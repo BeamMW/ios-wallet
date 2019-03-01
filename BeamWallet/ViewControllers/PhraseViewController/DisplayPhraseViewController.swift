@@ -10,7 +10,11 @@ import UIKit
 
 class DisplayPhraseViewController: UIViewController {
 
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var stackWidth: NSLayoutConstraint!
+    @IBOutlet private weak var stackY: NSLayoutConstraint!
+    @IBOutlet private weak var mainStack: UIStackView!
+    
+    @IBOutlet private weak var collectionView: UICollectionView!
 
     let words = ["garden","water","rifle","century","mutual","foster","wear","fantasy","deer",
                    "attend","approve","maple"]
@@ -21,6 +25,12 @@ class DisplayPhraseViewController: UIViewController {
         self.title = "Seed phrase"
         
         collectionView.register(UINib(nibName: "WordCell", bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
+        
+        if Device.screenType == .iPhones_5_5s_5c_SE {
+            stackWidth.constant = 290
+            mainStack.spacing = 25
+            stackY.constant = 15
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

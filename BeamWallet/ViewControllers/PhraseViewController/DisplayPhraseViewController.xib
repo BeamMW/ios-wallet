@@ -21,6 +21,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisplayPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="hro-fw-1ip" id="fHh-Pj-zTI"/>
+                <outlet property="mainStack" destination="ieK-AA-2FA" id="ZeP-qs-6g3"/>
+                <outlet property="stackWidth" destination="bWB-tf-HeN" id="fm9-qU-iiQ"/>
+                <outlet property="stackY" destination="iVY-Qp-wuw" id="qaA-k7-OAi"/>
                 <outlet property="view" destination="1rJ-7R-t7c" id="VKf-OH-GVu"/>
             </connections>
         </placeholder>

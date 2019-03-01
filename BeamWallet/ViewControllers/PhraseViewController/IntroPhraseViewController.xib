@@ -20,6 +20,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IntroPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="mainStack" destination="Cyl-sg-GXv" id="VNL-oV-U0Y"/>
+                <outlet property="stackWidth" destination="D6r-yd-Hcz" id="6Pb-lv-KT9"/>
+                <outlet property="stackY" destination="Ahq-0O-Ez0" id="kBv-D8-Ief"/>
                 <outlet property="view" destination="8iw-Ag-QBa" id="DBo-Er-dSv"/>
             </connections>
         </placeholder>

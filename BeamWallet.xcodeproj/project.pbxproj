@@ -39,6 +39,7 @@
 		92FC611D22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FC611B22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib */; };
 		92FC611F2229803700AEABC1 /* BMField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC611E2229803700AEABC1 /* BMField.swift */; };
 		92FC6121222990FE00AEABC1 /* BMStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC6120222990FE00AEABC1 /* BMStepView.swift */; };
+		92FC612322299A4E00AEABC1 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC612222299A4E00AEABC1 /* Device.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		92FC611B22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateWalletPasswordViewController.xib; sourceTree = "<group>"; };
 		92FC611E2229803700AEABC1 /* BMField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMField.swift; sourceTree = "<group>"; };
 		92FC6120222990FE00AEABC1 /* BMStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMStepView.swift; sourceTree = "<group>"; };
+		92FC612222299A4E00AEABC1 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 				925AD5FE22282AB500DDE66B /* View.swift */,
 				925AD6022228332A00DDE66B /* Button.swift */,
 				92FC611422296F2700AEABC1 /* Color.swift */,
+				92FC612222299A4E00AEABC1 /* Device.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				925AD5FC22282A7F00DDE66B /* BMButton.swift in Sources */,
 				92FC610922294F7D00AEABC1 /* InputPhraseViewController.swift in Sources */,
 				92FC6118222978C400AEABC1 /* PasswordManager.swift in Sources */,
+				92FC612322299A4E00AEABC1 /* Device.swift in Sources */,
 				92FC611522296F2700AEABC1 /* Color.swift in Sources */,
 				92FC6113222964F500AEABC1 /* BMWord.swift in Sources */,
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,

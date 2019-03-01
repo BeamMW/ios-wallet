@@ -10,8 +10,13 @@ import UIKit
 
 class InputPhraseViewController: UIViewController {
 
-    @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var nextButton: UIButton!
+    
+    @IBOutlet private weak var stackWidth: NSLayoutConstraint!
+    @IBOutlet private weak var stackY: NSLayoutConstraint!
+    @IBOutlet private weak var mainStack: UIStackView!
+    
+    @IBOutlet private weak var collectionView: UICollectionView!
 
     private var inputWords = [BMWord]()
     private let maxWords = 6
@@ -35,6 +40,12 @@ class InputPhraseViewController: UIViewController {
         self.title = "Seed phrase"
                 
         collectionView.register(UINib(nibName: "InputWordCell", bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
+        
+        if Device.screenType == .iPhones_5_5s_5c_SE {
+            stackWidth.constant = 290
+            mainStack.spacing = 25
+            stackY.constant = 15
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
