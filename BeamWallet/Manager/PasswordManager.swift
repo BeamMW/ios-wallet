@@ -11,6 +11,7 @@ import Foundation
 class PasswordTestManager {
     
     enum State: String {
+        case none = ""
         case veryWeak = "Very weak password"
         case weak = "Weak password"
         case medium = "Medium strength password"
@@ -43,11 +44,14 @@ class PasswordTestManager {
                          ]
     
     static func testPassword(password:String) -> State {
-       
+        var state = State.none
+
+        if password.isEmpty {
+            return state
+        }
+        
         let range = NSRange(location: 0, length: password.utf16.count)
 
-        var state = State.veryWeak
-        
         for test in strengthTests {
             if(test.exp.firstMatch(in: password, options: [], range: range) != nil)
             {

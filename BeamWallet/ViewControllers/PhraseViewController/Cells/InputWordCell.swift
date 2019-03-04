@@ -10,12 +10,14 @@ import UIKit
 
 protocol InputWordCellCellDelegate: AnyObject {
     func textValueCellDidEndEditing(_ sender: InputWordCell, _ text:String)
+    func textValueCellReturn(_ sender: InputWordCell, _ text:String)
 }
 
 class InputWordCell: UICollectionViewCell, Delegating {
 
     static let reuseIdentifier = "WordCell"
-    
+    static let nib = "InputWordCell"
+
     @IBOutlet weak var wordField: BMWordField!
     @IBOutlet weak var numberLabel: UILabel!
     
@@ -63,7 +65,10 @@ extension InputWordCell: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.delegate?.textValueCellReturn(self,textField.text ?? "")
+
         textField.resignFirstResponder()
+
         return true
     }
     

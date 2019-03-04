@@ -8,48 +8,47 @@
 
 import UIKit
 
-class DisplayPhraseViewController: UIViewController {
-
-    @IBOutlet private weak var stackWidth: NSLayoutConstraint!
-    @IBOutlet private weak var stackY: NSLayoutConstraint!
-    @IBOutlet private weak var mainStack: UIStackView!
+class DisplayPhraseViewController: BaseWizardViewController {
     
     @IBOutlet private weak var collectionView: UICollectionView!
 
-    let words = ["garden","water","rifle","century","mutual","foster","wear","fantasy","deer",
-                   "attend","approve","maple"]
-    
+    var words = [String]()
+    var phrase:String!
+        
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        phrase = MnemonicModel.generatePhrase()
+        
+        words = phrase.components(separatedBy: ";")
+        
         self.title = "Seed phrase"
         
-        collectionView.register(UINib(nibName: "WordCell", bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         
         if Device.screenType == .iPhones_5_5s_5c_SE {
-            stackWidth.constant = 290
-            mainStack.spacing = 25
-            stackY.constant = 15
+            mainStack?.spacing = 20
         }
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
-    //MARK: IBAction
-
+// MARK: IBAction
     @IBAction func onNext(sender :UIButton) {
-        let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backItem
+        let alert = UIAlertController(title: "Save seed phrase", message: "Please write the seed phrase down. Do not screenshot it and save it in your photo gallery. It makes the phrase prone to cyber attacks and, therefore, less secure.", preferredStyle: .alert)
         
-        let vc = InputPhraseViewController()
-        vc.words = words
-        navigationController?.pushViewController(vc, animated: true)
+        let ok = UIAlertAction(title: "Done", style: .default, handler: { action in
+            let vc = ConfirmPhraseViewController()
+                .withWords(words: self.words)
+            self.pushViewController(vc: vc)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(ok)
+
+        self.present(alert, animated: true)
     }
 }
 
 
+// MARK: UICollectionViewDataSource
 extension DisplayPhraseViewController : UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -61,22 +60,5 @@ extension DisplayPhraseViewController : UICollectionViewDataSource {
                                                       for: indexPath) as! WordCell)
             .configured(with: (word: words[indexPath.row], number: String(indexPath.row+1)))
         return cell
-    }
-}
-
-extension DisplayPhraseViewController : UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let noOfCellsInRow = 2
-        
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        
-        let totalSpace = flowLayout.sectionInset.left
-            + flowLayout.sectionInset.right
-            + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
-        
-        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-        
-        return CGSize(width: size, height: 38)
     }
 }

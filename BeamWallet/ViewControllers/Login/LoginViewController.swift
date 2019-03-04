@@ -21,15 +21,13 @@ class LoginViewController: UIViewController {
     //MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
-    
+        let vc = InputPhraseViewController()
+        pushViewController(vc: vc)
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {
-        let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backItem
-        
         let vc = IntroPhraseViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        pushViewController(vc: vc)
     }
 
 }

@@ -2,123 +2,108 @@
 //  InputPhraseViewController.swift
 //  BeamWallet
 //
-//  Created by Denis on 3/1/19.
+//  Created by Denis on 3/2/19.
 //  Copyright © 2019 Denis. All rights reserved.
 //
 
 import UIKit
 
-class InputPhraseViewController: UIViewController {
-
-    @IBOutlet private weak var nextButton: UIButton!
-    
-    @IBOutlet private weak var stackWidth: NSLayoutConstraint!
-    @IBOutlet private weak var stackY: NSLayoutConstraint!
-    @IBOutlet private weak var mainStack: UIStackView!
-    
-    @IBOutlet private weak var collectionView: UICollectionView!
+class InputPhraseViewController: BaseWizardViewController {
 
     private var inputWords = [BMWord]()
-    private let maxWords = 6
-    
-    public var words: [String] = [] {
-        didSet{
-            let shuffled = words.shuffled()
-            
-            for word in shuffled{
-                if let index = words.firstIndex(of: word) {
-                    inputWords.append(BMWord(word: "", index: index, correct: false))
-                }
-            }
-        }
-    }
-    
-    
+
+    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var nextButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.title = "Seed phrase"
-                
-        collectionView.register(UINib(nibName: "InputWordCell", bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
+        
+        for i in 0 ... 11 {
+            inputWords.append(BMWord(word: "", index: i, correct: false))
+        }
+        
+        collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         if Device.screenType == .iPhones_5_5s_5c_SE {
-            stackWidth.constant = 290
-            mainStack.spacing = 25
-            stackY.constant = 15
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         }
+       
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
-    //MARK: IBAction
-    
-    @IBAction func onNext(sender :UIButton) {
-        let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backItem
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        let vc = CreateWalletPasswordViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        if Device.screenType == .iPhones_5_5s_5c_SE {
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
+        }
     }
 }
 
+// MARK: UICollectionViewDataSource
 extension InputPhraseViewController : UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return maxWords
+        return inputWords.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: InputWordCell.reuseIdentifier,
                                                        for: indexPath) as! InputWordCell)
-        .configured(with: inputWords[indexPath.row],delegate: self)
+            .configured(with: inputWords[indexPath.row],delegate: self)
         return cell
     }
 }
 
-extension InputPhraseViewController : UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let noOfCellsInRow = 2
-        
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        
-        let totalSpace = flowLayout.sectionInset.left
-            + flowLayout.sectionInset.right
-            + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
-        
-        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-        
-        return CGSize(width: size, height: 38)
-    }
-}
-
+// MARK: InputWordCellCellDelegate Handling
 extension InputPhraseViewController : InputWordCellCellDelegate {
-    func textValueCellDidEndEditing(_ sender: InputWordCell, _ text: String) {
+    
+    func updateInputValue(path:Int, text:String) {
+        inputWords[path].value = text
+        inputWords[path].correct = MnemonicModel.isValidWord(text)
+    }
+    
+    func textValueCellReturn(_ sender: InputWordCell, _ text:String) {
         if let path = collectionView.indexPath(for: sender)
         {
-            let index = inputWords[path.row].index
-            
-            inputWords[path.row].value = text
-            
-            inputWords[path.row].correct = (words[index!]==text)
-            
-            collectionView.reloadItems(at: [path])
+            updateInputValue(path: path.row, text: text)
             
             //find next field
-            var corretPhrase = true
-            for i in 0 ... maxWords - 1{
+            for i in 0 ... inputWords.count - 1 {
                 if inputWords[i].value.isEmpty {
-                    corretPhrase = false
-                    
                     let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell
                     cell.startEditing()
                     
                     break;
                 }
-                else if !inputWords[i].correct {
+            }
+        }
+    }
+    
+    func textValueCellDidEndEditing(_ sender: InputWordCell, _ text: String) {
+        if let path = collectionView.indexPath(for: sender)
+        {
+            updateInputValue(path: path.row, text: text)
+            
+            collectionView.reloadItems(at: [path])
+            
+            //correct
+            var corretPhrase = true
+            for word in inputWords  {
+                if word.value.isEmpty {
                     corretPhrase = false
+                    break
+                }
+                else if !word.correct {
+                    corretPhrase = false
+                    break
                 }
             }
             
@@ -126,3 +111,20 @@ extension InputPhraseViewController : InputWordCellCellDelegate {
         }
     }
 }
+
+// MARK: Keyboard Handling
+extension InputPhraseViewController {
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            self.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.collectionView.contentInset = UIEdgeInsets.zero
+    }
+}
+

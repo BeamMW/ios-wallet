@@ -12,10 +12,37 @@ class BMField: UITextField {
 
     var line = UIView()
 
+    private var _lineColor:UIColor?
+    private var _lineHeight:CGFloat = 2
+
+    @IBInspectable
+    var lineColor: UIColor? {
+        get {
+            return _lineColor
+        }
+        set{
+            _lineColor = newValue
+            line.backgroundColor = _lineColor
+        }
+    }
+    
+    @IBInspectable
+    var lineHeight: CGFloat {
+        get {
+            return _lineHeight
+        }
+        set{
+            _lineHeight = newValue
+            layoutSubviews()
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        line.backgroundColor = UIColor.main.darkSlateBlue
+        if lineColor == nil {
+            line.backgroundColor = UIColor.main.darkSlateBlue
+        }
         
         addSubview(line)
     }
@@ -23,27 +50,8 @@ class BMField: UITextField {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        line.frame = CGRect(x: 0, y: self.frame.size.height-1, width: self.frame.size.width, height: 1)
-
-//        if(isEditing)
-//        {
-//            line.frame = CGRect(x: 0, y: self.frame.size.height-2, width: self.frame.size.width, height: 2)
-//        }
-//        else{
-//            line.frame = CGRect(x: 0, y: self.frame.size.height-1, width: self.frame.size.width, height: 1)
-//        }
+        line.frame = CGRect(x: 0, y: self.frame.size.height-lineHeight, width: self.frame.size.width, height: lineHeight)
     }
 
-    
-//    override func resignFirstResponder() -> Bool {
-//        line.frame = CGRect(x: 0, y: self.frame.size.height-1, width: self.frame.size.width, height: 1)
-//
-//        return super.resignFirstResponder()
-//    }
-//
-//    override func becomeFirstResponder() -> Bool {
-//        line.frame = CGRect(x: 0, y: self.frame.size.height-2, width: self.frame.size.width, height: 2)
-//
-//        return super.becomeFirstResponder()
-//    }
+
 }

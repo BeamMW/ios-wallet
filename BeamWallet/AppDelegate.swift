@@ -16,7 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let rootController = UINavigationController(rootViewController: LoginViewController())
+        let appModel = AppModel.sharedManager()!
+        let added = appModel.isWalletAlreadyAdded()
+        
+        let rootController = UINavigationController(rootViewController: added ? EnterWalletPasswordViewController() : LoginViewController())
         rootController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         rootController.navigationBar.shadowImage = UIImage()
         rootController.navigationBar.isTranslucent = true

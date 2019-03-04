@@ -11,6 +11,7 @@ import UIKit
 class WordCell: UICollectionViewCell {
 
     static let reuseIdentifier = "WordCell"
+    static let nib = "WordCell"
 
     @IBOutlet weak var wordLabel: UILabel!
     @IBOutlet weak var numberLabel: UILabel!

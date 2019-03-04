@@ -20,89 +20,74 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InputPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="collectionView" destination="y0S-AP-q9n" id="abe-Wp-jOr"/>
-                <outlet property="mainStack" destination="SY7-Yz-blR" id="h1A-Fi-2dN"/>
-                <outlet property="nextButton" destination="EZh-RJ-DHb" id="1j0-Cv-7nK"/>
-                <outlet property="stackWidth" destination="rD3-0f-E9e" id="4CV-LF-GQc"/>
-                <outlet property="stackY" destination="3oE-a9-erR" id="3Ql-mW-1bp"/>
-                <outlet property="view" destination="1Fc-IQ-u2K" id="H9r-XC-bGr"/>
+                <outlet property="collectionView" destination="FRO-uv-0vF" id="caS-LR-4JX"/>
+                <outlet property="nextButton" destination="Ovc-qP-PXf" id="Xl5-vu-Bg4"/>
+                <outlet property="view" destination="Qs6-5K-P4C" id="8Aq-ep-skV"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="1Fc-IQ-u2K">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Qs6-5K-P4C">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="SY7-Yz-blR">
-                    <rect key="frame" x="30" y="75" width="315" height="483.5"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To ensure the seed phrase is written down correctly, please fill in the specific words below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p1T-xu-CLB">
-                            <rect key="frame" x="0.0" y="0.0" width="315" height="33.5"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="y0S-AP-q9n">
-                            <rect key="frame" x="0.0" y="83.5" width="315" height="300"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="300" id="K1p-pc-lYP"/>
-                            </constraints>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1qZ-te-iYv">
-                                <size key="itemSize" width="140" height="38"/>
-                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            </collectionViewFlowLayout>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="ipG-Th-R3G"/>
-                                <outlet property="delegate" destination="-1" id="s0o-2D-Wtp"/>
-                            </connections>
-                        </collectionView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t3G-GZ-5AL">
-                            <rect key="frame" x="0.0" y="433.5" width="315" height="50"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZh-RJ-DHb" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="31" y="3" width="253" height="44"/>
-                                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="253" id="02n-Mz-rTW"/>
-                                        <constraint firstAttribute="height" constant="44" id="BOf-1R-u8S"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="next" image="iconNextBlue">
-                                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="59X-dV-tx8"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstItem="EZh-RJ-DHb" firstAttribute="centerY" secondItem="t3G-GZ-5AL" secondAttribute="centerY" id="Sso-Yb-zY9"/>
-                                <constraint firstItem="EZh-RJ-DHb" firstAttribute="centerX" secondItem="t3G-GZ-5AL" secondAttribute="centerX" id="kgu-jK-chE"/>
-                                <constraint firstItem="EZh-RJ-DHb" firstAttribute="top" secondItem="t3G-GZ-5AL" secondAttribute="top" constant="3" id="t4c-Wk-Wbq"/>
-                            </constraints>
-                        </view>
-                    </subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type in your seed phrase" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Bj-kk-5AT">
+                    <rect key="frame" x="30" y="50" width="315" height="19.5"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ovc-qP-PXf" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="61" y="429.5" width="253" height="44"/>
+                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="315" id="rD3-0f-E9e"/>
+                        <constraint firstAttribute="height" constant="44" id="F8Q-rW-Cet"/>
+                        <constraint firstAttribute="width" constant="253" id="Uy1-z1-cfo"/>
                     </constraints>
-                </stackView>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                    <state key="normal" title="next" image="iconNextBlue">
+                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="22"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </button>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FRO-uv-0vF">
+                    <rect key="frame" x="16" y="99.5" width="343" height="300"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="300" id="O0P-W0-NCe"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dmg-l2-y8c">
+                        <size key="itemSize" width="140" height="38"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="aK3-bd-Av2"/>
+                        <outlet property="delegate" destination="-1" id="nnI-s9-cmj"/>
+                    </connections>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="SY7-Yz-blR" firstAttribute="top" secondItem="iSK-KN-rbH" secondAttribute="top" constant="55" id="3oE-a9-erR"/>
-                <constraint firstItem="SY7-Yz-blR" firstAttribute="centerX" secondItem="1Fc-IQ-u2K" secondAttribute="centerX" id="wHg-Ie-Mih"/>
+                <constraint firstItem="Ovc-qP-PXf" firstAttribute="top" secondItem="FRO-uv-0vF" secondAttribute="bottom" constant="30" id="K3d-zF-fWJ"/>
+                <constraint firstItem="FRO-uv-0vF" firstAttribute="top" secondItem="1Bj-kk-5AT" secondAttribute="bottom" constant="30" id="LRM-It-IHS"/>
+                <constraint firstItem="355-Pt-DJD" firstAttribute="trailing" secondItem="FRO-uv-0vF" secondAttribute="trailing" constant="16" id="gk0-iA-KvC"/>
+                <constraint firstItem="FRO-uv-0vF" firstAttribute="leading" secondItem="355-Pt-DJD" secondAttribute="leading" constant="16" id="m8Q-Ht-uN5"/>
+                <constraint firstItem="355-Pt-DJD" firstAttribute="trailing" secondItem="1Bj-kk-5AT" secondAttribute="trailing" constant="30" id="mRf-8S-i3y"/>
+                <constraint firstItem="1Bj-kk-5AT" firstAttribute="top" secondItem="355-Pt-DJD" secondAttribute="top" constant="30" id="rQC-3u-6QY"/>
+                <constraint firstItem="1Bj-kk-5AT" firstAttribute="leading" secondItem="355-Pt-DJD" secondAttribute="leading" constant="30" id="sxU-yu-tz8"/>
+                <constraint firstItem="Ovc-qP-PXf" firstAttribute="centerX" secondItem="Qs6-5K-P4C" secondAttribute="centerX" id="xYX-tv-Bte"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="iSK-KN-rbH"/>
+            <viewLayoutGuide key="safeArea" id="355-Pt-DJD"/>
             <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>
         </view>
     </objects>

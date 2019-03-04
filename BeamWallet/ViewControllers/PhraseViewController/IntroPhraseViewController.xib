@@ -32,79 +32,88 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Cyl-sg-GXv">
-                    <rect key="frame" x="30" y="75" width="315" height="392.5"/>
+                    <rect key="frame" x="30" y="75" width="315" height="430.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCo-Qh-eFv">
-                            <rect key="frame" x="0.0" y="0.0" width="315" height="100.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="315" height="115"/>
                             <string key="text">Create new wallet by generating seed phrase.
 If you ever lose your device,
 you will need this phrase to recover your wallet!
 Never type your seed phrase in keychains or password managers. Never save it in your local or remote folders in any form.</string>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
                         </label>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Lq9-8Q-taa">
-                            <rect key="frame" x="0.0" y="150.5" width="315" height="142"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="Lq9-8Q-taa">
+                            <rect key="frame" x="0.0" y="165" width="315" height="165.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="rlL-A2-dDP">
                                     <rect key="frame" x="0.0" y="0.0" width="315" height="34"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconEye" translatesAutoresizingMaskIntoConstraints="NO" id="hJO-4Z-Yw4">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconEye" translatesAutoresizingMaskIntoConstraints="NO" id="hJO-4Z-Yw4">
                                             <rect key="frame" x="0.0" y="0.0" width="48" height="34"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="48" id="Jgh-12-p5h"/>
-                                                <constraint firstAttribute="height" constant="34" id="NSG-5k-ByN"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do not let anyone see your seed phrase" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bad-SX-eej">
                                             <rect key="frame" x="68" y="0.0" width="247" height="34"/>
-                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                 </stackView>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="KCx-va-Pmz">
-                                    <rect key="frame" x="0.0" y="54" width="315" height="30"/>
+                                    <rect key="frame" x="0.0" y="64" width="315" height="33.5"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconPassword" translatesAutoresizingMaskIntoConstraints="NO" id="duN-Q2-luZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="48" height="30"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconPassword" translatesAutoresizingMaskIntoConstraints="NO" id="duN-Q2-luZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="48" height="33.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="30" id="ISS-fd-Ka5"/>
                                                 <constraint firstAttribute="width" constant="48" id="aHE-P6-ptJ"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Never type your seed phrase into password managers or elsewhere" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XEd-tL-6av">
-                                            <rect key="frame" x="68" y="0.0" width="247" height="30"/>
-                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
+                                            <rect key="frame" x="68" y="0.0" width="247" height="33.5"/>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                 </stackView>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="dVg-2H-57n">
-                                    <rect key="frame" x="0.0" y="104" width="315" height="38"/>
+                                    <rect key="frame" x="0.0" y="127.5" width="315" height="38"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconCopy" translatesAutoresizingMaskIntoConstraints="NO" id="3JC-VC-gmx">
                                             <rect key="frame" x="0.0" y="0.0" width="48" height="38"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="48" id="2pi-lz-kqf"/>
-                                                <constraint firstAttribute="height" constant="38" id="xaa-cH-sJ2"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Make at least 2 copies of the phrase in case of emergency" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAN-q8-SYh">
                                             <rect key="frame" x="68" y="0.0" width="247" height="38"/>
-                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                 </stackView>
                             </subviews>
                         </stackView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M1j-Jr-M7N">
-                            <rect key="frame" x="0.0" y="342.5" width="315" height="50"/>
+                            <rect key="frame" x="0.0" y="380.5" width="315" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lc2-JS-VP6" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                     <rect key="frame" x="31" y="3" width="253" height="44"/>
@@ -122,6 +131,7 @@ Never type your seed phrase in keychains or password managers. Never save it in 
                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                             <real key="value" value="22"/>
                                         </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="pvF-SR-kwV"/>

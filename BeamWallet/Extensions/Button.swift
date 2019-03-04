@@ -11,6 +11,23 @@ import UIKit
 
 extension UIButton {
     
+    @IBInspectable
+    var adjustFontSize: Bool {
+        get {
+            return self.adjustFontSize
+        }
+        set {
+            if newValue {
+                if Device.screenType == .iPhone_XSMax {
+                    self.titleLabel?.adjustFontSize = true
+                }
+            }
+        }
+    }
+}
+
+extension UIButton {
+    
     func setBackgroundColor(color: UIColor, forState: UIControl.State) {
         
         let minimumSize: CGSize = CGSize(width: 1.0, height: 1.0)

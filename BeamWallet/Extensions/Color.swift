@@ -32,6 +32,16 @@ extension UIColor {
         static var red: UIColor {
             return .init(red: 255/255, green: 98/255, blue: 92/255, alpha: 1)
         }
+        
+        static var maize: UIColor {
+            return .init(red: 244/255, green: 206/255, blue: 74/255, alpha: 1)
+        }
+        
+        static var brightTeal: UIColor {
+            return .init(red: 0/255, green: 246/255, blue: 210/255, alpha: 1)
+        }
+        
+        
     }
     
 }
