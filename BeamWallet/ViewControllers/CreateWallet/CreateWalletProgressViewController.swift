@@ -2,8 +2,20 @@
 //  CreateWalletProgressViewController.swift
 //  BeamWallet
 //
-//  Created by Denis on 3/3/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// 3/3/19.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 import UIKit
@@ -16,7 +28,8 @@ class CreateWalletProgressViewController: UIViewController {
 
     private var password:String!
     private var phrase:String?
-
+    private var isPresented = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,35 +44,50 @@ class CreateWalletProgressViewController: UIViewController {
     }
 
     private func startCreateWallet() {
-        let appModel = AppModel.sharedManager()!
-        appModel.walletDelegate = self
+        let appModel = AppModel.sharedManager()
         
-        if let phrase = phrase {
-            let created = appModel.createWallet(phrase, pass: password)
-            if(!created)
-            {
-                self.alert(title: "Error", message: "Wallet not created")
-                navigationController?.popToRootViewController(animated: true)
+        if (!appModel.isReachable){
+            if phrase == nil {
+                progressTitleLabel.text = "Loading wallet"
+                cancelButton.isHidden = true
             }
-            else{
-                UIView.animate(withDuration: 0.3) {
-                    self.progressView.progress = 0.2
-                }
+            
+            self.alert(title: "Error", message: "No internet connection") { (_ ) in
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }
         else{
-            progressTitleLabel.text = "Loading wallet"
-            cancelButton.isHidden = true
+            appModel.walletDelegate = self
             
-            let opened = appModel.openWallet(password)
-            if(!opened)
-            {
-                self.alert(title: "Error", message: "Wallet can not be opened")
-                navigationController?.popToRootViewController(animated: true)
+            if let phrase = phrase {
+                let created = appModel.createWallet(phrase, pass: password)
+                if(!created)
+                {
+                    self.alert(title: "Error", message: "Wallet not created") { (_ ) in
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+                else{
+                    UIView.animate(withDuration: 0.3) {
+                        self.progressView.progress = 0.2
+                    }
+                }
             }
             else{
-                UIView.animate(withDuration: 0.3) {
-                    self.progressView.progress = 0.2
+                progressTitleLabel.text = "Loading wallet"
+                cancelButton.isHidden = true
+                
+                let opened = appModel.openWallet(password)
+                if(!opened)
+                {
+                    self.alert(title: "Error", message: "Wallet can not be opened") { (_ ) in
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+                else{
+                    UIView.animate(withDuration: 0.3) {
+                        self.progressView.progress = 0.2
+                    }
                 }
             }
         }
@@ -71,7 +99,7 @@ class CreateWalletProgressViewController: UIViewController {
 
 // MARK: IBAction
     @IBAction func onCancel(sender :UIButton) {
-        let appModel = AppModel.sharedManager()!
+        let appModel = AppModel.sharedManager()
         appModel.resetWallet()
         
         navigationController?.popToRootViewController(animated: true)
@@ -98,25 +126,29 @@ extension CreateWalletProgressViewController {
 
 extension CreateWalletProgressViewController : WalletModelDelegate {
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
-        if total == done {
+        if total == done && !isPresented {
+            isPresented = true
+            
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 2, animations: {
                     self.progressView.progress = 1
                 }) { (_) in
-                    
+                    DispatchQueue.main.async {
+                        let vc = MainTabBarController()
+                        vc.modalTransitionStyle = .crossDissolve
+                        self.present(vc, animated: true, completion: nil)
+                    }
                 }
             }
         }
         else{
-            UIView.animate(withDuration: 2, animations: {
+            DispatchQueue.main.async {
                 self.progressView.progress = Float(Float(done)/Float(total))
-            }) { (_) in
-                
             }
         }
     }
     
-    func onWalletError(_ error: String!) {
+    func onWalletError(_ error: String) {
         DispatchQueue.main.async {
             self.alert(title: "Error", message: error)
         }

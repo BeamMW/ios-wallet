@@ -2,11 +2,25 @@
 //  AppModel.m
 //  BeamTest
 //
-//  Created by Denis on 2/28/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// 2/28/19.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "Reachability.h"
 
 #import "AppModel.h"
 #import "Settings.h"
@@ -33,13 +47,15 @@ using namespace std;
 
 
 @implementation AppModel  {
+    Reachability *internetReachableFoo;
+
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
 }
 
-+ (AppModel*)sharedManager {
++ (AppModel*_Nonnull)sharedManager {
     static AppModel *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -51,7 +67,44 @@ using namespace std;
 -(id)init{
     self = [super init];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshAllInfo)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    internetReachableFoo = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    // Internet is reachable
+    internetReachableFoo.reachableBlock = ^(Reachability*reach)
+    {
+        if (![[AppModel sharedManager] isReachable]) {
+            [[AppModel sharedManager] refreshAllInfo];
+        }
+        
+        [[AppModel sharedManager] setIsReachable:YES];
+    };
+    
+    // Internet is not reachable
+    internetReachableFoo.unreachableBlock = ^(Reachability*reach)
+    {
+        [[AppModel sharedManager] setIsReachable:NO];
+
+        [[AppModel sharedManager] setIsConnected:NO];
+        
+        if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+            [[AppModel sharedManager].walletDelegate onNetwotkStatusChange:NO];
+        }
+    };
+    
+    [internetReachableFoo startNotifier];
+    
     return self;
+}
+
+-(void)setIsConnected:(BOOL)isConnected {
+    if(isConnected && _isConnected==NO && wallet!=nil){
+        [self getWalletStatus];
+    }
+    _isConnected = isConnected;
 }
 
 
@@ -60,7 +113,13 @@ using namespace std;
 }
 
 -(BOOL)openWallet:(NSString*)pass {
-    Rules::get().UpdateChecksum();
+    try{
+        Rules::get().UpdateChecksum();
+    }
+    catch(NSException *ex)
+    {
+        return NO;
+    }
 
     string dbFilePath = Settings.walletStoragePath.string;
 
@@ -71,7 +130,13 @@ using namespace std;
         }
     }
     
-    [self onWalledOpened:SecString(pass.string)];
+    try{
+        [self onWalledOpened:SecString(pass.string)];
+    }
+    catch(NSException *ex)
+    {
+        NSLog(@"%@",ex);
+    }
     
     return YES;
 }
@@ -150,23 +215,41 @@ using namespace std;
 }
 
 -(void)start {
-    string nodeAddr = Settings.nodeAddress.string;
-
-    wallet = make_shared<WalletModel>(walletDb, nodeAddr);
-    
-    wallet->getAsync()->setNodeAddress(nodeAddr);
-
-    wallet->start();
+    try{
+        string nodeAddr = Settings.nodeAddress.string;
+        
+        wallet = make_shared<WalletModel>(walletDb, nodeAddr);
+        
+        wallet->getAsync()->setNodeAddress(nodeAddr);
+        
+        wallet->start();
+    }
+    catch(NSException *ex)
+    {
+        NSLog(@"%@",ex);
+    }
 }
 
-//    auto addressess = walletDb->getAddresses(true);
-//    auto wid = addressess[0].m_walletID;
-//    auto s = to_string(wid);
-//
-//    NSString* result = [NSString stringWithUTF8String:s.c_str()];
-//
-//    NSLog(@"%@",result);
+-(void)generateNewWalletAddress {
+    wallet->getAsync()->generateNewAddress();
+}
 
+-(void)refreshWallet {
+    wallet->getAsync()->refresh();
+}
 
+-(void)getWalletStatus {
+    wallet->getAsync()->getWalletStatus();
+}
+
+-(void)getNetworkStatus {
+    wallet->getAsync()->getNetworkStatus();
+}
+
+-(void)refreshAllInfo{
+    if (wallet != nil) {
+        [self getNetworkStatus];
+    }
+}
 
 @end

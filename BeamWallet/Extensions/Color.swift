@@ -2,8 +2,20 @@
 //  Color.swift
 //  BeamWallet
 //
-//  Created by Denis on 3/1/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// 3/1/19.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 import Foundation
@@ -41,7 +53,25 @@ extension UIColor {
             return .init(red: 0/255, green: 246/255, blue: 210/255, alpha: 1)
         }
         
+        static var navy: UIColor {
+            return .init(red: 2/255, green: 37/255, blue: 60/255, alpha: 1)
+        }
         
+        static var blueyGrey: UIColor {
+            return .init(red: 141/255, green: 161/255, blue: 173/255, alpha: 1)
+        }
+        
+        static var marineTwo: UIColor {
+            return .init(red: 10/255, green: 52/255, blue: 77/255, alpha: 1)
+        }
+        
+        static var heliotrope: UIColor {
+            return .init(red: 218/255, green: 104/255, blue: 245/255, alpha: 1)
+        }
+        
+        static var brightSkyBlue: UIColor {
+            return .init(red: 11/255, green: 204/255, blue: 247/255, alpha: 1)
+        }
     }
     
 }

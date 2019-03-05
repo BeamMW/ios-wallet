@@ -2,8 +2,20 @@
 //  CreateWalletPasswordViewController.swift
 //  BeamWallet
 //
-//  Created by Denis on 3/1/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// 3/1/19.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 import UIKit
@@ -28,9 +40,35 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         
         passField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         confirmPassField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        let backButton = UIButton(type: .system)
+        backButton.tintColor = UIColor.white
+        backButton.setImage(UIImage.init(named: "iconBack"), for: .normal)
+        backButton.addTarget(self, action: #selector(onBack), for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
     }
     
 // MARK: IBAction
+    
+    @objc private func onBack() {
+        let pass = passField.text ?? ""
+        
+        if !pass.isEmpty {
+            let alert = UIAlertController(title: "Return to seed phrase", message: "If you return to seed phrase, it would be changed and your local password won’t be saved.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Return", style: .default, handler: { action in
+                self.navigationController?.popViewController(animated: true)
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            alert.addAction(ok)
+            
+            self.present(alert, animated: true)
+        }
+        else{
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
     @IBAction func onNext(sender :UIButton) {
         let pass = passField.text ?? ""
         let confirmPass = confirmPassField.text ?? ""

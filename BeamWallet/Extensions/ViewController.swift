@@ -2,8 +2,20 @@
 //  ViewController.swift
 //  BeamWallet
 //
-//  Created by Denis on 3/2/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// 3/2/19.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 import Foundation
@@ -18,13 +30,17 @@ extension UIViewController {
 }
 
 extension UIViewController {
-    func alert(title: String = "", message: String) {
+    func alert(title: String = "", message: String, handler: ((UIAlertAction) -> Void)? = nil) {
         if (self.presentedViewController as? UIAlertController) != nil {
             return
         }
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let OKAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            if handler != nil {
+                handler!(action)
+            }
+        }
         alertController.addAction(OKAction)
         self.present(alertController, animated: true, completion: nil)
     }
