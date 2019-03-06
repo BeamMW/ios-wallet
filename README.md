@@ -16,3 +16,7 @@ Things that make BEAM special include:
 * No addresses are stored in the blockchain - no information whatsoever about either the sender or the receiver of a transaction is stored in the blockchain.
 * Superior scalability through compact blockchain size - using the “cut-through” feature of Mimblewimble makes the BEAM blockchain orders of magnitude smaller than any other blockchain implementation.
 * BEAM supports many transaction types such as escrow transactions, time locked transactions, atomic swaps and more.
+
+Known limitation:
+
+* Restore flow is not implemented on mobile, yet the funds can be restored from the desktop wallet using the same seed the mobile wallet was created with
