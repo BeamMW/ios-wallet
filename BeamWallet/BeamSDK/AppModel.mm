@@ -53,6 +53,7 @@ using namespace std;
     WalletModel::Ptr wallet;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
+    
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -67,37 +68,46 @@ using namespace std;
 -(id)init{
     self = [super init];
     
+    _delegates = [[NSHashTable alloc] init];
+    
+    _transactions = [[NSMutableArray alloc] init];
+    
+    [self checkEthernetConnection];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshAllInfo)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
+
     
-    internetReachableFoo = [Reachability reachabilityWithHostname:@"www.google.com"];
+    return self;
+}
+
+-(void)checkEthernetConnection{
+    internetReachableFoo = [Reachability reachabilityWithHostName:@"www.google.com"];
     
-    // Internet is reachable
     internetReachableFoo.reachableBlock = ^(Reachability*reach)
     {
-        if (![[AppModel sharedManager] isReachable]) {
+        if (![[AppModel sharedManager] isInternetAvailable]) {
             [[AppModel sharedManager] refreshAllInfo];
         }
         
-        [[AppModel sharedManager] setIsReachable:YES];
+        [[AppModel sharedManager] setIsInternetAvailable:YES];
     };
     
-    // Internet is not reachable
     internetReachableFoo.unreachableBlock = ^(Reachability*reach)
     {
-        [[AppModel sharedManager] setIsReachable:NO];
-
+        [[AppModel sharedManager] setIsInternetAvailable:NO];
         [[AppModel sharedManager] setIsConnected:NO];
         
-        if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
-            [[AppModel sharedManager].walletDelegate onNetwotkStatusChange:NO];
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                [delegate onNetwotkStatusChange:NO];
+            }
         }
     };
     
     [internetReachableFoo startNotifier];
-    
-    return self;
 }
 
 -(void)setIsConnected:(BOOL)isConnected {
@@ -113,13 +123,7 @@ using namespace std;
 }
 
 -(BOOL)openWallet:(NSString*)pass {
-    try{
-        Rules::get().UpdateChecksum();
-    }
-    catch(NSException *ex)
-    {
-        return NO;
-    }
+    Rules::get().UpdateChecksum();
 
     string dbFilePath = Settings.walletStoragePath.string;
 
@@ -130,14 +134,8 @@ using namespace std;
         }
     }
     
-    try{
-        [self onWalledOpened:SecString(pass.string)];
-    }
-    catch(NSException *ex)
-    {
-        NSLog(@"%@",ex);
-    }
-    
+    [self onWalledOpened:SecString(pass.string)];
+
     return YES;
 }
 
@@ -215,24 +213,15 @@ using namespace std;
 }
 
 -(void)start {
-    try{
-        string nodeAddr = Settings.nodeAddress.string;
-        
-        wallet = make_shared<WalletModel>(walletDb, nodeAddr);
-        
-        wallet->getAsync()->setNodeAddress(nodeAddr);
-        
-        wallet->start();
-    }
-    catch(NSException *ex)
-    {
-        NSLog(@"%@",ex);
-    }
+    string nodeAddr = Settings.nodeAddress.string;
+    
+    wallet = make_shared<WalletModel>(walletDb, nodeAddr);
+    
+    wallet->getAsync()->setNodeAddress(nodeAddr);
+    
+    wallet->start();
 }
 
--(void)generateNewWalletAddress {
-    wallet->getAsync()->generateNewAddress();
-}
 
 -(void)refreshWallet {
     wallet->getAsync()->refresh();
@@ -247,9 +236,79 @@ using namespace std;
 }
 
 -(void)refreshAllInfo{
+    [internetReachableFoo stopNotifier];
+    [internetReachableFoo startNotifier];
+
     if (wallet != nil) {
         [self getNetworkStatus];
     }
+}
+
+//TODO: TMP Solution
+-(NSString* _Nullable)getWalletFirstAddress {
+    auto addresses = walletDb->getAddresses(true);
+    
+    return [NSString stringWithUTF8String:to_string(addresses[0].m_walletID).c_str()];
+}
+
+#pragma mark - Address
+
+-(void)setExpires:(int)hours toAddress:(NSString*)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+        
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            
+            if ([wAddress isEqualToString:address])
+            {
+                addresses[i].m_duration = hours * 60 * 60;
+                
+                walletDb->saveAddress(addresses[i]);
+                
+                break;
+            }
+        }
+    }
+}
+
+-(void)setWalletComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+        
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            
+            if ([wAddress isEqualToString:address])
+            {
+                addresses[i].m_label = comment.string;
+                
+                walletDb->saveAddress(addresses[i]);
+                
+                break;
+            }
+        }
+    }
+}
+
+-(void)generateNewWalletAddress {    
+    wallet->getAsync()->generateNewAddress();
+}
+
+#pragma mark - Delegates
+
+-(void)addDelegate:(id<WalletModelDelegate>) delegate{
+    [_delegates addObject: delegate];
+}
+
+-(void)removeDelegate:(id<WalletModelDelegate>) delegate {
+    [_delegates removeObject: delegate];
 }
 
 @end

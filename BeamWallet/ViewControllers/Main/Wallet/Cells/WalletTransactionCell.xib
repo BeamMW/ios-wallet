@@ -62,16 +62,28 @@
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="dhp-eX-Z1e">
-                                <rect key="frame" x="213" y="21.5" width="69" height="43.5"/>
+                                <rect key="frame" x="194" y="21.5" width="88" height="43.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aBt-ab-epn">
-                                        <rect key="frame" x="0.0" y="0.0" width="69" height="29"/>
-                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
-                                        <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="FB7-z6-iLj">
+                                        <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aBt-ab-epn">
+                                                <rect key="frame" x="0.0" y="0.0" width="69" height="29"/>
+                                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
+                                                <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="rMc-aT-mO8">
+                                                <rect key="frame" x="74" y="4" width="14" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="14" id="NMu-Md-vFL"/>
+                                                    <constraint firstAttribute="height" constant="21" id="YGB-za-lcb"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwt-9z-uRX">
-                                        <rect key="frame" x="5.5" y="29" width="63.5" height="14.5"/>
+                                        <rect key="frame" x="24.5" y="29" width="63.5" height="14.5"/>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="12"/>
                                         <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -102,15 +114,18 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="amountLabel" destination="aBt-ab-epn" id="1w6-GU-Uea"/>
+                <outlet property="currencyIcon" destination="rMc-aT-mO8" id="8da-2S-iAN"/>
                 <outlet property="dateLabel" destination="4ho-1u-9fd" id="G6S-NY-L8Y"/>
                 <outlet property="mainView" destination="fKt-Vb-Zkz" id="sq1-M0-hYG"/>
                 <outlet property="statusLabel" destination="Jwt-9z-uRX" id="9tg-pS-q6I"/>
                 <outlet property="typeLabel" destination="cfi-41-SbP" id="Q8I-4B-jjr"/>
             </connections>
+            <point key="canvasLocation" x="52.799999999999997" y="87.706146926536732"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="iconBeam" width="22" height="22"/>
         <image name="iconNextArrow" width="8" height="13"/>
+        <image name="iconSymbol" width="16" height="24.5"/>
     </resources>
 </document>

@@ -50,6 +50,13 @@ class DisplayPhraseViewController: BaseWizardViewController {
     }
     
 // MARK: IBAction
+    @IBAction func onCopy(sender :UIButton) {
+        UIPasteboard.general.string = phrase
+        
+        SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
+        SVProgressHUD.dismiss(withDelay: 1.5)
+    }
+    
     @IBAction func onNext(sender :UIButton) {
         let alert = UIAlertController(title: "Save seed phrase", message: "Please write the seed phrase down. Do not screenshot it and save it in your photo gallery. It makes the phrase prone to cyber attacks and, therefore, less secure.", preferredStyle: .alert)
         

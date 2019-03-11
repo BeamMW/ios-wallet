@@ -57,6 +57,19 @@ class InputPhraseViewController: BaseWizardViewController {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
         }
     }
+    
+    // MARK: IBAction
+    @IBAction func onNext(sender :UIButton) {
+        var words = [String]()
+        
+        for w in inputWords {
+            words.append(w.value)
+        }
+        
+        let vc = CreateWalletPasswordViewController()
+            .withPhrase(phrase: words.joined(separator: ";"))
+        pushViewController(vc: vc)
+    }
 }
 
 // MARK: UICollectionViewDataSource

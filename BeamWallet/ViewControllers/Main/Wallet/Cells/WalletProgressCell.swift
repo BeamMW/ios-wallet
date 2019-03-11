@@ -68,14 +68,14 @@ extension WalletProgressCell: Configurable {
     
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
-            receivingLabel.text = "+" + String.currency(value: status.realReceiving)
-            sentLabel.text = "-" + String.currency(value: status.realSending)
-            maturingLabel.text = String.currency(value: status.realMaturing)
+            receivingLabel.text = "+" + String.currency(value: status.realReceiving) + " ₿"
+            sentLabel.text = "-" + String.currency(value: status.realSending) + " ₿"
+            maturingLabel.text = String.currency(value: status.realMaturing) + " ₿"
         }
         else{
-            sentLabel.text = "0.00"
-            maturingLabel.text = "0.00"
-            receivingLabel.text = "0.00"
+            sentLabel.text = "0.00 ₿"
+            maturingLabel.text = "0.00 ₿"
+            receivingLabel.text = "0.00 ₿"
         }
         
         if !options.expand {

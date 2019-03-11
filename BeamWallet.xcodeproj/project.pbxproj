@@ -74,10 +74,19 @@
 		926A857C222EC10C00A3B747 /* WalletTransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A857A222EC10C00A3B747 /* WalletTransactionCell.swift */; };
 		926A857D222EC10C00A3B747 /* WalletTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A857B222EC10C00A3B747 /* WalletTransactionCell.xib */; };
 		926A8580222ECD7600A3B747 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A857F222ECD7600A3B747 /* Reachability.m */; };
+		928E78122236A8880099AD20 /* SelectItemController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928E78112236A8880099AD20 /* SelectItemController.framework */; };
+		928E78142236A88F0099AD20 /* SelectItemController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 928E78112236A8880099AD20 /* SelectItemController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		929885F3222A15300038C015 /* InputPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F1222A15300038C015 /* InputPhraseViewController.swift */; };
 		929885F4222A15300038C015 /* InputPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929885F2222A15300038C015 /* InputPhraseViewController.xib */; };
 		929885F6222B2B1F0038C015 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F5222B2B1E0038C015 /* Label.swift */; };
 		929885F8222B32C40038C015 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F7222B32C40038C015 /* Field.swift */; };
+		92A1B9FB22367717008135B5 /* WalletReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */; };
+		92A1B9FC22367717008135B5 /* WalletReceiveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */; };
+		92A1B9FE22368FFA008135B5 /* SVProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */; };
+		92A1BA0022369001008135B5 /* SVProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		92A1BA032236920C008135B5 /* WalletQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */; };
+		92A1BA042236920C008135B5 /* WalletQRCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */; };
+		92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA0522369567008135B5 /* QRCodeView.swift */; };
 		92ADED812229F213001D0A38 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ADED802229F213001D0A38 /* ViewController.swift */; };
 		92FC610922294F7D00AEABC1 /* ConfirmPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610722294F7D00AEABC1 /* ConfirmPhraseViewController.swift */; };
 		92FC610A22294F7D00AEABC1 /* ConfirmPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */; };
@@ -102,6 +111,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				92A1BA0022369001008135B5 /* SVProgressHUD.framework in Embed Frameworks */,
+				928E78142236A88F0099AD20 /* SelectItemController.framework in Embed Frameworks */,
 				92365AE1222D4038000D7064 /* openssl.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -187,10 +198,17 @@
 		926A857B222EC10C00A3B747 /* WalletTransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletTransactionCell.xib; sourceTree = "<group>"; };
 		926A857E222ECD7600A3B747 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		926A857F222ECD7600A3B747 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		928E78112236A8880099AD20 /* SelectItemController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SelectItemController.framework; sourceTree = "<group>"; };
 		929885F1222A15300038C015 /* InputPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPhraseViewController.swift; sourceTree = "<group>"; };
 		929885F2222A15300038C015 /* InputPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputPhraseViewController.xib; sourceTree = "<group>"; };
 		929885F5222B2B1E0038C015 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		929885F7222B32C40038C015 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
+		92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletReceiveViewController.swift; sourceTree = "<group>"; };
+		92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletReceiveViewController.xib; sourceTree = "<group>"; };
+		92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SVProgressHUD.framework; sourceTree = "<group>"; };
+		92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletQRCodeViewController.swift; sourceTree = "<group>"; };
+		92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletQRCodeViewController.xib; sourceTree = "<group>"; };
+		92A1BA0522369567008135B5 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		92ADED802229F213001D0A38 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		92F82512222C33F6000D34F7 /* BeamWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BeamWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		92FC610722294F7D00AEABC1 /* ConfirmPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPhraseViewController.swift; sourceTree = "<group>"; };
@@ -215,12 +233,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				92365AF3222D41C7000D7064 /* libuv_a.a in Frameworks */,
+				928E78122236A8880099AD20 /* SelectItemController.framework in Frameworks */,
 				92365B01222D41E9000D7064 /* openssl.framework in Frameworks */,
 				92365AF9222D41C7000D7064 /* libmnemonic.a in Frameworks */,
 				92365AF6222D41C7000D7064 /* libsqlite.a in Frameworks */,
 				92365AFA222D41C7000D7064 /* libexternal_pow.a in Frameworks */,
 				92365AFB222D41C7000D7064 /* libwallet_api_proto.a in Frameworks */,
 				92365AFD222D41C7000D7064 /* libnode.a in Frameworks */,
+				92A1B9FE22368FFA008135B5 /* SVProgressHUD.framework in Frameworks */,
 				92365AF7222D41C7000D7064 /* libexplorer.a in Frameworks */,
 				92365AF8222D41C7000D7064 /* libp2p.a in Frameworks */,
 				92365ACB222D3E31000D7064 /* boost.framework in Frameworks */,
@@ -304,6 +324,10 @@
 		92365AC8222D3E16000D7064 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				928E78112236A8880099AD20 /* SelectItemController.framework */,
+				92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */,
+				92365AC9222D3E31000D7064 /* boost.framework */,
+				92365ACA222D3E31000D7064 /* openssl.framework */,
 				92365AF1222D41C6000D7064 /* libcore.a */,
 				92365AF0222D41C6000D7064 /* libcrypto.a */,
 				92365AE9222D41C5000D7064 /* libexplorer.a */,
@@ -318,8 +342,6 @@
 				92365AE5222D41C5000D7064 /* libuv_a.a */,
 				92365AED222D41C6000D7064 /* libwallet_api_proto.a */,
 				92365AE7222D41C5000D7064 /* libwallet.a */,
-				92365AC9222D3E31000D7064 /* boost.framework */,
-				92365ACA222D3E31000D7064 /* openssl.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -363,6 +385,10 @@
 				926A8566222E7FBD00A3B747 /* Cells */,
 				9243524E222E73DC00A0EF37 /* WalletViewController.swift */,
 				9243524F222E73DC00A0EF37 /* WalletViewController.xib */,
+				92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */,
+				92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */,
+				92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */,
+				92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -461,6 +487,7 @@
 				92FC610F22295DC100AEABC1 /* BMWordField.swift */,
 				92FC611E2229803700AEABC1 /* BMField.swift */,
 				92FC6120222990FE00AEABC1 /* BMStepView.swift */,
+				92A1BA0522369567008135B5 /* QRCodeView.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -606,7 +633,9 @@
 				92538F62222B5F7E00792A25 /* CreateWalletProgressViewController.xib in Resources */,
 				9207FF4922293FEB009D931B /* DisplayPhraseViewController.xib in Resources */,
 				929885F4222A15300038C015 /* InputPhraseViewController.xib in Resources */,
+				92A1B9FC22367717008135B5 /* WalletReceiveViewController.xib in Resources */,
 				926A8576222EA54F00A3B747 /* WalletProgressCell.xib in Resources */,
+				92A1BA042236920C008135B5 /* WalletQRCodeViewController.xib in Resources */,
 				926A8570222E97DF00A3B747 /* WalletAvailableCell.xib in Resources */,
 				926A856A222E7FD900A3B747 /* WalletStatusCell.xib in Resources */,
 				9243525B222E73FC00A0EF37 /* UTXOViewController.xib in Resources */,
@@ -638,6 +667,7 @@
 				92FC611C22297EEC00AEABC1 /* CreateWalletPasswordViewController.swift in Sources */,
 				92435243222DED3200A0EF37 /* BMWalletStatus.m in Sources */,
 				92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */,
+				92A1B9FB22367717008135B5 /* WalletReceiveViewController.swift in Sources */,
 				9243525A222E73FC00A0EF37 /* UTXOViewController.swift in Sources */,
 				92435250222E73DC00A0EF37 /* WalletViewController.swift in Sources */,
 				925AD5FF22282AB500DDE66B /* View.swift in Sources */,
@@ -651,6 +681,7 @@
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
 				929885F6222B2B1F0038C015 /* Label.swift in Sources */,
 				92365ADA222D3F5E000D7064 /* StringStd.mm in Sources */,
+				92A1BA032236920C008135B5 /* WalletQRCodeViewController.swift in Sources */,
 				925AD5FC22282A7F00DDE66B /* BMButton.swift in Sources */,
 				92FC610922294F7D00AEABC1 /* ConfirmPhraseViewController.swift in Sources */,
 				92FC6118222978C400AEABC1 /* PasswordManager.swift in Sources */,
@@ -659,6 +690,7 @@
 				92FC611522296F2700AEABC1 /* Color.swift in Sources */,
 				92435246222DF9AE00A0EF37 /* BMAddress.mm in Sources */,
 				92365ADE222D3FAB000D7064 /* MnemonicModel.mm in Sources */,
+				92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */,
 				926A8580222ECD7600A3B747 /* Reachability.m in Sources */,
 				929885F3222A15300038C015 /* InputPhraseViewController.swift in Sources */,
 				92FC6113222964F500AEABC1 /* BMWord.swift in Sources */,
@@ -740,7 +772,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -797,7 +829,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -831,7 +863,7 @@
 					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -874,7 +906,7 @@
 					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

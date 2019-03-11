@@ -30,11 +30,15 @@ class WalletAvailableCell: UITableViewCell {
     @IBOutlet weak private var balanceLabel: UILabel!
     @IBOutlet weak private var balanceIcon: UIImageView!
     @IBOutlet weak private var arrowIcon: UIImageView!
+    @IBOutlet weak private var currencyIcon: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
+        
+        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyIcon.tintColor = UIColor.white
     }
     
     @IBAction func onExpand(sender :UIButton) {
@@ -42,6 +46,7 @@ class WalletAvailableCell: UITableViewCell {
             UIView.animate(withDuration: 0.3) {
                 self.balanceIcon.alpha = 0
                 self.balanceLabel.alpha = 0
+                self.currencyIcon.alpha = 0
                 self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
             }
         }
@@ -49,6 +54,7 @@ class WalletAvailableCell: UITableViewCell {
             UIView.animate(withDuration: 0.3) {
                 self.balanceIcon.alpha = 1
                 self.balanceLabel.alpha = 1
+                self.currencyIcon.alpha = 1
                 self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
             }
         }
@@ -69,11 +75,13 @@ extension WalletAvailableCell: Configurable {
         if options.expand {
             balanceIcon.alpha = 1
             balanceLabel.alpha = 1
+            currencyIcon.alpha = 1
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
         }
         else{
             balanceIcon.alpha = 0
             balanceLabel.alpha = 0
+            currencyIcon.alpha = 0
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
         }
     }

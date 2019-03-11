@@ -1,0 +1,11 @@
+framework module SelectItemController {
+  umbrella header "SelectItemController.h"
+
+  export *
+  module * { export * }
+}
+
+module SelectItemController.Swift {
+    header "SelectItemController-Swift.h"
+    requires objc
+}

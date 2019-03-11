@@ -129,7 +129,7 @@ extension ConfirmPhraseViewController : InputWordCellCellDelegate {
                 }
             }
             
-            nextButton.isEnabled = corretPhrase
+            nextButton.isEnabled = true
         }
     }
 }

@@ -31,7 +31,7 @@ public:
     
     WalletModel(beam::IWalletDB::Ptr walletDB, const std::string& nodeAddr);
     ~WalletModel() override;
-    
+
 private:
     NSString *GetErrorString(beam::wallet::ErrorType type);
     NSString *GetTransactionStatusString(beam::TxStatus status, bool income);

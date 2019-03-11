@@ -22,6 +22,7 @@
 
 @interface BMTransaction : NSObject
 
+@property (nonatomic,strong) NSString *ID;
 @property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) UInt64 createdTime;
 @property (nonatomic,strong) NSString *status;

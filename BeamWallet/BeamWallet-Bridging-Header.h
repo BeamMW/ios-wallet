@@ -4,3 +4,4 @@
 
 #import "AppModel.h"
 #import "MnemonicModel.h"
+#import <SVProgressHUD/SVProgressHUD.h>

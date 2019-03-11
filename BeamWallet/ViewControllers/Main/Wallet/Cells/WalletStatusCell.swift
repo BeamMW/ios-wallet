@@ -55,12 +55,12 @@ extension WalletStatusCell: Configurable {
     func configure(with networkStatus:Bool) {
         if networkStatus {
             statusView.backgroundColor = UIColor.main.green
-            statusLabel.text = "online"
+            statusLabel.text = "online (testnet)"
             statusLabel.textColor = UIColor.main.blueyGrey
         }
         else{
             statusView.backgroundColor = UIColor.main.red
-            statusLabel.text = "offline"
+            statusLabel.text = "offline (testnet)"
             statusLabel.textColor = UIColor.main.red
         }
     }

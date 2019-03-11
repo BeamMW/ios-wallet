@@ -26,7 +26,7 @@ class WalletViewController: UIViewController {
     private var expandProgress = true
 
     @IBOutlet private weak var talbeView: UITableView!
-    @IBOutlet private weak var transactionsHeaderView: UIView!
+    @IBOutlet private var transactionsHeaderView: UIView!
 
     private var transactions = [BMTransaction]()
     
@@ -40,10 +40,10 @@ class WalletViewController: UIViewController {
         talbeView.register(WalletProgressCell.self)
         talbeView.register(WalletTransactionCell.self)
 
-        AppModel.sharedManager().walletDelegate = self
+        AppModel.sharedManager().addDelegate(self)
         
         if let tr = AppModel.sharedManager().transactions {
-            transactions = tr
+            transactions = tr as! [BMTransaction]
         }
     }
 }
@@ -152,19 +152,27 @@ extension WalletViewController : WalletModelDelegate {
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
             if let tr = AppModel.sharedManager().transactions {
-                self.transactions = tr
+                self.transactions = tr as! [BMTransaction]
             }
-            self.talbeView.reloadData()
+            self.talbeView.reloadSections(IndexSet(arrayLiteral: 1), with: .none)
+        }
+    }
+    
+    func onGeneratedNewAddress(_ address: BMAddress) {
+        DispatchQueue.main.async {
+            let vc = WalletReceiveViewController()
+            vc.hidesBottomBarWhenPushed = true
+            self.pushViewController(vc: vc)
         }
     }
 }
 
 extension WalletViewController : WalletStatusCellDelegate {
     func onClickReceived() {
+        AppModel.sharedManager().generateNewWalletAddress()
     }
     
     func onClickSend() {
-        
     }
 }
 

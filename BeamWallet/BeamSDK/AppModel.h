@@ -35,11 +35,19 @@
 
 @interface AppModel : NSObject
 
+@property (nonatomic,strong) NSHashTable * _Nonnull delegates;
+
 @property (nonatomic,assign) BOOL isConnected;
-@property (nonatomic,assign) BOOL isReachable;
+@property (nonatomic,assign) BOOL isInternetAvailable;
+
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) BMAddress* _Nullable walletAddress;
-@property (nonatomic,strong) NSArray<BMTransaction*>*_Nullable transactions;
+@property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
+
+-(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;
+-(void)removeDelegate:(id<WalletModelDelegate>_Nullable) delegate;
+
+-(NSString* _Nullable)getWalletFirstAddress;
 
 -(BOOL)isWalletAlreadyAdded;
 -(BOOL)createWallet:(NSString*_Nonnull)phrase pass:(NSString*_Nonnull)pass;
@@ -47,13 +55,14 @@
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
 -(void)resetWallet;
 
--(void)generateNewWalletAddress;
 -(void)refreshWallet;
 -(void)getWalletStatus;
 -(void)getNetworkStatus;
 
-+(AppModel*_Nonnull)sharedManager;
+-(void)generateNewWalletAddress;
+-(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address ;
+-(void)setWalletComment:(NSString*)comment toAddress:(NSString*_Nonnull)address ;
 
-@property (nonatomic,weak) id <WalletModelDelegate>  _Nullable walletDelegate;
++(AppModel*_Nonnull)sharedManager;
 
 @end

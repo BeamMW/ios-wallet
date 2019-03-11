@@ -26,9 +26,12 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var amountLabel: UILabel!
+    @IBOutlet weak private var currencyIcon: UIImageView!
 
     override func awakeFromNib() {
-        super.awakeFromNib()        
+        super.awakeFromNib()
+        
+        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
     }
 }
 
@@ -46,12 +49,16 @@ extension WalletTransactionCell: Configurable {
             amountLabel.text = "+" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
             statusLabel.textColor = UIColor.main.brightSkyBlue
+            currencyIcon.tintColor = UIColor.main.brightSkyBlue
+
             typeLabel.text = "Receive BEAM"
         }
         else{
             amountLabel.text = "-" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
             statusLabel.textColor = UIColor.main.heliotrope
+            currencyIcon.tintColor = UIColor.main.heliotrope
+
             typeLabel.text = "Send BEAM"
         }
         

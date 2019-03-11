@@ -39,6 +39,11 @@ WalletModel::~WalletModel()
 
 }
 
+std::string txIDToString(const TxID& txId)
+{
+    return to_hex(txId.data(), txId.size());
+}
+
 void WalletModel::onStatus(const WalletStatus& status)
 {
     NSLog(@"onStatus");
@@ -54,8 +59,12 @@ void WalletModel::onStatus(const WalletStatus& status)
     walletStatus.realReceiving = double(int64_t(status.receiving)) / Rules::Coin;
 
     [[AppModel sharedManager] setWalletStatus:walletStatus];
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onWalletStatusChange:)]) {
-        [[AppModel sharedManager].walletDelegate onWalletStatusChange:walletStatus];
+
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onWalletStatusChange:)]) {
+            [delegate onWalletStatusChange:walletStatus];
+        }
     }
 }
 
@@ -71,14 +80,75 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.isIncome = (item.m_sender == false);
         transaction.status = GetTransactionStatusString(item.m_status,transaction.isIncome);
         transaction.failureReason = GetTransactionFailurString(item.m_failureReason);
+        transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
 
         [transactions addObject:transaction];
     }
     
-    [[AppModel sharedManager] setTransactions:transactions];
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onReceivedTransactions:)]) {
-        [[AppModel sharedManager].walletDelegate onReceivedTransactions:transactions];
+    switch (action) {
+        case ChangeAction::Added:
+        {
+            [[[AppModel sharedManager]transactions] addObjectsFromArray:transactions];
+            break;
+        }
+        case ChangeAction::Removed:
+        {
+            NSMutableIndexSet *set = [NSMutableIndexSet new];
+            
+            for (int i=0;i<[[AppModel sharedManager]transactions].count; i++) {
+                BMTransaction *tr_1 = [[[AppModel sharedManager]transactions] objectAtIndex:i];
+                for (int j=0;j<transactions.count; j++) {
+                    BMTransaction *tr_2 = [transactions objectAtIndex:j];
+                    if([tr_1.ID isEqualToString:tr_2.ID])
+                    {
+                        [set addIndex:i];
+                    }
+                }
+            }
+            
+            [[[AppModel sharedManager]transactions] removeObjectsAtIndexes:set];
+            
+            break;
+        }
+        case ChangeAction::Updated:
+        {
+            for (int i=0;i<[[AppModel sharedManager]transactions].count; i++) {
+                BMTransaction *tr_1 = [[[AppModel sharedManager]transactions] objectAtIndex:i];
+                for (int j=0;j<transactions.count; j++) {
+                    BMTransaction *tr_2 = [transactions objectAtIndex:j];
+                    if([tr_1.ID isEqualToString:tr_2.ID])
+                    {
+                        [[[AppModel sharedManager]transactions] replaceObjectAtIndex:i withObject:tr_2];
+                    }
+                }
+            }
+            break;
+        }
+        case ChangeAction::Reset:
+        {
+            [[[AppModel sharedManager]transactions] removeAllObjects];
+            [[[AppModel sharedManager]transactions] addObjectsFromArray:transactions];
+            break;
+        }
+        default:
+            break;
     }
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdTime"
+                                                  ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [[[AppModel sharedManager]transactions] sortedArrayUsingDescriptors:sortDescriptors];
+    
+    [[[AppModel sharedManager]transactions] removeAllObjects];
+    [[[AppModel sharedManager]transactions] addObjectsFromArray:sortedArray];
+
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
+            [delegate onReceivedTransactions:[[AppModel sharedManager]transactions]];
+        }
+    }
+    
     
     NSLog(@"onTxStatus");
 }
@@ -87,10 +157,12 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
 {
     NSLog(@"onSyncProgressUpdated %d/%d",done, total);
 
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
-        [[AppModel sharedManager].walletDelegate onSyncProgressUpdated:done total:total];
-     }
-    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
+            [delegate onSyncProgressUpdated:done total:total];
+        }
+    }    
 }
 
 void WalletModel::onChangeCalculated(beam::Amount change)
@@ -120,10 +192,16 @@ void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
     address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
     address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
     
+
+    getAsync()->saveAddress(walletAddr, true);
+
     [[AppModel sharedManager] setWalletAddress:address];
     
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onGeneratedNewAddress:)]) {
-        [[AppModel sharedManager].walletDelegate onGeneratedNewAddress:address];
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onGeneratedNewAddress:)]) {
+            [delegate onGeneratedNewAddress:address];
+        }
     }
 }
 
@@ -136,33 +214,41 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 {
     NSLog(@"onNodeConnectionChanged %d",isNodeConnected);
     
-    if (![[AppModel sharedManager] isReachable] && isNodeConnected) {
+    if (![[AppModel sharedManager] isInternetAvailable] && isNodeConnected) {
         isNodeConnected = NO;
     }
     
     [[AppModel sharedManager] setIsConnected:isNodeConnected];
     
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
-        [[AppModel sharedManager].walletDelegate onNetwotkStatusChange:isNodeConnected];
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+            [delegate onNetwotkStatusChange:isNodeConnected];
+        }
     }
 }
 
 void WalletModel::onWalletError(beam::wallet::ErrorType error)
 {
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onWalletError:)]) {
-        [[AppModel sharedManager].walletDelegate onWalletError:GetErrorString(error)];
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+            [delegate onWalletError:GetErrorString(error)];
+        }
     }
-    
     
     NSLog(@"onWalletError %hhu",error);
 }
 
 void WalletModel::FailedToStartWallet()
 {
-    if ([[AppModel sharedManager].walletDelegate respondsToSelector:@selector(onWalletError:)]) {
-        [[AppModel sharedManager].walletDelegate onWalletError:@"Failed to start wallet"];
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+            [delegate onWalletError:@"Failed to start wallet"];
+        }
     }
-    
+
     NSLog(@"FailedToStartWallet");
 }
 
@@ -242,5 +328,3 @@ NSString* WalletModel::GetTransactionFailurString(TxFailureReason reason)
 
     return reasons[reason];
 }
-
-

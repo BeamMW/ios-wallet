@@ -33,9 +33,8 @@ class LoginViewController: UIViewController {
     //MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
-        alert(message: "In developing")
-//        let vc = InputPhraseViewController()
-//        pushViewController(vc: vc)
+        let vc = InputPhraseViewController()
+        pushViewController(vc: vc)
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {

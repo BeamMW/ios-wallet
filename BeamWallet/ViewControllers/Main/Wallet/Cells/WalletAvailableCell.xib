@@ -56,6 +56,13 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="W82-H2-7nu">
+                                <rect key="frame" x="151" y="57" width="14" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="55s-C5-lVr"/>
+                                    <constraint firstAttribute="width" constant="14" id="ZKz-Tb-OLr"/>
+                                </constraints>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="zFZ-o9-rOz">
                                 <rect key="frame" x="262" y="22" width="13" height="8"/>
                                 <constraints>
@@ -70,6 +77,7 @@
                             <constraint firstItem="ed4-pF-ahV" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" id="Abd-Sd-eAL"/>
                             <constraint firstAttribute="trailing" secondItem="ed4-pF-ahV" secondAttribute="trailing" id="Bpv-TM-Dst"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="top" secondItem="ofI-XE-xgr" secondAttribute="bottom" constant="16" id="Fb1-qc-d6d"/>
+                            <constraint firstItem="W82-H2-7nu" firstAttribute="leading" secondItem="rsW-sA-dfC" secondAttribute="trailing" constant="5" id="HEF-c2-cxg"/>
                             <constraint firstAttribute="bottom" secondItem="ed4-pF-ahV" secondAttribute="bottom" id="LIg-hZ-gjV"/>
                             <constraint firstItem="ofI-XE-xgr" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="15" id="Pi0-fj-eDa"/>
                             <constraint firstItem="zFZ-o9-rOz" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="22" id="Vtm-dd-oqV"/>
@@ -79,6 +87,7 @@
                             <constraint firstItem="ed4-pF-ahV" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" id="jOd-D5-mSz"/>
                             <constraint firstItem="kO1-i9-9f4" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="qUZ-nD-B6n"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="leading" secondItem="kO1-i9-9f4" secondAttribute="trailing" constant="10" id="taI-Dc-fJe"/>
+                            <constraint firstItem="W82-H2-7nu" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="57" id="tlV-0q-VQt"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -100,6 +109,7 @@
                 <outlet property="arrowIcon" destination="zFZ-o9-rOz" id="7zN-bD-PT7"/>
                 <outlet property="balanceIcon" destination="kO1-i9-9f4" id="W47-aq-gPZ"/>
                 <outlet property="balanceLabel" destination="rsW-sA-dfC" id="wNz-re-eGd"/>
+                <outlet property="currencyIcon" destination="W82-H2-7nu" id="PBR-Ie-saB"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="87.256371814092958"/>
         </tableViewCell>
@@ -107,5 +117,6 @@
     <resources>
         <image name="iconBeam" width="22" height="22"/>
         <image name="iconDownArrow" width="13" height="8"/>
+        <image name="iconSymbol" width="16" height="24.5"/>
     </resources>
 </document>

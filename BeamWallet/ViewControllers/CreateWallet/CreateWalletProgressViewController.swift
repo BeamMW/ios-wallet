@@ -40,25 +40,30 @@ class CreateWalletProgressViewController: UIViewController {
         let transformScale = CGAffineTransform(scaleX: 1.0, y: progressViewHeight)
         progressView.transform = transformScale
         
+        if phrase == nil {
+            progressTitleLabel.text = "Loading wallet"
+            cancelButton.isHidden = true
+        }
+        
         startCreateWallet()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().removeDelegate(self)
     }
 
     private func startCreateWallet() {
         let appModel = AppModel.sharedManager()
-        
-        if (!appModel.isReachable){
-            if phrase == nil {
-                progressTitleLabel.text = "Loading wallet"
-                cancelButton.isHidden = true
-            }
-            
+        appModel.addDelegate(self)
+
+        if (!appModel.isInternetAvailable){
             self.alert(title: "Error", message: "No internet connection") { (_ ) in
                 self.navigationController?.popToRootViewController(animated: true)
             }
         }
         else{
-            appModel.walletDelegate = self
-            
             if let phrase = phrase {
                 let created = appModel.createWallet(phrase, pass: password)
                 if(!created)
@@ -74,9 +79,6 @@ class CreateWalletProgressViewController: UIViewController {
                 }
             }
             else{
-                progressTitleLabel.text = "Loading wallet"
-                cancelButton.isHidden = true
-                
                 let opened = appModel.openWallet(password)
                 if(!opened)
                 {

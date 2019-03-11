@@ -57,6 +57,9 @@
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="Ywl-np-TMK"/>
+                    </connections>
                 </button>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FRO-uv-0vF">
                     <rect key="frame" x="16" y="99.5" width="343" height="300"/>
