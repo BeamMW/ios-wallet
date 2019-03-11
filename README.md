@@ -2,7 +2,7 @@
 
 [twitter](https://twitter.com/beamprivacy) | [medium](https://medium.com/beam-mw) | [reddit](https://www.reddit.com/r/beamprivacy/) | [beam forum](http://forum.beam-mw.com) | [gitter](https://gitter.im/beamprivacy/Lobby) | [telegram](https://t.me/BeamPrivacy) | [bitcointalk](https://bitcointalk.org/index.php?topic=5052151.0) | [youtube](https://www.youtube.com/channel/UCddqBnfSPWibf4f8OnEJm_w?)
 
-Beam wallet mobile application allows to confidentially exchange funds anywhere you are.
+Beam wallet app for iOS allows to confidentially exchange funds anywhere you are.
 
 Read documentation [here](https://documentation.beam.mw).
 
@@ -16,3 +16,21 @@ Things that make BEAM special include:
 * No addresses are stored in the blockchain - no information whatsoever about either the sender or the receiver of a transaction is stored in the blockchain.
 * Superior scalability through compact blockchain size - using the “cut-through” feature of Mimblewimble makes the BEAM blockchain orders of magnitude smaller than any other blockchain implementation.
 * BEAM supports many transaction types such as escrow transactions, time locked transactions, atomic swaps and more.
+
+
+# Roadmap
+- March 2019    : Tesnet Betas
+- April 2019    : Mainnet release
+
+# Current status
+- First Testnet development started
+
+# Known limitations and workarounds:
+- Restore flow is not implemented on mobile, yet the funds can be restored from the desktop wallet using the same seed the mobile wallet was created with
+
+# How to build
+
+# Build status
+
+# Support
+
