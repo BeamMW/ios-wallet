@@ -145,7 +145,9 @@ extension WalletViewController : WalletModelDelegate {
     
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
-            self.talbeView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+            UIView.performWithoutAnimation {
+                self.talbeView.reloadData()
+            }
         }
     }
     
@@ -154,7 +156,10 @@ extension WalletViewController : WalletModelDelegate {
             if let tr = AppModel.sharedManager().transactions {
                 self.transactions = tr as! [BMTransaction]
             }
-            self.talbeView.reloadSections(IndexSet(arrayLiteral: 1), with: .none)
+            
+            UIView.performWithoutAnimation {
+                self.talbeView.reloadData()
+            }
         }
     }
     
@@ -173,6 +178,9 @@ extension WalletViewController : WalletStatusCellDelegate {
     }
     
     func onClickSend() {
+        let vc = WalletSendViewController()
+        vc.hidesBottomBarWhenPushed = true
+        self.pushViewController(vc: vc)
     }
 }
 

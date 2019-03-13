@@ -42,7 +42,7 @@
                     <rect key="frame" x="20" y="73.5" width="335" height="520"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T3j-3U-bV4">
-                            <rect key="frame" x="287" y="36" width="40" height="40"/>
+                            <rect key="frame" x="292" y="3" width="40" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="mho-cb-vqT"/>
                                 <constraint firstAttribute="height" constant="40" id="s9L-NK-lNL"/>
@@ -120,8 +120,7 @@ over an external secure channel</string>
                         <constraint firstItem="loc-1l-wZa" firstAttribute="centerX" secondItem="soS-x3-QUu" secondAttribute="centerX" id="07b-7i-9lo"/>
                         <constraint firstAttribute="trailing" secondItem="Ybu-4e-f8u" secondAttribute="trailing" constant="15" id="0Rj-9x-RTo"/>
                         <constraint firstAttribute="height" constant="520" id="4uR-sP-YLg"/>
-                        <constraint firstItem="T3j-3U-bV4" firstAttribute="top" secondItem="soS-x3-QUu" secondAttribute="top" constant="36" id="Iew-vQ-TnH"/>
-                        <constraint firstAttribute="trailing" secondItem="T3j-3U-bV4" secondAttribute="trailing" constant="8" id="JDj-OQ-gx6"/>
+                        <constraint firstAttribute="trailing" secondItem="T3j-3U-bV4" secondAttribute="trailing" constant="3" id="JDj-OQ-gx6"/>
                         <constraint firstItem="loc-1l-wZa" firstAttribute="top" secondItem="wEt-M7-Ryv" secondAttribute="bottom" constant="30" id="Lol-5g-l0u"/>
                         <constraint firstItem="Ybu-4e-f8u" firstAttribute="top" secondItem="I1h-L2-7Oi" secondAttribute="bottom" constant="20" id="MPZ-h6-5He"/>
                         <constraint firstItem="wEt-M7-Ryv" firstAttribute="leading" secondItem="soS-x3-QUu" secondAttribute="leading" constant="15" id="W19-MD-fMp"/>
@@ -129,6 +128,7 @@ over an external secure channel</string>
                         <constraint firstItem="I1h-L2-7Oi" firstAttribute="top" secondItem="soS-x3-QUu" secondAttribute="top" constant="50" id="aFr-Jm-SYu"/>
                         <constraint firstItem="wEt-M7-Ryv" firstAttribute="top" secondItem="Ybu-4e-f8u" secondAttribute="bottom" constant="20" id="kR3-e7-n80"/>
                         <constraint firstItem="I1h-L2-7Oi" firstAttribute="centerX" secondItem="soS-x3-QUu" secondAttribute="centerX" id="pln-Yh-ddU"/>
+                        <constraint firstItem="T3j-3U-bV4" firstAttribute="top" secondItem="soS-x3-QUu" secondAttribute="top" constant="3" id="rkw-9a-1Oj"/>
                         <constraint firstAttribute="trailing" secondItem="wEt-M7-Ryv" secondAttribute="trailing" constant="15" id="s3s-l5-kGQ"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>

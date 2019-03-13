@@ -31,6 +31,8 @@
 -(void)onNetwotkStatusChange:(BOOL)connected;
 -(void)onGeneratedNewAddress:(BMAddress*_Nonnull)address;
 -(void)onReceivedTransactions:(NSArray<BMTransaction*>*_Nonnull)transactions;
+-(void)onSendMoneyVerified;
+-(void)onCantSendToExpired;
 @end
 
 @interface AppModel : NSObject
@@ -61,8 +63,16 @@
 
 -(void)generateNewWalletAddress;
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address ;
--(void)setWalletComment:(NSString*)comment toAddress:(NSString*_Nonnull)address ;
+-(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address ;
+
+-(BOOL)isValidAddress:(NSString*_Nonnull)address;
+
+-(BOOL)canSend:(double)amount fee:(double)fee;
+-(NSString*_Nonnull)sendError:(double)amount fee:(double)fee;
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
 
 +(AppModel*_Nonnull)sharedManager;
+
+-(NSString*_Nonnull)getZipLogs ;
 
 @end

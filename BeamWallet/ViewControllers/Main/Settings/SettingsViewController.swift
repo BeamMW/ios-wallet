@@ -1,5 +1,5 @@
 //
-//  SettingsViewController.swift
+//  WalletViewController.swift
 //  BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -20,22 +20,84 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
+    
+    private var rowHeight = [CGFloat(130.0),CGFloat(130.0),CGFloat(150.0)]
 
+    @IBOutlet private weak var talbeView: UITableView!
+    @IBOutlet private weak var versionLabel:UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        self.navigationItem.title = "Settings"
+        
+        talbeView.register(ShareLogCell.self)
+        
+        versionLabel.text = version()
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func version() -> String {
+        let dictionary = Bundle.main.infoDictionary!
+        let version = dictionary["CFBundleShortVersionString"] as! String
+        let build = dictionary["CFBundleVersion"] as! String
+        return "version \(version) build \(build)"
     }
-    */
+}
 
+extension SettingsViewController : UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 && indexPath.row == 0 {
+            return rowHeight[0]
+        }
+        else if indexPath.section == 0 && indexPath.row == 1 {
+            return rowHeight[1]
+        }
+        else if indexPath.section == 0 && indexPath.row == 2 {
+            return rowHeight[2]
+        }
+        else if indexPath.section == 1 {
+            return 86
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension SettingsViewController : UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.section == 0 && indexPath.row == 0 {
+            let cell = tableView
+                .dequeueReusableCell(withType: ShareLogCell.self, for: indexPath)
+            cell.delegate = self
+            
+            return cell
+        }
+ 
+        return UITableViewCell()
+    }
+}
+
+extension SettingsViewController : ShareLogCellDelegate {
+    func onClickReport() {
+        let path = AppModel.sharedManager().getZipLogs()
+        let url = URL(fileURLWithPath: path)
+        
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+        
+        present(vc, animated: true)
+    }
 }

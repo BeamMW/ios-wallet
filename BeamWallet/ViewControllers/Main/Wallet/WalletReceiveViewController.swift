@@ -22,41 +22,25 @@ import SelectItemController
 
 class WalletReceiveViewController: UIViewController {
 
-    @IBOutlet weak private var statusLabel: UILabel!
-    @IBOutlet weak private var statusView: UIView!
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var expireLabel: UILabel!
     @IBOutlet weak private var mainStack: UIStackView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         title = "Receive"
         
         hideKeyboardWhenTappedAround()
         
         addressLabel.text = AppModel.sharedManager().walletAddress?.walletId
-        
-        onNetwotkStatusChange(AppModel.sharedManager().isConnected)
-        
+                
         if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus {
             mainStack.spacing = 70
         }
         else if Device.screenType == .iPhones_5_5s_5c_SE {
             mainStack.spacing = 50
         }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        AppModel.sharedManager().addDelegate(self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        AppModel.sharedManager().removeDelegate(self)
     }
     
     //MARK: IBAction
@@ -84,35 +68,22 @@ class WalletReceiveViewController: UIViewController {
 
         SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
         SVProgressHUD.dismiss(withDelay: 1.5)
+        
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func onQRCode(sender :UIButton) {
         let modalViewController = WalletQRCodeViewController().withAddress(address: addressLabel.text!)
-        modalViewController.modalPresentationStyle = .overCurrentContext
+        modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
         present(modalViewController, animated: true, completion: nil)
     }
     
 }
 
-extension WalletReceiveViewController: WalletModelDelegate {
-    func onNetwotkStatusChange(_ connected: Bool) {
-        DispatchQueue.main.async {
-            if connected {
-                self.statusView.backgroundColor = UIColor.main.green
-                self.statusLabel.text = "online (testnet)"
-                self.statusLabel.textColor = UIColor.main.blueyGrey
-            }
-            else{
-                self.statusView.backgroundColor = UIColor.main.red
-                self.statusLabel.text = "offline (testnet)"
-                self.statusLabel.textColor = UIColor.main.red
-            }
-        }
-    }
-}
 
 // MARK: TextField Actions
+
 extension WalletReceiveViewController : UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

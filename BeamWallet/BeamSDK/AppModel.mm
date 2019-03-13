@@ -28,6 +28,8 @@
 #import "MnemonicModel.h"
 #import "WalletModel.h"
 
+#import <SSZipArchive/SSZipArchive.h>
+
 #include "wallet/wallet.h"
 #include "wallet/wallet_db.h"
 #include "wallet/wallet_network.h"
@@ -36,6 +38,7 @@
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
+#include "utility/options.h"
 
 #include "mnemonic/mnemonic.h"
 
@@ -54,6 +57,7 @@ using namespace std;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
+    NSString *pathLog;
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -68,6 +72,8 @@ using namespace std;
 -(id)init{
     self = [super init];
     
+    [self createLogger];
+    
     _delegates = [[NSHashTable alloc] init];
     
     _transactions = [[NSMutableArray alloc] init];
@@ -80,6 +86,19 @@ using namespace std;
 
     
     return self;
+}
+
+-(void)createLogger {
+    NSString *dataPath = [Settings logPath];
+
+    po::variables_map vm;
+    
+    static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string,dataPath.string);
+    
+    auto path = logger->get_current_file_name();
+    pathLog =  [NSString stringWithUTF8String:path.c_str()];
+    
+    LOG_INFO() << "APP RUNNING";
 }
 
 -(void)checkEthernetConnection{
@@ -238,7 +257,7 @@ using namespace std;
 -(void)refreshAllInfo{
     [internetReachableFoo stopNotifier];
     [internetReachableFoo startNotifier];
-
+    
     if (wallet != nil) {
         [self getNetworkStatus];
     }
@@ -252,6 +271,11 @@ using namespace std;
 }
 
 #pragma mark - Address
+
+-(BOOL)isValidAddress:(NSString*_Nonnull)address {
+    WalletID walletID(Zero);
+    return walletID.FromHex(address.string);
+}
 
 -(void)setExpires:(int)hours toAddress:(NSString*)address {
     WalletID walletID(Zero);
@@ -309,6 +333,92 @@ using namespace std;
 
 -(void)removeDelegate:(id<WalletModelDelegate>) delegate {
     [_delegates removeObject: delegate];
+}
+
+#pragma mark - Send
+
+-(BOOL)canSend:(double)amount fee:(double)fee {
+    if(amount==0)
+    {
+        return NO;
+    }
+    
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    return (_walletStatus.available >= bTotal);
+}
+
+-(NSString*)sendError:(double)amount fee:(double)fee {
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    
+    if (amount==0) {
+        return @"Amount can't be 0";
+    }
+    else if(_walletStatus.available <= bTotal)
+    {
+        double need = double(int64_t(bTotal - _walletStatus.available)) / Rules::Coin;
+        
+        NSNumberFormatter *currencyFormatter = [NSNumberFormatter new];
+        currencyFormatter.usesGroupingSeparator = true;
+        currencyFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        currencyFormatter.currencyCode = @"";
+        currencyFormatter.currencyCode = @"";
+        currencyFormatter.minimumIntegerDigits = 0;
+        currencyFormatter.minimumFractionDigits = 0;
+        currencyFormatter.minimumSignificantDigits = 0;
+        currencyFormatter.maximumIntegerDigits = 20;
+        currencyFormatter.maximumFractionDigits = 20;
+        currencyFormatter.maximumSignificantDigits = 20;
+        
+        NSString *beam = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:need]];
+        
+        return [NSString stringWithFormat:@"Insufficient funds: you would need %@ beams to complete the transaction",beam];
+    }
+    else{
+        return @"";
+    }
+}
+
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
+    
+    WalletID walletID(Zero);
+    if (walletID.FromHex(to.string))
+    {
+        wallet->getAsync()->sendMoney(walletID, comment.string, amount * Rules::Coin,fee);
+    }
+}
+
+-(NSString*)getZipLogs {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDirectory = [paths objectAtIndex:0];
+    
+    BOOL isDir=NO;
+    
+    NSArray *subpaths;
+    
+    NSString *exportPath = docDirectory;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+   
+    if ([fileManager fileExistsAtPath:exportPath isDirectory:&isDir] && isDir){
+        subpaths = [fileManager subpathsAtPath:exportPath];
+    }
+    
+    NSString *archivePath = [docDirectory stringByAppendingString:@"/logs.zip"];
+    
+    [SSZipArchive createZipFileAtPath:archivePath withContentsOfDirectory:[Settings logPath]];
+    
+    return archivePath;
+    
+//    NSArray * directoryContents =  [[NSFileManager defaultManager]
+//                                    contentsOfDirectoryAtPath:[Settings logPath] error:nil];
+//
+//    for(NSString *file in directoryContents)
+//    {
+//        NSString *content = [NSString stringWithContentsOfFile:[[Settings logPath]stringByAppendingPathComponent:file] encoding:NSUTF8StringEncoding error:NULL];
+//        NSLog(@"%@",content);
+//    }
 }
 
 @end

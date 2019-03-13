@@ -34,7 +34,7 @@ public:
 
 private:
     NSString *GetErrorString(beam::wallet::ErrorType type);
-    NSString *GetTransactionStatusString(beam::TxStatus status, bool income);
+    NSString *GetTransactionStatusString(beam::TxStatus status, bool income, bool self);
     NSString *GetTransactionFailurString(beam::TxFailureReason reason);
     
     void onStatus(const WalletStatus& status) override;

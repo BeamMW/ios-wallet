@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */; };
 		9207FF3F222932DA009D931B /* IntroPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */; };
 		9207FF40222932DA009D931B /* IntroPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */; };
 		9207FF4222293341009D931B /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF4122293341009D931B /* SF-Pro-Display-Regular.otf */; };
@@ -49,6 +50,10 @@
 		92435256222E73E900A0EF37 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92435254222E73E900A0EF37 /* SettingsViewController.xib */; };
 		9243525A222E73FC00A0EF37 /* UTXOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435258222E73FC00A0EF37 /* UTXOViewController.swift */; };
 		9243525B222E73FC00A0EF37 /* UTXOViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92435259222E73FC00A0EF37 /* UTXOViewController.xib */; };
+		92482DFF2237F69700776D38 /* WalletSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92482DFD2237F69700776D38 /* WalletSendViewController.swift */; };
+		92482E002237F69700776D38 /* WalletSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92482DFE2237F69700776D38 /* WalletSendViewController.xib */; };
+		92482E0522381B7300776D38 /* V3QRCodeScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92482E0422381B7200776D38 /* V3QRCodeScanner.framework */; };
+		92482E0622381B8200776D38 /* V3QRCodeScanner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92482E0422381B7200776D38 /* V3QRCodeScanner.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92538F61222B5F7E00792A25 /* CreateWalletProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92538F5F222B5F7E00792A25 /* CreateWalletProgressViewController.swift */; };
 		92538F62222B5F7E00792A25 /* CreateWalletProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */; };
 		925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925AD5DB2228254E00DDE66B /* AppDelegate.swift */; };
@@ -62,6 +67,8 @@
 		925AD5FF22282AB500DDE66B /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925AD5FE22282AB500DDE66B /* View.swift */; };
 		925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 925AD60022282C8400DDE66B /* SF-Pro-Display-Bold.otf */; };
 		925AD6032228332A00DDE66B /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925AD6022228332A00DDE66B /* Button.swift */; };
+		9266B8B5223955FF00B9E31D /* ShareLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266B8B3223955FF00B9E31D /* ShareLogCell.swift */; };
+		9266B8B6223955FF00B9E31D /* ShareLogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9266B8B4223955FF00B9E31D /* ShareLogCell.xib */; };
 		926A8569222E7FD900A3B747 /* WalletStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A8567222E7FD900A3B747 /* WalletStatusCell.swift */; };
 		926A856A222E7FD900A3B747 /* WalletStatusCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A8568222E7FD900A3B747 /* WalletStatusCell.xib */; };
 		926A856C222E835300A3B747 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A856B222E835300A3B747 /* TableView.swift */; };
@@ -82,12 +89,13 @@
 		929885F8222B32C40038C015 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F7222B32C40038C015 /* Field.swift */; };
 		92A1B9FB22367717008135B5 /* WalletReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */; };
 		92A1B9FC22367717008135B5 /* WalletReceiveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */; };
-		92A1B9FE22368FFA008135B5 /* SVProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */; };
-		92A1BA0022369001008135B5 /* SVProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92A1BA032236920C008135B5 /* WalletQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */; };
 		92A1BA042236920C008135B5 /* WalletQRCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */; };
 		92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA0522369567008135B5 /* QRCodeView.swift */; };
 		92ADED812229F213001D0A38 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ADED802229F213001D0A38 /* ViewController.swift */; };
+		92AE366C22383D2300E0810B /* WalletQRCodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */; };
+		92AE366D22383D2300E0810B /* WalletQRCodeScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */; };
+		92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366E223845E300E0810B /* BMNetworkStatusView.swift */; };
 		92FC610922294F7D00AEABC1 /* ConfirmPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610722294F7D00AEABC1 /* ConfirmPhraseViewController.swift */; };
 		92FC610A22294F7D00AEABC1 /* ConfirmPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */; };
 		92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610B22295A6E00AEABC1 /* InputWordCell.swift */; };
@@ -111,7 +119,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				92A1BA0022369001008135B5 /* SVProgressHUD.framework in Embed Frameworks */,
+				92482E0622381B8200776D38 /* V3QRCodeScanner.framework in Embed Frameworks */,
 				928E78142236A88F0099AD20 /* SelectItemController.framework in Embed Frameworks */,
 				92365AE1222D4038000D7064 /* openssl.framework in Embed Frameworks */,
 			);
@@ -121,6 +129,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroPhraseViewController.swift; sourceTree = "<group>"; };
 		9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IntroPhraseViewController.xib; sourceTree = "<group>"; };
 		9207FF4122293341009D931B /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
@@ -169,6 +178,9 @@
 		92435254222E73E900A0EF37 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		92435258222E73FC00A0EF37 /* UTXOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOViewController.swift; sourceTree = "<group>"; };
 		92435259222E73FC00A0EF37 /* UTXOViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOViewController.xib; sourceTree = "<group>"; };
+		92482DFD2237F69700776D38 /* WalletSendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSendViewController.swift; sourceTree = "<group>"; };
+		92482DFE2237F69700776D38 /* WalletSendViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletSendViewController.xib; sourceTree = "<group>"; };
+		92482E0422381B7200776D38 /* V3QRCodeScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = V3QRCodeScanner.framework; sourceTree = "<group>"; };
 		92538F5F222B5F7E00792A25 /* CreateWalletProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWalletProgressViewController.swift; sourceTree = "<group>"; };
 		92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateWalletProgressViewController.xib; sourceTree = "<group>"; };
 		925AD5D82228254E00DDE66B /* BeamWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +196,8 @@
 		925AD5FE22282AB500DDE66B /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		925AD60022282C8400DDE66B /* SF-Pro-Display-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Bold.otf"; sourceTree = "<group>"; };
 		925AD6022228332A00DDE66B /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		9266B8B3223955FF00B9E31D /* ShareLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareLogCell.swift; sourceTree = "<group>"; };
+		9266B8B4223955FF00B9E31D /* ShareLogCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShareLogCell.xib; sourceTree = "<group>"; };
 		926A8567222E7FD900A3B747 /* WalletStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletStatusCell.swift; sourceTree = "<group>"; };
 		926A8568222E7FD900A3B747 /* WalletStatusCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletStatusCell.xib; sourceTree = "<group>"; };
 		926A856B222E835300A3B747 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
@@ -205,11 +219,13 @@
 		929885F7222B32C40038C015 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletReceiveViewController.swift; sourceTree = "<group>"; };
 		92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletReceiveViewController.xib; sourceTree = "<group>"; };
-		92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SVProgressHUD.framework; sourceTree = "<group>"; };
 		92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletQRCodeViewController.swift; sourceTree = "<group>"; };
 		92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletQRCodeViewController.xib; sourceTree = "<group>"; };
 		92A1BA0522369567008135B5 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		92ADED802229F213001D0A38 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletQRCodeScannerViewController.swift; sourceTree = "<group>"; };
+		92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletQRCodeScannerViewController.xib; sourceTree = "<group>"; };
+		92AE366E223845E300E0810B /* BMNetworkStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMNetworkStatusView.swift; sourceTree = "<group>"; };
 		92F82512222C33F6000D34F7 /* BeamWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BeamWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		92FC610722294F7D00AEABC1 /* ConfirmPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPhraseViewController.swift; sourceTree = "<group>"; };
 		92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfirmPhraseViewController.xib; sourceTree = "<group>"; };
@@ -225,6 +241,8 @@
 		92FC6120222990FE00AEABC1 /* BMStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMStepView.swift; sourceTree = "<group>"; };
 		92FC612222299A4E00AEABC1 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		92FC61252229C0C200AEABC1 /* BaseWizardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWizardViewController.swift; sourceTree = "<group>"; };
+		C2E4147D822C3FDD1DDDA316 /* Pods-BeamWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.release.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet.release.xcconfig"; sourceTree = "<group>"; };
+		E45E166C4E6ADD8A09EE00A2 /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92482E0522381B7300776D38 /* V3QRCodeScanner.framework in Frameworks */,
 				92365AF3222D41C7000D7064 /* libuv_a.a in Frameworks */,
 				928E78122236A8880099AD20 /* SelectItemController.framework in Frameworks */,
 				92365B01222D41E9000D7064 /* openssl.framework in Frameworks */,
@@ -240,7 +259,6 @@
 				92365AFA222D41C7000D7064 /* libexternal_pow.a in Frameworks */,
 				92365AFB222D41C7000D7064 /* libwallet_api_proto.a in Frameworks */,
 				92365AFD222D41C7000D7064 /* libnode.a in Frameworks */,
-				92A1B9FE22368FFA008135B5 /* SVProgressHUD.framework in Frameworks */,
 				92365AF7222D41C7000D7064 /* libexplorer.a in Frameworks */,
 				92365AF8222D41C7000D7064 /* libp2p.a in Frameworks */,
 				92365ACB222D3E31000D7064 /* boost.framework in Frameworks */,
@@ -250,12 +268,22 @@
 				92365AFF222D41C7000D7064 /* libcore.a in Frameworks */,
 				92365AF4222D41C7000D7064 /* libhttp.a in Frameworks */,
 				92365B00222D41C7000D7064 /* libpow.a in Frameworks */,
+				575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22A30D11A4655B31D781F6DD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E45E166C4E6ADD8A09EE00A2 /* Pods-BeamWallet.debug.xcconfig */,
+				C2E4147D822C3FDD1DDDA316 /* Pods-BeamWallet.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9207FF3B2229327F009D931B /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -324,8 +352,8 @@
 		92365AC8222D3E16000D7064 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				92482E0422381B7200776D38 /* V3QRCodeScanner.framework */,
 				928E78112236A8880099AD20 /* SelectItemController.framework */,
-				92A1B9FD22368FFA008135B5 /* SVProgressHUD.framework */,
 				92365AC9222D3E31000D7064 /* boost.framework */,
 				92365ACA222D3E31000D7064 /* openssl.framework */,
 				92365AF1222D41C6000D7064 /* libcore.a */,
@@ -342,6 +370,7 @@
 				92365AE5222D41C5000D7064 /* libuv_a.a */,
 				92365AED222D41C6000D7064 /* libwallet_api_proto.a */,
 				92365AE7222D41C5000D7064 /* libwallet.a */,
+				60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -389,6 +418,10 @@
 				92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */,
 				92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */,
 				92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */,
+				92482DFD2237F69700776D38 /* WalletSendViewController.swift */,
+				92482DFE2237F69700776D38 /* WalletSendViewController.xib */,
+				92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */,
+				92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -396,6 +429,7 @@
 		92435252222E73DF00A0EF37 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				9266B8B2223955E100B9E31D /* Cells */,
 				92435253222E73E900A0EF37 /* SettingsViewController.swift */,
 				92435254222E73E900A0EF37 /* SettingsViewController.xib */,
 			);
@@ -418,6 +452,7 @@
 				925AD5ED2228260C00DDE66B /* Resources */,
 				92365AC8222D3E16000D7064 /* Frameworks */,
 				925AD5D92228254E00DDE66B /* Products */,
+				22A30D11A4655B31D781F6DD /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -488,6 +523,7 @@
 				92FC611E2229803700AEABC1 /* BMField.swift */,
 				92FC6120222990FE00AEABC1 /* BMStepView.swift */,
 				92A1BA0522369567008135B5 /* QRCodeView.swift */,
+				92AE366E223845E300E0810B /* BMNetworkStatusView.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -506,6 +542,15 @@
 				926A8571222EA16000A3B747 /* String.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9266B8B2223955E100B9E31D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9266B8B3223955FF00B9E31D /* ShareLogCell.swift */,
+				9266B8B4223955FF00B9E31D /* ShareLogCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		926A8566222E7FBD00A3B747 /* Cells */ = {
@@ -565,10 +610,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 925AD5EA2228254F00DDE66B /* Build configuration list for PBXNativeTarget "BeamWallet" */;
 			buildPhases = (
+				405A29B2F4F7A5D0E1E97D58 /* [CP] Check Pods Manifest.lock */,
 				925AD5D42228254E00DDE66B /* Sources */,
 				925AD5D52228254E00DDE66B /* Frameworks */,
 				925AD5D62228254E00DDE66B /* Resources */,
 				92365AE2222D4039000D7064 /* Embed Frameworks */,
+				928E78152237B33D0099AD20 /* ShellScript */,
+				849EB582CFC3EDB4F752313F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -622,11 +670,14 @@
 				926A857D222EC10C00A3B747 /* WalletTransactionCell.xib in Resources */,
 				925AD5E62228254F00DDE66B /* LaunchScreen.storyboard in Resources */,
 				92365B07222D743A000D7064 /* EnterWalletPasswordViewController.xib in Resources */,
+				92482E002237F69700776D38 /* WalletSendViewController.xib in Resources */,
 				92FC610E22295A6E00AEABC1 /* InputWordCell.xib in Resources */,
 				925AD5E32228254F00DDE66B /* Assets.xcassets in Resources */,
 				92435251222E73DC00A0EF37 /* WalletViewController.xib in Resources */,
 				9207FF4222293341009D931B /* SF-Pro-Display-Regular.otf in Resources */,
 				9207FF4D22294394009D931B /* WordCell.xib in Resources */,
+				9266B8B6223955FF00B9E31D /* ShareLogCell.xib in Resources */,
+				92AE366D22383D2300E0810B /* WalletQRCodeScannerViewController.xib in Resources */,
 				925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */,
 				9207FF40222932DA009D931B /* IntroPhraseViewController.xib in Resources */,
 				92435256222E73E900A0EF37 /* SettingsViewController.xib in Resources */,
@@ -649,6 +700,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		405A29B2F4F7A5D0E1E97D58 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BeamWallet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		849EB582CFC3EDB4F752313F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
+				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		928E78152237B33D0099AD20 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/Resources/Info.plist",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" a1b807ba21d77b7a801d4c9674b93d0e4f26b21d 2c256993692a8b7b4d88caf2930889f1e0721fa30c6fe73c85e6aaf11c9a9b66\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		925AD5D42228254E00DDE66B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -658,7 +776,9 @@
 				926A8579222EB7C600A3B747 /* BMTransaction.m in Sources */,
 				92365AD1222D3E79000D7064 /* AppModel.mm in Sources */,
 				926A8572222EA16000A3B747 /* String.swift in Sources */,
+				92482DFF2237F69700776D38 /* WalletSendViewController.swift in Sources */,
 				92FC611F2229803700AEABC1 /* BMField.swift in Sources */,
+				9266B8B5223955FF00B9E31D /* ShareLogCell.swift in Sources */,
 				929885F8222B32C40038C015 /* Field.swift in Sources */,
 				926A8575222EA54F00A3B747 /* WalletProgressCell.swift in Sources */,
 				925AD6032228332A00DDE66B /* Button.swift in Sources */,
@@ -680,6 +800,7 @@
 				9243524C222E72B500A0EF37 /* MainTabBarController.swift in Sources */,
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
 				929885F6222B2B1F0038C015 /* Label.swift in Sources */,
+				92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */,
 				92365ADA222D3F5E000D7064 /* StringStd.mm in Sources */,
 				92A1BA032236920C008135B5 /* WalletQRCodeViewController.swift in Sources */,
 				925AD5FC22282A7F00DDE66B /* BMButton.swift in Sources */,
@@ -702,6 +823,7 @@
 				9207FF4C22294394009D931B /* WordCell.swift in Sources */,
 				9207FF3F222932DA009D931B /* IntroPhraseViewController.swift in Sources */,
 				92435255222E73E900A0EF37 /* SettingsViewController.swift in Sources */,
+				92AE366C22383D2300E0810B /* WalletQRCodeScannerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,7 +876,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -841,11 +963,13 @@
 		};
 		925AD5EB2228254F00DDE66B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E45E166C4E6ADD8A09EE00A2 /* Pods-BeamWallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -884,6 +1008,7 @@
 		};
 		925AD5EC2228254F00DDE66B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2E4147D822C3FDD1DDDA316 /* Pods-BeamWallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

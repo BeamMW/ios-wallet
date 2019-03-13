@@ -28,6 +28,10 @@ class WalletProgressCell: UITableViewCell {
     
     weak var delegate: WalletProgressCellDelegate?
 
+    @IBOutlet weak private var receivingLabelMaxWidth: NSLayoutConstraint!
+    @IBOutlet weak private var sentLabelMaxWidth: NSLayoutConstraint!
+    @IBOutlet weak private var maturingLabelMaxWidth: NSLayoutConstraint!
+    
     @IBOutlet weak private var receivingLabel: UILabel!
     @IBOutlet weak private var sentLabel: UILabel!
     @IBOutlet weak private var maturingLabel: UILabel!
@@ -36,11 +40,33 @@ class WalletProgressCell: UITableViewCell {
     @IBOutlet weak private var receivingStack: UIStackView!
     @IBOutlet weak private var sentStack: UIStackView!
     @IBOutlet weak private var maturingStack: UIStackView!
-    
+
+    @IBOutlet weak private var currencyReceivingIcon: UIImageView!
+    @IBOutlet weak private var currencySendingIcon: UIImageView!
+    @IBOutlet weak private var currencyMaturingIcon: UIImageView!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        currencyReceivingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyReceivingIcon.tintColor = receivingLabel.textColor
+        
+        currencySendingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencySendingIcon.tintColor = sentLabel.textColor
+        
+        currencyMaturingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyMaturingIcon.tintColor = maturingLabel.textColor
+        
         selectionStyle = .none
+        
+        receivingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 70)/3
+        sentLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 70)/3
+        maturingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 70)/3
+
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     @IBAction func onExpand(sender :UIButton) {
@@ -68,14 +94,14 @@ extension WalletProgressCell: Configurable {
     
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
-            receivingLabel.text = "+" + String.currency(value: status.realReceiving) + " ₿"
-            sentLabel.text = "-" + String.currency(value: status.realSending) + " ₿"
-            maturingLabel.text = String.currency(value: status.realMaturing) + " ₿"
+            receivingLabel.text = "+" + String.currency(value: status.realReceiving)
+            sentLabel.text = "-" + String.currency(value: status.realSending)
+            maturingLabel.text = String.currency(value: status.realMaturing)
         }
         else{
-            sentLabel.text = "0.00 ₿"
-            maturingLabel.text = "0.00 ₿"
-            receivingLabel.text = "0.00 ₿"
+            sentLabel.text = "0.00"
+            maturingLabel.text = "0.00"
+            receivingLabel.text = "0.00"
         }
         
         if !options.expand {

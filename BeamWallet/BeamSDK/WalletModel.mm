@@ -46,8 +46,11 @@ std::string txIDToString(const TxID& txId)
 
 void WalletModel::onStatus(const WalletStatus& status)
 {
+//    auto logger = Logger::get_current_file_name();
+    
     NSLog(@"onStatus");
-
+    NSLog(@"%llu",status.sending);
+    
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
     walletStatus.available = status.available;
     walletStatus.receiving = status.receiving;
@@ -78,7 +81,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
-        transaction.status = GetTransactionStatusString(item.m_status,transaction.isIncome);
+        transaction.status = GetTransactionStatusString(item.m_status,transaction.isIncome, item.m_selfTx);
         transaction.failureReason = GetTransactionFailurString(item.m_failureReason);
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
 
@@ -254,11 +257,25 @@ void WalletModel::FailedToStartWallet()
 
 void WalletModel::onSendMoneyVerified()
 {
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onSendMoneyVerified)]) {
+            [delegate onSendMoneyVerified];
+        }
+    }
+    
     NSLog(@"onSendMoneyVerified");
 }
 
 void WalletModel::onCantSendToExpired()
 {
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onCantSendToExpired)]) {
+            [delegate onCantSendToExpired];
+        }
+    }
+    
     NSLog(@"onCantSendToExpired");
 }
 
@@ -293,7 +310,7 @@ NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
     }
 }
 
-NSString* WalletModel::GetTransactionStatusString(TxStatus status, bool income)
+NSString* WalletModel::GetTransactionStatusString(TxStatus status, bool income, bool self)
 {
     switch (status)
     {
@@ -305,10 +322,10 @@ NSString* WalletModel::GetTransactionStatusString(TxStatus status, bool income)
             return income ? @"receiving" : @"sending";
         case TxStatus::Completed:
         {
-//            if (m_tx.m_selfTx)
-//            {
-//                return tr("completed");
-//            }
+            if (self)
+            {
+                return @"completed";
+            }
             return income ? @"received" : @"sent";
         }
         case TxStatus::Cancelled:

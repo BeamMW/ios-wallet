@@ -64,5 +64,11 @@ static NSString *allPathsKey = @"allPaths";
     return @"ap-node03.testnet.beam.mw:8100";
 }
 
++(NSString*)logPath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/beam_logs"];
+    return dataPath;
+}
 
 @end

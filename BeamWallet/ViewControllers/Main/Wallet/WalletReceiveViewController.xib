@@ -23,8 +23,6 @@
                 <outlet property="addressLabel" destination="RFv-C1-E4b" id="TdU-g9-F4s"/>
                 <outlet property="expireLabel" destination="RyD-xK-jLO" id="9kQ-yC-L8U"/>
                 <outlet property="mainStack" destination="LGw-Q0-iXg" id="N3d-XB-wXD"/>
-                <outlet property="statusLabel" destination="I5p-pI-jHn" id="Yt9-YO-hz8"/>
-                <outlet property="statusView" destination="yft-yI-n51" id="b8f-tD-ZvR"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -33,33 +31,15 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="online" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I5p-pI-jHn">
-                    <rect key="frame" x="40" y="39" width="35.5" height="12"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8gS-hN-bfX" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="20" y="40" width="240" height="12"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="12" id="1Sv-KC-ZEu"/>
+                        <constraint firstAttribute="height" constant="12" id="yjE-hC-YUF"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                    </userDefinedRuntimeAttributes>
-                </label>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yft-yI-n51">
-                    <rect key="frame" x="20" y="40" width="12" height="12"/>
-                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="12" id="Mqg-iP-JDm"/>
-                        <constraint firstAttribute="width" constant="12" id="R1e-Av-LRx"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="6"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="LGw-Q0-iXg">
-                    <rect key="frame" x="20" y="81" width="280" height="330.5"/>
+                    <rect key="frame" x="20" y="82" width="280" height="330.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="bBQ-IY-Ees">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="174"/>
@@ -188,7 +168,7 @@
                     </subviews>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send this address to the sender over an external secure channel" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4c-Zv-rSh">
-                    <rect key="frame" x="50" y="441.5" width="220" height="33.5"/>
+                    <rect key="frame" x="50" y="442.5" width="220" height="33.5"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -262,14 +242,13 @@
                 <constraint firstItem="x4c-Zv-rSh" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="50" id="7ma-Sx-D4Z"/>
                 <constraint firstItem="LGw-Q0-iXg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Emm-He-4VR"/>
                 <constraint firstAttribute="trailing" secondItem="LGw-Q0-iXg" secondAttribute="trailing" constant="20" id="HQp-xv-Oxy"/>
+                <constraint firstItem="LGw-Q0-iXg" firstAttribute="top" secondItem="8gS-hN-bfX" secondAttribute="bottom" constant="30" id="O9Y-cx-kUg"/>
                 <constraint firstItem="dt6-hk-9bo" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="UNR-Df-07a"/>
-                <constraint firstItem="LGw-Q0-iXg" firstAttribute="top" secondItem="I5p-pI-jHn" secondAttribute="bottom" constant="30" id="YHO-LI-PJv"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="x4c-Zv-rSh" secondAttribute="trailing" constant="50" id="e1I-mt-IfD"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="dt6-hk-9bo" secondAttribute="bottom" constant="20" id="gTQ-87-tBX"/>
-                <constraint firstItem="I5p-pI-jHn" firstAttribute="leading" secondItem="yft-yI-n51" secondAttribute="trailing" constant="8" id="kbh-MN-6Oc"/>
-                <constraint firstItem="I5p-pI-jHn" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="19" id="mB1-wJ-GTd"/>
-                <constraint firstItem="yft-yI-n51" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="mlg-MC-ZlN"/>
-                <constraint firstItem="yft-yI-n51" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="v5s-Mk-Oeo"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="8gS-hN-bfX" secondAttribute="trailing" constant="60" id="sYR-gM-xm9"/>
+                <constraint firstItem="8gS-hN-bfX" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="su0-eJ-yj0"/>
+                <constraint firstItem="8gS-hN-bfX" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="wcT-Lu-psb"/>
                 <constraint firstAttribute="trailing" secondItem="dt6-hk-9bo" secondAttribute="trailing" constant="20" id="yLi-EN-1E6"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

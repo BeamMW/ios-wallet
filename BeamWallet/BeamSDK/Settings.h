@@ -28,6 +28,7 @@
 +(NSString*)walletStoragePath;
 +(NSString*)nodeAddress;
 
++(NSString*)logPath;
 
 
 @end

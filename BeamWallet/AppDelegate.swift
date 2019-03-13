@@ -19,6 +19,8 @@
 //
 
 import UIKit
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        Crashlytics().debugMode = true
+        Fabric.with([Crashlytics.self()])
         
         let appModel = AppModel.sharedManager()
         let added = appModel.isWalletAlreadyAdded()
@@ -42,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.rootViewController = rootController
         self.window!.makeKeyAndVisible()
+    
         
         return true
     }
