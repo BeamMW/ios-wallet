@@ -24,7 +24,7 @@ protocol WalletProgressCellDelegate: AnyObject {
 }
 
 
-class WalletProgressCell: UITableViewCell {
+class WalletProgressCell: BaseCell {
     
     weak var delegate: WalletProgressCellDelegate?
 
@@ -59,9 +59,9 @@ class WalletProgressCell: UITableViewCell {
         
         selectionStyle = .none
         
-        receivingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 70)/3
-        sentLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 70)/3
-        maturingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 70)/3
+        receivingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 110)/3
+        sentLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 110)/3
+        maturingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 110)/3
 
     }
     

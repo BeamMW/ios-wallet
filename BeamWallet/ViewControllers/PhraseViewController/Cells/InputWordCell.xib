@@ -67,7 +67,7 @@
                                 </connections>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="38" id="5lA-9s-T47"/>
                             <constraint firstAttribute="trailing" secondItem="dVj-JA-4Xf" secondAttribute="trailing" constant="5" id="FaL-bp-ast"/>

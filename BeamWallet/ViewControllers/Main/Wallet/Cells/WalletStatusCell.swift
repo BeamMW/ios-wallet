@@ -24,7 +24,7 @@ protocol WalletStatusCellDelegate: AnyObject {
     func onClickSend()
 }
 
-class WalletStatusCell: UITableViewCell {
+class WalletStatusCell: BaseCell {
 
     weak var delegate: WalletStatusCellDelegate?
 

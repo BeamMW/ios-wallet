@@ -28,6 +28,7 @@
 @property (nonatomic,strong) NSString *status;
 @property (nonatomic,strong) NSString *failureReason;
 @property (nonatomic,assign) BOOL isIncome;
+@property (nonatomic,assign) BOOL isSelf;
 
 -(NSString*)formattedDate;
 

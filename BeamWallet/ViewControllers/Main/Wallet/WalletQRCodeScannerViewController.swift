@@ -20,46 +20,126 @@
 
 import UIKit
 import AVFoundation
+import Loaf
 
 protocol WalletQRCodeScannerViewControllerDelegate: AnyObject {
     func didScanQRCode(value:String)
 }
 
-class WalletQRCodeScannerViewController: UIViewController {
+class WalletQRCodeScannerViewController: BaseViewController {
 
     weak var delegate: WalletQRCodeScannerViewControllerDelegate?
+    
+    @IBOutlet private weak var scannerView: UIView!
 
-    @IBOutlet private var qrCodeView:V3QRCodeReader!
+    private var captureSession: AVCaptureSession!
+    private var previewLayer: AVCaptureVideoPreviewLayer!
+
+    var offset:CGFloat = 180
+    var scannedValue:String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Scan QR code"
         
-        qrCodeView.delegate = self
-        qrCodeView.frame = CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: self.view.frame.size.height-180);
+        if Device.screenType == .iPhones_6_6s_7_8 || Device.screenType == .iPhones_5_5s_5c_SE
+            || Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus
+        {
+           offset = 140
+        }
+        
+        scannerView.frame = CGRect(x: 0, y: offset, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-offset)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        qrCodeView.frame = CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: self.view.frame.size.height-180);
-        
         checkCameraPermissions()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if (captureSession?.isRunning == true) {
+            captureSession.stopRunning()
+        }
+    }
+    
+    private func initSession() {
+        captureSession = AVCaptureSession()
+        
+        guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
+        let videoInput: AVCaptureDeviceInput
+        
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+        } catch {
+            return
+        }
+        
+        if (captureSession.canAddInput(videoInput)) {
+            captureSession.addInput(videoInput)
+        } else {
+            return
+        }
+        
+        let metadataOutput = AVCaptureMetadataOutput()
+        
+        if (captureSession.canAddOutput(metadataOutput)) {
+            captureSession.addOutput(metadataOutput)
+            
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [.ean8, .ean13, .pdf417, .qr, .aztec, .code128]
+        } else {
+            return
+        }
+        
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.frame = scannerView.bounds
+        previewLayer.videoGravity = .resizeAspectFill
+        scannerView.layer.addSublayer(previewLayer)
+        
+        captureSession.startRunning()
     }
 
 }
 
 //MARK: - V3QRCodeReaderDelegate
 
-extension WalletQRCodeScannerViewController : V3QRCodeReaderDelegate {
-    func getBarCodeData(_ scanDictonary: [AnyHashable : Any]!) {
+extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
+    
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         
-        navigationController?.popViewController(animated: true)
-        
-        let value = scanDictonary["barCodeValue"] as! String
-        
-        delegate?.didScanQRCode(value: value)
+        if let metadataObject = metadataObjects.first {
+            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
+            guard let stringValue = readableObject.stringValue else { return }
+            getBarCodeData(code: stringValue)
+        }
+
+    }
+    
+    func getBarCodeData(code: String) {
+        if (scannedValue.isEmpty)
+        {
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+
+            scannedValue = code;
+            
+            if (!AppModel.sharedManager().isValidAddress(code))
+            {
+                let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
+                loaf.show(.average) {
+                    self.scannedValue = ""
+                }
+            }
+            else{
+                navigationController?.popViewController(animated: true)
+                
+                delegate?.didScanQRCode(value: code)
+            }
+        }
+
     }
 }
 
@@ -72,18 +152,14 @@ extension WalletQRCodeScannerViewController {
         let authStatus =  AVCaptureDevice.authorizationStatus(for: .video)
         
         if(authStatus == .authorized) {
-            if (!qrCodeView.isRunning()) {
-                qrCodeView.startReading()
-            }
+            initSession()
         }
         else if(authStatus == .notDetermined) {
 
             AVCaptureDevice.requestAccess(for: .video) { (granted) in
                 DispatchQueue.main.async {
                     if granted {
-                        if (!self.qrCodeView.isRunning()) {
-                            self.qrCodeView.startReading()
-                        }
+                        self.initSession()
                     }
                     else{
                         self.camDenied()

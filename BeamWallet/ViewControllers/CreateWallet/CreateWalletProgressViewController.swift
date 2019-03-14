@@ -20,7 +20,7 @@
 
 import UIKit
 
-class CreateWalletProgressViewController: UIViewController {
+class CreateWalletProgressViewController: BaseViewController {
 
     @IBOutlet private weak var progressView: UIProgressView!
     @IBOutlet private weak var progressTitleLabel: UILabel!

@@ -19,14 +19,14 @@
 
 import UIKit
 
-class WalletViewController: UIViewController {
+class WalletViewController: BaseViewController {
 
     private var rowHeight = [CGFloat(100.0),CGFloat(130.0),CGFloat(150.0)]
     private var expandAvailable = true
     private var expandProgress = true
 
     @IBOutlet private weak var talbeView: UITableView!
-    @IBOutlet private var transactionsHeaderView: UIView!
+    @IBOutlet private var transactionsHeaderView: BaseView!
 
     private var transactions = [BMTransaction]()
     

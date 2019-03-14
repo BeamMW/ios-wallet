@@ -4,5 +4,6 @@
 
 #import "AppModel.h"
 #import "MnemonicModel.h"
+#import "MFMailComposeViewControllerRecipient.h"
 #import <SVProgressHUD/SVProgressHUD.h>
-#import <V3QRCodeScanner/V3QRCodeReader.h>
+

@@ -20,54 +20,17 @@
 import UIKit
 
 extension String {
-    static func currency(value:Double) -> String {
+    static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.currencyCode = ""
         formatter.currencySymbol = ""
         formatter.minimumFractionDigits =  2
         formatter.maximumFractionDigits = 10
         formatter.numberStyle = .currencyAccounting
-        
-        var s = formatter.string(from: NSNumber(value: value))!
-        
-        return s
-        
-//        let currencyFormatter = NumberFormatter()
-//        currencyFormatter.usesGroupingSeparator = true
-//        currencyFormatter.numberStyle = .decimal
-//        currencyFormatter.locale = Locale.current
-//        currencyFormatter.currencyCode = ""
-//        currencyFormatter.currencySymbol = ""
-//        currencyFormatter.minimumIntegerDigits = 0;
-//        currencyFormatter.minimumFractionDigits = 0;
-//        currencyFormatter.minimumSignificantDigits = 0;
-//        currencyFormatter.maximumIntegerDigits = 15;
-//        currencyFormatter.maximumFractionDigits = 15;
-//        currencyFormatter.maximumSignificantDigits = 15;
-//        currencyFormatter.roundingMode = .floor
-//
-//        var s = currencyFormatter.string(from: NSNumber(value: value))!
-//
-//        //hack for 0.999999999 -> 0.9
-//        if s.contains(".")
-//        {
-//            let array = s.split(separator: ".")
-//            let last = array[array.count-1]
-//            let characters = Array(last)
-//            var isSame = true
-//            let first = characters[0]
-//
-//            for ch in characters {
-//                if ch != first {
-//                    isSame = false
-//                }
-//            }
-//
-//            if isSame {
-//                s = s.replacingOccurrences(of: last, with: String(first))
-//            }
-//        }
-//
-//        return s
+        return formatter
+    }()
+    
+    static func currency(value:Double) -> String {
+        return formatter.string(from: NSNumber(value: value)) ?? "0.00"
     }
 }

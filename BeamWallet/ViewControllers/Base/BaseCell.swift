@@ -1,7 +1,8 @@
 //
-//  ShareLogCell.swift
+//  BaseCell.swift
 //  BeamWallet
 //
+// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,28 +18,12 @@
 // limitations under the License.
 //
 
-import UIKit
+import Foundation
 
-protocol ShareLogCellDelegate: AnyObject {
-    func onClickReport()
-}
-
-class ShareLogCell: BaseCell {
-
-    weak var delegate: ShareLogCellDelegate?
-
+class BaseCell: UITableViewCell {    
     override func awakeFromNib() {
         super.awakeFromNib()
-       
-        selectionStyle = .none
+        
+        self.contentView.backgroundColor = UIColor.main.marine
     }
-    
-    @IBAction func onReport(sender :UIButton) {
-        self.delegate?.onClickReport()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
 }

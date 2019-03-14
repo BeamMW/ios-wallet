@@ -88,19 +88,6 @@ using namespace std;
     return self;
 }
 
--(void)createLogger {
-    NSString *dataPath = [Settings logPath];
-
-    po::variables_map vm;
-    
-    static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string,dataPath.string);
-    
-    auto path = logger->get_current_file_name();
-    pathLog =  [NSString stringWithUTF8String:path.c_str()];
-    
-    LOG_INFO() << "APP RUNNING";
-}
-
 -(void)checkEthernetConnection{
     internetReachableFoo = [Reachability reachabilityWithHostName:@"www.google.com"];
     
@@ -263,16 +250,18 @@ using namespace std;
     }
 }
 
-//TODO: TMP Solution
--(NSString* _Nullable)getWalletFirstAddress {
-    auto addresses = walletDb->getAddresses(true);
-    
-    return [NSString stringWithUTF8String:to_string(addresses[0].m_walletID).c_str()];
-}
 
 #pragma mark - Address
 
--(BOOL)isValidAddress:(NSString*_Nonnull)address {
+-(BOOL)isValidAddress:(NSString*_Nullable)address {
+    if (address==nil)
+    {
+        return NO;
+    }
+    else if (address.length == 0)
+    {
+        return NO;
+    }
     WalletID walletID(Zero);
     return walletID.FromHex(address.string);
 }
@@ -337,22 +326,22 @@ using namespace std;
 
 #pragma mark - Send
 
--(BOOL)canSend:(double)amount fee:(double)fee {
-    if(amount==0)
-    {
-        return NO;
-    }
+-(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
+   
+    NSString *errorString =  [self sendError:amount fee:fee to:to];
     
-    Amount bAmount = round(amount * Rules::Coin);
-    Amount bTotal = bAmount + fee;
-    return (_walletStatus.available >= bTotal);
+    return errorString;
 }
 
--(NSString*)sendError:(double)amount fee:(double)fee {
+-(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
     Amount bAmount = round(amount * Rules::Coin);
     Amount bTotal = bAmount + fee;
     
-    if (amount==0) {
+   if(![self isValidAddress:to])
+    {
+        return @"Incorrect address";
+    }
+    else if (amount==0) {
         return @"Amount can't be 0";
     }
     else if(_walletStatus.available <= bTotal)
@@ -376,7 +365,7 @@ using namespace std;
         return [NSString stringWithFormat:@"Insufficient funds: you would need %@ beams to complete the transaction",beam];
     }
     else{
-        return @"";
+        return nil;
     }
 }
 
@@ -389,20 +378,31 @@ using namespace std;
     }
 }
 
+#pragma mark - Logs
+
+-(void)createLogger {
+    NSString *dataPath = [Settings logPath];
+    
+    static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string,dataPath.string);
+    
+    auto path = logger->get_current_file_name();
+    pathLog =  [NSString stringWithUTF8String:path.c_str()];
+    
+    LOG_INFO() << "APP RUNNING";
+}
+
 -(NSString*)getZipLogs {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *docDirectory = [paths objectAtIndex:0];
     
-    BOOL isDir=NO;
+    BOOL isDir = NO;
     
     NSArray *subpaths;
     
     NSString *exportPath = docDirectory;
     
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-   
-    if ([fileManager fileExistsAtPath:exportPath isDirectory:&isDir] && isDir){
-        subpaths = [fileManager subpathsAtPath:exportPath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:exportPath isDirectory:&isDir] && isDir) {
+        subpaths = [[NSFileManager defaultManager] subpathsAtPath:exportPath];
     }
     
     NSString *archivePath = [docDirectory stringByAppendingString:@"/logs.zip"];
@@ -410,15 +410,6 @@ using namespace std;
     [SSZipArchive createZipFileAtPath:archivePath withContentsOfDirectory:[Settings logPath]];
     
     return archivePath;
-    
-//    NSArray * directoryContents =  [[NSFileManager defaultManager]
-//                                    contentsOfDirectoryAtPath:[Settings logPath] error:nil];
-//
-//    for(NSString *file in directoryContents)
-//    {
-//        NSString *content = [NSString stringWithContentsOfFile:[[Settings logPath]stringByAppendingPathComponent:file] encoding:NSUTF8StringEncoding error:NULL];
-//        NSLog(@"%@",content);
-//    }
 }
 
 @end

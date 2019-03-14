@@ -30,6 +30,10 @@ class WordCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        if AppDelegate.CurrentTarget == .Test {
+            
+        }
     }
 }
 

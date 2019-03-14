@@ -19,7 +19,7 @@
 
 import UIKit
 
-class UTXOViewController: UIViewController {
+class UTXOViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

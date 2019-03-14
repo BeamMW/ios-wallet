@@ -30,6 +30,11 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tkt-4i-DB0" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="290" height="57.5"/>
                                 <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="testnetColor">
+                                        <color key="value" red="0.20392156862745098" green="0.1803921568627451" blue="0.25490196078431371" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onReportWithSender:" destination="feQ-Ee-g95" eventType="touchUpInside" id="UWE-x9-gZb"/>
                                 </connections>

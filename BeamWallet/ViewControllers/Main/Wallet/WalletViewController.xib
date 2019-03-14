@@ -45,7 +45,7 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
         </view>
-        <view contentMode="scaleToFill" id="hVq-Ig-XxH">
+        <view contentMode="scaleToFill" id="hVq-Ig-XxH" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>

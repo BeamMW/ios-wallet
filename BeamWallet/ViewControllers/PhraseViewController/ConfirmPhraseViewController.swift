@@ -53,6 +53,15 @@ class ConfirmPhraseViewController: BaseWizardViewController {
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if inputWords[0].value.isEmpty {
+            let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as! InputWordCell
+            cell.startEditing()
+        }
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -129,7 +138,7 @@ extension ConfirmPhraseViewController : InputWordCellCellDelegate {
                 }
             }
             
-            nextButton.isEnabled = corretPhrase
+            nextButton.isEnabled = true
         }
     }
 }

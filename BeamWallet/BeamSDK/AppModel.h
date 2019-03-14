@@ -46,10 +46,10 @@
 @property (nonatomic,strong) BMAddress* _Nullable walletAddress;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
 
++(AppModel*_Nonnull)sharedManager;
+
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;
 -(void)removeDelegate:(id<WalletModelDelegate>_Nullable) delegate;
-
--(NSString* _Nullable)getWalletFirstAddress;
 
 -(BOOL)isWalletAlreadyAdded;
 -(BOOL)createWallet:(NSString*_Nonnull)phrase pass:(NSString*_Nonnull)pass;
@@ -65,13 +65,10 @@
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address ;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address ;
 
--(BOOL)isValidAddress:(NSString*_Nonnull)address;
+-(BOOL)isValidAddress:(NSString*_Nullable)address;
 
--(BOOL)canSend:(double)amount fee:(double)fee;
--(NSString*_Nonnull)sendError:(double)amount fee:(double)fee;
+-(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
-
-+(AppModel*_Nonnull)sharedManager;
 
 -(NSString*_Nonnull)getZipLogs ;
 

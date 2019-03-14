@@ -62,6 +62,10 @@ extension WalletTransactionCell: Configurable {
             typeLabel.text = "Send BEAM"
         }
         
+        if options.transaction.isSelf {
+            statusLabel.textColor = UIColor.white
+        }
+        
         dateLabel.text = options.transaction.formattedDate()
         statusLabel.text = options.transaction.status
         

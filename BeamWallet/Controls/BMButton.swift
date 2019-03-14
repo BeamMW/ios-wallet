@@ -24,8 +24,26 @@ import UIKit
 @IBDesignable
 class BMButton: UIButton {
     
+    private var _testnetColor:UIColor?
+
+    @IBInspectable
+    var testnetColor: UIColor? {
+        get {
+            return _testnetColor
+        }
+        set {
+            _testnetColor = newValue
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        if let color = testnetColor {
+            if AppDelegate.CurrentTarget == .Test {
+                self.backgroundColor = color
+            }
+        }
         
         if let color = self.backgroundColor {
             self.setBackgroundColor(color: UIColor.init(red: 2/255, green: 86/255, blue: 100/255, alpha: 1), forState: .disabled)

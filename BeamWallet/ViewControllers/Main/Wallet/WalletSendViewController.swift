@@ -21,7 +21,7 @@
 import UIKit
 import AVFoundation
 
-class WalletSendViewController: UIViewController {
+class WalletSendViewController: BaseViewController {
 
     @IBOutlet weak private var mainViewHeight: NSLayoutConstraint!
     @IBOutlet weak private var mainViewWidth: NSLayoutConstraint!
@@ -94,21 +94,24 @@ class WalletSendViewController: UIViewController {
         let amount = Double(amountField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
         let fee = Double(feeField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
         
-        let canSend = AppModel.sharedManager().canSend(amount ?? 0, fee: fee ?? 0)
+        let valid = AppModel.sharedManager().isValidAddress(toAddressField.text)
         
-        if(!canSend)
-        {
-            let error = AppModel.sharedManager().sendError(amount ?? 0, fee: fee ?? 0)
+        if !valid {
+            toAddressErrorLabel.text = "Incorrect address"
+            toAddressErrorLabel.textColor = UIColor.main.red
+            toAddressField.lineColor = UIColor.main.red
+            toAddressField.textColor = UIColor.main.red
+        }
+        else if let canSend = AppModel.sharedManager().canSend(amount ?? 0, fee: fee ?? 0, to: toAddressField.text) {
+            
             amountErrorLabel.isHidden = false
-            amountErrorLabel.text = error
+            amountErrorLabel.text = canSend
             amountErrorLabel.textColor = UIColor.main.red
         }
-        else{
-            if let address = toAddressField.text {
-                AppModel.sharedManager().send(amount ?? 0, fee: fee ?? 0, to: address, comment: commentField.text ?? "")
-                
-                self.navigationController?.popViewController(animated: true)
-            }
+        else if let address = toAddressField.text {
+            AppModel.sharedManager().send(amount ?? 0, fee: fee ?? 0, to: address, comment: commentField.text ?? "")
+            
+            self.navigationController?.popViewController(animated: true)
         }
         
         updateLayout()
@@ -175,6 +178,24 @@ extension WalletSendViewController : UITextFieldDelegate {
         if let position = fieldPosition {
             scrollView.scrollRectToVisible(position, animated: true)
         }
+        
+        if textField == toAddressField {
+            toAddressField.inputAccessoryView = nil
+            
+            if let text = UIPasteboard.general.string {
+                if AppModel.sharedManager().isValidAddress(text)
+                {
+                    let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44), copy:text)
+                    inputBar.completion = {
+                        (obj : String?) -> Void in
+                        if let text = obj {
+                            self.toAddressField.text = text
+                        }
+                    }
+                    toAddressField.inputAccessoryView = inputBar
+                }
+            }
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -220,17 +241,11 @@ extension WalletSendViewController {
 extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
 {
     func didScanQRCode(value: String) {        
-        let valid = AppModel.sharedManager().isValidAddress(value)
-        if !valid {
-            self.alert(title: "Error", message: "Incorrect address")
-        }
-        else{
-            self.toAddressErrorLabel.text = "Input or scan the recipient's address"
-            self.toAddressErrorLabel.textColor = UIColor.main.blueyGrey
-            self.toAddressField.lineColor = UIColor.main.darkSlateBlue
-            self.toAddressField.textColor = UIColor.white
-            self.toAddressField.text = value
-        }
+        self.toAddressErrorLabel.text = "Input or scan the recipient's address"
+        self.toAddressErrorLabel.textColor = UIColor.main.blueyGrey
+        self.toAddressField.lineColor = UIColor.main.darkSlateBlue
+        self.toAddressField.textColor = UIColor.white
+        self.toAddressField.text = value
     }
 }
 

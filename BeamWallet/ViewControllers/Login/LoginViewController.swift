@@ -20,10 +20,16 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: BaseViewController {
+
+    @IBOutlet private weak var bgView: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if AppDelegate.CurrentTarget == .Test {
+            bgView.image = UIImage.init(named: "bgTestnet.jpg");
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {

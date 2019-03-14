@@ -2,12 +2,14 @@ PODS:
   - Crashlytics (3.12.0):
     - Fabric (~> 1.9.0)
   - Fabric (1.9.0)
+  - Loaf (0.3.0)
   - SSZipArchive (2.1.4)
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
   - Crashlytics
   - Fabric
+  - Loaf
   - SSZipArchive
   - SVProgressHUD
 
@@ -15,15 +17,17 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Crashlytics
     - Fabric
+    - Loaf
     - SSZipArchive
     - SVProgressHUD
 
 SPEC CHECKSUMS:
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+  Loaf: 081b392fbe142da036377ebd988831596b89cf98
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: e859ff3457c3ecaa669051303b9222af75152ce0
+PODFILE CHECKSUM: 19f679bb059691686badc372833a64640ac66067
 
 COCOAPODS: 1.5.3

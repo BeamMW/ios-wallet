@@ -17,7 +17,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WalletQRCodeScannerViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="qrCodeView" destination="Nxq-4l-r8L" id="3jD-je-4PI"/>
+                <outlet property="scannerView" destination="EoU-EB-gFt" id="4vq-M2-29j"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -26,10 +26,10 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nxq-4l-r8L" customClass="V3QRCodeReader">
+                <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EoU-EB-gFt">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan receiver’s QR code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6m3-DW-Abz">
                     <rect key="frame" x="20" y="60" width="335" height="20"/>
@@ -45,6 +45,7 @@
                 <constraint firstItem="6m3-DW-Abz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="qma-69-xAN"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="uI8-p7-6o0"/>
+            <point key="canvasLocation" x="138.40000000000001" y="144.3778110944528"/>
         </view>
     </objects>
 </document>

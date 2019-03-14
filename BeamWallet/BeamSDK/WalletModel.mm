@@ -51,6 +51,7 @@ void WalletModel::onStatus(const WalletStatus& status)
     NSLog(@"onStatus");
     NSLog(@"%llu",status.sending);
     
+
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
     walletStatus.available = status.available;
     walletStatus.receiving = status.receiving;
@@ -84,7 +85,8 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.status = GetTransactionStatusString(item.m_status,transaction.isIncome, item.m_selfTx);
         transaction.failureReason = GetTransactionFailurString(item.m_failureReason);
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
-
+        transaction.isSelf = item.m_selfTx;
+        
         [transactions addObject:transaction];
     }
     

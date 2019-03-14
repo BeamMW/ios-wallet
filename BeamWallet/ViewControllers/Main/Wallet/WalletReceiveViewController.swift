@@ -20,7 +20,7 @@
 import UIKit
 import SelectItemController
 
-class WalletReceiveViewController: UIViewController {
+class WalletReceiveViewController: BaseViewController {
 
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var expireLabel: UILabel!

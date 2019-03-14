@@ -37,6 +37,9 @@ class DisplayPhraseViewController: BaseWizardViewController {
         if Device.screenType == .iPhones_5_5s_5c_SE {
             mainStack?.spacing = 20
         }
+        else if Device.screenType == .iPhones_6_6s_7_8 {
+            mainStack?.spacing = 30
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +54,21 @@ class DisplayPhraseViewController: BaseWizardViewController {
     
 // MARK: IBAction
     @IBAction func onCopy(sender :UIButton) {
-        UIPasteboard.general.string = phrase
+        var copyPhrase = ""
+        var index = 1
+        
+        for word in words {
+            let s = String(index) + ": " + word
+            if copyPhrase.isEmpty {
+                copyPhrase = s
+            }
+            else{
+                copyPhrase = copyPhrase + "\n" + s
+            }
+            index = index + 1
+        }
+        
+        UIPasteboard.general.string = copyPhrase
         
         SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
         SVProgressHUD.dismiss(withDelay: 1.5)

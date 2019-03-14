@@ -19,7 +19,7 @@
 
 import UIKit
 
-class WalletQRCodeViewController: UIViewController {
+class WalletQRCodeViewController: BaseViewController {
 
     private var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
 

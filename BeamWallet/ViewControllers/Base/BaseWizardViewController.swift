@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BaseWizardViewController: UIViewController {
+class BaseWizardViewController: BaseViewController {
 
     @IBOutlet weak var stackWidth: NSLayoutConstraint?
     @IBOutlet weak var mainStack: UIStackView?

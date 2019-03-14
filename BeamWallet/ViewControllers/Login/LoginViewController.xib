@@ -20,6 +20,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="bgView" destination="iAW-fu-nfK" id="y8n-q0-XUE"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

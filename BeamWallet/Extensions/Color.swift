@@ -34,6 +34,9 @@ extension UIColor {
         }
         
         static var marine: UIColor {
+            if AppDelegate.CurrentTarget == .Test {
+                return UIColor.main.dark
+            }
             return .init(red: 3/255, green: 46/255, blue: 73/255, alpha: 1)
         }
         
@@ -54,6 +57,9 @@ extension UIColor {
         }
         
         static var navy: UIColor {
+            if AppDelegate.CurrentTarget == .Test {
+                return UIColor.main.dark
+            }
             return .init(red: 2/255, green: 37/255, blue: 60/255, alpha: 1)
         }
         
@@ -62,6 +68,9 @@ extension UIColor {
         }
         
         static var marineTwo: UIColor {
+            if AppDelegate.CurrentTarget == .Test {
+                return UIColor.main.darkTwo
+            }
             return .init(red: 10/255, green: 52/255, blue: 77/255, alpha: 1)
         }
         
@@ -71,6 +80,14 @@ extension UIColor {
         
         static var brightSkyBlue: UIColor {
             return .init(red: 11/255, green: 204/255, blue: 247/255, alpha: 1)
+        }
+        
+        static var dark: UIColor {
+            return .init(red: 30/255, green: 23/255, blue: 44/255, alpha: 1)
+        }
+        
+        static var darkTwo: UIColor {
+            return .init(red: 40/255, green: 34/255, blue: 54/255, alpha: 1)
         }
     }
     

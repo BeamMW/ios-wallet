@@ -27,9 +27,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    static let targetName = Bundle.main.infoDictionary?["CFBundleExecutable"] as! String
 
+    enum Target: String {
+        case Main = "Main"
+        case Test = "BeamWalletTestNet"
+    }
+    
+    static var CurrentTarget: Target {
+        switch targetName {
+        case Target.Test.rawValue:
+            return .Test
+        default:
+            return .Main
+        }
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+                
         Crashlytics().debugMode = true
         Fabric.with([Crashlytics.self()])
         

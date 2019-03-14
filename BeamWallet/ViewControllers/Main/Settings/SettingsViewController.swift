@@ -19,7 +19,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: BaseViewController {
     
     private var rowHeight = [CGFloat(130.0),CGFloat(130.0),CGFloat(150.0)]
 

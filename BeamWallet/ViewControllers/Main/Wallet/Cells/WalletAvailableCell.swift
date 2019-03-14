@@ -23,7 +23,7 @@ protocol WalletAvailableCellDelegate: AnyObject {
     func onExpandAvailable()
 }
 
-class WalletAvailableCell: UITableViewCell {
+class WalletAvailableCell: BaseCell {
 
     weak var delegate: WalletAvailableCellDelegate?
 
