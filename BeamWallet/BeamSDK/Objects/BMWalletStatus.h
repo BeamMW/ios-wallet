@@ -31,5 +31,7 @@
 @property (nonatomic,assign) double realReceiving;
 @property (nonatomic,assign) double realSending;
 @property (nonatomic,assign) double realMaturing;
+@property (nonatomic,strong) NSString *currentHeight;
+@property (nonatomic,strong) NSString *currentStateHash;
 
 @end

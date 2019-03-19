@@ -28,9 +28,6 @@ class WalletStatusCell: BaseCell {
 
     weak var delegate: WalletStatusCellDelegate?
 
-    @IBOutlet weak private var statusLabel: UILabel!
-    @IBOutlet weak private var statusView: UIView!
-
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -47,21 +44,5 @@ class WalletStatusCell: BaseCell {
     
     @IBAction func onSend(sender :UIButton) {
         self.delegate?.onClickSend()
-    }
-}
-
-extension WalletStatusCell: Configurable {
-    
-    func configure(with networkStatus:Bool) {
-        if networkStatus {
-            statusView.backgroundColor = UIColor.main.green
-            statusLabel.text = "online (testnet)"
-            statusLabel.textColor = UIColor.main.blueyGrey
-        }
-        else{
-            statusView.backgroundColor = UIColor.main.red
-            statusLabel.text = "offline (testnet)"
-            statusLabel.textColor = UIColor.main.red
-        }
     }
 }

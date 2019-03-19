@@ -28,6 +28,8 @@ class MainTabBarController: UITabBarController {
         self.tabBar.tintColor = UIColor.main.green
         self.tabBar.barTintColor = UIColor.main.navy
         self.tabBar.isTranslucent = false
+        self.tabBar.shadowImage = UIImage()
+        self.tabBar.backgroundImage = UIImage()
         
         let walletVC = UINavigationController(rootViewController: WalletViewController())
         walletVC.navigationBar.setBackgroundImage(UIImage(), for: .default)

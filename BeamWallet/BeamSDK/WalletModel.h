@@ -19,7 +19,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #include <csignal>
 
 #include "wallet/wallet_client.h"
@@ -36,6 +35,7 @@ private:
     NSString *GetErrorString(beam::wallet::ErrorType type);
     NSString *GetTransactionStatusString(beam::TxStatus status, bool income, bool self);
     NSString *GetTransactionFailurString(beam::TxFailureReason reason);
+    NSString *GetUTXOStatusString(beam::Coin coin);
     
     void onStatus(const WalletStatus& status) override;
     void onTxStatus(beam::ChangeAction, const std::vector<beam::TxDescription>& items) override;

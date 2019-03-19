@@ -24,7 +24,7 @@ extension String {
         let formatter = NumberFormatter()
         formatter.currencyCode = ""
         formatter.currencySymbol = ""
-        formatter.minimumFractionDigits =  2
+        formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 10
         formatter.numberStyle = .currencyAccounting
         return formatter

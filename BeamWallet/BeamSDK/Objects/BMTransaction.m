@@ -31,4 +31,8 @@
     return [f stringFromDate:date];
 }
 
+-(BOOL)isFailed {
+    return [self.status isEqualToString:@"failed"];
+}
+
 @end

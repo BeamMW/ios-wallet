@@ -25,7 +25,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SMN-6X-hRJ">
-                        <rect key="frame" x="15" y="57" width="290" height="57.5"/>
+                        <rect key="frame" x="15" y="47" width="290" height="57.5"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tkt-4i-DB0" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="290" height="57.5"/>
@@ -84,9 +84,9 @@
                     <constraint firstItem="SMN-6X-hRJ" firstAttribute="leading" secondItem="AYp-YA-COh" secondAttribute="leading" constant="15" id="5BD-lI-HL7"/>
                     <constraint firstItem="xO5-XO-RDU" firstAttribute="top" secondItem="AYp-YA-COh" secondAttribute="top" constant="15" id="GRw-wj-W9l"/>
                     <constraint firstItem="xO5-XO-RDU" firstAttribute="leading" secondItem="AYp-YA-COh" secondAttribute="leading" constant="15" id="N20-VW-iHM"/>
-                    <constraint firstAttribute="bottom" secondItem="SMN-6X-hRJ" secondAttribute="bottom" constant="15" id="ePo-lQ-bfQ"/>
+                    <constraint firstAttribute="bottom" secondItem="SMN-6X-hRJ" secondAttribute="bottom" constant="25" id="ePo-lQ-bfQ"/>
                     <constraint firstAttribute="trailing" secondItem="SMN-6X-hRJ" secondAttribute="trailing" constant="15" id="pim-1L-B8P"/>
-                    <constraint firstItem="SMN-6X-hRJ" firstAttribute="top" secondItem="xO5-XO-RDU" secondAttribute="bottom" constant="30" id="z3V-hb-LO4"/>
+                    <constraint firstItem="SMN-6X-hRJ" firstAttribute="top" secondItem="xO5-XO-RDU" secondAttribute="bottom" constant="20" id="z3V-hb-LO4"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="G9c-ca-nNU"/>

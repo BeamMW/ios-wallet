@@ -23,14 +23,23 @@
 @interface BMTransaction : NSObject
 
 @property (nonatomic,strong) NSString *ID;
-@property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) UInt64 createdTime;
 @property (nonatomic,strong) NSString *status;
 @property (nonatomic,strong) NSString *failureReason;
+@property (nonatomic,strong) NSString *kernelId;
+@property (nonatomic,strong) NSString *senderAddress;
+@property (nonatomic,strong) NSString *receiverAddress;
+@property (nonatomic,strong) NSString *comment;
 @property (nonatomic,assign) BOOL isIncome;
 @property (nonatomic,assign) BOOL isSelf;
+@property (nonatomic,assign) BOOL canCancel;
+@property (nonatomic,assign) BOOL canResume;
+@property (nonatomic,assign) BOOL canDelete;
+@property (nonatomic,assign) double fee;
+@property (nonatomic,assign) double realAmount;
 
 -(NSString*)formattedDate;
+-(BOOL)isFailed;
 
 @end
 

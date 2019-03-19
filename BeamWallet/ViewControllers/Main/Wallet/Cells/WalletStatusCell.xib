@@ -13,9 +13,6 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
-        <array key="SF-Pro-Display-Regular.otf">
-            <string>SFProDisplay-Regular</string>
-        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -30,31 +27,6 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-Vv-Ysb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gRq-lV-Rff">
-                                <rect key="frame" x="15" y="15" width="12" height="12"/>
-                                <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="12" id="BZE-uU-Whp"/>
-                                    <constraint firstAttribute="width" constant="12" id="MLb-Cu-iUu"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="6"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="online" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2In-cH-qge">
-                                <rect key="frame" x="35" y="13" width="35.5" height="12"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="12" id="bzi-Oo-Zxu"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117647058827" green="0.63137254901960782" blue="0.67843137254901964" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aBo-4q-aqi">
                                 <rect key="frame" x="15" y="42" width="290" height="44"/>
                                 <subviews>
@@ -99,17 +71,22 @@
                                     <constraint firstAttribute="height" constant="44" id="ePg-d8-sxa"/>
                                 </constraints>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xqb-q6-mpE" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="15" width="290" height="12"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="12" id="yX7-Gh-LJ4"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="xqb-q6-mpE" firstAttribute="top" secondItem="eF7-Vv-Ysb" secondAttribute="top" constant="15" id="0N0-LM-fWQ"/>
                             <constraint firstItem="aBo-4q-aqi" firstAttribute="leading" secondItem="eF7-Vv-Ysb" secondAttribute="leading" constant="15" id="0iX-LX-lgb"/>
-                            <constraint firstItem="aBo-4q-aqi" firstAttribute="top" secondItem="gRq-lV-Rff" secondAttribute="bottom" constant="15" id="GwY-GD-7nJ"/>
                             <constraint firstAttribute="trailing" secondItem="aBo-4q-aqi" secondAttribute="trailing" constant="15" id="N3o-cj-E9T"/>
-                            <constraint firstItem="gRq-lV-Rff" firstAttribute="leading" secondItem="eF7-Vv-Ysb" secondAttribute="leading" constant="15" id="UpI-Ox-xnQ"/>
-                            <constraint firstItem="2In-cH-qge" firstAttribute="top" secondItem="eF7-Vv-Ysb" secondAttribute="top" constant="13" id="cW8-Md-qZZ"/>
+                            <constraint firstItem="xqb-q6-mpE" firstAttribute="leading" secondItem="eF7-Vv-Ysb" secondAttribute="leading" constant="15" id="SNC-WU-rGC"/>
+                            <constraint firstAttribute="trailing" secondItem="xqb-q6-mpE" secondAttribute="trailing" constant="15" id="fht-so-j6a"/>
                             <constraint firstAttribute="bottom" secondItem="aBo-4q-aqi" secondAttribute="bottom" constant="13.5" id="qvl-u1-5lW"/>
-                            <constraint firstItem="2In-cH-qge" firstAttribute="leading" secondItem="gRq-lV-Rff" secondAttribute="trailing" constant="8" id="sbK-bV-lpV"/>
-                            <constraint firstItem="gRq-lV-Rff" firstAttribute="top" secondItem="eF7-Vv-Ysb" secondAttribute="top" constant="15" id="zm9-ak-C5o"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -123,10 +100,6 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <connections>
-                <outlet property="statusLabel" destination="2In-cH-qge" id="3Jf-k5-FMl"/>
-                <outlet property="statusView" destination="gRq-lV-Rff" id="E8a-iS-RWZ"/>
-            </connections>
             <point key="canvasLocation" x="52.799999999999997" y="48.575712143928037"/>
         </tableViewCell>
     </objects>

@@ -62,7 +62,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="W82-H2-7nu">
-                                <rect key="frame" x="151" y="57" width="14" height="21"/>
+                                <rect key="frame" x="151" y="59" width="14" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="55s-C5-lVr"/>
                                     <constraint firstAttribute="width" constant="14" id="ZKz-Tb-OLr"/>
@@ -92,7 +92,7 @@
                             <constraint firstItem="ed4-pF-ahV" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" id="jOd-D5-mSz"/>
                             <constraint firstItem="kO1-i9-9f4" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="qUZ-nD-B6n"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="leading" secondItem="kO1-i9-9f4" secondAttribute="trailing" constant="10" id="taI-Dc-fJe"/>
-                            <constraint firstItem="W82-H2-7nu" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="57" id="tlV-0q-VQt"/>
+                            <constraint firstItem="W82-H2-7nu" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="59" id="tlV-0q-VQt"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

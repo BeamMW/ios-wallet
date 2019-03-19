@@ -22,6 +22,7 @@
 #import "BMWalletStatus.h"
 #import "BMAddress.h"
 #import "BMTransaction.h"
+#import "BMUTXO.h"
 
 @protocol WalletModelDelegate <NSObject>
 @optional
@@ -33,6 +34,7 @@
 -(void)onReceivedTransactions:(NSArray<BMTransaction*>*_Nonnull)transactions;
 -(void)onSendMoneyVerified;
 -(void)onCantSendToExpired;
+-(void)onReceivedUTXOs:(NSArray<BMUTXO*>*_Nonnull)utxos;
 @end
 
 @interface AppModel : NSObject
@@ -45,6 +47,7 @@
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) BMAddress* _Nullable walletAddress;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
+@property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable utxos;
 
 +(AppModel*_Nonnull)sharedManager;
 
@@ -71,5 +74,11 @@
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
 
 -(NSString*_Nonnull)getZipLogs ;
+
+-(void)deleteTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)cancelTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
+
+-(void)getUTXO;
 
 @end

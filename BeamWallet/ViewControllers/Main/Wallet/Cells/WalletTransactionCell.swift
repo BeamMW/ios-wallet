@@ -27,6 +27,8 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var currencyIcon: UIImageView!
+    @IBOutlet weak private var arrowImage: UIImageView!
+    @IBOutlet weak private var amountOffset: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -37,12 +39,18 @@ class WalletTransactionCell: UITableViewCell {
 
 extension WalletTransactionCell: Configurable {
     
-    func configure(with options: (row: Int, transaction:BMTransaction)) {
+    func configure(with options: (row: Int, transaction:BMTransaction, single:Bool)) {
         if options.row % 2 == 0 {
             mainView.backgroundColor = UIColor.main.marineTwo
         }
         else{
             mainView.backgroundColor = UIColor.main.marine
+        }
+        
+        self.arrowImage.isHidden = options.single
+        
+        if options.single {
+            amountOffset.constant = 0
         }
         
         if options.transaction.isIncome {
@@ -65,12 +73,15 @@ extension WalletTransactionCell: Configurable {
         if options.transaction.isSelf {
             statusLabel.textColor = UIColor.white
         }
+        else if options.transaction.isFailed() {
+            statusLabel.textColor = UIColor.main.red
+        }
         
         dateLabel.text = options.transaction.formattedDate()
         statusLabel.text = options.transaction.status
         
         let selectedView = UIView()
-        selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.5)
+        selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
         self.selectedBackgroundView = selectedView
     }
 }

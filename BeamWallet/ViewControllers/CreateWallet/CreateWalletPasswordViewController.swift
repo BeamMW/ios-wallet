@@ -42,6 +42,8 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         confirmPassField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         let backButton = UIButton(type: .system)
+        backButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        backButton.contentHorizontalAlignment = .left
         backButton.tintColor = UIColor.white
         backButton.setImage(UIImage.init(named: "iconBack"), for: .normal)
         backButton.addTarget(self, action: #selector(onBack), for: .touchUpInside)
@@ -51,22 +53,17 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
 // MARK: IBAction
     
     @objc private func onBack() {
-        let pass = passField.text ?? ""
+        let alert = UIAlertController(title: "Return to seed phrase", message: "If you return to seed phrase, it would be changed and your local password won’t be saved.", preferredStyle: .alert)
         
-        if !pass.isEmpty {
-            let alert = UIAlertController(title: "Return to seed phrase", message: "If you return to seed phrase, it would be changed and your local password won’t be saved.", preferredStyle: .alert)
-            
-            let ok = UIAlertAction(title: "Return", style: .default, handler: { action in
-                self.navigationController?.popViewController(animated: true)
-            })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-            alert.addAction(ok)
-            
-            self.present(alert, animated: true)
-        }
-        else{
-            self.navigationController?.popViewController(animated: true)
-        }
+        let ok = UIAlertAction(title: "Return", style: .default, handler: { action in
+            let viewControllers = self.navigationController?.viewControllers
+            let vc = viewControllers![(viewControllers?.count)!-3]
+            self.navigationController?.popToViewController(vc, animated: true)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(ok)
+        
+        self.present(alert, animated: true)
     }
     
     @IBAction func onNext(sender :UIButton) {

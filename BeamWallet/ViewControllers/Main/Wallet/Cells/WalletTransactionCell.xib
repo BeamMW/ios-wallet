@@ -64,24 +64,36 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="dhp-eX-Z1e">
                                 <rect key="frame" x="194" y="21.5" width="88" height="43.5"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="FB7-z6-iLj">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sx6-PN-EDm">
                                         <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="aBt-ab-epn">
                                                 <rect key="frame" x="0.0" y="0.0" width="69" height="29"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="29" id="xGs-FE-S6B"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
                                                 <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="rMc-aT-mO8">
-                                                <rect key="frame" x="74" y="4" width="14" height="21"/>
+                                                <rect key="frame" x="74" y="6" width="14" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="14" id="NMu-Md-vFL"/>
                                                     <constraint firstAttribute="height" constant="21" id="YGB-za-lcb"/>
                                                 </constraints>
                                             </imageView>
                                         </subviews>
-                                    </stackView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="rMc-aT-mO8" firstAttribute="leading" secondItem="aBt-ab-epn" secondAttribute="trailing" constant="5" id="3s3-qX-q5s"/>
+                                            <constraint firstItem="aBt-ab-epn" firstAttribute="leading" secondItem="Sx6-PN-EDm" secondAttribute="leading" id="4Oz-B2-5ip"/>
+                                            <constraint firstAttribute="height" constant="29" id="EK7-sU-RaH"/>
+                                            <constraint firstItem="aBt-ab-epn" firstAttribute="top" secondItem="Sx6-PN-EDm" secondAttribute="top" id="WR4-dG-jGG"/>
+                                            <constraint firstItem="rMc-aT-mO8" firstAttribute="top" secondItem="Sx6-PN-EDm" secondAttribute="top" constant="6" id="uq8-7i-jIU"/>
+                                            <constraint firstAttribute="trailing" secondItem="rMc-aT-mO8" secondAttribute="trailing" id="zbP-yP-bNe"/>
+                                        </constraints>
+                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwt-9z-uRX">
                                         <rect key="frame" x="24.5" y="29" width="63.5" height="14.5"/>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="12"/>
@@ -115,6 +127,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="amountLabel" destination="aBt-ab-epn" id="1w6-GU-Uea"/>
+                <outlet property="amountOffset" destination="vRK-j9-ET5" id="Xvu-VA-fcs"/>
+                <outlet property="arrowImage" destination="3i8-ik-RhG" id="3N2-yX-zix"/>
                 <outlet property="currencyIcon" destination="rMc-aT-mO8" id="8da-2S-iAN"/>
                 <outlet property="dateLabel" destination="4ho-1u-9fd" id="G6S-NY-L8Y"/>
                 <outlet property="mainView" destination="fKt-Vb-Zkz" id="sq1-M0-hYG"/>

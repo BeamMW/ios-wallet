@@ -74,6 +74,13 @@ extension WalletViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.section == 1 {
+            let vc = TransactionViewController()
+            vc.hidesBottomBarWhenPushed = true
+            vc.configure(with: transactions[indexPath.row])
+            pushViewController(vc: vc)
+        }
     }
 }
 
@@ -104,14 +111,12 @@ extension WalletViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 && indexPath.row == 0 {
-            let cell = tableView
-                .dequeueReusableCell(withType: WalletStatusCell.self, for: indexPath)
-                .configured(with: AppModel.sharedManager().isConnected)
+            let cell = tableView.dequeueReusableCell(withType: WalletStatusCell.self, for: indexPath)
             cell.delegate = self
             return cell
         }
         else if indexPath.section == 0 && indexPath.row == 1 {
-            let cell =  tableView
+            let cell = tableView
                 .dequeueReusableCell(withType: WalletAvailableCell.self, for: indexPath)
                 .configured(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus))
             cell.delegate = self
@@ -127,7 +132,7 @@ extension WalletViewController : UITableViewDataSource {
         else if indexPath.section == 1 {
             let cell =  tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: transactions[indexPath.row]))
+                .configured(with: (row: indexPath.row, transaction: transactions[indexPath.row], single:false))
             return cell
         }
         

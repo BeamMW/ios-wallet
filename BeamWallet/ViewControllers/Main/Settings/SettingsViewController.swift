@@ -40,7 +40,7 @@ class SettingsViewController: BaseViewController {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
         let build = dictionary["CFBundleVersion"] as! String
-        return "version \(version) build \(build)"
+        return "Version \(version).\(build)"
     }
 }
 
@@ -95,7 +95,17 @@ extension SettingsViewController : ShareLogCellDelegate {
         let path = AppModel.sharedManager().getZipLogs()
         let url = URL(fileURLWithPath: path)
         
-        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        let act = ShareLogActivity()
+        act.zipUrl = url
+        
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: [act])
+        if (AppDelegate.CurrentTarget == .Test) {
+            vc.setValue("beam wallet testnet logs", forKey: "subject")
+        }
+        else{
+            vc.setValue("beam wallet logs", forKey: "subject")
+        }
+        
         vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
         
         present(vc, animated: true)

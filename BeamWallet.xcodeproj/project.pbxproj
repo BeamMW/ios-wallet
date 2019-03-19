@@ -21,8 +21,6 @@
 		92090D0A223A67D400A1CFBB /* LaunchScreenTestNet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92090D07223A67D400A1CFBB /* LaunchScreenTestNet.storyboard */; };
 		92090D0C223A684000A1CFBB /* bgTestnet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92090D0B223A684000A1CFBB /* bgTestnet.jpg */; };
 		92090D0D223A684000A1CFBB /* bgTestnet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92090D0B223A684000A1CFBB /* bgTestnet.jpg */; };
-		920F460A223A88CC0048966E /* MFMailComposeViewControllerRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F4609223A88CC0048966E /* MFMailComposeViewControllerRecipient.m */; };
-		920F460B223A88CC0048966E /* MFMailComposeViewControllerRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F4609223A88CC0048966E /* MFMailComposeViewControllerRecipient.m */; };
 		920F460D223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		920F460E223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		92365ACB222D3E31000D7064 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92365AC9222D3E31000D7064 /* boost.framework */; };
@@ -204,10 +202,30 @@
 		92A1BA032236920C008135B5 /* WalletQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */; };
 		92A1BA042236920C008135B5 /* WalletQRCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */; };
 		92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA0522369567008135B5 /* QRCodeView.swift */; };
+		92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB8326223BA921000ADE86 /* ShareLogActivity.swift */; };
+		92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB8326223BA921000ADE86 /* ShareLogActivity.swift */; };
+		92AB832E223BC5D4000ADE86 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */; };
+		92AB832F223BC5D4000ADE86 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */; };
+		92AB8330223BC5D4000ADE86 /* TransactionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AB832D223BC5D4000ADE86 /* TransactionViewController.xib */; };
+		92AB8331223BC5D4000ADE86 /* TransactionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AB832D223BC5D4000ADE86 /* TransactionViewController.xib */; };
 		92ADED812229F213001D0A38 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ADED802229F213001D0A38 /* ViewController.swift */; };
 		92AE366C22383D2300E0810B /* WalletQRCodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */; };
 		92AE366D22383D2300E0810B /* WalletQRCodeScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */; };
 		92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366E223845E300E0810B /* BMNetworkStatusView.swift */; };
+		92BE0E63223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */; };
+		92BE0E64223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */; };
+		92BE0E65223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */; };
+		92BE0E66223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */; };
+		92D9C9492240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */; };
+		92D9C94A2240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */; };
+		92D9C94B2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */; };
+		92D9C94C2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */; };
+		92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
+		92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
+		92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
+		92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
+		92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
+		92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
 		92FC610922294F7D00AEABC1 /* ConfirmPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610722294F7D00AEABC1 /* ConfirmPhraseViewController.swift */; };
 		92FC610A22294F7D00AEABC1 /* ConfirmPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */; };
 		92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610B22295A6E00AEABC1 /* InputWordCell.swift */; };
@@ -269,8 +287,6 @@
 		9207FF4F222948F3009D931B /* Configurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurable.swift; sourceTree = "<group>"; };
 		92090D08223A67D400A1CFBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenTestNet.storyboard; sourceTree = "<group>"; };
 		92090D0B223A684000A1CFBB /* bgTestnet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgTestnet.jpg; sourceTree = "<group>"; };
-		920F4608223A88CC0048966E /* MFMailComposeViewControllerRecipient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MFMailComposeViewControllerRecipient.h; sourceTree = "<group>"; };
-		920F4609223A88CC0048966E /* MFMailComposeViewControllerRecipient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MFMailComposeViewControllerRecipient.m; sourceTree = "<group>"; };
 		920F460C223A9EA20048966E /* BMInputCopyBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMInputCopyBar.swift; sourceTree = "<group>"; };
 		92365AC9222D3E31000D7064 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boost.framework; sourceTree = "<group>"; };
 		92365ACA222D3E31000D7064 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
@@ -359,10 +375,21 @@
 		92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletQRCodeViewController.swift; sourceTree = "<group>"; };
 		92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletQRCodeViewController.xib; sourceTree = "<group>"; };
 		92A1BA0522369567008135B5 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		92AB8326223BA921000ADE86 /* ShareLogActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareLogActivity.swift; sourceTree = "<group>"; };
+		92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
+		92AB832D223BC5D4000ADE86 /* TransactionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionViewController.xib; sourceTree = "<group>"; };
 		92ADED802229F213001D0A38 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletQRCodeScannerViewController.swift; sourceTree = "<group>"; };
 		92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletQRCodeScannerViewController.xib; sourceTree = "<group>"; };
 		92AE366E223845E300E0810B /* BMNetworkStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMNetworkStatusView.swift; sourceTree = "<group>"; };
+		92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransactionInfoCell.swift; sourceTree = "<group>"; };
+		92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GeneralTransactionInfoCell.xib; sourceTree = "<group>"; };
+		92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOBlockCell.swift; sourceTree = "<group>"; };
+		92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOBlockCell.xib; sourceTree = "<group>"; };
+		92E884B7223F93FF0003D6BB /* BMUTXO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMUTXO.h; sourceTree = "<group>"; };
+		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
+		92E884C2223FADCD0003D6BB /* UTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOCell.swift; sourceTree = "<group>"; };
+		92E884C3223FADCD0003D6BB /* UTXOCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOCell.xib; sourceTree = "<group>"; };
 		92F82512222C33F6000D34F7 /* BeamWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BeamWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		92FC610722294F7D00AEABC1 /* ConfirmPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPhraseViewController.swift; sourceTree = "<group>"; };
 		92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfirmPhraseViewController.xib; sourceTree = "<group>"; };
@@ -479,6 +506,7 @@
 			isa = PBXGroup;
 			children = (
 				9207FF4F222948F3009D931B /* Configurable.swift */,
+				92AB8326223BA921000ADE86 /* ShareLogActivity.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -544,8 +572,6 @@
 			children = (
 				92365AD9222D3F5E000D7064 /* StringStd.h */,
 				92365AD7222D3F5E000D7064 /* StringStd.mm */,
-				920F4608223A88CC0048966E /* MFMailComposeViewControllerRecipient.h */,
-				920F4609223A88CC0048966E /* MFMailComposeViewControllerRecipient.m */,
 			);
 			path = ObjcExtensions;
 			sourceTree = "<group>";
@@ -559,6 +585,8 @@
 				92435245222DF9AE00A0EF37 /* BMAddress.mm */,
 				926A8577222EB7C600A3B747 /* BMTransaction.h */,
 				926A8578222EB7C600A3B747 /* BMTransaction.m */,
+				92E884B7223F93FF0003D6BB /* BMUTXO.h */,
+				92E884B8223F93FF0003D6BB /* BMUTXO.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -566,9 +594,9 @@
 		92435247222E728300A0EF37 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				9243524D222E73CD00A0EF37 /* Wallet */,
 				92435257222E73EC00A0EF37 /* UTXO */,
 				92435252222E73DF00A0EF37 /* Settings */,
-				9243524D222E73CD00A0EF37 /* Wallet */,
 				9243524B222E72B500A0EF37 /* MainTabBarController.swift */,
 			);
 			path = Main;
@@ -578,16 +606,11 @@
 			isa = PBXGroup;
 			children = (
 				926A8566222E7FBD00A3B747 /* Cells */,
+				92AB832B223BC5B6000ADE86 /* Send */,
+				92AB832A223BC5A7000ADE86 /* Receive */,
+				92AB8329223BC59E000ADE86 /* Transaction */,
 				9243524E222E73DC00A0EF37 /* WalletViewController.swift */,
 				9243524F222E73DC00A0EF37 /* WalletViewController.xib */,
-				92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */,
-				92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */,
-				92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */,
-				92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */,
-				92482DFD2237F69700776D38 /* WalletSendViewController.swift */,
-				92482DFE2237F69700776D38 /* WalletSendViewController.xib */,
-				92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */,
-				92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -605,6 +628,7 @@
 		92435257222E73EC00A0EF37 /* UTXO */ = {
 			isa = PBXGroup;
 			children = (
+				92E884BB223F9EF70003D6BB /* Cells */,
 				92435258222E73FC00A0EF37 /* UTXOViewController.swift */,
 				92435259222E73FC00A0EF37 /* UTXOViewController.xib */,
 			);
@@ -739,6 +763,58 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		92AB8329223BC59E000ADE86 /* Transaction */ = {
+			isa = PBXGroup;
+			children = (
+				92BE0E60223BD3FC002BF856 /* Cell */,
+				92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */,
+				92AB832D223BC5D4000ADE86 /* TransactionViewController.xib */,
+			);
+			path = Transaction;
+			sourceTree = "<group>";
+		};
+		92AB832A223BC5A7000ADE86 /* Receive */ = {
+			isa = PBXGroup;
+			children = (
+				92A1B9F922367717008135B5 /* WalletReceiveViewController.swift */,
+				92A1B9FA22367717008135B5 /* WalletReceiveViewController.xib */,
+				92A1BA012236920C008135B5 /* WalletQRCodeViewController.swift */,
+				92A1BA022236920C008135B5 /* WalletQRCodeViewController.xib */,
+			);
+			path = Receive;
+			sourceTree = "<group>";
+		};
+		92AB832B223BC5B6000ADE86 /* Send */ = {
+			isa = PBXGroup;
+			children = (
+				92482DFD2237F69700776D38 /* WalletSendViewController.swift */,
+				92482DFE2237F69700776D38 /* WalletSendViewController.xib */,
+				92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */,
+				92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */,
+			);
+			path = Send;
+			sourceTree = "<group>";
+		};
+		92BE0E60223BD3FC002BF856 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */,
+				92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		92E884BB223F9EF70003D6BB /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				92E884C2223FADCD0003D6BB /* UTXOCell.swift */,
+				92E884C3223FADCD0003D6BB /* UTXOCell.xib */,
+				92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */,
+				92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		92FC6111222964E900AEABC1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -836,6 +912,13 @@
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1010;
 					};
+					9288DD2A223A55410020C501 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 925AD5D32228254E00DDE66B /* Build configuration list for PBXProject "BeamWallet" */;
@@ -876,11 +959,14 @@
 				92AE366D22383D2300E0810B /* WalletQRCodeScannerViewController.xib in Resources */,
 				925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */,
 				9207FF40222932DA009D931B /* IntroPhraseViewController.xib in Resources */,
+				92D9C94B2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */,
 				92435256222E73E900A0EF37 /* SettingsViewController.xib in Resources */,
 				92538F62222B5F7E00792A25 /* CreateWalletProgressViewController.xib in Resources */,
 				9207FF4922293FEB009D931B /* DisplayPhraseViewController.xib in Resources */,
+				92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */,
 				929885F4222A15300038C015 /* InputPhraseViewController.xib in Resources */,
 				92A1B9FC22367717008135B5 /* WalletReceiveViewController.xib in Resources */,
+				92AB8330223BC5D4000ADE86 /* TransactionViewController.xib in Resources */,
 				926A8576222EA54F00A3B747 /* WalletProgressCell.xib in Resources */,
 				92A1BA042236920C008135B5 /* WalletQRCodeViewController.xib in Resources */,
 				926A8570222E97DF00A3B747 /* WalletAvailableCell.xib in Resources */,
@@ -888,6 +974,7 @@
 				9243525B222E73FC00A0EF37 /* UTXOViewController.xib in Resources */,
 				925AD5F72228299500DDE66B /* ProximaNova-Regular.ttf in Resources */,
 				9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */,
+				92BE0E65223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */,
 				925AD5F4222827A500DDE66B /* LoginViewController.xib in Resources */,
 				92FC611D22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib in Resources */,
 				925AD5F9222829A400DDE66B /* ProximaNova-Bold.ttf in Resources */,
@@ -914,11 +1001,14 @@
 				9288DD81223A55410020C501 /* WalletQRCodeScannerViewController.xib in Resources */,
 				9288DD82223A55410020C501 /* SF-Pro-Display-Bold.otf in Resources */,
 				9288DD83223A55410020C501 /* IntroPhraseViewController.xib in Resources */,
+				92D9C94C2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */,
 				9288DD84223A55410020C501 /* SettingsViewController.xib in Resources */,
 				9288DD85223A55410020C501 /* CreateWalletProgressViewController.xib in Resources */,
 				9288DD86223A55410020C501 /* DisplayPhraseViewController.xib in Resources */,
+				92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */,
 				9288DD87223A55410020C501 /* InputPhraseViewController.xib in Resources */,
 				9288DD88223A55410020C501 /* WalletReceiveViewController.xib in Resources */,
+				92AB8331223BC5D4000ADE86 /* TransactionViewController.xib in Resources */,
 				9288DD89223A55410020C501 /* WalletProgressCell.xib in Resources */,
 				9288DD8A223A55410020C501 /* WalletQRCodeViewController.xib in Resources */,
 				9288DD8B223A55410020C501 /* WalletAvailableCell.xib in Resources */,
@@ -926,6 +1016,7 @@
 				9288DD8D223A55410020C501 /* UTXOViewController.xib in Resources */,
 				9288DD8E223A55410020C501 /* ProximaNova-Regular.ttf in Resources */,
 				9288DD8F223A55410020C501 /* SF-Pro-Display-Semibold.otf in Resources */,
+				92BE0E66223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */,
 				9288DD90223A55410020C501 /* LoginViewController.xib in Resources */,
 				9288DD91223A55410020C501 /* CreateWalletPasswordViewController.xib in Resources */,
 				9288DD92223A55410020C501 /* ProximaNova-Bold.ttf in Resources */,
@@ -1089,6 +1180,7 @@
 				92365ADB222D3F5E000D7064 /* Settings.m in Sources */,
 				926A856F222E97DF00A3B747 /* WalletAvailableCell.swift in Sources */,
 				92FC611C22297EEC00AEABC1 /* CreateWalletPasswordViewController.swift in Sources */,
+				92D9C9492240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */,
 				92435243222DED3200A0EF37 /* BMWalletStatus.m in Sources */,
 				92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */,
 				9288DD9F223A55DF0020C501 /* BaseViewController.swift in Sources */,
@@ -1102,9 +1194,13 @@
 				92FC61262229C0C200AEABC1 /* BaseWizardViewController.swift in Sources */,
 				92365AD3222D3E79000D7064 /* WalletModel.mm in Sources */,
 				925AD5F3222827A500DDE66B /* LoginViewController.swift in Sources */,
+				92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */,
 				9243524C222E72B500A0EF37 /* MainTabBarController.swift in Sources */,
+				92AB832E223BC5D4000ADE86 /* TransactionViewController.swift in Sources */,
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
+				92BE0E63223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */,
 				929885F6222B2B1F0038C015 /* Label.swift in Sources */,
+				92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */,
 				92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */,
 				92365ADA222D3F5E000D7064 /* StringStd.mm in Sources */,
 				92A1BA032236920C008135B5 /* WalletQRCodeViewController.swift in Sources */,
@@ -1116,7 +1212,6 @@
 				92FC611522296F2700AEABC1 /* Color.swift in Sources */,
 				92435246222DF9AE00A0EF37 /* BMAddress.mm in Sources */,
 				920F460D223A9EA20048966E /* BMInputCopyBar.swift in Sources */,
-				920F460A223A88CC0048966E /* MFMailComposeViewControllerRecipient.m in Sources */,
 				92365ADE222D3FAB000D7064 /* MnemonicModel.mm in Sources */,
 				9288DDA2223A5A550020C501 /* BaseCell.swift in Sources */,
 				92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */,
@@ -1133,6 +1228,7 @@
 				9207FF3F222932DA009D931B /* IntroPhraseViewController.swift in Sources */,
 				92435255222E73E900A0EF37 /* SettingsViewController.swift in Sources */,
 				92AE366C22383D2300E0810B /* WalletQRCodeScannerViewController.swift in Sources */,
+				92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1153,6 +1249,7 @@
 				9288DD37223A55410020C501 /* Settings.m in Sources */,
 				9288DD38223A55410020C501 /* WalletAvailableCell.swift in Sources */,
 				9288DD39223A55410020C501 /* CreateWalletPasswordViewController.swift in Sources */,
+				92D9C94A2240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */,
 				9288DD3A223A55410020C501 /* BMWalletStatus.m in Sources */,
 				9288DD3B223A55410020C501 /* InputWordCell.swift in Sources */,
 				9288DDA0223A56920020C501 /* BaseViewController.swift in Sources */,
@@ -1166,9 +1263,13 @@
 				9288DD43223A55410020C501 /* BaseWizardViewController.swift in Sources */,
 				9288DD44223A55410020C501 /* WalletModel.mm in Sources */,
 				9288DD45223A55410020C501 /* LoginViewController.swift in Sources */,
+				92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */,
 				9288DD46223A55410020C501 /* MainTabBarController.swift in Sources */,
+				92AB832F223BC5D4000ADE86 /* TransactionViewController.swift in Sources */,
 				9288DD47223A55410020C501 /* AppDelegate.swift in Sources */,
+				92BE0E64223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */,
 				9288DD48223A55410020C501 /* Label.swift in Sources */,
+				92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */,
 				9288DD49223A55410020C501 /* BMNetworkStatusView.swift in Sources */,
 				9288DD4A223A55410020C501 /* StringStd.mm in Sources */,
 				9288DD4B223A55410020C501 /* WalletQRCodeViewController.swift in Sources */,
@@ -1180,7 +1281,6 @@
 				9288DD51223A55410020C501 /* Color.swift in Sources */,
 				9288DD52223A55410020C501 /* BMAddress.mm in Sources */,
 				920F460E223A9EA20048966E /* BMInputCopyBar.swift in Sources */,
-				920F460B223A88CC0048966E /* MFMailComposeViewControllerRecipient.m in Sources */,
 				9288DD53223A55410020C501 /* MnemonicModel.mm in Sources */,
 				9288DDA3223A5A550020C501 /* BaseCell.swift in Sources */,
 				9288DD54223A55410020C501 /* QRCodeView.swift in Sources */,
@@ -1197,6 +1297,7 @@
 				9288DD5E223A55410020C501 /* IntroPhraseViewController.swift in Sources */,
 				9288DD5F223A55410020C501 /* SettingsViewController.swift in Sources */,
 				9288DD60223A55410020C501 /* WalletQRCodeScannerViewController.swift in Sources */,
+				92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

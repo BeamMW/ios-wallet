@@ -119,6 +119,7 @@ using namespace std;
 -(void)setIsConnected:(BOOL)isConnected {
     if(isConnected && _isConnected==NO && wallet!=nil){
         [self getWalletStatus];
+        [self getUTXO];
     }
     _isConnected = isConnected;
 }
@@ -342,9 +343,9 @@ using namespace std;
         return @"Incorrect address";
     }
     else if (amount==0) {
-        return @"Amount can't be 0";
+        return @"Amount can’t be 0";;
     }
-    else if(_walletStatus.available <= bTotal)
+    else if(_walletStatus.available < bTotal)
     {
         double need = double(int64_t(bTotal - _walletStatus.available)) / Rules::Coin;
         
@@ -410,6 +411,35 @@ using namespace std;
     [SSZipArchive createZipFileAtPath:archivePath withContentsOfDirectory:[Settings logPath]];
     
     return archivePath;
+}
+
+#pragma mark - Transactions
+
+-(void)deleteTransaction:(BMTransaction*_Nonnull)transaction {
+    wallet->getAsync()->deleteTx([self txIDfromString:transaction.ID]);
+}
+
+-(void)cancelTransaction:(BMTransaction*_Nonnull)transaction {
+    wallet->getAsync()->cancelTx([self txIDfromString:transaction.ID]);
+}
+
+-(void)resumeTransaction:(BMTransaction*_Nonnull)transaction {
+    wallet->getAsync()->cancelTx([self txIDfromString:transaction.ID]);
+}
+
+-(TxID)txIDfromString:(NSString*)string {
+    auto buffer = from_hex(string.string);
+    TxID txID;
+    
+    std::copy_n(buffer.begin(), txID.size(), txID.begin());
+    
+    return txID;
+}
+
+#pragma mark - UTXO
+
+-(void)getUTXO {
+    wallet->getAsync()->getUtxosStatus();
 }
 
 @end

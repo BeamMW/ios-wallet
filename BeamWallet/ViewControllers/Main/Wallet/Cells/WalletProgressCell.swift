@@ -32,14 +32,18 @@ class WalletProgressCell: BaseCell {
     @IBOutlet weak private var sentLabelMaxWidth: NSLayoutConstraint!
     @IBOutlet weak private var maturingLabelMaxWidth: NSLayoutConstraint!
     
+    @IBOutlet weak private var receivingTitleLabel: UILabel!
+    @IBOutlet weak private var sentTitleLabel: UILabel!
+    @IBOutlet weak private var maturingTitleLabel: UILabel!
+    
     @IBOutlet weak private var receivingLabel: UILabel!
     @IBOutlet weak private var sentLabel: UILabel!
     @IBOutlet weak private var maturingLabel: UILabel!
 
     @IBOutlet weak private var arrowIcon: UIImageView!
-    @IBOutlet weak private var receivingStack: UIStackView!
-    @IBOutlet weak private var sentStack: UIStackView!
-    @IBOutlet weak private var maturingStack: UIStackView!
+    @IBOutlet weak private var receivingStack: UIView!
+    @IBOutlet weak private var sentStack: UIView!
+    @IBOutlet weak private var maturingStack: UIView!
 
     @IBOutlet weak private var currencyReceivingIcon: UIImageView!
     @IBOutlet weak private var currencySendingIcon: UIImageView!
@@ -75,6 +79,9 @@ class WalletProgressCell: BaseCell {
                 self.receivingStack.alpha = 0
                 self.sentStack.alpha = 0
                 self.maturingStack.alpha = 0
+                self.receivingTitleLabel.alpha = 0
+                self.sentTitleLabel.alpha = 0
+                self.maturingTitleLabel.alpha = 0
                 self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
             }
         }
@@ -83,6 +90,9 @@ class WalletProgressCell: BaseCell {
                 self.receivingStack.alpha = 1
                 self.sentStack.alpha = 1
                 self.maturingStack.alpha = 1
+                self.receivingTitleLabel.alpha = 1
+                self.sentTitleLabel.alpha = 1
+                self.maturingTitleLabel.alpha = 1
                 self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
             }
         }
@@ -108,12 +118,18 @@ extension WalletProgressCell: Configurable {
             receivingStack.alpha = 0
             sentStack.alpha = 0
             maturingStack.alpha = 0
+            receivingTitleLabel.alpha = 0
+            sentTitleLabel.alpha = 0
+            maturingTitleLabel.alpha = 0
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
         }
         else{
             receivingStack.alpha = 1
             sentStack.alpha = 1
             maturingStack.alpha = 1
+            receivingTitleLabel.alpha = 1
+            sentTitleLabel.alpha = 1
+            maturingTitleLabel.alpha = 1
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
         }
     }
