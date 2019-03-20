@@ -191,6 +191,8 @@
 		9288DDA3223A5A550020C501 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288DDA1223A5A550020C501 /* BaseCell.swift */; };
 		9288DDA5223A5B430020C501 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288DDA4223A5B430020C501 /* BaseView.swift */; };
 		9288DDA6223A5B430020C501 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288DDA4223A5B430020C501 /* BaseView.swift */; };
+		928B0AB222425329003CE9E7 /* BMPopoverMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928B0AB122425329003CE9E7 /* BMPopoverMenu.swift */; };
+		928B0AB322425329003CE9E7 /* BMPopoverMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928B0AB122425329003CE9E7 /* BMPopoverMenu.swift */; };
 		928E78122236A8880099AD20 /* SelectItemController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928E78112236A8880099AD20 /* SelectItemController.framework */; };
 		928E78142236A88F0099AD20 /* SelectItemController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 928E78112236A8880099AD20 /* SelectItemController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		929885F3222A15300038C015 /* InputPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F1222A15300038C015 /* InputPhraseViewController.swift */; };
@@ -212,14 +214,14 @@
 		92AE366C22383D2300E0810B /* WalletQRCodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */; };
 		92AE366D22383D2300E0810B /* WalletQRCodeScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */; };
 		92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366E223845E300E0810B /* BMNetworkStatusView.swift */; };
-		92BE0E63223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */; };
-		92BE0E64223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */; };
-		92BE0E65223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */; };
-		92BE0E66223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */; };
 		92D9C9492240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */; };
 		92D9C94A2240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */; };
 		92D9C94B2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */; };
 		92D9C94C2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */; };
+		92D9C94F224188A400EDE059 /* GeneralTransactionInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9C94D224188A400EDE059 /* GeneralTransactionInfoCell.swift */; };
+		92D9C950224188A400EDE059 /* GeneralTransactionInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9C94D224188A400EDE059 /* GeneralTransactionInfoCell.swift */; };
+		92D9C951224188A400EDE059 /* GeneralTransactionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D9C94E224188A400EDE059 /* GeneralTransactionInfoCell.xib */; };
+		92D9C952224188A400EDE059 /* GeneralTransactionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D9C94E224188A400EDE059 /* GeneralTransactionInfoCell.xib */; };
 		92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
@@ -365,6 +367,7 @@
 		9288DD9E223A55DF0020C501 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		9288DDA1223A5A550020C501 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		9288DDA4223A5B430020C501 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		928B0AB122425329003CE9E7 /* BMPopoverMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPopoverMenu.swift; sourceTree = "<group>"; };
 		928E78112236A8880099AD20 /* SelectItemController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SelectItemController.framework; sourceTree = "<group>"; };
 		929885F1222A15300038C015 /* InputPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPhraseViewController.swift; sourceTree = "<group>"; };
 		929885F2222A15300038C015 /* InputPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputPhraseViewController.xib; sourceTree = "<group>"; };
@@ -382,10 +385,10 @@
 		92AE366A22383D2300E0810B /* WalletQRCodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletQRCodeScannerViewController.swift; sourceTree = "<group>"; };
 		92AE366B22383D2300E0810B /* WalletQRCodeScannerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletQRCodeScannerViewController.xib; sourceTree = "<group>"; };
 		92AE366E223845E300E0810B /* BMNetworkStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMNetworkStatusView.swift; sourceTree = "<group>"; };
-		92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransactionInfoCell.swift; sourceTree = "<group>"; };
-		92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GeneralTransactionInfoCell.xib; sourceTree = "<group>"; };
 		92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOBlockCell.swift; sourceTree = "<group>"; };
 		92D9C9482240FB3C00EDE059 /* UTXOBlockCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOBlockCell.xib; sourceTree = "<group>"; };
+		92D9C94D224188A400EDE059 /* GeneralTransactionInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransactionInfoCell.swift; sourceTree = "<group>"; };
+		92D9C94E224188A400EDE059 /* GeneralTransactionInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GeneralTransactionInfoCell.xib; sourceTree = "<group>"; };
 		92E884B7223F93FF0003D6BB /* BMUTXO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMUTXO.h; sourceTree = "<group>"; };
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
 		92E884C2223FADCD0003D6BB /* UTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOCell.swift; sourceTree = "<group>"; };
@@ -719,6 +722,7 @@
 				92A1BA0522369567008135B5 /* QRCodeView.swift */,
 				92AE366E223845E300E0810B /* BMNetworkStatusView.swift */,
 				920F460C223A9EA20048966E /* BMInputCopyBar.swift */,
+				928B0AB122425329003CE9E7 /* BMPopoverMenu.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -798,8 +802,8 @@
 		92BE0E60223BD3FC002BF856 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				92BE0E61223BD416002BF856 /* GeneralTransactionInfoCell.swift */,
-				92BE0E62223BD416002BF856 /* GeneralTransactionInfoCell.xib */,
+				92D9C94D224188A400EDE059 /* GeneralTransactionInfoCell.swift */,
+				92D9C94E224188A400EDE059 /* GeneralTransactionInfoCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -964,6 +968,7 @@
 				92538F62222B5F7E00792A25 /* CreateWalletProgressViewController.xib in Resources */,
 				9207FF4922293FEB009D931B /* DisplayPhraseViewController.xib in Resources */,
 				92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */,
+				92D9C951224188A400EDE059 /* GeneralTransactionInfoCell.xib in Resources */,
 				929885F4222A15300038C015 /* InputPhraseViewController.xib in Resources */,
 				92A1B9FC22367717008135B5 /* WalletReceiveViewController.xib in Resources */,
 				92AB8330223BC5D4000ADE86 /* TransactionViewController.xib in Resources */,
@@ -974,7 +979,6 @@
 				9243525B222E73FC00A0EF37 /* UTXOViewController.xib in Resources */,
 				925AD5F72228299500DDE66B /* ProximaNova-Regular.ttf in Resources */,
 				9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */,
-				92BE0E65223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */,
 				925AD5F4222827A500DDE66B /* LoginViewController.xib in Resources */,
 				92FC611D22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib in Resources */,
 				925AD5F9222829A400DDE66B /* ProximaNova-Bold.ttf in Resources */,
@@ -1006,6 +1010,7 @@
 				9288DD85223A55410020C501 /* CreateWalletProgressViewController.xib in Resources */,
 				9288DD86223A55410020C501 /* DisplayPhraseViewController.xib in Resources */,
 				92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */,
+				92D9C952224188A400EDE059 /* GeneralTransactionInfoCell.xib in Resources */,
 				9288DD87223A55410020C501 /* InputPhraseViewController.xib in Resources */,
 				9288DD88223A55410020C501 /* WalletReceiveViewController.xib in Resources */,
 				92AB8331223BC5D4000ADE86 /* TransactionViewController.xib in Resources */,
@@ -1016,7 +1021,6 @@
 				9288DD8D223A55410020C501 /* UTXOViewController.xib in Resources */,
 				9288DD8E223A55410020C501 /* ProximaNova-Regular.ttf in Resources */,
 				9288DD8F223A55410020C501 /* SF-Pro-Display-Semibold.otf in Resources */,
-				92BE0E66223BD416002BF856 /* GeneralTransactionInfoCell.xib in Resources */,
 				9288DD90223A55410020C501 /* LoginViewController.xib in Resources */,
 				9288DD91223A55410020C501 /* CreateWalletPasswordViewController.xib in Resources */,
 				9288DD92223A55410020C501 /* ProximaNova-Bold.ttf in Resources */,
@@ -1198,8 +1202,8 @@
 				9243524C222E72B500A0EF37 /* MainTabBarController.swift in Sources */,
 				92AB832E223BC5D4000ADE86 /* TransactionViewController.swift in Sources */,
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
-				92BE0E63223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */,
 				929885F6222B2B1F0038C015 /* Label.swift in Sources */,
+				92D9C94F224188A400EDE059 /* GeneralTransactionInfoCell.swift in Sources */,
 				92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */,
 				92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */,
 				92365ADA222D3F5E000D7064 /* StringStd.mm in Sources */,
@@ -1229,6 +1233,7 @@
 				92435255222E73E900A0EF37 /* SettingsViewController.swift in Sources */,
 				92AE366C22383D2300E0810B /* WalletQRCodeScannerViewController.swift in Sources */,
 				92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
+				928B0AB222425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1267,8 +1272,8 @@
 				9288DD46223A55410020C501 /* MainTabBarController.swift in Sources */,
 				92AB832F223BC5D4000ADE86 /* TransactionViewController.swift in Sources */,
 				9288DD47223A55410020C501 /* AppDelegate.swift in Sources */,
-				92BE0E64223BD416002BF856 /* GeneralTransactionInfoCell.swift in Sources */,
 				9288DD48223A55410020C501 /* Label.swift in Sources */,
+				92D9C950224188A400EDE059 /* GeneralTransactionInfoCell.swift in Sources */,
 				92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */,
 				9288DD49223A55410020C501 /* BMNetworkStatusView.swift in Sources */,
 				9288DD4A223A55410020C501 /* StringStd.mm in Sources */,
@@ -1298,6 +1303,7 @@
 				9288DD5F223A55410020C501 /* SettingsViewController.swift in Sources */,
 				9288DD60223A55410020C501 /* WalletQRCodeScannerViewController.swift in Sources */,
 				92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
+				928B0AB322425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -53,8 +53,7 @@ class QRCodeView: UIView {
         indicator.center = imageView.center
     }
     
-    func getImage() -> UIImage?
-    {
+    func getImage() -> UIImage? {
         return self.imageView.image
     }
     

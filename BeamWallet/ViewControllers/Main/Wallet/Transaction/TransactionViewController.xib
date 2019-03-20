@@ -9,10 +9,16 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TransactionViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="talbeView" destination="hAi-n2-aQW" id="awX-gB-cUH"/>
+                <outlet property="headerView" destination="K6A-5F-eFP" id="GQ1-Qe-IzV"/>
+                <outlet property="tableView" destination="hAi-n2-aQW" id="SbH-gN-vkh"/>
                 <outlet property="view" destination="AON-1l-2nJ" id="oQP-I7-igN"/>
             </connections>
         </placeholder>
@@ -38,6 +44,31 @@
                 <constraint firstItem="h5v-7D-c69" firstAttribute="trailing" secondItem="hAi-n2-aQW" secondAttribute="trailing" id="rsB-Tg-Nxs"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="h5v-7D-c69"/>
+        </view>
+        <view contentMode="scaleToFill" id="K6A-5F-eFP" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="General transaction info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fqc-l4-m3w">
+                    <rect key="frame" x="15" y="12.5" width="345" height="19.5"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="fqc-l4-m3w" firstAttribute="centerY" secondItem="K6A-5F-eFP" secondAttribute="centerY" id="ZmA-Sn-FqS"/>
+                <constraint firstItem="RQC-sh-Zsr" firstAttribute="trailing" secondItem="fqc-l4-m3w" secondAttribute="trailing" constant="15" id="wyo-w2-a3I"/>
+                <constraint firstItem="fqc-l4-m3w" firstAttribute="leading" secondItem="RQC-sh-Zsr" secondAttribute="leading" constant="15" id="yb7-de-dMe"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="RQC-sh-Zsr"/>
         </view>
     </objects>
 </document>

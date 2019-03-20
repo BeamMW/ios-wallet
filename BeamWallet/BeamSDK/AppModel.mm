@@ -44,6 +44,9 @@
 
 #include "common.h"
 
+#include <sys/sysctl.h>
+#import <sys/utsname.h>
+
 using namespace beam;
 using namespace ECC;
 using namespace std;
@@ -384,12 +387,56 @@ using namespace std;
 -(void)createLogger {
     NSString *dataPath = [Settings logPath];
     
+    NSMutableArray *needRemove = [NSMutableArray new];
+    
+    NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dataPath error:nil];
+    
+    NSTimeInterval period = 60 * 60 * (24*3); //3 day
+    
+    for (NSString *file in dirContents) {
+        NSString *path = [dataPath stringByAppendingPathComponent:file];
+        
+        NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+        
+        NSDate *result = [fileAttribs objectForKey:NSFileCreationDate];
+        NSTimeInterval diff = [[NSDate date] timeIntervalSince1970] - [result timeIntervalSince1970];
+        
+        if (diff > period) {
+            [needRemove addObject:path];
+        }
+    }
+    
+    for (NSString *file in needRemove) {
+        [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
+    }
+    
+    
     static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string,dataPath.string);
     
     auto path = logger->get_current_file_name();
     pathLog =  [NSString stringWithUTF8String:path.c_str()];
     
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+
+    NSString *ios = [NSString stringWithFormat:@"iOS: %@",[[UIDevice currentDevice] systemVersion]];
+    NSString *model = [NSString stringWithFormat:@"MODEL: %@",[[UIDevice currentDevice] model]];
+    NSString *modelID = [NSString stringWithFormat:@"MODEL ID: %@",[self modelIdentifier]];
+    NSString *appVersion = [NSString stringWithFormat:@"APP VERSION: %@",version];
+    NSString *buildVersion = [NSString stringWithFormat:@"BUILD NUMBER: %@",build];
+
     LOG_INFO() << "APP RUNNING";
+    LOG_INFO() << ios.string;
+    LOG_INFO() << model.string;
+    LOG_INFO() << modelID.string;
+    LOG_INFO() << appVersion.string;
+    LOG_INFO() << buildVersion.string;
+}
+
+- (NSString *)modelIdentifier {
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 
 -(NSString*)getZipLogs {

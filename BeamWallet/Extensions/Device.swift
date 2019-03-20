@@ -22,6 +22,11 @@ import Foundation
 import UIKit
 
 class Device {
+    
+    static var isZoomed: Bool {
+        return UIScreen.main.nativeScale > 2.1
+    }
+    
     static var iPhoneX: Bool {
         return UIScreen.main.nativeBounds.height == 2436
     }

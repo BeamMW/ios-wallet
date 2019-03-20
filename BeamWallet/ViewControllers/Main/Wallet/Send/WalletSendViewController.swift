@@ -174,21 +174,51 @@ extension WalletSendViewController : UITextFieldDelegate {
         
         updateLayout()
 
+        let textFieldText: NSString = (textField.text ?? "") as NSString
+
         if textField == amountField || textField == feeField {
-            let textFieldText: NSString = (textField.text ?? "") as NSString
+            
+            let count = (textField == amountField) ? 8 : 15
             
             let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
+            if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
+                return false
+            }
+            
+            let allowedCharacters = CharacterSet(charactersIn:".0123456789")
+            let characterSet = CharacterSet(charactersIn: txtAfterUpdate)
+            
+            if (!allowedCharacters.isSuperset(of: characterSet)) {
+                return false
+            }
+            
+            if textField == feeField && txtAfterUpdate.contains(".") {
+                return false
+            }
+            
             if !txtAfterUpdate.isEmpty {
                 let split = txtAfterUpdate.split(separator: ".")
-                if split[0].lengthOfBytes(using: .utf8) > 8 {
+                if split[0].lengthOfBytes(using: .utf8) > count {
                     return false
                 }
                 else if split.count > 1 {
-                    if split[1].lengthOfBytes(using: .utf8) > 8 {
+                     if split[1].lengthOfBytes(using: .utf8) > count {
                         return false
                     }
                 }
+            }
+        }
+        else if textField == toAddressField {
+            let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
+
+            let allowedCharacters = CharacterSet(
+                charactersIn:"0123456789qwertyuiopasdfghjklzxcvbnm")
+            
+            let characterSet = CharacterSet(charactersIn: txtAfterUpdate)
+            
+            if (!allowedCharacters.isSuperset(of: characterSet)) {
+                return false
             }
         }
         
@@ -225,7 +255,19 @@ extension WalletSendViewController : UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         scrollView.scrollRectToVisible(CGRect.zero, animated: true)
 
-        if textField == toAddressField {
+        if textField == feeField || textField == amountField {
+            if let text = textField.text {
+                if let v = Double(text) {
+                    if v == 0 {
+                        textField.text = "0"
+                    }
+                }
+                else{
+                    textField.text = "0"
+                }
+            }
+        }
+        else if textField == toAddressField {
             if let text = textField.text {
                 if !text.isEmpty {
                     let valid = AppModel.sharedManager().isValidAddress(text)

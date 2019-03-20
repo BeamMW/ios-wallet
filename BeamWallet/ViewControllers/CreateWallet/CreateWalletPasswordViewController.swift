@@ -34,7 +34,11 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         
         self.title = "Password"
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.isZoomed {
+            stackY?.constant = 10
+            mainStack?.spacing = 30
+        }
+        else if Device.screenType == .iPhones_5_5s_5c_SE {
             mainStack?.spacing = 50
         }
         
@@ -137,7 +141,7 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField == confirmPassField && Device.screenType == .iPhones_5_5s_5c_SE {
+        if textField == confirmPassField && (Device.screenType == .iPhones_5_5s_5c_SE || Device.isZoomed) {
             UIView.animate(withDuration: 0.25) {
                 var frame = self.navigationController?.view.frame
                 frame?.origin.y = 0
@@ -148,7 +152,7 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == confirmPassField && Device.screenType == .iPhones_5_5s_5c_SE {
+        if textField == confirmPassField && (Device.screenType == .iPhones_5_5s_5c_SE || Device.isZoomed) {
             UIView.animate(withDuration: 0.25) {
                 var frame = self.navigationController?.view.frame
                 frame?.origin.y = -48

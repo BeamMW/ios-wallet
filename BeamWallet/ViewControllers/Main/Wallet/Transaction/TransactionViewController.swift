@@ -20,19 +20,28 @@
 import UIKit
 
 class TransactionViewController: BaseViewController {
-
-    private var transaction:BMTransaction!
     
-    @IBOutlet private weak var talbeView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private var headerView: UIView!
+
+    struct TransactionGeneralInfo {
+        var text:String!
+        var detail:String!
+        var failed:Bool!
+    }
+    
+    private var transaction:BMTransaction!
+    private var details = [TransactionGeneralInfo]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Transaction details"
         
-        talbeView.register(GeneralTransactionInfoCell.self)
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "iconMore"), style: .plain, target: self, action: #selector(onMore))
+        tableView.register(GeneralTransactionInfoCell.self)
+        tableView.register(WalletTransactionCell.self)
+
+        fillTransactionInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,44 +56,76 @@ class TransactionViewController: BaseViewController {
         AppModel.sharedManager().removeDelegate(self)
     }
     
+    private func fillTransactionInfo() {
+        if transaction.canCancel || transaction.canDelete {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "iconMore"), style: .plain, target: self, action: #selector(onMore))
+        }
+        else{
+            self.navigationItem.rightBarButtonItem = nil
+        }
+        
+        details = [TransactionGeneralInfo]()
+        details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false))
+        details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false))
+        details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false))
+        details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false))
+        
+        if !transaction.comment.isEmpty {
+            details.append(TransactionGeneralInfo(text: "Comment:", detail: transaction.comment, failed: false))
+        }
+        
+        if transaction.isFailed() {
+            details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true))
+        }
+
+        tableView.reloadData()
+    }
+    
     @objc private func onMore(sender:UIBarButtonItem) {
+        let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
+        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Repeat transaction", icon: "iconRepeat", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Save peer address", icon: "iconSaveAddress", id:2)]
         
         if transaction.canCancel {
-            let alert = UIAlertController(title: "Cancel Transaction", message: nil, preferredStyle: .actionSheet)
-            
-            alert.addAction(UIAlertAction(title: "Yes", style: .default , handler:{ (UIAlertAction)in
-                
-                AppModel.sharedManager().cancelTransaction(self.transaction)
-                self.navigationController?.popViewController(animated: true)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler:{ (UIAlertAction)in
-            }))
-            
-            self.present(alert, animated: true, completion: {
-            })
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Cancel transaction", icon: "iconCancelTransction", id:3))
         }
-        else if transaction.canDelete {
-            let alert = UIAlertController(title: "Delete Transaction", message: nil, preferredStyle: .actionSheet)
-            
-            alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (UIAlertAction)in
-                
-                AppModel.sharedManager().deleteTransaction(self.transaction)
-                self.navigationController?.popViewController(animated: true)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
-            }))
-            
-            self.present(alert, animated: true, completion: {
-            })
+        if transaction.canDelete {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Delete transaction", icon: "iconDelete", id:4))
         }
+        
+        BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.id) {
+                case 3 :
+                    AppModel.sharedManager().cancelTransaction(self.transaction)
+                    self.navigationController?.popViewController(animated: true)
+                case 4 :
+                    AppModel.sharedManager().deleteTransaction(self.transaction)
+                    self.navigationController?.popViewController(animated: true)
+                default:
+                    return
+                }
+            }
+        }, cancel: {
+            
+        })
     }
 }
 
 extension TransactionViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 60
+        }
+        
+        return 0
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 500
+        if indexPath.section == 0 {
+            return 86
+        }
+        return UITableView.automaticDimension
     }
     
     
@@ -96,20 +137,39 @@ extension TransactionViewController : UITableViewDelegate {
 extension TransactionViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if section == 0 {
+            return 1
+        }
+        return details.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell =  tableView
-            .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
-        cell.configure(with: transaction)
+        if indexPath.section == 0 {
+            let cell =  tableView
+                .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
+                .configured(with: (row: indexPath.row, transaction: transaction, single:true))
+            return cell
+        }
+        else{
+            let cell =  tableView
+                .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
+                .configured(with: details[indexPath.row])
+           
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            return nil
+        }
         
-        return cell
+        return headerView
     }
     
 }
@@ -122,7 +182,7 @@ extension TransactionViewController : WalletModelDelegate {
                 self.transaction = transaction
                 
                 UIView.performWithoutAnimation {
-                    self.talbeView.reloadData()
+                    self.fillTransactionInfo()
                 }
             }
         }

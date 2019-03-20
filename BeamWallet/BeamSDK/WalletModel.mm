@@ -93,7 +93,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         }
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
         transaction.isSelf = item.m_selfTx;
-        transaction.fee = double(int64_t(item.m_fee));
+        transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
         transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
         transaction.canCancel = item.canCancel();
         transaction.canResume = item.canResume();

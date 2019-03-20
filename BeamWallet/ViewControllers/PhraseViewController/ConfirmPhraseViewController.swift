@@ -46,7 +46,11 @@ class ConfirmPhraseViewController: BaseWizardViewController {
 
         self.title = "Confirm seed phrase"
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.isZoomed {
+            stackY?.constant = 10
+            mainStack?.spacing = 30
+        }
+        else if Device.screenType == .iPhones_5_5s_5c_SE {
             mainStack?.spacing = 50
         }
         

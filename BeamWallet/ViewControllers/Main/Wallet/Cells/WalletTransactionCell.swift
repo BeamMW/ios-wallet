@@ -80,8 +80,13 @@ extension WalletTransactionCell: Configurable {
         dateLabel.text = options.transaction.formattedDate()
         statusLabel.text = options.transaction.status
         
-        let selectedView = UIView()
-        selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
-        self.selectedBackgroundView = selectedView
+        if options.single {
+            self.selectionStyle = .none
+        }
+        else{
+            let selectedView = UIView()
+            selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
+            self.selectedBackgroundView = selectedView
+        }
     }
 }

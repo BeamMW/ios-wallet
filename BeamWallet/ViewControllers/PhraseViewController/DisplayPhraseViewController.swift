@@ -34,7 +34,11 @@ class DisplayPhraseViewController: BaseWizardViewController {
         
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.isZoomed {
+            stackY?.constant = 10
+            mainStack?.spacing = 10
+        }
+        else if Device.screenType == .iPhones_5_5s_5c_SE {
             mainStack?.spacing = 20
         }
         else if Device.screenType == .iPhones_6_6s_7_8 {
