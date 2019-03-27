@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 
 @interface BMAddress : NSObject {
-
+    NSDateFormatter *_formatter;
 }
 
 @property (nonatomic,strong) NSString *walletId;
@@ -29,8 +29,16 @@
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
+@property (nonatomic,assign) BOOL isNowExpired;
+@property (nonatomic,assign) BOOL isNowActive;
+@property (nonatomic,assign) UInt64 isNowActiveDuration;
 
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;
+-(NSString*)formattedDate;
+-(NSString*)nowDate;
+-(NSString*)expireNowDate;
+-(int)isNowActiveDurationInHours;
+-(int)durationInHours;
 
 @end

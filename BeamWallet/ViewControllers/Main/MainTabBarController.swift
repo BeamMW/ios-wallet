@@ -39,15 +39,24 @@ class MainTabBarController: UITabBarController {
         walletVC.navigationBar.tintColor = UIColor.white
         walletVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
         walletVC.tabBarItem = UITabBarItem(title: "Wallet", image: UIImage.init(named: "iconWallet"), tag: 0)
+        
+        let addressesVC = UINavigationController(rootViewController: AddressesViewController())
+        addressesVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        addressesVC.navigationBar.shadowImage = UIImage()
+        addressesVC.navigationBar.isTranslucent = true
+        addressesVC.navigationBar.backgroundColor = .clear
+        addressesVC.navigationBar.tintColor = UIColor.white
+        addressesVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
+        addressesVC.tabBarItem = UITabBarItem(title: "Addresses", image: UIImage.init(named: "iconAddresses"), tag: 0)
 
-//        let utxoVC = UINavigationController(rootViewController: UTXOViewController())
-//        utxoVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        utxoVC.navigationBar.shadowImage = UIImage()
-//        utxoVC.navigationBar.isTranslucent = true
-//        utxoVC.navigationBar.backgroundColor = .clear
-//        utxoVC.navigationBar.tintColor = UIColor.white
-//        utxoVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-//        utxoVC.tabBarItem = UITabBarItem(title: "UTXO", image: UIImage.init(named: "iconUtxo"), tag: 1)
+        let utxoVC = UINavigationController(rootViewController: UTXOViewController())
+        utxoVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        utxoVC.navigationBar.shadowImage = UIImage()
+        utxoVC.navigationBar.isTranslucent = true
+        utxoVC.navigationBar.backgroundColor = .clear
+        utxoVC.navigationBar.tintColor = UIColor.white
+        utxoVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
+        utxoVC.tabBarItem = UITabBarItem(title: "UTXO", image: UIImage.init(named: "iconUtxo"), tag: 1)
 
         let settingsVC = UINavigationController(rootViewController: SettingsViewController())
         settingsVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -58,7 +67,7 @@ class MainTabBarController: UITabBarController {
         settingsVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
         settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage.init(named: "iconSettings"), tag: 2)
         
-        self.viewControllers = [walletVC, settingsVC]
+        self.viewControllers = [walletVC, addressesVC, utxoVC, settingsVC]
     }
     
 

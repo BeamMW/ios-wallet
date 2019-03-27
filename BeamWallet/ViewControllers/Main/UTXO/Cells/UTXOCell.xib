@@ -18,29 +18,29 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="B4s-Ic-dth" customClass="UTXOCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B4s-Ic-dth" id="tiW-dZ-Buv">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="86.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ndh-8Z-dyd">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="86.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="btj-ss-OUf">
-                                <rect key="frame" x="15" y="15" width="88" height="34.5"/>
+                                <rect key="frame" x="15" y="15.5" width="88" height="29"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="B70-bH-TAg">
-                                        <rect key="frame" x="0.0" y="0.0" width="88" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Zv6-bU-1Cg">
-                                                <rect key="frame" x="0.0" y="3" width="69" height="29"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="69" height="29"/>
                                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="kxJ-Bc-z3t">
-                                                <rect key="frame" x="74" y="7" width="14" height="21"/>
+                                                <rect key="frame" x="74" y="4" width="14" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="14" id="TXm-7X-BaN"/>
                                                     <constraint firstAttribute="height" constant="21" id="btg-uX-l7s"/>
@@ -51,18 +51,9 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hNw-Ff-J2o">
-                                <rect key="frame" x="241.5" y="36" width="63.5" height="14.5"/>
+                                <rect key="frame" x="241.5" y="22.5" width="63.5" height="14.5"/>
                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9f8sn49jllsnw926sn6slss72hs" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Un-aC-ziF">
-                                <rect key="frame" x="15" y="54.5" width="205" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
@@ -72,12 +63,8 @@
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="hNw-Ff-J2o" secondAttribute="trailing" constant="15" id="5li-Kf-NIY"/>
-                            <constraint firstItem="2Un-aC-ziF" firstAttribute="top" secondItem="btj-ss-OUf" secondAttribute="bottom" constant="5" id="6fP-Lu-Kjn"/>
                             <constraint firstItem="btj-ss-OUf" firstAttribute="leading" secondItem="Ndh-8Z-dyd" secondAttribute="leading" constant="15" id="6g2-pm-f6S"/>
-                            <constraint firstItem="2Un-aC-ziF" firstAttribute="leading" secondItem="Ndh-8Z-dyd" secondAttribute="leading" constant="15" id="HeT-kQ-6qW"/>
-                            <constraint firstAttribute="trailing" secondItem="2Un-aC-ziF" secondAttribute="trailing" constant="100" id="J6o-li-zl4"/>
-                            <constraint firstItem="btj-ss-OUf" firstAttribute="top" secondItem="Ndh-8Z-dyd" secondAttribute="top" constant="15" id="Xd6-gL-RjZ"/>
-                            <constraint firstAttribute="bottom" secondItem="2Un-aC-ziF" secondAttribute="bottom" constant="15" id="c7Q-S9-hvQ"/>
+                            <constraint firstItem="btj-ss-OUf" firstAttribute="centerY" secondItem="Ndh-8Z-dyd" secondAttribute="centerY" id="ayg-Je-kLw"/>
                             <constraint firstItem="hNw-Ff-J2o" firstAttribute="centerY" secondItem="Ndh-8Z-dyd" secondAttribute="centerY" id="dFS-9n-O4c"/>
                         </constraints>
                     </view>
@@ -93,7 +80,6 @@
             <connections>
                 <outlet property="amountLabel" destination="Zv6-bU-1Cg" id="Rxf-8P-vyx"/>
                 <outlet property="currencyIcon" destination="kxJ-Bc-z3t" id="pQa-eT-LXC"/>
-                <outlet property="idLabel" destination="2Un-aC-ziF" id="tA0-Nd-xKo"/>
                 <outlet property="mainView" destination="Ndh-8Z-dyd" id="mng-gz-oJZ"/>
                 <outlet property="statusLabel" destination="hNw-Ff-J2o" id="32p-7V-X5k"/>
             </connections>

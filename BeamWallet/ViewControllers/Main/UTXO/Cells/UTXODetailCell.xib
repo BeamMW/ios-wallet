@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="JSp-cb-YXw" customClass="UTXODetailCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JSp-cb-YXw" id="nlU-c7-klL">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yio-1z-dxj">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="x1S-Qb-R3f">
+                                <rect key="frame" x="15" y="17" width="206.5" height="46"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="VOB-oL-jcc">
+                                        <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="lnC-mH-Ze3">
+                                                <rect key="frame" x="0.0" y="0.0" width="69" height="29"/>
+                                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="FwQ-jI-3st">
+                                                <rect key="frame" x="74" y="4" width="14" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="14" id="eHT-bw-l8O"/>
+                                                    <constraint firstAttribute="height" constant="21" id="wmC-HF-3Pb"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8jdu7we232ihsjwbdy62e2n3jr3o9bdy" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f49-Xl-h3f" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="29" width="206.5" height="17"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                        <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aqv-SP-vsI">
+                                <rect key="frame" x="241.5" y="32.5" width="63.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="italicSystem" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="aqv-SP-vsI" secondAttribute="trailing" constant="15" id="1jh-NP-UTI"/>
+                            <constraint firstItem="x1S-Qb-R3f" firstAttribute="leading" secondItem="yio-1z-dxj" secondAttribute="leading" constant="15" id="8HA-5j-seI"/>
+                            <constraint firstItem="aqv-SP-vsI" firstAttribute="leading" secondItem="x1S-Qb-R3f" secondAttribute="trailing" constant="20" id="9rK-SJ-Efa"/>
+                            <constraint firstItem="aqv-SP-vsI" firstAttribute="centerY" secondItem="yio-1z-dxj" secondAttribute="centerY" id="SFp-WZ-n5X"/>
+                            <constraint firstItem="x1S-Qb-R3f" firstAttribute="centerY" secondItem="yio-1z-dxj" secondAttribute="centerY" id="uKQ-EH-2Ve"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="yio-1z-dxj" firstAttribute="top" secondItem="nlU-c7-klL" secondAttribute="top" id="0e8-Lp-7zG"/>
+                    <constraint firstAttribute="trailing" secondItem="yio-1z-dxj" secondAttribute="trailing" id="1M5-ry-wJa"/>
+                    <constraint firstAttribute="bottom" secondItem="yio-1z-dxj" secondAttribute="bottom" id="Qfy-rP-HCY"/>
+                    <constraint firstItem="yio-1z-dxj" firstAttribute="leading" secondItem="nlU-c7-klL" secondAttribute="leading" id="a7m-Zk-ggc"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="7nM-t7-gc3"/>
+            <connections>
+                <outlet property="amountLabel" destination="lnC-mH-Ze3" id="Sdx-49-1dQ"/>
+                <outlet property="currencyIcon" destination="FwQ-jI-3st" id="FfO-kE-Oke"/>
+                <outlet property="idLabel" destination="f49-Xl-h3f" id="QfF-GP-MzC"/>
+                <outlet property="mainView" destination="yio-1z-dxj" id="vBc-vf-TcL"/>
+                <outlet property="statusLabel" destination="aqv-SP-vsI" id="iar-uX-zrv"/>
+            </connections>
+            <point key="canvasLocation" x="52.799999999999997" y="87.706146926536732"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="iconSymbol" width="16" height="24.5"/>
+    </resources>
+</document>

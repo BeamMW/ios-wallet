@@ -89,6 +89,10 @@ extension UIColor {
         static var darkTwo: UIColor {
             return .init(red: 40/255, green: 34/255, blue: 54/255, alpha: 1)
         }
+        
+        static var orange: UIColor {
+            return .init(red: 241/255, green: 196/255, blue: 15/255, alpha: 1)
+        }
     }
     
 }

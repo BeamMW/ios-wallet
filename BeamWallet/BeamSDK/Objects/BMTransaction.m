@@ -22,6 +22,31 @@
 
 @implementation BMTransaction
 
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.ID forKey: @"ID"];
+    [encoder encodeObject:self.status forKey: @"status"];
+    [encoder encodeObject:[NSNumber numberWithBool:self.isIncome] forKey: @"isIncome"];
+    [encoder encodeObject:[NSNumber numberWithBool:self.isSelf] forKey: @"isSelf"];
+    [encoder encodeObject:[NSNumber numberWithDouble:self.realAmount] forKey: @"realAmount"];
+    [encoder encodeObject:[NSNumber numberWithInteger:self.enumStatus] forKey: @"enumStatus"];
+}
+
+-(id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if(self)
+    {
+        self.ID = [decoder decodeObjectForKey: @"ID"];
+        self.status = [decoder decodeObjectForKey: @"status"];
+        self.isIncome = [[decoder decodeObjectForKey:@"isIncome"] boolValue];
+        self.isSelf = [[decoder decodeObjectForKey:@"isSelf"] boolValue];
+        self.realAmount = [[decoder decodeObjectForKey:@"realAmount"] boolValue];
+        self.enumStatus = [[decoder decodeObjectForKey:@"enumStatus"] integerValue];
+    }
+    return self;
+}
+
 -(NSString*)formattedDate {
     NSDateFormatter *f = [NSDateFormatter new];
     [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
@@ -34,5 +59,6 @@
 -(BOOL)isFailed {
     return [self.status isEqualToString:@"failed"];
 }
+
 
 @end

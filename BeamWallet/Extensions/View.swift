@@ -33,6 +33,17 @@ extension UIView {
 
 extension UIView {
     
+    var x: CGFloat {
+        get {
+            return frame.origin.x
+        }
+        set {
+            var f = frame
+            f.origin.x = newValue
+            frame = f
+        }
+    }
+    
     @IBInspectable
     var cornerRadius: CGFloat {
         get {

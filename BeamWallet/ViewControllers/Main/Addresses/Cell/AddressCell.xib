@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="9Qe-LI-S4I" customClass="AddressCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Qe-LI-S4I" id="1o4-Fd-YXa">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="86.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6m3-TY-RcF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="86.5"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconNextArrow" translatesAutoresizingMaskIntoConstraints="NO" id="c1b-hm-9Et">
+                                <rect key="frame" x="297" y="37" width="8" height="13"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="13" id="FXu-Ke-zsM"/>
+                                    <constraint firstAttribute="width" constant="8" id="mBd-dV-3gK"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xdq-8a-CiY">
+                                <rect key="frame" x="15" y="23" width="200" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="rTL-Om-DsA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0312312" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQY-Eh-qS0">
+                                <rect key="frame" x="15" y="51" width="100" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="HEU-Ff-LO7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expires: 2 Jan 2019  |  3:46 PM" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Otz-SI-3Wv">
+                                <rect key="frame" x="125.5" y="53" width="156.5" height="14.5"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="Otz-SI-3Wv" firstAttribute="top" secondItem="Xdq-8a-CiY" secondAttribute="bottom" constant="9" id="719-dR-EgB"/>
+                            <constraint firstItem="Xdq-8a-CiY" firstAttribute="leading" secondItem="6m3-TY-RcF" secondAttribute="leading" constant="15" id="Gak-5h-mlJ"/>
+                            <constraint firstItem="DQY-Eh-qS0" firstAttribute="top" secondItem="Xdq-8a-CiY" secondAttribute="bottom" constant="7" id="ShP-GZ-ULZ"/>
+                            <constraint firstItem="c1b-hm-9Et" firstAttribute="centerY" secondItem="6m3-TY-RcF" secondAttribute="centerY" id="W6a-Vp-yCy"/>
+                            <constraint firstAttribute="trailing" secondItem="c1b-hm-9Et" secondAttribute="trailing" constant="15" id="WDm-91-Obo"/>
+                            <constraint firstItem="c1b-hm-9Et" firstAttribute="leading" secondItem="Otz-SI-3Wv" secondAttribute="trailing" constant="15" id="dUm-yu-JmT"/>
+                            <constraint firstItem="DQY-Eh-qS0" firstAttribute="leading" secondItem="6m3-TY-RcF" secondAttribute="leading" constant="15" id="hoE-PM-ZFb"/>
+                            <constraint firstItem="Xdq-8a-CiY" firstAttribute="top" secondItem="6m3-TY-RcF" secondAttribute="top" constant="23" id="uYT-VJ-h44"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="6m3-TY-RcF" secondAttribute="trailing" id="CwI-lC-Q8d"/>
+                    <constraint firstItem="6m3-TY-RcF" firstAttribute="top" secondItem="1o4-Fd-YXa" secondAttribute="top" id="XMK-45-9OK"/>
+                    <constraint firstItem="6m3-TY-RcF" firstAttribute="leading" secondItem="1o4-Fd-YXa" secondAttribute="leading" id="nzO-nc-8rN"/>
+                    <constraint firstAttribute="bottom" secondItem="6m3-TY-RcF" secondAttribute="bottom" id="uGI-lL-zPK"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="kOf-YT-16G"/>
+            <connections>
+                <outlet property="arrowImage" destination="c1b-hm-9Et" id="mkh-qr-Z8W"/>
+                <outlet property="expiredLabel" destination="Otz-SI-3Wv" id="syX-ZD-8KO"/>
+                <outlet property="idLabel" destination="DQY-Eh-qS0" id="hdC-fE-O67"/>
+                <outlet property="mainView" destination="6m3-TY-RcF" id="JvG-ZX-ZJo"/>
+                <outlet property="nameLabel" destination="Xdq-8a-CiY" id="0TZ-jK-X0F"/>
+            </connections>
+            <point key="canvasLocation" x="52.799999999999997" y="87.706146926536732"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="iconNextArrow" width="8" height="13"/>
+    </resources>
+</document>

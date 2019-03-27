@@ -19,6 +19,15 @@
 
 #import <Foundation/Foundation.h>
 
+enum {
+    BMTransactionStatusPending = 0,
+    BMTransactionStatusInProgress = 1,
+    BMTransactionStatusCancelled = 2,
+    BMTransactionStatusCompleted = 3,
+    BMTransactionStatusFailed = 4,
+    BMTransactionStatusRegistering = 5
+};
+typedef UInt64 BMTransactionStatus;
 
 @interface BMTransaction : NSObject
 
@@ -37,9 +46,14 @@
 @property (nonatomic,assign) BOOL canDelete;
 @property (nonatomic,assign) double fee;
 @property (nonatomic,assign) double realAmount;
+@property (nonatomic,assign) UInt64 realFee;
+@property (nonatomic,assign) BMTransactionStatus enumStatus;
 
+    
 -(NSString*)formattedDate;
 -(BOOL)isFailed;
+
+
 
 @end
 

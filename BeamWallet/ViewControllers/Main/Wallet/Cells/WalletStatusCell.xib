@@ -72,10 +72,10 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xqb-q6-mpE" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="15" width="290" height="12"/>
+                                <rect key="frame" x="15" y="15" width="290" height="14"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="12" id="yX7-Gh-LJ4"/>
+                                    <constraint firstAttribute="height" constant="14" id="yX7-Gh-LJ4"/>
                                 </constraints>
                             </view>
                         </subviews>

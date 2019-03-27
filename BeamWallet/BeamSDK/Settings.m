@@ -46,12 +46,6 @@ static NSString *allPathsKey = @"allPaths";
 
 
 +(NSString*)walletStoragePath {
-//    if ([[[NSUserDefaults standardUserDefaults] objectForKey:storageKey] isKindOfClass:[NSNull class]]) {
-//        [Settings generateNewStoragePath];
-//    }
-//    
-//   // NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:storageKey];
-//    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];

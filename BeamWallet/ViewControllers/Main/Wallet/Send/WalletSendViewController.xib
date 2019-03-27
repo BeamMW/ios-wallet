@@ -47,14 +47,14 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OaQ-H9-sf9" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="20" y="15" width="240" height="12"/>
+                                    <rect key="frame" x="20" y="15" width="240" height="14"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="12" id="N7O-rQ-G9w"/>
+                                        <constraint firstAttribute="height" constant="14" id="N7O-rQ-G9w"/>
                                     </constraints>
                                 </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="1VF-oE-Sfo">
-                                    <rect key="frame" x="20" y="57" width="335" height="466"/>
+                                    <rect key="frame" x="20" y="59" width="335" height="466"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="eLJ-72-xlw">
                                             <rect key="frame" x="0.0" y="0.0" width="335" height="78.5"/>

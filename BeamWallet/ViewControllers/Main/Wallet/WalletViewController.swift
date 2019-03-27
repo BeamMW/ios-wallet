@@ -21,7 +21,7 @@ import UIKit
 
 class WalletViewController: BaseViewController {
 
-    private var rowHeight = [CGFloat(100.0),CGFloat(130.0),CGFloat(150.0)]
+    private var rowHeight = [CGFloat(100.0),CGFloat(130.0),CGFloat(135.0)]
     private var expandAvailable = true
     private var expandProgress = true
 
@@ -39,12 +39,33 @@ class WalletViewController: BaseViewController {
         talbeView.register(WalletAvailableCell.self)
         talbeView.register(WalletProgressCell.self)
         talbeView.register(WalletTransactionCell.self)
-
-        AppModel.sharedManager().addDelegate(self)
+        talbeView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
+        AppModel.sharedManager().addDelegate(self)
+        AppModel.sharedManager().isLoggedin = true
+
         if let tr = AppModel.sharedManager().transactions {
             transactions = tr as! [BMTransaction]
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
+            if let transaction = transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
+                let vc = TransactionViewController()
+                vc.hidesBottomBarWhenPushed = true
+                vc.configure(with: transaction)
+                self.pushViewController(vc: vc)
+            }
+            
+            NotificationManager.sharedManager.clickedTransaction = ""
+        }
+    }
+    
+    @objc private func refreshData(_ sender: Any) {
+       AppModel.sharedManager().getWalletStatus()
     }
 }
 
@@ -105,6 +126,13 @@ extension WalletViewController : UITableViewDataSource {
         if section == 1 {
             return transactions.count
         }
+        else if let status = AppModel.sharedManager().walletStatus {
+            if status.realMaturing == 0
+                && status.realReceiving == 0
+                && status.realSending == 0 {
+                return 2
+            }
+        }
         return 3
     }
     
@@ -151,6 +179,7 @@ extension WalletViewController : WalletModelDelegate {
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
+                self.talbeView.stopRefreshing()
                 self.talbeView.reloadData()
             }
         }
@@ -163,6 +192,7 @@ extension WalletViewController : WalletModelDelegate {
             }
             
             UIView.performWithoutAnimation {
+                self.talbeView.stopRefreshing()
                 self.talbeView.reloadData()
             }
         }
@@ -212,7 +242,7 @@ extension WalletViewController : WalletProgressCellDelegate {
             rowHeight[2] = 65
         }
         else{
-            rowHeight[2] = 150
+            rowHeight[2] = 135
         }
         
         self.talbeView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)

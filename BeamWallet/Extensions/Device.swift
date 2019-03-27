@@ -24,7 +24,8 @@ import UIKit
 class Device {
     
     static var isZoomed: Bool {
-        return UIScreen.main.nativeScale > 2.1
+        let zoomed =  UIScreen.main.nativeScale > UIScreen.main.scale
+        return zoomed
     }
     
     static var iPhoneX: Bool {

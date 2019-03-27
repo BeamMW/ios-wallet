@@ -29,14 +29,15 @@ using namespace beam;
 using namespace beam::io;
 using namespace std;
 
-WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr)
-: WalletClient(walletDB, nodeAddr)
+WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
+: WalletClient(walletDB, nodeAddr, reactor)
 {
+
 }
 
 WalletModel::~WalletModel()
 {
-
+    
 }
 
 std::string txIDToString(const TxID& txId)
@@ -84,6 +85,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
         transaction.status = GetTransactionStatusString(item.m_status,transaction.isIncome, item.m_selfTx);
+        transaction.enumStatus = (UInt64)item.m_status;
         if (item.m_failureReason != TxFailureReason::Unknown)
         {
             transaction.failureReason = GetTransactionFailurString(item.m_failureReason);
@@ -94,6 +96,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
         transaction.isSelf = item.m_selfTx;
         transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
+        transaction.realFee = int64_t(item.m_fee);
         transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
         transaction.canCancel = item.canCancel();
         transaction.canResume = item.canResume();
@@ -191,6 +194,8 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
 {
     NSLog(@"onSyncProgressUpdated %d/%d",done, total);
 
+    [AppModel sharedManager].isUpdating = (done != total);
+    
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
@@ -212,6 +217,7 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
     
     for (const auto& coin : utxos)
     {
+
         BMUTXO *bmUTXO = [[BMUTXO alloc] init];
         bmUTXO.ID = coin.m_ID.m_Idx;
         bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
@@ -220,7 +226,21 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
         bmUTXO.status = coin.m_status;
         bmUTXO.maturity = coin.m_maturity;
         bmUTXO.confirmHeight = coin.m_confirmHeight;
-        bmUTXO.statusString = GetUTXOStatusString(coin);
+        bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
+        bmUTXO.typeString = GetUTXOTypeString(coin);
+        
+        if (coin.m_createTxId)
+        {
+            string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());
+            bmUTXO.createTxId = [NSString stringWithUTF8String:createdTxId.c_str()];
+        }
+        
+        if (coin.m_spentTxId)
+        {
+            string spentTxId = to_hex(coin.m_spentTxId->data(), coin.m_spentTxId->size());
+            bmUTXO.spentTxId = [NSString stringWithUTF8String:spentTxId.c_str()];
+        }
+
         [bmUtxos addObject:bmUTXO];
     }
     
@@ -238,6 +258,33 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
 void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& addrs)
 {
     printf("onAddresses");
+    
+    if (own)
+    {
+        NSMutableArray *addresses = [[NSMutableArray alloc] init];
+        
+        for (const auto& walletAddr : addrs)
+        {
+            BMAddress *address = [[BMAddress alloc] init];
+            address.duration = walletAddr.m_duration;
+            address.ownerId = walletAddr.m_OwnID;
+            address.createTime = walletAddr.m_createTime;
+            address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+            address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+            
+            [addresses addObject:address];
+        }
+        
+        [[AppModel sharedManager] setWalletAddresses:addresses];
+        
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
+                [delegate onWalletAddresses:addresses];
+            }
+        }
+    }
 }
 
 void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
@@ -252,7 +299,6 @@ void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
     address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
     address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
     
-
     getAsync()->saveAddress(walletAddr, true);
 
     [[AppModel sharedManager] setWalletAddress:address];
@@ -279,6 +325,7 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
     }
     
     [[AppModel sharedManager] setIsConnected:isNodeConnected];
+    [[AppModel sharedManager] setIsConnecting:NO];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
@@ -338,7 +385,7 @@ void WalletModel::onCantSendToExpired()
 
 void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof)
 {
-    NSLog(@"onPaymentProofExported");
+
 }
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
@@ -431,27 +478,21 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
     return @"unknown";
 }
 
-//QString UtxoItem::status() const
-//{
-//    switch(_coin.m_status)
-//    {
-//        case Coin::Available:
-//            return tr("available");
-//        case Coin::Maturing:
-//            return tr("maturing\n(till block height ") + QString::number(_coin.m_maturity) + ")";
-//        case Coin::Unavailable:
-//            return tr("unavailable\n(mining result rollback)");
-//        case Coin::Outgoing:
-//            return tr("in progress\n(outgoing)");
-//        case Coin::Incoming:
-//            return (_coin.m_ID.m_Type == Key::Type::Change) ?
-//            tr("in progress\n(change)") :
-//            tr("in progress\n(incoming)");
-//        case Coin::Spent:
-//            return tr("spent");
-//        default:
-//            assert(false && "Unknown key type");
-//    }
-//
-//    return "";
-//}
+NSString* WalletModel::GetUTXOTypeString(beam::Coin coin) {
+    switch (coin.m_ID.m_Type)
+    {
+        case Key::Type::Comission:
+            return @"Transaction fee";
+        case Key::Type::Coinbase:
+            return @"Coinbase";
+        case Key::Type::Regular:
+            return @"Regular";
+        case Key::Type::Change:
+            return @"Change";
+        case Key::Type::Treasury: {
+            return @"Treasury";
+        }
+    }
+    
+    return @"unknown";
+}

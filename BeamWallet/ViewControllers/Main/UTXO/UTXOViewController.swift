@@ -20,7 +20,7 @@
 import UIKit
 
 class UTXOViewController: BaseViewController {
-    enum UTXOSelectedState {
+    enum UTXOSelectedState: Int {
         case active
         case all
     }
@@ -39,10 +39,16 @@ class UTXOViewController: BaseViewController {
         
         tableView.register(UTXOCell.self)
         tableView.register(UTXOBlockCell.self)
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         filterUTXOS()
         
-        AppModel.sharedManager().addDelegate(self)
+        AppModel.sharedManager().addDelegate(self)        
+    }
+    
+    @objc private func refreshData(_ sender: Any) {
+        AppModel.sharedManager().getWalletStatus()
+        AppModel.sharedManager().getUTXO()
     }
     
     private func filterUTXOS() {
@@ -60,11 +66,13 @@ class UTXOViewController: BaseViewController {
     }
     
     @IBAction func onStatus(sender : UISegmentedControl) {
-        if sender.selectedSegmentIndex == 1 {
-            onClickAll()
-        }
-        else{
+        selectedState = UTXOViewController.UTXOSelectedState(rawValue: sender.selectedSegmentIndex) ?? .active
+        
+        switch selectedState {
+        case .active:
             onClickActive()
+        case .all:
+            onClickAll()
         }
     }
 }
@@ -83,11 +91,16 @@ extension UTXOViewController : UITableViewDelegate {
         if indexPath.row == 0 && indexPath.section == 0{
             return expandBlock ? 156 : 106
         }
-        return UITableView.automaticDimension
+        return 60
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.section == 1 {
+            let vc = UTXODetailViewController(utxo: utxos[indexPath.row])
+            self.pushViewController(vc: vc)
+        }
     }
 }
 
@@ -167,6 +180,7 @@ extension UTXOViewController : WalletModelDelegate {
                 }
             }
             UIView.performWithoutAnimation {
+                self.tableView.stopRefreshing()
                 self.tableView.reloadData()
             }
         }

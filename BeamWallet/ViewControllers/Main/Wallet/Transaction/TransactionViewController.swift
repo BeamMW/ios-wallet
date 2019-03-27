@@ -28,6 +28,7 @@ class TransactionViewController: BaseViewController {
         var text:String!
         var detail:String!
         var failed:Bool!
+        var canCopy:Bool!
     }
     
     private var transaction:BMTransaction!
@@ -40,8 +41,13 @@ class TransactionViewController: BaseViewController {
         
         tableView.register(GeneralTransactionInfoCell.self)
         tableView.register(WalletTransactionCell.self)
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         fillTransactionInfo()
+    }
+    
+    @objc private func refreshData(_ sender: Any) {
+        AppModel.sharedManager().getWalletStatus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,17 +71,17 @@ class TransactionViewController: BaseViewController {
         }
         
         details = [TransactionGeneralInfo]()
-        details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false))
-        details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false))
-        details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false))
-        details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false))
+        details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false, canCopy:true))
+        details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false, canCopy:true))
+        details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false, canCopy:true))
+        details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true))
         
         if !transaction.comment.isEmpty {
-            details.append(TransactionGeneralInfo(text: "Comment:", detail: transaction.comment, failed: false))
+            details.append(TransactionGeneralInfo(text: "Comment:", detail: transaction.comment, failed: false, canCopy:true))
         }
         
         if transaction.isFailed() {
-            details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true))
+            details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true, canCopy:true))
         }
 
         tableView.reloadData()
@@ -95,6 +101,10 @@ class TransactionViewController: BaseViewController {
         BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.id) {
+                case 1:
+                    let vc = WalletSendViewController()
+                    vc.transaction = self.transaction
+                    self.pushViewController(vc: vc)
                 case 3 :
                     AppModel.sharedManager().cancelTransaction(self.transaction)
                     self.navigationController?.popViewController(animated: true)
@@ -182,6 +192,7 @@ extension TransactionViewController : WalletModelDelegate {
                 self.transaction = transaction
                 
                 UIView.performWithoutAnimation {
+                    self.tableView.stopRefreshing()
                     self.fillTransactionInfo()
                 }
             }

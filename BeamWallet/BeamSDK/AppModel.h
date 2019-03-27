@@ -30,6 +30,8 @@
 -(void)onWalletError:(NSString*_Nonnull)error;
 -(void)onWalletStatusChange:(BMWalletStatus*_Nonnull)status;
 -(void)onNetwotkStatusChange:(BOOL)connected;
+-(void)onNetwotkStartConnecting:(BOOL)connecting;
+-(void)onWalletAddresses:(NSArray<BMAddress*>*_Nonnull)walletAddresses;
 -(void)onGeneratedNewAddress:(BMAddress*_Nonnull)address;
 -(void)onReceivedTransactions:(NSArray<BMTransaction*>*_Nonnull)transactions;
 -(void)onSendMoneyVerified;
@@ -43,11 +45,15 @@
 
 @property (nonatomic,assign) BOOL isConnected;
 @property (nonatomic,assign) BOOL isInternetAvailable;
+@property (nonatomic,assign) BOOL isUpdating;
+@property (nonatomic,assign) BOOL isConnecting;
+@property (nonatomic,assign) BOOL isLoggedin;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) BMAddress* _Nullable walletAddress;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable utxos;
+@property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nullable walletAddresses;
 
 +(AppModel*_Nonnull)sharedManager;
 
@@ -60,15 +66,21 @@
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
 -(void)resetWallet;
 
--(void)refreshWallet;
+//-(void)refreshWallet;
 -(void)getWalletStatus;
 -(void)getNetworkStatus;
+-(void)refreshAllInfo;
 
 -(void)generateNewWalletAddress;
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address ;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address ;
+-(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
+-(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
+-(void)editAddress:(BMAddress*_Nonnull)address;
 
 -(BOOL)isValidAddress:(NSString*_Nullable)address;
+-(BOOL)isExpiredAddress:(NSString*_Nullable)address;
+-(void)deleteAddress:(NSString*_Nullable)address;
 
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
@@ -80,5 +92,6 @@
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
 
 -(void)getUTXO;
+-(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromUTXO:(BMUTXO*_Nonnull)utox;
 
 @end

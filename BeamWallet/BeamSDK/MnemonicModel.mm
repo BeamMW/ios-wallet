@@ -20,7 +20,6 @@
 
 #import "MnemonicModel.h"
 #import "StringStd.h"
-
 #include "mnemonic/mnemonic.h"
 
 using namespace beam;
@@ -60,5 +59,6 @@ using namespace std;
     
     return [words componentsJoinedByString:@";"];
 }
+
 
 @end

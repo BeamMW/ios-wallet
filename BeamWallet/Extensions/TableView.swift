@@ -45,3 +45,22 @@ extension UITableView {
         return self.dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath) as! T
     }
 }
+
+extension UITableView {
+
+    public func addPullToRefresh(target:Any?, handler: Selector) {
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(target, action: handler, for: .valueChanged)
+        self.refreshControl = refreshControl
+    }
+    
+    public func stopRefreshing() {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if let control = self.refreshControl {
+                control.endRefreshing()
+            }
+        }       
+    }
+}

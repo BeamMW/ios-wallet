@@ -27,8 +27,8 @@ class WalletModel : public WalletClient
 {
 public:
     using Ptr = std::shared_ptr<WalletModel>;
-    
-    WalletModel(beam::IWalletDB::Ptr walletDB, const std::string& nodeAddr);
+
+    WalletModel(beam::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
 
 private:
@@ -36,7 +36,8 @@ private:
     NSString *GetTransactionStatusString(beam::TxStatus status, bool income, bool self);
     NSString *GetTransactionFailurString(beam::TxFailureReason reason);
     NSString *GetUTXOStatusString(beam::Coin coin);
-    
+    NSString *GetUTXOTypeString(beam::Coin coin);
+
     void onStatus(const WalletStatus& status) override;
     void onTxStatus(beam::ChangeAction, const std::vector<beam::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;
@@ -50,5 +51,5 @@ private:
     void FailedToStartWallet() override;
     void onSendMoneyVerified() override;
     void onCantSendToExpired() override;
-    void onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof) ;
+    void onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof) override;
 };

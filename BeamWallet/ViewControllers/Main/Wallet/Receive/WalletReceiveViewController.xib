@@ -32,14 +32,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8gS-hN-bfX" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="20" y="35" width="240" height="12"/>
+                    <rect key="frame" x="20" y="35" width="240" height="14"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="12" id="yjE-hC-YUF"/>
+                        <constraint firstAttribute="height" constant="14" id="yjE-hC-YUF"/>
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="LGw-Q0-iXg">
-                    <rect key="frame" x="20" y="77" width="280" height="330.5"/>
+                    <rect key="frame" x="20" y="79" width="280" height="330.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="bBQ-IY-Ees">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="174"/>
@@ -168,7 +168,7 @@
                     </subviews>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send this address to the sender over an external secure channel" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4c-Zv-rSh">
-                    <rect key="frame" x="50" y="437.5" width="220" height="33.5"/>
+                    <rect key="frame" x="50" y="439.5" width="220" height="33.5"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -211,7 +211,7 @@
                                     </constraints>
                                     <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="copy" image="iconCopyBlue">
+                                    <state key="normal" title="copy address" image="iconCopyBlue">
                                         <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <userDefinedRuntimeAttributes>

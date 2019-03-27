@@ -44,6 +44,8 @@ class WalletSendViewController: BaseViewController {
 
     private var focused = false
     
+    public var transaction: BMTransaction?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -61,6 +63,13 @@ class WalletSendViewController: BaseViewController {
         }
         
         mainViewWidth.constant = UIScreen.main.bounds.width
+        
+        if let repeatTransaction = transaction {
+            toAddressField.text = repeatTransaction.receiverAddress
+            amountField.text = String.currency(value: repeatTransaction.realAmount)
+            feeField.text = String(repeatTransaction.realFee)
+            commentField.text = repeatTransaction.comment
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -76,7 +85,7 @@ class WalletSendViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        if !focused {
+        if !focused && transaction == nil {
             focused = true
             
             if let text = UIPasteboard.general.string {
@@ -112,9 +121,16 @@ class WalletSendViewController: BaseViewController {
         let fee = Double(feeField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
         
         let valid = AppModel.sharedManager().isValidAddress(toAddressField.text)
-        
+        let expired = AppModel.sharedManager().isExpiredAddress(toAddressField.text)
+
         if !valid {
             toAddressErrorLabel.text = "Incorrect address"
+            toAddressErrorLabel.textColor = UIColor.main.red
+            toAddressField.lineColor = UIColor.main.red
+            toAddressField.textColor = UIColor.main.red
+        }
+        else if expired {
+            toAddressErrorLabel.text = "Can't send to the expired address"
             toAddressErrorLabel.textColor = UIColor.main.red
             toAddressField.lineColor = UIColor.main.red
             toAddressField.textColor = UIColor.main.red
@@ -133,6 +149,19 @@ class WalletSendViewController: BaseViewController {
         }
         else if let address = toAddressField.text {
             AppModel.sharedManager().send(amount ?? 0, fee: fee ?? 0, to: address, comment: commentField.text ?? "")
+            
+            if let viewControllers = self.navigationController?.viewControllers{
+                for vc in viewControllers {
+                    if vc is WalletViewController {
+                        self.navigationController?.popToViewController(vc, animated: true)
+                        return
+                    }
+                    else if vc is AddressViewController {
+                        self.navigationController?.popToViewController(vc, animated: true)
+                        return
+                    }
+                }
+            }
             
             self.navigationController?.popViewController(animated: true)
         }

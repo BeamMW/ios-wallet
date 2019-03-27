@@ -74,11 +74,10 @@ class QRCodeView: UIView {
             }
             
             let transformed = ciImage.transformed(by: CGAffineTransform.init(scaleX: 10, y: 10))
-            let invertFilter = CIFilter(name: "CIColorInvert")
-            invertFilter?.setValue(transformed, forKey: kCIInputImageKey)
+            
             
             let alphaFilter = CIFilter(name: "CIMaskToAlpha")
-            alphaFilter?.setValue(invertFilter?.outputImage, forKey: kCIInputImageKey)
+            alphaFilter?.setValue(transformed, forKey: kCIInputImageKey)
             
             let outImage = alphaFilter?.outputImage
             

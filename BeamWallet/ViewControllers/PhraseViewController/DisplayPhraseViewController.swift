@@ -44,6 +44,9 @@ class DisplayPhraseViewController: BaseWizardViewController {
         else if Device.screenType == .iPhones_6_6s_7_8 {
             mainStack?.spacing = 30
         }
+        else if Device.screenType == .iPhone_XSMax {
+            mainStack?.spacing = 110
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -50,6 +50,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 passField.textColor = UIColor.main.red
             }
             else{
+                _ = KeychainManager.addPassword(password: pass)
+
                 let vc = CreateWalletProgressViewController()
                     .withPassword(password: pass)
                 pushViewController(vc: vc)

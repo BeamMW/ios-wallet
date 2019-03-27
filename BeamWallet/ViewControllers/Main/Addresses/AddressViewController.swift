@@ -1,0 +1,195 @@
+//
+//  AddressViewController.swift
+//  BeamWallet
+//
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+import UIKit
+
+class AddressViewController: BaseViewController {
+
+    private var address:BMAddress!
+    private var transactions:[BMTransaction]!
+
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private var headerView: UIView!
+    
+    init(address:BMAddress) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.address = address
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "iconMore"), style: .plain, target: self, action: #selector(onMore))
+
+        tableView.register(AddressCell.self)
+        tableView.register(WalletTransactionCell.self)
+
+        getTransactions()
+        
+        title = "Address"
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if isMovingFromParent
+        {
+            AppModel.sharedManager().removeDelegate(self)
+        }
+    }
+    
+    @objc private func onMore(sender:UIBarButtonItem) {
+        let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: "Show QR code", icon: "iconScanQr", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Copy address", icon: "iconCopyWhite24", id:2), BMPopoverMenu.BMPopoverMenuItem(name: "Edit address", icon: "iconEdit", id:3), BMPopoverMenu.BMPopoverMenuItem(name: "Delete address", icon: "iconDelete", id:4)]
+        
+
+        BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.id) {
+                case 1:
+                    let modalViewController = WalletQRCodeViewController().withAddress(address: self.address.walletId)
+                    modalViewController.modalPresentationStyle = .overFullScreen
+                    modalViewController.modalTransitionStyle = .crossDissolve
+                    self.present(modalViewController, animated: true, completion: nil)
+                case 2 :
+                    UIPasteboard.general.string = self.address.walletId
+                    SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
+                case 3 :
+                    let vc = EditAddressViewController(address: self.address)
+                    self.pushViewController(vc: vc)
+                case 4 :
+                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                    self.navigationController?.popViewController(animated: true)
+                default:
+                    return
+                }
+            }
+        }, cancel: {
+            
+        })
+    }
+    
+    private func getTransactions() {
+        transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
+    }
+}
+
+extension AddressViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 40
+        }
+        
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 1 {
+            return 86
+        }
+        return 90
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.section == 1 {
+            let vc = TransactionViewController()
+            vc.hidesBottomBarWhenPushed = true
+            vc.configure(with: transactions[indexPath.row])
+            pushViewController(vc: vc)
+        }
+    }
+}
+
+extension AddressViewController : UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if transactions.count > 0 {
+            return 2
+        }
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 1 {
+            return transactions.count
+        }
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.section == 0 {
+            let cell =  tableView
+                .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                .configured(with: (row: indexPath.row, address: address, single:true))
+            return cell
+        }
+        else{
+            let cell =  tableView
+                .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
+                .configured(with: (row: indexPath.row, transaction: transactions[indexPath.row], single:false))
+            return cell
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            return headerView
+        }
+        
+        return nil
+    }
+}
+
+extension AddressViewController : WalletModelDelegate {
+    func onReceivedTransactions(_ transactions: [BMTransaction]) {
+        DispatchQueue.main.async {
+            self.getTransactions()
+            
+            UIView.performWithoutAnimation {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func onWalletAddresses(_ walletAddresses: [BMAddress]) {
+        DispatchQueue.main.async {
+            if let address = walletAddresses.first(where: { $0.walletId == self.address.walletId }) {
+                self.address = address
+                
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+}
+

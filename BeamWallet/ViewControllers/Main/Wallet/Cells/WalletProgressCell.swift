@@ -27,23 +27,18 @@ protocol WalletProgressCellDelegate: AnyObject {
 class WalletProgressCell: BaseCell {
     
     weak var delegate: WalletProgressCellDelegate?
-
-    @IBOutlet weak private var receivingLabelMaxWidth: NSLayoutConstraint!
-    @IBOutlet weak private var sentLabelMaxWidth: NSLayoutConstraint!
-    @IBOutlet weak private var maturingLabelMaxWidth: NSLayoutConstraint!
     
-    @IBOutlet weak private var receivingTitleLabel: UILabel!
-    @IBOutlet weak private var sentTitleLabel: UILabel!
-    @IBOutlet weak private var maturingTitleLabel: UILabel!
     
     @IBOutlet weak private var receivingLabel: UILabel!
     @IBOutlet weak private var sentLabel: UILabel!
     @IBOutlet weak private var maturingLabel: UILabel!
 
     @IBOutlet weak private var arrowIcon: UIImageView!
-    @IBOutlet weak private var receivingStack: UIView!
-    @IBOutlet weak private var sentStack: UIView!
-    @IBOutlet weak private var maturingStack: UIView!
+    
+    @IBOutlet weak private var receivingStack: UIStackView!
+    @IBOutlet weak private var sentStack: UIStackView!
+    @IBOutlet weak private var maturingStack: UIStackView!
+    @IBOutlet weak private var mainStackView: UIStackView!
 
     @IBOutlet weak private var currencyReceivingIcon: UIImageView!
     @IBOutlet weak private var currencySendingIcon: UIImageView!
@@ -62,10 +57,6 @@ class WalletProgressCell: BaseCell {
         currencyMaturingIcon.tintColor = maturingLabel.textColor
         
         selectionStyle = .none
-        
-        receivingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 110)/3
-        sentLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 110)/3
-        maturingLabelMaxWidth.constant = (UIScreen.main.bounds.size.width - 110)/3
 
     }
     
@@ -76,23 +67,13 @@ class WalletProgressCell: BaseCell {
     @IBAction func onExpand(sender :UIButton) {
         if receivingStack.alpha == 1 {
             UIView.animate(withDuration: 0.3) {
-                self.receivingStack.alpha = 0
-                self.sentStack.alpha = 0
-                self.maturingStack.alpha = 0
-                self.receivingTitleLabel.alpha = 0
-                self.sentTitleLabel.alpha = 0
-                self.maturingTitleLabel.alpha = 0
+                self.mainStackView.alpha = 0
                 self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
             }
         }
         else{
             UIView.animate(withDuration: 0.3) {
-                self.receivingStack.alpha = 1
-                self.sentStack.alpha = 1
-                self.maturingStack.alpha = 1
-                self.receivingTitleLabel.alpha = 1
-                self.sentTitleLabel.alpha = 1
-                self.maturingTitleLabel.alpha = 1
+                self.mainStackView.alpha = 1
                 self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
             }
         }
@@ -107,29 +88,23 @@ extension WalletProgressCell: Configurable {
             receivingLabel.text = "+" + String.currency(value: status.realReceiving)
             sentLabel.text = "-" + String.currency(value: status.realSending)
             maturingLabel.text = String.currency(value: status.realMaturing)
+            
+            maturingStack.isHidden = status.realMaturing == 0 ? true : false
+            sentStack.isHidden = status.realSending == 0 ? true : false
+            receivingStack.isHidden = status.realReceiving == 0 ? true : false
         }
         else{
-            sentLabel.text = "0.00"
-            maturingLabel.text = "0.00"
-            receivingLabel.text = "0.00"
+            sentLabel.text = "0"
+            maturingLabel.text = "0"
+            receivingLabel.text = "0"
         }
         
         if !options.expand {
-            receivingStack.alpha = 0
-            sentStack.alpha = 0
-            maturingStack.alpha = 0
-            receivingTitleLabel.alpha = 0
-            sentTitleLabel.alpha = 0
-            maturingTitleLabel.alpha = 0
+            mainStackView.alpha = 0
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
         }
         else{
-            receivingStack.alpha = 1
-            sentStack.alpha = 1
-            maturingStack.alpha = 1
-            receivingTitleLabel.alpha = 1
-            sentTitleLabel.alpha = 1
-            maturingTitleLabel.alpha = 1
+            mainStackView.alpha = 1
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
         }
     }

@@ -26,11 +26,14 @@
 @property (nonatomic,assign) UInt64 ID;
 @property (nonatomic,assign) UInt64 amount;
 @property (nonatomic,assign) double realAmount;
-@property (nonatomic,strong) NSString * stringID;
 @property (nonatomic,assign) int status;
 @property (nonatomic,assign) UInt64 maturity;
 @property (nonatomic,assign) UInt64 confirmHeight;
-@property (nonatomic,strong) NSString * statusString;
+@property (nonatomic,strong) NSString * _Nonnull statusString;
+@property (nonatomic,strong) NSString * _Nonnull stringID;
+@property (nonatomic,strong) NSString * _Nonnull typeString;
+@property (nonatomic,strong) NSString * _Nullable createTxId;
+@property (nonatomic,strong) NSString * _Nullable spentTxId;
 
 @end
 

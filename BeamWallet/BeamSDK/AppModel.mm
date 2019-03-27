@@ -24,9 +24,9 @@
 
 #import "AppModel.h"
 #import "Settings.h"
-#import "StringStd.h"
 #import "MnemonicModel.h"
 #import "WalletModel.h"
+#import "StringStd.h"
 
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -50,6 +50,7 @@
 using namespace beam;
 using namespace ECC;
 using namespace std;
+using namespace beam::io;
 
 
 @implementation AppModel  {
@@ -57,6 +58,7 @@ using namespace std;
 
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
+    Reactor::Ptr walletReactor;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
@@ -75,6 +77,8 @@ using namespace std;
 -(id)init{
     self = [super init];
     
+    walletReactor = Reactor::create();
+
     [self createLogger];
     
     _delegates = [[NSHashTable alloc] init];
@@ -86,8 +90,6 @@ using namespace std;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshAllInfo)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
-
-    
     return self;
 }
 
@@ -126,6 +128,17 @@ using namespace std;
     }
     _isConnected = isConnected;
 }
+    
+-(void)setIsConnecting:(BOOL)isConnecting {
+    _isConnecting = isConnecting;
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onNetwotkStartConnecting:)]) {
+            [delegate onNetwotkStartConnecting:_isConnecting];
+        }
+    }
+}
 
 
 -(BOOL)isWalletAlreadyAdded {
@@ -133,19 +146,20 @@ using namespace std;
 }
 
 -(BOOL)openWallet:(NSString*)pass {
+    
     Rules::get().UpdateChecksum();
-
+    
     string dbFilePath = Settings.walletStoragePath.string;
-
+    
     if (!walletDb) {
-        walletDb = WalletDB::open(dbFilePath, pass.string);
+        walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
         if (!walletDb){
             return NO;
         }
     }
     
     [self onWalledOpened:SecString(pass.string)];
-
+    
     return YES;
 }
 
@@ -154,7 +168,7 @@ using namespace std;
 
     string dbFilePath = Settings.walletStoragePath.string;
 
-    walletDb = WalletDB::open(dbFilePath, pass.string);
+    walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
     if (!walletDb) {
         return NO;
     }
@@ -173,7 +187,7 @@ using namespace std;
     }
     
     //invalid parameters
-    if (phrase.isEmpty || pass.isEmpty) {
+    if ((phrase==nil || phrase.length==0) || (pass==nil || pass.length==0)) {
         return NO;
     }
     
@@ -193,7 +207,7 @@ using namespace std;
     seed.assign(buf.data(), buf.size());
 
     //create wallet db
-    walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash());
+    walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash(), walletReactor);
     
     if (!walletDb) {
         return NO;
@@ -225,7 +239,7 @@ using namespace std;
 -(void)start {
     string nodeAddr = Settings.nodeAddress.string;
     
-    wallet = make_shared<WalletModel>(walletDb, nodeAddr);
+    wallet = make_shared<WalletModel>(walletDb, nodeAddr, walletReactor);
     
     wallet->getAsync()->setNodeAddress(nodeAddr);
     
@@ -233,9 +247,9 @@ using namespace std;
 }
 
 
--(void)refreshWallet {
-    wallet->getAsync()->refresh();
-}
+//-(void)refreshWallet {
+//   // wallet->getAsync()->refresh();
+//}
 
 -(void)getWalletStatus {
     wallet->getAsync()->getWalletStatus();
@@ -249,7 +263,9 @@ using namespace std;
     [internetReachableFoo stopNotifier];
     [internetReachableFoo startNotifier];
     
-    if (wallet != nil) {
+    if (wallet != nil) {        
+        [self setIsConnecting:true];
+        
         [self getNetworkStatus];
     }
 }
@@ -257,6 +273,28 @@ using namespace std;
 
 #pragma mark - Address
 
+-(BOOL)isExpiredAddress:(NSString*_Nullable)address {
+    if (address!=nil) {
+        if(address.length)
+        {
+            WalletID walletID(Zero);
+            if (walletID.FromHex(address.string))
+            {
+                auto receiverAddr = walletDb->getAddress(walletID);
+                
+                if(receiverAddr) {
+                    if (receiverAddr->m_OwnID && receiverAddr->isExpired())
+                    {
+                        return YES;
+                    }
+                }
+            }
+        }
+    }
+    
+    return NO;
+}
+    
 -(BOOL)isValidAddress:(NSString*_Nullable)address {
     if (address==nil)
     {
@@ -282,9 +320,7 @@ using namespace std;
             
             if ([wAddress isEqualToString:address])
             {
-                addresses[i].m_duration = hours * 60 * 60;
-                
-                walletDb->saveAddress(addresses[i]);
+                wallet->getAsync()->saveAddressChanges(walletID, addresses[i].m_label, (hours == 0 ? true : false), true, false);
                 
                 break;
             }
@@ -304,18 +340,81 @@ using namespace std;
             
             if ([wAddress isEqualToString:address])
             {
-                addresses[i].m_label = comment.string;
-                
-                walletDb->saveAddress(addresses[i]);
-                
+                wallet->getAsync()->saveAddressChanges(walletID, comment.string, (addresses[i].m_duration == 0 ? true : false), true, false);
+
                 break;
             }
         }
     }
 }
 
+-(void)deleteAddress:(NSString*_Nullable)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        walletDb->deleteAddress(walletID);
+    }
+}
+
 -(void)generateNewWalletAddress {    
     wallet->getAsync()->generateNewAddress();
+}
+
+-(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {
+    std::vector<WalletAddress> addrs = walletDb->getAddresses(true);
+
+    NSMutableArray *addresses = [[NSMutableArray alloc] init];
+    
+    for (const auto& walletAddr : addrs)
+    {        
+        BMAddress *address = [[BMAddress alloc] init];
+        address.duration = walletAddr.m_duration;
+        address.ownerId = walletAddr.m_OwnID;
+        address.createTime = walletAddr.m_createTime;
+        address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+        address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+        address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+        
+        [addresses addObject:address];
+    }
+    
+    return addresses;
+}
+
+-(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address {
+    
+    NSMutableArray *result = [NSMutableArray array];
+    for (BMTransaction *tr in self.transactions)
+    {
+        if ([tr.senderAddress isEqualToString:address.walletId]
+            || [tr.receiverAddress isEqualToString:address.walletId]) {
+            [result addObject:tr];
+        }
+    }
+    
+    return result;
+}
+
+-(void)editAddress:(BMAddress*_Nonnull)address {
+    
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.walletId.string))
+    {
+        if(address.isNowExpired) {
+            wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
+        }
+        else if(address.isNowActive) {
+            if (address.isNowActiveDuration == 0){
+                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, true, true, false);
+            }
+            else{
+                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, true, false);
+            }
+        }
+        else{
+            wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), false, false);
+        }
+    }
 }
 
 #pragma mark - Delegates
@@ -341,7 +440,11 @@ using namespace std;
     Amount bAmount = round(amount * Rules::Coin);
     Amount bTotal = bAmount + fee;
     
-   if(![self isValidAddress:to])
+
+    if([self isExpiredAddress:to]){
+        return @"Can't send to the expired address";
+    }
+    else if(![self isValidAddress:to])
     {
         return @"Incorrect address";
     }
@@ -378,7 +481,12 @@ using namespace std;
     WalletID walletID(Zero);
     if (walletID.FromHex(to.string))
     {
-        wallet->getAsync()->sendMoney(walletID, comment.string, amount * Rules::Coin,fee);
+        try{
+            wallet->getAsync()->sendMoney(walletID, comment.string, amount * Rules::Coin,fee);
+        }
+        catch(NSException *ex) {
+            NSLog(@"%@",ex);
+        }
     }
 }
 
@@ -411,7 +519,7 @@ using namespace std;
     }
     
     
-    static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string,dataPath.string);
+    static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string, dataPath.string);
     
     auto path = logger->get_current_file_name();
     pathLog =  [NSString stringWithUTF8String:path.c_str()];
@@ -419,18 +527,16 @@ using namespace std;
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
 
-    NSString *ios = [NSString stringWithFormat:@"iOS: %@",[[UIDevice currentDevice] systemVersion]];
-    NSString *model = [NSString stringWithFormat:@"MODEL: %@",[[UIDevice currentDevice] model]];
-    NSString *modelID = [NSString stringWithFormat:@"MODEL ID: %@",[self modelIdentifier]];
-    NSString *appVersion = [NSString stringWithFormat:@"APP VERSION: %@",version];
-    NSString *buildVersion = [NSString stringWithFormat:@"BUILD NUMBER: %@",build];
+    NSString *ios = [NSString stringWithFormat:@"OS VERSION: iOS %@",[[UIDevice currentDevice] systemVersion]];
+    NSString *model = [NSString stringWithFormat:@"DEVICE TYPE: %@",[[UIDevice currentDevice] model]];
+    NSString *modelID = [NSString stringWithFormat:@"DEVICE MODEL ID: %@",[self modelIdentifier]];
+    NSString *appVersion = [NSString stringWithFormat:@"APP VERSION: %@ BUILD %@",version, build];
 
-    LOG_INFO() << "APP RUNNING";
+    LOG_INFO() << "Application has started";
     LOG_INFO() << ios.string;
     LOG_INFO() << model.string;
     LOG_INFO() << modelID.string;
     LOG_INFO() << appVersion.string;
-    LOG_INFO() << buildVersion.string;
 }
 
 - (NSString *)modelIdentifier {
@@ -489,4 +595,26 @@ using namespace std;
     wallet->getAsync()->getUtxosStatus();
 }
 
+-(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromUTXO:(BMUTXO*_Nonnull)utox {
+    NSMutableArray *result = [NSMutableArray array];
+    for (BMTransaction *tr in self.transactions)
+    {
+        if (utox.createTxId!=nil)
+        {
+            if([tr.ID isEqualToString:utox.createTxId])
+            {
+                [result addObject:tr];
+            }
+        }
+        if (utox.spentTxId!=nil)
+        {
+            if([tr.ID isEqualToString:utox.spentTxId])
+            {
+                [result addObject:tr];
+            }
+        }
+    }
+    return result;
+}
+    
 @end

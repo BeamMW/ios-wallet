@@ -76,6 +76,8 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         
         if !pass.isEmpty {
             if pass == confirmPass {
+                _ = KeychainManager.addPassword(password: pass)
+                
                 let vc = CreateWalletProgressViewController()
                     .withPassword(password: pass)
                     .withPhrase(phrase: phrase)

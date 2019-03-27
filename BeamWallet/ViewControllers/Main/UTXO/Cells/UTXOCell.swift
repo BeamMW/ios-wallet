@@ -2,8 +2,19 @@
 //  UTXOCell.swift
 //  BeamWallet
 //
-//  Created by Denis on 3/18/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 import UIKit
@@ -14,7 +25,6 @@ class UTXOCell: UITableViewCell {
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var statusLabel: UILabel!
-    @IBOutlet weak private var idLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -39,13 +49,12 @@ extension UTXOCell: Configurable {
         }
         
         amountLabel.text = String.currency(value: options.utxo.realAmount)
-        idLabel.text = options.utxo.stringID
         statusLabel.text = options.utxo.statusString
         
-        if options.utxo.statusString == "Available" {
-            statusLabel.textColor = UIColor.main.brightTeal
+        if options.utxo.statusString == "available" {
+            statusLabel.textColor = UIColor.white
         }
-        else if options.utxo.statusString == "Spent" {
+        else if options.utxo.statusString == "spent" {
             statusLabel.textColor = UIColor.main.heliotrope
         }
         else{
