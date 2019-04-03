@@ -37,7 +37,6 @@
                     <segments>
                         <segment title="Active"/>
                         <segment title="Expired"/>
-                        <segment title="Contacts"/>
                     </segments>
                     <color key="tintColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>

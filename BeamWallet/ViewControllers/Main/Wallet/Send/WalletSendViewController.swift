@@ -290,6 +290,9 @@ extension WalletSendViewController : UITextFieldDelegate {
                     if v == 0 {
                         textField.text = "0"
                     }
+                    else if textField == feeField {
+                        textField.text = String(Int(v))
+                    }
                 }
                 else{
                     textField.text = "0"

@@ -22,6 +22,7 @@ import SelectItemController
 
 class EditAddressViewController: BaseViewController {
 
+    private let hours_24: UInt64 = 86400
     private var address:BMAddress!
     private var oldAddress:BMAddress!
 
@@ -44,7 +45,7 @@ class EditAddressViewController: BaseViewController {
         self.address.ownerId = address.ownerId
         self.address.isNowExpired = false
         self.address.isNowActive = false
-        self.address.isNowActiveDuration = 86400
+        self.address.isNowActiveDuration = hours_24
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -243,10 +244,10 @@ extension EditAddressViewController : AddressExpireCellDelegate {
         SelectItemController().show(parent: self, params: params) { (index) in
             if let index = index {
                 if self.address.isNowActive {
-                    self.address.isNowActiveDuration = (index == 0 ? 86400 : 0)
+                    self.address.isNowActiveDuration = (index == 0 ? self.hours_24 : 0)
                 }
                 else{
-                    self.address.duration = (index == 0 ? 86400 : 0)
+                    self.address.duration = (index == 0 ? self.hours_24 : 0)
                 }
                 
                 self.checkIsChanges()

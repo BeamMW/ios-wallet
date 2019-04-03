@@ -89,7 +89,7 @@ class TransactionViewController: BaseViewController {
     
     @objc private func onMore(sender:UIBarButtonItem) {
         let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
-        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Repeat transaction", icon: "iconRepeat", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Save peer address", icon: "iconSaveAddress", id:2)]
+        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Repeat transaction", icon: "iconRepeat", id:1) /*, BMPopoverMenu.BMPopoverMenuItem(name: "Save peer address", icon: "iconSaveAddress", id:2)*/]
         
         if transaction.canCancel {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Cancel transaction", icon: "iconCancelTransction", id:3))

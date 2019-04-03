@@ -58,12 +58,12 @@ class CreateWalletProgressViewController: BaseViewController {
         let appModel = AppModel.sharedManager()
         appModel.addDelegate(self)
 
-        if (!appModel.isInternetAvailable){
-            self.alert(title: "Error", message: "No internet connection") { (_ ) in
-                self.navigationController?.popToRootViewController(animated: true)
-            }
-        }
-        else{
+//        if (!appModel.isInternetAvailable){
+//            self.alert(title: "Error", message: "No internet connection") { (_ ) in
+//                self.navigationController?.popToRootViewController(animated: true)
+//            }
+//        }
+//        else{
             if let phrase = phrase {
                 let created = appModel.createWallet(phrase, pass: password)
                 if(!created)
@@ -92,7 +92,7 @@ class CreateWalletProgressViewController: BaseViewController {
                     }
                 }
             }
-        }
+       // }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
