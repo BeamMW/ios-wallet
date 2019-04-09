@@ -27,8 +27,6 @@ class WalletQRCodeViewController: BaseViewController {
 
     weak var delegate: WalletQRCodeViewControllerDelegate?
 
-    private var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-
     private var address:String!
     
     @IBOutlet weak private var addressLabel: UILabel!
@@ -44,7 +42,7 @@ class WalletQRCodeViewController: BaseViewController {
         
         codeView.generateCode(address, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         
-        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler)))
+        addSwipeToDismiss()
     }
 
     @IBAction func onCopy(sender :UIButton) {
@@ -72,39 +70,5 @@ extension WalletQRCodeViewController {
         self.address = address
         
         return self
-    }
-}
-
-extension WalletQRCodeViewController {
-    @objc private func panGestureRecognizerHandler(sender:UIGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
-        
-        if sender.state == .began {
-            initialTouchPoint = touchPoint
-        }
-        else if sender.state == .changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-             
-                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
-                
-                let offset = (self.view.frame.size.height - self.view.frame.origin.y)
-               
-                var percent = offset / self.view.frame.size.height
-                if percent < 0.85 {
-                    percent = 0.85
-                }
-                
-                self.view.alpha = percent
-            }
-        } else if sender.state == .ended || sender.state == .cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.view.alpha = 1
-                    self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-                })
-            }
-        }
     }
 }

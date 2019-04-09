@@ -1,8 +1,7 @@
 //
-//  AppDelegate.swift
-//  BeamWallet
+// AppDelegate.swift
+// BeamWallet
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +23,9 @@ import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var securityScreen = AutoSecurityScreen()
+    var lockScreen = LockScreen()
 
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
@@ -47,7 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
+        
+        UIApplication.shared.isIdleTimerDisabled = true
 
         Crashlytics().debugMode = true
         Fabric.with([Crashlytics.self()])
@@ -70,6 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = rootController
         self.window!.makeKeyAndVisible()
     
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marineTwo
         
         return true
     }
@@ -78,9 +84,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        
+        if AppModel.sharedManager().isRestoreFlow {
+            registerBackgroundTask()
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
+        if AppModel.sharedManager().isRestoreFlow {
+            endBackgroundTask()
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -104,7 +117,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        if let password = KeychainManager.getPassword() {
+        if(!AppModel.sharedManager().isRestoreFlow) {
+            //   if let password = KeychainManager.getPassword() {
             self.completionHandler = completionHandler
             
             self.registerBackgroundTask()
@@ -112,14 +126,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if(AppModel.sharedManager().isLoggedin) {
                 AppModel.sharedManager().refreshAllInfo()
             }
-            else{
-                AppModel.sharedManager().openWallet(password)
-            }
+            //            else{
+            //                AppModel.sharedManager().openWallet(password)
+            //            }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
                 self.endBackgroundTask()
                 self.completionHandler?(.newData)
             }
+            //  }
+        }
+        else{
+            completionHandler(.noData)
         }
     }
 }

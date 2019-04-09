@@ -185,8 +185,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
             [delegate onReceivedTransactions:[[AppModel sharedManager]transactions]];
         }
     }
-    
-    
+        
     NSLog(@"onTxStatus");
 }
 
@@ -215,34 +214,36 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
     
     NSMutableArray *bmUtxos = [[NSMutableArray alloc] init];
     
-    for (const auto& coin : utxos)
-    {
-
-        BMUTXO *bmUTXO = [[BMUTXO alloc] init];
-        bmUTXO.ID = coin.m_ID.m_Idx;
-        bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
-        bmUTXO.amount = coin.m_ID.m_Value;
-        bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
-        bmUTXO.status = coin.m_status;
-        bmUTXO.maturity = coin.m_maturity;
-        bmUTXO.confirmHeight = coin.m_confirmHeight;
-        bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
-        bmUTXO.typeString = GetUTXOTypeString(coin);
-        
-        if (coin.m_createTxId)
+    @autoreleasepool {
+        for (const auto& coin : utxos)
         {
-            string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());
-            bmUTXO.createTxId = [NSString stringWithUTF8String:createdTxId.c_str()];
+            BMUTXO *bmUTXO = [[BMUTXO alloc] init];
+            bmUTXO.ID = coin.m_ID.m_Idx;
+            bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
+            bmUTXO.amount = coin.m_ID.m_Value;
+            bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
+            bmUTXO.status = coin.m_status;
+            bmUTXO.maturity = coin.m_maturity;
+            bmUTXO.confirmHeight = coin.m_confirmHeight;
+            bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
+            bmUTXO.typeString = GetUTXOTypeString(coin);
+            
+            if (coin.m_createTxId)
+            {
+                string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());
+                bmUTXO.createTxId = [NSString stringWithUTF8String:createdTxId.c_str()];
+            }
+            
+            if (coin.m_spentTxId)
+            {
+                string spentTxId = to_hex(coin.m_spentTxId->data(), coin.m_spentTxId->size());
+                bmUTXO.spentTxId = [NSString stringWithUTF8String:spentTxId.c_str()];
+            }
+            
+            [bmUtxos addObject:bmUTXO];
         }
-        
-        if (coin.m_spentTxId)
-        {
-            string spentTxId = to_hex(coin.m_spentTxId->data(), coin.m_spentTxId->size());
-            bmUTXO.spentTxId = [NSString stringWithUTF8String:spentTxId.c_str()];
-        }
-
-        [bmUtxos addObject:bmUTXO];
     }
+
     
     [[[AppModel sharedManager]utxos] removeAllObjects];
     [[AppModel sharedManager] setUtxos:bmUtxos];
@@ -253,11 +254,14 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
         }
     }
+    
+    [bmUtxos removeAllObjects];
+    bmUtxos = nil;
 }
 
 void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& addrs)
 {
-    printf("onAddresses");
+    NSLog(@"onAddresses");
     
     if (own)
     {
@@ -282,6 +286,31 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
         {
             if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
                 [delegate onWalletAddresses:addresses];
+            }
+        }
+    }
+    else{
+        NSMutableArray *contacts = [[NSMutableArray alloc] init];
+
+        for (const auto& walletAddr : addrs)
+        {
+            BMAddress *address = [[BMAddress alloc] init];
+            address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+            
+            BMContact *contact = [[BMContact alloc] init];
+            contact.address = address;
+            contact.name = address.label;
+            
+            [contacts addObject:contact];
+        }
+        
+        [[AppModel sharedManager] setContacts:contacts];
+        
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onContactsChange:)]) {
+                [delegate onContactsChange:contacts];
             }
         }
     }
@@ -385,7 +414,23 @@ void WalletModel::onCantSendToExpired()
 
 void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof)
 {
-
+    NSLog(@"onPaymentProofExported");
+    
+    string str;
+    str.resize(proof.size() * 2);
+    
+    beam::to_hex(str.data(), proof.data(), proof.size());
+    
+    BMPaymentProof *paymentProof = [[BMPaymentProof alloc] init];
+    paymentProof.code = [NSString stringWithUTF8String:str.c_str()];
+    paymentProof.txID = [NSString stringWithUTF8String:txIDToString(txID).c_str()];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onReceivePaymentProof:)]) {
+            [delegate onReceivePaymentProof:paymentProof];
+        }
+    }
 }
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)

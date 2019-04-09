@@ -29,6 +29,8 @@
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
+
+//edit
 @property (nonatomic,assign) BOOL isNowExpired;
 @property (nonatomic,assign) BOOL isNowActive;
 @property (nonatomic,assign) UInt64 isNowActiveDuration;
@@ -36,6 +38,8 @@
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;
 -(NSString*)formattedDate;
+
+//edit
 -(NSString*)nowDate;
 -(NSString*)expireNowDate;
 -(int)isNowActiveDurationInHours;

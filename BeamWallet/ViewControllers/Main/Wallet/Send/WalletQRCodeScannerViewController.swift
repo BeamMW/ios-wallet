@@ -1,6 +1,6 @@
 //
-//  WalletQRCodeScannerViewController.swift
-//  BeamWallet
+// WalletQRCodeScannerViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -43,8 +43,8 @@ class WalletQRCodeScannerViewController: BaseViewController {
         
         title = "Scan QR code"
         
-        if Device.screenType == .iPhones_6_6s_7_8 || Device.screenType == .iPhones_5_5s_5c_SE
-            || Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus
+        if Device.screenType == .iPhones_6 || Device.screenType == .iPhones_5
+            || Device.screenType == .iPhones_Plus
         {
            offset = 140
         }
@@ -120,6 +120,7 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
     }
     
     func getBarCodeData(code: String) {
+        
         if (scannedValue.isEmpty)
         {
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -129,7 +130,7 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
             if (!AppModel.sharedManager().isValidAddress(code))
             {
                 let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
-                loaf.show(.average) {
+                loaf.show(Loaf.Duration.average) { (_ ) in
                     self.scannedValue = ""
                 }
             }
@@ -139,7 +140,6 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
                 delegate?.didScanQRCode(value: code)
             }
         }
-
     }
 }
 

@@ -1,8 +1,7 @@
 //
-//  KeychainManager.swift
-//  BeamWallet
+// KeychainManager.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

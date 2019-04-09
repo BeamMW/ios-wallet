@@ -28,6 +28,7 @@ class AddressesViewController: BaseViewController {
     
     private var selectedState: AddressesSelectedState = .active
     private var addresses = [BMAddress]()
+    private var contacts = [BMContact]()
 
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private var headerView: UIView!
@@ -40,25 +41,32 @@ class AddressesViewController: BaseViewController {
         AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
 
         tableView.register(AddressCell.self)
-        
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+
         filterAddresses()
         
         AppModel.sharedManager().addDelegate(self)
     }
     
+    @objc private func refreshData(_ sender: Any) {
+        //TODO: refresh
+        tableView.stopRefreshing()
+    }
 
     private func filterAddresses() {
-        if let addresses = AppModel.sharedManager().walletAddresses {
-            self.addresses = addresses as! [BMAddress]
-        }
-        
         switch selectedState {
         case .active:
+            if let addresses = AppModel.sharedManager().walletAddresses {
+                self.addresses = addresses as! [BMAddress]
+            }
             self.addresses = self.addresses.filter { $0.isExpired() == false}
         case .expired:
+            if let addresses = AppModel.sharedManager().walletAddresses {
+                self.addresses = addresses as! [BMAddress]
+            }
             self.addresses = self.addresses.filter { $0.isExpired() == true}
         case .contacts:
-            self.addresses.removeAll()
+            self.contacts = AppModel.sharedManager().contacts as! [BMContact]
         }
     }
     
@@ -93,7 +101,9 @@ extension AddressesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let vc = AddressViewController(address: addresses[indexPath.row])
+        let address = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
+        
+        let vc = AddressViewController(address: address, isContact:(selectedState == .contacts))
         vc.hidesBottomBarWhenPushed = true
         pushViewController(vc: vc)
     }
@@ -106,14 +116,17 @@ extension AddressesViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return addresses.count
+        let count = selectedState == .contacts ? contacts.count : addresses.count
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        let address = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
+
         let cell =  tableView
             .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-            .configured(with: (row: indexPath.row, address: addresses[indexPath.row], single:false))
+            .configured(with: (row: indexPath.row, address: address, single:false))
         
         return cell
     }
@@ -129,6 +142,15 @@ extension AddressesViewController : UITableViewDataSource {
 
 extension AddressesViewController : WalletModelDelegate {
     func onWalletAddresses(_ walletAddresses: [BMAddress]) {
+        DispatchQueue.main.async {
+            self.filterAddresses()
+            UIView.performWithoutAnimation {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func onContactsChange(_ contacts: [BMContact]) {
         DispatchQueue.main.async {
             self.filterAddresses()
             UIView.performWithoutAnimation {

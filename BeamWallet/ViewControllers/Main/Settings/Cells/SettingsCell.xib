@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SettingsCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eLd-yJ-xMq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                        <subviews>
+                            <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Zr-vf-ChD">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="Vi0-s7-MqN"/>
+                                </constraints>
+                            </view>
+                            <view alpha="0.10000000149011612" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pmd-ab-w6o">
+                                <rect key="frame" x="0.0" y="48.5" width="320" height="1"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="QAR-qV-0nI"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L9T-j8-Tlp">
+                                <rect key="frame" x="15" y="15" width="37" height="20"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8vt-rz-tFN">
+                                <rect key="frame" x="268" y="15" width="37" height="19.5"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eOW-a8-ams">
+                                <rect key="frame" x="256" y="10" width="51" height="31"/>
+                                <color key="onTintColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="onSwitchWithSender:" destination="KGk-i7-Jjw" eventType="valueChanged" id="f1m-2Z-rWs"/>
+                                </connections>
+                            </switch>
+                        </subviews>
+                        <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="8vt-rz-tFN" firstAttribute="top" secondItem="eLd-yJ-xMq" secondAttribute="top" constant="15" id="8TK-wP-bAZ"/>
+                            <constraint firstItem="L9T-j8-Tlp" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" constant="15" id="985-aK-EJa"/>
+                            <constraint firstItem="8Zr-vf-ChD" firstAttribute="top" secondItem="eLd-yJ-xMq" secondAttribute="top" id="B1f-SP-f2P"/>
+                            <constraint firstAttribute="trailing" secondItem="8vt-rz-tFN" secondAttribute="trailing" constant="15" id="E9a-rE-Bpx"/>
+                            <constraint firstItem="Pmd-ab-w6o" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" id="JQn-fJ-4lk"/>
+                            <constraint firstItem="8Zr-vf-ChD" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" id="OjQ-y7-lgL"/>
+                            <constraint firstAttribute="trailing" secondItem="Pmd-ab-w6o" secondAttribute="trailing" id="QNz-Mx-5ig"/>
+                            <constraint firstAttribute="bottom" secondItem="Pmd-ab-w6o" secondAttribute="bottom" id="Veg-Ao-uvj"/>
+                            <constraint firstItem="L9T-j8-Tlp" firstAttribute="top" secondItem="eLd-yJ-xMq" secondAttribute="top" constant="15" id="ZNc-O0-rLl"/>
+                            <constraint firstAttribute="bottom" secondItem="8vt-rz-tFN" secondAttribute="bottom" constant="15" id="aWV-Gh-fYm"/>
+                            <constraint firstItem="eOW-a8-ams" firstAttribute="top" secondItem="8Zr-vf-ChD" secondAttribute="bottom" constant="9" id="gV5-6J-bDg"/>
+                            <constraint firstItem="Pmd-ab-w6o" firstAttribute="top" secondItem="eOW-a8-ams" secondAttribute="bottom" constant="7.5" id="hhT-Q4-0WX"/>
+                            <constraint firstAttribute="trailing" secondItem="8Zr-vf-ChD" secondAttribute="trailing" id="tNt-wR-6yh"/>
+                            <constraint firstAttribute="trailing" secondItem="eOW-a8-ams" secondAttribute="trailing" constant="15" id="u88-7v-oxI"/>
+                            <constraint firstAttribute="bottom" secondItem="L9T-j8-Tlp" secondAttribute="bottom" constant="14.5" id="wzQ-co-3uv"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="eLd-yJ-xMq" secondAttribute="trailing" id="6IK-NR-HEh"/>
+                    <constraint firstItem="eLd-yJ-xMq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Mzt-A0-ZR5"/>
+                    <constraint firstItem="eLd-yJ-xMq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Uqa-5U-e1s"/>
+                    <constraint firstAttribute="bottom" secondItem="eLd-yJ-xMq" secondAttribute="bottom" id="YGz-0B-SaL"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="botLineView" destination="Pmd-ab-w6o" id="qmD-2z-473"/>
+                <outlet property="detailLabel" destination="8vt-rz-tFN" id="7h0-Z4-9eo"/>
+                <outlet property="mainView" destination="eLd-yJ-xMq" id="T0d-ye-Z2J"/>
+                <outlet property="switchView" destination="eOW-a8-ams" id="wm8-5O-fbZ"/>
+                <outlet property="titleLabel" destination="L9T-j8-Tlp" id="Dwc-ir-vdD"/>
+            </connections>
+            <point key="canvasLocation" x="52.799999999999997" y="48.575712143928037"/>
+        </tableViewCell>
+    </objects>
+</document>

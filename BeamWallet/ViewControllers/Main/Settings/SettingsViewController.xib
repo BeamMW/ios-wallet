@@ -17,6 +17,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="headerView" destination="7pZ-0J-NAH" id="lYM-J0-Ks4"/>
+                <outlet property="nodeTitleHeaderView" destination="DuO-98-NQb" id="t6l-t2-g8h"/>
                 <outlet property="talbeView" destination="Tem-J3-aZI" id="dex-x4-MCQ"/>
                 <outlet property="versionLabel" destination="Dlb-M4-lrq" id="moj-V2-QaQ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -53,6 +55,47 @@
                 <constraint firstItem="Tem-J3-aZI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="rmS-19-u5m"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+        </view>
+        <view contentMode="scaleToFill" id="7pZ-0J-NAH" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PGk-R4-x9b" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="15" y="15" width="345" height="14"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="UIl-36-QE1"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="PGk-R4-x9b" firstAttribute="top" secondItem="KJ2-Pk-MBT" secondAttribute="top" constant="15" id="TFS-OR-xJe"/>
+                <constraint firstItem="PGk-R4-x9b" firstAttribute="leading" secondItem="KJ2-Pk-MBT" secondAttribute="leading" constant="15" id="We2-td-PJB"/>
+                <constraint firstItem="KJ2-Pk-MBT" firstAttribute="trailing" secondItem="PGk-R4-x9b" secondAttribute="trailing" constant="15" id="bte-L0-lNC"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="KJ2-Pk-MBT"/>
+            <point key="canvasLocation" x="53.600000000000001" y="66.11694152923539"/>
+        </view>
+        <view contentMode="scaleToFill" id="DuO-98-NQb" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NODE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ylS-84-VAU">
+                    <rect key="frame" x="15" y="20.5" width="32" height="14.5"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
+                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="ylS-84-VAU" firstAttribute="leading" secondItem="NWe-JO-bSE" secondAttribute="leading" constant="15" id="29e-XK-BMf"/>
+                <constraint firstItem="NWe-JO-bSE" firstAttribute="bottom" secondItem="ylS-84-VAU" secondAttribute="bottom" constant="5" id="YSf-MU-qTG"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="NWe-JO-bSE"/>
         </view>
     </objects>
 </document>

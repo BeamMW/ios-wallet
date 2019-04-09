@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>9</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -52,6 +52,9 @@
 		<string>SF-Pro-Display-Bold.otf</string>
 		<string>SF-Pro-Display-Regular.otf</string>
 		<string>SF-Pro-Display-Semibold.otf</string>
+		<string>SFProText-Semibold.otf</string>
+		<string>SF-Pro-Display-LightItalic.otf</string>
+		<string>SF-Pro-Display-RegularItalic.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

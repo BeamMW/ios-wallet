@@ -21,16 +21,16 @@ import UIKit
 import SelectItemController
 
 class EditAddressViewController: BaseViewController {
-
+    
     private let hours_24: UInt64 = 86400
     private var address:BMAddress!
     private var oldAddress:BMAddress!
-
+    
     private var details = [TransactionViewController.TransactionGeneralInfo]()
-
+    
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var saveButton: UIButton!
-
+    
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
         
@@ -54,7 +54,7 @@ class EditAddressViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         title = "Edit address"
         
         tableView.keyboardDismissMode = .interactive
@@ -62,10 +62,29 @@ class EditAddressViewController: BaseViewController {
         tableView.register(AddressSwitchCell.self)
         tableView.register(AddressExpireCell.self)
         tableView.register(AddressCommentCell.self)
-
+        
         hideKeyboardWhenTappedAround()
         
         fillDetails()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if Device.screenType == .iPhones_5 || Device.isZoomed {
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        }
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if Device.screenType == .iPhones_5 || Device.isZoomed  {
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
+        }
     }
     
     private func checkIsChanges(){
@@ -222,7 +241,7 @@ extension EditAddressViewController : AddressSwitchCellDelegate {
         }
         
         checkIsChanges()
-
+        
         fillDetails()
         
         tableView.reloadData()
@@ -238,23 +257,55 @@ extension EditAddressViewController : AddressCommentCellDelegate {
 
 extension EditAddressViewController : AddressExpireCellDelegate {
     func onShowPopover() {
-        let items = ["24 hours", "Never"]
-        let params = Parameters(title: "Expires", items: items, cancelButton: "Cancel")
         
-        SelectItemController().show(parent: self, params: params) { (index) in
-            if let index = index {
-                if self.address.isNowActive {
-                    self.address.isNowActiveDuration = (index == 0 ? self.hours_24 : 0)
-                }
-                else{
-                    self.address.duration = (index == 0 ? self.hours_24 : 0)
-                }
-                
-                self.checkIsChanges()
-                self.fillDetails()
-                self.tableView.reloadData()
+        let alert = UIAlertController(title: "Expires", message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "24 hours", style: .default , handler:{ (UIAlertAction)in
+            if self.address.isNowActive {
+                self.address.isNowActiveDuration = self.hours_24
             }
+            else{
+                self.address.duration = self.hours_24
+            }
+            
+            self.checkIsChanges()
+            self.fillDetails()
+            self.tableView.reloadData()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Never", style: .default , handler:{ (UIAlertAction)in
+            if self.address.isNowActive {
+                self.address.isNowActiveDuration = 0
+            }
+            else{
+                self.address.duration = 0
+            }
+            
+            self.checkIsChanges()
+            self.fillDetails()
+            self.tableView.reloadData()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+        }))
+        
+        self.present(alert, animated: true)
+    }
+}
+
+extension EditAddressViewController {
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .top, animated: false)
         }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        tableView.contentInset = UIEdgeInsets.zero
     }
 }
 

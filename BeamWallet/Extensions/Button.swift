@@ -1,8 +1,7 @@
 //
-//  Button.swift
-//  BeamWallet
+// Button.swift
+// BeamWallet
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +29,7 @@ extension UIButton {
         }
         set {
             if newValue {
-                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus {
+                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
                     self.titleLabel?.adjustFontSize = true
                 }
             }

@@ -1,8 +1,7 @@
 //
-//  InputWordCell.swift
-//  BeamWallet
+// InputWordCell.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +51,7 @@ extension InputWordCell: Configurable {
         
         if(word.value.isEmpty){
             numberLabel.backgroundColor = UIColor.clear
-            numberLabel.layer.borderColor = UIColor.main.darkSlateBlue.cgColor
+            numberLabel.layer.borderColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
             numberLabel.textColor =  UIColor.main.veryLightPink50
             wordField.fState = BMWordField.FieldState.empty
         }

@@ -22,13 +22,23 @@
 
 @interface Settings : NSObject
 
++(Settings*_Nonnull)sharedManager;
+
+@property (nonatomic, assign) BOOL isLocalNode;
+@property (nonatomic, assign) BOOL isNeedaskPasswordForSend;
+@property (nonatomic, assign) int lockScreenSeconds;
+
 //+(void)generateNewStoragePath;
 //+(NSArray*)walletStoragesPaths;
 
-+(NSString*)walletStoragePath;
-+(NSString*)nodeAddress;
+-(NSString*_Nonnull)walletStoragePath;
+-(NSString*_Nonnull)nodeAddress;
 
-+(NSString*)logPath;
+-(NSString*_Nonnull)logPath;
 
+-(int)nodePort;
+-(NSString*_Nonnull)localNodeStorage;
+-(NSString*_Nonnull)localNodeTemdDir;
+-(NSArray*_Nonnull)localNodePeers;
 
 @end

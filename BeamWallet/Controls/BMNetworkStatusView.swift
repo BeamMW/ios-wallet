@@ -59,6 +59,7 @@ class BMNetworkStatusView: UIView {
 
 extension BMNetworkStatusView: WalletModelDelegate {
     func onNetwotkStatusChange(_ connected: Bool) {
+        
         DispatchQueue.main.async {
             self.indicatorView.stopAnimating()
             self.statusView.alpha = 1
@@ -79,6 +80,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
     }
     
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
+        
         DispatchQueue.main.async {
             if done != total {
                 self.indicatorView.color = UIColor.main.green
@@ -104,7 +106,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.startAnimating()
                 
                 self.statusLabel.x = 20
-                self.statusLabel.text = "connection"
+                self.statusLabel.text = "connecting"
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusLabel.textColor = UIColor.main.orange
             }

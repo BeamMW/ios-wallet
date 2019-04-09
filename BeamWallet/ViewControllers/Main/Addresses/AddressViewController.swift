@@ -23,14 +23,16 @@ class AddressViewController: BaseViewController {
 
     private var address:BMAddress!
     private var transactions:[BMTransaction]!
-
+    private var isContact = false
+    
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private var headerView: UIView!
     
-    init(address:BMAddress) {
+    init(address:BMAddress, isContact:Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.address = address
+        self.isContact = isContact
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -63,8 +65,11 @@ class AddressViewController: BaseViewController {
     
     @objc private func onMore(sender:UIBarButtonItem) {
         let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: "Show QR code", icon: "iconScanQr", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Copy address", icon: "iconCopyWhite24", id:2), BMPopoverMenu.BMPopoverMenuItem(name: "Edit address", icon: "iconEdit", id:3), BMPopoverMenu.BMPopoverMenuItem(name: "Delete address", icon: "iconDelete", id:4)]
+        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Show QR code", icon: "iconScanQr", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Copy address", icon: "iconCopyWhite24", id:2), BMPopoverMenu.BMPopoverMenuItem(name: "Edit address", icon: "iconEdit", id:3), BMPopoverMenu.BMPopoverMenuItem(name: "Delete address", icon: "iconDelete", id:4)]
         
+        if isContact {
+            items.remove(at: 2)
+        }
 
         BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
             if let item = selectedItem {

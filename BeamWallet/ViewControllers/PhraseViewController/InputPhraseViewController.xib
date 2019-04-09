@@ -40,7 +40,7 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ovc-qP-PXf" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="61" y="429.5" width="253" height="44"/>
+                    <rect key="frame" x="61" y="459.5" width="253" height="44"/>
                     <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="F8Q-rW-Cet"/>
@@ -81,7 +81,7 @@
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Ovc-qP-PXf" firstAttribute="top" secondItem="FRO-uv-0vF" secondAttribute="bottom" constant="30" id="K3d-zF-fWJ"/>
+                <constraint firstItem="Ovc-qP-PXf" firstAttribute="top" secondItem="FRO-uv-0vF" secondAttribute="bottom" constant="60" id="K3d-zF-fWJ"/>
                 <constraint firstItem="FRO-uv-0vF" firstAttribute="top" secondItem="1Bj-kk-5AT" secondAttribute="bottom" constant="30" id="LRM-It-IHS"/>
                 <constraint firstItem="355-Pt-DJD" firstAttribute="trailing" secondItem="FRO-uv-0vF" secondAttribute="trailing" constant="16" id="gk0-iA-KvC"/>
                 <constraint firstItem="FRO-uv-0vF" firstAttribute="leading" secondItem="355-Pt-DJD" secondAttribute="leading" constant="16" id="m8Q-Ht-uN5"/>

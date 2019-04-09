@@ -47,22 +47,24 @@ extension AddressCell: Configurable {
         
         idLabel.text = options.address.walletId
         
-        
-        if options.address.isExpired() {
-            expiredLabel.text = "Expired: " + options.address.formattedDate()
+        if options.address.createTime == 0 {
+            expiredLabel.text = ""
         }
         else{
-            expiredLabel.text = "Expires: " + options.address.formattedDate()
+            if options.address.isExpired() {
+                expiredLabel.text = "Expired: " + options.address.formattedDate()
+            }
+            else{
+                expiredLabel.text = "Expires: " + options.address.formattedDate()
+            }
         }
         
         if options.address.label.isEmpty {
-            nameLabel.text = "Default"
+            nameLabel.text = " "
         }
         else{
-            nameLabel.text = options.address.label.capitalized
+            nameLabel.text = options.address.label
         }
-        
-        
         
         if options.single {
             self.selectionStyle = .none

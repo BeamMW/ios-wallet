@@ -67,6 +67,34 @@ class WalletViewController: BaseViewController {
     @objc private func refreshData(_ sender: Any) {
        AppModel.sharedManager().getWalletStatus()
     }
+    
+    @IBAction func onMore(sender :UIButton) {
+        
+        let headerFrame = talbeView.convert(transactionsHeaderView.frame, to: self.view)
+
+        let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: headerFrame.origin.y, width: 60, height: 40)
+        
+        var items = [BMPopoverMenu.BMPopoverMenuItem]()
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Search", icon: "iconSearch", id:1))
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Filter", icon: "iconFilter", id:2))
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Payment proof", icon: "iconProof", id:3))
+
+        BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.id) {
+                case 3:
+                    let vc  = PaymentProofDetailViewController(transaction: nil, paymentProof: nil)
+                    vc.hidesBottomBarWhenPushed = true
+                    self.pushViewController(vc: vc)
+                    return
+                default:
+                    return
+                }
+            }
+        }, cancel: {
+            
+        })
+    }
 }
 
 extension WalletViewController : UITableViewDelegate {
@@ -181,6 +209,7 @@ extension WalletViewController : WalletModelDelegate {
             UIView.performWithoutAnimation {
                 self.talbeView.stopRefreshing()
                 self.talbeView.reloadData()
+              //  self.talbeView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
             }
         }
     }

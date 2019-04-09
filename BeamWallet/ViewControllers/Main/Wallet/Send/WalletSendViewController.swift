@@ -57,7 +57,7 @@ class WalletSendViewController: BaseViewController {
         {
             mainStack.spacing = 45;
         }
-        else if (Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus || Device.screenType == .iPhone_XSMax)
+        else if (Device.screenType == .iPhones_Plus || Device.screenType == .iPhone_XSMax)
         {
             mainStack.spacing = 55;
         }
@@ -126,14 +126,12 @@ class WalletSendViewController: BaseViewController {
         if !valid {
             toAddressErrorLabel.text = "Incorrect address"
             toAddressErrorLabel.textColor = UIColor.main.red
-            toAddressField.lineColor = UIColor.main.red
-            toAddressField.textColor = UIColor.main.red
+            toAddressField.status = BMField.Status.error
         }
         else if expired {
             toAddressErrorLabel.text = "Can't send to the expired address"
             toAddressErrorLabel.textColor = UIColor.main.red
-            toAddressField.lineColor = UIColor.main.red
-            toAddressField.textColor = UIColor.main.red
+            toAddressField.status = BMField.Status.error
         }
         else if let canSend = AppModel.sharedManager().canSend(amount ?? 0, fee: fee ?? 0, to: toAddressField.text) {
             
@@ -147,23 +145,17 @@ class WalletSendViewController: BaseViewController {
                 amountErrorLabel.text = canSend
             }
         }
-        else if let address = toAddressField.text {
-            AppModel.sharedManager().send(amount ?? 0, fee: fee ?? 0, to: address, comment: commentField.text ?? "")
-            
-            if let viewControllers = self.navigationController?.viewControllers{
-                for vc in viewControllers {
-                    if vc is WalletViewController {
-                        self.navigationController?.popToViewController(vc, animated: true)
-                        return
-                    }
-                    else if vc is AddressViewController {
-                        self.navigationController?.popToViewController(vc, animated: true)
-                        return
-                    }
-                }
+        else if let toAddress = toAddressField.text {
+            if Settings.sharedManager().isNeedaskPasswordForSend {
+                let modalViewController = WalletConfirmSendViewController(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
+                modalViewController.delegate = self
+                modalViewController.modalPresentationStyle = .overFullScreen
+                modalViewController.modalTransitionStyle = .crossDissolve
+                present(modalViewController, animated: true, completion: nil)
             }
-            
-            self.navigationController?.popViewController(animated: true)
+            else{
+                onConfirmSend(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
+            }
         }
         
         updateLayout()
@@ -192,8 +184,6 @@ extension WalletSendViewController : UITextFieldDelegate {
         if textField == toAddressField {
             toAddressErrorLabel.text = "Input or scan the recipient's address"
             toAddressErrorLabel.textColor = UIColor.main.blueyGrey
-            toAddressField.lineColor = UIColor.main.darkSlateBlue
-            toAddressField.textColor = UIColor.white
         }
         else if textField == amountField {
             amountErrorLabel.isHidden = true
@@ -237,6 +227,10 @@ extension WalletSendViewController : UITextFieldDelegate {
                     }
                 }
             }
+            
+            textField.text = txtAfterUpdate
+            
+            return false
         }
         else if textField == toAddressField {
             let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
@@ -308,8 +302,7 @@ extension WalletSendViewController : UITextFieldDelegate {
                     {
                         toAddressErrorLabel.text = "Incorrect address"
                         toAddressErrorLabel.textColor = UIColor.main.red
-                        toAddressField.lineColor = UIColor.main.red
-                        toAddressField.textColor = UIColor.main.red
+                        toAddressField.status = BMField.Status.error
                     }
                 }
             }
@@ -341,10 +334,29 @@ extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
     func didScanQRCode(value: String) {        
         self.toAddressErrorLabel.text = "Input or scan the recipient's address"
         self.toAddressErrorLabel.textColor = UIColor.main.blueyGrey
-        self.toAddressField.lineColor = UIColor.main.darkSlateBlue
-        self.toAddressField.textColor = UIColor.white
         self.toAddressField.text = value
         self.amountField.becomeFirstResponder()
+    }
+}
+
+extension WalletSendViewController : WalletConfirmSendViewControllerDelegate {
+    func onConfirmSend(amount: Double, fee: Double, toAddress: String) {
+        AppModel.sharedManager().send(amount, fee:fee, to: toAddress, comment: commentField.text ?? "")
+        
+        if let viewControllers = self.navigationController?.viewControllers{
+            for vc in viewControllers {
+                if vc is WalletViewController {
+                    self.navigationController?.popToViewController(vc, animated: true)
+                    return
+                }
+                else if vc is AddressViewController {
+                    self.navigationController?.popToViewController(vc, animated: true)
+                    return
+                }
+            }
+        }
+        
+        self.navigationController?.popViewController(animated: true)
     }
 }
 

@@ -1,8 +1,7 @@
 //
-//  BMField.swift
-//  BeamWallet
+// BMField.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +21,36 @@ import UIKit
 
 class BMField: UITextField {
 
+    enum Status {
+        case normal
+        case error
+    }
+    
     var line = UIView()
+
+    private var errorLabel:UILabel?
 
     private var _lineColor:UIColor?
     private var _lineHeight:CGFloat = 2
-
+    private var _error:String?
+    
+    var status: Status?  {
+        didSet {
+            switch status {
+            case .error?:
+                self.textColor = UIColor.main.red
+                self.line.backgroundColor = UIColor.main.red
+                self.errorLabel?.isHidden = false
+            case .normal?:
+                self.textColor = UIColor.white
+                self.line.backgroundColor = lineColor
+                self.errorLabel?.isHidden = true
+            case .none:
+                break
+            }
+        }
+    }
+    
     @IBInspectable
     var lineColor: UIColor? {
         get {
@@ -49,21 +73,47 @@ class BMField: UITextField {
         }
     }
     
+    @IBInspectable
+    var error: String? {
+        get {
+            return _error
+        }
+        set{
+            _error = newValue
+            errorLabel?.text = newValue
+            layoutSubviews()
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         if lineColor == nil {
-            line.backgroundColor = UIColor.main.darkSlateBlue
+            line.backgroundColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+            lineColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
         }
         
         addSubview(line)
+        
+        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: self, queue: nil) { [weak self] notification in
+            guard let strongSelf = self else { return }
+            guard let object = notification.object as? BMField, object == strongSelf else { return }
+            
+            strongSelf.status = .normal
+        }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         line.frame = CGRect(x: 0, y: self.frame.size.height-lineHeight, width: self.frame.size.width, height: lineHeight)
     }
 
+    override var text: String? {
+        didSet {
+           status = .normal
+        }
+    }
+    
 
 }

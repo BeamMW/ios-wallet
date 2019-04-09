@@ -1,6 +1,6 @@
 //
-//  MainTabBarController.swift
-//  BeamWallet
+// MainTabBarController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //

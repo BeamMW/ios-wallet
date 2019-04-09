@@ -1,8 +1,7 @@
 //
-//  WordCell.swift
-//  BeamWallet
+// WordCell.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,13 +26,14 @@ class WordCell: UICollectionViewCell {
 
     @IBOutlet weak var wordLabel: UILabel!
     @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet weak var mainView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        if AppDelegate.CurrentTarget == .Test {
-            
-        }
+        mainView.layer.borderColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
+        numberLabel.backgroundColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+
     }
 }
 

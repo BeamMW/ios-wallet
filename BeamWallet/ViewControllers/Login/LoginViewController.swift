@@ -1,8 +1,7 @@
 //
-//  LoginViewController.swift
-//  BeamWallet
+// LoginViewController.swift
+// BeamWallet
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,11 +38,34 @@ class LoginViewController: BaseViewController {
     //MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
-        let vc = InputPhraseViewController()
-        pushViewController(vc: vc)
+        if AppModel.sharedManager().canRestoreWallet() {
+            
+            let alertController = UIAlertController(title: "Restore Wallet", message: "Only your funds can be fully restored from the blockchain. The transaction history is stored locally and is encrypted with your password, hence it can't be restored.\n\nThat's the final version until the future validation and process.", preferredStyle: .alert)
+            
+            let NoAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            }
+            alertController.addAction(NoAction)
+            
+            let OKAction = UIAlertAction(title: "Restore wallet", style: .cancel) { (action) in
+                AppModel.sharedManager().isRestoreFlow = true;
+                
+                let vc = InputPhraseViewController()
+                self.pushViewController(vc: vc)
+            }
+            alertController.addAction(OKAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+        else{
+            self.alert(title: "Not enough storage", message: "To restore the wallet on the phone should be at least 200 MB of free space") { (_ ) in
+                
+            }
+        }
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {
+        AppModel.sharedManager().isRestoreFlow = false;
+
         let vc = IntroPhraseViewController()
         pushViewController(vc: vc)
     }

@@ -1,8 +1,7 @@
 //
-//  EnterWalletPasswordViewController.swift
-//  BeamWallet
+// EnterWalletPasswordViewController.swift
+// BeamWallet
 //
-// 3/4/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,26 +27,32 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 60
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        AppModel.sharedManager().cancelForgotPassword()
     }
     
     //MARK: IBAction
     
     @IBAction func onLogin(sender :UIButton) {
+        AppModel.sharedManager().isRestoreFlow = false;
+
         if passField.text?.isEmpty ?? true {
-            errorLabel.text = "password must not be empty"
-            passField.lineColor = UIColor.main.red
-            passField.textColor = UIColor.main.red
+            errorLabel.text = "Password should not be empty"
+            passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let appModel = AppModel.sharedManager()
             let valid = appModel.canOpenWallet(pass)
             if !valid {
-                errorLabel.text = "wrong password"
-                passField.lineColor = UIColor.main.red
-                passField.textColor = UIColor.main.red
+                errorLabel.text = "Incorrect password"
+                passField.status = BMField.Status.error
             }
             else{
                 _ = KeychainManager.addPassword(password: pass)
@@ -63,6 +68,32 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         let vc = LoginViewController()
         pushViewController(vc: vc)
     }
+    
+    @IBAction func onForgotPassword(sender :UIButton) {
+        if AppModel.sharedManager().canRestoreWallet() {
+            let alertController = UIAlertController(title: "Forgot password", message: "Only your funds can be fully restored from the blockchain. The transaction history is stored locally and is encrypted with your password, hence it can't be restored.\n\nThat's the final version until the future validation and process.", preferredStyle: .alert)
+
+            let NoAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            }
+            alertController.addAction(NoAction)
+            
+            let OKAction = UIAlertAction(title: "Restore wallet", style: .cancel) { (action) in
+                AppModel.sharedManager().isRestoreFlow = true;
+                AppModel.sharedManager().startForgotPassword()
+                
+                let vc = InputPhraseViewController()
+                self.pushViewController(vc: vc)
+            }
+            alertController.addAction(OKAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+        else{
+            self.alert(title: "Not enough storage", message: "To restore the wallet on the phone should be at least 200 MB of free space") { (_ ) in
+                
+            }
+        }
+    }
 }
 
 // MARK: TextField Actions
@@ -76,9 +107,7 @@ extension EnterWalletPasswordViewController : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         errorLabel.text = ""
-        passField.lineColor = UIColor.main.brightTeal
-        passField.textColor = UIColor.white
-
+     
         return true
     }
     

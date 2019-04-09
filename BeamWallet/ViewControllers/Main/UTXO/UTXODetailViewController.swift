@@ -62,6 +62,14 @@ class UTXODetailViewController: BaseViewController {
             details.append(TransactionViewController.TransactionGeneralInfo(text: "Transaction ID:", detail: txid, failed: false, canCopy:true))
         }
         details.append(TransactionViewController.TransactionGeneralInfo(text: "UTXO type:", detail: utxo.typeString, failed: false, canCopy:true))
+        
+//        for transaction in history {
+//            if let contact = AppModel.sharedManager().getContactFromId(transaction.receiverAddress)
+//            {
+//                let value = contact.name.isEmpty ? contact.address.walletId : contact.name + "\n" + contact.address.walletId
+//                details.append(TransactionViewController.TransactionGeneralInfo(text: "Contact:", detail: value, failed: false, canCopy:true))
+//            }
+//        }
     }
 }
 

@@ -1,8 +1,7 @@
 //
-//  IntroPhraseViewController.swift
-//  BeamWallet
+// IntroPhraseViewController.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +26,7 @@ class IntroPhraseViewController: BaseWizardViewController {
         
         title = "Create new wallet"
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 60
         }
     }

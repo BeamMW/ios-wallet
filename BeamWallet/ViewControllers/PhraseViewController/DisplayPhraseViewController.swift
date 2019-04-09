@@ -1,8 +1,7 @@
 //
-//  DisplayPhraseViewController.swift
-//  BeamWallet
+// DisplayPhraseViewController.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,10 +37,10 @@ class DisplayPhraseViewController: BaseWizardViewController {
             stackY?.constant = 10
             mainStack?.spacing = 10
         }
-        else if Device.screenType == .iPhones_5_5s_5c_SE {
+        else if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 20
         }
-        else if Device.screenType == .iPhones_6_6s_7_8 {
+        else if Device.screenType == .iPhones_6 {
             mainStack?.spacing = 30
         }
         else if Device.screenType == .iPhone_XSMax {
@@ -91,6 +90,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         alert.addAction(ok)
+
 
         self.present(alert, animated: true)
     }

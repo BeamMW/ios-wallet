@@ -60,5 +60,19 @@
     return [self.status isEqualToString:@"failed"];
 }
 
+-(BOOL)hasPaymentProof {
+    return (self.isIncome == NO && self.enumStatus == BMTransactionStatusCompleted && self.isSelf == NO);
+}
+
+-(NSString*)details {
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    formatter.currencyCode = @"";
+    formatter.currencySymbol = @"";
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 10;
+    formatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
+    
+    return [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@\nKernel ID: %@", _senderAddress, _receiverAddress, [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]], _kernelId];
+}
 
 @end

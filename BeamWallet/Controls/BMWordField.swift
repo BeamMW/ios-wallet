@@ -29,7 +29,7 @@ class BMWordField: BMField {
     }
     
     private let errorColor = UIColor.main.red
-    private let normalColor = UIColor.main.darkSlateBlue
+    private let normalColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
 
     var fState: FieldState! = .none {
         didSet {

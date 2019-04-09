@@ -29,12 +29,12 @@ class BaseWizardViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.screenType == .iPhones_5 {
             stackWidth?.constant = 290
             mainStack?.spacing = 25
             stackY?.constant = 15
         }
-        else if Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus{
+        else if Device.screenType == .iPhones_Plus{
             stackY?.constant = 80
             mainStack?.spacing = 60
         }

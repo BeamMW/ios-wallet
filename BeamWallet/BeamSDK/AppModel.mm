@@ -23,10 +23,11 @@
 #import "Reachability.h"
 
 #import "AppModel.h"
-#import "Settings.h"
 #import "MnemonicModel.h"
 #import "WalletModel.h"
 #import "StringStd.h"
+#import "NodeModel.h"
+#import "DiskStatusManager.h"
 
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -52,13 +53,17 @@ using namespace ECC;
 using namespace std;
 using namespace beam::io;
 
+static int proofSize = 330;
 
 @implementation AppModel  {
+    BOOL isStarted;
+    
     Reachability *internetReachableFoo;
 
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
     Reactor::Ptr walletReactor;
+    NodeModel nodeModel;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
@@ -78,22 +83,29 @@ using namespace beam::io;
     self = [super init];
     
     walletReactor = Reactor::create();
-
+    
     [self createLogger];
     
     _delegates = [[NSHashTable alloc] init];
     
     _transactions = [[NSMutableArray alloc] init];
     
-    [self checkEthernetConnection];
+    _contacts = [[NSMutableArray alloc] init];
+    
+    [self checkInternetConnection];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshAllInfo)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [self cancelForgotPassword];
+    
     return self;
 }
 
--(void)checkEthernetConnection{
+#pragma mark - Inetrnet
+
+-(void)checkInternetConnection{
     internetReachableFoo = [Reachability reachabilityWithHostName:@"www.google.com"];
     
     internetReachableFoo.reachableBlock = ^(Reachability*reach)
@@ -103,6 +115,7 @@ using namespace beam::io;
         }
         
         [[AppModel sharedManager] setIsInternetAvailable:YES];
+        [[AppModel sharedManager] start];
     };
     
     internetReachableFoo.unreachableBlock = ^(Reachability*reach)
@@ -140,16 +153,69 @@ using namespace beam::io;
     }
 }
 
+-(void)setIsLocalNodeStarted:(BOOL)isLocalNodeStarted {
+    _isLocalNodeStarted = isLocalNodeStarted;
+    
+    if (_isLocalNodeStarted) {
+        if ([[Settings sharedManager] isLocalNode]) {
+            wallet->start();
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self->nodeModel.stopNode();
+
+                string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+               
+                self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
+
+                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+                {
+                    if ([delegate respondsToSelector:@selector(onLocalNodeStarted)]) {
+                        [delegate onLocalNodeStarted];
+                    }
+                }
+                
+                [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
+                
+                if([AppModel sharedManager].isForgotPasswordFlow) {
+                    [[AppModel sharedManager] stopForgotPassword];
+                }
+            });
+        }
+    }
+}
+
+-(void)setIsRestoreFlow:(BOOL)isRestoreFlow {
+    _isRestoreFlow = isRestoreFlow;
+    
+    if (_isRestoreFlow) {
+        if (!nodeModel.isStarted())
+        {
+            nodeModel.start();
+        }
+    }
+    
+    [Settings sharedManager].isLocalNode = _isRestoreFlow;
+}
+
+#pragma mark - Open, Create
+
+-(BOOL)canRestoreWallet {
+    //TODO: get node size. default 500 mb?
+    if ([DiskStatusManager freeDiskspaceInMB] < 200) {
+        return NO;
+    }
+    
+    return YES;
+}
 
 -(BOOL)isWalletAlreadyAdded {
-    return [[NSFileManager defaultManager] fileExistsAtPath:Settings.walletStoragePath];
+    return [[NSFileManager defaultManager] fileExistsAtPath:Settings.sharedManager.walletStoragePath];
 }
 
 -(BOOL)openWallet:(NSString*)pass {
-    
     Rules::get().UpdateChecksum();
     
-    string dbFilePath = Settings.walletStoragePath.string;
+    string dbFilePath = Settings.sharedManager.walletStoragePath.string;
     
     if (!walletDb) {
         walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
@@ -166,20 +232,35 @@ using namespace beam::io;
 -(BOOL)canOpenWallet:(NSString*)pass {
     Rules::get().UpdateChecksum();
 
-    string dbFilePath = Settings.walletStoragePath.string;
+    string dbFilePath = [Settings sharedManager].walletStoragePath.string;
 
     walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
     if (!walletDb) {
         return NO;
     }
     
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
+        self.isRestoreFlow = YES;
+    }
+    
+    
     return YES;
 }
 
+-(BOOL)isValidPassword:(NSString*_Nonnull)pass {
+    auto hash = SecString(pass.string).hash();
+    
+    return hash.V == passwordHash.V;
+}
+
 -(BOOL)createWallet:(NSString*)phrase pass:(NSString*)pass {
+    if (self.isInternetAvailable == NO) {
+        return NO;
+    }
+        
     Rules::get().UpdateChecksum();
 
-    string dbFilePath = Settings.walletStoragePath.string;
+    string dbFilePath = [Settings sharedManager].walletStoragePath.string;
 
     //already created. restore wallet?
     if (WalletDB::isInitialized(dbFilePath)) {
@@ -224,10 +305,16 @@ using namespace beam::io;
 }
 
 -(void)resetWallet{
-    walletDb.reset();
-    wallet.reset();
-    
-    [[NSFileManager defaultManager] removeItemAtPath:Settings.walletStoragePath error:nil];
+    if (self.isRestoreFlow) {
+        self.isRestoreFlow = NO;
+        self->nodeModel.stopNode();
+    }
+    else{
+        walletDb.reset();
+        wallet.reset();
+        
+        [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
+    }
 }
 
 -(void)onWalledOpened:(const SecString&) pass {
@@ -237,19 +324,92 @@ using namespace beam::io;
 }
 
 -(void)start {
-    string nodeAddr = Settings.nodeAddress.string;
+    if (self.isInternetAvailable) {
+        if (isStarted == NO && walletDb != nil) {
+            Rules::get().UpdateChecksum();
+
+            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+
+            if ([[Settings sharedManager] isLocalNode]) {
+                
+                nodeModel.setKdf(walletDb->get_MasterKdf());
+
+                nodeModel.startNode();
+                
+                io::Address nodeAddr = io::Address::LOCALHOST;
+                nodeAddr.port([[Settings sharedManager] nodePort]);
+                nodeAddrStr = nodeAddr.str();
+            }
+            
+            wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+            wallet->getAsync()->setNodeAddress(nodeAddrStr);
+            
+            if (![[Settings sharedManager] isLocalNode]) {
+                wallet->start();
+            }
+            
+            isStarted = YES;
+        }
+    }
+}
+
+-(void)startForgotPassword{
+    _isForgotPasswordFlow = YES;
     
-    wallet = make_shared<WalletModel>(walletDb, nodeAddr, walletReactor);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].walletStoragePath]) {
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet_old"];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath] == YES) {
+            [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil];
+        }
+        
+        [[NSFileManager defaultManager] copyItemAtPath:[Settings sharedManager].walletStoragePath toPath:dataPath error:nil];
+        
+        [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
+    }
+}
+
+-(void)stopForgotPassword {
+    _isForgotPasswordFlow = NO;
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet_old"];
     
-    wallet->getAsync()->setNodeAddress(nodeAddr);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
+        
+        [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil];
+    }
+}
+
+-(void)cancelForgotPassword {
+    _isForgotPasswordFlow = NO;
     
-    wallet->start();
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet_old"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
+        
+        [[NSFileManager defaultManager] copyItemAtPath:dataPath toPath:[Settings sharedManager].walletStoragePath error:nil];
+        
+        [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil];
+    }
+}
+
+-(void)changePassword:(NSString*_Nonnull)pass {
+    auto password = SecString(pass.string);
+    
+    passwordHash = password.hash();
+
+    wallet->getAsync()->changeWalletPassword(password);
 }
 
 
-//-(void)refreshWallet {
-//   // wallet->getAsync()->refresh();
-//}
+#pragma mark - Updates
 
 -(void)getWalletStatus {
     wallet->getAsync()->getWalletStatus();
@@ -271,7 +431,7 @@ using namespace beam::io;
 }
 
 
-#pragma mark - Address
+#pragma mark - Addresses
 
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address {
     if (address!=nil) {
@@ -493,7 +653,7 @@ using namespace beam::io;
 #pragma mark - Logs
 
 -(void)createLogger {
-    NSString *dataPath = [Settings logPath];
+    NSString *dataPath = [[Settings sharedManager] logPath];
     
     NSMutableArray *needRemove = [NSMutableArray new];
     
@@ -561,12 +721,85 @@ using namespace beam::io;
     
     NSString *archivePath = [docDirectory stringByAppendingString:@"/logs.zip"];
     
-    [SSZipArchive createZipFileAtPath:archivePath withContentsOfDirectory:[Settings logPath]];
+    [SSZipArchive createZipFileAtPath:archivePath withContentsOfDirectory:[[Settings sharedManager] logPath]];
     
     return archivePath;
 }
 
 #pragma mark - Transactions
+
+-(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction {
+    NSMutableArray *result = [NSMutableArray array];
+    
+    for(BMUTXO *utxo in _utxos)
+    {
+        if (utxo.createTxId!=nil)
+        {
+            if([transaction.ID isEqualToString:utxo.createTxId])
+            {
+                [result addObject:utxo];
+            }
+        }
+        if (utxo.spentTxId!=nil)
+        {
+            if([transaction.ID isEqualToString:utxo.spentTxId])
+            {
+                [result addObject:utxo];
+            }
+        }
+    }
+    
+    if (result.count > 1)
+    {
+        BMUTXO *total = [[BMUTXO alloc] init];
+        total.statusString = @"total";
+        
+        for(BMUTXO *utxo in result)
+        {
+            total.realAmount = total.realAmount + utxo.realAmount;
+            
+        }
+        
+        [result insertObject:total atIndex:0];
+    }
+    
+    return result;
+}
+
+-(BMTransaction*_Nullable)validatePaymentProof:(NSString*_Nullable)code {
+    if (code == nil || code.length < proofSize) {
+        return nil;
+    }
+    
+    try{
+        auto buffer = from_hex(code.string);
+        beam::wallet::PaymentInfo m_paymentInfo = wallet::PaymentInfo::FromByteBuffer(buffer);
+        
+        if (m_paymentInfo.IsValid()) {
+            auto kernelId = to_hex(m_paymentInfo.m_KernelID.m_pData, m_paymentInfo.m_KernelID.nBytes);
+            
+            BMTransaction *transaction = [[BMTransaction alloc] init];
+            transaction.realAmount = double(int64_t(m_paymentInfo.m_Amount)) / Rules::Coin;
+            transaction.senderAddress = [NSString stringWithUTF8String:to_string(m_paymentInfo.m_Sender).c_str()];
+            transaction.receiverAddress = [NSString stringWithUTF8String:to_string(m_paymentInfo.m_Receiver).c_str()];
+            transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
+            
+            return transaction;
+        }
+    }
+    catch (const std::exception& e) {
+        return nil;
+    }
+    catch (...) {
+        return nil;
+    }
+    
+    return nil;
+}
+
+-(void)getPaymentProof:(BMTransaction*_Nonnull)transaction {
+    wallet->getAsync()->exportPaymentProof([self txIDfromString:transaction.ID]);
+}
 
 -(void)deleteTransaction:(BMTransaction*_Nonnull)transaction {
     wallet->getAsync()->deleteTx([self txIDfromString:transaction.ID]);
@@ -615,6 +848,19 @@ using namespace beam::io;
         }
     }
     return result;
+}
+
+#pragma mark - Contacts
+
+-(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue {
+    for (BMContact *contact in _contacts) {
+        if([contact.address.walletId isEqualToString:idValue])
+        {
+            return contact;
+        }
+    }
+    
+    return nil;
 }
     
 @end

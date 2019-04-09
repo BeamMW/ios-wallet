@@ -63,6 +63,8 @@ class UTXOViewController: BaseViewController {
                 self.utxos = self.utxos.filter { $0.status == 1 || $0.status == 2 }
             }
         }
+        
+        self.utxos = self.utxos.sorted(by: { $0.id < $1.id })
     }
     
     @IBAction func onStatus(sender : UISegmentedControl) {
@@ -99,6 +101,7 @@ extension UTXOViewController : UITableViewDelegate {
         
         if indexPath.section == 1 {
             let vc = UTXODetailViewController(utxo: utxos[indexPath.row])
+            vc.hidesBottomBarWhenPushed = true
             self.pushViewController(vc: vc)
         }
     }

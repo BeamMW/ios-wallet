@@ -35,10 +35,10 @@ class WalletReceiveViewController: BaseViewController {
         
         addressLabel.text = AppModel.sharedManager().walletAddress?.walletId
                 
-        if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_6Plus_6sPlus_7Plus_8Plus {
+        if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
             mainStack.spacing = 70
         }
-        else if Device.screenType == .iPhones_5_5s_5c_SE {
+        else if Device.screenType == .iPhones_5 {
             mainStack.spacing = 50
         }
     }
@@ -46,20 +46,27 @@ class WalletReceiveViewController: BaseViewController {
     //MARK: IBAction
     
     @IBAction func onExpire(sender :UIButton) {
-        let items = ["24 hours", "Never"]
-        let params = Parameters(title: "Expires", items: items, cancelButton: "Cancel")
         
-        SelectItemController().show(parent: self, params: params) { (index) in
-            if let index = index, let address = self.addressLabel.text {
-                if index == 0 {
-                    self.expireLabel.text = "24 hours"
-                    AppModel.sharedManager().setExpires(24, toAddress: address)
-                }
-                else{
-                    self.expireLabel.text = "Never"
-                    AppModel.sharedManager().setExpires(0, toAddress: address)
-                }
-            } 
+        if let address = self.addressLabel.text {
+            
+            let alert = UIAlertController(title: "Expires", message: nil, preferredStyle: .actionSheet)
+            
+            alert.addAction(UIAlertAction(title: "24 hours", style: .default , handler:{ (UIAlertAction)in
+                self.expireLabel.text = "24 hours"
+                
+                AppModel.sharedManager().setExpires(24, toAddress: address)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Never", style: .default , handler:{ (UIAlertAction)in
+                self.expireLabel.text = "Never"
+                
+                AppModel.sharedManager().setExpires(0, toAddress: address)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+            }))
+            
+            self.present(alert, animated: true)
         }
     }
     

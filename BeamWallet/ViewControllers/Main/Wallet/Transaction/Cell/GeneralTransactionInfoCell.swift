@@ -41,6 +41,20 @@ extension GeneralTransactionInfoCell: Configurable {
         titleLabel.text = info.text
         detailLabel.text = info.detail
         
+        if info.text == "Contact:" {
+            let split = info.detail.split(separator: "\n")
+            if split.count == 2 {
+                let contact = split[0]
+                
+                let range = (info.detail as NSString).range(of: String(contact))
+               
+                let attributedString = NSMutableAttributedString(string:info.detail)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Bold", size: 15) ?? UIFont.boldSystemFont(ofSize: 15) , range: range)
+                detailLabel.attributedText = attributedString
+            }
+         
+        }
+        
         if info.failed {
             titleLabel.textColor = UIColor.main.red
             detailLabel.textColor = UIColor.main.red

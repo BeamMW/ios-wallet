@@ -1,6 +1,6 @@
 //
-//  WalletViewController.swift
-//  BeamWallet
+// WalletViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -21,19 +21,58 @@ import UIKit
 
 class SettingsViewController: BaseViewController {
     
-    private var rowHeight = [CGFloat(130.0),CGFloat(130.0),CGFloat(150.0)]
+    class SettingsItem {
+        enum Position {
+            case one
+            case midle
+        }
+        
+        public var title:String?
+        public var detail:String?
+        public var isSwitch:Bool?
+        public var id:Int!
+        public var position:Position!
+
+        init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position) {
+            self.title = title
+            self.detail = detail
+            self.isSwitch = isSwitch
+            self.id = id
+            self.position = position
+        }
+    }
+    
 
     @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private weak var versionLabel:UILabel!
+    @IBOutlet private var headerView:UIView!
+    @IBOutlet private var nodeTitleHeaderView:UIView!
+
+    private var items = [[SettingsItem]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Settings"
         
-        talbeView.register(ShareLogCell.self)
-        
         versionLabel.text = version()
+        
+        var first = [SettingsItem]()
+        first.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress(), isSwitch: nil, id: 0, position: .one))
+        
+        var second = [SettingsItem]()
+        second.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
+        second.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .one))
+        
+        var three = [SettingsItem]()
+        three.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
+
+        items.append(first)
+        items.append(second)
+        items.append(three)
+        
+        talbeView.register(SettingsCell.self)
+        talbeView.tableHeaderView = headerView
     }
     
     func version() -> String {
@@ -46,51 +85,96 @@ class SettingsViewController: BaseViewController {
 
 extension SettingsViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 && indexPath.row == 0 {
-            return rowHeight[0]
-        }
-        else if indexPath.section == 0 && indexPath.row == 1 {
-            return rowHeight[1]
-        }
-        else if indexPath.section == 0 && indexPath.row == 2 {
-            return rowHeight[2]
-        }
-        else if indexPath.section == 1 {
-            return 86
-        }
-        return 0
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let item = items[indexPath.section][indexPath.row]
+        
+        switch item.id {
+        case 2:
+            self.onClickReport()
+        case 1:
+            let vc = UnlockPasswordViewController(event: .changePassword)
+            vc.hidesBottomBarWhenPushed = true
+            pushViewController(vc: vc)
+        default:
+            return
+        }
     }
+    
 }
 
 extension SettingsViewController : UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            return nodeTitleHeaderView
+        }
+        
+        let view = UIView()
+        view.backgroundColor = UIColor.clear
+        return view
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return items[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 && indexPath.row == 0 {
-            let cell = tableView
-                .dequeueReusableCell(withType: ShareLogCell.self, for: indexPath)
-            cell.delegate = self
-            
-            return cell
-        }
- 
-        return UITableViewCell()
+        let cell = tableView
+            .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
+        cell.configure(with: items[indexPath.section][indexPath.row])
+        cell.delegate = self
+        return cell
     }
 }
 
-extension SettingsViewController : ShareLogCellDelegate {
+extension SettingsViewController : SettingsCellDelegate {
+    
+    func onClickSwitch(value: Bool, cell: SettingsCell) {
+        if let indexPath = talbeView.indexPath(for: cell) {
+            let item = items[indexPath.section][indexPath.row]
+            item.isSwitch = value
+            items[indexPath.section][indexPath.row] = item
+
+            if value == false && item.id == 3 {
+                let vc = UnlockPasswordViewController(event: .unlock)
+                vc.hidesBottomBarWhenPushed = true
+                vc.completion = {
+                    obj in
+                    
+                    if obj == false {
+                    
+                        item.isSwitch = true
+                        
+                        self.talbeView.reloadData()
+                    }
+                    else{
+                        Settings.sharedManager().isNeedaskPasswordForSend = false
+                    }
+                }
+                pushViewController(vc: vc)
+            }
+            else if value == true && item.id == 3 {
+                Settings.sharedManager().isNeedaskPasswordForSend = true
+            }
+        }
+    }
+}
+
+extension SettingsViewController {
     func onClickReport() {
         let path = AppModel.sharedManager().getZipLogs()
         let url = URL(fileURLWithPath: path)

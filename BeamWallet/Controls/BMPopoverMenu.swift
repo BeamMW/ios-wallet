@@ -22,11 +22,45 @@ import UIKit
 extension BMPopoverMenu {
     
     public static func showForSender(sender : UIView, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {
-        self.sharedMenu.showForSender(sender: sender, or: nil, with: menuArray, done: done, cancel: cancel)
+       
+        if let rootVC = UIApplication.getTopMostViewController() {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            for item in menuArray {
+                alert.addAction(UIAlertAction(title: item.name, style: .default, handler:{ (UIAlertAction)in
+                    done(item)
+                }))
+            }
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+                cancel()
+            }))
+            
+            rootVC.present(alert, animated: true)
+        }
+        
+     //   self.sharedMenu.showForSender(sender: sender, or: nil, with: menuArray, done: done, cancel: cancel)
     }
     
     public static func showForSenderFrame(senderFrame : CGRect, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {
-        self.sharedMenu.showForSender(sender: nil, or: senderFrame, with: menuArray, done: done, cancel: cancel)
+       
+        if let rootVC = UIApplication.getTopMostViewController() {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            for item in menuArray {
+                alert.addAction(UIAlertAction(title: item.name, style: .default, handler:{ (UIAlertAction)in
+                    done(item)
+                }))
+            }
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+                cancel()
+            }))
+            
+            rootVC.present(alert, animated: true)
+        }
+        
+      //  self.sharedMenu.showForSender(sender: nil, or: senderFrame, with: menuArray, done: done, cancel: cancel)
     }
 }
 

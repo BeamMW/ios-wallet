@@ -1,8 +1,7 @@
 //
-//  InputPhraseViewController.swift
-//  BeamWallet
+// InputPhraseViewController.swift
+// BeamWallet
 //
-// 3/2/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +41,7 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.screenType == .iPhones_5 {
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         }
@@ -52,7 +51,7 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if Device.screenType == .iPhones_5_5s_5c_SE {
+        if Device.screenType == .iPhones_5 {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
         }

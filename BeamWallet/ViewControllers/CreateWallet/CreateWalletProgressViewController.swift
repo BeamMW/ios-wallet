@@ -1,8 +1,7 @@
 //
-//  CreateWalletProgressViewController.swift
-//  BeamWallet
+// CreateWalletProgressViewController.swift
+// BeamWallet
 //
-// 3/3/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +18,25 @@
 //
 
 import UIKit
+import Loaf
 
 class CreateWalletProgressViewController: BaseViewController {
 
     @IBOutlet private weak var progressView: UIProgressView!
     @IBOutlet private weak var progressTitleLabel: UILabel!
+    @IBOutlet private weak var progressValueLabel: UILabel!
+    @IBOutlet private weak var restotingInfoLabel: UILabel!
+    @IBOutlet private weak var restotingWarningLabel: UILabel!
     @IBOutlet private weak var cancelButton: UIButton!
+    @IBOutlet private weak var logoYOffset: NSLayoutConstraint!
+    @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
 
+    
     private var password:String!
     private var phrase:String?
     private var isPresented = false
-    
+    private var start = Date.timeIntervalSinceReferenceDate;
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,9 +47,26 @@ class CreateWalletProgressViewController: BaseViewController {
         let transformScale = CGAffineTransform(scaleX: 1.0, y: progressViewHeight)
         progressView.transform = transformScale
         
-        if phrase == nil {
+        if AppModel.sharedManager().isRestoreFlow {
+            progressTitleLabel.text = "Restoring wallet"
+            restotingInfoLabel.isHidden = false
+            restotingWarningLabel.isHidden = false
+            progressValueLabel.text = "Restored 0%"
+            progressValueLabel.isHidden = false
+            cancelButton.isHidden = false
+        }
+        else if phrase == nil {
             progressTitleLabel.text = "Loading wallet"
             cancelButton.isHidden = true
+        }
+        
+        if Device.screenType == .iPhones_5 {
+            logoYOffset.constant = 50
+            stackYOffset.constant = 50
+        }
+        else if Device.screenType == .iPhones_6 {
+            logoYOffset.constant = 50
+            stackYOffset.constant = 50
         }
         
         startCreateWallet()
@@ -58,23 +82,39 @@ class CreateWalletProgressViewController: BaseViewController {
         let appModel = AppModel.sharedManager()
         appModel.addDelegate(self)
 
-//        if (!appModel.isInternetAvailable){
-//            self.alert(title: "Error", message: "No internet connection") { (_ ) in
-//                self.navigationController?.popToRootViewController(animated: true)
-//            }
-//        }
-//        else{
+        if !appModel.isInternetAvailable {
+            self.navigationController?.popViewController(animated: true)
+
+            self.alert(title: "Error", message: "No internet connection") { (_ ) in
+
+            }
+        }
+        else{
             if let phrase = phrase {
                 let created = appModel.createWallet(phrase, pass: password)
                 if(!created)
                 {
                     self.alert(title: "Error", message: "Wallet not created") { (_ ) in
-                        self.navigationController?.popToRootViewController(animated: true)
+                        if appModel.isInternetAvailable {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                        else{
+                            let loaf = Loaf("Please check your internet connection and try again", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
+                            loaf.show(Loaf.Duration.long) { (_ ) in
+                            }
+                            
+                            DispatchQueue.main.async {
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        }
                     }
                 }
                 else{
-                    UIView.animate(withDuration: 0.3) {
-                        self.progressView.progress = 0.2
+                    if (!appModel.isRestoreFlow)
+                    {
+                        UIView.animate(withDuration: 0.3) {
+                            self.progressView.progress = 0.2
+                        }
                     }
                 }
             }
@@ -92,7 +132,7 @@ class CreateWalletProgressViewController: BaseViewController {
                     }
                 }
             }
-       // }
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -127,11 +167,32 @@ extension CreateWalletProgressViewController {
 
 
 extension CreateWalletProgressViewController : WalletModelDelegate {
+    
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
-        if total == done && !isPresented {
-            isPresented = true
+        DispatchQueue.main.async {
+            if AppModel.sharedManager().isRestoreFlow {
+                if total > 0 {
+                    let speed = Double(done) / Double((Date.timeIntervalSinceReferenceDate - self.start))
+                   
+                    if speed > 0 {
+                        let sizeLeft = Double(total-done)
+                        let timeLeft = sizeLeft / speed
+                        
+                        print("-----------")
+                        print(timeLeft.asTime(style: .abbreviated))
+                        print("-----------")
+                    }
+    
+                    let progress: Float = Float(done) / Float(total)
+                    let percent = Int32(progress * 100)
+                    
+                    self.progressValueLabel.text = "Restored \(percent)%"
+                }
+            }
             
-            DispatchQueue.main.async {
+            if total == done && !self.isPresented && !AppModel.sharedManager().isRestoreFlow {
+                self.isPresented = true
+                
                 UIView.animate(withDuration: 2, animations: {
                     self.progressView.progress = 1
                 }) { (_) in
@@ -142,9 +203,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     }
                 }
             }
-        }
-        else{
-            DispatchQueue.main.async {
+            else{
                 self.progressView.progress = Float(Float(done)/Float(total))
             }
         }
@@ -153,6 +212,18 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
     func onWalletError(_ error: String) {
         DispatchQueue.main.async {
             self.alert(title: "Error", message: error)
+        }
+    }
+    
+    func onLocalNodeStarted() {
+        DispatchQueue.main.async {
+            if !self.isPresented {
+                self.isPresented = true
+                
+                let vc = MainTabBarController()
+                vc.modalTransitionStyle = .crossDissolve
+                self.present(vc, animated: true, completion: nil)
+            }
         }
     }
 }

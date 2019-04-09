@@ -1,8 +1,7 @@
 //
-//  ConfirmPhraseViewController.swift
-//  BeamWallet
+// ConfirmPhraseViewController.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +49,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
             stackY?.constant = 10
             mainStack?.spacing = 30
         }
-        else if Device.screenType == .iPhones_5_5s_5c_SE {
+        else if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 50
         }
         

@@ -24,8 +24,55 @@
 
 static NSString *storageKey = @"storageKey";
 static NSString *allPathsKey = @"allPaths";
+static NSString *askKey = @"isNeedaskPasswordForSend";
+static NSString *lockScreen = @"lockScreen";
 
-+(NSArray*)walletStoragesPaths {
++ (Settings*_Nonnull)sharedManager {
+    static Settings *sharedMyManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedMyManager = [[self alloc] init];
+    });
+    return sharedMyManager;
+}
+
+-(id)init {
+    self = [super init];
+    
+    _isLocalNode = NO;
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:askKey]) {
+        _isNeedaskPasswordForSend = [[[NSUserDefaults standardUserDefaults] objectForKey:askKey] boolValue];
+    }
+    else{
+        _isNeedaskPasswordForSend = YES;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:lockScreen]) {
+        _lockScreenSeconds = [[[NSUserDefaults standardUserDefaults] objectForKey:lockScreen] intValue];
+    }
+    else{
+        _lockScreenSeconds = 0;
+    }
+    
+    return self;
+}
+
+-(void)setLockScreenSeconds:(int)lockScreenSeconds {
+    _lockScreenSeconds = lockScreenSeconds;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_lockScreenSeconds] forKey:lockScreen];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setIsNeedaskPasswordForSend:(BOOL)isNeedaskPasswordForSend {
+    _isNeedaskPasswordForSend = isNeedaskPasswordForSend;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_isNeedaskPasswordForSend forKey:askKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(NSArray*_Nonnull)walletStoragesPaths {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:allPathsKey] isKindOfClass:[NSNull class]]) {
         return [NSArray new];
     }
@@ -33,10 +80,10 @@ static NSString *allPathsKey = @"allPaths";
     return [NSArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:allPathsKey]];
 }
 
-+(void)generateNewStoragePath {
+-(void)generateNewStoragePath {
     NSString *name = [NSString stringWithFormat:@"%d",(int)[NSDate date].timeIntervalSince1970];
     
-    NSMutableArray *paths = [NSMutableArray arrayWithArray:[Settings walletStoragesPaths]];
+    NSMutableArray *paths = [NSMutableArray arrayWithArray:[[Settings sharedManager] walletStoragesPaths]];
     [paths addObject:name];
     
     [[NSUserDefaults standardUserDefaults] setObject:name forKey:storageKey];
@@ -45,7 +92,7 @@ static NSString *allPathsKey = @"allPaths";
 }
 
 
-+(NSString*)walletStoragePath {
+-(NSString*_Nonnull)walletStoragePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
@@ -54,15 +101,61 @@ static NSString *allPathsKey = @"allPaths";
 }
 
 
-+(NSString*)nodeAddress {
-    return @"ap-node03.testnet.beam.mw:8100";
+-(NSString*_Nonnull)nodeAddress {
+    NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
+    
+    if ([target isEqualToString:@"BeamWalletTestNet"]) {
+        return @"ap-node03.testnet.beam.mw:8100";
+    }
+    else{
+        return @"eu-node01.masternet.beam.mw:8100";
+    }
 }
 
-+(NSString*)logPath {
+-(NSString*_Nonnull)logPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/beam_logs"];
     return dataPath;
+}
+
+#pragma mark - Local Node
+
+-(int)nodePort {    
+    NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
+    
+    if ([target isEqualToString:@"BeamWalletTestNet"]) {
+        return 11005;
+    }
+    else{
+        return 10005;
+    }
+}
+
+-(NSString*_Nonnull)localNodeStorage {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/node.db"];
+    
+    return dataPath;
+}
+
+-(NSString*_Nonnull)localNodeTemdDir {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    return documentsDirectory;
+}
+
+-(NSArray*_Nonnull)localNodePeers {
+    NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
+    
+    if ([target isEqualToString:@"BeamWalletTestNet"]) {
+        return @[@"us-nodes.testnet.beam.mw:8100",@"eu-nodes.testnet.beam.mw:8100",@"ap-nodes.testnet.beam.mw:8100"];
+    }
+    else{
+        return @[@"eu-node01.masternet.beam.mw:8100",@"eu-node02.masternet.beam.mw:8100",@"eu-node03.masternet.beam.mw:8100",@"eu-node04.masternet.beam.mw:8100"];
+    }
 }
 
 @end

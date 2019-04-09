@@ -23,7 +23,10 @@ class TransactionViewController: BaseViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private var headerView: UIView!
+    @IBOutlet private var proofHeaderView: UIView!
+    @IBOutlet private var utxosHeaderView: UIView!
 
+    
     struct TransactionGeneralInfo {
         var text:String!
         var detail:String!
@@ -31,6 +34,9 @@ class TransactionViewController: BaseViewController {
         var canCopy:Bool!
     }
     
+    private var paymentProof:BMPaymentProof?
+    private var utxos:[BMUTXO]!
+
     private var transaction:BMTransaction!
     private var details = [TransactionGeneralInfo]()
 
@@ -41,9 +47,14 @@ class TransactionViewController: BaseViewController {
         
         tableView.register(GeneralTransactionInfoCell.self)
         tableView.register(WalletTransactionCell.self)
+        tableView.register(TransactionPaymentProofCell.self)
+        tableView.register(TransactionUTXOCell.self)
+        
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         fillTransactionInfo()
+        
+        getPaymentProof()
     }
     
     @objc private func refreshData(_ sender: Any) {
@@ -60,6 +71,12 @@ class TransactionViewController: BaseViewController {
         super.viewWillDisappear(animated)
         
         AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    private func getPaymentProof() {
+        if transaction.hasPaymentProof() {
+            AppModel.sharedManager().getPaymentProof(transaction)
+        }
     }
     
     private func fillTransactionInfo() {
@@ -83,13 +100,18 @@ class TransactionViewController: BaseViewController {
         if transaction.isFailed() {
             details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true, canCopy:true))
         }
-
+        
+        //utxos
+        utxos = (AppModel.sharedManager().getUTXOSFrom(transaction) as! [BMUTXO])
+        
         tableView.reloadData()
     }
     
     @objc private func onMore(sender:UIBarButtonItem) {
         let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
-        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Repeat transaction", icon: "iconRepeat", id:1) /*, BMPopoverMenu.BMPopoverMenuItem(name: "Save peer address", icon: "iconSaveAddress", id:2)*/]
+//        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Repeat transaction", icon: "iconRepeat", id:1) /*, BMPopoverMenu.BMPopoverMenuItem(name: "Save peer address", icon: "iconSaveAddress", id:2)*/]
+        
+        var items = [BMPopoverMenu.BMPopoverMenuItem]()
         
         if transaction.canCancel {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Cancel transaction", icon: "iconCancelTransction", id:3))
@@ -124,10 +146,15 @@ class TransactionViewController: BaseViewController {
 extension TransactionViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
+        if section == 2 && paymentProof != nil {
             return 60
         }
-        
+        else if section == 3 && utxos.count > 0 {
+            return 60
+        }
+        else if section == 1 {
+            return 60
+        }
         return 0
     }
     
@@ -147,14 +174,23 @@ extension TransactionViewController : UITableViewDelegate {
 extension TransactionViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         }
-        return details.count
+        else if section == 1 {
+            return details.count
+        }
+        else if section == 2 && paymentProof != nil {
+            return 1
+        }
+        else if section == 3 {
+            return utxos.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -165,21 +201,45 @@ extension TransactionViewController : UITableViewDataSource {
                 .configured(with: (row: indexPath.row, transaction: transaction, single:true))
             return cell
         }
-        else{
+        else if indexPath.section == 1 {
             let cell =  tableView
                 .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
            
             return cell
         }
+        else if indexPath.section == 2 {
+            let cell =  tableView
+                .dequeueReusableCell(withType: TransactionPaymentProofCell.self, for: indexPath)
+            cell.delegate = self
+            
+            return cell
+        }
+        else if indexPath.section == 3 {
+            let cell =  tableView
+                .dequeueReusableCell(withType: TransactionUTXOCell.self, for: indexPath)
+            cell.configure(with: utxos[indexPath.row])
+            
+            return cell
+        }
+        
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             return nil
         }
-        
-        return headerView
+        else if section == 1 {
+            return headerView
+        }
+        else if section == 2 && paymentProof != nil {
+            return proofHeaderView
+        }
+        else if section == 3 && utxos.count > 0 {
+            return utxosHeaderView
+        }
+        return nil
     }
     
 }
@@ -198,11 +258,41 @@ extension TransactionViewController : WalletModelDelegate {
             }
         }
     }
+    
+    func onReceive(_ proof: BMPaymentProof) {
+        DispatchQueue.main.async {
+            if proof.txID == self.transaction.id {
+                self.paymentProof = proof
+                
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
 }
 
 extension TransactionViewController: Configurable {
     
     func configure(with transaction:BMTransaction) {
         self.transaction = transaction
+    }
+}
+
+extension TransactionViewController: TransactionPaymentProofCellDelegate {
+    func onPaymentProofDetails() {
+        if let proof = paymentProof {
+            let vc = PaymentProofDetailViewController(transaction: transaction, paymentProof: proof)
+            pushViewController(vc: vc)
+        }
+    }
+    
+    func onPaymentProofCopy() {
+        if let code = paymentProof?.code {
+            UIPasteboard.general.string = code
+            
+            SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+        }
     }
 }

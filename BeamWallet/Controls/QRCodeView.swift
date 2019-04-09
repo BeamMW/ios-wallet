@@ -91,8 +91,6 @@ class QRCodeView: UIView {
                         .withRenderingMode(.alwaysTemplate)
                 }
             }
-        }
-        
-     
+        }     
     }
 }

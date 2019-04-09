@@ -13,13 +13,24 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+        <array key="SF-Pro-Display-RegularItalic.otf">
+            <string>SFProDisplay-Italic</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CreateWalletProgressViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="cancelButton" destination="FIX-uE-nue" id="eWY-zi-uAk"/>
+                <outlet property="logoYOffset" destination="CK3-Xg-lx9" id="v8E-QH-4yO"/>
                 <outlet property="progressTitleLabel" destination="ZqN-A1-TIj" id="gbH-jG-pwq"/>
+                <outlet property="progressValueLabel" destination="ptl-BF-NdL" id="erB-PX-mi1"/>
                 <outlet property="progressView" destination="bZD-dB-5UV" id="whc-Ut-x2W"/>
+                <outlet property="restotingInfoLabel" destination="sOp-KF-vke" id="ErO-zE-KPf"/>
+                <outlet property="restotingWarningLabel" destination="g2P-sH-Tyo" id="GIK-9d-ZUh"/>
+                <outlet property="stackYOffset" destination="YDf-uM-xWZ" id="VNk-dw-T6T"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -29,7 +40,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="tiL-BA-jJU">
-                    <rect key="frame" x="137" y="80" width="101" height="90"/>
+                    <rect key="frame" x="137" y="106" width="101" height="90"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="101" id="D3E-hx-K1X"/>
                         <constraint firstAttribute="height" constant="90" id="cWg-aA-m4p"/>
@@ -42,6 +53,15 @@
                             <rect key="frame" x="0.0" y="0.0" width="253" height="21.5"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ptl-BF-NdL">
+                            <rect key="frame" x="0.0" y="36.5" width="253" height="0.0"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
@@ -75,6 +95,26 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please wait for synchronization and do not close or minimize the application." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2P-sH-Tyo">
+                            <rect key="frame" x="0.0" y="55.5" width="253" height="0.0"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
+                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOp-KF-vke">
+                            <rect key="frame" x="0.0" y="55.5" width="253" height="0.0"/>
+                            <string key="text">Only the wallet balance (UTXO) can be restored,  transaction info is always private
+and never kept in the blockchain.</string>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
+                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="NO"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="width" constant="253" id="MHT-e1-b5z"/>
@@ -105,11 +145,11 @@
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="Pob-fL-4oD" firstAttribute="top" secondItem="tiL-BA-jJU" secondAttribute="bottom" constant="110" id="CK3-Xg-lx9"/>
                 <constraint firstItem="FIX-uE-nue" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="DDs-AX-uiW"/>
                 <constraint firstItem="Pob-fL-4oD" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="YDf-uM-xWZ"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="FIX-uE-nue" secondAttribute="bottom" constant="50" id="bS7-Oc-rWf"/>
                 <constraint firstItem="Pob-fL-4oD" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="tcF-90-2XT"/>
-                <constraint firstItem="tiL-BA-jJU" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="60" id="z5r-d2-Crw"/>
                 <constraint firstItem="tiL-BA-jJU" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="zY5-O9-55M"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

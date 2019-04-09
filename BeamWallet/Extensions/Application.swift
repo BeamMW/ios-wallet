@@ -1,8 +1,7 @@
 //
-//  Application.swift
-//  BeamWallet
+// Application.swift
+// BeamWallet
 //
-// 3/2/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

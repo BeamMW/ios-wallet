@@ -33,7 +33,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="150" translatesAutoresizingMaskIntoConstraints="NO" id="Prf-e9-uhW">
-                    <rect key="frame" x="55.5" y="146" width="264" height="375.5"/>
+                    <rect key="frame" x="55.5" y="109" width="264" height="449.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="XS3-jK-PB8">
                             <rect key="frame" x="0.0" y="0.0" width="264" height="181.5"/>
@@ -57,7 +57,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="qyg-x7-z6S">
-                            <rect key="frame" x="5.5" y="331.5" width="253" height="44"/>
+                            <rect key="frame" x="5.5" y="331.5" width="253" height="118"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Iu-PO-y9I" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="253" height="44"/>
@@ -81,8 +81,8 @@
                                         <action selector="onCreateWalletWithSender:" destination="-1" eventType="touchUpInside" id="oiX-Hv-bGB"/>
                                     </connections>
                                 </button>
-                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dil-6y-9Wr" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="253" height="44"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dil-6y-9Wr" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="74" width="253" height="44"/>
                                     <color key="backgroundColor" red="0.10980392156862745" green="0.2627450980392157" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="253" id="LeK-ma-hrN"/>

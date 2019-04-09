@@ -82,6 +82,7 @@
                 <constraint firstItem="iW6-Bq-5xt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="Jjf-WY-aS1"/>
             </constraints>
             <connections>
+                <outlet property="mainView" destination="iW6-Bq-5xt" id="qXe-xO-f4M"/>
                 <outlet property="numberLabel" destination="ag5-bY-KAl" id="VgJ-fp-Snr"/>
                 <outlet property="wordLabel" destination="YWJ-kk-5tJ" id="TyK-Bg-WiU"/>
             </connections>
