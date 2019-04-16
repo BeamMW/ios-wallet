@@ -18,7 +18,6 @@
 //
 
 import UIKit
-import SelectItemController
 
 class EditAddressViewController: BaseViewController {
     
@@ -197,7 +196,12 @@ extension EditAddressViewController : UITableViewDataSource {
                 return cell
             }
             else{
-                let text = address.isExpired() ? "Active address" : "Expire address now"
+                var text = address.isExpired() ? "Active address" : "Expire address now"
+                
+                if Device.screenType == .iPhones_Plus || Device.screenType == .iPhone_XSMax {
+                    text = address.isExpired() ? "Active address" : "Expire address\nnow"
+                }
+                
                 let selected = false
                 
                 let cell =  tableView

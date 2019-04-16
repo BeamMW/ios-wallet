@@ -216,7 +216,6 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
             transaction = tr
             
             codeInputLabel.alpha = 0
-            
             codeInputField.lineColor = UIColor.main.marineTwo
             codeInputField.textColor = UIColor.white
         }
@@ -234,7 +233,36 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
             textView.resignFirstResponder()
         }
         else if transaction != nil && tr == nil {
+            transaction = nil
             
+            if textView.text.isEmpty {
+                codeInputLabel.alpha = 0
+                codeInputField.lineColor = UIColor.main.marineTwo
+                codeInputField.textColor = UIColor.white
+            }
+            else{
+                codeInputLabel.alpha = 1
+                codeInputLabel.textColor = UIColor.main.red
+                codeInputField.textColor = UIColor.main.red
+                codeInputField.lineColor = UIColor.main.red
+            }
+            
+            fillTransactionInfo()
+            
+            tableView.reloadData()
+        }
+        else if tr == nil {
+            if textView.text.isEmpty {
+                codeInputLabel.alpha = 0
+                codeInputField.lineColor = UIColor.main.marineTwo
+                codeInputField.textColor = UIColor.white
+            }
+            else{
+                codeInputLabel.alpha = 1
+                codeInputLabel.textColor = UIColor.main.red
+                codeInputField.textColor = UIColor.main.red
+                codeInputField.lineColor = UIColor.main.red
+            }
         }
     }
     

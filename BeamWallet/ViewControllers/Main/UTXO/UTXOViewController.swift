@@ -31,12 +31,15 @@ class UTXOViewController: BaseViewController {
 
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private var headerView: UIView!
+    @IBOutlet private var networkHeaderView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.title = "UTXO"
         
+        tableView.tableHeaderView = networkHeaderView
+
         tableView.register(UTXOCell.self)
         tableView.register(UTXOBlockCell.self)
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
@@ -91,7 +94,7 @@ extension UTXOViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 && indexPath.section == 0{
-            return expandBlock ? 156 : 106
+            return expandBlock ? 123 : 70
         }
         return 60
     }
@@ -175,24 +178,75 @@ extension UTXOViewController : UTXOBlockCellDelegate {
 extension UTXOViewController : WalletModelDelegate {
     func onReceivedUTXOs(_ utxos: [BMUTXO]) {
         DispatchQueue.main.async {
-            if let utox = AppModel.sharedManager().utxos {
-                self.utxos = utox as! [BMUTXO]
-                
-                if self.selectedState == .active {
-                    self.utxos = self.utxos.filter { $0.status == 1 || $0.status == 2 }
+
+            self.tableView.stopRefreshing()
+
+            if Settings.sharedManager().isLocalNode {
+                if let utox = AppModel.sharedManager().utxos {
+                    var _utxos = utox as! [BMUTXO]
+                    
+                    if self.selectedState == .active {
+                        _utxos = _utxos.filter { $0.status == 1 || $0.status == 2 }
+                    }
+                    
+                    if _utxos.count > self.utxos.count {
+                        let diff = _utxos.count - self.utxos.count
+                        
+                        if diff >= 200 {
+                            var rows = [IndexPath]()
+                            
+                            for i in 0...diff-1 {
+                                rows.append(IndexPath(row: self.utxos.count+i, section: 1))
+                            }
+                            
+                            self.utxos = _utxos
+                            
+                            UIView.performWithoutAnimation {
+                                self.tableView.beginUpdates()
+                                self.tableView.insertRows(at: rows, with: .none)
+                                self.tableView.endUpdates()
+                            }
+                        }              
+                    }
+                    else{
+                        self.utxos = _utxos
+                        
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
             }
-            UIView.performWithoutAnimation {
-                self.tableView.stopRefreshing()
-                self.tableView.reloadData()
+            else{
+                if let utox = AppModel.sharedManager().utxos {
+                    self.utxos = utox as! [BMUTXO]
+                    
+                    if self.selectedState == .active {
+                        self.utxos = self.utxos.filter { $0.status == 1 || $0.status == 2 }
+                    }
+                }
+                
+                self.utxos = self.utxos.sorted(by: { $0.id < $1.id })
+                
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
     
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
-            UIView.performWithoutAnimation {
-                self.tableView.reloadData()
+            self.tableView.stopRefreshing()
+
+            if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? UTXOBlockCell
+            {
+                cell.configure(with: (status: AppModel.sharedManager().walletStatus, expand: self.expandBlock))
+            }
+            else{
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadData()
+                }
             }
         }
     }

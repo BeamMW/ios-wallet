@@ -23,13 +23,22 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
 
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var errorLabel: UILabel!
+    @IBOutlet private weak var touchIdButton: UIButton!
+    @IBOutlet private weak var passViewHeight: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 60
+            passViewHeight.constant = 70
         }
+        
+        if !BiometricAuthorization.shared.canAuthenticate() || Settings.sharedManager().isEnableBiometric == false {
+            touchIdButton.isHidden = true
+        }
+        
+       biometricAuthorization()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +47,26 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         AppModel.sharedManager().cancelForgotPassword()
     }
     
+    private func biometricAuthorization() {
+        if BiometricAuthorization.shared.canAuthenticate() && AppDelegate.enableNewFeatures && Settings.sharedManager().isEnableBiometric {
+            BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
+                if let password = KeychainManager.getPassword() {
+                    self.passField.text = password
+                    self.onLogin(sender: UIButton())
+                }
+            }) {
+                self.touchIdButton.tintColor = UIColor.main.red
+            }
+        }
+    }
+    
     //MARK: IBAction
+    
+    @IBAction func onTouchId(sender :UIButton) {
+        touchIdButton.tintColor = UIColor.white
+
+        biometricAuthorization()
+    }
     
     @IBAction func onLogin(sender :UIButton) {
         AppModel.sharedManager().isRestoreFlow = false;
@@ -72,7 +100,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     @IBAction func onForgotPassword(sender :UIButton) {
         if AppModel.sharedManager().canRestoreWallet() {
             let alertController = UIAlertController(title: "Forgot password", message: "Only your funds can be fully restored from the blockchain. The transaction history is stored locally and is encrypted with your password, hence it can't be restored.\n\nThat's the final version until the future validation and process.", preferredStyle: .alert)
-
+            
             let NoAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
             }
             alertController.addAction(NoAction)
@@ -85,7 +113,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 self.pushViewController(vc: vc)
             }
             alertController.addAction(OKAction)
-            
+                        
             self.present(alertController, animated: true, completion: nil)
         }
         else{
@@ -105,6 +133,10 @@ extension EnterWalletPasswordViewController : UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if string == " " {
+            return false
+        }
         
         errorLabel.text = ""
      

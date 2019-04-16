@@ -35,5 +35,7 @@
 @property (nonatomic,strong) NSString * _Nullable createTxId;
 @property (nonatomic,strong) NSString * _Nullable spentTxId;
 
+-(BOOL)isActive;
+
 @end
 

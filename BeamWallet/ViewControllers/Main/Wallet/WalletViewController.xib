@@ -17,6 +17,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WalletViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="networkHeaderView" destination="GSR-o4-4f8" id="NZb-0G-Psu"/>
                 <outlet property="talbeView" destination="tAl-Fw-eWC" id="RoO-Lu-iuC"/>
                 <outlet property="transactionsHeaderView" destination="hVq-Ig-XxH" id="0e9-s1-Rff"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -76,6 +77,28 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="suh-kv-1ta"/>
+        </view>
+        <view contentMode="scaleToFill" id="GSR-o4-4f8">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5n-jR-a3M" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="15" y="15" width="303" height="14"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="FE5-fv-274"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="b5n-jR-a3M" firstAttribute="leading" secondItem="OtY-DX-lkW" secondAttribute="leading" constant="15" id="K42-9P-GvK"/>
+                <constraint firstItem="b5n-jR-a3M" firstAttribute="top" secondItem="OtY-DX-lkW" secondAttribute="top" constant="15" id="QyM-z4-TV8"/>
+                <constraint firstItem="OtY-DX-lkW" firstAttribute="trailing" secondItem="b5n-jR-a3M" secondAttribute="trailing" constant="57" id="hal-s2-24b"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="OtY-DX-lkW"/>
+            <point key="canvasLocation" x="54" y="71"/>
         </view>
     </objects>
     <resources>

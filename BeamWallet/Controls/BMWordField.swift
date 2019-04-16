@@ -28,9 +28,16 @@ class BMWordField: BMField {
         case empty
     }
     
+    private var maxWords = 3
+    
+    private var accessoryView = UIView()
+    private var accessoryOptions = [UIButton]()
+    
     private let errorColor = UIColor.main.red
     private let normalColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
-
+    
+    var suggestions: [String]?
+    
     var fState: FieldState! = .none {
         didSet {
             switch fState {
@@ -49,6 +56,152 @@ class BMWordField: BMField {
             case .none:
                 break
             }
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSuggestionsView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupSuggestionsView()
+    }
+    
+    private func setupSuggestionsView() {
+        accessoryView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+
+        let toolbar = UIToolbar(frame: accessoryView.bounds)
+        toolbar.autoresizingMask = .flexibleWidth;
+        toolbar.isUserInteractionEnabled = false;
+        accessoryView.addSubview(toolbar)
+
+        let width_3 = toolbar.frame.size.width / CGFloat(maxWords)
+
+        for i in 0...maxWords-1 {
+            let button = UIButton(type: .custom)
+            button.frame = CGRect(x: CGFloat(i) * width_3, y: 0, width: width_3, height: 44)
+            button.setTitleColor(UIColor.init(white: 0.3, alpha: 1), for: .normal)
+            button.setTitleColor(UIColor.init(white: 0.3, alpha: 0.3), for: .highlighted)
+            button.addTarget(self, action: #selector(onSuggestion), for: .touchUpInside)
+            accessoryView.addSubview(button)
+            accessoryOptions.append(button)
+        }
+
+        let separator = UIView(frame: CGRect(x:0, y:43.5, width:accessoryView.frame.size.width, height:0.5))
+        separator.autoresizingMask = .flexibleWidth;
+        separator.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
+        accessoryView.addSubview(separator)
+        
+        if AppDelegate.enableNewFeatures {
+            self.addTarget(self, action: #selector(didBeginEditing), for: UIControl.Event.editingDidBegin)
+            self.addTarget(self, action: #selector(editingChanged), for: UIControl.Event.editingChanged)
+        }
+    }
+    
+    @objc private func onSuggestion(sender:UIButton) {
+        if sender.currentAttributedTitle?.string.lengthOfBytes(using: .utf8) == 0 {
+            return
+        }
+        
+        self.text = sender.currentAttributedTitle?.string
+        
+        _ = self.delegate?.textFieldShouldReturn!(self)
+    }
+    
+    @objc private func didBeginEditing() {
+        if let txt = text {
+            updateAccessoryViewPrefix(prefix: txt)
+        }
+    }
+    
+    @objc private func editingChanged() {
+        if let txt = text {
+            updateAccessoryViewPrefix(prefix: txt)
+        }
+    }
+    
+    private func updateAccessoryViewPrefix(prefix:String) {
+        var words = MnemonicModel.mnemonicWords(forPrefix: prefix, suggestions: suggestions) as [String]
+        
+//        if words.count == 1 {
+//            self.text = words[0]
+//            
+//            _ = self.delegate?.textFieldShouldReturn!(self)
+//        }
+        
+        for btn in accessoryOptions {
+            btn.setAttributedTitle(nil, for: .normal)
+        }
+
+        if words.count > 0 {
+            var recommendFirstWord = (words.count == 1)
+
+            if !recommendFirstWord && words.count != 0 && words[0].hasPrefix(prefix) {
+
+                var hasPrefix = false;
+
+                for i in 1...words.count-1 {
+                    if words[i].hasPrefix(prefix) {
+                        hasPrefix = true;
+                        break
+                    }
+                }
+
+                if !hasPrefix {
+                    recommendFirstWord = true;
+                }
+            }
+
+
+            for i in 0...words.count-1 {
+                if i >= maxWords {
+                    break
+                }
+
+                let button = accessoryOptions [i]
+
+                let word = words[i]
+
+                if word == prefix {
+                    recommendFirstWord = true
+                }
+
+                let attributedTitle = NSMutableAttributedString(string: word)
+                let range = (word as NSString).range(of: String(prefix))
+
+                if range.location == 0 && range.length > 0 {
+                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Bold", size: 15) ?? UIFont.boldSystemFont(ofSize: 15) , range: range)
+                }
+
+                if range.length < word.lengthOfBytes(using: .utf8) {
+                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Regular", size: 15) ?? UIFont.systemFont(ofSize: 15) , range: NSRange(location: range.length, length: word.lengthOfBytes(using: .utf8) - range.length))
+                }
+                else{
+                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Regular", size: 15) ?? UIFont.systemFont(ofSize: 15) , range: NSRange(location: 0, length: word.lengthOfBytes(using: .utf8)))
+                }
+
+                button.setAttributedTitle(attributedTitle, for: .normal)
+            }
+
+            if recommendFirstWord {
+                let button = accessoryOptions[0];
+                button.layer.removeAllAnimations()
+
+                let animate = CABasicAnimation(keyPath: "backgroundColor")
+                animate.fromValue = UIColor.black.cgColor
+                animate.toValue = UIColor.clear.cgColor
+                animate.duration = 1.0;
+
+                button.layer.add(animate, forKey: "recommend")
+            }
+
+            self.inputAccessoryView = accessoryView
+            self.reloadInputViews()
+        }
+        else{
+            self.inputAccessoryView = nil
         }
     }
 }

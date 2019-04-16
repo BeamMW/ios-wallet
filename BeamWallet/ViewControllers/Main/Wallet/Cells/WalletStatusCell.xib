@@ -17,18 +17,18 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="WalletStatusCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="66" id="KGk-i7-Jjw" customClass="WalletStatusCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-Vv-Ysb">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aBo-4q-aqi">
-                                <rect key="frame" x="15" y="42" width="290" height="44"/>
+                                <rect key="frame" x="15" y="5" width="290" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-cW-9tn" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
@@ -71,22 +71,13 @@
                                     <constraint firstAttribute="height" constant="44" id="ePg-d8-sxa"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xqb-q6-mpE" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="15" width="290" height="14"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="14" id="yX7-Gh-LJ4"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="xqb-q6-mpE" firstAttribute="top" secondItem="eF7-Vv-Ysb" secondAttribute="top" constant="15" id="0N0-LM-fWQ"/>
                             <constraint firstItem="aBo-4q-aqi" firstAttribute="leading" secondItem="eF7-Vv-Ysb" secondAttribute="leading" constant="15" id="0iX-LX-lgb"/>
                             <constraint firstAttribute="trailing" secondItem="aBo-4q-aqi" secondAttribute="trailing" constant="15" id="N3o-cj-E9T"/>
-                            <constraint firstItem="xqb-q6-mpE" firstAttribute="leading" secondItem="eF7-Vv-Ysb" secondAttribute="leading" constant="15" id="SNC-WU-rGC"/>
-                            <constraint firstAttribute="trailing" secondItem="xqb-q6-mpE" secondAttribute="trailing" constant="15" id="fht-so-j6a"/>
-                            <constraint firstAttribute="bottom" secondItem="aBo-4q-aqi" secondAttribute="bottom" constant="13.5" id="qvl-u1-5lW"/>
+                            <constraint firstAttribute="bottom" secondItem="aBo-4q-aqi" secondAttribute="bottom" constant="16.5" id="Seh-su-cRa"/>
+                            <constraint firstItem="aBo-4q-aqi" firstAttribute="top" secondItem="eF7-Vv-Ysb" secondAttribute="top" constant="5" id="pcx-Hk-17g"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -100,7 +91,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <point key="canvasLocation" x="52.799999999999997" y="48.575712143928037"/>
+            <point key="canvasLocation" x="52.799999999999997" y="33.283358320839582"/>
         </tableViewCell>
     </objects>
     <resources>

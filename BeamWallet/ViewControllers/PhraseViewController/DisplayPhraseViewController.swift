@@ -22,6 +22,7 @@ import UIKit
 class DisplayPhraseViewController: BaseWizardViewController {
     
     @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var copyButton: UIButton!
 
     var words = [String]()
     var phrase:String!
@@ -46,6 +47,10 @@ class DisplayPhraseViewController: BaseWizardViewController {
         else if Device.screenType == .iPhone_XSMax {
             mainStack?.spacing = 110
         }
+        
+        if AppDelegate.CurrentTarget == .Test {
+            copyButton.isHidden = false
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +61,18 @@ class DisplayPhraseViewController: BaseWizardViewController {
         words = phrase.components(separatedBy: ";")
         
         self.collectionView.reloadData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func didTakeScreenshot() {
+        self.alert(message: "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds in risk. It is strictly recommended to remove the screenshot manually from your pictures gallery.")
     }
     
 // MARK: IBAction

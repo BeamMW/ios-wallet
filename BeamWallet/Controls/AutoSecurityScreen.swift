@@ -43,7 +43,10 @@ public class AutoSecurityScreen {
     }
 
     @objc private func addBlur() {
-        createBlurEffect()
+        if UIApplication.getTopMostViewController() is DisplayPhraseViewController
+        || UIApplication.getTopMostViewController() is InputPhraseViewController {
+            createBlurEffect()
+        }
     }
 
     @objc private func remoteBlur() {

@@ -17,25 +17,18 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="181" id="J7e-aX-YPy" customClass="UTXOBlockCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="156"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="148" id="J7e-aX-YPy" customClass="UTXOBlockCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="123"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J7e-aX-YPy" id="QwR-Gj-jI9">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="155.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="122.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BXj-kN-hzu">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="155.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="122.5"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oFI-j0-5aq" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="15" width="290" height="14"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="14" id="InC-iS-eDd"/>
-                                </constraints>
-                            </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rPQ-Hm-w8n">
-                                <rect key="frame" x="15" y="44" width="290" height="99"/>
+                                <rect key="frame" x="15" y="5" width="290" height="99"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0x-1m-rBH" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="290" height="99"/>
@@ -122,13 +115,10 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="oFI-j0-5aq" secondAttribute="trailing" constant="15" id="2Ze-rq-K0U"/>
-                            <constraint firstAttribute="bottom" secondItem="rPQ-Hm-w8n" secondAttribute="bottom" constant="12.5" id="2bg-1R-585"/>
+                            <constraint firstItem="rPQ-Hm-w8n" firstAttribute="top" secondItem="BXj-kN-hzu" secondAttribute="top" constant="5" id="8Cu-NQ-0Oh"/>
                             <constraint firstItem="rPQ-Hm-w8n" firstAttribute="leading" secondItem="BXj-kN-hzu" secondAttribute="leading" constant="15" id="8hL-5M-YGq"/>
                             <constraint firstAttribute="trailing" secondItem="rPQ-Hm-w8n" secondAttribute="trailing" constant="15" id="Afh-r5-DBM"/>
-                            <constraint firstItem="rPQ-Hm-w8n" firstAttribute="top" secondItem="oFI-j0-5aq" secondAttribute="bottom" constant="15" id="Tkm-1y-c8e"/>
-                            <constraint firstItem="oFI-j0-5aq" firstAttribute="top" secondItem="BXj-kN-hzu" secondAttribute="top" constant="15" id="wBw-v0-INt"/>
-                            <constraint firstItem="oFI-j0-5aq" firstAttribute="leading" secondItem="BXj-kN-hzu" secondAttribute="leading" constant="15" id="ySV-3x-vRB"/>
+                            <constraint firstAttribute="bottom" secondItem="rPQ-Hm-w8n" secondAttribute="bottom" constant="18.5" id="WKV-uL-y1a"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -148,7 +138,7 @@
                 <outlet property="hashTitleLabel" destination="ZD0-5h-LPH" id="gaP-ln-yO8"/>
                 <outlet property="heightLabel" destination="2tc-2q-9Ok" id="37M-e3-yFn"/>
             </connections>
-            <point key="canvasLocation" x="52.799999999999997" y="62.068965517241381"/>
+            <point key="canvasLocation" x="52.799999999999997" y="47.226386806596707"/>
         </tableViewCell>
     </objects>
     <resources>

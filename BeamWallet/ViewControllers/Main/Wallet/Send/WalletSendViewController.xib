@@ -23,6 +23,9 @@
                 <outlet property="amountErrorLabel" destination="EDz-ef-spI" id="1VZ-b6-vPz"/>
                 <outlet property="amountField" destination="0YU-pJ-aOY" id="y7Y-Bu-TK7"/>
                 <outlet property="amountStack" destination="6Iw-vO-5cf" id="1bE-XH-1hc"/>
+                <outlet property="balanceTotalIcon" destination="ddS-45-Okq" id="1kb-AK-chr"/>
+                <outlet property="balanceTotalLabel" destination="bdC-a8-BL1" id="67l-CL-dfA"/>
+                <outlet property="balanceTotalView" destination="c9X-sd-jA5" id="Imc-Cg-BSx"/>
                 <outlet property="commentField" destination="OWO-nu-Lnb" id="Sio-ks-giZ"/>
                 <outlet property="feeField" destination="Fuh-jU-JGk" id="yih-4B-4wV"/>
                 <outlet property="feeStack" destination="trx-DT-H34" id="5Ju-Lk-50d"/>
@@ -186,6 +189,40 @@
                                                 </label>
                                             </subviews>
                                         </stackView>
+                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c9X-sd-jA5">
+                                            <rect key="frame" x="0.0" y="193" width="335" height="35"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CVL-zA-HhE">
+                                                    <rect key="frame" x="0.0" y="9" width="82" height="17"/>
+                                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                                    <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bdC-a8-BL1">
+                                                    <rect key="frame" x="276" y="7" width="37" height="21.5"/>
+                                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="ddS-45-Okq">
+                                                    <rect key="frame" x="321" y="10" width="14" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="14" id="cxT-Mh-ShA"/>
+                                                        <constraint firstAttribute="height" constant="21" id="jfl-SS-8Ob"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="ddS-45-Okq" firstAttribute="top" secondItem="c9X-sd-jA5" secondAttribute="top" constant="10" id="4fU-D9-KYQ"/>
+                                                <constraint firstAttribute="trailing" secondItem="ddS-45-Okq" secondAttribute="trailing" id="GZ4-V3-5RH"/>
+                                                <constraint firstAttribute="height" constant="35" id="KCo-eJ-Nw8"/>
+                                                <constraint firstItem="bdC-a8-BL1" firstAttribute="centerY" secondItem="c9X-sd-jA5" secondAttribute="centerY" id="Qpw-BV-9QC"/>
+                                                <constraint firstItem="CVL-zA-HhE" firstAttribute="centerY" secondItem="c9X-sd-jA5" secondAttribute="centerY" id="h7z-74-bTf"/>
+                                                <constraint firstItem="CVL-zA-HhE" firstAttribute="leading" secondItem="c9X-sd-jA5" secondAttribute="leading" id="iBb-Zf-gOq"/>
+                                                <constraint firstItem="ddS-45-Okq" firstAttribute="leading" secondItem="bdC-a8-BL1" secondAttribute="trailing" constant="8" id="lJQ-LT-no9"/>
+                                            </constraints>
+                                        </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="trx-DT-H34">
                                             <rect key="frame" x="0.0" y="208" width="335" height="69.5"/>
                                             <subviews>
@@ -364,5 +401,6 @@
     <resources>
         <image name="iconScanQr" width="24" height="24"/>
         <image name="iconSendBlue" width="16" height="16"/>
+        <image name="iconSymbol" width="16" height="24.5"/>
     </resources>
 </document>

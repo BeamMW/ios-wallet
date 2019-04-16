@@ -35,10 +35,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="SY7-Yz-blR">
-                    <rect key="frame" x="30" y="75" width="315" height="488.5"/>
+                    <rect key="frame" x="32.5" y="75" width="310" height="488.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To ensure the seed phrase is written down correctly, please fill in the specific words below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p1T-xu-CLB">
-                            <rect key="frame" x="0.0" y="0.0" width="315" height="38.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="310" height="38.5"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -47,12 +48,12 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="y0S-AP-q9n">
-                            <rect key="frame" x="0.0" y="88.5" width="315" height="300"/>
+                            <rect key="frame" x="0.0" y="88.5" width="310" height="300"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="300" id="K1p-pc-lYP"/>
                             </constraints>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1qZ-te-iYv">
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="20" id="1qZ-te-iYv">
                                 <size key="itemSize" width="140" height="38"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -64,10 +65,10 @@
                             </connections>
                         </collectionView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t3G-GZ-5AL">
-                            <rect key="frame" x="0.0" y="438.5" width="315" height="50"/>
+                            <rect key="frame" x="0.0" y="438.5" width="310" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZh-RJ-DHb" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="31" y="3" width="253" height="44"/>
+                                    <rect key="frame" x="28.5" y="3" width="253" height="44"/>
                                     <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="253" id="02n-Mz-rTW"/>
@@ -97,8 +98,9 @@
                             </constraints>
                         </view>
                     </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="315" id="rD3-0f-E9e"/>
+                        <constraint firstAttribute="width" constant="310" id="rD3-0f-E9e"/>
                     </constraints>
                 </stackView>
             </subviews>

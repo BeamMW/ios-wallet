@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UTXOViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="headerView" destination="ker-Nr-F41" id="IaU-aa-dpI"/>
+                <outlet property="networkHeaderView" destination="rja-o1-rKT" id="7Yf-Wl-nnv"/>
                 <outlet property="tableView" destination="oVk-An-Dah" id="9Xl-mA-Qwj"/>
                 <outlet property="view" destination="TGE-Jg-fXf" id="fEw-0K-bsr"/>
             </connections>
@@ -68,6 +69,28 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="MLY-Uj-9Hd"/>
             <point key="canvasLocation" x="53.600000000000001" y="66.11694152923539"/>
+        </view>
+        <view contentMode="scaleToFill" id="rja-o1-rKT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G14-Ox-6OG" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="15" y="15" width="303" height="14"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="e6I-gf-tgZ"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="d39-Pb-D9u" firstAttribute="trailing" secondItem="G14-Ox-6OG" secondAttribute="trailing" constant="57" id="7Bc-hr-END"/>
+                <constraint firstItem="G14-Ox-6OG" firstAttribute="top" secondItem="d39-Pb-D9u" secondAttribute="top" constant="15" id="DYK-Fk-BT7"/>
+                <constraint firstItem="G14-Ox-6OG" firstAttribute="leading" secondItem="d39-Pb-D9u" secondAttribute="leading" constant="15" id="KMf-r6-9ob"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="d39-Pb-D9u"/>
+            <point key="canvasLocation" x="54" y="71"/>
         </view>
     </objects>
 </document>

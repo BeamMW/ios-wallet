@@ -18,7 +18,6 @@
 //
 
 import UIKit
-import SelectItemController
 
 class WalletReceiveViewController: BaseViewController {
 

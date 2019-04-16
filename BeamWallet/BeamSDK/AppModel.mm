@@ -39,7 +39,7 @@
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
-#include "utility/options.h"
+//#include "utility/options.h"
 
 #include "mnemonic/mnemonic.h"
 
@@ -54,9 +54,11 @@ using namespace std;
 using namespace beam::io;
 
 static int proofSize = 330;
+static NSString *deletedAddressesKEY = @"deletedAddresses";
 
 @implementation AppModel  {
     BOOL isStarted;
+    NSTimer *utxoTimer;
     
     Reachability *internetReachableFoo;
 
@@ -99,7 +101,7 @@ static int proofSize = 330;
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self cancelForgotPassword];
-    
+
     return self;
 }
 
@@ -161,11 +163,12 @@ static int proofSize = 330;
             wallet->start();
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self->nodeModel.stopNode();
-
-                string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
                
-                self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
+              ///  self->nodeModel.stopNode();
+
+              ///  string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+               
+              ///  self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
 
                 for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
                 {
@@ -174,7 +177,7 @@ static int proofSize = 330;
                     }
                 }
                 
-                [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
+           ///     [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
                 
                 if([AppModel sharedManager].isForgotPasswordFlow) {
                     [[AppModel sharedManager] stopForgotPassword];
@@ -231,18 +234,24 @@ static int proofSize = 330;
 
 -(BOOL)canOpenWallet:(NSString*)pass {
     Rules::get().UpdateChecksum();
-
+    
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
-
+    
     walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
     if (!walletDb) {
         return NO;
     }
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
-        self.isRestoreFlow = YES;
+        // self.isRestoreFlow = YES;
+        
+        if (!nodeModel.isStarted())
+        {
+            nodeModel.start();
+        }
+        
+        [Settings sharedManager].isLocalNode = YES;
     }
-    
     
     return YES;
 }
@@ -304,16 +313,23 @@ static int proofSize = 330;
     return YES;
 }
 
--(void)resetWallet{
+-(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
         self->nodeModel.stopNode();
     }
-    else{
-        walletDb.reset();
-        wallet.reset();
-        
+    
+    isStarted = NO;
+
+    walletDb.reset();
+    wallet.reset();
+    
+    wallet = nil;
+    walletDb = nil;
+
+    if(removeDatabase) {
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
     }
 }
 
@@ -509,11 +525,25 @@ static int proofSize = 330;
 }
 
 -(void)deleteAddress:(NSString*_Nullable)address {
+
     WalletID walletID(Zero);
     if (walletID.FromHex(address.string))
     {
-        walletDb->deleteAddress(walletID);
+        wallet->getAsync()->deleteAddress(walletID);
+       // walletDb->deleteAddress(walletID);
     }
+}
+
+-(BOOL)isAddressDeleted:(NSString*_Nullable)address {
+    NSMutableArray *deletedAddresses = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:deletedAddressesKEY]];
+    
+    for (NSString *a in deletedAddresses) {
+        if ([a isEqualToString:address]){
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 -(void)generateNewWalletAddress {    
@@ -572,7 +602,7 @@ static int proofSize = 330;
             }
         }
         else{
-            wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), false, false);
+            wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), true, false);
         }
     }
 }
@@ -626,6 +656,7 @@ static int proofSize = 330;
         currencyFormatter.maximumIntegerDigits = 20;
         currencyFormatter.maximumFractionDigits = 20;
         currencyFormatter.maximumSignificantDigits = 20;
+        currencyFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
         
         NSString *beam = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:need]];
         
@@ -641,8 +672,10 @@ static int proofSize = 330;
     WalletID walletID(Zero);
     if (walletID.FromHex(to.string))
     {
+        auto bAmount = round(amount * Rules::Coin);
+        
         try{
-            wallet->getAsync()->sendMoney(walletID, comment.string, amount * Rules::Coin,fee);
+            wallet->getAsync()->sendMoney(walletID, comment.string, bAmount, fee);
         }
         catch(NSException *ex) {
             NSLog(@"%@",ex);
@@ -822,7 +855,70 @@ static int proofSize = 330;
     return txID;
 }
 
+-(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback {    
+    NSString *fileName = @"transactions.csv";
+    NSURL *url = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+    
+    NSString *csvText = @"Type,Date,Amount,Status,Sending address,Receiving address,Transaction fee,Transaction ID,Kernel ID\n";
+
+    for (BMTransaction *tr in _transactions) {
+        NSString *newLine = [tr csvLine];
+        csvText = [csvText stringByAppendingString:newLine];
+    }
+    
+    [csvText writeToURL:url atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    
+    callback(url);
+}
+
 #pragma mark - UTXO
+
+-(void)onSyncWithLocalNodeCompleted {
+    if ([Settings sharedManager].isLocalNode) {
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        NSLog(@"---------------------------");
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+            self->nodeModel.stopNode();
+            
+            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+            
+            self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
+            
+            [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
+        });
+           
+        self.isLocalNodeStarted = NO;
+        self.isRestoreFlow = NO;
+    }
+}
+
+-(void)setUtxos:(NSMutableArray<BMUTXO *> *)utxos {
+    _utxos = utxos;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if ([Settings sharedManager].isLocalNode) {
+//            if (self->utxoTimer) {
+//                [self->utxoTimer invalidate];
+//                self->utxoTimer = nil;
+//            }
+//
+//            self->utxoTimer = [NSTimer scheduledTimerWithTimeInterval: 15
+//                                                     target: self
+//                                                   selector: @selector(onUTXOTimer)
+//                                                   userInfo: nil
+//                                                    repeats: NO];
+//        }
+//    });
+}
 
 -(void)getUTXO {
     wallet->getAsync()->getUtxosStatus();
@@ -847,6 +943,45 @@ static int proofSize = 330;
             }
         }
     }
+    return result;
+}
+
+-(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOWithPadding:(BOOL)active page:(int)page perPage:(int)perPage {
+    
+    NSArray *filteredArray = [self.utxos filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        if (active) {
+            if ([(BMUTXO*)object isActive]) {
+                return YES;
+            }
+            else{
+                return NO;
+            }
+        }
+        
+        return YES;
+    }]];
+    
+    NSMutableArray *result = [NSMutableArray array];
+
+    if(filteredArray.count >= (perPage*page)) {
+        result = [NSMutableArray arrayWithArray:[filteredArray subarrayWithRange:NSMakeRange(0, perPage*page)]];
+    }
+    else{
+        [result addObjectsFromArray:filteredArray];
+    }
+    
+    [result sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        BMUTXO *utxo_1 = (BMUTXO*)obj1;
+        BMUTXO *utxo_2 = (BMUTXO*)obj2;
+        
+        if (utxo_1.ID > utxo_2.ID) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        else{
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+    }];
+    
     return result;
 }
 

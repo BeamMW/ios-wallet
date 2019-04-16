@@ -26,6 +26,7 @@
 
 @property (nonatomic, assign) BOOL isLocalNode;
 @property (nonatomic, assign) BOOL isNeedaskPasswordForSend;
+@property (nonatomic, assign) BOOL isEnableBiometric;
 @property (nonatomic, assign) int lockScreenSeconds;
 
 //+(void)generateNewStoragePath;

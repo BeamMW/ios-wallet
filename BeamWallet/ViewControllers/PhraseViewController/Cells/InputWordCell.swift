@@ -85,6 +85,10 @@ extension InputWordCell: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        if string == " " {
+            return false
+        }
+        
         let textFieldText: NSString = (textField.text ?? "") as NSString
 
         let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)

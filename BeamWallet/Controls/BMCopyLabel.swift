@@ -21,6 +21,8 @@ import UIKit
 
 class BMCopyLabel: UILabel {
 
+    public var copyText:String?
+    
     override public var canBecomeFirstResponder: Bool {
         get {
             return true
@@ -46,7 +48,13 @@ class BMCopyLabel: UILabel {
     }
     
     override func copy(_ sender: Any?) {
-        UIPasteboard.general.string = text
+        if let copy = copyText {
+            UIPasteboard.general.string = copy
+        }
+        else{
+            UIPasteboard.general.string = text
+        }
+        
         UIMenuController.shared.setMenuVisible(false, animated: true)
         
         SVProgressHUD.showSuccess(withStatus: "copied to clipboard")

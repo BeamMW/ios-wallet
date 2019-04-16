@@ -1,6 +1,6 @@
 //
-//  String.swift
-//  BeamWallet
+// BMWordSuggestionView.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -17,22 +17,8 @@
 // limitations under the License.
 //
 
-import UIKit
+import Foundation
 
-extension String {
-    static let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.currencyCode = ""
-        formatter.currencySymbol = ""
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 10
-        formatter.numberStyle = .currencyAccounting
-        formatter.locale = Locale(identifier: "en_US")
-
-        return formatter
-    }()
+class BMWordSuggestionView: UIView {
     
-    static func currency(value:Double) -> String {
-        return formatter.string(from: NSNumber(value: value)) ?? "0.00"
-    }
 }

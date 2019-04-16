@@ -1,8 +1,7 @@
 //
-//  MnemonicModel.m
-//  BeamTest
+// MnemonicModel.m
+// BeamTest
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +25,8 @@ using namespace beam;
 using namespace std;
 
 @implementation MnemonicModel
+
+static NSMutableArray *phrases;
 
 +(BOOL)isValidPhrase:(NSString*)phrase {
     NSArray *wordsArray = [phrase componentsSeparatedByString:@";"];
@@ -58,6 +59,42 @@ using namespace std;
     }
     
     return [words componentsJoinedByString:@";"];
+}
+
++(NSArray<NSString*>*_Nonnull)mnemonicWordsForPrefix:(NSString*_Nonnull)prefix suggestions:(NSArray*_Nullable)suggestions {
+    
+    if (prefix.length == 0)
+    {
+        return @[];
+    }
+    
+    if (suggestions!=nil) {
+        NSMutableArray *result = [NSMutableArray array];
+        
+        for (NSString *phrase in suggestions) {
+            if ([phrase hasPrefix:prefix]) {
+                [result addObject:phrase];
+            }
+        }
+        
+        return [NSArray arrayWithArray:result];
+    }
+    else{
+        if (phrases == nil) {
+            NSString *string = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
+            phrases = [NSMutableArray arrayWithArray:[string componentsSeparatedByString:@"\n"]];
+        }
+        
+        NSMutableArray *result = [NSMutableArray array];
+        
+        for (NSString *phrase in phrases) {
+            if ([phrase hasPrefix:prefix]) {
+                [result addObject:phrase];
+            }
+        }
+        
+        return [NSArray arrayWithArray:result];
+    }
 }
 
 

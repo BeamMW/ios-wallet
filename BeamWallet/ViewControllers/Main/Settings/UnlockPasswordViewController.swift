@@ -28,7 +28,8 @@ class UnlockPasswordViewController: BaseWizardViewController {
     
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var errorLabel: UILabel!
-    
+    @IBOutlet private var heightConstraint: NSLayoutConstraint!
+
     private var event:UnlockEvent!
     private var isUnlocked = false
     
@@ -50,6 +51,10 @@ class UnlockPasswordViewController: BaseWizardViewController {
         hideKeyboardWhenTappedAround()
         
         title = event == .unlock ? "Your password" : "Change password"
+        
+        if Device.isZoomed{
+            heightConstraint.constant = 250
+        }
         
         if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 50
@@ -126,9 +131,12 @@ extension UnlockPasswordViewController : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        if string == " " {
+            return false
+        }
+        
         errorLabel.text = ""
         
         return true
-    }
-    
+    }    
 }

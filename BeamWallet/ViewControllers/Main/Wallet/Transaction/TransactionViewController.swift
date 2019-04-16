@@ -91,6 +91,11 @@ class TransactionViewController: BaseViewController {
         details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false, canCopy:true))
         details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false, canCopy:true))
         details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false, canCopy:true))
+        
+        if AppDelegate.enableNewFeatures {
+            details.append(TransactionGeneralInfo(text: "Transaction ID: ", detail: transaction.id, failed: false, canCopy:true))
+        }
+        
         details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true))
         
         if !transaction.comment.isEmpty {

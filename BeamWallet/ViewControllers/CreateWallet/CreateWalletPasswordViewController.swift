@@ -85,12 +85,12 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         else{
             let alert = UIAlertController(title: "Return to seed phrase", message: "If you return to seed phrase, it would be changed and your local password won’t be saved.", preferredStyle: .alert)
             
-            let ok = UIAlertAction(title: "Return", style: .cancel, handler: { action in
+            let ok = UIAlertAction(title: "Return", style: .default, handler: { action in
                 let viewControllers = self.navigationController?.viewControllers
                 let vc = viewControllers![(viewControllers?.count)!-3]
                 self.navigationController?.popToViewController(vc, animated: true)
             })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
             alert.addAction(ok)
             
             self.present(alert, animated: true)
@@ -222,6 +222,15 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
                 self.navigationController?.view.frame = frame ?? CGRect.zero
             }
         }
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if string == " " {
+            return false
+        }
+        
         return true
     }
 }

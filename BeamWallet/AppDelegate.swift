@@ -47,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    static var enableNewFeatures = true
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         

@@ -33,7 +33,7 @@ public:
 
 private:
     NSString *GetErrorString(beam::wallet::ErrorType type);
-    NSString *GetTransactionStatusString(beam::TxStatus status, bool income, bool self);
+    NSString *GetTransactionStatusString(beam::TxDescription transaction);
     NSString *GetTransactionFailurString(beam::TxFailureReason reason);
     NSString *GetUTXOStatusString(beam::Coin coin);
     NSString *GetUTXOTypeString(beam::Coin coin);

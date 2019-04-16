@@ -52,13 +52,12 @@ class LoginViewController: BaseViewController {
                 let vc = InputPhraseViewController()
                 self.pushViewController(vc: vc)
             }
-            alertController.addAction(OKAction)
+            alertController.addAction(OKAction)          
             
             self.present(alertController, animated: true, completion: nil)
         }
         else{
             self.alert(title: "Not enough storage", message: "To restore the wallet on the phone should be at least 200 MB of free space") { (_ ) in
-                
             }
         }
     }

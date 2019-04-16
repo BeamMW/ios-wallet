@@ -56,6 +56,11 @@ extension UITableView {
     }
     
     public func stopRefreshing() {
+        if let control = self.refreshControl {
+            if !control.isRefreshing {
+                return
+            }
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             if let control = self.refreshControl {

@@ -26,6 +26,7 @@ static NSString *storageKey = @"storageKey";
 static NSString *allPathsKey = @"allPaths";
 static NSString *askKey = @"isNeedaskPasswordForSend";
 static NSString *lockScreen = @"lockScreen";
+static NSString *biometricKey = @"biometricKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -45,7 +46,7 @@ static NSString *lockScreen = @"lockScreen";
         _isNeedaskPasswordForSend = [[[NSUserDefaults standardUserDefaults] objectForKey:askKey] boolValue];
     }
     else{
-        _isNeedaskPasswordForSend = YES;
+        _isNeedaskPasswordForSend = NO;
     }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:lockScreen]) {
@@ -55,7 +56,21 @@ static NSString *lockScreen = @"lockScreen";
         _lockScreenSeconds = 0;
     }
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:biometricKey]) {
+        _isEnableBiometric = [[[NSUserDefaults standardUserDefaults] objectForKey:askKey] boolValue];
+    }
+    else{
+        _isEnableBiometric = YES;
+    }
+    
     return self;
+}
+
+-(void)setIsEnableBiometric:(BOOL)isEnableBiometric {
+    _isEnableBiometric = isEnableBiometric;
+
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_isEnableBiometric] forKey:biometricKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)setLockScreenSeconds:(int)lockScreenSeconds {
@@ -108,7 +123,7 @@ static NSString *lockScreen = @"lockScreen";
         return @"ap-node03.testnet.beam.mw:8100";
     }
     else{
-        return @"eu-node01.masternet.beam.mw:8100";
+        return @"ap-node01.mainnet.beam.mw:8100";
     }
 }
 
@@ -154,7 +169,7 @@ static NSString *lockScreen = @"lockScreen";
         return @[@"us-nodes.testnet.beam.mw:8100",@"eu-nodes.testnet.beam.mw:8100",@"ap-nodes.testnet.beam.mw:8100"];
     }
     else{
-        return @[@"eu-node01.masternet.beam.mw:8100",@"eu-node02.masternet.beam.mw:8100",@"eu-node03.masternet.beam.mw:8100",@"eu-node04.masternet.beam.mw:8100"];
+        return @[@"ap-nodes.mainnet.beam.mw:8100",@"eu-nodes.mainnet.beam.mw:8100",@"us-nodes.mainnet.beam.mw:8100"];
     }
 }
 

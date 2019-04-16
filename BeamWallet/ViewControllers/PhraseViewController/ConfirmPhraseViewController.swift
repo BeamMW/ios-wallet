@@ -34,7 +34,17 @@ class ConfirmPhraseViewController: BaseWizardViewController {
             
             for word in shuffled{
                 if let index = words.firstIndex(of: word) {
-                    inputWords.append(BMWord(word: "", index: index, correct: false))
+                    var added = false
+                    
+                    for inWord in inputWords {
+                        if inWord.index == index {
+                            added = true
+                        }
+                    }
+                    
+                    if !added {
+                        inputWords.append(BMWord(word: "", index: index, correct: false))
+                    }
                 }
             }
         }
@@ -52,6 +62,9 @@ class ConfirmPhraseViewController: BaseWizardViewController {
         else if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 50
         }
+        else{
+            mainStack?.spacing = 40
+        }
         
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
     }
@@ -64,7 +77,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
             cell.startEditing()
         }
     }
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }

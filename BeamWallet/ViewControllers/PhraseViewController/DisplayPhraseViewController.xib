@@ -21,6 +21,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisplayPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="hro-fw-1ip" id="fHh-Pj-zTI"/>
+                <outlet property="copyButton" destination="EOZ-6T-qlN" id="L1H-yV-sU2"/>
                 <outlet property="mainStack" destination="ieK-AA-2FA" id="ZeP-qs-6g3"/>
                 <outlet property="stackWidth" destination="bWB-tf-HeN" id="fm9-qU-iiQ"/>
                 <outlet property="stackY" destination="iVY-Qp-wuw" id="qaA-k7-OAi"/>
@@ -68,8 +69,8 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="O7o-B6-g7f">
                                     <rect key="frame" x="1.5" y="0.0" width="312" height="44"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EOZ-6T-qlN" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="151" height="44"/>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EOZ-6T-qlN" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                                             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="rgY-I6-YJ9"/>
@@ -90,7 +91,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hiA-fN-9Ys" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                            <rect key="frame" x="161" y="0.0" width="151" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="312" height="44"/>
                                             <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="T3M-IN-yC5"/>

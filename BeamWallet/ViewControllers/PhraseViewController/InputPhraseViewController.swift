@@ -41,6 +41,8 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(didTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
+
         if Device.screenType == .iPhones_5 {
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -55,6 +57,12 @@ class InputPhraseViewController: BaseWizardViewController {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
         }
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func didTakeScreenshot() {
+        self.alert(message: "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds in risk. It is strictly recommended to remove the screenshot manually from your pictures gallery.")
     }
     
     // MARK: IBAction

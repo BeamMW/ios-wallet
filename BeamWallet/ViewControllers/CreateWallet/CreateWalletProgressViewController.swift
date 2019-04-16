@@ -83,6 +83,8 @@ class CreateWalletProgressViewController: BaseViewController {
         appModel.addDelegate(self)
 
         if !appModel.isInternetAvailable {
+            appModel.resetWallet(false)
+
             self.navigationController?.popViewController(animated: true)
 
             self.alert(title: "Error", message: "No internet connection") { (_ ) in
@@ -142,7 +144,7 @@ class CreateWalletProgressViewController: BaseViewController {
 // MARK: IBAction
     @IBAction func onCancel(sender :UIButton) {
         let appModel = AppModel.sharedManager()
-        appModel.resetWallet()
+        appModel.resetWallet(true)
         
         navigationController?.popToRootViewController(animated: true)
     }

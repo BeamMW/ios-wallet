@@ -62,6 +62,11 @@ class SettingsViewController: BaseViewController {
         
         var second = [SettingsItem]()
         second.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
+        
+        if BiometricAuthorization.shared.canAuthenticate() {
+            second.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
+        }
+        
         second.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .one))
         
         var three = [SettingsItem]()
@@ -169,6 +174,27 @@ extension SettingsViewController : SettingsCellDelegate {
             }
             else if value == true && item.id == 3 {
                 Settings.sharedManager().isNeedaskPasswordForSend = true
+            }
+            else if value == false && item.id == 4 {
+                let vc = UnlockPasswordViewController(event: .unlock)
+                vc.hidesBottomBarWhenPushed = true
+                vc.completion = {
+                    obj in
+                    
+                    if obj == false {
+                        
+                        item.isSwitch = true
+                        
+                        self.talbeView.reloadData()
+                    }
+                    else{
+                        Settings.sharedManager().isEnableBiometric = false
+                    }
+                }
+                pushViewController(vc: vc)
+            }
+            else if value == true && item.id == 4 {
+                Settings.sharedManager().isEnableBiometric = true
             }
         }
     }

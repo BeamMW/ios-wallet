@@ -41,12 +41,11 @@ class BMNetworkStatusView: UIView {
         indicatorView.hidesWhenStopped = true
         addSubview(indicatorView)
 
+        onNetwotkStatusChange(AppModel.sharedManager().isConnected)
+
         if (AppModel.sharedManager().isUpdating && AppModel.sharedManager().isConnected)
         {
             onSyncProgressUpdated(0, total: 1)
-        }
-        else{
-            onNetwotkStatusChange(AppModel.sharedManager().isConnected)
         }
         
         AppModel.sharedManager().addDelegate(self)
@@ -68,12 +67,22 @@ extension BMNetworkStatusView: WalletModelDelegate {
             
             if connected {
                 self.statusView.backgroundColor = UIColor.main.green
-                self.statusLabel.text = "online (testnet)"
+                if AppDelegate.CurrentTarget == .Main {
+                    self.statusLabel.text = "online"
+                }
+                else{
+                    self.statusLabel.text = "online (testnet)"
+                }
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else{
                 self.statusView.backgroundColor = UIColor.main.red
-                self.statusLabel.text = "offline (testnet)"
+                if AppDelegate.CurrentTarget == .Main {
+                    self.statusLabel.text = "offline"
+                }
+                else{
+                    self.statusLabel.text = "offline (testnet)"
+                }
                 self.statusLabel.textColor = UIColor.main.red
             }
         }
@@ -89,6 +98,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.statusLabel.x = 20
                 self.statusLabel.text = "updating"
                 self.statusView.alpha = 0
+                self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
                 self.indicatorView.stopAnimating()

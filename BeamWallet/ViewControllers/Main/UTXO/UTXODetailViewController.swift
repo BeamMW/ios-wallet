@@ -52,8 +52,22 @@ class UTXODetailViewController: BaseViewController {
         title = "UTXO Details"
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().removeDelegate(self)
+    }
+    
     private func fillDetailInfo() {
         history = AppModel.sharedManager().getTransactionsFrom(utxo) as! [BMTransaction]
+        
+        details.removeAll()
         
         if let txid = utxo.createTxId {
             details.append(TransactionViewController.TransactionGeneralInfo(text: "Transaction ID:", detail: txid, failed: false, canCopy:true))
@@ -153,3 +167,31 @@ extension UTXODetailViewController : UITableViewDataSource {
         }
     }
 }
+
+extension UTXODetailViewController : WalletModelDelegate {
+    func onReceivedTransactions(_ transactions: [BMTransaction]) {
+        DispatchQueue.main.async {
+            self.fillDetailInfo()
+            
+            UIView.performWithoutAnimation {
+                self.tableView.stopRefreshing()
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func onReceivedUTXOs(_ utxos: [BMUTXO]) {
+        DispatchQueue.main.async {
+            if let utxo = utxos.first(where: { $0.id == self.utxo.id }) {
+                self.utxo = utxo
+                self.fillDetailInfo()
+                
+                UIView.performWithoutAnimation {
+                    self.tableView.stopRefreshing()
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+}
+

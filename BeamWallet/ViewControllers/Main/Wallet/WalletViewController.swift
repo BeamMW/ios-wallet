@@ -1,6 +1,6 @@
 //
-//  WalletViewController.swift
-//  BeamWallet
+// WalletViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -21,12 +21,13 @@ import UIKit
 
 class WalletViewController: BaseViewController {
 
-    private var rowHeight = [CGFloat(100.0),CGFloat(130.0),CGFloat(135.0)]
+    private var rowHeight = [CGFloat(66.0),CGFloat(130.0),CGFloat(135.0)]
     private var expandAvailable = true
     private var expandProgress = true
 
     @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private var transactionsHeaderView: BaseView!
+    @IBOutlet private var networkHeaderView: UIView!
 
     private var transactions = [BMTransaction]()
     
@@ -34,6 +35,8 @@ class WalletViewController: BaseViewController {
         super.viewDidLoad()
 
         self.navigationItem.title = "Wallet"
+        
+        talbeView.tableHeaderView = networkHeaderView
         
         talbeView.register(WalletStatusCell.self)
         talbeView.register(WalletAvailableCell.self)
@@ -75,9 +78,13 @@ class WalletViewController: BaseViewController {
         let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: headerFrame.origin.y, width: 60, height: 40)
         
         var items = [BMPopoverMenu.BMPopoverMenuItem]()
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Search", icon: "iconSearch", id:1))
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Filter", icon: "iconFilter", id:2))
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Payment proof", icon: "iconProof", id:3))
+      // items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Search", icon: "iconSearch", id:1))
+      // items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Filter", icon: "iconFilter", id:2))
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Payment proof", icon: nil, id:3))
+        
+        if AppDelegate.enableNewFeatures {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Export", icon: nil, id:4))
+        }
 
         BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -86,6 +93,16 @@ class WalletViewController: BaseViewController {
                     let vc  = PaymentProofDetailViewController(transaction: nil, paymentProof: nil)
                     vc.hidesBottomBarWhenPushed = true
                     self.pushViewController(vc: vc)
+                    return
+                case 4:
+                    AppModel.sharedManager().exportTransactions(toCSV: { (csvPath) in
+                        
+                        let vc = UIActivityViewController(activityItems: [csvPath], applicationActivities: nil)
+                        
+                        vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+                        
+                        self.present(vc, animated: true)
+                    })
                     return
                 default:
                     return
@@ -208,8 +225,33 @@ extension WalletViewController : WalletModelDelegate {
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
                 self.talbeView.stopRefreshing()
-                self.talbeView.reloadData()
-              //  self.talbeView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+
+                if Settings.sharedManager().isLocalNode {
+                    let progressIsNull = (status.realMaturing == 0
+                        && status.realReceiving == 0
+                        && status.realSending == 0)
+                    
+                    if let cell = self.talbeView.cellForRow(at: IndexPath(row: 1, section: 0)) as? WalletAvailableCell
+                    {
+                        cell.configure(with: (expand: self.expandAvailable, status: AppModel.sharedManager().walletStatus))
+                    }
+                    else{
+                        self.talbeView.reloadData()
+                    }
+                    
+                    if !progressIsNull {
+                        if let cell = self.talbeView.cellForRow(at: IndexPath(row: 2, section: 0)) as? WalletProgressCell
+                        {
+                            cell.configure(with: (expand: self.expandProgress, status: AppModel.sharedManager().walletStatus))
+                        }
+                        else{
+                            self.talbeView.reloadData()
+                        }
+                    }
+                }
+                else{
+                    self.talbeView.reloadData()
+                }
             }
         }
     }

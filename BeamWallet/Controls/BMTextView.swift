@@ -68,7 +68,12 @@ class BMTextView: UITextView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        line.frame = CGRect(x: 0, y: self.frame.size.height-lineHeight, width: self.frame.size.width, height: lineHeight)
+        if self.frame.size.height <= 42 {
+            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - 12, width: self.frame.size.width, height: lineHeight)
+        }
+        else{
+            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - 4, width: self.frame.size.width, height: lineHeight)
+        }
     }
 }
 

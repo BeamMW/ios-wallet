@@ -1,6 +1,6 @@
 //
-//  BMInputCopyBar.swift
-//  BeamWallet
+// BMInputCopyBar.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -26,9 +26,19 @@ class BMInputCopyBar: UIView {
     init(frame: CGRect, copy:String) {
         super.init(frame: frame)
         
-        let toolBar = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 44))
-        toolBar.backgroundColor = UIColor(red: 186/255, green: 191/255, blue: 196/255, alpha: 1)
-        addSubview(toolBar)
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 44))
+        view.backgroundColor = UIColor.clear
+        addSubview(view)
+        
+        let toolbar = UIToolbar(frame: view.bounds)
+        toolbar.autoresizingMask = .flexibleWidth;
+        toolbar.isUserInteractionEnabled = false;
+        view.addSubview(toolbar)
+        
+        let separator = UIView(frame: CGRect(x:0, y:43.5, width:view.frame.size.width, height:0.5))
+        separator.autoresizingMask = .flexibleWidth;
+        separator.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
+        view.addSubview(separator)
         
         let label = UIButton(frame: CGRect(x: 50, y: 5, width: frame.size.width-100, height: 34))
         label.layer.cornerRadius = 6
@@ -39,7 +49,7 @@ class BMInputCopyBar: UIView {
         label.setTitle(copy, for: .normal)
         label.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
         label.addTarget(self, action: #selector(onCopy), for: .touchUpInside)
-        toolBar.addSubview(label)
+        view.addSubview(label)
     }
     
     required init?(coder aDecoder: NSCoder) {

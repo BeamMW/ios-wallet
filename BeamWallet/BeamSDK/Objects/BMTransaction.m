@@ -57,7 +57,11 @@
 }
 
 -(BOOL)isFailed {
-    return [self.status isEqualToString:@"failed"];
+    return [self.status isEqualToString:@"failed"] || [self.status isEqualToString:@"expired"];
+}
+
+-(BOOL)isCancelled {
+    return [self.status isEqualToString:@"cancelled"];
 }
 
 -(BOOL)hasPaymentProof {
@@ -70,9 +74,39 @@
     formatter.currencySymbol = @"";
     formatter.minimumFractionDigits = 0;
     formatter.maximumFractionDigits = 10;
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     formatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
     
-    return [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@\nKernel ID: %@", _senderAddress, _receiverAddress, [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]], _kernelId];
+    NSString *number = [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]];
+    number = [number stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSString *detail = [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@ BEAM\nKernel ID: %@", _senderAddress, _receiverAddress, number, _kernelId];
+    detail = [detail stringByReplacingOccurrencesOfString:@"  " withString:@" "];
+    return detail;
+}
+
+-(NSString*)csvLine {    
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    formatter.currencyCode = @"";
+    formatter.currencySymbol = @"";
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 10;
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    formatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
+    
+    NSString *_type =  self.isIncome ? @"Receive BEAM" : @"Send BEAM";
+    NSString *_date =  [self formattedDate];
+    NSString *_amount =  [[formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *_status = self.status;
+    NSString *_sending = self.senderAddress;
+    NSString *_receiving = self.receiverAddress;
+    NSString *_fee =  [[formatter stringFromNumber:[NSNumber numberWithDouble:self.fee]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *_id = self.ID;
+    NSString *_kernel = self.kernelId;
+    
+    NSArray *array = @[_type,_date,_amount,_status,_sending,_receiving,_fee,_id,_kernel];
+    
+    return [[array componentsJoinedByString:@","] stringByAppendingString:@"\n"];
 }
 
 @end

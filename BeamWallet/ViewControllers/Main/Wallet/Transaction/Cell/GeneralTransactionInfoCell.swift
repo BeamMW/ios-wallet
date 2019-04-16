@@ -40,6 +40,16 @@ extension GeneralTransactionInfoCell: Configurable {
     func configure(with info:TransactionViewController.TransactionGeneralInfo) {
         titleLabel.text = info.text
         detailLabel.text = info.detail
+        detailLabel.copyText = nil
+        
+        if info.failed {
+            titleLabel.textColor = UIColor.main.red
+            detailLabel.textColor = UIColor.main.red
+        }
+        else{
+            titleLabel.textColor = UIColor.main.blueyGrey
+            detailLabel.textColor = UIColor.white
+        }
         
         if info.text == "Contact:" {
             let split = info.detail.split(separator: "\n")
@@ -52,18 +62,18 @@ extension GeneralTransactionInfoCell: Configurable {
                 attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Bold", size: 15) ?? UIFont.boldSystemFont(ofSize: 15) , range: range)
                 detailLabel.attributedText = attributedString
             }
-         
         }
-        
-        if info.failed {
-            titleLabel.textColor = UIColor.main.red
-            detailLabel.textColor = UIColor.main.red
+        else if info.text == "Transaction ID: " && AppDelegate.enableNewFeatures {
+            detailLabel.copyText = info.detail
+            
+            let text = info.detail + "\n" + "not stored on blockchain"
+            let range = (text as NSString).range(of: String("not stored on blockchain"))
+            
+            let attributedString = NSMutableAttributedString(string:text)
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey , range: range)
+            detailLabel.attributedText = attributedString
         }
-        else{
-            titleLabel.textColor = UIColor.main.blueyGrey
-            detailLabel.textColor = UIColor.white
-        }
-        
+                
         detailLabel.isUserInteractionEnabled = info.canCopy
     }
 }

@@ -61,6 +61,10 @@ class WalletConfirmSendViewController: BaseViewController {
         feeLabel.text = String.currency(value: fee) + " GROTH"
 
         addSwipeToDismiss()
+        
+        if Device.isZoomed || Device.screenType == .iPhones_5 {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,6 +72,10 @@ class WalletConfirmSendViewController: BaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        if Device.isZoomed || Device.screenType == .iPhones_5 {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,6 +125,10 @@ extension WalletConfirmSendViewController : UITextFieldDelegate {
         
         passwordErrorLabel.isHidden = true
         
+        if string == " " {
+            return false
+        }
+        
         return true
     }
     
@@ -143,6 +155,11 @@ extension WalletConfirmSendViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset = UIEdgeInsets.zero
+        if Device.isZoomed || Device.screenType == .iPhones_5 {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
+        }
+        else {
+            scrollView.contentInset = UIEdgeInsets.zero
+        }
     }
 }

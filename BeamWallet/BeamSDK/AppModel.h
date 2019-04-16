@@ -77,12 +77,13 @@
 -(BOOL)createWallet:(NSString*_Nonnull)phrase pass:(NSString*_Nonnull)pass;
 -(BOOL)openWallet:(NSString*_Nonnull)pass;
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
--(void)resetWallet;
+-(void)resetWallet:(BOOL)removeDatabase;
 -(void)startForgotPassword;
 -(void)stopForgotPassword;
 -(void)cancelForgotPassword;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
+-(void)onSyncWithLocalNodeCompleted;
 
 // updates
 -(void)getWalletStatus;
@@ -99,6 +100,8 @@
 -(void)deleteAddress:(NSString*_Nullable)address;
 -(BOOL)isValidAddress:(NSString*_Nullable)address;
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address;
+-(BOOL)isAddressDeleted:(NSString*_Nullable)address;
+
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
@@ -114,9 +117,11 @@
 -(void)cancelTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback;
 
 // utxo
 -(void)getUTXO;
+-(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOWithPadding:(BOOL)active page:(int)page perPage:(int)perPage;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromUTXO:(BMUTXO*_Nonnull)utox;
 
 //contacts

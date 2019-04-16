@@ -23,6 +23,10 @@ import AVFoundation
 
 class WalletSendViewController: BaseViewController {
 
+    @IBOutlet weak private var balanceTotalLabel: UILabel!
+    @IBOutlet weak private var balanceTotalIcon: UIImageView!
+    @IBOutlet weak private var balanceTotalView: UIView!
+
     @IBOutlet weak private var mainViewHeight: NSLayoutConstraint!
     @IBOutlet weak private var mainViewWidth: NSLayoutConstraint!
 
@@ -51,6 +55,9 @@ class WalletSendViewController: BaseViewController {
 
         title = "Send"
         
+        balanceTotalIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        balanceTotalIcon.tintColor = UIColor.white
+        
         hideKeyboardWhenTappedAround()
                         
         if (Device.screenType == .iPhone_XR || Device.screenType == .iPhones_X_XS)
@@ -69,6 +76,13 @@ class WalletSendViewController: BaseViewController {
             amountField.text = String.currency(value: repeatTransaction.realAmount)
             feeField.text = String(repeatTransaction.realFee)
             commentField.text = repeatTransaction.comment
+        }
+        
+        if AppDelegate.enableNewFeatures {
+            if let status = AppModel.sharedManager().walletStatus {
+                balanceTotalLabel.text = String.currency(value: status.realAmount)
+            }
+            balanceTotalView.isHidden = false
         }
     }
     
@@ -116,7 +130,7 @@ class WalletSendViewController: BaseViewController {
     
     @IBAction func onSend(sender :UIButton) {
         self.view.endEditing(true)
-        
+
         let amount = Double(amountField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
         let fee = Double(feeField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
         
@@ -135,6 +149,7 @@ class WalletSendViewController: BaseViewController {
         }
         else if let canSend = AppModel.sharedManager().canSend(amount ?? 0, fee: fee ?? 0, to: toAddressField.text) {
             
+            amountField.status = BMField.Status.error
             amountErrorLabel.isHidden = false
             amountErrorLabel.textColor = UIColor.main.red
             
@@ -146,14 +161,26 @@ class WalletSendViewController: BaseViewController {
             }
         }
         else if let toAddress = toAddressField.text {
+            
             if Settings.sharedManager().isNeedaskPasswordForSend {
-                let modalViewController = WalletConfirmSendViewController(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
-                modalViewController.delegate = self
-                modalViewController.modalPresentationStyle = .overFullScreen
-                modalViewController.modalTransitionStyle = .crossDissolve
-                present(modalViewController, animated: true, completion: nil)
+                
+                if Settings.sharedManager().isEnableBiometric && BiometricAuthorization.shared.canAuthenticate() {
+                    
+                    BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
+                        self.onConfirmSend(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
+                    }) { }
+                }
+                else{
+                    
+                    let modalViewController = WalletConfirmSendViewController(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
+                    modalViewController.delegate = self
+                    modalViewController.modalPresentationStyle = .overFullScreen
+                    modalViewController.modalTransitionStyle = .crossDissolve
+                    present(modalViewController, animated: true, completion: nil)
+                }
             }
             else{
+                
                 onConfirmSend(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
             }
         }
@@ -187,8 +214,6 @@ extension WalletSendViewController : UITextFieldDelegate {
         }
         else if textField == amountField {
             amountErrorLabel.isHidden = true
-            amountField.lineColor = UIColor.main.darkSlateBlue
-            amountField.textColor = UIColor.main.heliotrope
         }
         
         updateLayout()

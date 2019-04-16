@@ -23,8 +23,9 @@
 
 @interface MnemonicModel : NSObject
 
-+(NSString*)generatePhrase;
-+(BOOL)isValidPhrase:(NSString*)phrase;
-+(BOOL)isValidWord:(NSString*)word;
++(NSString*_Nonnull)generatePhrase;
++(BOOL)isValidPhrase:(NSString*_Nonnull)phrase;
++(BOOL)isValidWord:(NSString*_Nonnull)word;
++(NSArray<NSString*>*_Nonnull)mnemonicWordsForPrefix:(NSString*_Nonnull)prefix suggestions:(NSArray*_Nullable)suggestions;
 
 @end

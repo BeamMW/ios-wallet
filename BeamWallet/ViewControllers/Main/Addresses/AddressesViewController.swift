@@ -46,6 +46,13 @@ class AddressesViewController: BaseViewController {
         filterAddresses()
         
         AppModel.sharedManager().addDelegate(self)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    @objc private func didBecomeActive() {
+        filterAddresses()
+        tableView.reloadData()
     }
     
     @objc private func refreshData(_ sender: Any) {

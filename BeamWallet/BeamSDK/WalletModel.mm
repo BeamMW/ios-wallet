@@ -47,7 +47,7 @@ std::string txIDToString(const TxID& txId)
 
 void WalletModel::onStatus(const WalletStatus& status)
 {
-    NSLog(@"onStatus");
+   // NSLog(@"onStatus");
 
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
     walletStatus.available = status.available;
@@ -84,7 +84,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
-        transaction.status = GetTransactionStatusString(item.m_status,transaction.isIncome, item.m_selfTx);
+        transaction.status = GetTransactionStatusString(item);
         transaction.enumStatus = (UInt64)item.m_status;
         if (item.m_failureReason != TxFailureReason::Unknown)
         {
@@ -103,7 +103,6 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.canDelete = item.canDelete();
         transaction.comment = [NSString stringWithUTF8String:comment.c_str()];
         
-        
         if (item.m_sender) {
             transaction.senderAddress = [NSString stringWithUTF8String:to_string(item.m_myId).c_str()];
         }
@@ -118,8 +117,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
             transaction.receiverAddress = [NSString stringWithUTF8String:to_string(item.m_myId).c_str()];
         }
         
-        
-        [transactions addObject:transaction];
+        [transactions addObject:transaction];      
     }
     
     switch (action) {
@@ -200,7 +198,12 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
         if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
             [delegate onSyncProgressUpdated:done total:total];
         }
-    }    
+    }
+    
+    if (done == total)
+    {
+        [[AppModel sharedManager] onSyncWithLocalNodeCompleted];
+    }
 }
 
 void WalletModel::onChangeCalculated(beam::Amount change)
@@ -210,7 +213,7 @@ void WalletModel::onChangeCalculated(beam::Amount change)
 
 void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
 {
-    NSLog(@"onAllUtxoChanged");
+  //  NSLog(@"onAllUtxoChanged");
     
     NSMutableArray *bmUtxos = [[NSMutableArray alloc] init];
     
@@ -254,9 +257,9 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
         }
     }
-    
-    [bmUtxos removeAllObjects];
-    bmUtxos = nil;
+//    
+//    [bmUtxos removeAllObjects];
+//    bmUtxos = nil;
 }
 
 void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& addrs)
@@ -458,27 +461,35 @@ NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
     }
 }
 
-NSString* WalletModel::GetTransactionStatusString(TxStatus status, bool income, bool self)
+NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
 {
-    switch (status)
+    bool isIncome = (transaction.m_sender == false);
+    
+    switch (transaction.m_status)
     {
         case TxStatus::Pending:
             return @"pending";
         case TxStatus::InProgress:
-            return income ? @"waiting for sender" : @"waiting for receiver";
+            return isIncome ? @"waiting for sender" : @"waiting for receiver";
         case TxStatus::Registering:
-            return income ? @"receiving" : @"sending";
+            return isIncome ? @"receiving" : @"sending";
         case TxStatus::Completed:
         {
-            if (self)
+            if (transaction.m_selfTx)
             {
                 return @"completed";
             }
-            return income ? @"received" : @"sent";
+            return isIncome ? @"received" : @"sent";
         }
         case TxStatus::Cancelled:
             return @"cancelled";
         case TxStatus::Failed:
+            {
+                if (transaction.m_failureReason == TxFailureReason::TransactionExpired)
+                {
+                    return @"expired";
+                }
+            }
             return @"failed";
         default:
             break;

@@ -28,7 +28,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="140" height="38"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OH4-vY-X9Q">
-                                <rect key="frame" x="10" y="9" width="20" height="20"/>
+                                <rect key="frame" x="0.0" y="9" width="20" height="20"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Phw-Fa-Ngy"/>
@@ -51,7 +51,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dVj-JA-4Xf" customClass="BMWordField" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="40" y="6.5" width="95" height="25"/>
+                                <rect key="frame" x="30" y="6.5" width="105" height="25"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="45V-Jr-Txt"/>
@@ -73,9 +73,8 @@
                             <constraint firstAttribute="trailing" secondItem="dVj-JA-4Xf" secondAttribute="trailing" constant="5" id="FaL-bp-ast"/>
                             <constraint firstItem="OH4-vY-X9Q" firstAttribute="centerY" secondItem="pDb-cY-p2y" secondAttribute="centerY" id="aNG-6P-wea"/>
                             <constraint firstItem="dVj-JA-4Xf" firstAttribute="centerY" secondItem="pDb-cY-p2y" secondAttribute="centerY" id="nXU-IL-41g"/>
-                            <constraint firstAttribute="width" constant="140" id="ngl-zL-3Sj"/>
                             <constraint firstItem="dVj-JA-4Xf" firstAttribute="leading" secondItem="OH4-vY-X9Q" secondAttribute="trailing" constant="10" id="tgx-mF-cLq"/>
-                            <constraint firstItem="OH4-vY-X9Q" firstAttribute="leading" secondItem="pDb-cY-p2y" secondAttribute="leading" constant="10" id="wzL-ec-DYh"/>
+                            <constraint firstItem="OH4-vY-X9Q" firstAttribute="leading" secondItem="pDb-cY-p2y" secondAttribute="leading" id="wzL-ec-DYh"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -93,8 +92,9 @@
             </view>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="pDb-cY-p2y" secondAttribute="trailing" id="8Hq-0C-qDb"/>
                 <constraint firstItem="pDb-cY-p2y" firstAttribute="centerY" secondItem="CCv-KC-rV9" secondAttribute="centerY" id="XyN-j5-MD8"/>
-                <constraint firstItem="pDb-cY-p2y" firstAttribute="centerX" secondItem="CCv-KC-rV9" secondAttribute="centerX" id="wBF-Uu-BrR"/>
+                <constraint firstItem="pDb-cY-p2y" firstAttribute="leading" secondItem="CCv-KC-rV9" secondAttribute="leading" id="YbO-b4-VtQ"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="xe8-wg-wRf"/>
             <connections>

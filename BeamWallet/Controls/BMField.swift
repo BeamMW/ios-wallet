@@ -33,7 +33,8 @@ class BMField: UITextField {
     private var _lineColor:UIColor?
     private var _lineHeight:CGFloat = 2
     private var _error:String?
-    
+    private var _oldColor:UIColor?
+        
     var status: Status?  {
         didSet {
             switch status {
@@ -42,7 +43,7 @@ class BMField: UITextField {
                 self.line.backgroundColor = UIColor.main.red
                 self.errorLabel?.isHidden = false
             case .normal?:
-                self.textColor = UIColor.white
+                self.textColor = _oldColor
                 self.line.backgroundColor = lineColor
                 self.errorLabel?.isHidden = true
             case .none:
@@ -87,6 +88,8 @@ class BMField: UITextField {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        _oldColor = self.textColor
         
         if lineColor == nil {
             line.backgroundColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
