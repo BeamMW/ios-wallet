@@ -25,6 +25,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var touchIdButton: UIButton!
     @IBOutlet private weak var passViewHeight: NSLayoutConstraint!
+    @IBOutlet private weak var loginLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +35,15 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             passViewHeight.constant = 70
         }
         
-        if !BiometricAuthorization.shared.canAuthenticate() || Settings.sharedManager().isEnableBiometric == false {
+        if !BiometricAuthorization.shared.canAuthenticate() || !Settings.sharedManager().isEnableBiometric {
             touchIdButton.isHidden = true
         }
+        else{
+            let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID" : "Touch ID"
+
+            loginLabel.text = "Use \(mechanism) or enter your password to access the wallet"
+        }
+        
         
        biometricAuthorization()
     }
@@ -48,15 +55,19 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     private func biometricAuthorization() {
-        if BiometricAuthorization.shared.canAuthenticate() && AppDelegate.enableNewFeatures && Settings.sharedManager().isEnableBiometric {
+        if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
+            
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
                 if let password = KeychainManager.getPassword() {
                     self.passField.text = password
                     self.onLogin(sender: UIButton())
                 }
-            }) {
-                self.touchIdButton.tintColor = UIColor.main.red
-            }
+
+            }, failure: {
+                 self.touchIdButton.tintColor = UIColor.main.red
+            }, retry: {
+                self.touchIdButton.tintColor = UIColor.white
+            })
         }
     }
     
@@ -83,11 +94,27 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 passField.status = BMField.Status.error
             }
             else{
-                _ = KeychainManager.addPassword(password: pass)
+                if(AppModel.sharedManager().isValidNodeAddress(Settings.sharedManager().nodeAddress) == false) {
+                    let alert = UIAlertController(title: "Incompatible node", message: "You’re trying to connect to an incompatible peer.", preferredStyle: .alert)
+                    
+                    let ok = UIAlertAction(title: "Change settings", style: .default, handler: { action in
+                        let vc = EnterNodeAddressViewController()
+                        vc.hidesBottomBarWhenPushed = true
+                        self.pushViewController(vc: vc)
+                    })
+                    alert.addAction(ok)
+                    
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
 
-                let vc = CreateWalletProgressViewController()
-                    .withPassword(password: pass)
-                pushViewController(vc: vc)
+                    self.present(alert, animated: true)
+                }
+                else{
+                    _ = KeychainManager.addPassword(password: pass)
+                    
+                    let vc = CreateWalletProgressViewController()
+                        .withPassword(password: pass)
+                    pushViewController(vc: vc)
+                }
             }
         }
     }
@@ -133,10 +160,6 @@ extension EnterWalletPasswordViewController : UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        if string == " " {
-            return false
-        }
         
         errorLabel.text = ""
      

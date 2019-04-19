@@ -131,10 +131,6 @@ extension UnlockPasswordViewController : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if string == " " {
-            return false
-        }
-        
         errorLabel.text = ""
         
         return true

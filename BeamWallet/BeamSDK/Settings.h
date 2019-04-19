@@ -1,8 +1,7 @@
 //
-//  Settings.h
-//  BeamTest
+// Settings.h
+// BeamTest
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,20 +19,27 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol SettingsModelDelegate <NSObject>
+@optional
+-(void)onChangeHideAmounts;
+@end
+
 @interface Settings : NSObject
 
 +(Settings*_Nonnull)sharedManager;
+
+@property (nonatomic, weak) id <SettingsModelDelegate> _Nullable delegate;
 
 @property (nonatomic, assign) BOOL isLocalNode;
 @property (nonatomic, assign) BOOL isNeedaskPasswordForSend;
 @property (nonatomic, assign) BOOL isEnableBiometric;
 @property (nonatomic, assign) int lockScreenSeconds;
+@property (nonatomic, assign) BOOL isHideAmounts;
 
-//+(void)generateNewStoragePath;
-//+(NSArray*)walletStoragesPaths;
+@property (nonatomic, strong) NSString * _Nonnull nodeAddress;
+-(BOOL)isChangedNode;
 
 -(NSString*_Nonnull)walletStoragePath;
--(NSString*_Nonnull)nodeAddress;
 
 -(NSString*_Nonnull)logPath;
 

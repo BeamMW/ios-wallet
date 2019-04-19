@@ -1,8 +1,7 @@
 //
-//  Settings.m
-//  BeamTest
+// Settings.m
+// BeamTest
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +26,8 @@ static NSString *allPathsKey = @"allPaths";
 static NSString *askKey = @"isNeedaskPasswordForSend";
 static NSString *lockScreen = @"lockScreen";
 static NSString *biometricKey = @"biometricKey";
+static NSString *hideAmountsKey = @"isHideAmounts";
+static NSString *nodeKey = @"nodeKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -57,13 +58,45 @@ static NSString *biometricKey = @"biometricKey";
     }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:biometricKey]) {
-        _isEnableBiometric = [[[NSUserDefaults standardUserDefaults] objectForKey:askKey] boolValue];
+        _isEnableBiometric = [[[NSUserDefaults standardUserDefaults] objectForKey:biometricKey] boolValue];
     }
     else{
         _isEnableBiometric = YES;
     }
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:hideAmountsKey]) {
+        _isHideAmounts = [[[NSUserDefaults standardUserDefaults] objectForKey:hideAmountsKey] boolValue];
+    }
+    else{
+        _isHideAmounts = NO;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+        _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
+    }
+    else{
+        NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
+        
+        if ([target isEqualToString:@"BeamWalletTestNet"]) {
+            _nodeAddress = @"ap-node03.testnet.beam.mw:8100";
+        }
+        else{
+            _nodeAddress = @"ap-node01.mainnet.beam.mw:8100";
+        }
+    }
+    
     return self;
+}
+
+-(void)setIsHideAmounts:(BOOL)isHideAmounts {
+    _isHideAmounts = isHideAmounts;
+    
+    if ([self.delegate respondsToSelector:@selector(onChangeHideAmounts)]) {
+        [self.delegate onChangeHideAmounts];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_isHideAmounts forKey:hideAmountsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)setIsEnableBiometric:(BOOL)isEnableBiometric {
@@ -85,6 +118,13 @@ static NSString *biometricKey = @"biometricKey";
     
     [[NSUserDefaults standardUserDefaults] setBool:_isNeedaskPasswordForSend forKey:askKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(BOOL)isChangedNode {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+        return YES;
+    }
+    return NO;
 }
 
 -(NSArray*_Nonnull)walletStoragesPaths {
@@ -116,15 +156,11 @@ static NSString *biometricKey = @"biometricKey";
 }
 
 
--(NSString*_Nonnull)nodeAddress {
-    NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
+-(void)setNodeAddress:(NSString *_Nonnull)nodeAddress {
+    _nodeAddress = nodeAddress;
     
-    if ([target isEqualToString:@"BeamWalletTestNet"]) {
-        return @"ap-node03.testnet.beam.mw:8100";
-    }
-    else{
-        return @"ap-node01.mainnet.beam.mw:8100";
-    }
+    [[NSUserDefaults standardUserDefaults] setObject:_nodeAddress forKey:nodeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(NSString*_Nonnull)logPath {

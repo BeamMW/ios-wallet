@@ -1,8 +1,7 @@
 //
-//  BMTransaction.m
-//  BeamWallet
+// BMTransaction.m
+// BeamWallet
 //
-// 3/5/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

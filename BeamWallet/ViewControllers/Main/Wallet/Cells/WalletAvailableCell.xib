@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -43,26 +43,26 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofI-XE-xgr">
-                                <rect key="frame" x="15" y="15" width="75" height="21.5"/>
+                                <rect key="frame" x="15" y="15" width="72" height="21"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconBeam" translatesAutoresizingMaskIntoConstraints="NO" id="kO1-i9-9f4">
-                                <rect key="frame" x="15" y="56.5" width="22" height="22"/>
+                                <rect key="frame" x="15" y="56" width="22" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="22" id="Li7-ar-aTV"/>
                                     <constraint firstAttribute="height" constant="22" id="dyF-fr-hNg"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.221746" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rsW-sA-dfC">
-                                <rect key="frame" x="47" y="52.5" width="99" height="30"/>
+                                <rect key="frame" x="47" y="52" width="100.5" height="30"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="W82-H2-7nu">
-                                <rect key="frame" x="151" y="59" width="14" height="21"/>
+                                <rect key="frame" x="152.5" y="59" width="14" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="55s-C5-lVr"/>
                                     <constraint firstAttribute="width" constant="14" id="ZKz-Tb-OLr"/>
@@ -115,6 +115,7 @@
                 <outlet property="balanceIcon" destination="kO1-i9-9f4" id="W47-aq-gPZ"/>
                 <outlet property="balanceLabel" destination="rsW-sA-dfC" id="wNz-re-eGd"/>
                 <outlet property="currencyIcon" destination="W82-H2-7nu" id="PBR-Ie-saB"/>
+                <outlet property="mainView" destination="ja7-ld-PUy" id="UNK-sz-K5u"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="87.256371814092958"/>
         </tableViewCell>

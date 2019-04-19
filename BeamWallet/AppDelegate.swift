@@ -20,6 +20,8 @@
 import UIKit
 import Fabric
 import Crashlytics
+import FirebaseCore
+import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -47,7 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    static var enableNewFeatures = true
+    static var disableApns = false
+   // static var enableNewFeatures = true
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -55,6 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = true
+
+        AnalyticsConfiguration.shared().setAnalyticsCollectionEnabled(false)
+        FirebaseApp.configure()
 
         Crashlytics().debugMode = true
         Fabric.with([Crashlytics.self()])
@@ -78,6 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.makeKeyAndVisible()
     
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marineTwo
+        
         
         return true
     }
@@ -117,26 +124,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         backgroundTask = .invalid
     }
     
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    }
+    
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        print("didReceiveRemoteNotification")
+
+        if(!AppModel.sharedManager().isRestoreFlow) {
+            if let password = KeychainManager.getPassword() {
+                if NotificationManager.sharedManager.sendAutomaticMoney(data: userInfo) == false
+                {
+                    self.registerBackgroundTask()
+                    
+                    self.completionHandler = completionHandler
+                    
+                    if(AppModel.sharedManager().isLoggedin) {
+                        AppModel.sharedManager().refreshAllInfo()
+                    }
+                    else{
+                        AppModel.sharedManager().openWallet(password)
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
+                        self.endBackgroundTask()
+                        self.completionHandler?(.newData)
+                    }
+                }
+                else{
+                    completionHandler(.newData)
+                }
+            }
+            else{
+                completionHandler(.noData)
+            }
+        }
+        else{
+            completionHandler(.newData)
+        }
+    }
+    
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        print("performFetchWithCompletionHandler")
+
         if(!AppModel.sharedManager().isRestoreFlow) {
-            //   if let password = KeychainManager.getPassword() {
-            self.completionHandler = completionHandler
-            
-            self.registerBackgroundTask()
-            
-            if(AppModel.sharedManager().isLoggedin) {
-                AppModel.sharedManager().refreshAllInfo()
+            if let password = KeychainManager.getPassword() {
+                self.completionHandler = completionHandler
+                
+                self.registerBackgroundTask()
+                
+                if(AppModel.sharedManager().isLoggedin) {
+                    AppModel.sharedManager().refreshAllInfo()
+                }
+                else{
+                    AppModel.sharedManager().openWallet(password)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
+                    self.endBackgroundTask()
+                    self.completionHandler?(.newData)
+                }
             }
-            //            else{
-            //                AppModel.sharedManager().openWallet(password)
-            //            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
-                self.endBackgroundTask()
-                self.completionHandler?(.newData)
+            else{
+                completionHandler(.noData)
             }
-            //  }
         }
         else{
             completionHandler(.noData)
@@ -148,7 +205,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate : WalletModelDelegate {
     public func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
-
+            
             var oldTransactions = [BMTransaction]()
             
             //get old notifications

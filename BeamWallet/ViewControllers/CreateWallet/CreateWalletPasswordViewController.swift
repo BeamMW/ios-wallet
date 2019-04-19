@@ -127,7 +127,34 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                     }
                 }
                 else{
-                    goNext(pass: pass)
+                    if BiometricAuthorization.shared.canAuthenticate() {
+                        
+                        let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID" : "Touch ID"
+                        
+                        let message = "Would you like to use \(mechanism) for login to your wallet?\n\nAfter login \(mechanism) can be enabled or disabled at any time in the settings menu"
+                        
+                        let alertController = UIAlertController(title: "Enable \(mechanism)", message: message, preferredStyle: .alert)
+                        
+                        let yesAction = UIAlertAction(title: "Enable", style: .default) { (action) in
+                            self.goNext(pass: pass)
+                            
+                            Settings.sharedManager().isEnableBiometric = true
+                        }
+                        
+                        let noAction = UIAlertAction(title: "Don't use", style: .destructive) { (action) in
+                            self.goNext(pass: pass)
+                            
+                            Settings.sharedManager().isEnableBiometric = false
+                        }
+                        
+                        alertController.addAction(noAction)
+                        alertController.addAction(yesAction)
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    else{
+                        goNext(pass: pass)
+                    }
                 }
             }
             else{
@@ -226,10 +253,6 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        if string == " " {
-            return false
-        }
         
         return true
     }

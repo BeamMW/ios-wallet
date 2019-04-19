@@ -18,7 +18,8 @@ def shared_pods
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
     pod 'Loaf'
-    pod 'SwiftSoup'
+    pod 'Firebase/Core'
+    pod 'Firebase/Messaging'
 end
 
 target 'BeamWallet' do

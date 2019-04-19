@@ -28,7 +28,8 @@ class WalletProgressCell: BaseCell {
     
     weak var delegate: WalletProgressCellDelegate?
     
-    
+    @IBOutlet weak private var mainView: UIView!
+
     @IBOutlet weak private var receivingLabel: UILabel!
     @IBOutlet weak private var sentLabel: UILabel!
     @IBOutlet weak private var maturingLabel: UILabel!
@@ -107,5 +108,8 @@ extension WalletProgressCell: Configurable {
             mainStackView.alpha = 1
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
         }
+        
+        arrowIcon.alpha = Settings.sharedManager().isHideAmounts ? 0 : 1
+        mainView.alpha =  Settings.sharedManager().isHideAmounts ? 0.7 : 1
     }
 }

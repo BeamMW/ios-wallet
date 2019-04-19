@@ -31,6 +31,7 @@ class CreateWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var logoYOffset: NSLayoutConstraint!
     @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
 
+    private var timeoutTimer = Timer()
     
     private var password:String!
     private var phrase:String?
@@ -56,6 +57,8 @@ class CreateWalletProgressViewController: BaseViewController {
             cancelButton.isHidden = false
         }
         else if phrase == nil {
+            timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
+            
             progressTitleLabel.text = "Loading wallet"
             cancelButton.isHidden = true
         }
@@ -74,6 +77,8 @@ class CreateWalletProgressViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        timeoutTimer.invalidate()
         
         AppModel.sharedManager().removeDelegate(self)
     }
@@ -148,6 +153,36 @@ class CreateWalletProgressViewController: BaseViewController {
         
         navigationController?.popToRootViewController(animated: true)
     }
+    
+    @objc private func onTimeOut() {
+        if Settings.sharedManager().isChangedNode() {
+            let alert = UIAlertController(title: "Incompatible node", message: "You’re trying to connect to an incompatible peer.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Change settings", style: .default, handler: { action in
+                let vc = EnterNodeAddressViewController()
+                vc.completion = {
+                    obj in
+                    
+                    if obj == true {
+                        self.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(self.onTimeOut), userInfo: nil, repeats: false)
+
+                        self.startCreateWallet()
+                    }
+                }
+                vc.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: vc)
+            })
+            alert.addAction(ok)
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .default, handler: { action in
+                AppModel.sharedManager().resetWallet(false)
+                self.navigationController?.popViewController(animated: true)
+            })
+            alert.addAction(cancel)
+            
+            self.present(alert, animated: true)
+        }
+    }
 }
 
 extension CreateWalletProgressViewController {
@@ -213,7 +248,17 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
     
     func onWalletError(_ error: String) {
         DispatchQueue.main.async {
-            self.alert(title: "Error", message: error)
+            if let controllers = self.navigationController?.viewControllers {
+                for vc in controllers {
+                    if vc is EnterNodeAddressViewController {
+                        return
+                    }
+                }
+            }
+            self.alert(title: "Error", message: error, handler: { (_ ) in
+                AppModel.sharedManager().resetWallet(false)
+                self.navigationController?.popViewController(animated: true)
+            })
         }
     }
     

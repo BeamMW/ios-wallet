@@ -55,10 +55,10 @@ class SettingsViewController: BaseViewController {
         
         self.navigationItem.title = "Settings"
         
-        versionLabel.text = version()
+        versionLabel.text = UIApplication.version()
         
         var first = [SettingsItem]()
-        first.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress(), isSwitch: nil, id: 0, position: .one))
+        first.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5, position: .one))
         
         var second = [SettingsItem]()
         second.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
@@ -78,13 +78,6 @@ class SettingsViewController: BaseViewController {
         
         talbeView.register(SettingsCell.self)
         talbeView.tableHeaderView = headerView
-    }
-    
-    func version() -> String {
-        let dictionary = Bundle.main.infoDictionary!
-        let version = dictionary["CFBundleShortVersionString"] as! String
-        let build = dictionary["CFBundleVersion"] as! String
-        return "Version \(version).\(build)"
     }
 }
 
@@ -108,6 +101,18 @@ extension SettingsViewController : UITableViewDelegate {
         case 1:
             let vc = UnlockPasswordViewController(event: .changePassword)
             vc.hidesBottomBarWhenPushed = true
+            pushViewController(vc: vc)
+        case 5:
+            let vc = EnterNodeAddressViewController()
+            vc.hidesBottomBarWhenPushed = true
+            vc.completion = {
+                obj in
+                
+                if obj == true {
+                    self.items[0][0].detail = Settings.sharedManager().nodeAddress
+                    self.talbeView.reloadData()
+                }
+            }
             pushViewController(vc: vc)
         default:
             return
@@ -142,6 +147,8 @@ extension SettingsViewController : UITableViewDataSource {
             .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
         cell.configure(with: items[indexPath.section][indexPath.row])
         cell.delegate = self
+        
+        
         return cell
     }
 }
