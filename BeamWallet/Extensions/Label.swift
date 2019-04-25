@@ -23,6 +23,19 @@ import UIKit
 
 extension UILabel {
     
+    
+    @IBInspectable
+    var localizationKey: String? {
+        get {
+            return self.localizationKey
+        }
+        set {
+            if newValue != nil {
+                self.text = newValue?.localized
+            }
+        }
+    }
+    
     @IBInspectable
     var adjustFontSize: Bool {
         get {

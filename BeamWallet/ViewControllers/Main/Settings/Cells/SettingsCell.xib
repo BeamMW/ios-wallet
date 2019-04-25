@@ -41,14 +41,17 @@
                                     <constraint firstAttribute="height" constant="1" id="QAR-qV-0nI"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L9T-j8-Tlp">
-                                <rect key="frame" x="15" y="15" width="233" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="L9T-j8-Tlp">
+                                <rect key="frame" x="15" y="15" width="37" height="20"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8vt-rz-tFN">
-                                <rect key="frame" x="268" y="15" width="37" height="19.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="8vt-rz-tFN">
+                                <rect key="frame" x="105" y="15" width="200" height="19.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="tNe-yY-ool"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -77,7 +80,6 @@
                             <constraint firstItem="Pmd-ab-w6o" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" id="JQn-fJ-4lk"/>
                             <constraint firstAttribute="trailing" secondItem="I27-EI-w1l" secondAttribute="trailing" constant="11" id="JwD-MB-2fg"/>
                             <constraint firstItem="8Zr-vf-ChD" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" id="OjQ-y7-lgL"/>
-                            <constraint firstItem="8vt-rz-tFN" firstAttribute="leading" secondItem="L9T-j8-Tlp" secondAttribute="trailing" constant="20" id="P6i-lA-GGE"/>
                             <constraint firstAttribute="trailing" secondItem="Pmd-ab-w6o" secondAttribute="trailing" id="QNz-Mx-5ig"/>
                             <constraint firstAttribute="bottom" secondItem="Pmd-ab-w6o" secondAttribute="bottom" id="Veg-Ao-uvj"/>
                             <constraint firstItem="L9T-j8-Tlp" firstAttribute="top" secondItem="eLd-yJ-xMq" secondAttribute="top" constant="15" id="ZNc-O0-rLl"/>

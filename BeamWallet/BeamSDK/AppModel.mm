@@ -241,16 +241,16 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
         return NO;
     }
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
-        // self.isRestoreFlow = YES;
-        
-        if (!nodeModel.isStarted())
-        {
-            nodeModel.start();
-        }
-        
-        [Settings sharedManager].isLocalNode = YES;
-    }
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
+//        // self.isRestoreFlow = YES;
+//        
+//        if (!nodeModel.isStarted())
+//        {
+//            nodeModel.start();
+//        }
+//        
+//        [Settings sharedManager].isLocalNode = YES;
+//    }
     
     return YES;
 }
@@ -513,6 +513,26 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     return walletID.FromHex(address.string);
 }
 
+-(void)editBotAddress:(NSString*_Nonnull)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+        
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            
+            if ([wAddress isEqualToString:address])
+            {
+                wallet->getAsync()->saveAddressChanges(walletID, "telegram bot", true, true, false);
+                
+                break;
+            }
+        }
+    }
+}
+
 -(void)setExpires:(int)hours toAddress:(NSString*)address {
     WalletID walletID(Zero);
     if (walletID.FromHex(address.string))
@@ -633,6 +653,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
         else{
             wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), true, false);
         }
+    }
+}
+
+-(void)clearAllAddresses{
+    for (BMAddress *add in _walletAddresses) {
+        [self deleteAddress:add.walletId];
     }
 }
 
@@ -902,6 +928,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     callback(url);
 }
 
+-(void)clearAllTransactions{
+    for (BMTransaction *tr in _transactions) {
+        [self deleteTransaction:tr];
+    }
+}
+
 #pragma mark - UTXO
 
 -(void)onSyncWithLocalNodeCompleted {
@@ -1027,6 +1059,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     }
     
     return nil;
+}
+
+-(void)clearAllContacts{
+    for (BMContact *contact in _contacts) {
+        [self deleteAddress:contact.address.walletId];
+    }
 }
     
 @end

@@ -29,6 +29,9 @@ class LoginViewController: BaseViewController {
         if AppDelegate.CurrentTarget == .Test {
             bgView.image = UIImage.init(named: "bgTestnet.jpg");
         }
+        else if AppDelegate.CurrentTarget == .Master {
+            bgView.image = UIImage.init(named: "bgMasternet.jpg");
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -40,13 +43,13 @@ class LoginViewController: BaseViewController {
     @IBAction func onRestoreWallet(sender :UIButton) {
         if AppModel.sharedManager().canRestoreWallet() {
             
-            let alertController = UIAlertController(title: "Restore Wallet", message: "Only your funds can be fully restored from the blockchain. The transaction history is stored locally and is encrypted with your password, hence it can't be restored.\n\nThat's the final version until the future validation and process.", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "restore_wallet_title".localized, message: "restore_wallet_info".localized, preferredStyle: .alert)
             
-            let NoAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            let NoAction = UIAlertAction(title: "cancel".localized, style: .default) { (action) in
             }
             alertController.addAction(NoAction)
             
-            let OKAction = UIAlertAction(title: "Restore wallet", style: .cancel) { (action) in
+            let OKAction = UIAlertAction(title: "restore_wallet_title".localized, style: .cancel) { (action) in
                 AppModel.sharedManager().isRestoreFlow = true;
                 
                 let vc = InputPhraseViewController()
@@ -57,7 +60,7 @@ class LoginViewController: BaseViewController {
             self.present(alertController, animated: true, completion: nil)
         }
         else{
-            self.alert(title: "Not enough storage", message: "To restore the wallet on the phone should be at least 200 MB of free space") { (_ ) in
+            self.alert(title: "no_space_title".localized, message: "no_space_info".localized) { (_ ) in
             }
         }
     }

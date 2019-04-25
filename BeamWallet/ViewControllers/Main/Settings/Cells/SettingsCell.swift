@@ -60,7 +60,7 @@ extension SettingsCell: Configurable {
             selectionStyle = item.id == 0 ? .none : .default
         }
         
-        if item.id == 5 {
+        if item.id == 5 || item.id == 6 || item.id == 7 {
             arrowView.isHidden = false
             titleXOffset.constant = 25
         }

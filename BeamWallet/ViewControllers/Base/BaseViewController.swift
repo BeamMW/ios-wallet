@@ -31,8 +31,9 @@ class BaseViewController: UIViewController {
         {
             view.backgroundColor = UIColor.main.dark
         }
-        else{
-            
+        else if AppDelegate.CurrentTarget == .Master
+        {
+            view.backgroundColor = UIColor.main.blackTwo
         }
     }
     

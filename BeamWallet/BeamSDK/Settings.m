@@ -18,6 +18,7 @@
 //
 
 #import "Settings.h"
+#import "AppModel.h"
 
 @implementation Settings
 
@@ -79,6 +80,9 @@ static NSString *nodeKey = @"nodeKey";
         
         if ([target isEqualToString:@"BeamWalletTestNet"]) {
             _nodeAddress = @"ap-node03.testnet.beam.mw:8100";
+        }
+        else if ([target isEqualToString:@"BeamWalletMasterNet"]) {
+            _nodeAddress = @"eu-node03.masternet.beam.mw:8100";
         }
         else{
             _nodeAddress = @"ap-node01.mainnet.beam.mw:8100";
@@ -161,6 +165,13 @@ static NSString *nodeKey = @"nodeKey";
     
     [[NSUserDefaults standardUserDefaults] setObject:_nodeAddress forKey:nodeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+            [delegate onNetwotkStatusChange:NO];
+        }
+    }
 }
 
 -(NSString*_Nonnull)logPath {

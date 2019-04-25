@@ -23,6 +23,18 @@ import UIKit
 
 extension UITextField {
     
+    @IBInspectable
+    var localizationKey: String? {
+        get {
+            return self.localizationKey
+        }
+        set {
+            if newValue != nil {
+                self.placeholder = newValue?.localized
+            }
+        }
+    }
+    
     @IBInspectable var placeHolderColor: UIColor? {
         get {
             return self.placeHolderColor

@@ -32,10 +32,10 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         super.viewDidLoad()
         
         if AppModel.sharedManager().isLoggedin {
-            self.title = "Change password"
+            self.title = "change_password".localized
         }
         else{
-            self.title = "Password"
+            self.title = "password".localized
         }
         
         if Device.isZoomed {
@@ -83,14 +83,14 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             self.navigationController?.popViewController(animated: true)
         }
         else{
-            let alert = UIAlertController(title: "Return to seed phrase", message: "If you return to seed phrase, it would be changed and your local password won’t be saved.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "return_to_seed_title".localized, message: "return_to_seed_info".localized, preferredStyle: .alert)
             
-            let ok = UIAlertAction(title: "Return", style: .default, handler: { action in
+            let ok = UIAlertAction(title: "return".localized, style: .default, handler: { action in
                 let viewControllers = self.navigationController?.viewControllers
                 let vc = viewControllers![(viewControllers?.count)!-3]
                 self.navigationController?.popToViewController(vc, animated: true)
             })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
             alert.addAction(ok)
             
             self.present(alert, animated: true)
@@ -102,14 +102,14 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         let confirmPass = confirmPassField.text ?? ""
         
         if pass.isEmpty {
-            self.passConfirmLabel.text = "Password should not be empty"
+            self.passConfirmLabel.text = "empty_password".localized
             
             self.passField.status = BMField.Status.error
         }
         
         if confirmPass.isEmpty {
-            self.passConfirmLabel.text = "Password should not be empty"
-            
+            self.passConfirmLabel.text = "empty_password".localized
+
             self.confirmPassField.status = BMField.Status.error
         }
         
@@ -118,7 +118,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 if AppModel.sharedManager().isLoggedin {
                     if AppModel.sharedManager().isValidPassword(pass)
                     {
-                        self.passConfirmLabel.text = "New password cannot be the same as old"
+                        self.passConfirmLabel.text = "old_password".localized
                         self.confirmPassField.status = BMField.Status.error
                         self.passField.status = BMField.Status.error
                     }
@@ -135,13 +135,13 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                         
                         let alertController = UIAlertController(title: "Enable \(mechanism)", message: message, preferredStyle: .alert)
                         
-                        let yesAction = UIAlertAction(title: "Enable", style: .default) { (action) in
+                        let yesAction = UIAlertAction(title: "enable".localized, style: .default) { (action) in
                             self.goNext(pass: pass)
                             
                             Settings.sharedManager().isEnableBiometric = true
                         }
                         
-                        let noAction = UIAlertAction(title: "Don't use", style: .destructive) { (action) in
+                        let noAction = UIAlertAction(title: "dont_use".localized, style: .destructive) { (action) in
                             self.goNext(pass: pass)
                             
                             Settings.sharedManager().isEnableBiometric = false
@@ -158,7 +158,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 }
             }
             else{
-                self.passConfirmLabel.text = "Passwords do not match"
+                self.passConfirmLabel.text = "passwords_dont_match".localized
                 self.confirmPassField.status = BMField.Status.error
                 self.passField.status = BMField.Status.error
             }

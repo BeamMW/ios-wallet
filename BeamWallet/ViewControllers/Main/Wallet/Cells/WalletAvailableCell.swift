@@ -89,5 +89,6 @@ extension WalletAvailableCell: Configurable {
         
         arrowIcon.alpha = Settings.sharedManager().isHideAmounts ? 0 : 1
         mainView.alpha =  Settings.sharedManager().isHideAmounts ? 0.7 : 1
+        mainView.isUserInteractionEnabled =  Settings.sharedManager().isHideAmounts ? false : true
     }
 }

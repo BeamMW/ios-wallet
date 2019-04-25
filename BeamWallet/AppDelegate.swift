@@ -38,12 +38,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     enum Target: String {
         case Main = "Main"
         case Test = "BeamWalletTestNet"
+        case Master = "BeamWalletMasterNet"
     }
     
     static var CurrentTarget: Target {
         switch targetName {
         case Target.Test.rawValue:
             return .Test
+        case Target.Master.rawValue:
+            return .Master
         default:
             return .Main
         }

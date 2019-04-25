@@ -32,7 +32,7 @@ class SettingsViewController: BaseViewController {
         public var isSwitch:Bool?
         public var id:Int!
         public var position:Position!
-
+        
         init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position) {
             self.title = title
             self.detail = detail
@@ -45,11 +45,14 @@ class SettingsViewController: BaseViewController {
 
     @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private weak var versionLabel:UILabel!
+    @IBOutlet private var versionView:UIView!
     @IBOutlet private var headerView:UIView!
     @IBOutlet private var nodeTitleHeaderView:UIView!
 
     private var items = [[SettingsItem]]()
     
+    private var scannedTGUserId = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,22 +65,30 @@ class SettingsViewController: BaseViewController {
         
         var second = [SettingsItem]()
         second.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
-        
         if BiometricAuthorization.shared.canAuthenticate() {
             second.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
         }
-        
         second.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .one))
         
         var three = [SettingsItem]()
+        three.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6, position: .midle))
         three.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
 
         items.append(first)
         items.append(second)
         items.append(three)
         
+        if !AppDelegate.disableApns {
+            AppModel.sharedManager().addDelegate(self)
+
+            var four = [SettingsItem]()
+            four.append(SettingsItem(title: "Linking telegram bot", detail: nil, isSwitch: nil, id: 7, position: .one))
+            items.append(four)
+        }
+        
         talbeView.register(SettingsCell.self)
         talbeView.tableHeaderView = headerView
+        talbeView.tableFooterView = versionView
     }
 }
 
@@ -113,6 +124,16 @@ extension SettingsViewController : UITableViewDelegate {
                     self.talbeView.reloadData()
                 }
             }
+            pushViewController(vc: vc)
+        case 6:
+            let vc = ClearDataViewController()
+            vc.hidesBottomBarWhenPushed = true
+            pushViewController(vc: vc)
+        case 7:
+            let vc = WalletQRCodeScannerViewController()
+            vc.delegate = self
+            vc.isBotScanner = true
+            vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         default:
             return
@@ -226,5 +247,35 @@ extension SettingsViewController {
         vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
         
         present(vc, animated: true)
+    }
+}
+
+extension SettingsViewController : WalletQRCodeScannerViewControllerDelegate {
+   
+    func didScanQRCode(value: String) {
+        scannedTGUserId = value
+        
+        AppModel.sharedManager().generateNewWalletAddress()      
+    }
+}
+
+extension SettingsViewController : WalletModelDelegate {
+    func onGeneratedNewAddress(_ address: BMAddress) {
+        
+        DispatchQueue.main.async {
+            if UIApplication.getTopMostViewController() is SettingsViewController {
+
+                AppModel.sharedManager().editBotAddress(address.walletId)
+                
+                if let token = NotificationManager.sharedManager.fcmToken(),  self.scannedTGUserId.isEmpty == false {
+                    
+                    NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
+                    
+                    TGBotManager.linkTGUser(user_id: self.scannedTGUserId, fcmToken: token, address: address.walletId) { (_ ) in
+                        
+                    }
+                }
+            }
+        }
     }
 }

@@ -29,12 +29,18 @@ extension UIColor {
         }
         
         static var darkSlateBlue: UIColor {
+            if AppDelegate.CurrentTarget == .Master {
+                return UIColor.main.black
+            }
             return .init(red: 28/255, green: 67/255, blue: 91/255, alpha: 1)
         }
         
         static var marine: UIColor {
             if AppDelegate.CurrentTarget == .Test {
                 return UIColor.main.dark
+            }
+            else if AppDelegate.CurrentTarget == .Master {
+                return UIColor.main.blackTwo
             }
             return .init(red: 3/255, green: 46/255, blue: 73/255, alpha: 1)
         }
@@ -55,9 +61,20 @@ extension UIColor {
             return .init(red: 0/255, green: 246/255, blue: 210/255, alpha: 1)
         }
         
+        static var black: UIColor {
+            return .init(red: 36/255, green: 36/255, blue: 36/255, alpha: 1)
+        }
+        
+        static var blackTwo: UIColor {
+            return .init(red: 23/255, green: 23/255, blue: 23/255, alpha: 1)
+        }
+        
         static var navy: UIColor {
             if AppDelegate.CurrentTarget == .Test {
                 return UIColor.main.dark
+            }
+            else if AppDelegate.CurrentTarget == .Master {
+                return .init(red: 16/255, green: 16/255, blue: 16/255, alpha: 1)
             }
             return .init(red: 2/255, green: 37/255, blue: 60/255, alpha: 1)
         }
@@ -69,6 +86,9 @@ extension UIColor {
         static var marineTwo: UIColor {
             if AppDelegate.CurrentTarget == .Test {
                 return UIColor.main.darkTwo
+            }
+            else if AppDelegate.CurrentTarget == .Master {
+                return UIColor.main.black
             }
             return .init(red: 10/255, green: 52/255, blue: 77/255, alpha: 1)
         }

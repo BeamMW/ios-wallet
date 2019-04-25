@@ -52,6 +52,7 @@
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="beam_title"/>
                                     </userDefinedRuntimeAttributes>
                                 </label>
                             </subviews>
@@ -98,6 +99,7 @@
                                             <real key="value" value="22"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="create_new_wallet_1"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onRestoreWalletWithSender:" destination="-1" eventType="touchUpInside" id="BQr-b9-pxC"/>

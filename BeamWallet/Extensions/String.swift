@@ -18,6 +18,16 @@
 //
 
 import UIKit
+import Network
+
+protocol Localizable {
+    var localized: String { get }
+}
+extension String: Localizable {
+    var localized: String {
+        return NSLocalizedString(self, comment: "")
+    }
+}
 
 extension String {
     static let formatter: NumberFormatter = {
@@ -34,5 +44,26 @@ extension String {
     
     static func currency(value:Double) -> String {
         return formatter.string(from: NSNumber(value: value)) ?? "0.00"
+    }
+    
+    func isValidUrl() -> Bool {
+        let urlRegEx = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$"
+        let urlTest = NSPredicate(format:"SELF MATCHES %@", urlRegEx)
+        let result = urlTest.evaluate(with: self)
+        return result
+    }
+    
+    func isValidIp() -> Bool {
+        if #available(iOS 12.0, *) {
+            if let _ = IPv4Address(self) {
+                return true
+            } else if let _ = IPv6Address(self) {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return true
+        }
     }
 }

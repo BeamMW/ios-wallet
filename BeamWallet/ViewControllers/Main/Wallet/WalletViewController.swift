@@ -110,8 +110,7 @@ class WalletViewController: BaseViewController {
 
     @objc private func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
-            let alert = UIAlertController(title: "Activate security mode", message: "All balances will be hidden till you will press this button again", preferredStyle: .alert)
-            
+            let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this button is tapped again", preferredStyle: .alert)
 
             alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
             }))
@@ -326,11 +325,13 @@ extension WalletViewController : WalletModelDelegate {
     
     func onGeneratedNewAddress(_ address: BMAddress) {
         DispatchQueue.main.async {
-            NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
-
-            let vc = WalletReceiveViewController()
-            vc.hidesBottomBarWhenPushed = true
-            self.pushViewController(vc: vc)
+            if UIApplication.getTopMostViewController() is WalletViewController {
+                NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
+                
+                let vc = WalletReceiveViewController()
+                vc.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: vc)
+            }
         }
     }
     

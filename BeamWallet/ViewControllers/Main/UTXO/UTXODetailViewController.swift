@@ -69,12 +69,10 @@ class UTXODetailViewController: BaseViewController {
         
         details.removeAll()
         
-        if let txid = utxo.createTxId {
-            details.append(TransactionViewController.TransactionGeneralInfo(text: "Transaction ID:", detail: txid, failed: false, canCopy:true))
+        if let kernel = history.first?.kernelId {
+            details.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: kernel, failed: false, canCopy:true))
         }
-        else if let txid = utxo.spentTxId {
-            details.append(TransactionViewController.TransactionGeneralInfo(text: "Transaction ID:", detail: txid, failed: false, canCopy:true))
-        }
+        
         details.append(TransactionViewController.TransactionGeneralInfo(text: "UTXO type:", detail: utxo.typeString, failed: false, canCopy:true))
         
 //        for transaction in history {

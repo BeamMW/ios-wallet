@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +20,8 @@
                 <outlet property="headerView" destination="7pZ-0J-NAH" id="lYM-J0-Ks4"/>
                 <outlet property="nodeTitleHeaderView" destination="DuO-98-NQb" id="t6l-t2-g8h"/>
                 <outlet property="talbeView" destination="Tem-J3-aZI" id="dex-x4-MCQ"/>
-                <outlet property="versionLabel" destination="Dlb-M4-lrq" id="moj-V2-QaQ"/>
+                <outlet property="versionLabel" destination="eet-tA-QhM" id="FOq-DY-ism"/>
+                <outlet property="versionView" destination="suv-th-NdT" id="tpR-K4-9JJ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -37,24 +38,16 @@
                         <outlet property="delegate" destination="-1" id="F7z-Hx-rto"/>
                     </connections>
                 </tableView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dlb-M4-lrq">
-                    <rect key="frame" x="20" y="630" width="335" height="17"/>
-                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Dlb-M4-lrq" secondAttribute="bottom" constant="20" id="1OU-mj-o9x"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Tem-J3-aZI" secondAttribute="bottom" id="51N-3h-sbP"/>
-                <constraint firstItem="Dlb-M4-lrq" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="A2M-C9-MmI"/>
                 <constraint firstItem="Tem-J3-aZI" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="LPl-gg-L5I"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Tem-J3-aZI" secondAttribute="trailing" id="cOK-Bu-2x5"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Dlb-M4-lrq" secondAttribute="trailing" constant="20" id="hAQ-HM-6sP"/>
                 <constraint firstItem="Tem-J3-aZI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="rmS-19-u5m"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="138.40000000000001" y="176.76161919040482"/>
         </view>
         <view contentMode="scaleToFill" id="7pZ-0J-NAH" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
@@ -96,6 +89,25 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="NWe-JO-bSE"/>
+        </view>
+        <view contentMode="scaleToFill" id="suv-th-NdT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eet-tA-QhM">
+                    <rect key="frame" x="166" y="19" width="43" height="17"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="eet-tA-QhM" firstAttribute="centerX" secondItem="suv-th-NdT" secondAttribute="centerX" id="9M4-mP-lrR"/>
+                <constraint firstItem="eet-tA-QhM" firstAttribute="centerY" secondItem="suv-th-NdT" secondAttribute="centerY" id="jx6-Nm-ana"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="U8U-LA-grh"/>
         </view>
     </objects>
 </document>

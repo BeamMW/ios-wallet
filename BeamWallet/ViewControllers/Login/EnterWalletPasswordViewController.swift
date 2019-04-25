@@ -30,7 +30,11 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Device.screenType == .iPhones_5 {
+        if Device.isZoomed {
+            mainStack?.spacing = 40
+            passViewHeight.constant = 50
+        }
+        else if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 60
             passViewHeight.constant = 70
         }
@@ -39,11 +43,10 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             touchIdButton.isHidden = true
         }
         else{
-            let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID" : "Touch ID"
+            let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID " : "Touch ID "
 
-            loginLabel.text = "Use \(mechanism) or enter your password to access the wallet"
+            loginLabel.text = "use".localized +  mechanism + "enter_password_title_2".localized
         }
-        
         
        biometricAuthorization()
     }
@@ -83,38 +86,38 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         AppModel.sharedManager().isRestoreFlow = false;
 
         if passField.text?.isEmpty ?? true {
-            errorLabel.text = "Password should not be empty"
+            errorLabel.text = "empty_password".localized
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let appModel = AppModel.sharedManager()
             let valid = appModel.canOpenWallet(pass)
             if !valid {
-                errorLabel.text = "Incorrect password"
+                errorLabel.text = "incorrect_password".localized
                 passField.status = BMField.Status.error
             }
             else{
-                if(AppModel.sharedManager().isValidNodeAddress(Settings.sharedManager().nodeAddress) == false) {
-                    let alert = UIAlertController(title: "Incompatible node", message: "You’re trying to connect to an incompatible peer.", preferredStyle: .alert)
-                    
-                    let ok = UIAlertAction(title: "Change settings", style: .default, handler: { action in
-                        let vc = EnterNodeAddressViewController()
-                        vc.hidesBottomBarWhenPushed = true
-                        self.pushViewController(vc: vc)
-                    })
-                    alert.addAction(ok)
-                    
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-
-                    self.present(alert, animated: true)
-                }
-                else{
+//                if(AppModel.sharedManager().isValidNodeAddress(Settings.sharedManager().nodeAddress) == false) {
+//                    let alert = UIAlertController(title: "incompatible_node_title".localized, message: "incompatible_node_info".localized, preferredStyle: .alert)
+//
+//                    let ok = UIAlertAction(title: "change_settings".localized, style: .default, handler: { action in
+//                        let vc = EnterNodeAddressViewController()
+//                        vc.hidesBottomBarWhenPushed = true
+//                        self.pushViewController(vc: vc)
+//                    })
+//                    alert.addAction(ok)
+//
+//                    alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
+//
+//                    self.present(alert, animated: true)
+//                }
+//                else{
                     _ = KeychainManager.addPassword(password: pass)
                     
                     let vc = CreateWalletProgressViewController()
                         .withPassword(password: pass)
                     pushViewController(vc: vc)
-                }
+//                }
             }
         }
     }
@@ -122,32 +125,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     @IBAction func onChangeWallet(sender :UIButton) {
         let vc = LoginViewController()
         pushViewController(vc: vc)
-    }
-    
-    @IBAction func onForgotPassword(sender :UIButton) {
-        if AppModel.sharedManager().canRestoreWallet() {
-            let alertController = UIAlertController(title: "Forgot password", message: "Only your funds can be fully restored from the blockchain. The transaction history is stored locally and is encrypted with your password, hence it can't be restored.\n\nThat's the final version until the future validation and process.", preferredStyle: .alert)
-            
-            let NoAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
-            }
-            alertController.addAction(NoAction)
-            
-            let OKAction = UIAlertAction(title: "Restore wallet", style: .cancel) { (action) in
-                AppModel.sharedManager().isRestoreFlow = true;
-                AppModel.sharedManager().startForgotPassword()
-                
-                let vc = InputPhraseViewController()
-                self.pushViewController(vc: vc)
-            }
-            alertController.addAction(OKAction)
-                        
-            self.present(alertController, animated: true, completion: nil)
-        }
-        else{
-            self.alert(title: "Not enough storage", message: "To restore the wallet on the phone should be at least 200 MB of free space") { (_ ) in
-                
-            }
-        }
     }
 }
 

@@ -379,6 +379,11 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
     NSLog(@"onWalletError %hhu",error);
 }
 
+//void WalletModel::onCoinsByTx(const std::vector<beam::Coin>& coins)
+//{
+//    
+//}
+
 void WalletModel::FailedToStartWallet()
 {
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)

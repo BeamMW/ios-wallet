@@ -43,6 +43,9 @@ class BMButton: UIButton {
             if AppDelegate.CurrentTarget == .Test {
                 self.backgroundColor = color
             }
+            else if AppDelegate.CurrentTarget == .Master {
+                self.backgroundColor = UIColor.main.black
+            }
         }
         
         if let color = self.backgroundColor {
