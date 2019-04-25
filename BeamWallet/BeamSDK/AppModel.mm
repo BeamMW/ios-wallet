@@ -1,8 +1,7 @@
 //
-//  AppModel.m
-//  BeamTest
+// AppModel.m
+// BeamTest
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -242,16 +241,16 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
         return NO;
     }
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
-        // self.isRestoreFlow = YES;
-        
-        if (!nodeModel.isStarted())
-        {
-            nodeModel.start();
-        }
-        
-        [Settings sharedManager].isLocalNode = YES;
-    }
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
+//        // self.isRestoreFlow = YES;
+//        
+//        if (!nodeModel.isStarted())
+//        {
+//            nodeModel.start();
+//        }
+//        
+//        [Settings sharedManager].isLocalNode = YES;
+//    }
     
     return YES;
 }
@@ -366,6 +365,14 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
             
             isStarted = YES;
         }
+        else if(self.isConnected == YES && isStarted == YES && walletDb != nil) {
+            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+            {
+                if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
+                    [delegate onSyncProgressUpdated:0 total:0];
+                }
+            }
+        }
     }
 }
 
@@ -424,6 +431,28 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     wallet->getAsync()->changeWalletPassword(password);
 }
 
+-(void)changeNodeAddress {
+    if (![Settings sharedManager].isLocalNode) {
+        string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+        self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
+    }
+}
+
+-(BOOL)isMyAddress:(NSString*_Nullable)address {
+    for (BMAddress *add in _walletAddresses) {
+        if ([add.walletId isEqualToString:address]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
+-(BOOL)isValidNodeAddress:(NSString*_Nonnull)string {
+    Address nodeAddr;
+    BOOL isValid =  nodeAddr.resolve(string.string.c_str());
+    return isValid;
+}
 
 #pragma mark - Updates
 
@@ -482,6 +511,26 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     }
     WalletID walletID(Zero);
     return walletID.FromHex(address.string);
+}
+
+-(void)editBotAddress:(NSString*_Nonnull)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+        
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            
+            if ([wAddress isEqualToString:address])
+            {
+                wallet->getAsync()->saveAddressChanges(walletID, "telegram bot", true, true, false);
+                
+                break;
+            }
+        }
+    }
 }
 
 -(void)setExpires:(int)hours toAddress:(NSString*)address {
@@ -604,6 +653,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
         else{
             wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), true, false);
         }
+    }
+}
+
+-(void)clearAllAddresses{
+    for (BMAddress *add in _walletAddresses) {
+        [self deleteAddress:add.walletId];
     }
 }
 
@@ -855,11 +910,13 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     return txID;
 }
 
--(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback {    
-    NSString *fileName = @"transactions.csv";
+-(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback {
+    NSTimeInterval date = [[NSDate date] timeIntervalSince1970];
+    
+    NSString *fileName = [NSString stringWithFormat:@"transactions_%d.csv",(int)date];
     NSURL *url = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
     
-    NSString *csvText = @"Type,Date,Amount,Status,Sending address,Receiving address,Transaction fee,Transaction ID,Kernel ID\n";
+    NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",Status,Sending address,Receiving address,\"Transaction fee, BEAM\",Transaction ID,Kernel ID\n";
 
     for (BMTransaction *tr in _transactions) {
         NSString *newLine = [tr csvLine];
@@ -869,6 +926,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     [csvText writeToURL:url atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
     callback(url);
+}
+
+-(void)clearAllTransactions{
+    for (BMTransaction *tr in _transactions) {
+        [self deleteTransaction:tr];
+    }
 }
 
 #pragma mark - UTXO
@@ -996,6 +1059,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     }
     
     return nil;
+}
+
+-(void)clearAllContacts{
+    for (BMContact *contact in _contacts) {
+        [self deleteAddress:contact.address.walletId];
+    }
 }
     
 @end

@@ -29,7 +29,7 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Seed phrase"
+        self.title = "seed_prhase".localized
         
         for i in 0 ... 11 {
             inputWords.append(BMWord(word: "", index: i, correct: false))
@@ -62,7 +62,7 @@ class InputPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds in risk. It is strictly recommended to remove the screenshot manually from your pictures gallery.")
+        self.alert(message: "seed_capture_warning".localized)
     }
     
     // MARK: IBAction
@@ -106,16 +106,21 @@ extension InputPhraseViewController : InputWordCellCellDelegate {
         if let path = collectionView.indexPath(for: sender)
         {
             updateInputValue(path: path.row, text: text)
-            
+
             //find next field
-            for i in 0 ... inputWords.count - 1 {
-                if inputWords[i].value.isEmpty {
-                    let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell
-                    cell.startEditing()
-                    
-                    break;
-                }
+            if let cell = collectionView.cellForItem(at: IndexPath(row: path.row + 1, section: 0)) as? InputWordCell {
+                cell.startEditing()
             }
+            
+//
+//            for i in 0 ... inputWords.count - 1 {
+//                if inputWords[i].value.isEmpty {
+//                    let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell
+//                    cell.startEditing()
+//
+//                    break;
+//                }
+//            }
         }
     }
     

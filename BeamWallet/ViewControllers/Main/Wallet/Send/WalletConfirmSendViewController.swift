@@ -125,10 +125,6 @@ extension WalletConfirmSendViewController : UITextFieldDelegate {
         
         passwordErrorLabel.isHidden = true
         
-        if string == " " {
-            return false
-        }
-        
         return true
     }
     

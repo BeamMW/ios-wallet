@@ -30,7 +30,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Seed phrase"
+        self.title = "seed_prhase".localized
         
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         
@@ -72,7 +72,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds in risk. It is strictly recommended to remove the screenshot manually from your pictures gallery.")
+        self.alert(message: "seed_capture_warning".localized)
     }
     
 // MARK: IBAction
@@ -93,19 +93,19 @@ class DisplayPhraseViewController: BaseWizardViewController {
         
         UIPasteboard.general.string = copyPhrase
         
-        SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
+        SVProgressHUD.showSuccess(withStatus: "copied_to_clipboard".localized)
         SVProgressHUD.dismiss(withDelay: 1.5)
     }
     
     @IBAction func onNext(sender :UIButton) {
-        let alert = UIAlertController(title: "Save seed phrase", message: "Please write the seed phrase down. Do not screenshot it and save it in your photo gallery. It makes the phrase prone to cyber attacks and, therefore, less secure.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "save_seed_title".localized, message: "save_seed_info".localized, preferredStyle: .alert)
         
-        let ok = UIAlertAction(title: "Done", style: .default, handler: { action in
+        let ok = UIAlertAction(title: "done".localized, style: .default, handler: { action in
             let vc = ConfirmPhraseViewController()
                 .withWords(words: self.words)
             self.pushViewController(vc: vc)
         })
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
         alert.addAction(ok)
 
 

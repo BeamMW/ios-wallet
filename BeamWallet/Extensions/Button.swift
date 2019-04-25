@@ -35,6 +35,18 @@ extension UIButton {
             }
         }
     }
+    
+    @IBInspectable
+    var localizationKey: String? {
+        get {
+            return self.localizationKey
+        }
+        set {
+            if newValue != nil {
+                self.setTitle(newValue?.localized, for: .normal)
+            }
+        }
+    }
 }
 
 extension UIButton {

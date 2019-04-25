@@ -1,8 +1,7 @@
 //
-//  AppModel.h
-//  BeamTest
+// AppModel.h
+// BeamTest
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,6 +83,8 @@
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
 -(void)onSyncWithLocalNodeCompleted;
+-(void)changeNodeAddress;
+-(BOOL)isValidNodeAddress:(NSString*_Nonnull)string;
 
 // updates
 -(void)getWalletStatus;
@@ -92,6 +93,7 @@
 
 // addresses
 -(void)generateNewWalletAddress;
+-(void)editBotAddress:(NSString*_Nonnull)address ;
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address ;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address ;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
@@ -101,6 +103,8 @@
 -(BOOL)isValidAddress:(NSString*_Nullable)address;
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address;
 -(BOOL)isAddressDeleted:(NSString*_Nullable)address;
+-(BOOL)isMyAddress:(NSString*_Nullable)address;
+-(void)clearAllAddresses;
 
 
 // send
@@ -118,6 +122,7 @@
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback;
+-(void)clearAllTransactions;
 
 // utxo
 -(void)getUTXO;
@@ -126,5 +131,6 @@
 
 //contacts
 -(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue;
+-(void)clearAllContacts;
 
 @end

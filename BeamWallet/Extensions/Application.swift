@@ -20,6 +20,13 @@
 import Foundation
 
 extension UIApplication {
+    class func version() -> String {
+        let dictionary = Bundle.main.infoDictionary!
+        let version = dictionary["CFBundleShortVersionString"] as! String
+        let build = dictionary["CFBundleVersion"] as! String
+        return "Version \(version).\(build)"
+    }
+    
     class func getTopMostViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return getTopMostViewController(base: nav.visibleViewController)

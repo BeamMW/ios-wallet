@@ -63,7 +63,7 @@ extension GeneralTransactionInfoCell: Configurable {
                 detailLabel.attributedText = attributedString
             }
         }
-        else if info.text == "Transaction ID: " && AppDelegate.enableNewFeatures {
+        else if info.text == "Transaction ID: " {
             detailLabel.copyText = info.detail
             
             let text = info.detail + "\n" + "not stored on blockchain"

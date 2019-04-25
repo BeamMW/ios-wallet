@@ -29,6 +29,7 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var arrowImage: UIImageView!
     @IBOutlet weak private var amountOffset: NSLayoutConstraint!
+    @IBOutlet weak private var balanceView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -85,5 +86,7 @@ extension WalletTransactionCell: Configurable {
             selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
             self.selectedBackgroundView = selectedView
         }
+        
+        balanceView.isHidden = Settings.sharedManager().isHideAmounts
     }
 }

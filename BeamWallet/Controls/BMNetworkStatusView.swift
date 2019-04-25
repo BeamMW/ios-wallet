@@ -33,8 +33,10 @@ class BMNetworkStatusView: UIView {
         statusView.layer.masksToBounds = true
         addSubview(statusView)
         
-        statusLabel = UILabel(frame: CGRect(x: 18, y: 0, width: 120, height: 14))
+        statusLabel = UILabel(frame: CGRect(x: 18, y: 0, width: UIScreen.main.bounds.size.width-50, height: 14))
         statusLabel.font = UIFont(name: "SFProDisplay-Regular", size: 14)
+        statusLabel.adjustsFontSizeToFitWidth = true
+        statusLabel.minimumScaleFactor = 0.5
         addSubview(statusLabel)
         
         indicatorView = UIActivityIndicatorView(frame: statusView.frame)
@@ -77,12 +79,29 @@ extension BMNetworkStatusView: WalletModelDelegate {
             }
             else{
                 self.statusView.backgroundColor = UIColor.main.red
-                if AppDelegate.CurrentTarget == .Main {
-                    self.statusLabel.text = "offline"
+          
+                if AppModel.sharedManager().isInternetAvailable == false {
+                    if AppDelegate.CurrentTarget == .Main {
+                        self.statusLabel.text = "offline"
+                    }
+                    else{
+                        self.statusLabel.text = "offline (testnet)"
+                    }
                 }
                 else{
-                    self.statusLabel.text = "offline (testnet)"
+                    if Settings.sharedManager().isChangedNode() {
+                        self.statusLabel.text = "cannot connect to node: \(Settings.sharedManager().nodeAddress)"
+                    }
+                    else{
+                        if AppDelegate.CurrentTarget == .Main {
+                            self.statusLabel.text = "offline"
+                        }
+                        else{
+                            self.statusLabel.text = "offline (testnet)"
+                        }
+                    }
                 }
+                
                 self.statusLabel.textColor = UIColor.main.red
             }
         }

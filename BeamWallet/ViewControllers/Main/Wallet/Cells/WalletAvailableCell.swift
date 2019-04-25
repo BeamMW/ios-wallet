@@ -27,6 +27,8 @@ class WalletAvailableCell: BaseCell {
 
     weak var delegate: WalletAvailableCellDelegate?
 
+    @IBOutlet weak private var mainView: UIView!
+
     @IBOutlet weak private var balanceLabel: UILabel!
     @IBOutlet weak private var balanceIcon: UIImageView!
     @IBOutlet weak private var arrowIcon: UIImageView!
@@ -84,5 +86,9 @@ extension WalletAvailableCell: Configurable {
             currencyIcon.alpha = 0
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
         }
+        
+        arrowIcon.alpha = Settings.sharedManager().isHideAmounts ? 0 : 1
+        mainView.alpha =  Settings.sharedManager().isHideAmounts ? 0.7 : 1
+        mainView.isUserInteractionEnabled =  Settings.sharedManager().isHideAmounts ? false : true
     }
 }

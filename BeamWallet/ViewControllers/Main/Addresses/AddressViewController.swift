@@ -88,6 +88,9 @@ class AddressViewController: BaseViewController {
                     self.pushViewController(vc: vc)
                 case 4 :
                     AppModel.sharedManager().deleteAddress(self.address.walletId)
+                    
+                    NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                    
                     self.navigationController?.popViewController(animated: true)
                 default:
                     return

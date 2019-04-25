@@ -31,12 +31,14 @@ class WalletQRCodeScannerViewController: BaseViewController {
     weak var delegate: WalletQRCodeScannerViewControllerDelegate?
     
     @IBOutlet private weak var scannerView: UIView!
+    @IBOutlet private weak var titleLabel: UILabel!
 
     private var captureSession: AVCaptureSession!
     private var previewLayer: AVCaptureVideoPreviewLayer!
 
-    var offset:CGFloat = 180
-    var scannedValue:String = ""
+    private var offset:CGFloat = 180
+    private var scannedValue:String = ""
+    public var isBotScanner = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +52,10 @@ class WalletQRCodeScannerViewController: BaseViewController {
         }
         
         scannerView.frame = CGRect(x: 0, y: offset, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-offset)
+        
+        if isBotScanner {
+            titleLabel.text = "Scan telegram QR code"
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +108,30 @@ class WalletQRCodeScannerViewController: BaseViewController {
         
         captureSession.startRunning()
     }
+    
+    private func detectQRCode(_ image: UIImage?) -> [CIFeature]? {
+//        if let features = detectQRCode(#imageLiteral(resourceName: "qrcode")), !features.isEmpty{
+//            for case let row as CIQRCodeFeature in features{
+//                print(row.messageString ?? "nope")
+//            }
+//        }
+        
+        if let image = image, let ciImage = CIImage.init(image: image){
+            var options: [String: Any]
+            let context = CIContext()
+            options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+            let qrDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: context, options: options)
+            if ciImage.properties.keys.contains((kCGImagePropertyOrientation as String)){
+                options = [CIDetectorImageOrientation: ciImage.properties[(kCGImagePropertyOrientation as String)] ?? 1]
+            }else {
+                options = [CIDetectorImageOrientation: 1]
+            }
+            let features = qrDetector?.features(in: ciImage, options: options)
+            return features
+            
+        }
+        return nil
+    }
 
 }
 
@@ -119,7 +149,7 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
 
     }
     
-    func getBarCodeData(code: String) {
+    private func getBarCodeData(code: String) {
         
         if (scannedValue.isEmpty)
         {
@@ -127,17 +157,45 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
 
             scannedValue = code;
             
-            if (!AppModel.sharedManager().isValidAddress(code))
-            {
-                let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
-                loaf.show(Loaf.Duration.average) { (_ ) in
-                    self.scannedValue = ""
+            if isBotScanner {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: scannedValue.data(using: .utf8)!, options: .mutableContainers) as? [String: Any] {
+                        print(json)
+                        
+                        if let id = json["_id"] as? u_quad_t {
+                            navigationController?.popViewController(animated: true)
+
+                            let user_id = String(id)
+                            
+                            delegate?.didScanQRCode(value: user_id)
+                        }
+                    }
+                    else{
+                        let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
+                        loaf.show(Loaf.Duration.average) { (_ ) in
+                            self.scannedValue = ""
+                        }
+                    }
+                } catch _ {
+                    let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
+                    loaf.show(Loaf.Duration.average) { (_ ) in
+                        self.scannedValue = ""
+                    }
                 }
             }
             else{
-                navigationController?.popViewController(animated: true)
-                
-                delegate?.didScanQRCode(value: code)
+                if (!AppModel.sharedManager().isValidAddress(code))
+                {
+                    let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
+                    loaf.show(Loaf.Duration.average) { (_ ) in
+                        self.scannedValue = ""
+                    }
+                }
+                else{
+                    navigationController?.popViewController(animated: true)
+                    
+                    delegate?.didScanQRCode(value: code)
+                }
             }
         }
     }
@@ -196,6 +254,3 @@ extension WalletQRCodeScannerViewController {
         self.present(alertController, animated: true, completion: nil)
     }
 }
-
-
-

@@ -32,7 +32,7 @@ class SettingsViewController: BaseViewController {
         public var isSwitch:Bool?
         public var id:Int!
         public var position:Position!
-
+        
         init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position) {
             self.title = title
             self.detail = detail
@@ -45,46 +45,50 @@ class SettingsViewController: BaseViewController {
 
     @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private weak var versionLabel:UILabel!
+    @IBOutlet private var versionView:UIView!
     @IBOutlet private var headerView:UIView!
     @IBOutlet private var nodeTitleHeaderView:UIView!
 
     private var items = [[SettingsItem]]()
     
+    private var scannedTGUserId = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Settings"
         
-        versionLabel.text = version()
+        versionLabel.text = UIApplication.version()
         
         var first = [SettingsItem]()
-        first.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress(), isSwitch: nil, id: 0, position: .one))
+        first.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5, position: .one))
         
         var second = [SettingsItem]()
         second.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
-        
         if BiometricAuthorization.shared.canAuthenticate() {
             second.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
         }
-        
         second.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .one))
         
         var three = [SettingsItem]()
+        three.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6, position: .midle))
         three.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
 
         items.append(first)
         items.append(second)
         items.append(three)
         
+        if !AppDelegate.disableApns {
+            AppModel.sharedManager().addDelegate(self)
+
+            var four = [SettingsItem]()
+            four.append(SettingsItem(title: "Linking telegram bot", detail: nil, isSwitch: nil, id: 7, position: .one))
+            items.append(four)
+        }
+        
         talbeView.register(SettingsCell.self)
         talbeView.tableHeaderView = headerView
-    }
-    
-    func version() -> String {
-        let dictionary = Bundle.main.infoDictionary!
-        let version = dictionary["CFBundleShortVersionString"] as! String
-        let build = dictionary["CFBundleVersion"] as! String
-        return "Version \(version).\(build)"
+        talbeView.tableFooterView = versionView
     }
 }
 
@@ -107,6 +111,28 @@ extension SettingsViewController : UITableViewDelegate {
             self.onClickReport()
         case 1:
             let vc = UnlockPasswordViewController(event: .changePassword)
+            vc.hidesBottomBarWhenPushed = true
+            pushViewController(vc: vc)
+        case 5:
+            let vc = EnterNodeAddressViewController()
+            vc.hidesBottomBarWhenPushed = true
+            vc.completion = {
+                obj in
+                
+                if obj == true {
+                    self.items[0][0].detail = Settings.sharedManager().nodeAddress
+                    self.talbeView.reloadData()
+                }
+            }
+            pushViewController(vc: vc)
+        case 6:
+            let vc = ClearDataViewController()
+            vc.hidesBottomBarWhenPushed = true
+            pushViewController(vc: vc)
+        case 7:
+            let vc = WalletQRCodeScannerViewController()
+            vc.delegate = self
+            vc.isBotScanner = true
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         default:
@@ -142,6 +168,8 @@ extension SettingsViewController : UITableViewDataSource {
             .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
         cell.configure(with: items[indexPath.section][indexPath.row])
         cell.delegate = self
+        
+        
         return cell
     }
 }
@@ -219,5 +247,35 @@ extension SettingsViewController {
         vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
         
         present(vc, animated: true)
+    }
+}
+
+extension SettingsViewController : WalletQRCodeScannerViewControllerDelegate {
+   
+    func didScanQRCode(value: String) {
+        scannedTGUserId = value
+        
+        AppModel.sharedManager().generateNewWalletAddress()      
+    }
+}
+
+extension SettingsViewController : WalletModelDelegate {
+    func onGeneratedNewAddress(_ address: BMAddress) {
+        
+        DispatchQueue.main.async {
+            if UIApplication.getTopMostViewController() is SettingsViewController {
+
+                AppModel.sharedManager().editBotAddress(address.walletId)
+                
+                if let token = NotificationManager.sharedManager.fcmToken(),  self.scannedTGUserId.isEmpty == false {
+                    
+                    NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
+                    
+                    TGBotManager.linkTGUser(user_id: self.scannedTGUserId, fcmToken: token, address: address.walletId) { (_ ) in
+                        
+                    }
+                }
+            }
+        }
     }
 }

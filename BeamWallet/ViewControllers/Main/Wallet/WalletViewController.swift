@@ -44,12 +44,32 @@ class WalletViewController: BaseViewController {
         talbeView.register(WalletTransactionCell.self)
         talbeView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
+        AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
+
         AppModel.sharedManager().addDelegate(self)
         AppModel.sharedManager().isLoggedin = true
-
+        
+        subscribeToAPNSTopics()
+        
+        Settings.sharedManager().delegate = self
+        
         if let tr = AppModel.sharedManager().transactions {
             transactions = tr as! [BMTransaction]
         }
+        
+        if Settings.sharedManager().isHideAmounts {
+            rowHeight[1] = 80
+            rowHeight[2] = 65
+            
+            expandProgress = false
+            expandAvailable = false
+        }
+        
+        rightButton()        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -67,6 +87,47 @@ class WalletViewController: BaseViewController {
         }
     }
     
+    
+    private func rightButton() {
+        let icon = Settings.sharedManager().isHideAmounts ? UIImage(named: "iconShowBalance") : UIImage(named: "iconHideBalance")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(onHideAmounts))
+    }
+    
+    private func subscribeToAPNSTopics() {
+        if let walletAddresses = AppModel.sharedManager().walletAddresses as? [BMAddress] {
+            for address in walletAddresses {
+                if address.isExpired() {
+                    NotificationManager.sharedManager.unSubscribeToTopic(topic: address.walletId)
+                }
+                else{
+                    NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
+                }
+            }
+        }
+    }
+    
+    //MARK: - IBAction
+
+    @objc private func onHideAmounts() {
+        if !Settings.sharedManager().isHideAmounts {
+            let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this button is tapped again", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
+                
+                Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+            }))
+            
+            self.present(alert, animated: true)
+            
+        }
+        else{
+            Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+        }
+    }
+    
     @objc private func refreshData(_ sender: Any) {
        AppModel.sharedManager().getWalletStatus()
     }
@@ -81,10 +142,8 @@ class WalletViewController: BaseViewController {
       // items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Search", icon: "iconSearch", id:1))
       // items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Filter", icon: "iconFilter", id:2))
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Payment proof", icon: nil, id:3))
-        
-        if AppDelegate.enableNewFeatures {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Export", icon: nil, id:4))
-        }
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Export", icon: nil, id:4))
+
 
         BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -215,12 +274,7 @@ extension WalletViewController : UITableViewDataSource {
 }
 
 extension WalletViewController : WalletModelDelegate {
-    func onNetwotkStatusChange(_ connected: Bool) {
-        DispatchQueue.main.async {
-            self.talbeView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-        }
-    }
-    
+
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
@@ -271,9 +325,26 @@ extension WalletViewController : WalletModelDelegate {
     
     func onGeneratedNewAddress(_ address: BMAddress) {
         DispatchQueue.main.async {
-            let vc = WalletReceiveViewController()
-            vc.hidesBottomBarWhenPushed = true
-            self.pushViewController(vc: vc)
+            if UIApplication.getTopMostViewController() is WalletViewController {
+                NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
+                
+                let vc = WalletReceiveViewController()
+                vc.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: vc)
+            }
+        }
+    }
+    
+    func onWalletAddresses(_ walletAddresses: [BMAddress]) {
+        DispatchQueue.main.async {
+            for address in walletAddresses {
+                if address.isExpired() {
+                    NotificationManager.sharedManager.unSubscribeToTopic(topic: address.walletId)
+                }
+                else{
+                    NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
+                }
+            }
         }
     }
 }
@@ -292,30 +363,57 @@ extension WalletViewController : WalletStatusCellDelegate {
 
 extension WalletViewController : WalletAvailableCellDelegate {
     func onExpandAvailable() {
-        expandAvailable = !expandAvailable
-        
-        if !expandAvailable {
-            rowHeight[1] = 80
+        if !Settings.sharedManager().isHideAmounts {
+            expandAvailable = !expandAvailable
+            
+            if !expandAvailable {
+                rowHeight[1] = 80
+            }
+            else{
+                rowHeight[1] = 130
+            }
+            
+            self.talbeView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
         }
-        else{
-            rowHeight[1] = 130
-        }
-        
-        self.talbeView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
     }
 }
 
 extension WalletViewController : WalletProgressCellDelegate {
     func onExpandProgress() {
-        expandProgress = !expandProgress
+        if !Settings.sharedManager().isHideAmounts {
+            expandProgress = !expandProgress
+            
+            if !expandProgress {
+                rowHeight[2] = 65
+            }
+            else{
+                rowHeight[2] = 135
+            }
+            
+            self.talbeView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+        }
+    }
+}
+
+extension WalletViewController : SettingsModelDelegate {
+    func onChangeHideAmounts() {
+        rightButton()
         
-        if !expandProgress {
+        if Settings.sharedManager().isHideAmounts {
+            rowHeight[1] = 80
             rowHeight[2] = 65
+            
+            expandProgress = false
+            expandAvailable = false
         }
         else{
+            rowHeight[1] = 130
             rowHeight[2] = 135
+            
+            expandProgress = true
+            expandAvailable = true
         }
         
-        self.talbeView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+        talbeView.reloadData()
     }
 }

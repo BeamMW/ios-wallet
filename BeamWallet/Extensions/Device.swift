@@ -34,6 +34,11 @@ class Device {
     static var iPhone: Bool {
         return UIDevice.current.userInterfaceIdiom == .phone
     }
+    
+    static var iPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     enum ScreenType: String {
         case iPhones_4 = "iPhone 4 or iPhone 4S"
         case iPhones_5 = "iPhone 5, iPhone 5s, iPhone 5c or iPhone SE"
@@ -45,23 +50,28 @@ class Device {
         case unknown
     }
     static var screenType: ScreenType {
-        switch UIScreen.main.nativeBounds.height {
-        case 960:
-            return .iPhones_4
-        case 1136:
+        if Device.iPad {
             return .iPhones_5
-        case 1334:
-            return .iPhones_6
-        case 1792:
-            return .iPhone_XR
-        case 1920, 2208:
-            return .iPhones_Plus
-        case 2436:
-            return .iPhones_X_XS
-        case 2688:
-            return .iPhone_XSMax
-        default:
-            return .unknown
+        }
+        else{
+            switch UIScreen.main.nativeBounds.height {
+            case 960:
+                return .iPhones_4
+            case 1136:
+                return .iPhones_5
+            case 1334:
+                return .iPhones_6
+            case 1792:
+                return .iPhone_XR
+            case 1920, 2208:
+                return .iPhones_Plus
+            case 2436:
+                return .iPhones_X_XS
+            case 2688:
+                return .iPhone_XSMax
+            default:
+                return .unknown
+            }
         }
     }
 }

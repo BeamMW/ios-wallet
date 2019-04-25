@@ -53,7 +53,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "Confirm seed phrase"
+        self.title = "confirm_seed".localized
         
         if Device.isZoomed {
             stackY?.constant = 10
@@ -123,14 +123,20 @@ extension ConfirmPhraseViewController : InputWordCellCellDelegate {
             updateInputValue(path: path.row, text: text)
             
             //find next field
-            for i in 0 ... maxWords - 1 {
-                if inputWords[i].value.isEmpty {
-                    let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell
-                    cell.startEditing()
-                    
-                    break;
-                }
+            
+            if let cell = collectionView.cellForItem(at: IndexPath(row: path.row + 1, section: 0)) as? InputWordCell {
+                 cell.startEditing()
             }
+            
+//            //find next field
+//            for i in 0 ... maxWords - 1 {
+//                if inputWords[i].value.isEmpty {
+//                    let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell
+//                    cell.startEditing()
+//
+//                    break;
+//                }
+//            }
         }
     }
 

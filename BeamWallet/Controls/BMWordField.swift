@@ -94,10 +94,8 @@ class BMWordField: BMField {
         separator.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
         accessoryView.addSubview(separator)
         
-        if AppDelegate.enableNewFeatures {
-            self.addTarget(self, action: #selector(didBeginEditing), for: UIControl.Event.editingDidBegin)
-            self.addTarget(self, action: #selector(editingChanged), for: UIControl.Event.editingChanged)
-        }
+        self.addTarget(self, action: #selector(didBeginEditing), for: UIControl.Event.editingDidBegin)
+        self.addTarget(self, action: #selector(editingChanged), for: UIControl.Event.editingChanged)
     }
     
     @objc private func onSuggestion(sender:UIButton) {
@@ -121,7 +119,7 @@ class BMWordField: BMField {
             updateAccessoryViewPrefix(prefix: txt)
         }
     }
-    
+        
     private func updateAccessoryViewPrefix(prefix:String) {
         var words = MnemonicModel.mnemonicWords(forPrefix: prefix, suggestions: suggestions) as [String]
         
