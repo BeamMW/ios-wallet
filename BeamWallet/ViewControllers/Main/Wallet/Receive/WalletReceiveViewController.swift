@@ -20,26 +20,47 @@
 import UIKit
 
 class WalletReceiveViewController: BaseViewController {
-
+    @IBOutlet weak private var mainViewHeight: NSLayoutConstraint!
+    @IBOutlet weak private var mainViewWidth: NSLayoutConstraint!
+    
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var expireLabel: UILabel!
-    @IBOutlet weak private var mainStack: UIStackView!
-
+    @IBOutlet weak private var amountField: BMField!
+    @IBOutlet weak private var scrollView: UIScrollView!
+    @IBOutlet weak private var commentField: BMField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mainViewWidth.constant = UIScreen.main.bounds.width
+        
+        if UIScreen.main.bounds.size.height > mainViewHeight.constant  {
+            mainViewHeight.constant = UIScreen.main.bounds.height - 84
+        }
+
         title = "Receive"
         
         hideKeyboardWhenTappedAround()
         
         addressLabel.text = AppModel.sharedManager().walletAddress?.walletId
-                
-        if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
-            mainStack.spacing = 70
-        }
-        else if Device.screenType == .iPhones_5 {
-            mainStack.spacing = 50
-        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
     
     //MARK: IBAction
@@ -69,17 +90,24 @@ class WalletReceiveViewController: BaseViewController {
         }
     }
     
-    @IBAction func onCopy(sender :UIButton) {
-        UIPasteboard.general.string = addressLabel.text
-
-        SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-        SVProgressHUD.dismiss(withDelay: 1.5)
-        
-        self.navigationController?.popViewController(animated: true)
+    @IBAction func onShare(sender :UIButton) {
+        if let address = addressLabel.text {
+            let vc = UIActivityViewController(activityItems: [address], applicationActivities: [])
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                if completed {
+                    self.navigationController?.popViewController(animated: true)
+                    return
+                }
+            }
+            
+            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+            
+            self.present(vc, animated: true)
+        }
     }
     
     @IBAction func onQRCode(sender :UIButton) {
-        let modalViewController = WalletQRCodeViewController().withAddress(address: addressLabel.text!)
+        let modalViewController = WalletQRCodeViewController().withAddress(address: addressLabel.text!, amount: self.amountField.text)
         modalViewController.delegate = self
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -89,26 +117,108 @@ class WalletReceiveViewController: BaseViewController {
 }
 
 
+
+extension WalletReceiveViewController : WalletQRCodeViewControllerDelegate {
+    func onCopyDone() {
+        self.navigationController?.popViewController(animated: true)
+    }
+}
+
 // MARK: TextField Actions
 
 extension WalletReceiveViewController : UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        scrollView.scrollRectToVisible(CGRect.zero, animated: true)
+        
+        if textField == amountField {
+            if let text = textField.text {
+                if let v = Double(text) {
+                    if v == 0 {
+                        textField.text = "0"
+                    }
+                }
+                else{
+                    textField.text = "0"
+                }
+            }
+        }
+        else if(textField == commentField) {
+            if let comment = textField.text, let address = addressLabel.text {
+                AppModel.sharedManager().setWalletComment(comment, toAddress: address)
+            }
+        }
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if let comment = textField.text, let address = addressLabel.text {
-            AppModel.sharedManager().setWalletComment(comment, toAddress: address)
+        let textFieldText: NSString = (textField.text ?? "") as NSString
+        
+        if textField == amountField {
+            
+            let count = (textField == amountField) ? 8 : 15
+            
+            let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
+            
+            if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
+                return false
+            }
+            
+            let allowedCharacters = CharacterSet(charactersIn:".0123456789")
+            let characterSet = CharacterSet(charactersIn: txtAfterUpdate)
+            
+            if (!allowedCharacters.isSuperset(of: characterSet)) {
+                return false
+            }
+            
+            if !txtAfterUpdate.isEmpty {
+                let split = txtAfterUpdate.split(separator: ".")
+                if split[0].lengthOfBytes(using: .utf8) > count {
+                    return false
+                }
+                else if split.count > 1 {
+                    if split[1].lengthOfBytes(using: .utf8) > count {
+                        return false
+                    }
+                }
+            }
+            
+            textField.text = txtAfterUpdate
+            
+            return false
+        }
+        
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        let fieldPosition = textField.superview?.frame
+        if let position = fieldPosition {
+            scrollView.scrollRectToVisible(position, animated: true)
         }
     }
 }
 
-extension WalletReceiveViewController : WalletQRCodeViewControllerDelegate {
-    func onCopyDone() {
-        self.navigationController?.popViewController(animated: true)
+// MARK: Keyboard Handling
+
+extension WalletReceiveViewController {
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset = UIEdgeInsets.zero
     }
 }
 

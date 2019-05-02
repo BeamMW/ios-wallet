@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UTXOViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="headerView" destination="ker-Nr-F41" id="IaU-aa-dpI"/>
+                <outlet property="hideUTXOView" destination="qMV-JL-uaA" id="Af0-hS-8dp"/>
                 <outlet property="networkHeaderView" destination="rja-o1-rKT" id="7Yf-Wl-nnv"/>
                 <outlet property="tableView" destination="oVk-An-Dah" id="9Xl-mA-Qwj"/>
                 <outlet property="view" destination="TGE-Jg-fXf" id="fEw-0K-bsr"/>
@@ -31,15 +37,51 @@
                         <outlet property="delegate" destination="-1" id="2OK-EY-2iH"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qMV-JL-uaA" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icEyeCrossedBig" translatesAutoresizingMaskIntoConstraints="NO" id="H6Z-fZ-WFe">
+                            <rect key="frame" x="157" y="243.5" width="61" height="60"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="61" id="Fiv-Nv-HSg"/>
+                                <constraint firstAttribute="height" constant="60" id="ogg-uL-yPN"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Mp-3i-Dmg">
+                            <rect key="frame" x="15" y="313.5" width="345" height="33.5"/>
+                            <string key="text">You’re currently in Security Mode.
+Turn it off to see your UTXO list. </string>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.011764705882352941" green="0.1803921568627451" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstItem="H6Z-fZ-WFe" firstAttribute="centerY" secondItem="qMV-JL-uaA" secondAttribute="centerY" constant="-50" id="BJV-Yr-oTD"/>
+                        <constraint firstItem="9Mp-3i-Dmg" firstAttribute="top" secondItem="H6Z-fZ-WFe" secondAttribute="bottom" constant="10" id="Zg5-pc-Prx"/>
+                        <constraint firstItem="H6Z-fZ-WFe" firstAttribute="centerX" secondItem="qMV-JL-uaA" secondAttribute="centerX" id="lFP-q9-Prm"/>
+                        <constraint firstAttribute="trailing" secondItem="9Mp-3i-Dmg" secondAttribute="trailing" constant="15" id="r3h-G8-jr1"/>
+                        <constraint firstItem="9Mp-3i-Dmg" firstAttribute="leading" secondItem="qMV-JL-uaA" secondAttribute="leading" constant="15" id="udX-Wx-mSS"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="J4N-rb-XuS" firstAttribute="bottom" secondItem="oVk-An-Dah" secondAttribute="bottom" id="D52-pY-Lwl"/>
+                <constraint firstItem="qMV-JL-uaA" firstAttribute="trailing" secondItem="J4N-rb-XuS" secondAttribute="trailing" id="Hfe-Ui-X17"/>
+                <constraint firstItem="qMV-JL-uaA" firstAttribute="leading" secondItem="J4N-rb-XuS" secondAttribute="leading" id="Qau-kh-cco"/>
+                <constraint firstItem="qMV-JL-uaA" firstAttribute="top" secondItem="J4N-rb-XuS" secondAttribute="top" id="SJK-bo-dPO"/>
+                <constraint firstItem="qMV-JL-uaA" firstAttribute="bottom" secondItem="J4N-rb-XuS" secondAttribute="bottom" id="TI9-5U-oWX"/>
                 <constraint firstItem="J4N-rb-XuS" firstAttribute="trailing" secondItem="oVk-An-Dah" secondAttribute="trailing" id="ahZ-JJ-eco"/>
                 <constraint firstItem="oVk-An-Dah" firstAttribute="top" secondItem="J4N-rb-XuS" secondAttribute="top" id="gHg-Gc-4f5"/>
                 <constraint firstItem="oVk-An-Dah" firstAttribute="leading" secondItem="J4N-rb-XuS" secondAttribute="leading" id="ur7-St-3MO"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="J4N-rb-XuS"/>
+            <point key="canvasLocation" x="138.40000000000001" y="176.76161919040482"/>
         </view>
         <view contentMode="scaleToFill" id="ker-Nr-F41" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
@@ -93,4 +135,7 @@
             <point key="canvasLocation" x="54" y="71"/>
         </view>
     </objects>
+    <resources>
+        <image name="icEyeCrossedBig" width="60" height="61"/>
+    </resources>
 </document>

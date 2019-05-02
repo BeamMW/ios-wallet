@@ -63,16 +63,16 @@ extension GeneralTransactionInfoCell: Configurable {
                 detailLabel.attributedText = attributedString
             }
         }
-        else if info.text == "Transaction ID: " {
-            detailLabel.copyText = info.detail
-            
-            let text = info.detail + "\n" + "not stored on blockchain"
-            let range = (text as NSString).range(of: String("not stored on blockchain"))
-            
-            let attributedString = NSMutableAttributedString(string:text)
-            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey , range: range)
-            detailLabel.attributedText = attributedString
-        }
+//        else if info.text == "Transaction ID: " {
+//            detailLabel.copyText = info.detail
+//            
+//            let text = info.detail + "\n" + "not stored on blockchain"
+//            let range = (text as NSString).range(of: String("not stored on blockchain"))
+//            
+//            let attributedString = NSMutableAttributedString(string:text)
+//            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey , range: range)
+//            detailLabel.attributedText = attributedString
+//        }
                 
         detailLabel.isUserInteractionEnabled = info.canCopy
     }

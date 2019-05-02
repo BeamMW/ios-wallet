@@ -39,14 +39,19 @@ class BMButton: UIButton {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        #if EXTENSION
+        print("ignore")
+        #else
         if let color = testnetColor {
-            if AppDelegate.CurrentTarget == .Test {
+            if Settings.sharedManager().target == Testnet {
                 self.backgroundColor = color
             }
-            else if AppDelegate.CurrentTarget == .Master {
+            else if Settings.sharedManager().target == Masternet{
                 self.backgroundColor = UIColor.main.black
             }
         }
+        #endif
+
         
         if let color = self.backgroundColor {
             self.setBackgroundColor(color: UIColor.init(red: 2/255, green: 86/255, blue: 100/255, alpha: 1), forState: .disabled)

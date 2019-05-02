@@ -26,10 +26,10 @@ class LoginViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if AppDelegate.CurrentTarget == .Test {
+        if Settings.sharedManager().target == Testnet {
             bgView.image = UIImage.init(named: "bgTestnet.jpg");
         }
-        else if AppDelegate.CurrentTarget == .Master {
+        else if Settings.sharedManager().target == Masternet{
             bgView.image = UIImage.init(named: "bgMasternet.jpg");
         }
     }

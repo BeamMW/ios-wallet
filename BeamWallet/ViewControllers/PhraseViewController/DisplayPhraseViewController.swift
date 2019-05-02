@@ -48,7 +48,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
             mainStack?.spacing = 110
         }
         
-        if AppDelegate.CurrentTarget == .Test {
+        if Settings.sharedManager().target == Testnet {
             copyButton.isHidden = false
         }
     }

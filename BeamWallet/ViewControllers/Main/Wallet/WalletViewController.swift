@@ -24,7 +24,8 @@ class WalletViewController: BaseViewController {
     private var rowHeight = [CGFloat(66.0),CGFloat(130.0),CGFloat(135.0)]
     private var expandAvailable = true
     private var expandProgress = true
-
+    private var isNewAddres = false
+    
     @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private var transactionsHeaderView: BaseView!
     @IBOutlet private var networkHeaderView: UIView!
@@ -51,8 +52,8 @@ class WalletViewController: BaseViewController {
         
         subscribeToAPNSTopics()
         
-        Settings.sharedManager().delegate = self
-        
+        Settings.sharedManager().addDelegate(self)
+
         if let tr = AppModel.sharedManager().transactions {
             transactions = tr as! [BMTransaction]
         }
@@ -65,7 +66,16 @@ class WalletViewController: BaseViewController {
             expandAvailable = false
         }
         
-        rightButton()        
+        rightButton()
+        
+        if TGBotManager.sharedManager.user.userName.isEmpty == false {
+            TGBotManager.sharedManager.startLinking { (_ ) in
+                
+            }
+        }
+        else{
+            NotificationManager.sharedManager.displayConfirmAlert()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,18 +120,23 @@ class WalletViewController: BaseViewController {
 
     @objc private func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
-            let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this button is tapped again", preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
+            if Settings.sharedManager().isAskForHideAmounts {
+                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this icon is tapped again", preferredStyle: .alert)
                 
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
+                    
+                    Settings.sharedManager().isAskForHideAmounts = false
+                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+                }))
+                
+                self.present(alert, animated: true)
+            }
+            else{
                 Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-            }))
-            
-            self.present(alert, animated: true)
-            
+            }
         }
         else{
             Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
@@ -325,7 +340,10 @@ extension WalletViewController : WalletModelDelegate {
     
     func onGeneratedNewAddress(_ address: BMAddress) {
         DispatchQueue.main.async {
-            if UIApplication.getTopMostViewController() is WalletViewController {
+            if UIApplication.getTopMostViewController() is WalletViewController && self.isNewAddres {
+                
+                self.isNewAddres = false
+                
                 NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
                 
                 let vc = WalletReceiveViewController()
@@ -351,6 +369,8 @@ extension WalletViewController : WalletModelDelegate {
 
 extension WalletViewController : WalletStatusCellDelegate {
     func onClickReceived() {
+        isNewAddres = true
+        
         AppModel.sharedManager().generateNewWalletAddress()
     }
     

@@ -51,7 +51,7 @@ extension InputWordCell: Configurable {
         
         if(word.value.isEmpty){
             numberLabel.backgroundColor = UIColor.clear
-            numberLabel.layer.borderColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
+            numberLabel.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
             numberLabel.textColor =  UIColor.main.veryLightPink50
             wordField.fState = BMWordField.FieldState.empty
         }

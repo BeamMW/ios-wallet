@@ -22,10 +22,22 @@ def shared_pods
     pod 'Firebase/Messaging'
 end
 
+def extension
+    use_frameworks!
+    
+    pod 'SSZipArchive'
+    pod 'Firebase/Core'
+    pod 'Firebase/Messaging'
+end
+
 target 'BeamWallet' do
     shared_pods
 end
 
 target 'BeamWalletTestNet' do
     shared_pods
+end
+
+target 'BeamWalletNotificationView' do
+    extension
 end

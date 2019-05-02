@@ -136,23 +136,32 @@ class WalletSendViewController: BaseViewController {
     
     @objc private func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
-            let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this button is tapped again", preferredStyle: .alert)
             
-            
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
+            if Settings.sharedManager().isAskForHideAmounts {
+                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this icon is tapped again.", preferredStyle: .alert)
                 
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
+                    
+                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+                    Settings.sharedManager().isAskForHideAmounts = false
+
+                    self.balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
+                    
+                    self.rightButton()
+                }))
+                
+                self.present(alert, animated: true)
+            }
+            else{
                 Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
                 
                 self.balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
                 
                 self.rightButton()
-            }))
-            
-            self.present(alert, animated: true)
-            
+            }
         }
         else{
             Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
@@ -396,20 +405,24 @@ extension WalletSendViewController {
 
 extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
 {
-    func didScanQRCode(value: String) {        
+    func didScanQRCode(value:String, amount:String?) {        
         self.toAddressErrorLabel.text = "Input or scan the recipient's address"
         self.toAddressErrorLabel.textColor = UIColor.main.blueyGrey
         self.toAddressField.text = value
-        self.amountField.becomeFirstResponder()
+        
+        if amount != nil {
+            self.amountField.text = amount
+        }
+        else{
+            self.amountField.becomeFirstResponder()
+        }
     }
 }
 
 extension WalletSendViewController : WalletConfirmSendViewControllerDelegate {
     func onConfirmSend(amount: Double, fee: Double, toAddress: String) {
         AppModel.sharedManager().send(amount, fee:fee, to: toAddress, comment: commentField.text ?? "")
-        
-        NotificationManager.sharedManager.sendFirebaseNotification(topic: toAddress)
-        
+                
         if let viewControllers = self.navigationController?.viewControllers{
             for vc in viewControllers {
                 if vc is WalletViewController {

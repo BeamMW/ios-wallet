@@ -21,6 +21,8 @@ import UIKit
 
 class EnterWalletPasswordViewController: BaseWizardViewController {
 
+    private var isRequestedAuthorization = false
+    
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var touchIdButton: UIButton!
@@ -48,16 +50,39 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             loginLabel.text = "use".localized +  mechanism + "enter_password_title_2".localized
         }
         
-       biometricAuthorization()
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         AppModel.sharedManager().cancelForgotPassword()
+        
+        if (self.presentedViewController as? UIAlertController) != nil {
+            
+        }
+        else{
+            if isRequestedAuthorization == false && TGBotManager.sharedManager.user.userId.isEmpty == true && UIApplication.shared.applicationState == .active {
+                isRequestedAuthorization = true
+                
+                biometricAuthorization()
+            }
+        }
     }
     
-    private func biometricAuthorization() {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    @objc private func didBecomeActive() {
+        if UIApplication.shared.applicationState == .active {
+            viewWillAppear(false)
+        }
+    }
+    
+    public func biometricAuthorization() {
         if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
             
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
@@ -97,27 +122,11 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 passField.status = BMField.Status.error
             }
             else{
-//                if(AppModel.sharedManager().isValidNodeAddress(Settings.sharedManager().nodeAddress) == false) {
-//                    let alert = UIAlertController(title: "incompatible_node_title".localized, message: "incompatible_node_info".localized, preferredStyle: .alert)
-//
-//                    let ok = UIAlertAction(title: "change_settings".localized, style: .default, handler: { action in
-//                        let vc = EnterNodeAddressViewController()
-//                        vc.hidesBottomBarWhenPushed = true
-//                        self.pushViewController(vc: vc)
-//                    })
-//                    alert.addAction(ok)
-//
-//                    alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
-//
-//                    self.present(alert, animated: true)
-//                }
-//                else{
-                    _ = KeychainManager.addPassword(password: pass)
-                    
-                    let vc = CreateWalletProgressViewController()
-                        .withPassword(password: pass)
-                    pushViewController(vc: vc)
-//                }
+                _ = KeychainManager.addPassword(password: pass)
+                
+                let vc = CreateWalletProgressViewController()
+                    .withPassword(password: pass)
+                pushViewController(vc: vc)
             }
         }
     }
@@ -142,5 +151,4 @@ extension EnterWalletPasswordViewController : UITextFieldDelegate {
      
         return true
     }
-    
 }

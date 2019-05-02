@@ -34,7 +34,7 @@ class BMWordField: BMField {
     private var accessoryOptions = [UIButton]()
     
     private let errorColor = UIColor.main.red
-    private let normalColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+    private let normalColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
     
     var suggestions: [String]?
     

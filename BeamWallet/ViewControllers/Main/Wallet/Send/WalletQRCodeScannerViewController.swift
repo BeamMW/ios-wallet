@@ -23,7 +23,7 @@ import AVFoundation
 import Loaf
 
 protocol WalletQRCodeScannerViewControllerDelegate: AnyObject {
-    func didScanQRCode(value:String)
+    func didScanQRCode(value:String, amount:String?)
 }
 
 class WalletQRCodeScannerViewController: BaseViewController {
@@ -149,6 +149,13 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
 
     }
     
+    private func showError() {
+        let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
+        loaf.show(Loaf.Duration.average) { (_ ) in
+            self.scannedValue = ""
+        }
+    }
+    
     private func getBarCodeData(code: String) {
         
         if (scannedValue.isEmpty)
@@ -162,39 +169,52 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
                     if let json = try JSONSerialization.jsonObject(with: scannedValue.data(using: .utf8)!, options: .mutableContainers) as? [String: Any] {
                         print(json)
                         
-                        if let id = json["_id"] as? u_quad_t {
+                        if (json["_id"] as? u_quad_t) != nil {
                             navigationController?.popViewController(animated: true)
-
-                            let user_id = String(id)
                             
-                            delegate?.didScanQRCode(value: user_id)
+                            delegate?.didScanQRCode(value: scannedValue, amount: nil)
                         }
                     }
                     else{
-                        let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
-                        loaf.show(Loaf.Duration.average) { (_ ) in
-                            self.scannedValue = ""
-                        }
+                        self.showError()
                     }
                 } catch _ {
-                    let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
-                    loaf.show(Loaf.Duration.average) { (_ ) in
-                        self.scannedValue = ""
-                    }
+                    self.showError()
                 }
             }
             else{
-                if (!AppModel.sharedManager().isValidAddress(code))
+                var address = code
+                var amount:String?
+                
+                if(address.hasPrefix("beam:"))
                 {
-                    let loaf = Loaf("QR code cannot be recognized recognized. Please try again.", state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
-                    loaf.show(Loaf.Duration.average) { (_ ) in
-                        self.scannedValue = ""
+                    let removePrefix = address.replacingOccurrences(of: "beam:", with: "")
+                    
+                    if (removePrefix.contains("?")) {
+                        let url = URL(string: removePrefix)
+                        let params = url?.queryParameters
+                        
+                        if let a = params?["amount"] {
+                            amount = a
+                        }
+                        
+                        if let index = removePrefix.firstIndex(of: "?") {
+                            address = String(removePrefix[..<index])
+                        }
                     }
+                    else {
+                       address = removePrefix
+                    }
+                }
+                
+                if (!AppModel.sharedManager().isValidAddress(address))
+                {
+                    self.showError()
                 }
                 else{
                     navigationController?.popViewController(animated: true)
                     
-                    delegate?.didScanQRCode(value: code)
+                    delegate?.didScanQRCode(value: address, amount: amount)
                 }
             }
         }

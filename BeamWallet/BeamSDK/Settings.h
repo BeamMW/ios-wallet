@@ -19,6 +19,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum Target : NSUInteger {
+    Testnet = 0,
+    Mainnet = 1,
+    Masternet = 2,
+} Target;
+
+
 @protocol SettingsModelDelegate <NSObject>
 @optional
 -(void)onChangeHideAmounts;
@@ -28,13 +35,21 @@
 
 +(Settings*_Nonnull)sharedManager;
 
-@property (nonatomic, weak) id <SettingsModelDelegate> _Nullable delegate;
+// delegates
+@property (nonatomic,strong) NSHashTable * _Nonnull delegates;
+
+-(void)addDelegate:(id<SettingsModelDelegate>_Nullable) delegate;
+-(void)removeDelegate:(id<SettingsModelDelegate>_Nullable) delegate;
+
+@property (nonatomic, assign) Target target;
 
 @property (nonatomic, assign) BOOL isLocalNode;
 @property (nonatomic, assign) BOOL isNeedaskPasswordForSend;
 @property (nonatomic, assign) BOOL isEnableBiometric;
-@property (nonatomic, assign) int lockScreenSeconds;
 @property (nonatomic, assign) BOOL isHideAmounts;
+@property (nonatomic, assign) BOOL isAskForHideAmounts;
+
+@property (nonatomic, assign) int lockScreenSeconds;
 
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
 -(BOOL)isChangedNode;

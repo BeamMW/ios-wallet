@@ -57,6 +57,8 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 
 @implementation AppModel  {
     BOOL isStarted;
+    BOOL isRunning;
+
     NSTimer *utxoTimer;
     
     Reachability *internetReachableFoo;
@@ -83,9 +85,9 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 -(id)init{
     self = [super init];
     
-    walletReactor = Reactor::create();
-    
     [self createLogger];
+    
+     walletReactor = Reactor::create();
     
     _delegates = [[NSHashTable alloc] init];
     
@@ -96,7 +98,7 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     [self checkInternetConnection];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshAllInfo)
+                                             selector:@selector(didBecomeActiveNotification)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self cancelForgotPassword];
@@ -217,10 +219,15 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 -(BOOL)openWallet:(NSString*)pass {
     Rules::get().UpdateChecksum();
     
+    if (walletReactor == nil) {
+        walletReactor = Reactor::create();
+    }
+    
     string dbFilePath = Settings.sharedManager.walletStoragePath.string;
     
     if (!walletDb) {
         walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
+        
         if (!walletDb){
             return NO;
         }
@@ -234,9 +241,18 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 -(BOOL)canOpenWallet:(NSString*)pass {
     Rules::get().UpdateChecksum();
     
+    if (walletReactor == nil) {
+        walletReactor = Reactor::create();
+    }
+    
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
     
+    if (walletDb != nil) {
+        return YES;
+    }
+    
     walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
+    
     if (!walletDb) {
         return NO;
     }
@@ -319,10 +335,13 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     }
     
     isStarted = NO;
+    isRunning = NO;
 
+    walletReactor.reset();
     walletDb.reset();
     wallet.reset();
     
+    walletReactor = nil;
     wallet = nil;
     walletDb = nil;
 
@@ -332,6 +351,15 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     }
 }
 
+
+-(BOOL)isWalletInitialized{
+    if (walletDb != nil && wallet != nil) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 -(void)onWalledOpened:(const SecString&) pass {
     passwordHash = pass.hash();
     
@@ -339,39 +367,46 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 }
 
 -(void)start {
-    if (self.isInternetAvailable) {
-        if (isStarted == NO && walletDb != nil) {
-            Rules::get().UpdateChecksum();
-
-            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-
-            if ([[Settings sharedManager] isLocalNode]) {
-                
-                nodeModel.setKdf(walletDb->get_MasterKdf());
-
-                nodeModel.startNode();
-                
-                io::Address nodeAddr = io::Address::LOCALHOST;
-                nodeAddr.port([[Settings sharedManager] nodePort]);
-                nodeAddrStr = nodeAddr.str();
-            }
+    if (isStarted == NO && walletDb != nil) {
+        Rules::get().UpdateChecksum();
+        
+        string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+        
+        if ([[Settings sharedManager] isLocalNode]) {
             
-            wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
-            wallet->getAsync()->setNodeAddress(nodeAddrStr);
+            nodeModel.setKdf(walletDb->get_MasterKdf());
             
-            if (![[Settings sharedManager] isLocalNode]) {
-                wallet->start();
-            }
+            nodeModel.startNode();
             
-            isStarted = YES;
+            io::Address nodeAddr = io::Address::LOCALHOST;
+            nodeAddr.port([[Settings sharedManager] nodePort]);
+            nodeAddrStr = nodeAddr.str();
         }
-        else if(self.isConnected == YES && isStarted == YES && walletDb != nil) {
-            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-            {
-                if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
-                    [delegate onSyncProgressUpdated:0 total:0];
-                }
+        
+        wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+        wallet->getAsync()->setNodeAddress(nodeAddrStr);
+        
+        if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
+            isRunning = YES;
+            wallet->start();
+        }
+        
+        isStarted = YES;
+    }
+    else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
+                [delegate onSyncProgressUpdated:0 total:0];
             }
+        }
+    }
+    else if(wallet != nil)
+    {
+        if(self.isInternetAvailable && isRunning == NO && ![[Settings sharedManager] isLocalNode])
+        {
+            isRunning = YES;
+            wallet->start();
         }
     }
 }
@@ -433,8 +468,10 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 
 -(void)changeNodeAddress {
     if (![Settings sharedManager].isLocalNode) {
+        [self setIsConnecting:YES];
+
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-        self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
+        wallet->getAsync()->setNodeAddress(nodeAddrStr);
     }
 }
 
@@ -468,13 +505,28 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     [internetReachableFoo stopNotifier];
     [internetReachableFoo startNotifier];
     
-    if (wallet != nil) {        
+    if (wallet != nil) {
         [self setIsConnecting:true];
         
         [self getNetworkStatus];
+        
+        if (self.isConnected)
+        {
+            [self getWalletStatus];
+        }
     }
 }
 
+-(void)didBecomeActiveNotification{
+    if ([Settings sharedManager].target == Testnet)
+    {
+        [internetReachableFoo stopNotifier];
+        [internetReachableFoo startNotifier];
+    }
+    else{
+        [self refreshAllInfo];
+    }
+}
 
 #pragma mark - Addresses
 
@@ -485,14 +537,22 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
             WalletID walletID(Zero);
             if (walletID.FromHex(address.string))
             {
-                auto receiverAddr = walletDb->getAddress(walletID);
-                
-                if(receiverAddr) {
-                    if (receiverAddr->m_OwnID && receiverAddr->isExpired())
-                    {
-                        return YES;
+                try{
+                    auto receiverAddr = walletDb->getAddress(walletID);
+                    
+                    if(receiverAddr) {
+                        if (receiverAddr->m_OwnID && receiverAddr->isExpired())
+                        {
+                            return YES;
+                        }
                     }
                 }
+                catch (const std::exception& e) {
+                    return NO;
+                }
+                catch (...) {
+                    return NO;
+                }            
             }
         }
     }
@@ -514,22 +574,30 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 }
 
 -(void)editBotAddress:(NSString*_Nonnull)address {
-    WalletID walletID(Zero);
-    if (walletID.FromHex(address.string))
-    {
-        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
-        
-        for (int i=0; i<addresses.size(); i++)
+    try{
+        WalletID walletID(Zero);
+        if (walletID.FromHex(address.string))
         {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
             
-            if ([wAddress isEqualToString:address])
+            for (int i=0; i<addresses.size(); i++)
             {
-                wallet->getAsync()->saveAddressChanges(walletID, "telegram bot", true, true, false);
+                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
                 
-                break;
+                if ([wAddress isEqualToString:address])
+                {
+                    wallet->getAsync()->saveAddressChanges(walletID, "telegram bot", true, true, false);
+                    
+                    break;
+                }
             }
         }
+    }
+    catch (const std::exception& e) {
+        NSLog(@"error edit bot address");
+    }
+    catch (...) {
+        NSLog(@"error edit bot address");
     }
 }
 
@@ -595,7 +663,7 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     return NO;
 }
 
--(void)generateNewWalletAddress {    
+-(void)generateNewWalletAddress {
     wallet->getAsync()->generateNewAddress();
 }
 
@@ -651,7 +719,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
             }
         }
         else{
-            wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), true, false);
+            if (address.isExpired) {
+                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
+            }
+            else{
+                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), true, false);
+            }
         }
     }
 }
@@ -665,7 +738,10 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 #pragma mark - Delegates
 
 -(void)addDelegate:(id<WalletModelDelegate>) delegate{
-    [_delegates addObject: delegate];
+    if(![_delegates containsObject:delegate])
+    {
+        [_delegates addObject: delegate];
+    }
 }
 
 -(void)removeDelegate:(id<WalletModelDelegate>) delegate {
@@ -685,11 +761,12 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     Amount bAmount = round(amount * Rules::Coin);
     Amount bTotal = bAmount + fee;
     
+//    if([self isExpiredAddress:to]){
+//        return @"Can't send to the expired address";
+//    }
+//    else
 
-    if([self isExpiredAddress:to]){
-        return @"Can't send to the expired address";
-    }
-    else if(![self isValidAddress:to])
+    if(![self isValidAddress:to])
     {
         return @"Incorrect address";
     }
@@ -938,16 +1015,6 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 
 -(void)onSyncWithLocalNodeCompleted {
     if ([Settings sharedManager].isLocalNode) {
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
-        NSLog(@"---------------------------");
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
@@ -967,20 +1034,6 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
 
 -(void)setUtxos:(NSMutableArray<BMUTXO *> *)utxos {
     _utxos = utxos;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if ([Settings sharedManager].isLocalNode) {
-//            if (self->utxoTimer) {
-//                [self->utxoTimer invalidate];
-//                self->utxoTimer = nil;
-//            }
-//
-//            self->utxoTimer = [NSTimer scheduledTimerWithTimeInterval: 15
-//                                                     target: self
-//                                                   selector: @selector(onUTXOTimer)
-//                                                   userInfo: nil
-//                                                    repeats: NO];
-//        }
-//    });
 }
 
 -(void)getUTXO {

@@ -28,7 +28,8 @@ class WalletQRCodeViewController: BaseViewController {
     weak var delegate: WalletQRCodeViewControllerDelegate?
 
     private var address:String!
-    
+    private var amount:String?
+
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var codeView: QRCodeView!
     
@@ -40,19 +41,38 @@ class WalletQRCodeViewController: BaseViewController {
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
         
-        codeView.generateCode(address, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
+        var qrString = "beam:\(address ?? "")"
+        
+        if let a = self.amount {
+            if let d = Double(a.replacingOccurrences(of: ",", with: "."))
+            {
+                if d > 0 {
+                    qrString = qrString + "?amount=\(a)"
+                }
+            }
+        }
+        
+        codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         
         addSwipeToDismiss()
     }
 
-    @IBAction func onCopy(sender :UIButton) {
-        UIPasteboard.general.string = addressLabel.text
-        
-        SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-        SVProgressHUD.dismiss(withDelay: 1.5)
-        
-        dismiss(animated: true) {
-            self.delegate?.onCopyDone()
+    
+    @IBAction func onShare(sender :UIButton) {
+        if let address = addressLabel.text {
+            let vc = UIActivityViewController(activityItems: [address], applicationActivities: [])
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                if completed {
+                    self.dismiss(animated: true, completion: {
+                        self.delegate?.onCopyDone()
+                    })
+                    return
+                }
+            }
+            
+            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+            
+            self.present(vc, animated: true)
         }
     }
     
@@ -65,9 +85,10 @@ class WalletQRCodeViewController: BaseViewController {
 
 extension WalletQRCodeViewController {
     
-    func withAddress(address: String) -> Self {
+    func withAddress(address: String, amount:String?) -> Self {
         
         self.address = address
+        self.amount = amount
         
         return self
     }

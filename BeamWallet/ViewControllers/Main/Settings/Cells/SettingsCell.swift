@@ -43,7 +43,7 @@ class SettingsCell: BaseCell {
 
 extension SettingsCell: Configurable {
     
-    func configure(with item:SettingsViewController.SettingsItem) {
+    func configure(with item:SettingsViewModel.SettingsItem) {
 
         titleLabel?.text = item.title
         detailLabel?.text = item.detail
@@ -60,7 +60,8 @@ extension SettingsCell: Configurable {
             selectionStyle = item.id == 0 ? .none : .default
         }
         
-        if item.id == 5 || item.id == 6 || item.id == 7 {
+        if item.id == 5 || item.id == 6 || item.id == 7 || item.id == 2 || item.id == 1
+            || item.id == 8 {
             arrowView.isHidden = false
             titleXOffset.constant = 25
         }
@@ -69,6 +70,6 @@ extension SettingsCell: Configurable {
             titleXOffset.constant = 15
         }
         
-        botLineView.isHidden = item.position == SettingsViewController.SettingsItem.Position.midle
+        botLineView.isHidden = item.position == SettingsViewModel.SettingsItem.Position.midle
     }
 }

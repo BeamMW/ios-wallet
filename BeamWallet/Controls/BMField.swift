@@ -90,10 +90,11 @@ class BMField: UITextField {
         super.awakeFromNib()
         
         _oldColor = self.textColor
-        
+
+    
         if lineColor == nil {
-            line.backgroundColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
-            lineColor = AppDelegate.CurrentTarget == .Test ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+            line.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+            lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
         }
         
         addSubview(line)

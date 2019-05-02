@@ -60,7 +60,7 @@ extension ShareLogActivity : MFMailComposeViewControllerDelegate {
             mailComposer.mailComposeDelegate = self
             mailComposer.setToRecipients(["support@beam.mw"])
             
-            if (AppDelegate.CurrentTarget == .Test) {
+            if (Settings.sharedManager().target == Testnet) {
                 mailComposer.setSubject("beam wallet testnet logs")
             }
             else{

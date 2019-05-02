@@ -26,47 +26,28 @@ import FirebaseMessaging
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    private var scannedTGUserId = ""
+
     var securityScreen = AutoSecurityScreen()
     var lockScreen = LockScreen()
 
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     var completionHandler: ((UIBackgroundFetchResult) -> Void)?
-
-    static let targetName = Bundle.main.infoDictionary?["CFBundleExecutable"] as! String
-
-    enum Target: String {
-        case Main = "Main"
-        case Test = "BeamWalletTestNet"
-        case Master = "BeamWalletMasterNet"
-    }
-    
-    static var CurrentTarget: Target {
-        switch targetName {
-        case Target.Test.rawValue:
-            return .Test
-        case Target.Master.rawValue:
-            return .Master
-        default:
-            return .Main
-        }
-    }
-    
-    static var disableApns = false
-   // static var enableNewFeatures = true
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        
+    
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = true
 
-        AnalyticsConfiguration.shared().setAnalyticsCollectionEnabled(false)
+        FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
 
         Crashlytics().debugMode = true
         Fabric.with([Crashlytics.self()])
+        
+        Settings.sharedManager()
         
         NotificationManager.sharedManager.requestPermissions()
         
@@ -88,43 +69,111 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marineTwo
         
-        
         return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
+        //TODO: notification - close db
+        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow
+            && Settings.sharedManager().target == Testnet {
+            AppModel.sharedManager().isConnecting = true
+            AppModel.sharedManager().resetWallet(false)
+        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        
+
         if AppModel.sharedManager().isRestoreFlow {
             registerBackgroundTask()
         }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
+        
         if AppModel.sharedManager().isRestoreFlow {
             endBackgroundTask()
         }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+
         NotificationManager.sharedManager.clearNotifications()
         
+        //TODO: notification - close db
+        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow && Settings.sharedManager().target == Testnet {
+            if let password = KeychainManager.getPassword() {
+                if AppModel.sharedManager().isWalletInitialized() == false {
+                    AppModel.sharedManager().isConnecting = true
+                    AppModel.sharedManager().openWallet(password)
+                }
+            }
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        
     }
 
-    func registerBackgroundTask() {
+    private func registerBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()
         }
     }
     
-    func endBackgroundTask() {
+    private func endBackgroundTask() {
         UIApplication.shared.endBackgroundTask(backgroundTask)
         backgroundTask = .invalid
+    }
+    
+    private func tryLinkingBot(url:URL) {
+        if let params = url.queryParameters {
+            if let id = params["user_id"], let name = params["username"] {
+                TGBotManager.sharedManager.user.userId = id
+                TGBotManager.sharedManager.user.userName = name
+
+                if AppModel.sharedManager().isLoggedin {
+                    TGBotManager.sharedManager.startLinking { (_ ) in
+                        
+                    }
+                }
+                else{
+                    if let vc = UIApplication.getTopMostViewController() {
+                        vc.alert(title: "Telegram bot", message: "Please open wallet to link telegram bot") { (_ ) in
+                            
+                            if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
+                                passVC.biometricAuthorization()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+       
+        if let url = userActivity.webpageURL {
+            if ((UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController) != nil) {
+                if let params = url.queryParameters {
+                    if let id = params["user_id"], let name = params["username"] {
+                        TGBotManager.sharedManager.user.userId = id
+                        TGBotManager.sharedManager.user.userName = name
+                    }
+                }
+            }
+            else{
+                tryLinkingBot(url: url)
+            }
+        }
+
+        return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        tryLinkingBot(url: url)
+        
+        return true
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -138,57 +187,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         print("didReceiveRemoteNotification")
+        completionHandler(.noData)
 
-        if(!AppModel.sharedManager().isRestoreFlow) {
-            if let password = KeychainManager.getPassword() {
-                if NotificationManager.sharedManager.sendAutomaticMoney(data: userInfo) == false
-                {
-                    self.registerBackgroundTask()
-                    
-                    self.completionHandler = completionHandler
-                    
-                    if(AppModel.sharedManager().isLoggedin) {
-                        AppModel.sharedManager().refreshAllInfo()
-                    }
-                    else{
-                        AppModel.sharedManager().openWallet(password)
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
-                        self.endBackgroundTask()
-                        self.completionHandler?(.newData)
-                    }
-                }
-                else{
-                    completionHandler(.newData)
-                }
-            }
-            else{
-                completionHandler(.noData)
-            }
-        }
-        else{
-            completionHandler(.newData)
-        }
+//        if(!AppModel.sharedManager().isRestoreFlow) {
+//            if let password = KeychainManager.getPassword() {
+//                if NotificationManager.sharedManager.sendAutomaticMoney(data: userInfo) == false
+//                {
+//                    self.registerBackgroundTask()
+//
+//                    self.completionHandler = completionHandler
+//
+//                    if(AppModel.sharedManager().isLoggedin) {
+//                        AppModel.sharedManager().refreshAllInfo()
+//                    }
+//                    else{
+//                        AppModel.sharedManager().openWallet(password)
+//                    }
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
+//                        self.endBackgroundTask()
+//                        self.completionHandler?(.newData)
+//                    }
+//                }
+//                else{
+//                    completionHandler(.newData)
+//                }
+//            }
+//            else{
+//                completionHandler(.noData)
+//            }
+//        }
+//        else{
+//            completionHandler(.newData)
+//        }
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         print("performFetchWithCompletionHandler")
-
+        
         if(!AppModel.sharedManager().isRestoreFlow) {
             if let password = KeychainManager.getPassword() {
                 self.completionHandler = completionHandler
-                
+
                 self.registerBackgroundTask()
-                
+
                 if(AppModel.sharedManager().isLoggedin) {
                     AppModel.sharedManager().refreshAllInfo()
                 }
                 else{
                     AppModel.sharedManager().openWallet(password)
                 }
-                
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
                     self.endBackgroundTask()
                     self.completionHandler?(.newData)

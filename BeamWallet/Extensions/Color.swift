@@ -29,17 +29,17 @@ extension UIColor {
         }
         
         static var darkSlateBlue: UIColor {
-            if AppDelegate.CurrentTarget == .Master {
+            if Settings.sharedManager().target == Masternet{
                 return UIColor.main.black
             }
             return .init(red: 28/255, green: 67/255, blue: 91/255, alpha: 1)
         }
         
         static var marine: UIColor {
-            if AppDelegate.CurrentTarget == .Test {
+            if Settings.sharedManager().target == Testnet {
                 return UIColor.main.dark
             }
-            else if AppDelegate.CurrentTarget == .Master {
+            else if Settings.sharedManager().target == Masternet{
                 return UIColor.main.blackTwo
             }
             return .init(red: 3/255, green: 46/255, blue: 73/255, alpha: 1)
@@ -70,10 +70,10 @@ extension UIColor {
         }
         
         static var navy: UIColor {
-            if AppDelegate.CurrentTarget == .Test {
+            if Settings.sharedManager().target == Testnet {
                 return UIColor.main.dark
             }
-            else if AppDelegate.CurrentTarget == .Master {
+            else if Settings.sharedManager().target == Masternet{
                 return .init(red: 16/255, green: 16/255, blue: 16/255, alpha: 1)
             }
             return .init(red: 2/255, green: 37/255, blue: 60/255, alpha: 1)
@@ -84,10 +84,10 @@ extension UIColor {
         }
         
         static var marineTwo: UIColor {
-            if AppDelegate.CurrentTarget == .Test {
+            if Settings.sharedManager().target == Testnet {
                 return UIColor.main.darkTwo
             }
-            else if AppDelegate.CurrentTarget == .Master {
+            else if Settings.sharedManager().target == Masternet{
                 return UIColor.main.black
             }
             return .init(red: 10/255, green: 52/255, blue: 77/255, alpha: 1)

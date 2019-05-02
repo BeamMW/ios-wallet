@@ -108,4 +108,16 @@
     return [[array componentsJoinedByString:@","] stringByAppendingString:@"\n"];
 }
 
+-(BOOL)isNew {
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
+    NSDate *current = [NSDate date];
+    
+    int difference = current.timeIntervalSince1970 - date.timeIntervalSince1970;
+    if (difference<5) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 @end

@@ -192,7 +192,7 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
     NSLog(@"onSyncProgressUpdated %d/%d",done, total);
 
     [AppModel sharedManager].isUpdating = (done != total);
-    
+
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
@@ -357,6 +357,7 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
     }
     
     [[AppModel sharedManager] setIsConnected:isNodeConnected];
+    
     [[AppModel sharedManager] setIsConnecting:NO];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
@@ -426,13 +427,14 @@ void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::Byt
     
     string str;
     str.resize(proof.size() * 2);
-    
-    beam::to_hex(str.data(), proof.data(), proof.size());
+
+    //beam::to_hex(str.data(), proof.data(), proof.size());
+    str = to_hex(proof.data(), proof.size());
     
     BMPaymentProof *paymentProof = [[BMPaymentProof alloc] init];
     paymentProof.code = [NSString stringWithUTF8String:str.c_str()];
     paymentProof.txID = [NSString stringWithUTF8String:txIDToString(txID).c_str()];
-    
+
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivePaymentProof:)]) {

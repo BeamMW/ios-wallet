@@ -85,6 +85,7 @@
 -(void)onSyncWithLocalNodeCompleted;
 -(void)changeNodeAddress;
 -(BOOL)isValidNodeAddress:(NSString*_Nonnull)string;
+-(BOOL)isWalletInitialized;
 
 // updates
 -(void)getWalletStatus;

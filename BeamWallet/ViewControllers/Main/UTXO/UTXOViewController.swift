@@ -32,6 +32,7 @@ class UTXOViewController: BaseViewController {
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private var headerView: UIView!
     @IBOutlet private var networkHeaderView: UIView!
+    @IBOutlet private var hideUTXOView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,9 +45,19 @@ class UTXOViewController: BaseViewController {
         tableView.register(UTXOBlockCell.self)
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
+        hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
+
         filterUTXOS()
         
-        AppModel.sharedManager().addDelegate(self)        
+        AppModel.sharedManager().addDelegate(self)
+        Settings.sharedManager().addDelegate(self)
+        
+        rightButton()
+    }
+    
+    private func rightButton() {
+        let icon = Settings.sharedManager().isHideAmounts ? UIImage(named: "iconShowBalance") : UIImage(named: "iconHideBalance")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(onHideAmounts))
     }
     
     @objc private func refreshData(_ sender: Any) {
@@ -68,6 +79,31 @@ class UTXOViewController: BaseViewController {
         }
         
         self.utxos = self.utxos.sorted(by: { $0.id < $1.id })
+    }
+    
+    @objc private func onHideAmounts() {
+        if !Settings.sharedManager().isHideAmounts {
+            if Settings.sharedManager().isAskForHideAmounts {
+                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this icon is tapped again", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
+                    
+                    Settings.sharedManager().isAskForHideAmounts = false
+                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+                }))
+                
+                self.present(alert, animated: true)
+            }
+            else{
+                Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+            }
+        }
+        else{
+            Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+        }
     }
     
     @IBAction func onStatus(sender : UISegmentedControl) {
@@ -249,6 +285,14 @@ extension UTXOViewController : WalletModelDelegate {
                 }
             }
         }
+    }
+}
+
+extension UTXOViewController : SettingsModelDelegate {
+    func onChangeHideAmounts() {
+        rightButton()
+        
+        hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
     }
 }
 

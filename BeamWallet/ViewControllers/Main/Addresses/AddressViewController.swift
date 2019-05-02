@@ -75,7 +75,7 @@ class AddressViewController: BaseViewController {
             if let item = selectedItem {
                 switch (item.id) {
                 case 1:
-                    let modalViewController = WalletQRCodeViewController().withAddress(address: self.address.walletId)
+                    let modalViewController = WalletQRCodeViewController().withAddress(address: self.address.walletId, amount: nil)
                     modalViewController.modalPresentationStyle = .overFullScreen
                     modalViewController.modalTransitionStyle = .crossDissolve
                     self.present(modalViewController, animated: true, completion: nil)

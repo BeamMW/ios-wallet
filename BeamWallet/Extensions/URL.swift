@@ -1,6 +1,6 @@
 //
-// String.m
-// BeamTest
+// URL.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -17,21 +17,16 @@
 // limitations under the License.
 //
 
-#import "StringStd.h"
+import Foundation
 
-@implementation NSString (Additions)
-
--(BOOL)isEmpty {
-    NSString *trimmed = [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    return trimmed.length == 0;
+extension URL {
+    
+    public var queryParameters: [String: String]? {
+        guard
+            let components = URLComponents(string: self.absoluteString),
+            let queryItems = components.queryItems else { return nil }
+        return queryItems.reduce(into: [String: String]()) { (result, item) in
+            result[item.name] = item.value
+        }
+    }
 }
-
-@end
-
-@implementation NSString (StdExtension)
-
--(std::string)string {
-    return std::string([self UTF8String]);;
-}
-
-@end

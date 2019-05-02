@@ -27,11 +27,11 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if AppDelegate.CurrentTarget == .Test
+        if Settings.sharedManager().target == Testnet
         {
             view.backgroundColor = UIColor.main.dark
         }
-        else if AppDelegate.CurrentTarget == .Master
+        else if Settings.sharedManager().target == Masternet
         {
             view.backgroundColor = UIColor.main.blackTwo
         }
