@@ -110,9 +110,7 @@ extension InputPhraseViewController : InputWordCellCellDelegate {
             //find next field
             if let cell = collectionView.cellForItem(at: IndexPath(row: path.row + 1, section: 0)) as? InputWordCell {
                 cell.startEditing()
-            }
-            
-//
+            }            
 //            for i in 0 ... inputWords.count - 1 {
 //                if inputWords[i].value.isEmpty {
 //                    let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell

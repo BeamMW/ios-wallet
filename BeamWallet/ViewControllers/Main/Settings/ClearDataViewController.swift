@@ -75,7 +75,7 @@ class ClearDataViewController: BaseViewController {
             str = deleted.joined(separator: ", ")
         }
         
-        let alert = UIAlertController(title: "Clear data", message: "Are you sure you want to delete all \(str) from your device?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Clear data", message: "Are you sure you want to delete all \(str) from your wallet?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         
         let ok = UIAlertAction(title: "Clear", style: .destructive, handler: { action in

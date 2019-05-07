@@ -160,34 +160,6 @@ class CreateWalletProgressViewController: BaseViewController {
                 self.present(vc, animated: true, completion: nil)
             }
         }
-        
-//        if Settings.sharedManager().isChangedNode() {
-//            let alert = UIAlertController(title: "Incompatible node", message: "You’re trying to connect to an incompatible node.", preferredStyle: .alert)
-//
-//            let ok = UIAlertAction(title: "Change settings", style: .default, handler: { action in
-//                let vc = EnterNodeAddressViewController()
-//                vc.completion = {
-//                    obj in
-//
-//                    if obj == true {
-//                        self.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(self.onTimeOut), userInfo: nil, repeats: false)
-//
-//                        self.startCreateWallet()
-//                    }
-//                }
-//                vc.hidesBottomBarWhenPushed = true
-//                self.pushViewController(vc: vc)
-//            })
-//            alert.addAction(ok)
-//
-//            let cancel = UIAlertAction(title: "Cancel", style: .default, handler: { action in
-//                AppModel.sharedManager().resetWallet(false)
-//                self.navigationController?.popViewController(animated: true)
-//            })
-//            alert.addAction(cancel)
-//
-//            self.present(alert, animated: true)
-//        }
     }
 }
 
@@ -252,9 +224,11 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
         }
     }
     
-    func onWalletError(_ error: String) {
+    func onWalletError(_ _error: Error) {
         DispatchQueue.main.async {
-            if error == "Connection error." && Settings.sharedManager().isChangedNode() {
+            let error = _error as NSError
+            
+            if error.code == 2 && Settings.sharedManager().isChangedNode() {
                 if !self.isPresented {
                     self.isPresented = true
                     
@@ -262,6 +236,38 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     vc.modalTransitionStyle = .crossDissolve
                     self.present(vc, animated: true, completion: nil)
                 }
+            }
+            else if error.code == 1 {
+                let alert = UIAlertController(title: "Incompatible node", message: "You’re trying to connect to an incompatible node", preferredStyle: .alert)
+                
+                let ok = UIAlertAction(title: "Change settings", style: .default, handler: { action in
+                    let vc = EnterNodeAddressViewController()
+                    vc.completion = {
+                        obj in
+                        
+                        if obj == true {
+                            AppModel.sharedManager().isConnecting = false
+                            
+                            self.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(self.onTimeOut), userInfo: nil, repeats: false)
+                            
+                            self.startCreateWallet()
+                        }
+                        else{
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                    }
+                    vc.hidesBottomBarWhenPushed = true
+                    self.pushViewController(vc: vc)
+                })
+                alert.addAction(ok)
+                
+                let cancel = UIAlertAction(title: "Cancel", style: .default, handler: { action in
+                    AppModel.sharedManager().resetWallet(false)
+                    self.navigationController?.popViewController(animated: true)
+                })
+                alert.addAction(cancel)
+                
+                self.present(alert, animated: true)
             }
             else{
                 if let controllers = self.navigationController?.viewControllers {
@@ -271,7 +277,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                         }
                     }
                 }
-                self.alert(title: "error".localized, message: error, handler: { (_ ) in
+                self.alert(title: "error".localized, message: error.localizedDescription, handler: { (_ ) in
                     AppModel.sharedManager().resetWallet(false)
                     self.navigationController?.popViewController(animated: true)
                 })

@@ -30,6 +30,54 @@ extension String: Localizable {
 }
 
 extension String {
+    func countInstances(of stringToFind: String) -> Int {
+        assert(!stringToFind.isEmpty)
+        var count = 0
+        var searchRange: Range<String.Index>?
+        while let foundRange = range(of: stringToFind, options: [], range: searchRange) {
+            count += 1
+            searchRange = Range(uncheckedBounds: (lower: foundRange.upperBound, upper: endIndex))
+        }
+        return count
+    }
+}
+
+extension String {
+    func isValidPort() -> Bool {
+        if let d = Int(self) {
+            if(d > 0 && d <= 65535) {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func isNumeric() -> Bool {
+        let allowedCharacters = CharacterSet(charactersIn:"0123456789")
+        let characterSet = CharacterSet(charactersIn: self)
+        
+        if (!allowedCharacters.isSuperset(of: characterSet)) {
+            return false
+        }
+        
+        return true
+    }
+    
+    func isDecimial() -> Bool {
+        let allowedCharacters = CharacterSet(charactersIn:".0123456789")
+        let characterSet = CharacterSet(charactersIn: self)
+        
+        if (!allowedCharacters.isSuperset(of: characterSet)) {
+            return false
+        }
+        
+        return true
+    }
+}
+
+extension String {
+    
     static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.currencyCode = ""
@@ -65,5 +113,28 @@ extension String {
         } else {
             return true
         }
+    }
+}
+
+extension NSAttributedString {
+    func rangesOf(subString: String) -> [NSRange] {
+        var nsRanges: [NSRange] = []
+        let ranges = string.ranges(of: subString, options: .caseInsensitive, locale: nil)
+        
+        for range in ranges {
+            nsRanges.append(NSRange(range, in: self.string))
+        }
+        
+        return nsRanges
+    }
+}
+
+extension String {
+    func ranges(of substring: String, options: CompareOptions = [], locale: Locale? = nil) -> [Range<Index>] {
+        var ranges: [Range<Index>] = []
+        while let range = self.range(of: substring, options: options, range: (ranges.last?.upperBound ?? self.startIndex) ..< self.endIndex, locale: locale) {
+            ranges.append(range)
+        }
+        return ranges
     }
 }

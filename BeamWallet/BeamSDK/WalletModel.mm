@@ -22,17 +22,22 @@
 #import "AppModel.h"
 
 #include "utility/logger.h"
-
-#include "common.h"
+#include "utility/bridge.h"
+#include "utility/io/asyncevent.h"
+#include "utility/helpers.h"
+#include "utility/common.h"
 
 using namespace beam;
 using namespace beam::io;
 using namespace std;
 
+NSString *const AppErrorDomain = @"beam.mw";
+
+
 WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
 : WalletClient(walletDB, nodeAddr, reactor)
 {
-
+    
 }
 
 WalletModel::~WalletModel()
@@ -48,7 +53,7 @@ std::string txIDToString(const TxID& txId)
 void WalletModel::onStatus(const WalletStatus& status)
 {
    // NSLog(@"onStatus");
-
+    
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
     walletStatus.available = status.available;
     walletStatus.receiving = status.receiving;
@@ -60,7 +65,8 @@ void WalletModel::onStatus(const WalletStatus& status)
     walletStatus.realReceiving = double(int64_t(status.receiving)) / Rules::Coin;
     walletStatus.currentHeight = [NSString stringWithUTF8String:to_string(status.stateID.m_Height).c_str()];
     walletStatus.currentStateHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, 15).c_str()];;
-
+    walletStatus.currentStateFullHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, status.stateID.m_Hash.nBytes).c_str()];;
+    
     [[AppModel sharedManager] setWalletStatus:walletStatus];
 
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
@@ -343,6 +349,11 @@ void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
     }
 }
 
+void WalletModel::onNewAddressFailed()
+{
+    NSLog(@"onNewAddressFailed");
+}
+
 void WalletModel::onChangeCurrentWalletIDs(beam::WalletID senderID, beam::WalletID receiverID)
 {
     NSLog(@"onChangeCurrentWalletIDs");
@@ -373,11 +384,12 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-            [delegate onWalletError:GetErrorString(error)];
+            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
+                                               code:NSUInteger(error)
+                                           userInfo:@{ NSLocalizedDescriptionKey:GetErrorString(error) }];
+            [delegate onWalletError:nativeError];
         }
     }
-    
-    NSLog(@"onWalletError %hhu",error);
 }
 
 //void WalletModel::onCoinsByTx(const std::vector<beam::Coin>& coins)
@@ -390,7 +402,10 @@ void WalletModel::FailedToStartWallet()
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-            [delegate onWalletError:@"Failed to start wallet"];
+            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
+                                                       code:NSUInteger(12)
+                                                   userInfo:@{ NSLocalizedDescriptionKey:@"Failed to start wallet" }];
+            [delegate onWalletError:nativeError];
         }
     }
 
@@ -441,6 +456,16 @@ void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::Byt
             [delegate onReceivePaymentProof:paymentProof];
         }
     }
+}
+
+void WalletModel::onCoinsByTx(const std::vector<beam::Coin>& coins)
+{
+    
+}
+
+void WalletModel::onAddressChecked(const std::string& addr, bool isValid)
+{
+    
 }
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)

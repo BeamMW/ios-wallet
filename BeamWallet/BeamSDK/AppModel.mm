@@ -27,6 +27,7 @@
 #import "StringStd.h"
 #import "NodeModel.h"
 #import "DiskStatusManager.h"
+#import "CurrencyFormatter.h"
 
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -312,7 +313,7 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     seed.assign(buf.data(), buf.size());
 
     //create wallet db
-    walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash(), walletReactor);
+     walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash(), walletReactor);
     
     if (!walletDb) {
         return NO;
@@ -757,14 +758,27 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     return errorString;
 }
 
--(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
+-(NSString*_Nullable)canReceive:(double)amount fee:(double)fee {
+
     Amount bAmount = round(amount * Rules::Coin);
     Amount bTotal = bAmount + fee;
+    Amount bMax = round(MAX_AMOUNT * Rules::Coin);
     
-//    if([self isExpiredAddress:to]){
-//        return @"Can't send to the expired address";
-//    }
-//    else
+    if (bTotal > bMax || (amount == MAX_AMOUNT && fee > 0))
+    {
+        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
+
+        return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
+    }
+    
+    return nil;
+}
+
+-(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
+    
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    Amount bMax = round(MAX_AMOUNT * Rules::Coin);
 
     if(![self isValidAddress:to])
     {
@@ -776,23 +790,16 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
     else if(_walletStatus.available < bTotal)
     {
         double need = double(int64_t(bTotal - _walletStatus.available)) / Rules::Coin;
-        
-        NSNumberFormatter *currencyFormatter = [NSNumberFormatter new];
-        currencyFormatter.usesGroupingSeparator = true;
-        currencyFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-        currencyFormatter.currencyCode = @"";
-        currencyFormatter.currencyCode = @"";
-        currencyFormatter.minimumIntegerDigits = 0;
-        currencyFormatter.minimumFractionDigits = 0;
-        currencyFormatter.minimumSignificantDigits = 0;
-        currencyFormatter.maximumIntegerDigits = 20;
-        currencyFormatter.maximumFractionDigits = 20;
-        currencyFormatter.maximumSignificantDigits = 20;
-        currencyFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        
-        NSString *beam = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:need]];
-        
+
+        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+
         return [NSString stringWithFormat:@"Insufficient funds: you would need %@ beams to complete the transaction",beam];
+    }
+    else if (bTotal > bMax)
+    {
+        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
+        
+        return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
     }
     else{
         return nil;
@@ -813,6 +820,17 @@ static NSString *deletedAddressesKEY = @"deletedAddresses";
             NSLog(@"%@",ex);
         }
     }
+}
+
+-(NSString*_Nonnull)allAmount:(double)fee {
+    Amount bAmount = _walletStatus.available - fee;
+    
+    double d = double(int64_t(bAmount)) / Rules::Coin;
+    
+    NSString *allValue =  [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:d]];
+    allValue = [allValue stringByReplacingOccurrencesOfString:@"," withString:@""];
+    
+    return allValue;
 }
 
 #pragma mark - Logs

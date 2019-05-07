@@ -22,12 +22,13 @@
 #include <csignal>
 
 #include "wallet/wallet_client.h"
+#include "wallet/common.h"
 
 class WalletModel : public WalletClient
 {
 public:
     using Ptr = std::shared_ptr<WalletModel>;
-
+    
     WalletModel(beam::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
 
@@ -45,6 +46,7 @@ private:
     void onAllUtxoChanged(const std::vector<beam::Coin>& utxos) override;
     void onAddresses(bool own, const std::vector<beam::WalletAddress>& addrs) override;
     void onGeneratedNewAddress(const beam::WalletAddress& walletAddr) override;
+    void onNewAddressFailed() override;
     void onChangeCurrentWalletIDs(beam::WalletID senderID, beam::WalletID receiverID) override;
     void onNodeConnectionChanged(bool isNodeConnected) override;
     void onWalletError(beam::wallet::ErrorType error) override;
@@ -52,5 +54,6 @@ private:
     void onSendMoneyVerified() override;
     void onCantSendToExpired() override;
     void onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof) override;
-   // void onCoinsByTx(const std::vector<beam::Coin>& coins) override;
+    void onCoinsByTx(const std::vector<beam::Coin>& coins) override;
+    void onAddressChecked(const std::string& addr, bool isValid) override;
 };

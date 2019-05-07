@@ -38,6 +38,10 @@ target 'BeamWalletTestNet' do
     shared_pods
 end
 
-target 'BeamWalletNotificationView' do
+target 'BeamWalletMasterNet' do
+    shared_pods
+end
+
+target 'BeamWalletNotificationViewTestNet' do
     extension
 end

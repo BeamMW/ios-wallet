@@ -1,6 +1,5 @@
 //
 // String.m
-// BeamTest
 //
 // Copyright 2018 Beam Development
 //

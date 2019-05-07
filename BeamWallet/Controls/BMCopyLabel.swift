@@ -67,6 +67,9 @@ class BMCopyLabel: UILabel {
         if !menu.isMenuVisible {
             menu.setTargetRect(bounds, in: self)
             menu.setMenuVisible(true, animated: true)
+            
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
         }
     }
     

@@ -69,6 +69,7 @@ class BMWordField: BMField {
         setupSuggestionsView()
     }
     
+    
     private func setupSuggestionsView() {
         accessoryView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
 
@@ -119,21 +120,27 @@ class BMWordField: BMField {
             updateAccessoryViewPrefix(prefix: txt)
         }
     }
-        
+    
+    public func tryAutoInsertWord() {
+        if self.inputAccessoryView != nil, let text = self.text {
+            var words = MnemonicModel.mnemonicWords(forPrefix: text, suggestions: suggestions) as [String]
+            if words.count == 1 {
+                if words[0] != text {
+                    self.text = words[0]
+                }
+            }
+        }
+    }
+    
     private func updateAccessoryViewPrefix(prefix:String) {
         var words = MnemonicModel.mnemonicWords(forPrefix: prefix, suggestions: suggestions) as [String]
         
-//        if words.count == 1 {
-//            self.text = words[0]
-//            
-//            _ = self.delegate?.textFieldShouldReturn!(self)
-//        }
         
         for btn in accessoryOptions {
             btn.setAttributedTitle(nil, for: .normal)
         }
 
-        if words.count > 0 {
+        if words.count == 1 {
             var recommendFirstWord = (words.count == 1)
 
             if !recommendFirstWord && words.count != 0 && words[0].hasPrefix(prefix) {

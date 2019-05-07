@@ -33,6 +33,11 @@ class WalletAvailableCell: BaseCell {
     @IBOutlet weak private var balanceIcon: UIImageView!
     @IBOutlet weak private var arrowIcon: UIImageView!
     @IBOutlet weak private var currencyIcon: UIImageView!
+    
+    @IBOutlet weak private var maturingLabel: UILabel!
+    @IBOutlet weak private var maturingIcon: UIImageView!
+    @IBOutlet weak private var maturingCurrencyIcon: UIImageView!
+    @IBOutlet weak private var maturingDescriptionLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,11 +46,19 @@ class WalletAvailableCell: BaseCell {
         
         currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
+        
+        maturingCurrencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        maturingCurrencyIcon.tintColor = UIColor.white
     }
     
     @IBAction func onExpand(sender :UIButton) {
         if balanceIcon.alpha == 1 {
             UIView.animate(withDuration: 0.3) {
+                self.maturingLabel.alpha = 0
+                self.maturingIcon.alpha = 0
+                self.maturingCurrencyIcon.alpha = 0
+                self.maturingDescriptionLabel.alpha = 0
+
                 self.balanceIcon.alpha = 0
                 self.balanceLabel.alpha = 0
                 self.currencyIcon.alpha = 0
@@ -54,6 +67,14 @@ class WalletAvailableCell: BaseCell {
         }
         else{
             UIView.animate(withDuration: 0.3) {
+                if self.maturingLabel.text != "" {
+                    self.maturingLabel.alpha = 1
+                    self.maturingIcon.alpha = 1
+                    self.maturingCurrencyIcon.alpha = 1
+                    self.maturingDescriptionLabel.alpha = 1
+                }
+                
+                
                 self.balanceIcon.alpha = 1
                 self.balanceLabel.alpha = 1
                 self.currencyIcon.alpha = 1
@@ -69,18 +90,33 @@ extension WalletAvailableCell: Configurable {
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
             balanceLabel.text = String.currency(value: status.realAmount)
+            maturingLabel.text = String.currency(value: status.realMaturing)
         }
         else{
             balanceLabel.text = "0"
+            maturingLabel.text = ""
         }
         
         if options.expand {
+            if maturingLabel.text != "" {
+                maturingLabel.alpha = 1
+                maturingIcon.alpha = 1
+                maturingCurrencyIcon.alpha = 1
+                maturingDescriptionLabel.alpha = 1
+            }
+      
+            
             balanceIcon.alpha = 1
             balanceLabel.alpha = 1
             currencyIcon.alpha = 1
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
         }
         else{
+            maturingLabel.alpha = 0
+            maturingIcon.alpha = 0
+            maturingCurrencyIcon.alpha = 0
+            maturingDescriptionLabel.alpha = 0
+            
             balanceIcon.alpha = 0
             balanceLabel.alpha = 0
             currencyIcon.alpha = 0

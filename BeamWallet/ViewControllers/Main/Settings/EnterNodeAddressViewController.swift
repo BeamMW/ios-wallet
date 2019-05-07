@@ -104,4 +104,31 @@ extension EnterNodeAddressViewController : UITextFieldDelegate {
 
         return true
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        let textFieldText: NSString = (textField.text ?? "") as NSString
+        
+        let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
+        
+        if txtAfterUpdate.countInstances(of: ":") > 1 {
+            return false
+        }
+        else if txtAfterUpdate.contains(":") {
+            let splited = txtAfterUpdate.split(separator: ":")
+            if splited.count == 2 {
+                let port = String(splited[1])
+                let portRange = (txtAfterUpdate as NSString).range(of: String(port))
+
+                if port.isEmpty == false && string == ":" {
+                    return false
+                }
+                else if range.intersection(portRange) != nil || port.lengthOfBytes(using: .utf8) == 1 {
+                    return (port.isNumeric() && port.isValidPort())
+                }
+            }
+        }
+        
+        return true
+    }
 }

@@ -19,6 +19,8 @@
 
 #import <Foundation/Foundation.h>
 
+static double MAX_AMOUNT = 262800000;
+
 typedef enum Target : NSUInteger {
     Testnet = 0,
     Mainnet = 1,
@@ -48,8 +50,10 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL isEnableBiometric;
 @property (nonatomic, assign) BOOL isHideAmounts;
 @property (nonatomic, assign) BOOL isAskForHideAmounts;
-
 @property (nonatomic, assign) int lockScreenSeconds;
+@property (nonatomic, assign) BOOL isAllowOpenLink;
+
+@property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
 -(BOOL)isChangedNode;

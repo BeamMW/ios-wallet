@@ -21,17 +21,17 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="WalletAvailableCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="175"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="129.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="174.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ja7-ld-PUy">
-                        <rect key="frame" x="15" y="15" width="290" height="99.5"/>
+                        <rect key="frame" x="15" y="15" width="290" height="144.5"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ed4-pF-ahV" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="290" height="99.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="290" height="144.5"/>
                                 <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="testnetColor">
@@ -78,22 +78,56 @@
                                     <constraint firstAttribute="width" constant="13" id="Xd8-uv-GHH"/>
                                 </constraints>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconBeam" translatesAutoresizingMaskIntoConstraints="NO" id="Waa-sj-vTH">
+                                <rect key="frame" x="15" y="103" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="22" id="9hD-NE-jnk"/>
+                                    <constraint firstAttribute="height" constant="22" id="rnS-km-irI"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.221746" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="my0-E8-0Dz">
+                                <rect key="frame" x="47" y="104" width="75.5" height="21"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="ure-WQ-qNv">
+                                <rect key="frame" x="127.5" y="108" width="12" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="12" id="g1c-SF-zUj"/>
+                                    <constraint firstAttribute="height" constant="17" id="lgy-gl-hHo"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(maturing)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sdt-t9-yAv">
+                                <rect key="frame" x="144.5" y="103" width="80.5" height="21"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                <color key="textColor" red="0.64313725489999995" green="0.70196078429999997" blue="0.74117647060000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="zFZ-o9-rOz" secondAttribute="trailing" constant="15" id="1Su-YQ-hqR"/>
+                            <constraint firstItem="Waa-sj-vTH" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="8UV-2b-Ucw"/>
                             <constraint firstItem="ed4-pF-ahV" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" id="Abd-Sd-eAL"/>
                             <constraint firstAttribute="trailing" secondItem="ed4-pF-ahV" secondAttribute="trailing" id="Bpv-TM-Dst"/>
+                            <constraint firstItem="my0-E8-0Dz" firstAttribute="leading" secondItem="Waa-sj-vTH" secondAttribute="trailing" constant="10" id="DOn-lL-i72"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="top" secondItem="ofI-XE-xgr" secondAttribute="bottom" constant="16" id="Fb1-qc-d6d"/>
+                            <constraint firstItem="ure-WQ-qNv" firstAttribute="leading" secondItem="my0-E8-0Dz" secondAttribute="trailing" constant="5" id="GDm-qu-tep"/>
                             <constraint firstItem="W82-H2-7nu" firstAttribute="leading" secondItem="rsW-sA-dfC" secondAttribute="trailing" constant="5" id="HEF-c2-cxg"/>
+                            <constraint firstItem="sdt-t9-yAv" firstAttribute="top" secondItem="W82-H2-7nu" secondAttribute="bottom" constant="23" id="Kd6-lG-MjV"/>
                             <constraint firstAttribute="bottom" secondItem="ed4-pF-ahV" secondAttribute="bottom" id="LIg-hZ-gjV"/>
                             <constraint firstItem="ofI-XE-xgr" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="15" id="Pi0-fj-eDa"/>
                             <constraint firstItem="zFZ-o9-rOz" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="22" id="Vtm-dd-oqV"/>
                             <constraint firstItem="kO1-i9-9f4" firstAttribute="top" secondItem="ofI-XE-xgr" secondAttribute="bottom" constant="20" id="Zm3-0B-ezM"/>
                             <constraint firstItem="ofI-XE-xgr" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="adM-5s-B44"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="centerY" secondItem="kO1-i9-9f4" secondAttribute="centerY" id="gb2-nH-imM"/>
+                            <constraint firstItem="sdt-t9-yAv" firstAttribute="leading" secondItem="ure-WQ-qNv" secondAttribute="trailing" constant="5" id="iGn-db-5j6"/>
                             <constraint firstItem="ed4-pF-ahV" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" id="jOd-D5-mSz"/>
+                            <constraint firstItem="my0-E8-0Dz" firstAttribute="top" secondItem="rsW-sA-dfC" secondAttribute="bottom" constant="22" id="joW-Kx-Q8e"/>
+                            <constraint firstItem="Waa-sj-vTH" firstAttribute="top" secondItem="kO1-i9-9f4" secondAttribute="bottom" constant="25" id="oF7-7d-a3v"/>
                             <constraint firstItem="kO1-i9-9f4" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="qUZ-nD-B6n"/>
+                            <constraint firstItem="ure-WQ-qNv" firstAttribute="top" secondItem="rsW-sA-dfC" secondAttribute="bottom" constant="26" id="t1c-gb-NqG"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="leading" secondItem="kO1-i9-9f4" secondAttribute="trailing" constant="10" id="taI-Dc-fJe"/>
                             <constraint firstItem="W82-H2-7nu" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="59" id="tlV-0q-VQt"/>
                         </constraints>
@@ -119,6 +153,10 @@
                 <outlet property="balanceLabel" destination="rsW-sA-dfC" id="wNz-re-eGd"/>
                 <outlet property="currencyIcon" destination="W82-H2-7nu" id="PBR-Ie-saB"/>
                 <outlet property="mainView" destination="ja7-ld-PUy" id="UNK-sz-K5u"/>
+                <outlet property="maturingCurrencyIcon" destination="ure-WQ-qNv" id="qcK-h3-PsP"/>
+                <outlet property="maturingDescriptionLabel" destination="sdt-t9-yAv" id="myb-GO-keN"/>
+                <outlet property="maturingIcon" destination="Waa-sj-vTH" id="mBt-Jr-0ir"/>
+                <outlet property="maturingLabel" destination="my0-E8-0Dz" id="J0z-lu-wyr"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="87.256371814092958"/>
         </tableViewCell>

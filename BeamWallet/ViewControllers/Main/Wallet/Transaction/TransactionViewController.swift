@@ -1,6 +1,6 @@
 //
-//  TransactionViewController.swift
-//  BeamWallet
+// TransactionViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -152,7 +152,7 @@ extension TransactionViewController : UITableViewDelegate {
         if section == 2 && paymentProof != nil {
             return 60
         }
-        else if section == 3 && utxos.count > 0 {
+        else if section == 3 && utxos.count > 0 && !Settings.sharedManager().isHideAmounts {
             return 60
         }
         else if section == 1 {
@@ -190,7 +190,7 @@ extension TransactionViewController : UITableViewDataSource {
         else if section == 2 && paymentProof != nil {
             return 1
         }
-        else if section == 3 {
+        else if section == 3 && !Settings.sharedManager().isHideAmounts {
             return utxos.count
         }
         return 0
@@ -208,7 +208,7 @@ extension TransactionViewController : UITableViewDataSource {
             let cell =  tableView
                 .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
-           
+            cell.delegate = self
             return cell
         }
         else if indexPath.section == 2 {
@@ -239,7 +239,7 @@ extension TransactionViewController : UITableViewDataSource {
         else if section == 2 && paymentProof != nil {
             return proofHeaderView
         }
-        else if section == 3 && utxos.count > 0 {
+        else if section == 3 && utxos.count > 0 && !Settings.sharedManager().isHideAmounts {
             return utxosHeaderView
         }
         return nil
@@ -296,6 +296,33 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
             
             SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
             SVProgressHUD.dismiss(withDelay: 1.5)
+        }
+    }
+}
+
+extension TransactionViewController : GeneralTransactionInfoCellDelegate {
+    func onClickToCell(cell: UITableViewCell) {
+        if let path = tableView.indexPath(for: cell)
+        {
+            if details[path.row].text == "Kernel ID:" {
+                let kernelId = self.transaction.kernelId!;
+                let link = Settings.sharedManager().explorerAddress + "block?kernel_id=" + kernelId
+                
+                if Settings.sharedManager().isAllowOpenLink {
+                    UIApplication.shared.open(URL(string: link)! , options: [:], completionHandler: nil)
+                }
+                else{
+                    let alert = UIAlertController(title: "External link", message: "Beam Wallet app requires permission to open external link in the browser. This action will expose your IP to the web server. To avoid it, choose \"Cancel\". You can chage your choice in app setting anytime.", preferredStyle: .alert)
+                    
+                    let ok = UIAlertAction(title: "Open", style: .default, handler: { action in
+                        UIApplication.shared.open(URL(string:link)! , options: [:], completionHandler: nil)
+                    })
+                    alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
+                    alert.addAction(ok)
+                    
+                    self.present(alert, animated: true)
+                }
+            }
         }
     }
 }

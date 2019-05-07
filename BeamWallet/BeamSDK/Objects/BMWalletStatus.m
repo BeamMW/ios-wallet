@@ -36,4 +36,8 @@
     return self;
 }
 
+-(BOOL)isSendingAndReceiving {
+    return (_realSending >0 && _realReceiving > 0);
+}
+
 @end

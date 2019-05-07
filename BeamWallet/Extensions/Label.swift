@@ -23,6 +23,34 @@ import UIKit
 
 extension UILabel {
     
+    func checkRange(_ range: NSRange, contain index: Int) -> Bool {
+        return index > range.location && index < range.location + range.length
+    }
+    
+    func indexOfAttributedTextCharacterAtPoint(point: CGPoint) -> Int {
+        guard let attributedString = self.attributedText else { return -1 }
+        
+        let mutableAttribString = NSMutableAttributedString(attributedString: attributedString)
+        // Add font so the correct range is returned for multi-line labels
+        mutableAttribString.addAttributes([NSAttributedString.Key.font: font ?? UIFont.systemFont(ofSize: 16)], range: NSRange(location: 0, length: attributedString.length))
+        
+        let textStorage = NSTextStorage(attributedString: mutableAttribString)
+        
+        let layoutManager = NSLayoutManager()
+        textStorage.addLayoutManager(layoutManager)
+        
+        let textContainer = NSTextContainer(size: frame.size)
+        textContainer.lineFragmentPadding = 0
+        textContainer.maximumNumberOfLines = numberOfLines
+        textContainer.lineBreakMode = lineBreakMode
+        layoutManager.addTextContainer(textContainer)
+        
+        let index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        return index
+    }
+}
+
+extension UILabel {
     
     @IBInspectable
     var localizationKey: String? {

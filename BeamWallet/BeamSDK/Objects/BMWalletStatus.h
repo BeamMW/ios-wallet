@@ -33,5 +33,9 @@
 @property (nonatomic,assign) double realMaturing;
 @property (nonatomic,strong) NSString *currentHeight;
 @property (nonatomic,strong) NSString *currentStateHash;
+@property (nonatomic,strong) NSString *currentStateFullHash;
+
+-(BOOL)isSendingAndReceiving;
+
 
 @end

@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:bar.beam.mw</string>
+		<string>applinks:anywhere.beam.mw</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>

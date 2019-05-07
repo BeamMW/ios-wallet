@@ -46,6 +46,7 @@ class UTXOViewController: BaseViewController {
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
+        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
 
         filterUTXOS()
         
@@ -84,7 +85,7 @@ class UTXOViewController: BaseViewController {
     @objc private func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
             if Settings.sharedManager().isAskForHideAmounts {
-                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this icon is tapped again", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until the eye icon is tapped again", preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
                 }))
@@ -293,6 +294,7 @@ extension UTXOViewController : SettingsModelDelegate {
         rightButton()
         
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
+        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
     }
 }
 

@@ -29,7 +29,7 @@
 @protocol WalletModelDelegate <NSObject>
 @optional
 -(void)onSyncProgressUpdated:(int)done total:(int)total;
--(void)onWalletError:(NSString*_Nonnull)error;
+-(void)onWalletError:(NSError*_Nonnull)error;
 -(void)onWalletStatusChange:(BMWalletStatus*_Nonnull)status;
 -(void)onNetwotkStatusChange:(BOOL)connected;
 -(void)onNetwotkStartConnecting:(BOOL)connecting;
@@ -110,7 +110,10 @@
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
+-(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
+-(NSString*_Nonnull)allAmount:(double)fee;
+
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;

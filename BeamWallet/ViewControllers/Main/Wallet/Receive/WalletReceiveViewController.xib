@@ -21,12 +21,16 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WalletReceiveViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="addressLabel" destination="RFv-C1-E4b" id="TdU-g9-F4s"/>
+                <outlet property="amountErrorLabel" destination="4O1-G5-6fr" id="lch-jF-oHO"/>
                 <outlet property="amountField" destination="Gvp-k0-rFQ" id="888-jf-MH0"/>
+                <outlet property="bottomYOffset" destination="r6h-Rw-Zji" id="WfD-1a-CnK"/>
                 <outlet property="commentField" destination="wMI-1i-8pg" id="cYf-0z-YDV"/>
                 <outlet property="expireLabel" destination="RyD-xK-jLO" id="9kQ-yC-L8U"/>
                 <outlet property="mainViewHeight" destination="HCa-7h-Ohq" id="bjb-Ll-ewO"/>
                 <outlet property="mainViewWidth" destination="EgD-qq-W9X" id="Cux-2i-Kg2"/>
+                <outlet property="qrButton" destination="bEA-N6-pMq" id="Cbu-CM-lng"/>
                 <outlet property="scrollView" destination="S6C-9s-It4" id="Edq-OY-zgl"/>
+                <outlet property="shareAddress" destination="mJg-ou-HyI" id="D0t-gg-FiS"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -105,6 +109,15 @@
                                                                 <constraint firstItem="Gvp-k0-rFQ" firstAttribute="top" secondItem="KnQ-1L-ifl" secondAttribute="top" id="yXf-ZX-YP3"/>
                                                             </constraints>
                                                         </view>
+                                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maximum amount 262 800 000 BEAMS" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4O1-G5-6fr">
+                                                            <rect key="frame" x="0.0" y="69.5" width="335" height="0.0"/>
+                                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                                            <color key="textColor" red="0.9192116857" green="0.25792378110000003" blue="0.3225119327" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
                                                     </subviews>
                                                 </stackView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hql-Wv-wQT">

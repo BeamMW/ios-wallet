@@ -173,6 +173,9 @@ extension SettingsViewController : SettingsCellDelegate {
             else if value == true && item.id == 4 {
                 Settings.sharedManager().isEnableBiometric = true
             }
+            else if item.id == 9 {
+                Settings.sharedManager().isAllowOpenLink = value
+            }
         }
     }
 }

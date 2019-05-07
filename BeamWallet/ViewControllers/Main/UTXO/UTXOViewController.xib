@@ -38,17 +38,17 @@
                     </connections>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qMV-JL-uaA" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                    <rect key="frame" x="0.0" y="60" width="375" height="607"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icEyeCrossedBig" translatesAutoresizingMaskIntoConstraints="NO" id="H6Z-fZ-WFe">
-                            <rect key="frame" x="157" y="243.5" width="61" height="60"/>
+                            <rect key="frame" x="157" y="223.5" width="61" height="60"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="61" id="Fiv-Nv-HSg"/>
                                 <constraint firstAttribute="height" constant="60" id="ogg-uL-yPN"/>
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Mp-3i-Dmg">
-                            <rect key="frame" x="15" y="313.5" width="345" height="33.5"/>
+                            <rect key="frame" x="15" y="293.5" width="345" height="33.5"/>
                             <string key="text">You’re currently in Security Mode.
 Turn it off to see your UTXO list. </string>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
@@ -74,7 +74,7 @@ Turn it off to see your UTXO list. </string>
                 <constraint firstItem="J4N-rb-XuS" firstAttribute="bottom" secondItem="oVk-An-Dah" secondAttribute="bottom" id="D52-pY-Lwl"/>
                 <constraint firstItem="qMV-JL-uaA" firstAttribute="trailing" secondItem="J4N-rb-XuS" secondAttribute="trailing" id="Hfe-Ui-X17"/>
                 <constraint firstItem="qMV-JL-uaA" firstAttribute="leading" secondItem="J4N-rb-XuS" secondAttribute="leading" id="Qau-kh-cco"/>
-                <constraint firstItem="qMV-JL-uaA" firstAttribute="top" secondItem="J4N-rb-XuS" secondAttribute="top" id="SJK-bo-dPO"/>
+                <constraint firstItem="qMV-JL-uaA" firstAttribute="top" secondItem="J4N-rb-XuS" secondAttribute="top" constant="40" id="SJK-bo-dPO"/>
                 <constraint firstItem="qMV-JL-uaA" firstAttribute="bottom" secondItem="J4N-rb-XuS" secondAttribute="bottom" id="TI9-5U-oWX"/>
                 <constraint firstItem="J4N-rb-XuS" firstAttribute="trailing" secondItem="oVk-An-Dah" secondAttribute="trailing" id="ahZ-JJ-eco"/>
                 <constraint firstItem="oVk-An-Dah" firstAttribute="top" secondItem="J4N-rb-XuS" secondAttribute="top" id="gHg-Gc-4f5"/>

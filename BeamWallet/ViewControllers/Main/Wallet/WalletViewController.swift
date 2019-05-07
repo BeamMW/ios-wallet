@@ -43,6 +43,7 @@ class WalletViewController: BaseViewController {
         talbeView.register(WalletAvailableCell.self)
         talbeView.register(WalletProgressCell.self)
         talbeView.register(WalletTransactionCell.self)
+        talbeView.register(EmptyCell.self)
         talbeView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
         AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
@@ -64,6 +65,10 @@ class WalletViewController: BaseViewController {
             
             expandProgress = false
             expandAvailable = false
+        }
+        else{
+            rowHeight[2] = AppModel.sharedManager().walletStatus?.isSendingAndReceiving() ?? false ? 160.0 : 120
+            rowHeight[1] = AppModel.sharedManager().walletStatus?.maturing == 0 ? 130.0 : 175.0
         }
         
         rightButton()
@@ -121,7 +126,7 @@ class WalletViewController: BaseViewController {
     @objc private func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
             if Settings.sharedManager().isAskForHideAmounts {
-                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this icon is tapped again", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until the eye icon is tapped again", preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
                 }))
@@ -157,9 +162,11 @@ class WalletViewController: BaseViewController {
       // items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Search", icon: "iconSearch", id:1))
       // items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Filter", icon: "iconFilter", id:2))
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Payment proof", icon: nil, id:3))
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Export", icon: nil, id:4))
-
-
+        
+        if transactions.count > 0 {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Export", icon: nil, id:4))
+        }
+        
         BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.id) {
@@ -215,7 +222,7 @@ extension WalletViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 1 {
+        if indexPath.section == 1 && transactions.count > 0 {
             let vc = TransactionViewController()
             vc.hidesBottomBarWhenPushed = true
             vc.configure(with: transactions[indexPath.row])
@@ -235,14 +242,14 @@ extension WalletViewController : UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if transactions.count > 0 {
-            return 2;
-        }
-        return 1
+        return 2;
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
+            if transactions.count == 0 {
+                return 1
+            }
             return transactions.count
         }
         else if let status = AppModel.sharedManager().walletStatus {
@@ -277,10 +284,18 @@ extension WalletViewController : UITableViewDataSource {
             return cell
         }
         else if indexPath.section == 1 {
-            let cell =  tableView
-                .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: transactions[indexPath.row], single:false))
-            return cell
+            if transactions.count == 0 {
+                let cell =  tableView
+                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
+                    .configured(with: "your transactions history will appear here")
+                return cell
+            }
+            else{
+                let cell =  tableView
+                    .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, transaction: transactions[indexPath.row], single:false))
+                return cell
+            }
         }
         
         return UITableViewCell()
@@ -293,6 +308,8 @@ extension WalletViewController : WalletModelDelegate {
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
+                self.rowHeight[2] = AppModel.sharedManager().walletStatus?.isSendingAndReceiving() ?? false ? 160.0 : 120
+
                 self.talbeView.stopRefreshing()
 
                 if Settings.sharedManager().isLocalNode {
@@ -390,7 +407,7 @@ extension WalletViewController : WalletAvailableCellDelegate {
                 rowHeight[1] = 80
             }
             else{
-                rowHeight[1] = 130
+                rowHeight[1] = AppModel.sharedManager().walletStatus?.maturing == 0 ? 130.0 : 175.0
             }
             
             self.talbeView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
@@ -407,7 +424,7 @@ extension WalletViewController : WalletProgressCellDelegate {
                 rowHeight[2] = 65
             }
             else{
-                rowHeight[2] = 135
+                rowHeight[2] = AppModel.sharedManager().walletStatus?.isSendingAndReceiving() ?? false ? 160.0 : 120
             }
             
             self.talbeView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
@@ -427,8 +444,8 @@ extension WalletViewController : SettingsModelDelegate {
             expandAvailable = false
         }
         else{
-            rowHeight[1] = 130
-            rowHeight[2] = 135
+            rowHeight[1] = AppModel.sharedManager().walletStatus?.maturing == 0 ? 130.0 : 175.0
+            rowHeight[2] = AppModel.sharedManager().walletStatus?.isSendingAndReceiving() ?? false ? 160.0 : 120
             
             expandProgress = true
             expandAvailable = true

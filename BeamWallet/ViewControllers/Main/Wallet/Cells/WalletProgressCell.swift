@@ -32,18 +32,15 @@ class WalletProgressCell: BaseCell {
 
     @IBOutlet weak private var receivingLabel: UILabel!
     @IBOutlet weak private var sentLabel: UILabel!
-    @IBOutlet weak private var maturingLabel: UILabel!
 
     @IBOutlet weak private var arrowIcon: UIImageView!
     
     @IBOutlet weak private var receivingStack: UIStackView!
     @IBOutlet weak private var sentStack: UIStackView!
-    @IBOutlet weak private var maturingStack: UIStackView!
     @IBOutlet weak private var mainStackView: UIStackView!
 
     @IBOutlet weak private var currencyReceivingIcon: UIImageView!
     @IBOutlet weak private var currencySendingIcon: UIImageView!
-    @IBOutlet weak private var currencyMaturingIcon: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -53,9 +50,6 @@ class WalletProgressCell: BaseCell {
         
         currencySendingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
         currencySendingIcon.tintColor = sentLabel.textColor
-        
-        currencyMaturingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
-        currencyMaturingIcon.tintColor = maturingLabel.textColor
         
         selectionStyle = .none
 
@@ -86,17 +80,14 @@ extension WalletProgressCell: Configurable {
     
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
-            receivingLabel.text = "+" + String.currency(value: status.realReceiving)
-            sentLabel.text = "-" + String.currency(value: status.realSending)
-            maturingLabel.text = String.currency(value: status.realMaturing)
+            receivingLabel.text = "+ " + String.currency(value: status.realReceiving)
+            sentLabel.text = "- " + String.currency(value: status.realSending)
             
-            maturingStack.isHidden = status.realMaturing == 0 ? true : false
             sentStack.isHidden = status.realSending == 0 ? true : false
             receivingStack.isHidden = status.realReceiving == 0 ? true : false
         }
         else{
             sentLabel.text = "0"
-            maturingLabel.text = "0"
             receivingLabel.text = "0"
         }
         

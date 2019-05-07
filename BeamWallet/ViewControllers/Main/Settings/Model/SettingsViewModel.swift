@@ -141,16 +141,21 @@ class SettingsViewModel {
         if BiometricAuthorization.shared.canAuthenticate() {
             second.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
         }
-        second.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .one))
+        second.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9, position: .midle))
+
         
         var three = [SettingsItem]()
+        three.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .midle))
         three.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6, position: .midle))
-        three.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
         
+        var four = [SettingsItem]()
+        four.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
+
         items.append(first)
         items.append(second)
         items.append(three)
-        
+        items.append(four)
+
         if !NotificationManager.disableApns {
             var four = [SettingsItem]()
             four.append(SettingsItem(title: "Open telegram bot", detail: nil, isSwitch: nil, id: 8, position: .midle))

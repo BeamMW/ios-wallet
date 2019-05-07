@@ -26,6 +26,10 @@ import FirebaseMessaging
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    //TODO: all targets uses masternet!!!!
+    
+    public static let isEnableNewFeatures = true
+    
     private var scannedTGUserId = ""
 
     var securityScreen = AutoSecurityScreen()
@@ -39,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
-        UIApplication.shared.isIdleTimerDisabled = true
+        //UIApplication.shared.isIdleTimerDisabled = true
 
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
@@ -73,17 +77,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
+   
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+
         //TODO: notification - close db
         if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow
             && Settings.sharedManager().target == Testnet {
             AppModel.sharedManager().isConnecting = true
             AppModel.sharedManager().resetWallet(false)
         }
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-
-        if AppModel.sharedManager().isRestoreFlow {
+        else if AppModel.sharedManager().isRestoreFlow {
             registerBackgroundTask()
         }
     }

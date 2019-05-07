@@ -87,6 +87,46 @@ class AddressViewController: BaseViewController {
                     let vc = EditAddressViewController(address: self.address)
                     self.pushViewController(vc: vc)
                 case 4 :
+                    if self.transactions.count > 0 {
+                        self.showDeleteAddressAndTransactions()
+                    }
+                    else{
+                        AppModel.sharedManager().deleteAddress(self.address.walletId)
+                        
+                        NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                        
+                        self.navigationController?.popViewController(animated: true)
+                    }
+         
+                default:
+                    return
+                }
+            }
+        }, cancel: {
+            
+        })
+    }
+    
+    private func showDeleteAddressAndTransactions() {
+        let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: "Delete address and related transactions", icon: "iconScanQr", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Delete address only", icon: "iconCopyWhite24", id:2)]
+        
+        BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.id) {
+                case 2:
+                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                    
+                    NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                    
+                    self.navigationController?.popViewController(animated: true)
+                case 1 :
+                    AppModel.sharedManager().removeDelegate(self)
+                    
+                    for tr in self.transactions {
+                        AppModel.sharedManager().deleteTransaction(tr)
+                    }
+                    
                     AppModel.sharedManager().deleteAddress(self.address.walletId)
                     
                     NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)

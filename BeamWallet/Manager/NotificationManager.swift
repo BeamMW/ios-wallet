@@ -30,7 +30,7 @@ class NotificationManager : NSObject {
     
     weak var delegate: NotificationManagerDelegate?
 
-    static var disableApns = false
+    static var disableApns = true
     
     //MARK: Notif Status
     
@@ -545,6 +545,11 @@ extension NotificationManager : WalletModelDelegate {
                         AppModel.sharedManager().getWalletStatus()
                     }
                 }
+            }
+            else if connected && TGBotManager.sharedManager.user.userId.isEmpty == false {
+                TGBotManager.sharedManager.startLinking(completion: { (_ ) in
+                    
+                })
             }
         }
     }

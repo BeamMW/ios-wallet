@@ -46,7 +46,11 @@ class WalletSendViewController: BaseViewController {
     @IBOutlet weak private var amountStack: UIStackView!
     @IBOutlet weak private var feeStack: UIStackView!
 
+    @IBOutlet weak private var sendAllButton: UIButton!
+
+    
     private var focused = false
+    private var isAll = false
     
     public var transaction: BMTransaction?
     
@@ -85,6 +89,8 @@ class WalletSendViewController: BaseViewController {
         rightButton()
         
         balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
+        
+        sendAllButton.setBackgroundColor(color: UIColor.main.marineTwo, forState: .normal)
     }
     
     override func viewDidLayoutSubviews() {
@@ -125,9 +131,17 @@ class WalletSendViewController: BaseViewController {
     
     private func updateLayout() {
         mainViewHeight.constant = mainStack.frame.height + mainStack.frame.origin.y + 20
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if self.amountErrorLabel.isHidden == false && (Device.screenType == .iPhones_6 || Device.screenType == .iPhones_5) && Settings.sharedManager().isHideAmounts == false {
+                self.mainViewHeight.constant = self.mainViewHeight.constant + 25
+            }
+        }
     }
     
     private func rightButton() {
+        updateLayout()
+        
         let icon = Settings.sharedManager().isHideAmounts ? UIImage(named: "iconShowBalance") : UIImage(named: "iconHideBalance")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(onHideAmounts))
     }
@@ -138,7 +152,7 @@ class WalletSendViewController: BaseViewController {
         if !Settings.sharedManager().isHideAmounts {
             
             if Settings.sharedManager().isAskForHideAmounts {
-                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until this icon is tapped again.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until the eye icon is tapped again", preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
                 }))
@@ -193,7 +207,7 @@ class WalletSendViewController: BaseViewController {
         }
         else if let canSend = AppModel.sharedManager().canSend(amount ?? 0, fee: fee ?? 0, to: toAddressField.text) {
             
-            amountField.status = BMField.Status.error
+            amountField.status = .error
             amountErrorLabel.isHidden = false
             amountErrorLabel.textColor = UIColor.main.red
             
@@ -237,11 +251,24 @@ class WalletSendViewController: BaseViewController {
         updateLayout()
     }
     
+    @IBAction func onSendAll(sender :UIButton) {
+        isAll = true
+        
+        fillAllAmount()
+    }
     
     @IBAction func onScan(sender :UIButton) {
         let vc = WalletQRCodeScannerViewController()
         vc.delegate = self
         pushViewController(vc: vc)
+    }
+    
+    private func fillAllAmount() {
+        let fee = Double(feeField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
+        
+        let all = AppModel.sharedManager().allAmount(fee ?? 0)
+        
+        amountField.text = all
     }
 }
 
@@ -261,9 +288,6 @@ extension WalletSendViewController : UITextFieldDelegate {
             toAddressErrorLabel.text = "Input or scan the recipient's address"
             toAddressErrorLabel.textColor = UIColor.main.blueyGrey
         }
-        else if textField == amountField {
-            amountErrorLabel.isHidden = true
-        }
         
         updateLayout()
 
@@ -271,7 +295,7 @@ extension WalletSendViewController : UITextFieldDelegate {
 
         if textField == amountField || textField == feeField {
             
-            let count = (textField == amountField) ? 8 : 15
+            let count = (textField == amountField) ? 9 : 15
             
             let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
@@ -279,10 +303,7 @@ extension WalletSendViewController : UITextFieldDelegate {
                 return false
             }
             
-            let allowedCharacters = CharacterSet(charactersIn:".0123456789")
-            let characterSet = CharacterSet(charactersIn: txtAfterUpdate)
-            
-            if (!allowedCharacters.isSuperset(of: characterSet)) {
+            if (!txtAfterUpdate.isDecimial()) {
                 return false
             }
             
@@ -302,8 +323,34 @@ extension WalletSendViewController : UITextFieldDelegate {
                 }
             }
             
+            amountErrorLabel.isHidden = true
+
+            if textField == amountField {
+                isAll = false
+                
+                let fee = Double(feeField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
+                let amount = Double(txtAfterUpdate.replacingOccurrences(of: ",", with: ".") )
+
+                if AppModel.sharedManager().canReceive(amount ?? 00, fee: fee ?? 0) != nil {
+                    return false
+                }
+            }
+            else if textField == feeField {
+                
+                let fee = Double(txtAfterUpdate.replacingOccurrences(of: ",", with: ".") )
+                let amount = Double(amountField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
+
+                if AppModel.sharedManager().canReceive(amount ?? 00, fee: fee ?? 0) != nil {
+                    return false
+                }
+            }
+            
             textField.text = txtAfterUpdate
             
+            if textField == feeField && isAll {
+                fillAllAmount()
+            }
+
             return false
         }
         else if textField == toAddressField {

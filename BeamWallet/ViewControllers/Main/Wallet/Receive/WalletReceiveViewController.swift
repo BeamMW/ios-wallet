@@ -22,20 +22,33 @@ import UIKit
 class WalletReceiveViewController: BaseViewController {
     @IBOutlet weak private var mainViewHeight: NSLayoutConstraint!
     @IBOutlet weak private var mainViewWidth: NSLayoutConstraint!
-    
+    @IBOutlet weak private var bottomYOffset: NSLayoutConstraint!
+
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var expireLabel: UILabel!
     @IBOutlet weak private var amountField: BMField!
     @IBOutlet weak private var scrollView: UIScrollView!
     @IBOutlet weak private var commentField: BMField!
-    
+    @IBOutlet weak private var amountErrorLabel: UILabel!
+
+    @IBOutlet weak private var qrButton: UIButton!
+    @IBOutlet weak private var shareAddress: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mainViewWidth.constant = UIScreen.main.bounds.width
         
-        if UIScreen.main.bounds.size.height > mainViewHeight.constant  {
-            mainViewHeight.constant = UIScreen.main.bounds.height - 84
+        if UIScreen.main.bounds.size.height > 680  {
+            mainViewHeight.constant = UIScreen.main.bounds.height - 94
+            scrollView.isScrollEnabled = false
+        }
+        else{
+            mainViewHeight.constant = 650
+        }
+        
+        if Device.screenType == .iPhones_6 {
+            bottomYOffset.constant = 45
         }
 
         title = "Receive"
@@ -158,22 +171,19 @@ extension WalletReceiveViewController : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        
         let textFieldText: NSString = (textField.text ?? "") as NSString
         
         if textField == amountField {
-            
-            let count = (textField == amountField) ? 8 : 15
+            let count = (textField == amountField) ? 9 : 15
             
             let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
             if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
                 return false
             }
-            
-            let allowedCharacters = CharacterSet(charactersIn:".0123456789")
-            let characterSet = CharacterSet(charactersIn: txtAfterUpdate)
-            
-            if (!allowedCharacters.isSuperset(of: characterSet)) {
+
+            if (!txtAfterUpdate.isDecimial()) {
                 return false
             }
             
@@ -189,8 +199,35 @@ extension WalletReceiveViewController : UITextFieldDelegate {
                 }
             }
             
-            textField.text = txtAfterUpdate
+            amountErrorLabel.isHidden = true
+            amountField.status = .normal
             
+            qrButton.isUserInteractionEnabled = true
+            shareAddress.isUserInteractionEnabled = true
+            
+            qrButton.alpha = 1
+            shareAddress.alpha = 1
+            
+            textField.text = txtAfterUpdate
+
+            if let amount = Double(txtAfterUpdate) {
+                if AppModel.sharedManager().canReceive(amount, fee: 0) != nil {
+                    return false
+//                    amountErrorLabel.isHidden = false
+//                    amountErrorLabel.text = error
+//                    amountErrorLabel.textColor = UIColor.main.red
+//                    amountField.status = .error
+//
+//                    qrButton.isUserInteractionEnabled = false
+//                    shareAddress.isUserInteractionEnabled = false
+//
+//                    qrButton.alpha = 0.5
+//                    shareAddress.alpha = 0.5
+                }
+            }
+
+            textField.text = txtAfterUpdate
+
             return false
         }
         
@@ -209,6 +246,8 @@ extension WalletReceiveViewController : UITextFieldDelegate {
 
 extension WalletReceiveViewController {
     @objc func keyboardWillShow(_ notification: Notification) {
+        scrollView.isScrollEnabled = true
+
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -219,6 +258,11 @@ extension WalletReceiveViewController {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = UIEdgeInsets.zero
+        
+        if UIScreen.main.bounds.size.height > 680  {
+            scrollView.isScrollEnabled = false
+            scrollView.setContentOffset(CGPoint.zero, animated: true)
+        }
     }
 }
 

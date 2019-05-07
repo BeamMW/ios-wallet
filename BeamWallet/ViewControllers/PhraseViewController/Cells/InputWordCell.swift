@@ -76,6 +76,8 @@ extension InputWordCell: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        wordField.tryAutoInsertWord()
+        
         self.delegate?.textValueCellReturn(self,textField.text ?? "")
 
         textField.resignFirstResponder()

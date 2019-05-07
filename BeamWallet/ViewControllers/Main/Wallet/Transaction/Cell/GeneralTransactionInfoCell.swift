@@ -19,8 +19,14 @@
 
 import UIKit
 
+protocol GeneralTransactionInfoCellDelegate: AnyObject {
+    func onClickToCell(cell:UITableViewCell)
+}
+
 class GeneralTransactionInfoCell: BaseCell {
     
+    weak var delegate: GeneralTransactionInfoCellDelegate?
+
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var detailLabel: BMCopyLabel!
     
@@ -28,10 +34,38 @@ class GeneralTransactionInfoCell: BaseCell {
         super.awakeFromNib()
         
         selectionStyle = .none
+        
+        if AppDelegate.isEnableNewFeatures {
+            detailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
+        }
+     
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    @objc private func titleLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+
+        if let text = self.detailLabel.attributedText {
+            let title = NSString(string: text.string)
+            
+            let tapRange = title.range(of: "Open in Block Explorer")
+            
+            if tapRange.location != NSNotFound {
+                let tapLocation = sender.location(in: self.detailLabel)
+                let tapIndex = self.detailLabel.indexOfAttributedTextCharacterAtPoint(point: tapLocation)
+                
+                if let ranges = self.detailLabel.attributedText?.rangesOf(subString: "Open in Block Explorer") {
+                    for range in ranges {
+                        if tapIndex > range.location && tapIndex < range.location + range.length {
+                                self.delegate?.onClickToCell(cell: self)
+                            return
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -41,7 +75,8 @@ extension GeneralTransactionInfoCell: Configurable {
         titleLabel.text = info.text
         detailLabel.text = info.detail
         detailLabel.copyText = nil
-        
+        detailLabel.isUserInteractionEnabled = info.canCopy
+
         if info.failed {
             titleLabel.textColor = UIColor.main.red
             detailLabel.textColor = UIColor.main.red
@@ -63,18 +98,29 @@ extension GeneralTransactionInfoCell: Configurable {
                 detailLabel.attributedText = attributedString
             }
         }
-//        else if info.text == "Transaction ID: " {
-//            detailLabel.copyText = info.detail
-//            
-//            let text = info.detail + "\n" + "not stored on blockchain"
-//            let range = (text as NSString).range(of: String("not stored on blockchain"))
-//            
-//            let attributedString = NSMutableAttributedString(string:text)
-//            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey , range: range)
-//            detailLabel.attributedText = attributedString
-//        }
+        else if info.text == "Kernel ID:" && AppDelegate.isEnableNewFeatures {
+            detailLabel.copyText = info.detail
+
+            if !info.detail.contains("00000000") {
+                detailLabel.isUserInteractionEnabled = true
                 
-        detailLabel.isUserInteractionEnabled = info.canCopy
+                let text = info.detail + "\n" + "Open in Block Explorer"
+                let range = (text as NSString).range(of: String("Open in Block Explorer"))
+                
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(named: "iconExternalLinkGreen")
+                let imageString = NSAttributedString(attachment: imageAttachment)
+                
+                let attributedString = NSMutableAttributedString(string:text)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightTeal , range: range)
+                
+                attributedString.append(NSAttributedString(string: " "))
+                attributedString.append(imageString)
+                
+                detailLabel.attributedText = attributedString
+            }
+        }
+        
     }
 }
 

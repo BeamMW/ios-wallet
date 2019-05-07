@@ -1,5 +1,6 @@
 //
-// String.h
+// CurrencyFormatter.h
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -17,17 +18,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <string>
 
-@interface NSString (Additions)
+@interface CurrencyFormatter : NSObject
 
--(BOOL)isEmpty;
-
-@end
-
-
-@interface NSString (StdExtension)
-
--(std::string)string;
++(NSString*)currencyFromNumber:(NSNumber*)number;
 
 @end

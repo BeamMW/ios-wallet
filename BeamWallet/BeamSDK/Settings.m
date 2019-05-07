@@ -28,6 +28,7 @@ static NSString *biometricKey = @"biometricKey";
 static NSString *hideAmountsKey = @"isHideAmounts";
 static NSString *nodeKey = @"nodeKey";
 static NSString *askHideAmountsKey = @"askHideAmountsKey";
+static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -90,6 +91,23 @@ static NSString *askHideAmountsKey = @"askHideAmountsKey";
     }
     else{
         _isAskForHideAmounts = YES;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:alowOpenLinkKey]) {
+        _isAllowOpenLink = [[[NSUserDefaults standardUserDefaults] objectForKey:alowOpenLinkKey] boolValue];
+    }
+    else{
+        _isAllowOpenLink = NO;
+    }
+    
+    if (self.target == Testnet) {
+        _explorerAddress = @"https://testnet.explorer.beam.mw/";
+    }
+    else if (self.target == Masternet) {
+        _explorerAddress = @"https://explorer.beam.mw/";
+    }
+    else{
+        _explorerAddress = @"https://explorer.beam.mw/";
     }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
@@ -155,6 +173,13 @@ static NSString *askHideAmountsKey = @"askHideAmountsKey";
     _isAskForHideAmounts = isAskForHideAmounts;
     
     [[NSUserDefaults standardUserDefaults] setBool:isAskForHideAmounts forKey:askHideAmountsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setIsAllowOpenLink:(BOOL)isAllowOpenLink {
+    _isAllowOpenLink = isAllowOpenLink;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_isAllowOpenLink] forKey:alowOpenLinkKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
