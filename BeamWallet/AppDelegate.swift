@@ -131,23 +131,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func tryLinkingBot(url:URL) {
-        if let params = url.queryParameters {
-            if let id = params["user_id"], let name = params["username"] {
-                TGBotManager.sharedManager.user.userId = id
-                TGBotManager.sharedManager.user.userName = name
-
-                if AppModel.sharedManager().isLoggedin {
-                    TGBotManager.sharedManager.startLinking { (_ ) in
-                        
-                    }
+        if TGBotManager.sharedManager.isValidUserFromUrl(url: url) {
+            if AppModel.sharedManager().isLoggedin {
+                TGBotManager.sharedManager.startLinking { (_ ) in
+                    
                 }
-                else{
-                    if let vc = UIApplication.getTopMostViewController() {
-                        vc.alert(title: "Telegram bot", message: "Please open wallet to link telegram bot") { (_ ) in
-                            
-                            if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
-                                passVC.biometricAuthorization()
-                            }
+            }
+            else{
+                if let vc = UIApplication.getTopMostViewController() {
+                    vc.alert(title: "Telegram bot", message: "Please open wallet to link telegram bot") { (_ ) in
+                        
+                        if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
+                            passVC.biometricAuthorization()
                         }
                     }
                 }
@@ -159,12 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         if let url = userActivity.webpageURL {
             if ((UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController) != nil) {
-                if let params = url.queryParameters {
-                    if let id = params["user_id"], let name = params["username"] {
-                        TGBotManager.sharedManager.user.userId = id
-                        TGBotManager.sharedManager.user.userName = name
-                    }
-                }
+                _ = TGBotManager.sharedManager.isValidUserFromUrl(url: url)
             }
             else{
                 tryLinkingBot(url: url)

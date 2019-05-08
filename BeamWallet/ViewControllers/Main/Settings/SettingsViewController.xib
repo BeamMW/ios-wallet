@@ -18,7 +18,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="headerView" destination="7pZ-0J-NAH" id="lYM-J0-Ks4"/>
-                <outlet property="nodeTitleHeaderView" destination="DuO-98-NQb" id="t6l-t2-g8h"/>
                 <outlet property="talbeView" destination="Tem-J3-aZI" id="dex-x4-MCQ"/>
                 <outlet property="versionLabel" destination="eet-tA-QhM" id="FOq-DY-ism"/>
                 <outlet property="versionView" destination="suv-th-NdT" id="tpR-K4-9JJ"/>
@@ -70,25 +69,6 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="KJ2-Pk-MBT"/>
             <point key="canvasLocation" x="53.600000000000001" y="66.11694152923539"/>
-        </view>
-        <view contentMode="scaleToFill" id="DuO-98-NQb" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NODE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ylS-84-VAU">
-                    <rect key="frame" x="15" y="20.5" width="32" height="14.5"/>
-                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
-                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-            </subviews>
-            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <constraints>
-                <constraint firstItem="ylS-84-VAU" firstAttribute="leading" secondItem="NWe-JO-bSE" secondAttribute="leading" constant="15" id="29e-XK-BMf"/>
-                <constraint firstItem="NWe-JO-bSE" firstAttribute="bottom" secondItem="ylS-84-VAU" secondAttribute="bottom" constant="5" id="YSf-MU-qTG"/>
-            </constraints>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="NWe-JO-bSE"/>
         </view>
         <view contentMode="scaleToFill" id="suv-th-NdT">
             <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>

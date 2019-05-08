@@ -50,6 +50,8 @@ class AddressesViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
+
+    
     @objc private func didBecomeActive() {
         filterAddresses()
         tableView.reloadData()
@@ -158,6 +160,15 @@ extension AddressesViewController : WalletModelDelegate {
     }
     
     func onContactsChange(_ contacts: [BMContact]) {
+        DispatchQueue.main.async {
+            self.filterAddresses()
+            UIView.performWithoutAnimation {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func onCategoriesChange() {
         DispatchQueue.main.async {
             self.filterAddresses()
             UIView.performWithoutAnimation {

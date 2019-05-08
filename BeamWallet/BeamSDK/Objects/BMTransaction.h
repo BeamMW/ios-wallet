@@ -1,6 +1,6 @@
 //
-//  BMTransaction.h
-//  BeamWallet
+// BMTransaction.h
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //

@@ -1,6 +1,6 @@
 //
-//  Configurable.swift
-//  BeamWallet
+// Configurable.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //

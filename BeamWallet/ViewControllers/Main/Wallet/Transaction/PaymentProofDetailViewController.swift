@@ -53,7 +53,7 @@ class PaymentProofDetailViewController: BaseViewController {
         
         title = paymentProof == nil ? "Payment proof verification" : "Payment proof"
         
-        tableView.register(GeneralTransactionInfoCell.self)
+        tableView.register(GeneralInfoCell.self)
         
         fillTransactionInfo()
         
@@ -95,13 +95,13 @@ class PaymentProofDetailViewController: BaseViewController {
         if let paymentProof = self.paymentProof, let transaction = self.transaction {
             
             var section_1 = [TransactionViewController.TransactionGeneralInfo]()
-            section_1.append(TransactionViewController.TransactionGeneralInfo(text: "Code:", detail: paymentProof.code, failed: false, canCopy:true))
+            section_1.append(TransactionViewController.TransactionGeneralInfo(text: "Code:", detail: paymentProof.code, failed: false, canCopy:true, color: UIColor.white))
             
             var section_2 = [TransactionViewController.TransactionGeneralInfo]()
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Sender:", detail: transaction.senderAddress, failed: false, canCopy:true))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Receiver:", detail: transaction.receiverAddress, failed: false, canCopy:true))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Amount:", detail: String.currency(value: transaction.realAmount) + " BEAM", failed: false, canCopy:true))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Sender:", detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Receiver:", detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Amount:", detail: String.currency(value: transaction.realAmount) + " BEAM", failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
             
             details.append(section_1)
             details.append(section_2)
@@ -110,10 +110,10 @@ class PaymentProofDetailViewController: BaseViewController {
         }
         else if let transaction = self.transaction {
             var section_2 = [TransactionViewController.TransactionGeneralInfo]()
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Sender:", detail: transaction.senderAddress, failed: false, canCopy:true))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Receiver:", detail: transaction.receiverAddress, failed: false, canCopy:true))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Amount:", detail: String.currency(value: transaction.realAmount) + " BEAM", failed: false, canCopy:true))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Sender:", detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Receiver:", detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Amount:", detail: String.currency(value: transaction.realAmount) + " BEAM", failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
             
             details.append(section_2)
             
@@ -169,7 +169,7 @@ extension PaymentProofDetailViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView
-            .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
+            .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
             .configured(with: details[indexPath.section][indexPath.row])
         
         return cell

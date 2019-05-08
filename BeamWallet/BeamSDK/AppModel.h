@@ -25,6 +25,8 @@
 #import "BMContact.h"
 #import "BMPaymentProof.h"
 #import "Settings.h"
+#import "BMCategory.h"
+#import "BMDuration.h"
 
 @protocol WalletModelDelegate <NSObject>
 @optional
@@ -42,6 +44,7 @@
 -(void)onContactsChange:(NSArray<BMContact*>*_Nonnull)contacts;
 -(void)onReceivePaymentProof:(BMPaymentProof*_Nonnull)proof;
 -(void)onLocalNodeStarted;
+-(void)onCategoriesChange;
 @end
 
 @interface AppModel : NSObject
@@ -63,6 +66,7 @@
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable utxos;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nullable walletAddresses;
 @property (nonatomic,strong) NSMutableArray<BMContact*>*_Nonnull contacts;
+@property (nonatomic,strong) NSMutableArray<BMCategory*>*_Nonnull categories;
 
 +(AppModel*_Nonnull)sharedManager;
 
@@ -103,7 +107,6 @@
 -(void)deleteAddress:(NSString*_Nullable)address;
 -(BOOL)isValidAddress:(NSString*_Nullable)address;
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address;
--(BOOL)isAddressDeleted:(NSString*_Nullable)address;
 -(BOOL)isMyAddress:(NSString*_Nullable)address;
 -(void)clearAllAddresses;
 
@@ -136,5 +139,14 @@
 //contacts
 -(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue;
 -(void)clearAllContacts;
+
+//categories
+-(void)deleteCategory:(BMCategory*_Nonnull)category;
+-(void)editCategory:(BMCategory*_Nonnull)category;
+-(void)addCategory:(BMCategory*_Nonnull)category;
+-(BOOL)isNameAlreadyExist:(NSString*_Nonnull)name id:(int)ID;
+-(BMCategory*_Nullable)findCategoryById:(NSString*_Nonnull)ID;
+-(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nonnull)ID;
+-(NSMutableArray<BMAddress*>*_Nonnull)getAddressFromCategory:(BMCategory*_Nonnull)category;
 
 @end

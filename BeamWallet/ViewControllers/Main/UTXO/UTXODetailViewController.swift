@@ -46,7 +46,7 @@ class UTXODetailViewController: BaseViewController {
         fillDetailInfo()
         
         tableView.register(UTXODetailCell.self)
-        tableView.register(GeneralTransactionInfoCell.self)
+        tableView.register(GeneralInfoCell.self)
         tableView.register(UTXOTransactionCell.self)
 
         title = "UTXO Details"
@@ -70,16 +70,16 @@ class UTXODetailViewController: BaseViewController {
         details.removeAll()
         
         if let kernel = history.first?.kernelId {
-            details.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: kernel, failed: false, canCopy:true))
+            details.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: kernel, failed: false, canCopy:true, color: UIColor.white))
         }
         
-        details.append(TransactionViewController.TransactionGeneralInfo(text: "UTXO type:", detail: utxo.typeString, failed: false, canCopy:true))
+        details.append(TransactionViewController.TransactionGeneralInfo(text: "UTXO type:", detail: utxo.typeString, failed: false, canCopy:true, color: UIColor.white))
         
 //        for transaction in history {
 //            if let contact = AppModel.sharedManager().getContactFromId(transaction.receiverAddress)
 //            {
 //                let value = contact.name.isEmpty ? contact.address.walletId : contact.name + "\n" + contact.address.walletId
-//                details.append(TransactionViewController.TransactionGeneralInfo(text: "Contact:", detail: value, failed: false, canCopy:true))
+//                details.append(TransactionViewController.TransactionGeneralInfo(text: "Contact:", detail: value, failed: false, canCopy:true, color: UIColor.white))
 //            }
 //        }
     }
@@ -139,7 +139,7 @@ extension UTXODetailViewController : UITableViewDataSource {
         }
         else if indexPath.section == 1{
             let cell =  tableView
-                .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
+                .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
             
             return cell

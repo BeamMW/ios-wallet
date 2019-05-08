@@ -26,10 +26,10 @@ class AddressCell: UITableViewCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var idLabel: UILabel!
     @IBOutlet weak private var expiredLabel: UILabel!
+    @IBOutlet weak private var categoryLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
     }
 }
 
@@ -73,6 +73,14 @@ extension AddressCell: Configurable {
             let selectedView = UIView()
             selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
             self.selectedBackgroundView = selectedView
+        }
+        
+        if let category = AppModel.sharedManager().findCategory(byId: options.address.category) {
+            categoryLabel.textColor = UIColor.init(hexString: category.color)
+            categoryLabel.text = category.name
+        }
+        else{
+            categoryLabel.text = ""
         }
     }
 }

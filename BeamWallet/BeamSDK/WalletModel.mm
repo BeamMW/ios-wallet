@@ -306,7 +306,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
             BMAddress *address = [[BMAddress alloc] init];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            
+            address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+
             BMContact *contact = [[BMContact alloc] init];
             contact.address = address;
             contact.name = address.label;

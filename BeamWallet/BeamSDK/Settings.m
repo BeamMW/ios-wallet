@@ -104,7 +104,7 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
         _explorerAddress = @"https://testnet.explorer.beam.mw/";
     }
     else if (self.target == Masternet) {
-        _explorerAddress = @"https://explorer.beam.mw/";
+        _explorerAddress = @"https://master-net.explorer.beam.mw/";
     }
     else{
         _explorerAddress = @"https://explorer.beam.mw/";

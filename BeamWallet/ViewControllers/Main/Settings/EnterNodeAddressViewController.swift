@@ -51,7 +51,7 @@ class EnterNodeAddressViewController: BaseViewController {
         super.viewDidDisappear(animated)
     }
     
-    @objc func textFieldDidChange(_ textField: BMField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         if let address = nodeAddressField.text {
             
             if address.isEmpty {

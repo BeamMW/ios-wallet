@@ -62,9 +62,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             
         }
         else{
-            if isRequestedAuthorization == false && TGBotManager.sharedManager.user.userId.isEmpty == true && UIApplication.shared.applicationState == .active {
+//            if let password = KeychainManager.getPassword() {
+//                passField.text = password
+//                onLogin(sender: UIButton())
+//            }
+            
+            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
                 isRequestedAuthorization = true
-                
+
                 biometricAuthorization()
             }
         }

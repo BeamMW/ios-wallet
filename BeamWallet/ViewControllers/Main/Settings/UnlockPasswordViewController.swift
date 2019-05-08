@@ -52,7 +52,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
         
         title = event == .unlock ? "Your password" : "Change password"
         
-        if Device.isZoomed{
+        if Device.isZoomed {
             heightConstraint.constant = 250
         }
         

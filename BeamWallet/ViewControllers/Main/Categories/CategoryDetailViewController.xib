@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CategoryDetailViewController" customModule="BeamWallet" customModuleProvider="target">
+            <connections>
+                <outlet property="headerView" destination="riF-UV-Cn4" id="9VT-82-Nb9"/>
+                <outlet property="tableView" destination="h7u-sG-QcS" id="ILc-CN-P3k"/>
+                <outlet property="view" destination="iG4-Pz-6Nd" id="TRs-Va-fpE"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="riF-UV-Cn4" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Addresses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BGP-hP-ZuS">
+                    <rect key="frame" x="15" y="15.5" width="78" height="19.5"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="BGP-hP-ZuS" firstAttribute="centerY" secondItem="riF-UV-Cn4" secondAttribute="centerY" id="ejh-m9-vlc"/>
+                <constraint firstItem="BGP-hP-ZuS" firstAttribute="leading" secondItem="YFr-f8-Ecj" secondAttribute="leading" constant="15" id="wQW-AU-XyC"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="YFr-f8-Ecj"/>
+        </view>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="iG4-Pz-6Nd">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="h7u-sG-QcS">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="rlI-97-LAJ"/>
+                        <outlet property="delegate" destination="-1" id="sIf-6W-hjL"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="drB-xv-wlY" firstAttribute="trailing" secondItem="h7u-sG-QcS" secondAttribute="trailing" id="5ZK-Nv-ELk"/>
+                <constraint firstItem="h7u-sG-QcS" firstAttribute="top" secondItem="drB-xv-wlY" secondAttribute="top" id="8gh-4S-B19"/>
+                <constraint firstItem="h7u-sG-QcS" firstAttribute="leading" secondItem="drB-xv-wlY" secondAttribute="leading" id="ZbQ-t1-Crk"/>
+                <constraint firstItem="drB-xv-wlY" firstAttribute="bottom" secondItem="h7u-sG-QcS" secondAttribute="bottom" id="zyv-nG-RIe"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="drB-xv-wlY"/>
+        </view>
+    </objects>
+</document>

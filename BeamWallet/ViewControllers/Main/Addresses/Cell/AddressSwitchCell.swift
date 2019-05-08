@@ -24,7 +24,7 @@ protocol AddressSwitchCellDelegate: AnyObject {
 }
 
 
-class AddressSwitchCell: BaseCell {
+class AddressSwitchCell: UITableViewCell {
 
     weak var delegate: AddressSwitchCellDelegate?
 
@@ -34,19 +34,21 @@ class AddressSwitchCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        self.backgroundColor = UIColor.main.marineTwo
+
         selectionStyle = .none
     }
     
     
     @IBAction func onSend(sender : UISwitch) {
-        self.delegate?.onSwitch(value: sender.isSelected)
+        self.delegate?.onSwitch(value: sender.isOn)
     }
 }
 
 extension AddressSwitchCell: Configurable {
     
     func configure(with options: (text: String, selected:Bool)) {
-        switchView.isSelected = options.selected
+        switchView.isOn = options.selected
         nameLabel.text = options.text
     }
 }

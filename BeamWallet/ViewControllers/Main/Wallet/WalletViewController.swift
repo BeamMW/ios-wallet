@@ -73,7 +73,7 @@ class WalletViewController: BaseViewController {
         
         rightButton()
         
-        if TGBotManager.sharedManager.user.userName.isEmpty == false {
+        if TGBotManager.sharedManager.isNeedLinking() {
             TGBotManager.sharedManager.startLinking { (_ ) in
                 
             }

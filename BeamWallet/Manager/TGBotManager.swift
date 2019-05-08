@@ -29,12 +29,50 @@ class TGBotManager : NSObject {
     static let sharedManager = TGBotManager()
 
     private static var mainApi = "https://anywhere.beam.mw/api"
-   
-    public var user = TGUser()
     
     private var isStartLinking = false
     private var completion : ((Bool) -> Void)?
 
+    private var user = TGUser()
+
+    public func isNeedLinking()->Bool {
+        if user.userName.isEmpty {
+            return false
+        }
+        return true
+    }
+    
+    public func isValidUserFromUrl(url:URL)->Bool {
+        if let params = url.queryParameters {
+            if let id = params["user_id"], let name = params["username"] {
+                
+                user.userId = id
+                user.userName = name
+                
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    public func isValidUserFromJson(value:String)->Bool {
+        if let json = try? JSONSerialization.jsonObject(with: value.data(using: .utf8)!, options: .mutableContainers) as? [String: Any] {
+            
+            if let id = json["_id"] as? u_quad_t, let name = json["username"] as? String {
+                
+                user.userId = String(id)
+                user.userName = name
+                
+                return true
+            }
+        }
+        
+        return false;
+    }
+    
+    //MARK: - HTTP methods
+    
     public func startLinking(completion:@escaping ((Bool) -> Void)) {
         #if EXTENSION
         print("ignore")
@@ -114,6 +152,8 @@ class TGBotManager : NSObject {
         }
     }
     
+    //MARK: - Requests
+
     private static func sendRequest(url:URL, parameters:[String:Any], method:String, completion: @escaping ((Error?) -> Void)) {
      
         let session = URLSession.shared
@@ -161,7 +201,7 @@ extension TGBotManager : WalletModelDelegate {
     
     func onGeneratedNewAddress(_ address: BMAddress) {
         #if EXTENSION
-        print("ignore")
+            print("ignore")
         #else
         DispatchQueue.main.async {
             if self.isStartLinking {

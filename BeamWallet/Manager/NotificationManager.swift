@@ -546,7 +546,7 @@ extension NotificationManager : WalletModelDelegate {
                     }
                 }
             }
-            else if connected && TGBotManager.sharedManager.user.userId.isEmpty == false {
+            else if connected && TGBotManager.sharedManager.isNeedLinking() {
                 TGBotManager.sharedManager.startLinking(completion: { (_ ) in
                     
                 })

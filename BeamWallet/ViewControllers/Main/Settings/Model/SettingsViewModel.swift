@@ -26,8 +26,9 @@ protocol SettingsActions {
     func onClearData(controller:UIViewController)
     func onSwitch(controller:UIViewController, indexPath:IndexPath)
     func onOpenTgBot()
-    
+    func onCategory(controller:UIViewController, category:BMCategory?)
 }
+
 extension SettingsViewModel: SettingsActions {
     
     func onOpenTgBot() {
@@ -101,11 +102,20 @@ extension SettingsViewModel: SettingsActions {
         
         controller.present(vc, animated: true)
     }
+    
+    func onCategory(controller:UIViewController, category:BMCategory?) {
+        
+        let vc = CategoryEditViewController(category: category)
+        vc.hidesBottomBarWhenPushed = true
+        controller.pushViewController(vc: vc)
+    }
 }
 
-class SettingsViewModel {
+class SettingsViewModel : NSObject {
     
     public var items = [[SettingsItem]]()
+    
+    public var needReloadTable : (() -> Void)?
 
     class SettingsItem {
         enum Position {
@@ -118,7 +128,8 @@ class SettingsViewModel {
         public var isSwitch:Bool?
         public var id:Int!
         public var position:Position!
-        
+        public var category:BMCategory?
+
         init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position) {
             self.title = title
             self.detail = detail
@@ -126,45 +137,85 @@ class SettingsViewModel {
             self.id = id
             self.position = position
         }
+        
+        init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position, category:BMCategory?) {
+            self.title = title
+            self.detail = detail
+            self.isSwitch = isSwitch
+            self.id = id
+            self.position = position
+            self.category = category
+        }
     }
     
-    init() {
+    override init() {
+        super.init()
+        
         initItems()
+        
+        AppModel.sharedManager().addDelegate(self)
     }
     
     private func initItems() {
-        var first = [SettingsItem]()
-        first.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5, position: .one))
         
-        var second = [SettingsItem]()
-        second.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
+        var node = [SettingsItem]()
+        node.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5, position: .one))
+        
+        var security = [SettingsItem]()
+        security.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
         if BiometricAuthorization.shared.canAuthenticate() {
-            second.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
+            security.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
         }
-        second.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9, position: .midle))
+        security.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9, position: .midle))
 
         
-        var three = [SettingsItem]()
-        three.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .midle))
-        three.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6, position: .midle))
+        var info = [SettingsItem]()
+        info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .midle))
+        info.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6, position: .midle))
         
-        var four = [SettingsItem]()
-        four.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
+        var categories = [SettingsItem]()
+        if AppModel.sharedManager().categories.count > 0 {
+            for category in AppModel.sharedManager().categories as! [BMCategory] {
+                categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, id: Int(category.id), position: .midle, category: category))
+            }
+        }
+        else{
+            categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10, position: AppModel.sharedManager().categories.count > 0 ? .midle : .one))
+        }
 
-        items.append(first)
-        items.append(second)
-        items.append(three)
-        items.append(four)
+        var report = [SettingsItem]()
+        report.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
+
+        items.append(node)
+        items.append(security)
+        items.append(info)
+        items.append(categories)
+        if AppModel.sharedManager().categories.count > 0 {
+            var categories = [SettingsItem]()
+            categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10, position: .one))
+            items.append(categories)
+        }
+        items.append(report)
 
         if !NotificationManager.disableApns {
-            var four = [SettingsItem]()
-            four.append(SettingsItem(title: "Open telegram bot", detail: nil, isSwitch: nil, id: 8, position: .midle))
-            four.append(SettingsItem(title: "Linking telegram bot", detail: nil, isSwitch: nil, id: 7, position: .one))
-            items.append(four)
+            var bots = [SettingsItem]()
+            bots.append(SettingsItem(title: "Open telegram bot", detail: nil, isSwitch: nil, id: 8, position: .midle))
+            bots.append(SettingsItem(title: "Linking telegram bot", detail: nil, isSwitch: nil, id: 7, position: .one))
+            items.append(bots)
         }
     }
     
     public func getItem(indexPath:IndexPath) -> SettingsItem {
         return items[indexPath.section][indexPath.row]
+    }
+}
+
+extension SettingsViewModel : WalletModelDelegate {
+    
+    func onCategoriesChange() {
+        //temp solution
+        self.items.removeAll()
+        self.initItems()
+        self.needReloadTable?()
     }
 }

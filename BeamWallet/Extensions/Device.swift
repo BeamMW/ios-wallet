@@ -39,6 +39,10 @@ class Device {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
     
+    static var isLarge: Bool {
+        return Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus
+    }
+    
     enum ScreenType: String {
         case iPhones_4 = "iPhone 4 or iPhone 4S"
         case iPhones_5 = "iPhone 5, iPhone 5s, iPhone 5c or iPhone SE"

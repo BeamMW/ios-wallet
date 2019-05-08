@@ -1,5 +1,5 @@
 //
-// BMWordSuggestionView.swift
+// CategoryNameCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,8 +17,23 @@
 // limitations under the License.
 //
 
-import Foundation
+import UIKit
 
-class BMWordSuggestionView: UIView {
+class CategoryNameCell: BaseCell {
     
+    @IBOutlet weak private var nameLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        selectionStyle = .none
+    }
+}
+
+extension CategoryNameCell: Configurable {
+    
+    func configure(with category:BMCategory) {
+        nameLabel.text = category.name
+        nameLabel.textColor = UIColor.init(hexString: category.color)
+    }
 }

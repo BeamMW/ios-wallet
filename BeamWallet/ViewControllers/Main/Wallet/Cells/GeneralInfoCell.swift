@@ -1,5 +1,5 @@
 //
-//  GeneralTransactionInfoCell.swift
+//  GeneralInfoCell.swift
 //  BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,13 +19,13 @@
 
 import UIKit
 
-protocol GeneralTransactionInfoCellDelegate: AnyObject {
+protocol GeneralInfoCellDelegate: AnyObject {
     func onClickToCell(cell:UITableViewCell)
 }
 
-class GeneralTransactionInfoCell: BaseCell {
+class GeneralInfoCell: BaseCell {
     
-    weak var delegate: GeneralTransactionInfoCellDelegate?
+    weak var delegate: GeneralInfoCellDelegate?
 
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var detailLabel: BMCopyLabel!
@@ -69,14 +69,14 @@ class GeneralTransactionInfoCell: BaseCell {
     }
 }
 
-extension GeneralTransactionInfoCell: Configurable {
+extension GeneralInfoCell: Configurable {
     
     func configure(with info:TransactionViewController.TransactionGeneralInfo) {
         titleLabel.text = info.text
         detailLabel.text = info.detail
         detailLabel.copyText = nil
         detailLabel.isUserInteractionEnabled = info.canCopy
-
+        
         if info.failed {
             titleLabel.textColor = UIColor.main.red
             detailLabel.textColor = UIColor.main.red
@@ -84,9 +84,25 @@ extension GeneralTransactionInfoCell: Configurable {
         else{
             titleLabel.textColor = UIColor.main.blueyGrey
             detailLabel.textColor = UIColor.white
+            detailLabel.textColor = info.color
         }
         
-        if info.text == "Contact:" {
+        if info.text == "Sending address:" ||  info.text == "Receiving address:" {
+            if let category = AppModel.sharedManager().findCategory(byAddress: info.detail)
+            {
+                detailLabel.copyText = info.detail
+                
+                let text = info.detail + "\n" + category.name
+                let range = (text as NSString).range(of: String(category.name))
+                
+                let attributedString = NSMutableAttributedString(string:text)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.init(hexString: category.color) , range: range)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Italic", size: 14) ?? UIFont.italicSystemFont(ofSize: 14) , range: range)
+
+                detailLabel.attributedText = attributedString
+            }
+        }
+        else if info.text == "Contact:" {
             let split = info.detail.split(separator: "\n")
             if split.count == 2 {
                 let contact = split[0]

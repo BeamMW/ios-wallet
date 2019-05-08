@@ -41,26 +41,37 @@
                             <rect key="frame" x="20" y="1" width="374" height="48.5"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" textContentType="url"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                     <color key="value" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="aH8-2p-7Wt"/>
                             </connections>
                         </textField>
+                        <view alpha="0.10000000149011612" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="imq-mz-aE3">
+                            <rect key="frame" x="0.0" y="48.5" width="414" height="1"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="W4h-L7-fP2"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
+                        <constraint firstItem="imq-mz-aE3" firstAttribute="leading" secondItem="GDO-Hv-JeU" secondAttribute="leading" id="0Kk-Z1-Z6h"/>
                         <constraint firstAttribute="trailing" secondItem="AKB-1E-OQ8" secondAttribute="trailing" constant="20" id="2r7-Bi-oze"/>
                         <constraint firstItem="JmE-Bj-dDb" firstAttribute="top" secondItem="GDO-Hv-JeU" secondAttribute="top" id="7id-0d-AhF"/>
                         <constraint firstItem="JmE-Bj-dDb" firstAttribute="leading" secondItem="GDO-Hv-JeU" secondAttribute="leading" id="86P-2A-7PI"/>
                         <constraint firstAttribute="bottom" secondItem="AKB-1E-OQ8" secondAttribute="bottom" id="I9D-N6-goK"/>
                         <constraint firstAttribute="height" constant="49.5" id="M6N-f9-Tg8"/>
                         <constraint firstItem="AKB-1E-OQ8" firstAttribute="top" secondItem="JmE-Bj-dDb" secondAttribute="bottom" id="aC3-To-ajV"/>
+                        <constraint firstAttribute="trailing" secondItem="imq-mz-aE3" secondAttribute="trailing" id="fbF-mt-yyZ"/>
+                        <constraint firstAttribute="bottom" secondItem="imq-mz-aE3" secondAttribute="bottom" id="n96-Yk-k8y"/>
                         <constraint firstItem="AKB-1E-OQ8" firstAttribute="leading" secondItem="GDO-Hv-JeU" secondAttribute="leading" constant="20" id="rtA-iW-1Am"/>
                         <constraint firstAttribute="trailing" secondItem="JmE-Bj-dDb" secondAttribute="trailing" id="zsC-IE-PmS"/>
                     </constraints>

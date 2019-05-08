@@ -34,6 +34,7 @@
 @property (nonatomic,assign) BOOL isNowExpired;
 @property (nonatomic,assign) BOOL isNowActive;
 @property (nonatomic,assign) UInt64 isNowActiveDuration;
+@property (nonatomic,assign) BOOL isChangedDate;
 
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;

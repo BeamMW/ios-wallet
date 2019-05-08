@@ -25,14 +25,18 @@ class SettingsViewController: BaseViewController {
     @IBOutlet private weak var versionLabel:UILabel!
     @IBOutlet private var versionView:UIView!
     @IBOutlet private var headerView:UIView!
-    @IBOutlet private var nodeTitleHeaderView:UIView!
-    
-    private var viewModel = SettingsViewModel()
+
+    private var viewModel:SettingsViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Settings"
+        
+        viewModel = SettingsViewModel()
+        viewModel.needReloadTable = {
+            self.talbeView.reloadData()
+        }
         
         versionLabel.text = UIApplication.version()
         
@@ -51,7 +55,7 @@ extension SettingsViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return 40
+        return BMTableHeaderTitleView.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -60,27 +64,36 @@ extension SettingsViewController : UITableViewDelegate {
         
         let item = viewModel.getItem(indexPath: indexPath)
         
-        switch item.id {
-        case 2:
-            self.viewModel.onClickReport(controller: self)
-        case 1:
-            self.viewModel.onChangePassword(controller: self)
-        case 5:
-            self.viewModel.onChangeNode(controller: self) { (_) in
-                self.talbeView.reloadData()
-            }
-        case 6:
-            self.viewModel.onClearData(controller: self)
-        case 7:
-            let vc = WalletQRCodeScannerViewController()
-            vc.delegate = self
-            vc.isBotScanner = true
+        if item.category != nil {
+            let vc = CategoryDetailViewController(category: item.category!)
             vc.hidesBottomBarWhenPushed = true
             self.pushViewController(vc: vc)
-        case 8:
-            self.viewModel.onOpenTgBot()
-        default:
-            return
+        }
+        else{
+            switch item.id {
+            case 2:
+                self.viewModel.onClickReport(controller: self)
+            case 1:
+                self.viewModel.onChangePassword(controller: self)
+            case 5:
+                self.viewModel.onChangeNode(controller: self) { (_) in
+                    self.talbeView.reloadData()
+                }
+            case 6:
+                self.viewModel.onClearData(controller: self)
+            case 7:
+                let vc = WalletQRCodeScannerViewController()
+                vc.delegate = self
+                vc.isBotScanner = true
+                vc.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: vc)
+            case 8:
+                self.viewModel.onOpenTgBot()
+            case 10:
+                self.viewModel.onCategory(controller: self, category: nil)
+            default:
+                return
+            }
         }
     }
     
@@ -91,7 +104,10 @@ extension SettingsViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if section == 0 {
-            return nodeTitleHeaderView
+            return BMTableHeaderTitleView(title: "node")
+        }
+        else if section == 3 {
+            return BMTableHeaderTitleView(title: "categories")
         }
         
         let view = UIView()
@@ -183,15 +199,9 @@ extension SettingsViewController : SettingsCellDelegate {
 extension SettingsViewController : WalletQRCodeScannerViewControllerDelegate {
    
     func didScanQRCode(value:String, amount:String?) {
-        if let json = try? JSONSerialization.jsonObject(with: value.data(using: .utf8)!, options: .mutableContainers) as? [String: Any] {
-            
-            if let id = json["_id"] as? u_quad_t, let name = json["username"] as? String {
+        if TGBotManager.sharedManager.isValidUserFromJson(value: value) {
+            TGBotManager.sharedManager.startLinking { (_ ) in
                 
-                TGBotManager.sharedManager.user.userId = String(id)
-                TGBotManager.sharedManager.user.userName = name
-                TGBotManager.sharedManager.startLinking { (_ ) in
-                    
-                }
             }
         }
     }

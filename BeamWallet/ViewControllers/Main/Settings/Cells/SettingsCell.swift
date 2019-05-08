@@ -30,6 +30,10 @@ class SettingsCell: BaseCell {
         
         backgroundColor = UIColor.clear
         mainView.backgroundColor = UIColor.main.marineTwo
+        
+        let selectedView = UIView()
+        selectedView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.6)
+        self.selectedBackgroundView = selectedView
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -45,6 +49,8 @@ extension SettingsCell: Configurable {
     
     func configure(with item:SettingsViewModel.SettingsItem) {
 
+        titleLabel.textColor = UIColor.white
+        
         titleLabel?.text = item.title
         detailLabel?.text = item.detail
         
@@ -60,16 +66,23 @@ extension SettingsCell: Configurable {
             selectionStyle = item.id == 0 ? .none : .default
         }
         
-        if item.id == 5 || item.id == 6 || item.id == 7 || item.id == 2 || item.id == 1
-            || item.id == 8 {
+        if let category = item.category {
             arrowView.isHidden = false
             titleXOffset.constant = 25
+            titleLabel.textColor = UIColor.init(hexString: category.color)
         }
         else{
-            arrowView.isHidden = true
-            titleXOffset.constant = 15
+            if item.id == 5 || item.id == 6 || item.id == 7 || item.id == 2 || item.id == 1
+                || item.id == 8 {
+                arrowView.isHidden = false
+                titleXOffset.constant = 25
+            }
+            else{
+                arrowView.isHidden = true
+                titleXOffset.constant = 15
+            }
         }
-        
+                
         botLineView.isHidden = item.position == SettingsViewModel.SettingsItem.Position.midle
     }
 }

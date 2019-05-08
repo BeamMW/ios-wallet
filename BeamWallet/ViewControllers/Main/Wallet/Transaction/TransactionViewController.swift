@@ -32,6 +32,7 @@ class TransactionViewController: BaseViewController {
         var detail:String!
         var failed:Bool!
         var canCopy:Bool!
+        var color = UIColor.white
     }
     
     private var paymentProof:BMPaymentProof?
@@ -45,7 +46,7 @@ class TransactionViewController: BaseViewController {
 
         title = "Transaction details"
         
-        tableView.register(GeneralTransactionInfoCell.self)
+        tableView.register(GeneralInfoCell.self)
         tableView.register(WalletTransactionCell.self)
         tableView.register(TransactionPaymentProofCell.self)
         tableView.register(TransactionUTXOCell.self)
@@ -88,20 +89,23 @@ class TransactionViewController: BaseViewController {
         }
         
         details = [TransactionGeneralInfo]()
-        details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false, canCopy:true))
-        details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false, canCopy:true))
-        details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false, canCopy:true))
         
-       details.append(TransactionGeneralInfo(text: "Transaction ID: ", detail: transaction.id, failed: false, canCopy:true))
+        details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
         
-        details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true))
+        details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+
+        details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false, canCopy:true, color: UIColor.white))
+        
+       details.append(TransactionGeneralInfo(text: "Transaction ID: ", detail: transaction.id, failed: false, canCopy:true, color: UIColor.white))
+        
+        details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
         
         if !transaction.comment.isEmpty {
-            details.append(TransactionGeneralInfo(text: "Comment:", detail: transaction.comment, failed: false, canCopy:true))
+            details.append(TransactionGeneralInfo(text: "Comment:", detail: transaction.comment, failed: false, canCopy:true, color: UIColor.white))
         }
         
         if transaction.isFailed() {
-            details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true, canCopy:true))
+            details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true, canCopy:true, color: UIColor.white))
         }
         
         //utxos
@@ -206,7 +210,7 @@ extension TransactionViewController : UITableViewDataSource {
         }
         else if indexPath.section == 1 {
             let cell =  tableView
-                .dequeueReusableCell(withType: GeneralTransactionInfoCell.self, for: indexPath)
+                .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
             cell.delegate = self
             return cell
@@ -300,7 +304,7 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
     }
 }
 
-extension TransactionViewController : GeneralTransactionInfoCellDelegate {
+extension TransactionViewController : GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell)
         {
