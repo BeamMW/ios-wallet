@@ -17,7 +17,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="headerView" destination="7pZ-0J-NAH" id="lYM-J0-Ks4"/>
                 <outlet property="talbeView" destination="Tem-J3-aZI" id="dex-x4-MCQ"/>
                 <outlet property="versionLabel" destination="eet-tA-QhM" id="FOq-DY-ism"/>
                 <outlet property="versionView" destination="suv-th-NdT" id="tpR-K4-9JJ"/>
@@ -29,9 +28,10 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Tem-J3-aZI">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Tem-J3-aZI">
                     <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="separatorColor" white="1" alpha="0.11191673801369863" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="hwW-h6-yRe"/>
                         <outlet property="delegate" destination="-1" id="F7z-Hx-rto"/>
@@ -46,29 +46,7 @@
                 <constraint firstItem="Tem-J3-aZI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="rmS-19-u5m"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <point key="canvasLocation" x="138.40000000000001" y="176.76161919040482"/>
-        </view>
-        <view contentMode="scaleToFill" id="7pZ-0J-NAH" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PGk-R4-x9b" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="15" y="15" width="345" height="14"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="14" id="UIl-36-QE1"/>
-                    </constraints>
-                </view>
-            </subviews>
-            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-            <constraints>
-                <constraint firstItem="PGk-R4-x9b" firstAttribute="top" secondItem="KJ2-Pk-MBT" secondAttribute="top" constant="15" id="TFS-OR-xJe"/>
-                <constraint firstItem="PGk-R4-x9b" firstAttribute="leading" secondItem="KJ2-Pk-MBT" secondAttribute="leading" constant="15" id="We2-td-PJB"/>
-                <constraint firstItem="KJ2-Pk-MBT" firstAttribute="trailing" secondItem="PGk-R4-x9b" secondAttribute="trailing" constant="15" id="bte-L0-lNC"/>
-            </constraints>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="KJ2-Pk-MBT"/>
-            <point key="canvasLocation" x="53.600000000000001" y="66.11694152923539"/>
+            <point key="canvasLocation" x="-412" y="78"/>
         </view>
         <view contentMode="scaleToFill" id="suv-th-NdT">
             <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>

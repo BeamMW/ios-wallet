@@ -19,6 +19,8 @@
 
 import Foundation
 
+let zero:CGFloat = 0
+
 extension Double {
     /// Rounds the double to decimal places value
     func rounded(toPlaces places:Int) -> Double {

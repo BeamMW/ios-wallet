@@ -41,35 +41,28 @@ class WalletTransactionCell: UITableViewCell {
 extension WalletTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, single:Bool)) {
-        if options.row % 2 == 0 {
-            mainView.backgroundColor = UIColor.main.marineTwo
-        }
-        else{
-            mainView.backgroundColor = UIColor.main.marine
-        }
+     
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
         
-        self.arrowImage.isHidden = options.single
+        backgroundColor = mainView.backgroundColor
         
-        if options.single {
-            amountOffset.constant = 0
-        }
+        arrowImage.isHidden = options.single
         
-        if options.transaction.isIncome {
+        switch options.transaction.isIncome {
+        case true:
             amountLabel.text = "+" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
             statusLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
-
             typeLabel.text = "Receive BEAM"
-        }
-        else{
+        case false:
             amountLabel.text = "-" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
             statusLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
-
             typeLabel.text = "Send BEAM"
         }
+
         
         if options.transaction.isSelf || options.transaction.isFailed() || options.transaction.isCancelled() {
             statusLabel.textColor = UIColor.white
@@ -79,14 +72,22 @@ extension WalletTransactionCell: Configurable {
         statusLabel.text = options.transaction.status
         
         if options.single {
+            amountOffset.constant = 0
             self.selectionStyle = .none
         }
         else{
             let selectedView = UIView()
-            selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
+            selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
             self.selectedBackgroundView = selectedView
         }
         
         balanceView.isHidden = Settings.sharedManager().isHideAmounts
+    }
+}
+
+extension WalletTransactionCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 86
     }
 }

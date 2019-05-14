@@ -24,7 +24,6 @@ class SettingsViewController: BaseViewController {
     @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private weak var versionLabel:UILabel!
     @IBOutlet private var versionView:UIView!
-    @IBOutlet private var headerView:UIView!
 
     private var viewModel:SettingsViewModel!
     
@@ -41,7 +40,7 @@ class SettingsViewController: BaseViewController {
         versionLabel.text = UIApplication.version()
         
         talbeView.register(SettingsCell.self)
-        talbeView.tableHeaderView = headerView
+        talbeView.tableHeaderView = BMNetworkStatusView()
         talbeView.tableFooterView = versionView
     }
 }
@@ -55,7 +54,17 @@ extension SettingsViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return BMTableHeaderTitleView.height
+        if section == 0 {
+            return BMTableHeaderTitleView.height
+        }
+        else if section == 3 && AppDelegate.isEnableNewFeatures {
+            return BMTableHeaderTitleView.height
+        }
+        else if section == 4 && AppModel.sharedManager().categories.count > 0 {
+            return 10
+        }
+        
+        return 20
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -104,10 +113,10 @@ extension SettingsViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if section == 0 {
-            return BMTableHeaderTitleView(title: "node")
+            return BMTableHeaderTitleView(title: "node", bold: false)
         }
-        else if section == 3 {
-            return BMTableHeaderTitleView(title: "categories")
+        else if section == 3 && AppDelegate.isEnableNewFeatures {
+            return BMTableHeaderTitleView(title: "categories", bold: false)
         }
         
         let view = UIView()

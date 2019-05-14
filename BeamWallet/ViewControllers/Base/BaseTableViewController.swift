@@ -1,8 +1,7 @@
 //
-//  BaseCell.swift
-//  BeamWallet
+// BaseTableViewController.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,16 +19,23 @@
 
 import Foundation
 
-class BaseCell: UITableViewCell {    
-    override func awakeFromNib() {
-        super.awakeFromNib()
+class BaseTableViewController: BaseViewController {
+
+    var tableView: UITableView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        self.contentView.backgroundColor = UIColor.main.marine
+        tableView = UITableView(frame: self.view.bounds, style: .plain)
+        tableView.backgroundColor = UIColor.main.marine
+        tableView.separatorStyle = .none
+        
+        self.view.addSubview(tableView)
     }
     
-    public func setSelectionBackgroundView() {
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        self.selectedBackgroundView = selectedView
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        tableView.frame = self.view.bounds
     }
 }

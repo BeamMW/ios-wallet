@@ -94,7 +94,7 @@ class WalletConfirmSendViewController: BaseViewController {
         
         if passwordField.text?.isEmpty ?? true {
             passwordErrorLabel.isHidden = false
-            passwordErrorLabel.text = "Password should not be empty"
+            passwordErrorLabel.text = "Password can not be empty"
             passwordErrorLabel.textColor = UIColor.main.red
             passwordField.status = BMField.Status.error
         }

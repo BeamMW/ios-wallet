@@ -25,41 +25,33 @@ protocol AddressCommentCellDelegate: AnyObject {
     func onChangeComment(value:String)
 }
 
-class AddressCommentCell: UITableViewCell {
+class AddressCommentCell: BaseCell {
 
     weak var delegate: AddressCommentCellDelegate?
 
-    @IBOutlet weak private var commentField: UITextViewPlacholder!
+    @IBOutlet weak private var commentField: UITextField!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
-        
-        self.backgroundColor = UIColor.main.marineTwo
-        
-        commentField.placeholder = "Annotation"
-        commentField.delegate = self
     }
+
 }
 
-extension AddressCommentCell: UITextViewDelegate {
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        print("begin")
+extension AddressCommentCell: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
+        let textFieldText: NSString = (textField.text ?? "") as NSString
         
-        let textFieldText: NSString = (textView.text ?? "") as NSString
-        
-        let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: text)
-        
+        let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
+     
         self.delegate?.onChangeComment(value: txtAfterUpdate)
         
         return true

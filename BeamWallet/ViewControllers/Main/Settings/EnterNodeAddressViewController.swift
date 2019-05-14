@@ -37,10 +37,8 @@ class EnterNodeAddressViewController: BaseViewController {
         
         nodeAddressView.backgroundColor = UIColor.main.marineTwo
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(onSave))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        
+        addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+
         oldAddress = Settings.sharedManager().nodeAddress
         nodeAddressField.text = oldAddress
         
@@ -55,15 +53,10 @@ class EnterNodeAddressViewController: BaseViewController {
         if let address = nodeAddressField.text {
             
             if address.isEmpty {
-                navigationItem.rightBarButtonItem?.isEnabled = false
+                enableRightButton(enabled: false)
             }
             else{
-                if address != oldAddress {
-                    navigationItem.rightBarButtonItem?.isEnabled = true
-                }
-                else{
-                    navigationItem.rightBarButtonItem?.isEnabled = false
-                }
+                enableRightButton(enabled: (address != oldAddress ) ? true : false )
             }
         }
     }
@@ -86,6 +79,7 @@ class EnterNodeAddressViewController: BaseViewController {
                 }
                 else{
                     completion?(true)
+                    
                     self.navigationController?.popViewController(animated: true)
                 }
             }

@@ -43,7 +43,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
                     }
                     
                     if !added {
-                        inputWords.append(BMWord(word: "", index: index, correct: false))
+                        inputWords.append(BMWord(word: String.empty(), index: index, correct: false))
                     }
                 }
             }
@@ -53,7 +53,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "confirm_seed".localized
+        self.title = LocalizableStrings.confirm_seed
         
         if Device.isZoomed {
             stackY?.constant = 10
@@ -68,13 +68,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
         
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
         
-        let backButton = UIButton(type: .system)
-        backButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        backButton.contentHorizontalAlignment = .left
-        backButton.tintColor = UIColor.white
-        backButton.setImage(UIImage.init(named: "iconBack"), for: .normal)
-        backButton.addTarget(self, action: #selector(onBack), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        addCustomBackButton(target: self, selector: #selector(onBack))
         
         hideKeyboardWhenTappedAround()
     }
@@ -94,16 +88,11 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     
 // MARK: IBAction
     @objc private func onBack() {
-        let alert = UIAlertController(title: "Back to seed phrase", message: "You current seed will become obsolete and the new seed will be generated", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
-
-        let ok = UIAlertAction(title: "Generate", style: .default, handler: { action in
+        self.confirmAlert(title: LocalizableStrings.seed_back_title, message: LocalizableStrings.seed_back_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.generate, cancelHandler: { (_ ) in
+            
+        }) { (_ ) in
             self.navigationController?.popViewController(animated: true)
-        })
-        alert.addAction(ok)
-        
-        self.present(alert, animated: true)
+        }
     }
     
     @IBAction func onNext(sender :UIButton) {

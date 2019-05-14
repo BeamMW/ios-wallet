@@ -91,7 +91,6 @@ class BMField: UITextField {
         
         _oldColor = self.textColor
 
-    
         if lineColor == nil {
             line.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
             lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
@@ -104,6 +103,10 @@ class BMField: UITextField {
             guard let object = notification.object as? BMField, object == strongSelf else { return }
             
             strongSelf.status = .normal
+        }
+        
+        if isSecureTextEntry {
+            disablePasswordAutoFill()
         }
     }
     
@@ -118,6 +121,4 @@ class BMField: UITextField {
            status = .normal
         }
     }
-    
-
 }

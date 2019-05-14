@@ -21,9 +21,12 @@ import UIKit
 
 extension BMPopoverMenu {
     
-    public static func showForSender(sender : UIView, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {
-       
+    public static func show(menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {
+        
         if let rootVC = UIApplication.getTopMostViewController() {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
             for item in menuArray {
@@ -32,49 +35,48 @@ extension BMPopoverMenu {
                 }))
             }
             
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+            alert.addAction(UIAlertAction(title: LocalizableStrings.cancel, style: .cancel, handler:{ (UIAlertAction)in
                 cancel()
             }))
             
             rootVC.present(alert, animated: true)
         }
-        
-     //   self.sharedMenu.showForSender(sender: sender, or: nil, with: menuArray, done: done, cancel: cancel)
     }
     
-    public static func showForSenderFrame(senderFrame : CGRect, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {
-       
-        if let rootVC = UIApplication.getTopMostViewController() {
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            for item in menuArray {
-                alert.addAction(UIAlertAction(title: item.name, style: .default, handler:{ (UIAlertAction)in
-                    done(item)
-                }))
-            }
-            
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
-                cancel()
-            }))
-            
-            rootVC.present(alert, animated: true)
-        }
-        
-      //  self.sharedMenu.showForSender(sender: nil, or: senderFrame, with: menuArray, done: done, cancel: cancel)
+    public static func showForSender(sender : UIView, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {
+        self.sharedMenu.showForSender(sender: sender, or: nil, with: menuArray, done: done, cancel: cancel)
+    }
+    
+    public static func showForSenderFrame(senderFrame : CGRect, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel:@escaping () -> Void) {        
+        self.sharedMenu.showForSender(sender: nil, or: senderFrame, with: menuArray, done: done, cancel: cancel)
     }
 }
 
 class BMPopoverMenu: NSObject {
 
+    enum BMPopoverMenuItemAction: Int {
+        case show_qr_code = 1
+        case copy_address = 2
+        case edit_address = 4
+        case delete_address = 5
+        case payment_proof = 6
+        case export_transactions = 7
+        case cancel_transaction = 8
+        case delete_transaction = 9
+        case edit_category = 10
+        case delete_category = 11
+    }
+    
+    
     class BMPopoverMenuItem {
         var name:String
         var icon:String?
-        var id:Int
+        var action:BMPopoverMenuItemAction
         
-        init(name: String, icon: String?, id:Int) {
+        init(name: String, icon: String?, action:BMPopoverMenuItemAction) {
             self.name = name
             self.icon = icon
-            self.id = id
+            self.action = action
         }
     }
     

@@ -19,6 +19,14 @@
 
 import UIKit
 
+struct GeneralInfo {
+    var text:String!
+    var detail:String!
+    var failed:Bool!
+    var canCopy:Bool!
+    var color = UIColor.white
+}
+
 protocol GeneralInfoCellDelegate: AnyObject {
     func onClickToCell(cell:UITableViewCell)
 }
@@ -71,7 +79,7 @@ class GeneralInfoCell: BaseCell {
 
 extension GeneralInfoCell: Configurable {
     
-    func configure(with info:TransactionViewController.TransactionGeneralInfo) {
+    func configure(with info:GeneralInfo) {
         titleLabel.text = info.text
         detailLabel.text = info.detail
         detailLabel.copyText = nil

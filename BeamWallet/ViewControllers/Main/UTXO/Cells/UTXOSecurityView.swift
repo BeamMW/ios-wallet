@@ -1,8 +1,7 @@
 //
-//  BaseCell.swift
-//  BeamWallet
+// UTXOSecurityView.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,16 +19,7 @@
 
 import Foundation
 
-class BaseCell: UITableViewCell {    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.contentView.backgroundColor = UIColor.main.marine
-    }
+class UTXOSecurityView: BaseView {
     
-    public func setSelectionBackgroundView() {
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        self.selectedBackgroundView = selectedView
-    }
+    
 }

@@ -36,6 +36,6 @@
 @property (nonatomic,strong) NSString *currentStateFullHash;
 
 -(BOOL)isSendingAndReceiving;
-
+-(BOOL)hasInProgressBalance;
 
 @end

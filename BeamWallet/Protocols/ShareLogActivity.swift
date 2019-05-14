@@ -1,6 +1,6 @@
 //
-//  ShareLogActivity.swift
-//  BeamWallet
+// ShareLogActivity.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -59,13 +59,7 @@ extension ShareLogActivity : MFMailComposeViewControllerDelegate {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             mailComposer.setToRecipients(["support@beam.mw"])
-            
-            if (Settings.sharedManager().target == Testnet) {
-                mailComposer.setSubject("beam wallet testnet logs")
-            }
-            else{
-                mailComposer.setSubject("beam wallet logs")
-            }
+            mailComposer.setSubject(Settings.sharedManager().target == Testnet ? "beam wallet testnet logs" : "beam wallet logs")
             
             if let data = try? Data(contentsOf: self.zipUrl) {
                 mailComposer.addAttachmentData(data, mimeType: "application/zip", fileName: "logs.zip")

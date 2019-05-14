@@ -59,14 +59,6 @@ class UnlockPasswordViewController: BaseWizardViewController {
         if Device.screenType == .iPhones_5 {
             mainStack?.spacing = 50
         }
-        
-        if #available(iOS 12, *) {
-            // iOS 12: Not the best solution, but it works.
-            passField.textContentType = .oneTimeCode
-        } else {
-            // iOS 11: Disables the autofill accessory view.
-            passField.textContentType = .init(rawValue: "")
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,7 +75,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
     
     @IBAction func onLogin(sender :UIButton) {        
         if passField.text?.isEmpty ?? true {
-            errorLabel.text = "Password should not be empty"
+            errorLabel.text = "Password can not be empty"
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {

@@ -177,14 +177,14 @@ class BMWordField: BMField {
                 let range = (word as NSString).range(of: String(prefix))
 
                 if range.location == 0 && range.length > 0 {
-                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Bold", size: 15) ?? UIFont.boldSystemFont(ofSize: 15) , range: range)
+                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 15) , range: range)
                 }
 
                 if range.length < word.lengthOfBytes(using: .utf8) {
-                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Regular", size: 15) ?? UIFont.systemFont(ofSize: 15) , range: NSRange(location: range.length, length: word.lengthOfBytes(using: .utf8) - range.length))
+                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 15) , range: NSRange(location: range.length, length: word.lengthOfBytes(using: .utf8) - range.length))
                 }
                 else{
-                    attributedTitle.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Regular", size: 15) ?? UIFont.systemFont(ofSize: 15) , range: NSRange(location: 0, length: word.lengthOfBytes(using: .utf8)))
+                    attributedTitle.addAttribute(NSAttributedString.Key.font, value:RegularFont(size: 15) , range: NSRange(location: 0, length: word.lengthOfBytes(using: .utf8)))
                 }
 
                 button.setAttributedTitle(attributedTitle, for: .normal)

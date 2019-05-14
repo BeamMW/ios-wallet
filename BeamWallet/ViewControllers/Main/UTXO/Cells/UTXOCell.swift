@@ -41,12 +41,9 @@ class UTXOCell: UITableViewCell {
 extension UTXOCell: Configurable {
     
     func configure(with options: (row: Int, utxo:BMUTXO)) {
-        if options.row % 2 == 0 {
-            mainView.backgroundColor = UIColor.main.marineTwo
-        }
-        else{
-            mainView.backgroundColor = UIColor.main.marine
-        }
+    
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
+        backgroundColor = mainView.backgroundColor
         
         amountLabel.text = String.currency(value: options.utxo.realAmount)
         statusLabel.text = options.utxo.statusString
@@ -62,8 +59,16 @@ extension UTXOCell: Configurable {
         }
         
         let selectedView = UIView()
-        selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
-        self.selectedBackgroundView = selectedView
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedBackgroundView = selectedView
     }
 }
+
+extension UTXOCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 60
+    }
+}
+
 

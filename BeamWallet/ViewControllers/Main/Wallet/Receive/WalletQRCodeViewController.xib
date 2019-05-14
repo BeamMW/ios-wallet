@@ -22,6 +22,7 @@
             <connections>
                 <outlet property="addressLabel" destination="Q11-bp-JzA" id="PUM-ka-beI"/>
                 <outlet property="codeView" destination="I1h-L2-7Oi" id="EK1-mW-V37"/>
+                <outlet property="shareAddress" destination="loc-1l-wZa" id="Klh-zY-i6f"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

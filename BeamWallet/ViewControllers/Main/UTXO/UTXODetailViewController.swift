@@ -1,6 +1,6 @@
 //
-//  UTXODetailViewController.swift
-//  BeamWallet
+// UTXODetailViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -19,13 +19,9 @@
 
 import UIKit
 
-class UTXODetailViewController: BaseViewController {
+class UTXODetailViewController: BaseTableViewController {
 
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private var headerInfoView: UIView!
-    @IBOutlet private var headerHistoryView: UIView!
-
-    private var details = [TransactionViewController.TransactionGeneralInfo]()
+    private var details = [GeneralInfo]()
     private var history = [BMTransaction]()
 
     private var utxo:BMUTXO!
@@ -37,19 +33,20 @@ class UTXODetailViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        fillDetailInfo()
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        tableView.register(UTXODetailCell.self)
-        tableView.register(GeneralInfoCell.self)
-        tableView.register(UTXOTransactionCell.self)
+        tableView.register([UTXODetailCell.self, GeneralInfoCell.self, UTXOTransactionCell.self])
+        
+        fillDetailInfo()
 
-        title = "UTXO Details"
+        title = LocalizableStrings.utxo_details
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,39 +67,30 @@ class UTXODetailViewController: BaseViewController {
         details.removeAll()
         
         if let kernel = history.first?.kernelId {
-            details.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: kernel, failed: false, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.kernel_id, detail: kernel, failed: false, canCopy:true, color: UIColor.white))
         }
         
-        details.append(TransactionViewController.TransactionGeneralInfo(text: "UTXO type:", detail: utxo.typeString, failed: false, canCopy:true, color: UIColor.white))
-        
-//        for transaction in history {
-//            if let contact = AppModel.sharedManager().getContactFromId(transaction.receiverAddress)
-//            {
-//                let value = contact.name.isEmpty ? contact.address.walletId : contact.name + "\n" + contact.address.walletId
-//                details.append(TransactionViewController.TransactionGeneralInfo(text: "Contact:", detail: value, failed: false, canCopy:true, color: UIColor.white))
-//            }
-//        }
+        details.append(GeneralInfo(text: LocalizableStrings.utxo_type, detail: utxo.typeString, failed: false, canCopy:false, color: UIColor.white))
     }
 }
 
 extension UTXODetailViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 || section == 2 {
-            if section == 2 {
-                return 100
-            }
-            return 60
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            return BMTableHeaderTitleView.boldHeight
+        case 2:
+            return UTXOTransactionsHeaderView.height
+        default:
+            return 0
         }
-        
-        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 80
-        }
-        return UITableView.automaticDimension
+        return indexPath.section == 0 ? UTXODetailCell.height() : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -113,55 +101,56 @@ extension UTXODetailViewController : UITableViewDelegate {
 extension UTXODetailViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if history.count > 0 {
-            return 3
-        }
-        return 2
+        return (history.count > 0) ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        switch section {
+        case 0:
             return 1
-        }
-        else if section == 1 {
+        case 1:
             return details.count
+        case 2:
+            return history.count
+        default:
+            return 0
         }
-        return history.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             let cell = tableView
                 .dequeueReusableCell(withType: UTXODetailCell.self, for: indexPath)
                 .configured(with: (row: indexPath.row, utxo: utxo))
             return cell
-        }
-        else if indexPath.section == 1{
-            let cell =  tableView
+        case 1:
+            let cell = tableView
                 .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
-            
             return cell
-        }
-        else{
-            let cell =  tableView
+        case 2:
+            let cell = tableView
                 .dequeueReusableCell(withType: UTXOTransactionCell.self, for: indexPath)
                 .configured(with: history[indexPath.row])
-            
             return cell
+        default:
+            return BaseCell()
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+       
+        switch section {
+        case 0:
             return nil
-        }
-        else if section == 1 {
-            return headerInfoView
-        }
-        else{
-            return headerHistoryView
+        case 1:
+            return BMTableHeaderTitleView(title: LocalizableStrings.utxo_details, bold: true)
+        case 2:
+            return UTXOTransactionsHeaderView().loadNib()
+        default:
+            return nil
         }
     }
 }

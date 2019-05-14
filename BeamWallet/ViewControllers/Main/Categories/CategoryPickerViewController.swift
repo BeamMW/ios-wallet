@@ -52,9 +52,7 @@ class CategoryPickerViewController: BaseViewController {
         tableView.register(CategoryPickerCell.self)
         tableView.register(EmptyCell.self)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(onSave))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
     }
     
     
@@ -76,15 +74,10 @@ extension CategoryPickerViewController : UITableViewDelegate {
         selectedCategory = categories[indexPath.row]
         
         if currentCategory != nil {
-            if currentCategory?.id == selectedCategory?.id {
-                navigationItem.rightBarButtonItem?.isEnabled = false
-            }
-            else{
-                navigationItem.rightBarButtonItem?.isEnabled = true
-            }
+            enableRightButton(enabled: (currentCategory?.id == selectedCategory?.id) ? false : true)
         }
         else{
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            enableRightButton(enabled: true)
         }
         
         tableView.reloadData()
@@ -92,10 +85,6 @@ extension CategoryPickerViewController : UITableViewDelegate {
 }
 
 extension CategoryPickerViewController : UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count

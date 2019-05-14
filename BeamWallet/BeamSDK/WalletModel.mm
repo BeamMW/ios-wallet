@@ -21,6 +21,8 @@
 #import "WalletModel.h"
 #import "AppModel.h"
 
+#include <boost/regex.hpp>
+
 #include "utility/logger.h"
 #include "utility/bridge.h"
 #include "utility/io/asyncevent.h"
@@ -339,20 +341,17 @@ void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
     address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
     
     getAsync()->saveAddress(walletAddr, true);
-
-    [[AppModel sharedManager] setWalletAddress:address];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onGeneratedNewAddress:)]) {
-            [delegate onGeneratedNewAddress:address];
-        }
-    }
+    [AppModel sharedManager].generatedNewAddressBlock(address, nil);
 }
 
 void WalletModel::onNewAddressFailed()
 {
-    NSLog(@"onNewAddressFailed");
+    NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
+                                               code:1
+                                           userInfo:@{ NSLocalizedDescriptionKey:@"Failed to genereate new address" }];
+    
+    [AppModel sharedManager].generatedNewAddressBlock(nil, nativeError);
 }
 
 void WalletModel::onChangeCurrentWalletIDs(beam::WalletID senderID, beam::WalletID receiverID)

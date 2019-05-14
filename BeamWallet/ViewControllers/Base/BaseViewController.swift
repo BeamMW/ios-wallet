@@ -22,25 +22,40 @@ import Foundation
 
 class BaseViewController: UIViewController {
 
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+    private var initialTouchPoint = CGPoint.zero
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Settings.sharedManager().target == Testnet
-        {
-            view.backgroundColor = UIColor.main.dark
-        }
-        else if Settings.sharedManager().target == Masternet
-        {
-            view.backgroundColor = UIColor.main.blackTwo
-        }
+        view.backgroundColor = UIColor.main.marine
+    }
+    
+    public func addRightButton(title:String, targer:Any?, selector:Selector?, enabled:Bool) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: targer, action: selector)
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
+        navigationItem.rightBarButtonItem?.isEnabled = enabled
+    }
+    
+    public func enableRightButton(enabled:Bool) {
+        navigationItem.rightBarButtonItem?.isEnabled = enabled
     }
     
     public func addSwipeToDismiss() {
         view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler)))
     }
 
+    public func openUrl(url:URL) {
+        if Settings.sharedManager().isAllowOpenLink {
+            UIApplication.shared.open(url , options: [:], completionHandler: nil)
+        }
+        else{
+            self.confirmAlert(title: LocalizableStrings.external_link_title, message: LocalizableStrings.external_link_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.open, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
+                UIApplication.shared.open(url , options: [:], completionHandler: nil)
+            }
+        }
+    }
 }
 
 extension BaseViewController {

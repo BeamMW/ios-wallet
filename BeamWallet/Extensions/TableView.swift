@@ -37,6 +37,12 @@ extension UICollectionReusableView: Reusable { }
 
 extension UITableView {
     
+    func register(_ cellTypes: [Reusable.Type]) {
+        for cellType in cellTypes {
+            self.register(UINib(nibName: cellType.reuseIdentifier, bundle: nil), forCellReuseIdentifier: cellType.reuseIdentifier)
+        }
+    }
+    
     func register(_ cellType: Reusable.Type) {
         self.register(UINib(nibName: cellType.reuseIdentifier, bundle: nil), forCellReuseIdentifier: cellType.reuseIdentifier)
     }
@@ -48,6 +54,37 @@ extension UITableView {
 
 extension UITableView {
 
+    public func findCell(_ row:AnyClass) -> UITableViewCell? {
+        for cell in visibleCells {
+            if cell.isKind(of: row) {
+                return cell
+            }
+        }
+        return nil
+    }
+    
+    public func reloadRow(_ row: AnyClass) {
+        
+        for cell in visibleCells {
+            
+            if cell.isKind(of: row) {
+                
+                if let path = indexPath(for: cell) {
+                    
+                    reloadRows(at: [path], with: .fade)
+                    
+                    return
+                }
+            }
+        }
+        
+        reloadData()
+    }
+    
+    public func scrollToTop() {
+        setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+    }
+    
     public func addPullToRefresh(target:Any?, handler: Selector) {
         
         let refreshControl = UIRefreshControl()

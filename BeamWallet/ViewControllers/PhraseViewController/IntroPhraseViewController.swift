@@ -24,10 +24,13 @@ class IntroPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "create_new_wallet".localized
+        title = LocalizableStrings.create_new_wallet
         
-        if Device.screenType == .iPhones_5 {
+        switch Device.screenType {
+        case .iPhones_5:
             mainStack?.spacing = 60
+        default:
+            return
         }
     }
     

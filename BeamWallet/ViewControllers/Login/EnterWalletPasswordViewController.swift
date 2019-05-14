@@ -45,9 +45,9 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             touchIdButton.isHidden = true
         }
         else{
-            let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID " : "Touch ID "
+            let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? LocalizableStrings.face_id : LocalizableStrings.touch_id
 
-            loginLabel.text = "use".localized +  mechanism + "enter_password_title_2".localized
+            loginLabel.text = LocalizableStrings.use + mechanism + LocalizableStrings.enter_password_title_2
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -62,11 +62,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             
         }
         else{
-//            if let password = KeychainManager.getPassword() {
-//                passField.text = password
-//                onLogin(sender: UIButton())
-//            }
-            
             if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
                 isRequestedAuthorization = true
 
@@ -87,7 +82,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         }
     }
     
-    public func biometricAuthorization() {
+    public func biometricAuthorization() {        
         if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
             
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
@@ -116,14 +111,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         AppModel.sharedManager().isRestoreFlow = false;
 
         if passField.text?.isEmpty ?? true {
-            errorLabel.text = "empty_password".localized
+            errorLabel.text = LocalizableStrings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let appModel = AppModel.sharedManager()
             let valid = appModel.canOpenWallet(pass)
             if !valid {
-                errorLabel.text = "incorrect_password".localized
+                errorLabel.text = LocalizableStrings.incorrect_password
                 passField.status = BMField.Status.error
             }
             else{
@@ -152,7 +147,7 @@ extension EnterWalletPasswordViewController : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        errorLabel.text = ""
+        errorLabel.text = String.empty()
      
         return true
     }

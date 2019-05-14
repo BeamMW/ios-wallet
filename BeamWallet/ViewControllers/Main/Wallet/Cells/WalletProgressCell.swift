@@ -42,17 +42,28 @@ class WalletProgressCell: BaseCell {
     @IBOutlet weak private var currencyReceivingIcon: UIImageView!
     @IBOutlet weak private var currencySendingIcon: UIImageView!
 
+    public static func hideHeight() -> CGFloat {
+        return 65
+    }
+    
+    public static func mainHeight() -> CGFloat {
+        return 160
+    }
+    
+    public static func singleHeight() -> CGFloat {
+        return 120
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        currencyReceivingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyReceivingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyReceivingIcon.tintColor = receivingLabel.textColor
         
-        currencySendingIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencySendingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencySendingIcon.tintColor = sentLabel.textColor
         
         selectionStyle = .none
-
     }
     
     override func layoutSubviews() {
@@ -80,15 +91,15 @@ extension WalletProgressCell: Configurable {
     
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
-            receivingLabel.text = "+ " + String.currency(value: status.realReceiving)
-            sentLabel.text = "- " + String.currency(value: status.realSending)
+            receivingLabel.text = "+" + String.currency(value: status.realReceiving)
+            sentLabel.text = "-" + String.currency(value: status.realSending)
             
             sentStack.isHidden = status.realSending == 0 ? true : false
             receivingStack.isHidden = status.realReceiving == 0 ? true : false
         }
         else{
-            sentLabel.text = "0"
-            receivingLabel.text = "0"
+            sentLabel.text = LocalizableStrings.zero
+            receivingLabel.text = LocalizableStrings.zero
         }
         
         if !options.expand {

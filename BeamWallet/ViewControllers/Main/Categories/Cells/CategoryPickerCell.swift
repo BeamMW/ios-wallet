@@ -30,11 +30,10 @@ class CategoryPickerCell: BaseCell {
         super.awakeFromNib()
         
         backgroundColor = UIColor.main.marineTwo
-        contentView.backgroundColor = UIColor.main.marineTwo
         mainView.backgroundColor = UIColor.main.marineTwo
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.6)
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
         
         arrowView.image = UIImage.init(named: "tick")?.withRenderingMode(.alwaysTemplate)

@@ -30,26 +30,29 @@ class DisplayPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "seed_prhase".localized
+        self.title = LocalizableStrings.seed_prhase
         
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
+        
+        if Settings.sharedManager().target == Testnet || Settings.sharedManager().target == Masternet {
+            copyButton.isHidden = false
+        }
         
         if Device.isZoomed {
             stackY?.constant = 10
             mainStack?.spacing = 10
         }
-        else if Device.screenType == .iPhones_5 {
-            mainStack?.spacing = 20
-        }
-        else if Device.screenType == .iPhones_6 {
-            mainStack?.spacing = 30
-        }
-        else if Device.screenType == .iPhone_XSMax {
-            mainStack?.spacing = 110
-        }
-        
-        if Settings.sharedManager().target == Testnet {
-            copyButton.isHidden = false
+        else{
+            switch Device.screenType {
+            case .iPhones_5:
+                mainStack?.spacing = 20
+            case .iPhones_6:
+                mainStack?.spacing = 30
+            case .iPhone_XSMax:
+                mainStack?.spacing = 110
+            default:
+                break
+            }
         }
     }
     
@@ -72,7 +75,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: "seed_capture_warning".localized)
+        self.alert(message: LocalizableStrings.seed_capture_warning)
     }
     
 // MARK: IBAction
@@ -93,23 +96,17 @@ class DisplayPhraseViewController: BaseWizardViewController {
         
         UIPasteboard.general.string = copyPhrase
         
-        SVProgressHUD.showSuccess(withStatus: "copied_to_clipboard".localized)
-        SVProgressHUD.dismiss(withDelay: 1.5)
+        ShowCopiedProgressHUD()
     }
     
     @IBAction func onNext(sender :UIButton) {
-        let alert = UIAlertController(title: "save_seed_title".localized, message: "save_seed_info".localized, preferredStyle: .alert)
-        
-        let ok = UIAlertAction(title: "done".localized, style: .default, handler: { action in
+        self.confirmAlert(title: LocalizableStrings.save_seed_title, message: LocalizableStrings.save_seed_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.done, cancelHandler: { (_ ) in
+            
+        }) { (_ ) in
             let vc = ConfirmPhraseViewController()
                 .withWords(words: self.words)
             self.pushViewController(vc: vc)
-        })
-        alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
-        alert.addAction(ok)
-
-
-        self.present(alert, animated: true)
+        }
     }
 }
 

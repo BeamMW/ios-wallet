@@ -47,8 +47,11 @@
 -(void)onCategoriesChange;
 @end
 
+typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
+
 @interface AppModel : NSObject
 
+@property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
 @property (nonatomic,strong) NSHashTable * _Nonnull delegates;
 
 @property (nonatomic,assign) BOOL isConnected;
@@ -61,7 +64,6 @@
 @property (nonatomic,assign) BOOL isForgotPasswordFlow;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
-@property (nonatomic,strong) BMAddress* _Nullable walletAddress;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable utxos;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nullable walletAddresses;
@@ -97,9 +99,10 @@
 -(void)refreshAllInfo;
 
 // addresses
+-(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block;
 -(void)generateNewWalletAddress;
 -(void)editBotAddress:(NSString*_Nonnull)address ;
--(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address ;
+-(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address ;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
@@ -109,7 +112,7 @@
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address;
 -(BOOL)isMyAddress:(NSString*_Nullable)address;
 -(void)clearAllAddresses;
-
+-(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;

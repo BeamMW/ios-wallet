@@ -32,13 +32,13 @@ class MainTabBarController: UITabBarController {
         self.tabBar.backgroundImage = UIImage()
         
         let walletVC = UINavigationController(rootViewController: WalletViewController())
-        walletVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        walletVC.navigationBar.setBackgroundImage(UIImage.fromColor(color: UIColor.main.marine), for: .default)
         walletVC.navigationBar.shadowImage = UIImage()
-        walletVC.navigationBar.isTranslucent = true
-        walletVC.navigationBar.backgroundColor = .clear
+        walletVC.navigationBar.backgroundColor = UIColor.main.marine
+        walletVC.navigationBar.isTranslucent = false
         walletVC.navigationBar.tintColor = UIColor.white
-        walletVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-        walletVC.tabBarItem = UITabBarItem(title: "Wallet", image: UIImage.init(named: "iconWallet"), tag: 0)
+        walletVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: SemiboldFont(size: 17)]
+        walletVC.tabBarItem = UITabBarItem(title: LocalizableStrings.wallet, image:IconWallet(), tag: 0)
         
         let addressesVC = UINavigationController(rootViewController: AddressesViewController())
         addressesVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -46,17 +46,17 @@ class MainTabBarController: UITabBarController {
         addressesVC.navigationBar.isTranslucent = true
         addressesVC.navigationBar.backgroundColor = .clear
         addressesVC.navigationBar.tintColor = UIColor.white
-        addressesVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-        addressesVC.tabBarItem = UITabBarItem(title: "Addresses", image: UIImage.init(named: "iconAddresses"), tag: 0)
+        addressesVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: SemiboldFont(size: 17)]
+        addressesVC.tabBarItem = UITabBarItem(title: LocalizableStrings.addresses, image: IconAddresses(), tag: 0)
 
         let utxoVC = UINavigationController(rootViewController: UTXOViewController())
-        utxoVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        utxoVC.navigationBar.setBackgroundImage(UIImage.fromColor(color: UIColor.main.marine), for: .default)
         utxoVC.navigationBar.shadowImage = UIImage()
-        utxoVC.navigationBar.isTranslucent = true
-        utxoVC.navigationBar.backgroundColor = .clear
+        utxoVC.navigationBar.backgroundColor = UIColor.main.marine
+        utxoVC.navigationBar.isTranslucent = false
         utxoVC.navigationBar.tintColor = UIColor.white
-        utxoVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-        utxoVC.tabBarItem = UITabBarItem(title: "UTXO", image: UIImage.init(named: "iconUtxo"), tag: 1)
+        utxoVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: SemiboldFont(size: 17)]
+        utxoVC.tabBarItem = UITabBarItem(title: LocalizableStrings.utxo, image: IconUtxo(), tag: 1)
 
         let settingsVC = UINavigationController(rootViewController: SettingsViewController())
         settingsVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -64,8 +64,8 @@ class MainTabBarController: UITabBarController {
         settingsVC.navigationBar.isTranslucent = true
         settingsVC.navigationBar.backgroundColor = .clear
         settingsVC.navigationBar.tintColor = UIColor.white
-        settingsVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-        settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage.init(named: "iconSettings"), tag: 2)
+        settingsVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: SemiboldFont(size: 17)]
+        settingsVC.tabBarItem = UITabBarItem(title: LocalizableStrings.settings, image: IconSettings(), tag: 2)
         
         self.viewControllers = [walletVC, addressesVC, utxoVC, settingsVC]
     }

@@ -21,18 +21,17 @@ class SettingsCell: BaseCell {
     @IBOutlet private weak var detailLabel: UILabel!
     @IBOutlet private weak var mainView: UIView!
     @IBOutlet private weak var switchView: UISwitch!
-    @IBOutlet private weak var botLineView: UIView!
     @IBOutlet private weak var arrowView: UIImageView!
     @IBOutlet private weak var titleXOffset: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundColor = UIColor.clear
+        backgroundColor = UIColor.main.marineTwo
         mainView.backgroundColor = UIColor.main.marineTwo
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.6)
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
     }
 
@@ -81,8 +80,6 @@ extension SettingsCell: Configurable {
                 arrowView.isHidden = true
                 titleXOffset.constant = 15
             }
-        }
-                
-        botLineView.isHidden = item.position == SettingsViewModel.SettingsItem.Position.midle
+        }                
     }
 }

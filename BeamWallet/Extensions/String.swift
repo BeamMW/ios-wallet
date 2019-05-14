@@ -1,6 +1,6 @@
 //
-//  String.swift
-//  BeamWallet
+// String.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -23,6 +23,7 @@ import Network
 protocol Localizable {
     var localized: String { get }
 }
+
 extension String: Localizable {
     var localized: String {
         return NSLocalizedString(self, comment: "")
@@ -136,5 +137,12 @@ extension String {
             ranges.append(range)
         }
         return ranges
+    }
+}
+
+extension String {
+    
+    static func empty() -> String {
+        return ""
     }
 }

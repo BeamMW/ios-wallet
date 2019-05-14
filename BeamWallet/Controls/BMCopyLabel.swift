@@ -48,17 +48,11 @@ class BMCopyLabel: UILabel {
     }
     
     override func copy(_ sender: Any?) {
-        if let copy = copyText {
-            UIPasteboard.general.string = copy
-        }
-        else{
-            UIPasteboard.general.string = text
-        }
-        
+        UIPasteboard.general.string = (copyText != nil ) ? copyText : text
+
         UIMenuController.shared.setMenuVisible(false, animated: true)
         
-        SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-        SVProgressHUD.dismiss(withDelay: 1.5)
+        ShowCopiedProgressHUD()
     }
     
     @objc private func showCopyMenu(sender: Any?) {

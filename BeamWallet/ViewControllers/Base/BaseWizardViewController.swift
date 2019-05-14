@@ -55,6 +55,16 @@ class BaseWizardViewController: BaseViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    func addCustomBackButton(target:Any?, selector:Selector) {
+        let backButton = UIButton(type: .system)
+        backButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        backButton.contentHorizontalAlignment = .left
+        backButton.tintColor = UIColor.white
+        backButton.setImage(IconBack(), for: .normal)
+        backButton.addTarget(target, action: selector, for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+    }
 }
 
 // MARK: UICollectionViewDelegateFlowLayout

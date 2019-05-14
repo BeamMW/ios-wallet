@@ -44,10 +44,8 @@ class ClearDataViewController: BaseViewController {
 
         title = "Clear data"
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(onClear))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        
+        addRightButton(title:"Clear", targer: self, selector: #selector(onClear), enabled: false)
+
         tableView.tableFooterView = UIView()
         tableView.separatorColor = UIColor.main.marineTwo
     }
@@ -127,7 +125,7 @@ class ClearDataViewController: BaseViewController {
             }
         }
         
-        navigationItem.rightBarButtonItem?.isEnabled = !isAllDisabled
+        enableRightButton(enabled: !isAllDisabled)
     }
 }
 
@@ -150,10 +148,6 @@ extension ClearDataViewController : UITableViewDelegate {
 
 extension ClearDataViewController : UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
@@ -162,10 +156,11 @@ extension ClearDataViewController : UITableViewDataSource {
         
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         cell.textLabel?.text = items[indexPath.row].title
-        cell.textLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 16)
+        cell.textLabel?.font = RegularFont(size: 16)
         cell.backgroundColor = UIColor.clear
         cell.selectionStyle = .none
         cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.adjustFontSize = true
         
         let selectedButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         selectedButton.setImage(UIImage(named: "checkboxEmpty"), for: .normal)

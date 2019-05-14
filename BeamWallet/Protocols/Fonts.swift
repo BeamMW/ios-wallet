@@ -1,8 +1,7 @@
 //
-//  BaseCell.swift
-//  BeamWallet
+// Fonts.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +17,17 @@
 // limitations under the License.
 //
 
+
 import Foundation
 
-class BaseCell: UITableViewCell {    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.contentView.backgroundColor = UIColor.main.marine
-    }
-    
-    public func setSelectionBackgroundView() {
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        self.selectedBackgroundView = selectedView
-    }
+func BoldFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProDisplay-Bold", size: size) ?? UIFont.systemFont(ofSize: size)
+}
+
+func RegularFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProDisplay-Regular", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+}
+
+func SemiboldFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProDisplay-Semibold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
 }

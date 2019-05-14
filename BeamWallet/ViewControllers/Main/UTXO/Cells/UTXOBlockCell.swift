@@ -33,6 +33,14 @@ class UTXOBlockCell: BaseCell {
     @IBOutlet weak private var hashTitleLabel: UILabel!
     @IBOutlet weak private var arrowIcon: UIImageView!
 
+    public static func hideHeight() -> CGFloat {
+        return 70
+    }
+    
+    public static func mainHeight() -> CGFloat {
+        return 123
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         

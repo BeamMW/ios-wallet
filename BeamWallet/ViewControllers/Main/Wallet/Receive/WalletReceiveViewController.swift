@@ -34,6 +34,18 @@ class WalletReceiveViewController: BaseViewController {
     @IBOutlet weak private var qrButton: UIButton!
     @IBOutlet weak private var shareAddress: UIButton!
 
+    private var address:BMAddress!
+    
+    init(address:BMAddress) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.address = address
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(LocalizableStrings.fatalInitCoderError)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,7 +67,12 @@ class WalletReceiveViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
         
-        addressLabel.text = AppModel.sharedManager().walletAddress?.walletId
+        addressLabel.text = address.walletId
+        
+        if !AppDelegate.isEnableNewFeatures {
+            shareAddress.setTitle("copy address", for: .normal)
+            shareAddress.setImage(UIImage(named: "iconCopyBlue"), for: .normal)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -105,22 +122,32 @@ class WalletReceiveViewController: BaseViewController {
     
     @IBAction func onShare(sender :UIButton) {
         if let address = addressLabel.text {
-            let vc = UIActivityViewController(activityItems: [address], applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-                if completed {
-                    self.navigationController?.popViewController(animated: true)
-                    return
-                }
+            if !AppDelegate.isEnableNewFeatures {
+                UIPasteboard.general.string = address
+                
+                ShowCopiedProgressHUD()
+                
+                self.navigationController?.popViewController(animated: true)
             }
-            
-            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
-            
-            self.present(vc, animated: true)
+            else{
+                let vc = UIActivityViewController(activityItems: [address], applicationActivities: [])
+                vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                    if completed {
+                        self.navigationController?.popViewController(animated: true)
+                        return
+                    }
+                }
+                
+                vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+                
+                self.present(vc, animated: true)
+            }
+
         }
     }
     
     @IBAction func onQRCode(sender :UIButton) {
-        let modalViewController = WalletQRCodeViewController().withAddress(address: addressLabel.text!, amount: self.amountField.text)
+        let modalViewController = WalletQRCodeViewController(address: addressLabel.text!, amount: amountField.text)
         modalViewController.delegate = self
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -175,7 +202,8 @@ extension WalletReceiveViewController : UITextFieldDelegate {
         let textFieldText: NSString = (textField.text ?? "") as NSString
         
         if textField == amountField {
-            let count = (textField == amountField) ? 9 : 15
+            let mainCount = (textField == amountField) ? 9 : 15
+            let comaCount = 8
             
             let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
@@ -189,11 +217,14 @@ extension WalletReceiveViewController : UITextFieldDelegate {
             
             if !txtAfterUpdate.isEmpty {
                 let split = txtAfterUpdate.split(separator: ".")
-                if split[0].lengthOfBytes(using: .utf8) > count {
+                if split[0].lengthOfBytes(using: .utf8) > mainCount {
                     return false
                 }
                 else if split.count > 1 {
-                    if split[1].lengthOfBytes(using: .utf8) > count {
+                    if split[1].lengthOfBytes(using: .utf8) > comaCount {
+                        return false
+                    }
+                    else if split[1].lengthOfBytes(using: .utf8) == comaCount && textField == amountField && Double(txtAfterUpdate) == 0 {
                         return false
                     }
                 }
@@ -208,21 +239,9 @@ extension WalletReceiveViewController : UITextFieldDelegate {
             qrButton.alpha = 1
             shareAddress.alpha = 1
             
-            textField.text = txtAfterUpdate
-
             if let amount = Double(txtAfterUpdate) {
                 if AppModel.sharedManager().canReceive(amount, fee: 0) != nil {
                     return false
-//                    amountErrorLabel.isHidden = false
-//                    amountErrorLabel.text = error
-//                    amountErrorLabel.textColor = UIColor.main.red
-//                    amountField.status = .error
-//
-//                    qrButton.isUserInteractionEnabled = false
-//                    shareAddress.isUserInteractionEnabled = false
-//
-//                    qrButton.alpha = 0.5
-//                    shareAddress.alpha = 0.5
                 }
             }
 

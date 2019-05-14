@@ -1,6 +1,6 @@
 //
-//  BMStatusView.swift
-//  BeamWallet
+// BMStatusView.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -24,17 +24,35 @@ class BMNetworkStatusView: UIView {
     private var statusLabel: UILabel!
     private var statusView: UIView!
     private var indicatorView:UIActivityIndicatorView!
+    private var fromNib = false
+    
+    init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 40))
+        
+        backgroundColor = UIColor.clear
+        
+        setup(fromNib: false)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setup(fromNib: true)
+    }
+    
+    private func setup(fromNib:Bool) {
+        self.fromNib = fromNib
         
-        statusView = UIView(frame: CGRect(x: 0, y: 2, width: 12, height: 12))
+        statusView = UIView(frame: CGRect(x: !fromNib ? 15 : 0, y: !fromNib ? 17 : 2, width: 12, height: 12))
         statusView.layer.cornerRadius = 6
         statusView.layer.masksToBounds = true
         addSubview(statusView)
         
-        statusLabel = UILabel(frame: CGRect(x: 18, y: 0, width: UIScreen.main.bounds.size.width-50, height: 14))
-        statusLabel.font = UIFont(name: "SFProDisplay-Regular", size: 14)
+        statusLabel = UILabel(frame: CGRect(x: !fromNib ? 33 : 18, y: !fromNib ? 15 : 0, width: UIScreen.main.bounds.size.width-50, height: 14))
+        statusLabel.font = RegularFont(size: 14)
         statusLabel.adjustsFontSizeToFitWidth = true
         statusLabel.minimumScaleFactor = 0.5
         addSubview(statusLabel)
@@ -42,8 +60,8 @@ class BMNetworkStatusView: UIView {
         indicatorView = UIActivityIndicatorView(frame: statusView.frame)
         indicatorView.hidesWhenStopped = true
         addSubview(indicatorView)
-
-
+        
+        
         if (AppModel.sharedManager().isUpdating && AppModel.sharedManager().isConnected)
         {
             onSyncProgressUpdated(0, total: 1)
@@ -71,7 +89,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
             self.indicatorView.stopAnimating()
             self.statusView.alpha = 1
             
-            self.statusLabel.x = 18
+            self.statusLabel.x = self.fromNib ? 18 : 33
             
              if connected {
                 self.statusView.backgroundColor = UIColor.main.green
@@ -107,7 +125,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.color = UIColor.main.green
                 self.indicatorView.startAnimating()
                 
-                self.statusLabel.x = 20
+                self.statusLabel.x = self.fromNib ? 20 : 35
                 self.statusLabel.text = "updating"
                 self.statusView.alpha = 0
                 self.statusLabel.textColor = UIColor.main.blueyGrey
@@ -132,7 +150,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.color = UIColor.main.orange
                 self.indicatorView.startAnimating()
                 
-                self.statusLabel.x = 20
+                self.statusLabel.x = self.fromNib ? 20 : 35
                 self.statusLabel.text = "connecting"
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusLabel.textColor = UIColor.main.orange

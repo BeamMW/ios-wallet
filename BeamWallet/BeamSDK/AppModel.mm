@@ -658,6 +658,12 @@ static NSString *categoriesKey = @"categoriesKey";
 -(void)generateNewWalletAddress {
     wallet->getAsync()->generateNewAddress();
 }
+    
+-(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block{
+    self.generatedNewAddressBlock = block;
+    
+    wallet->getAsync()->generateNewAddress();
+}
 
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {
     std::vector<WalletAddress> addrs = walletDb->getAddresses(true);
@@ -698,23 +704,25 @@ static NSString *categoriesKey = @"categoriesKey";
     WalletID walletID(Zero);
     if (walletID.FromHex(address.walletId.string))
     {
-        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+        //TODO: ENABLE for categories
         
-        for (int i=0; i<addresses.size(); i++)
-        {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-            
-            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
-            
-            if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:address.category])
-            {
-                addresses[i].m_category = address.category.string;
-                
-                wallet->getAsync()->saveAddress(addresses[i], true);
-                
-                break;
-            }
-        }
+//        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+//
+//        for (int i=0; i<addresses.size(); i++)
+//        {
+//            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+//
+//            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+//
+//            if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:address.category])
+//            {
+//                addresses[i].m_category = address.category.string;
+//
+//                wallet->getAsync()->saveAddress(addresses[i], true);
+//
+//                break;
+//            }
+//        }
         
         if(address.isNowExpired) {
             wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
@@ -732,6 +740,8 @@ static NSString *categoriesKey = @"categoriesKey";
                 wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
             }
             else  {
+                address.isChangedDate = YES;
+                
                 wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), address.isChangedDate ? true : false, false);
             }
         }
@@ -742,6 +752,19 @@ static NSString *categoriesKey = @"categoriesKey";
     for (BMAddress *add in _walletAddresses) {
         [self deleteAddress:add.walletId];
     }
+}
+
+-(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount {
+    
+    NSString *qrString = [NSString stringWithFormat:@"beam:%@",address];
+    if (amount!=nil) {
+        NSString *trimmed = [amount stringByReplacingOccurrencesOfString:@"," withString:@"."];
+        if (trimmed.doubleValue > 0) {
+            qrString = [qrString stringByAppendingString:[NSString stringWithFormat:@"?amount=%@",trimmed]];
+        }
+    }
+    
+    return  qrString;
 }
 
 #pragma mark - Delegates

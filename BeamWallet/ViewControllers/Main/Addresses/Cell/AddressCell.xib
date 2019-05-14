@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,23 +35,11 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xdq-8a-CiY">
-                                <rect key="frame" x="15" y="23" width="51" height="21"/>
+                                <rect key="frame" x="15" y="23" width="200" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="YgY-D9-rTm"/>
+                                    <constraint firstAttribute="width" constant="200" id="rTL-Om-DsA"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cWN-Y8-WUd">
-                                <rect key="frame" x="235.5" y="27" width="46.5" height="15"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="My9-Ah-fH6"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -89,9 +77,7 @@
                             <constraint firstAttribute="trailing" secondItem="c1b-hm-9Et" secondAttribute="trailing" constant="15" id="WDm-91-Obo"/>
                             <constraint firstItem="c1b-hm-9Et" firstAttribute="leading" secondItem="Otz-SI-3Wv" secondAttribute="trailing" constant="15" id="dUm-yu-JmT"/>
                             <constraint firstItem="DQY-Eh-qS0" firstAttribute="leading" secondItem="6m3-TY-RcF" secondAttribute="leading" constant="15" id="hoE-PM-ZFb"/>
-                            <constraint firstItem="c1b-hm-9Et" firstAttribute="leading" secondItem="cWN-Y8-WUd" secondAttribute="trailing" constant="15" id="uJx-w9-2cd"/>
                             <constraint firstItem="Xdq-8a-CiY" firstAttribute="top" secondItem="6m3-TY-RcF" secondAttribute="top" constant="23" id="uYT-VJ-h44"/>
-                            <constraint firstItem="cWN-Y8-WUd" firstAttribute="top" secondItem="6m3-TY-RcF" secondAttribute="top" constant="27" id="zfm-lj-cPs"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -105,7 +91,6 @@
             <viewLayoutGuide key="safeArea" id="kOf-YT-16G"/>
             <connections>
                 <outlet property="arrowImage" destination="c1b-hm-9Et" id="mkh-qr-Z8W"/>
-                <outlet property="categoryLabel" destination="cWN-Y8-WUd" id="Kn0-bY-rKT"/>
                 <outlet property="expiredLabel" destination="Otz-SI-3Wv" id="syX-ZD-8KO"/>
                 <outlet property="idLabel" destination="DQY-Eh-qS0" id="hdC-fE-O67"/>
                 <outlet property="mainView" destination="6m3-TY-RcF" id="JvG-ZX-ZJo"/>

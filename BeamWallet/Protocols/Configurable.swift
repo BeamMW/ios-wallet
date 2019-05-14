@@ -75,8 +75,6 @@ extension Configurable where Self: Delegating {
 }
 
 protocol DynamicContentHeight {
-    
-    associatedtype ContentModel
-    
-    static func height(with contentModel: ContentModel, constrainedWidth width: CGFloat) -> CGFloat
+        
+    static func height() -> CGFloat
 }

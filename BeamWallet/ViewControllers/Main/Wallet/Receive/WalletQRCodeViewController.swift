@@ -32,6 +32,18 @@ class WalletQRCodeViewController: BaseViewController {
 
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var codeView: QRCodeView!
+    @IBOutlet weak private var shareAddress: UIButton!
+    
+    init(address:String, amount:String?) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.address = address
+        self.amount = amount
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(LocalizableStrings.fatalInitCoderError)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,26 +53,30 @@ class WalletQRCodeViewController: BaseViewController {
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
         
-        var qrString = "beam:\(address ?? "")"
-        
-        if let a = self.amount {
-            if let d = Double(a.replacingOccurrences(of: ",", with: "."))
-            {
-                if d > 0 {
-                    qrString = qrString + "?amount=\(a)"
-                }
-            }
-        }
+        let qrString = AppModel.sharedManager().generateQRCodeString(self.address, amount: self.amount)
         
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
+        
+        if !AppDelegate.isEnableNewFeatures {
+            shareAddress.setTitle("copy address", for: .normal)
+            shareAddress.setImage(UIImage(named: "iconCopyBlue"), for: .normal)
+        }
         
         addSwipeToDismiss()
     }
 
-    
     @IBAction func onShare(sender :UIButton) {
-        if let address = addressLabel.text {
-            let vc = UIActivityViewController(activityItems: [address], applicationActivities: [])
+        if !AppDelegate.isEnableNewFeatures {
+            UIPasteboard.general.string = self.address
+            
+            ShowCopiedProgressHUD()
+            
+            self.dismiss(animated: true, completion: {
+                self.delegate?.onCopyDone()
+            })
+        }
+        else{
+            let vc = UIActivityViewController(activityItems: [address ?? ""], applicationActivities: [])
             vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
                 if completed {
                     self.dismiss(animated: true, completion: {
@@ -75,21 +91,8 @@ class WalletQRCodeViewController: BaseViewController {
             self.present(vc, animated: true)
         }
     }
-    
+        
     @IBAction func onClose(sender :UIButton) {
         dismiss(animated: true, completion:nil)
-    }
-
-}
-
-
-extension WalletQRCodeViewController {
-    
-    func withAddress(address: String, amount:String?) -> Self {
-        
-        self.address = address
-        self.amount = amount
-        
-        return self
     }
 }

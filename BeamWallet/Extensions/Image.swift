@@ -1,5 +1,5 @@
 //
-// AddressExpiredCell.swift
+// Image.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,29 +17,25 @@
 // limitations under the License.
 //
 
+
+import Foundation
 import UIKit
 
-class AddressExpiredCell: UITableViewCell {
-
-    @IBOutlet weak private var dateLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
+extension UIImage {
+    public static func fromColor(color:UIColor) -> UIImage? {
+        let minimumSize: CGSize = CGSize(width: 1.0, height: 1.0)
         
-        self.backgroundColor = UIColor.main.marineTwo
-
-        selectionStyle = .none
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-}
-
-extension AddressExpiredCell: Configurable {
-    
-    func configure(with address: BMAddress) {
-        dateLabel.text = address.formattedDate()
+        UIGraphicsBeginImageContext(minimumSize)
+        
+        if let context = UIGraphicsGetCurrentContext() {
+            context.setFillColor(color.cgColor)
+            context.fill(CGRect(origin: .zero, size: minimumSize))
+        }
+        
+        let colorImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        return colorImage
     }
 }

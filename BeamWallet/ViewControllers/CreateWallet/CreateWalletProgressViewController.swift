@@ -49,17 +49,17 @@ class CreateWalletProgressViewController: BaseViewController {
         progressView.transform = transformScale
         
         if AppModel.sharedManager().isRestoreFlow {
-            progressTitleLabel.text = "restoring_wallet".localized
+            progressTitleLabel.text = LocalizableStrings.restoring_wallet
             restotingInfoLabel.isHidden = false
             restotingWarningLabel.isHidden = false
-            progressValueLabel.text = "restored".localized + "0%"
+            progressValueLabel.text = LocalizableStrings.restored + "0%"
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
         }
         else if phrase == nil {
             timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
             
-            progressTitleLabel.text = "loading_wallet".localized
+            progressTitleLabel.text = LocalizableStrings.loading_wallet
             cancelButton.isHidden = true
         }
         
@@ -92,7 +92,7 @@ class CreateWalletProgressViewController: BaseViewController {
 
             self.navigationController?.popViewController(animated: true)
 
-            self.alert(title: "error".localized, message: "no_internet".localized) { (_ ) in
+            self.alert(title: LocalizableStrings.error, message: LocalizableStrings.no_internet) { (_ ) in
 
             }
         }
@@ -101,7 +101,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 let created = appModel.createWallet(phrase, pass: password)
                 if(!created)
                 {
-                    self.alert(title: "error".localized, message: "wallet_not_created") { (_ ) in
+                    self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_created) { (_ ) in
                         if appModel.isInternetAvailable {
                             self.navigationController?.popToRootViewController(animated: true)
                         }
@@ -125,7 +125,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 let opened = appModel.openWallet(password)
                 if(!opened)
                 {
-                    self.alert(title: "error".localized, message: "wallet_not_opened") { (_ ) in
+                    self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_opened) { (_ ) in
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 }
@@ -141,8 +141,29 @@ class CreateWalletProgressViewController: BaseViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    private func openNodeController() {
+        let vc = EnterNodeAddressViewController()
+        vc.completion = {
+            obj in
+            
+            if obj == true {
+                AppModel.sharedManager().isConnecting = false
+                
+                self.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(self.onTimeOut), userInfo: nil, repeats: false)
+                
+                self.startCreateWallet()
+            }
+            else{
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+        vc.hidesBottomBarWhenPushed = true
+        self.pushViewController(vc: vc)
+    }
 
 // MARK: IBAction
+    
     @IBAction func onCancel(sender :UIButton) {
         let appModel = AppModel.sharedManager()
         appModel.resetWallet(true)
@@ -201,7 +222,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     let progress: Float = Float(done) / Float(total)
                     let percent = Int32(progress * 100)
                     
-                    self.progressValueLabel.text = "restored".localized + "\(percent)%"
+                    self.progressValueLabel.text = LocalizableStrings.restored + "\(percent)%"
                 }
             }
             
@@ -238,36 +259,16 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                 }
             }
             else if error.code == 1 {
-                let alert = UIAlertController(title: "Incompatible node", message: "You’re trying to connect to an incompatible node", preferredStyle: .alert)
                 
-                let ok = UIAlertAction(title: "Change settings", style: .default, handler: { action in
-                    let vc = EnterNodeAddressViewController()
-                    vc.completion = {
-                        obj in
-                        
-                        if obj == true {
-                            AppModel.sharedManager().isConnecting = false
-                            
-                            self.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(self.onTimeOut), userInfo: nil, repeats: false)
-                            
-                            self.startCreateWallet()
-                        }
-                        else{
-                            self.navigationController?.popToRootViewController(animated: true)
-                        }
-                    }
-                    vc.hidesBottomBarWhenPushed = true
-                    self.pushViewController(vc: vc)
-                })
-                alert.addAction(ok)
-                
-                let cancel = UIAlertAction(title: "Cancel", style: .default, handler: { action in
+                self.confirmAlert(title: LocalizableStrings.incompatible_node_title, message: LocalizableStrings.incompatible_node_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.change_settings, cancelHandler: { (_ ) in
+                    
                     AppModel.sharedManager().resetWallet(false)
                     self.navigationController?.popViewController(animated: true)
+                    
+                }, confirmHandler: { (_ ) in
+                    
+                    self.openNodeController()
                 })
-                alert.addAction(cancel)
-                
-                self.present(alert, animated: true)
             }
             else{
                 if let controllers = self.navigationController?.viewControllers {
@@ -277,7 +278,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                         }
                     }
                 }
-                self.alert(title: "error".localized, message: error.localizedDescription, handler: { (_ ) in
+                self.alert(title: LocalizableStrings.error, message: error.localizedDescription, handler: { (_ ) in
                     AppModel.sharedManager().resetWallet(false)
                     self.navigationController?.popViewController(animated: true)
                 })

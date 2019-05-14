@@ -67,19 +67,17 @@ class CategoryDetailViewController: BaseViewController {
         addresses = AppModel.sharedManager().getAddressFrom(self.category) as! [BMAddress]
     }
     
-    @objc private func onMore(sender:UIBarButtonItem) {
-        let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
+    @objc private func onMore(sender:UIBarButtonItem) {        
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: "Edit", icon: nil, action:.edit_category), BMPopoverMenu.BMPopoverMenuItem(name: "Delete", icon: nil, action:.delete_category)]
         
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: "Edit", icon: "iconScanQr", id:1), BMPopoverMenu.BMPopoverMenuItem(name: "Delete", icon: "iconCopyWhite24", id:2)]
-        
-        BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
+        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
-                switch (item.id) {
-                case 1:
+                switch (item.action) {
+                case .edit_category:
                     let vc = CategoryEditViewController(category: self.category)
                     vc.hidesBottomBarWhenPushed = true
                     self.pushViewController(vc: vc)
-                case 2 :
+                case .delete_address :
                     AppModel.sharedManager().removeDelegate(self)
 
                     AppModel.sharedManager().deleteCategory(self.category)
@@ -140,27 +138,32 @@ extension CategoryDetailViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 1 {
-            if addresses.count == 0 {
-                let cell =  tableView
-                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
-                    .configured(with: "there are no addresses associated with this category")
-                return cell
-            }
-            else{
-                let cell =  tableView
-                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, address: addresses[indexPath.row], single:false))
-                return cell
-            }
-  
-        }
-        else{
-            let cell =  tableView
-                .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
-                .configured(with: self.category)
-            return cell
-        }
+        let cell =  tableView
+            .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
+            .configured(with: self.category)
+        return cell
+        
+//        if indexPath.section == 1 {
+//            if addresses.count == 0 {
+//                let cell =  tableView
+//                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
+//                    .configured(with: "there are no addresses associated with this category")
+//                return cell
+//            }
+//            else{
+//                let cell =  tableView
+//                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+//                    .configured(with: (row: indexPath.row, address: addresses[indexPath.row], single:false, displayCategory:false))
+//                return cell
+//            }
+//
+//        }
+//        else{
+//            let cell =  tableView
+//                .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
+//                .configured(with: self.category)
+//            return cell
+//        }
         
     }
     

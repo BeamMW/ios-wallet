@@ -118,32 +118,25 @@ class SettingsViewModel : NSObject {
     public var needReloadTable : (() -> Void)?
 
     class SettingsItem {
-        enum Position {
-            case one
-            case midle
-        }
-        
+
         public var title:String?
         public var detail:String?
         public var isSwitch:Bool?
         public var id:Int!
-        public var position:Position!
         public var category:BMCategory?
 
-        init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position) {
+        init(title: String?, detail: String?, isSwitch: Bool?, id:Int) {
             self.title = title
             self.detail = detail
             self.isSwitch = isSwitch
             self.id = id
-            self.position = position
         }
         
-        init(title: String?, detail: String?, isSwitch: Bool?, id:Int, position:Position, category:BMCategory?) {
+        init(title: String?, detail: String?, isSwitch: Bool?, id:Int, category:BMCategory?) {
             self.title = title
             self.detail = detail
             self.isSwitch = isSwitch
             self.id = id
-            self.position = position
             self.category = category
         }
     }
@@ -159,48 +152,60 @@ class SettingsViewModel : NSObject {
     private func initItems() {
         
         var node = [SettingsItem]()
-        node.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5, position: .one))
+        node.append(SettingsItem(title: "ip:port:", detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5))
         
         var security = [SettingsItem]()
-        security.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3, position: .midle))
+        security.append(SettingsItem(title: "Ask for password on every Send", detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3))
         if BiometricAuthorization.shared.canAuthenticate() {
-            security.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4, position: .midle))
+            security.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
         }
-        security.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9, position: .midle))
 
+        if AppDelegate.isEnableNewFeatures {
+            security.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
+        }
         
         var info = [SettingsItem]()
-        info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1, position: .midle))
-        info.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6, position: .midle))
+        info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1))
+        info.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6))
         
         var categories = [SettingsItem]()
-        if AppModel.sharedManager().categories.count > 0 {
-            for category in AppModel.sharedManager().categories as! [BMCategory] {
-                categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, id: Int(category.id), position: .midle, category: category))
+
+        if AppDelegate.isEnableNewFeatures {
+            if AppModel.sharedManager().categories.count > 0 {
+                for category in AppModel.sharedManager().categories as! [BMCategory] {
+                    categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, id: Int(category.id), category: category))
+                }
             }
-        }
-        else{
-            categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10, position: AppModel.sharedManager().categories.count > 0 ? .midle : .one))
+            else{
+                categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
+            }
         }
 
         var report = [SettingsItem]()
-        report.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2, position: .one))
+        report.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2))
 
         items.append(node)
         items.append(security)
         items.append(info)
-        items.append(categories)
-        if AppModel.sharedManager().categories.count > 0 {
-            var categories = [SettingsItem]()
-            categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10, position: .one))
+        
+        if AppDelegate.isEnableNewFeatures {
             items.append(categories)
         }
+        
+        if AppDelegate.isEnableNewFeatures {
+            if AppModel.sharedManager().categories.count > 0 {
+                var categories = [SettingsItem]()
+                categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
+                items.append(categories)
+            }
+        }
+        
         items.append(report)
 
         if !NotificationManager.disableApns {
             var bots = [SettingsItem]()
-            bots.append(SettingsItem(title: "Open telegram bot", detail: nil, isSwitch: nil, id: 8, position: .midle))
-            bots.append(SettingsItem(title: "Linking telegram bot", detail: nil, isSwitch: nil, id: 7, position: .one))
+            bots.append(SettingsItem(title: "Open telegram bot", detail: nil, isSwitch: nil, id: 8))
+            bots.append(SettingsItem(title: "Linking telegram bot", detail: nil, isSwitch: nil, id: 7))
             items.append(bots)
         }
     }

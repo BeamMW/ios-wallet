@@ -46,3 +46,10 @@ class WalletStatusCell: BaseCell {
         self.delegate?.onClickSend()
     }
 }
+
+extension WalletStatusCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 66
+    }
+}

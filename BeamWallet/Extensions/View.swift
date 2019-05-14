@@ -21,6 +21,15 @@ import Foundation
 import UIKit
 
 extension UIView {
+    func loadNib() -> UIView {
+        let bundle = Bundle(for: type(of: self))
+        let nibName = type(of: self).description().components(separatedBy: ".").last!
+        let nib = UINib(nibName: nibName, bundle: bundle)
+        return nib.instantiate(withOwner: self, options: nil).first as! UIView
+    }
+}
+
+extension UIView {
     
     struct Constants {
         static let ExternalBorderName = "externalBorder"
@@ -82,6 +91,17 @@ extension UIView {
         set {
             var f = frame
             f.origin.x = newValue
+            frame = f
+        }
+    }
+    
+    var y: CGFloat {
+        get {
+            return frame.origin.y
+        }
+        set {
+            var f = frame
+            f.origin.y = newValue
             frame = f
         }
     }

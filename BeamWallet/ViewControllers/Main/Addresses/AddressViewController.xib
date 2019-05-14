@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,23 +46,36 @@
             <viewLayoutGuide key="safeArea" id="Nqv-hT-Ycm"/>
         </view>
         <view contentMode="scaleToFill" id="h8Y-t6-gFZ" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transactions list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xg4-fC-J7L">
-                    <rect key="frame" x="15" y="33.5" width="134" height="21.5"/>
+                    <rect key="frame" x="15" y="9.5" width="134" height="21.5"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N3L-HV-gmO">
+                    <rect key="frame" x="330" y="0.0" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="Lc0-JE-5h0"/>
+                    </constraints>
+                    <state key="normal" image="iconMore"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="K9g-zb-xyz" firstAttribute="bottom" secondItem="Xg4-fC-J7L" secondAttribute="bottom" constant="15" id="en5-gX-0XV"/>
+                <constraint firstItem="N3L-HV-gmO" firstAttribute="top" secondItem="K9g-zb-xyz" secondAttribute="top" id="2Dy-lO-eCG"/>
+                <constraint firstItem="K9g-zb-xyz" firstAttribute="trailing" secondItem="N3L-HV-gmO" secondAttribute="trailing" constant="5" id="AJn-ea-28L"/>
+                <constraint firstItem="Xg4-fC-J7L" firstAttribute="centerY" secondItem="h8Y-t6-gFZ" secondAttribute="centerY" id="KPW-jn-EX1"/>
+                <constraint firstItem="K9g-zb-xyz" firstAttribute="bottom" secondItem="N3L-HV-gmO" secondAttribute="bottom" id="Yuj-nk-yYV"/>
                 <constraint firstItem="Xg4-fC-J7L" firstAttribute="leading" secondItem="K9g-zb-xyz" secondAttribute="leading" constant="15" id="llX-nQ-1cJ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="K9g-zb-xyz"/>
         </view>
     </objects>
+    <resources>
+        <image name="iconMore" width="24" height="24"/>
+    </resources>
 </document>

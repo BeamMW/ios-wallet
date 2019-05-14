@@ -26,11 +26,13 @@ class LoginViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Settings.sharedManager().target == Testnet {
-            bgView.image = UIImage.init(named: "bgTestnet.jpg");
-        }
-        else if Settings.sharedManager().target == Masternet{
-            bgView.image = UIImage.init(named: "bgMasternet.jpg");
+        switch Settings.sharedManager().target {
+        case Testnet:
+            bgView.image = BackgroundTestnet()
+        case Masternet:
+            bgView.image = BackgroundMasternet()
+        default:
+            return
         }
     }
 
@@ -43,33 +45,24 @@ class LoginViewController: BaseViewController {
     @IBAction func onRestoreWallet(sender :UIButton) {
         if AppModel.sharedManager().canRestoreWallet() {
             
-            let alertController = UIAlertController(title: "restore_wallet_title".localized, message: "restore_wallet_info".localized, preferredStyle: .alert)
-            
-            let NoAction = UIAlertAction(title: "cancel".localized, style: .default) { (action) in
-            }
-            alertController.addAction(NoAction)
-            
-            let OKAction = UIAlertAction(title: "restore_wallet_title".localized, style: .cancel) { (action) in
+            self.confirmAlert(title: LocalizableStrings.restore_wallet_title, message: LocalizableStrings.restore_wallet_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.restore_wallet_title, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
                 AppModel.sharedManager().isRestoreFlow = true;
                 
-                let vc = InputPhraseViewController()
-                self.pushViewController(vc: vc)
+                self.pushViewController(vc: InputPhraseViewController())
             }
-            alertController.addAction(OKAction)          
-            
-            self.present(alertController, animated: true, completion: nil)
         }
         else{
-            self.alert(title: "no_space_title".localized, message: "no_space_info".localized) { (_ ) in
+            self.alert(title: LocalizableStrings.no_space_title, message: LocalizableStrings.no_space_info) { (_ ) in
             }
         }
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {
         AppModel.sharedManager().isRestoreFlow = false;
-
-        let vc = IntroPhraseViewController()
-        pushViewController(vc: vc)
+        
+        pushViewController(vc: IntroPhraseViewController())
     }
 
 }

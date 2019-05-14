@@ -23,6 +23,19 @@ import UIKit
 
 extension UITextField {
     
+    public func disablePasswordAutoFill () {
+        if #available(iOS 12, *) {
+            // iOS 12: Not the best solution, but it works.
+            self.textContentType = .oneTimeCode
+        } else {
+            // iOS 11: Disables the autofill accessory view.
+            self.textContentType = .init(rawValue: "")
+        }
+    }
+}
+
+extension UITextField {
+    
     @IBInspectable
     var localizationKey: String? {
         get {

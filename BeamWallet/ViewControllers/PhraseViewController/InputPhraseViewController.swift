@@ -29,10 +29,10 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "seed_prhase".localized
+        self.title = LocalizableStrings.seed_prhase
         
         for i in 0 ... 11 {
-            inputWords.append(BMWord(word: "", index: i, correct: false))
+            inputWords.append(BMWord(word: String.empty(), index: i, correct: false))
         }
         
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
@@ -62,7 +62,7 @@ class InputPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: "seed_capture_warning".localized)
+        self.alert(message: LocalizableStrings.seed_capture_warning)
     }
     
     // MARK: IBAction
@@ -110,15 +110,7 @@ extension InputPhraseViewController : InputWordCellCellDelegate {
             //find next field
             if let cell = collectionView.cellForItem(at: IndexPath(row: path.row + 1, section: 0)) as? InputWordCell {
                 cell.startEditing()
-            }            
-//            for i in 0 ... inputWords.count - 1 {
-//                if inputWords[i].value.isEmpty {
-//                    let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as! InputWordCell
-//                    cell.startEditing()
-//
-//                    break;
-//                }
-//            }
+            }
         }
     }
     

@@ -19,32 +19,31 @@
 
 import UIKit
 
-class TransactionViewController: BaseViewController {
-    
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private var headerView: UIView!
-    @IBOutlet private var proofHeaderView: UIView!
-    @IBOutlet private var utxosHeaderView: UIView!
-
-    
-    struct TransactionGeneralInfo {
-        var text:String!
-        var detail:String!
-        var failed:Bool!
-        var canCopy:Bool!
-        var color = UIColor.white
-    }
+class TransactionViewController: BaseTableViewController {
     
     private var paymentProof:BMPaymentProof?
     private var utxos:[BMUTXO]!
 
     private var transaction:BMTransaction!
-    private var details = [TransactionGeneralInfo]()
+    private var details = [GeneralInfo]()
 
+    init(transaction:BMTransaction) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.transaction = transaction
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(LocalizableStrings.fatalInitCoderError)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Transaction details"
+        title = LocalizableStrings.transaction_details
+        
+        tableView.delegate = self
+        tableView.dataSource = self
         
         tableView.register(GeneralInfoCell.self)
         tableView.register(WalletTransactionCell.self)
@@ -54,12 +53,6 @@ class TransactionViewController: BaseViewController {
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         fillTransactionInfo()
-        
-        getPaymentProof()
-    }
-    
-    @objc private func refreshData(_ sender: Any) {
-        AppModel.sharedManager().getWalletStatus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,70 +67,62 @@ class TransactionViewController: BaseViewController {
         AppModel.sharedManager().removeDelegate(self)
     }
     
-    private func getPaymentProof() {
-        if transaction.hasPaymentProof() {
-            AppModel.sharedManager().getPaymentProof(transaction)
-        }
+    @objc private func refreshData(_ sender: Any) {
+        AppModel.sharedManager().getWalletStatus()
     }
     
-    private func fillTransactionInfo() {
-        if transaction.canCancel || transaction.canDelete {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "iconMore"), style: .plain, target: self, action: #selector(onMore))
-        }
-        else{
-            self.navigationItem.rightBarButtonItem = nil
-        }
-        
-        details = [TransactionGeneralInfo]()
-        
-        details.append(TransactionGeneralInfo(text: "Sending address:", detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-        
-        details.append(TransactionGeneralInfo(text: "Receiving address:", detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
 
-        details.append(TransactionGeneralInfo(text: "Transaction fee:", detail: String.currency(value: transaction.fee), failed: false, canCopy:true, color: UIColor.white))
+    private func fillTransactionInfo() {
+        self.navigationItem.rightBarButtonItem = (transaction.canCancel || transaction.canDelete) ? UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore)) : nil
         
-       details.append(TransactionGeneralInfo(text: "Transaction ID: ", detail: transaction.id, failed: false, canCopy:true, color: UIColor.white))
+        details.removeAll()
         
-        details.append(TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
+        details.append(GeneralInfo(text: LocalizableStrings.sending_address, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+        
+        details.append(GeneralInfo(text: LocalizableStrings.receiving_address, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+
+        details.append(GeneralInfo(text: LocalizableStrings.transaction_fee, detail: String.currency(value: transaction.fee), failed: false, canCopy:true, color: UIColor.white))
+        
+        details.append(GeneralInfo(text: LocalizableStrings.transaction_id, detail: transaction.id, failed: false, canCopy:true, color: UIColor.white))
+        
+        details.append(GeneralInfo(text: LocalizableStrings.kernel_id, detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
         
         if !transaction.comment.isEmpty {
-            details.append(TransactionGeneralInfo(text: "Comment:", detail: transaction.comment, failed: false, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.comment, detail: transaction.comment, failed: false, canCopy:true, color: UIColor.white))
         }
         
         if transaction.isFailed() {
-            details.append(TransactionGeneralInfo(text: "Failure reason:", detail: transaction.failureReason, failed: true, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.failure_reason, detail: transaction.failureReason, failed: true, canCopy:true, color: UIColor.white))
         }
         
         //utxos
         utxos = (AppModel.sharedManager().getUTXOSFrom(transaction) as! [BMUTXO])
         
+        if paymentProof == nil && transaction.hasPaymentProof()  {
+            AppModel.sharedManager().getPaymentProof(transaction)
+        }
+
         tableView.reloadData()
     }
     
-    @objc private func onMore(sender:UIBarButtonItem) {
-        let frame = CGRect(x: UIScreen.main.bounds.size.width-80, y: 44, width: 60, height: 40)
-//        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Repeat transaction", icon: "iconRepeat", id:1) /*, BMPopoverMenu.BMPopoverMenuItem(name: "Save peer address", icon: "iconSaveAddress", id:2)*/]
-        
+    @objc private func onMore(sender:UIBarButtonItem) {        
         var items = [BMPopoverMenu.BMPopoverMenuItem]()
         
         if transaction.canCancel {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Cancel transaction", icon: "iconCancelTransction", id:3))
-        }
-        if transaction.canDelete {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: "Delete transaction", icon: "iconDelete", id:4))
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.cancel_transaction, icon: nil, action: .cancel_transaction))
         }
         
-        BMPopoverMenu.showForSenderFrame(senderFrame: frame, with: items, done: { (selectedItem) in
+        if transaction.canDelete {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_transaction, icon: nil, action: .delete_transaction))
+        }
+        
+        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
-                switch (item.id) {
-                case 1:
-                    let vc = WalletSendViewController()
-                    vc.transaction = self.transaction
-                    self.pushViewController(vc: vc)
-                case 3 :
+                switch (item.action) {
+                case .cancel_transaction :
                     AppModel.sharedManager().cancelTransaction(self.transaction)
                     self.navigationController?.popViewController(animated: true)
-                case 4 :
+                case .delete_transaction :
                     AppModel.sharedManager().deleteTransaction(self.transaction)
                     self.navigationController?.popViewController(animated: true)
                 default:
@@ -153,28 +138,20 @@ class TransactionViewController: BaseViewController {
 extension TransactionViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 2 && paymentProof != nil {
-            return 60
+        switch section {
+        case 1:
+            return BMTableHeaderTitleView.boldHeight
+        case 2:
+            return (paymentProof != nil) ? BMTableHeaderTitleView.boldHeight : 0
+        case 3:
+            return (utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? 60 : 0
+        default:
+            return 0
         }
-        else if section == 3 && utxos.count > 0 && !Settings.sharedManager().isHideAmounts {
-            return 60
-        }
-        else if section == 1 {
-            return 60
-        }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 86
-        }
-        return UITableView.automaticDimension
-    }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        return (indexPath.section == 0) ? WalletTransactionCell.height() : UITableView.automaticDimension
     }
 }
 
@@ -185,68 +162,62 @@ extension TransactionViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        switch section {
+        case 0:
             return 1
-        }
-        else if section == 1 {
+        case 1:
             return details.count
+        case 2:
+            return (paymentProof != nil) ? 1 : 0
+        case 3:
+            return (Settings.sharedManager().isHideAmounts) ? 0 : utxos.count
+        default:
+            return 0
         }
-        else if section == 2 && paymentProof != nil {
-            return 1
-        }
-        else if section == 3 && !Settings.sharedManager().isHideAmounts {
-            return utxos.count
-        }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
-            let cell =  tableView
+        switch indexPath.section {
+        case 0:
+            let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
                 .configured(with: (row: indexPath.row, transaction: transaction, single:true))
             return cell
-        }
-        else if indexPath.section == 1 {
-            let cell =  tableView
+        case 1:
+            let cell = tableView
                 .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
             cell.delegate = self
             return cell
-        }
-        else if indexPath.section == 2 {
-            let cell =  tableView
+        case 2:
+            let cell = tableView
                 .dequeueReusableCell(withType: TransactionPaymentProofCell.self, for: indexPath)
             cell.delegate = self
-            
             return cell
-        }
-        else if indexPath.section == 3 {
-            let cell =  tableView
+        case 3:
+            let cell = tableView
                 .dequeueReusableCell(withType: TransactionUTXOCell.self, for: indexPath)
             cell.configure(with: utxos[indexPath.row])
-            
             return cell
+        default:
+            return UITableViewCell()
         }
-        
-        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+        switch section {
+        case 0:
+            return nil
+        case 1:
+            return BMTableHeaderTitleView(title: LocalizableStrings.general_info, bold: true)
+        case 2:
+            return (paymentProof != nil) ? BMTableHeaderTitleView(title: LocalizableStrings.payment_proof, bold: true) : nil
+        case 3:
+            return (utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: LocalizableStrings.utxo_list, bold: true) : nil
+        default:
             return nil
         }
-        else if section == 1 {
-            return headerView
-        }
-        else if section == 2 && paymentProof != nil {
-            return proofHeaderView
-        }
-        else if section == 3 && utxos.count > 0 && !Settings.sharedManager().isHideAmounts {
-            return utxosHeaderView
-        }
-        return nil
     }
     
 }
@@ -279,14 +250,8 @@ extension TransactionViewController : WalletModelDelegate {
     }
 }
 
-extension TransactionViewController: Configurable {
-    
-    func configure(with transaction:BMTransaction) {
-        self.transaction = transaction
-    }
-}
-
 extension TransactionViewController: TransactionPaymentProofCellDelegate {
+    
     func onPaymentProofDetails() {
         if let proof = paymentProof {
             let vc = PaymentProofDetailViewController(transaction: transaction, paymentProof: proof)
@@ -297,9 +262,7 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
     func onPaymentProofCopy() {
         if let code = paymentProof?.code {
             UIPasteboard.general.string = code
-            
-            SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-            SVProgressHUD.dismiss(withDelay: 1.5)
+            ShowCopiedProgressHUD()
         }
     }
 }
@@ -308,23 +271,11 @@ extension TransactionViewController : GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell)
         {
-            if details[path.row].text == "Kernel ID:" {
-                let kernelId = self.transaction.kernelId!;
+            if details[path.row].text == LocalizableStrings.kernel_id {
+                let kernelId = self.transaction.kernelId!
                 let link = Settings.sharedManager().explorerAddress + "block?kernel_id=" + kernelId
-                
-                if Settings.sharedManager().isAllowOpenLink {
-                    UIApplication.shared.open(URL(string: link)! , options: [:], completionHandler: nil)
-                }
-                else{
-                    let alert = UIAlertController(title: "External link", message: "Beam Wallet app requires permission to open external link in the browser. This action will expose your IP to the web server. To avoid it, choose \"Cancel\". You can chage your choice in app setting anytime.", preferredStyle: .alert)
-                    
-                    let ok = UIAlertAction(title: "Open", style: .default, handler: { action in
-                        UIApplication.shared.open(URL(string:link)! , options: [:], completionHandler: nil)
-                    })
-                    alert.addAction(UIAlertAction(title: "cancel".localized, style: .default, handler: nil))
-                    alert.addAction(ok)
-                    
-                    self.present(alert, animated: true)
+                if let url = URL(string: link) {
+                    openUrl(url: url)
                 }
             }
         }

@@ -1,5 +1,5 @@
 //
-// CategoryColorsView.swift
+// BMCategoryColorsView.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,15 +19,15 @@
 
 import Foundation
 
-protocol ColorViewDelegate: AnyObject {
+protocol BMColorViewDelegate: AnyObject {
     func onSelectColor(color:UIColor)
 }
 
-class CategoryColorsView: UIView {
+class BMCategoryColorsView: UIView {
 
-    class ColorView: UIView {
+    class BMColorView: UIView {
         
-        weak var delegate: ColorViewDelegate?
+        weak var delegate: BMColorViewDelegate?
 
         public var color:UIColor!
         private var circleView:UIView!
@@ -70,11 +70,11 @@ class CategoryColorsView: UIView {
         }
     }
     
-    weak var delegate: ColorViewDelegate?
+    weak var delegate: BMColorViewDelegate?
 
     public var colors:[UIColor] = [] {
         didSet{
-            fillColorView()
+            fillBMColorView()
         }
     }
     
@@ -86,7 +86,7 @@ class CategoryColorsView: UIView {
     
     private func selectColor() {
         for view in self.subviews {
-            if let colorView = view as? ColorView {
+            if let colorView = view as? BMColorView {
                 if colorView.color.toHexString() == selectedColor.toHexString() {
                     colorView.selected = true
                 }
@@ -97,7 +97,7 @@ class CategoryColorsView: UIView {
         }
     }
     
-    private func fillColorView() {
+    private func fillBMColorView() {
         
         let size:CGFloat = Device.isLarge ? 38 : 30
         let space:CGFloat = Device.isLarge ? 30 : 20
@@ -105,7 +105,7 @@ class CategoryColorsView: UIView {
         
         for color in colors {
             
-            let colorView = ColorView(color: color, frame: CGRect(x: x, y: 0, width: size, height: size))
+            let colorView = BMColorView(color: color, frame: CGRect(x: x, y: 0, width: size, height: size))
             colorView.delegate = self
             self.addSubview(colorView)
             
@@ -123,7 +123,7 @@ class CategoryColorsView: UIView {
     }
 }
 
-extension CategoryColorsView : ColorViewDelegate {
+extension BMCategoryColorsView : BMColorViewDelegate {
     
     func onSelectColor(color: UIColor) {
         self.delegate?.onSelectColor(color: color)

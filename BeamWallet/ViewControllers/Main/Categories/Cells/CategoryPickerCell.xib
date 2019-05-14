@@ -28,7 +28,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Mkd-1H-EvE">
-                                <rect key="frame" x="15" y="15" width="37" height="20"/>
+                                <rect key="frame" x="15" y="15" width="266" height="20"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -47,6 +47,7 @@
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="Mkd-1H-EvE" firstAttribute="leading" secondItem="7KO-n4-bBS" secondAttribute="leading" constant="15" id="0Mv-lq-Ckq"/>
+                            <constraint firstItem="h02-UQ-KS9" firstAttribute="leading" secondItem="Mkd-1H-EvE" secondAttribute="trailing" constant="15" id="BXP-ik-bV1"/>
                             <constraint firstItem="h02-UQ-KS9" firstAttribute="centerY" secondItem="7KO-n4-bBS" secondAttribute="centerY" id="E4t-cr-okv"/>
                             <constraint firstAttribute="bottom" secondItem="Mkd-1H-EvE" secondAttribute="bottom" constant="14.5" id="Tg3-4K-E4W"/>
                             <constraint firstAttribute="trailing" secondItem="h02-UQ-KS9" secondAttribute="trailing" constant="11" id="UaV-Bk-Fz5"/>

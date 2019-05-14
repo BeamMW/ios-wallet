@@ -39,6 +39,19 @@ class WalletAvailableCell: BaseCell {
     @IBOutlet weak private var maturingCurrencyIcon: UIImageView!
     @IBOutlet weak private var maturingDescriptionLabel: UILabel!
 
+    
+    public static func hideHeight() -> CGFloat {
+        return 80
+    }
+    
+    public static func mainHeight() -> CGFloat {
+        return 175.0
+    }
+    
+    public static func singleHeight() -> CGFloat {
+        return 130.0
+    }
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         

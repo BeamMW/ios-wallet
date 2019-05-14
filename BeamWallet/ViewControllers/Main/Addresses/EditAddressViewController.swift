@@ -1,6 +1,6 @@
 //
-// EditAddressViewController.swift
-// BeamWallet
+//  EditAddressViewController.swift
+//  BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -25,7 +25,10 @@ class EditAddressViewController: BaseViewController {
     private var address:BMAddress!
     private var oldAddress:BMAddress!
     
+    private var details = [GeneralInfo]()
+    
     @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var saveButton: UIButton!
     
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
@@ -54,17 +57,14 @@ class EditAddressViewController: BaseViewController {
         title = "Edit address"
         
         tableView.keyboardDismissMode = .interactive
+        tableView.register(GeneralInfoCell.self)
         tableView.register(AddressSwitchCell.self)
-        tableView.register(AddressExpiresCell.self)
-        tableView.register(AddressExpiredCell.self)
+        tableView.register(AddressExpireCell.self)
         tableView.register(AddressCommentCell.self)
-        tableView.register(AddressCategoryCell.self)
-
-      //  hideKeyboardWhenTappedAround()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(onSave))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        hideKeyboardWhenTappedAround()
+        
+        fillDetails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,26 +88,35 @@ class EditAddressViewController: BaseViewController {
     
     private func checkIsChanges(){
         if oldAddress.label != address.label {
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            saveButton.isEnabled = true
         }
         else if oldAddress.isNowExpired != address.isNowExpired {
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            saveButton.isEnabled = true
         }
         else if oldAddress.isNowActive != address.isNowActive {
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            saveButton.isEnabled = true
         }
         else if oldAddress.duration != address.duration {
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }
-        else if oldAddress.category != address.category {
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            saveButton.isEnabled = true
         }
         else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
+            saveButton.isEnabled = false
         }
     }
     
-    @IBAction func onSave(sender : UIBarButtonItem) {
+    private func fillDetails() {
+        details.removeAll()
+        
+        details.append(GeneralInfo(text: "Address ID:", detail: address.walletId, failed: false, canCopy:true, color: UIColor.white))
+        
+        if address.isExpired() {
+            details.append(GeneralInfo(text: "Expired:", detail: address.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
+        }
+        
+        tableView.reloadData()
+    }
+    
+    @IBAction func onSave(sender : UIButton) {
         AppModel.sharedManager().edit(address)
         
         navigationController?.popViewController(animated: true)
@@ -117,189 +126,94 @@ class EditAddressViewController: BaseViewController {
 extension EditAddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 2 && address.isNowActive && address.isExpired() {
+        if section == 1 || section == 2 {
             return 30
         }
-        else if section == 2 {
-            return 0
-        }
-        return 30
+        
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            return 60
+        if indexPath.section == 0 {
+            if indexPath.row == details.count {
+                return 80
+            }
         }
-        else if indexPath.section == 0 {
-            return address.isExpired() ? 60 : 80
-        }
-        else if indexPath.section == 2 && address.isNowActive && address.isExpired() {
+        else if indexPath.section == 1 && address.isNowActive && indexPath.row == 1 {
             return 80
         }
-        else if indexPath.section == 3 {
-            return 60
-        }
-        else if indexPath.section == 4 {
-            return 120
-        }
-        return 0
+        
+        return UITableView.automaticDimension
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if (indexPath.section == 0) || (indexPath.section == 2 && address.isNowActive && address.isExpired()) {
-            
-            let vc = AddressExpiresPickerViewController(duration: -1)
-            vc.completion = {
-                obj in
-                
-                self.address.isChangedDate = true
-
-                if obj == 24 {
-                    self.address.isNowActive = true
-                    self.address.isNowActiveDuration = self.hours_24
-                    
-                    if self.address.isExpired() {
-                    }
-                    else {
-                        self.address.isNowExpired = false
-                    }
-                }
-                else {
-                    if self.address.isNowActive {
-                        self.address.isNowActiveDuration = 0
-                    }
-                    else{
-                        self.address.duration = 0
-                    }
-                    
-                    if self.address.isExpired() {
-                    }
-                    else {
-                        self.address.isNowExpired = false
-                    }
-                }
-                
-                self.checkIsChanges()
-                self.tableView.reloadData()
-            }
-            
-            pushViewController(vc: vc)
-        }
-        else if indexPath.section == 3 {
-            if AppModel.sharedManager().categories.count == 0 {
-               
-                let vc = CategoryEditViewController(category: nil)
-                vc.completion = {
-                    obj in
-                    if let category = obj {
-                        self.address.category = String(category.id)
-                        self.checkIsChanges()
-                        self.tableView.reloadData()
-                    }
-                }
-                self.pushViewController(vc: vc)
-                
-//                let alertController = UIAlertController(title: "Categories list is empty", message: "You don’t have any categories at the moment.\nYou can create category in Settings or now", preferredStyle: .alert)
-//
-//                let later = UIAlertAction(title: "Not now", style: .default) { (action) in }
-//
-//                let create = UIAlertAction(title: "Create now", style: .default) { (action) in
-//                    let vc = CategoryEditViewController(category: nil)
-//                    vc.completion = {
-//                        obj in
-//                            if let category = obj {
-//                                self.address.category = String(category.id)
-//                                self.checkIsChanges()
-//                                self.tableView.reloadData()
-//                            }
-//                    }
-//                    self.pushViewController(vc: vc)
-//                }
-//
-//                alertController.addAction(later)
-//                alertController.addAction(create)
-//
-//                self.present(alertController, animated: true, completion: nil)
-            }
-            else{
-                let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address.category))
-                vc.completion = {
-                    obj in
-                    if let cat = obj {
-                        self.address.category = String(cat.id)
-                        self.checkIsChanges()
-                        self.tableView.reloadData()
-                    }
-                }
-                pushViewController(vc: vc)
-            }
-
-        }
     }
 }
 
 extension EditAddressViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return details.count + (address.isExpired() ? 0 : 1)
+        }
+        else if section == 1 && address.isNowActive {
+            return 2
+        }
+        
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            if address.isExpired() {
-                let cell = tableView
-                    .dequeueReusableCell(withType: AddressExpiredCell.self, for: indexPath)
+            if indexPath.row == details.count {
+                let cell =  tableView
+                    .dequeueReusableCell(withType: AddressExpireCell.self, for: indexPath)
                     .configured(with: address)
+                cell.delegate = self
                 return cell
             }
             else{
-                let cell = tableView
-                    .dequeueReusableCell(withType: AddressExpiresCell.self, for: indexPath)
-                    .configured(with: address)
+                let cell =  tableView
+                    .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
+                    .configured(with: details[indexPath.row])
+                
                 return cell
             }
         }
         else if indexPath.section == 1 {
-            let text = address.isExpired() ? "Active address" : "Expire address now"
-            
-            var selected = false
-            
-            if address.isExpired() {
-                selected = address.isNowActive
+            if address.isNowActive && indexPath.row == 1 {
+                let cell =  tableView
+                    .dequeueReusableCell(withType: AddressExpireCell.self, for: indexPath)
+                    .configured(with: address)
+                cell.delegate = self
+                return cell
             }
-            else {
-                selected = address.isNowExpired
+            else{
+                var text = address.isExpired() ? "Active address" : "Expire address now"
+                
+                if Device.screenType == .iPhones_Plus || Device.screenType == .iPhone_XSMax {
+                    text = address.isExpired() ? "Active address" : "Expire address\nnow"
+                }
+                
+                let selected = false
+                
+                let cell =  tableView
+                    .dequeueReusableCell(withType: AddressSwitchCell.self, for: indexPath)
+                    .configured(with: (text: text, selected: selected))
+                cell.delegate = self
+                
+                return cell
             }
-            
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressSwitchCell.self, for: indexPath)
-                .configured(with: (text: text, selected: selected))
-            cell.delegate = self
-            
-            return cell
         }
-        else if indexPath.section == 2 && address.isNowActive && address.isExpired() {
-            let cell = tableView
-                .dequeueReusableCell(withType: AddressExpiresCell.self, for: indexPath)
-                .configured(with: address)
-            return cell
-        }
-        else if indexPath.section == 3 {
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressCategoryCell.self, for: indexPath)
-                .configured(with: address)
+        else if indexPath.section == 2 {
             
-            return cell
-        }
-        else if indexPath.section == 4 {
             let cell =  tableView
                 .dequeueReusableCell(withType: AddressCommentCell.self, for: indexPath)
                 .configured(with: address.label)
@@ -307,14 +221,17 @@ extension EditAddressViewController : UITableViewDataSource {
             
             return cell
         }
-
-        
-        let cell = BaseCell()
-        return cell
+        else{
+            return UITableViewCell()
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
+        if section == 1 || section == 2 {
+            return UIView()
+        }
+        
+        return nil
     }
 }
 
@@ -322,14 +239,14 @@ extension EditAddressViewController : AddressSwitchCellDelegate {
     func onSwitch(value:Bool) {
         if address.isExpired() {
             address.isNowActive = !address.isNowActive
-            address.isNowExpired = false
         }
         else {
             address.isNowExpired = !address.isNowExpired
-            address.isNowActive = false
         }
         
         checkIsChanges()
+        
+        fillDetails()
         
         tableView.reloadData()
     }
@@ -339,6 +256,44 @@ extension EditAddressViewController : AddressCommentCellDelegate {
     func onChangeComment(value: String) {
         address.label = value
         checkIsChanges()
+    }
+}
+
+extension EditAddressViewController : AddressExpireCellDelegate {
+    func onShowPopover() {
+        
+        let alert = UIAlertController(title: "Expires", message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "24 hours", style: .default , handler:{ (UIAlertAction)in
+            if self.address.isNowActive {
+                self.address.isNowActiveDuration = self.hours_24
+            }
+            else{
+                self.address.duration = self.hours_24
+            }
+            
+            self.checkIsChanges()
+            self.fillDetails()
+            self.tableView.reloadData()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Never", style: .default , handler:{ (UIAlertAction)in
+            if self.address.isNowActive {
+                self.address.isNowActiveDuration = 0
+            }
+            else{
+                self.address.duration = 0
+            }
+            
+            self.checkIsChanges()
+            self.fillDetails()
+            self.tableView.reloadData()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+        }))
+        
+        self.present(alert, animated: true)
     }
 }
 

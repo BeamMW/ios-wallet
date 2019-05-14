@@ -1,6 +1,6 @@
 //
-//  UTXODetailCell.swift
-//  BeamWallet
+// UTXODetailCell.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -64,5 +64,12 @@ extension UTXODetailCell: Configurable {
         else{
             statusLabel.textColor = UIColor.white
         }
+    }
+}
+
+extension UTXODetailCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 80
     }
 }

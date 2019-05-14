@@ -19,15 +19,13 @@
 
 import UIKit
 
-class PaymentProofDetailViewController: BaseViewController {
+class PaymentProofDetailViewController: BaseTableViewController {
 
     private var transaction: BMTransaction?
     private var paymentProof: BMPaymentProof?
 
-    private var details = [[TransactionViewController.TransactionGeneralInfo]]()
+    private var details = [[GeneralInfo]]()
 
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private var headerView: UIView!
     @IBOutlet private var footerView: UIView!
     @IBOutlet private weak var buttonDetails: UIButton!
     @IBOutlet private weak var buttonCode: UIButton!
@@ -45,13 +43,16 @@ class PaymentProofDetailViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = paymentProof == nil ? "Payment proof verification" : "Payment proof"
+        title = paymentProof == nil ? LocalizableStrings.payment_proof_verefication : LocalizableStrings.payment_proof
+        
+        tableView.delegate = self
+        tableView.dataSource = self
         
         tableView.register(GeneralInfoCell.self)
         
@@ -75,8 +76,7 @@ class PaymentProofDetailViewController: BaseViewController {
         if let transactionDetail = transaction?.details() {
             UIPasteboard.general.string = transactionDetail
             
-            SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-            SVProgressHUD.dismiss(withDelay: 1.5)
+            ShowCopiedProgressHUD()
         }
     }
     
@@ -84,54 +84,52 @@ class PaymentProofDetailViewController: BaseViewController {
         if let code = paymentProof?.code {
             UIPasteboard.general.string = code
             
-            SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-            SVProgressHUD.dismiss(withDelay: 1.5)
+            ShowCopiedProgressHUD()
         }
     }
     
     private func fillTransactionInfo() {
         details.removeAll()
 
-        if let paymentProof = self.paymentProof, let transaction = self.transaction {
+        if let paymentProof = self.paymentProof {
             
-            var section_1 = [TransactionViewController.TransactionGeneralInfo]()
-            section_1.append(TransactionViewController.TransactionGeneralInfo(text: "Code:", detail: paymentProof.code, failed: false, canCopy:true, color: UIColor.white))
-            
-            var section_2 = [TransactionViewController.TransactionGeneralInfo]()
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Sender:", detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Receiver:", detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Amount:", detail: String.currency(value: transaction.realAmount) + " BEAM", failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
-            
+            var section_1 = [GeneralInfo]()
+            section_1.append(GeneralInfo(text: LocalizableStrings.code, detail: paymentProof.code, failed: false, canCopy:true, color: UIColor.white))
+
             details.append(section_1)
-            details.append(section_2)
             
             tableView.tableFooterView = footerView
         }
-        else if let transaction = self.transaction {
-            var section_2 = [TransactionViewController.TransactionGeneralInfo]()
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Sender:", detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Receiver:", detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Amount:", detail: String.currency(value: transaction.realAmount) + " BEAM", failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(TransactionViewController.TransactionGeneralInfo(text: "Kernel ID:", detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
+        
+        if let transaction = self.transaction {
+            
+            var section_2 = [GeneralInfo]()
+            section_2.append(GeneralInfo(text: LocalizableStrings.sender, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: LocalizableStrings.receiver, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: LocalizableStrings.amount, detail: String.currency(value: transaction.realAmount) + LocalizableStrings.beam, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: LocalizableStrings.kernel_id, detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
             
             details.append(section_2)
             
-            buttonCode.isHidden = true
-            
-            buttonDetails.backgroundColor = UIColor.main.brightTeal
-            buttonDetails.tintColor = UIColor.main.marine
-            buttonDetails.setTitleColor(UIColor.main.marine, for: .normal)
-            buttonDetails.setImage(UIImage(named: "iconCopyBlue"), for: .normal)
-            buttonDetails.awakeFromNib()
-            
-            let w: CGFloat = (UIScreen.main.bounds.size.width - 180)/2
-            footerRightOffset.constant = w
-            footerLeftOffset.constant = w
-            
-            tableView.tableFooterView = footerView
+            if self.paymentProof == nil {
+                buttonCode.isHidden = true
+                
+                buttonDetails.backgroundColor = UIColor.main.brightTeal
+                buttonDetails.tintColor = UIColor.main.marine
+                buttonDetails.setTitleColor(UIColor.main.marine, for: .normal)
+                buttonDetails.setImage(IconCopyBlue(), for: .normal)
+                buttonDetails.awakeFromNib()
+                
+                let w: CGFloat = (UIScreen.main.bounds.size.width - 180)/2
+                footerRightOffset.constant = w
+                footerLeftOffset.constant = w
+                
+                tableView.tableFooterView = footerView
+            }
         }
-        else{
+       
+        if self.transaction == nil && self.paymentProof == nil {
+            
             tableView.tableFooterView = nil
         }
     }
@@ -140,10 +138,7 @@ class PaymentProofDetailViewController: BaseViewController {
 extension PaymentProofDetailViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return 60
-        }
-        return 0
+        return section == 1 ? BMTableHeaderTitleView.boldHeight : 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -171,18 +166,20 @@ extension PaymentProofDetailViewController : UITableViewDataSource {
         let cell = tableView
             .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
             .configured(with: details[indexPath.section][indexPath.row])
+        cell.delegate = self
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+        switch section {
+        case 0:
+            return nil
+        case 1:
+            return BMTableHeaderTitleView(title: LocalizableStrings.details, bold: true)
+        default:
             return nil
         }
-        else if section == 1 {
-            return headerView
-        }
-        return nil
     }
 }
 
@@ -278,10 +275,25 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
+        if text == LocalizableStrings.new_line {
             textView.resignFirstResponder()
             return false
         }
         return true
+    }
+}
+
+extension PaymentProofDetailViewController : GeneralInfoCellDelegate {
+    func onClickToCell(cell: UITableViewCell) {
+        if let path = tableView.indexPath(for: cell)
+        {
+            if details[path.section][path.row].text == LocalizableStrings.kernel_id, let transaction = self.transaction {
+                let kernelId = transaction.kernelId!
+                let link = Settings.sharedManager().explorerAddress + "block?kernel_id=" + kernelId
+                if let url = URL(string: link) {
+                    openUrl(url: url)
+                }
+            }
+        }
     }
 }

@@ -22,14 +22,16 @@ import Foundation
 
 class PasswordTestManager {
     
-    enum State: String {
-        case none = ""
-        case veryWeak = "Very weak password"
-        case weak = "Weak password"
-        case medium = "Medium strength password"
-        case strong = "Strong password"
-        case veryStrong = "Very strong password"
+    enum State: Int {
+        case none = 0
+        case veryWeak = 1
+        case weak = 2
+        case medium = 3
+        case medium_two = 4
+        case strong = 5
+        case veryStrong = 6
     }
+    
     
     fileprivate class PasswordTest {
         var exp:NSRegularExpression!
@@ -41,18 +43,15 @@ class PasswordTestManager {
         }
     }
     
-    static fileprivate let strengthTests = [PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{1,})"),
+    
+    static fileprivate let strengthTests = [
+                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{1,})"),
                                       state: State.veryWeak),
-                         PasswordTest(exp: try! NSRegularExpression(pattern: "((?=.{6,})(?=.*[0-9]))|((?=.{6,})(?=.*[A-Z]))|((?=.{6,})(?=.*[a-z]))"),
-                                      state: State.weak),
-                         PasswordTest(exp: try! NSRegularExpression(pattern: "((?=.{6,})(?=.*[A-Z])(?=.*[a-z]))|((?=.{6,})(?=.*[0-9])(?=.*[a-z]))"),
-                                      state: State.medium),
-                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{8,})(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])"),
-                                      state: State.medium),
-                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{10,})(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])"),
-                                      state: State.strong),
-                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{10,})(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])"),
-                                      state: State.veryStrong)
+                         PasswordTest(exp: try! NSRegularExpression(pattern: "((?=.{6,})(?=.*[0-9]))|((?=.{6,})(?=.*[A-Z]))|((?=.{6,})(?=.*[a-z]))"), state: State.weak),
+                         PasswordTest(exp: try! NSRegularExpression(pattern: "((?=.{6,})(?=.*[A-Z])(?=.*[a-z]))|((?=.{6,})(?=.*[0-9])(?=.*[a-z]))"), state: State.medium),
+                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{8,})(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])"), state: State.medium_two),
+                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{10,})(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])"), state: State.strong),
+                         PasswordTest(exp: try! NSRegularExpression(pattern: "(?=.{10,})(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])"), state: State.veryStrong)
                          ]
     
     static func testPassword(password:String) -> State {

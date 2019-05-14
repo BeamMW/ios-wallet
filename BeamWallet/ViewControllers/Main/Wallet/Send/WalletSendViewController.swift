@@ -91,6 +91,10 @@ class WalletSendViewController: BaseViewController {
         balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
         
         sendAllButton.setBackgroundColor(color: UIColor.main.marineTwo, forState: .normal)
+        
+        if !AppDelegate.isEnableNewFeatures {
+            sendAllButton.isHidden = true
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -295,8 +299,9 @@ extension WalletSendViewController : UITextFieldDelegate {
 
         if textField == amountField || textField == feeField {
             
-            let count = (textField == amountField) ? 9 : 15
-            
+            let mainCount = (textField == amountField) ? 9 : 15
+            let comaCount = 8
+
             let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
             if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
@@ -313,11 +318,14 @@ extension WalletSendViewController : UITextFieldDelegate {
             
             if !txtAfterUpdate.isEmpty {
                 let split = txtAfterUpdate.split(separator: ".")
-                if split[0].lengthOfBytes(using: .utf8) > count {
+                if split[0].lengthOfBytes(using: .utf8) > mainCount {
                     return false
                 }
                 else if split.count > 1 {
-                     if split[1].lengthOfBytes(using: .utf8) > count {
+                     if split[1].lengthOfBytes(using: .utf8) > comaCount {
+                        return false
+                    }
+                     else if split[1].lengthOfBytes(using: .utf8) == comaCount && textField == amountField && Double(txtAfterUpdate) == 0 {
                         return false
                     }
                 }

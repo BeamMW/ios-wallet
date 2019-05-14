@@ -215,7 +215,7 @@
                                                         <constraint firstAttribute="height" constant="21" id="jfl-SS-8Ob"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-Np-aoT" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                                <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-Np-aoT" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                                     <rect key="frame" x="250" y="1.5" width="85" height="32"/>
                                                     <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <constraints>

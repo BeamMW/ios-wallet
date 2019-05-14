@@ -27,7 +27,7 @@ class CategoryEditViewController: BaseViewController {
     @IBOutlet private weak var nameField: UITextField!
     @IBOutlet private weak var nameView: UIView!
     
-    @IBOutlet private weak var colorsView: CategoryColorsView!
+    @IBOutlet private weak var colorsView: BMCategoryColorsView!
     @IBOutlet private var colorsWidth: NSLayoutConstraint!
 
     private var category:BMCategory!
@@ -64,14 +64,12 @@ class CategoryEditViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
 
-        title = category.id == 0 ? "New category" :  "Edit Category"
+        title = category.id == 0 ? "New category" : "Edit Category"
         
         nameField.text = category.name
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(onSave))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        
+        addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+
         nameView.backgroundColor = UIColor.main.marineTwo
         nameField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
@@ -95,8 +93,7 @@ class CategoryEditViewController: BaseViewController {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let name = nameField.text {
-            
-            navigationItem.rightBarButtonItem?.isEnabled = self.canSave(name: name, color: selectedColor)
+            enableRightButton(enabled: self.canSave(name: name, color: selectedColor))
         }
     }
     
@@ -136,14 +133,14 @@ extension CategoryEditViewController : UITextFieldDelegate {
     }
 }
 
-extension CategoryEditViewController: ColorViewDelegate {
+extension CategoryEditViewController: BMColorViewDelegate {
     func onSelectColor(color: UIColor) {
         
         self.selectedColor = color.toHexString()
         self.colorsView.selectedColor = UIColor.init(hexString: self.selectedColor)
         
         if let name = self.nameField.text {
-            self.navigationItem.rightBarButtonItem?.isEnabled = self.canSave(name: name, color: self.selectedColor)
+            enableRightButton(enabled: self.canSave(name: name, color: self.selectedColor))
         }
     }
 }

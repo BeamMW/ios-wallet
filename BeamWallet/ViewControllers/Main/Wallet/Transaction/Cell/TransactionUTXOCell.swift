@@ -19,7 +19,7 @@ class TransactionUTXOCell: BaseCell {
         
         selectionStyle = .none
         
-        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
     }    
 }
@@ -29,16 +29,13 @@ extension TransactionUTXOCell: Configurable {
     func configure(with utxo: BMUTXO) {        
         amountLabel.text = String.currency(value: utxo.realAmount)
         
-        if utxo.statusString == "spent"
-        {
-            statusIcon.image = UIImage.init(named: "iconSendPink")
-        }
-        else if utxo.statusString == "total"
-        {
-            statusIcon.image = UIImage.init(named: "iconUtxo")
-        }
-        else{
-            statusIcon.image = UIImage.init(named: "iconReceiveLightBlue")
+        switch utxo.statusString {
+        case LocalizableStrings.spent:
+            statusIcon.image = IconSendPink()
+        case LocalizableStrings.total:
+            statusIcon.image = IconUtxo()
+        default:
+            statusIcon.image = IconReceiveLightBlue()
         }
     }
 }

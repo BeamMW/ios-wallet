@@ -19,64 +19,82 @@
 
 import UIKit
 
-class AddressExpiresCell: BaseCell {
+protocol AddressExpireCellDelegate: AnyObject {
+    func onShowPopover()
+}
+
+
+class AddressExpireCell: BaseCell {
+
+    weak var delegate: AddressExpireCellDelegate?
 
     @IBOutlet weak private var expireLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var mainView: UIView!
+    @IBOutlet weak private var lineView: UIView!
+    @IBOutlet weak private var arrowView: UIImageView!
+    @IBOutlet weak private var expireView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        selectionStyle = .default
+        selectionStyle = .none
         
-        backgroundColor = UIColor.clear
-       
-        mainView.backgroundColor = UIColor.main.marineTwo
+        lineView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.6)
-        self.selectedBackgroundView = selectedView
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(hideKeyboard))
+        expireView.addGestureRecognizer(tapGesture)
     }
     
+    
+    @objc private func hideKeyboard() {
+        self.delegate?.onShowPopover()
+    }
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
 }
 
-extension AddressExpiresCell: Configurable {
+extension AddressExpireCell: Configurable {
     
     func configure(with address: BMAddress) {
-
-        if address.isExpired() || address.isNowActive {
+        lineView.alpha = 1
+        arrowView.alpha = 1
+        expireView.isUserInteractionEnabled = true
+        
+        if address.isExpired() {
             if(address.isNowActiveDuration == 0)
             {
                 expireLabel.text = "never"
-                dateLabel.isHidden = true
+                dateLabel.text = ""
             }
             else{
                 expireLabel.text = "in 24 hours"
                 dateLabel.text = address.expireNowDate()
-                dateLabel.isHidden = false
             }
         }
         else{
             if address.isNowExpired {
+                expireView.isUserInteractionEnabled = false
+
+                lineView.alpha = 0
+                arrowView.alpha = 0
+
                 expireLabel.text = "now"
                 dateLabel.text = address.nowDate()
-                dateLabel.isHidden = false
             }
             else{
+                
                 if(address.duration == 0)
                 {
                     expireLabel.text = "never"
-                    dateLabel.isHidden = true
+                    dateLabel.text = ""
                 }
                 else{
                     expireLabel.text = "in 24 hours"
                     dateLabel.text = address.formattedDate()
-                    dateLabel.isHidden = false
                 }
             }
         }
