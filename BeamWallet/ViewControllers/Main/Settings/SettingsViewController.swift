@@ -57,7 +57,7 @@ extension SettingsViewController : UITableViewDelegate {
         if section == 0 {
             return BMTableHeaderTitleView.height
         }
-        else if section == 3 && AppDelegate.isEnableNewFeatures {
+        else if section == 3 {
             return BMTableHeaderTitleView.height
         }
         else if section == 4 && AppModel.sharedManager().categories.count > 0 {
@@ -115,7 +115,7 @@ extension SettingsViewController : UITableViewDataSource {
         if section == 0 {
             return BMTableHeaderTitleView(title: "node", bold: false)
         }
-        else if section == 3 && AppDelegate.isEnableNewFeatures {
+        else if section == 3 {
             return BMTableHeaderTitleView(title: "categories", bold: false)
         }
         

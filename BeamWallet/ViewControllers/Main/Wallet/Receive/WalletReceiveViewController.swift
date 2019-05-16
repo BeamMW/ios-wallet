@@ -1,6 +1,6 @@
 //
-//  WalletReceiveViewController.swift
-//  BeamWallet
+// WalletReceiveViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -31,6 +31,8 @@ class WalletReceiveViewController: BaseViewController {
     @IBOutlet weak private var commentField: BMField!
     @IBOutlet weak private var amountErrorLabel: UILabel!
 
+    @IBOutlet weak private var categoryLabel: UILabel!
+
     @IBOutlet weak private var qrButton: UIButton!
     @IBOutlet weak private var shareAddress: UIButton!
 
@@ -56,27 +58,19 @@ class WalletReceiveViewController: BaseViewController {
             scrollView.isScrollEnabled = false
         }
         else{
-            mainViewHeight.constant = 650
+            mainViewHeight.constant = 700
         }
         
         if Device.screenType == .iPhones_6 {
             bottomYOffset.constant = 45
         }
 
-        title = "Receive"
+        title = LocalizableStrings.receive
         
         hideKeyboardWhenTappedAround()
         
         addressLabel.text = address.walletId
         
-        if !AppDelegate.isEnableNewFeatures {
-            shareAddress.setTitle("copy address", for: .normal)
-            shareAddress.setImage(UIImage(named: "iconCopyBlue"), for: .normal)
-        }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,70 +87,76 @@ class WalletReceiveViewController: BaseViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
     
+    private func didSelectCategory(category:BMCategory) {
+        address.category = String(category.id)
+        
+        categoryLabel.text = category.name
+        categoryLabel.textColor = UIColor.init(hexString: category.color)
+        
+        AppModel.sharedManager().setWalletCategory(self.address.category, toAddress: address.walletId)
+    }
+    
     //MARK: IBAction
     
-    @IBAction func onExpire(sender :UIButton) {
+    @IBAction func onCategory(sender :UIButton) {
         
-        if let address = self.addressLabel.text {
+        if AppModel.sharedManager().categories.count == 0 {
             
-            let alert = UIAlertController(title: "Expires", message: nil, preferredStyle: .actionSheet)
-            
-            alert.addAction(UIAlertAction(title: "24 hours", style: .default , handler:{ (UIAlertAction)in
-                self.expireLabel.text = "24 hours"
-                
-                AppModel.sharedManager().setExpires(24, toAddress: address)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Never", style: .default , handler:{ (UIAlertAction)in
-                self.expireLabel.text = "Never"
-                
-                AppModel.sharedManager().setExpires(0, toAddress: address)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
-            }))
-            
-            self.present(alert, animated: true)
+            let vc = CategoryEditViewController(category: nil)
+            vc.completion = {
+                obj in
+                if let category = obj {
+                    self.didSelectCategory(category: category)
+                }
+            }
+            pushViewController(vc: vc)
         }
+        else{
+            let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address.category))
+            vc.completion = {
+                obj in
+                if let category = obj {
+                    self.didSelectCategory(category: category)
+                }
+            }
+            pushViewController(vc: vc)
+        }
+    }
+    
+    @IBAction func onExpire(sender :UIButton) {
+        let vc = AddressExpiresPickerViewController(duration: -1)
+        vc.completion = {
+            obj in
+            
+            self.expireLabel.text = obj == 24 ? LocalizableStrings.hours_24 : LocalizableStrings.never
+            
+            AppModel.sharedManager().setExpires(Int32(obj), toAddress: self.address.walletId)
+        }
+        pushViewController(vc: vc)
     }
     
     @IBAction func onShare(sender :UIButton) {
-        if let address = addressLabel.text {
-            if !AppDelegate.isEnableNewFeatures {
-                UIPasteboard.general.string = address
-                
-                ShowCopiedProgressHUD()
-                
+        let vc = UIActivityViewController(activityItems: [address.walletId ?? String.empty()], applicationActivities: [])
+        vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            if completed {
                 self.navigationController?.popViewController(animated: true)
+                return
             }
-            else{
-                let vc = UIActivityViewController(activityItems: [address], applicationActivities: [])
-                vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-                    if completed {
-                        self.navigationController?.popViewController(animated: true)
-                        return
-                    }
-                }
-                
-                vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
-                
-                self.present(vc, animated: true)
-            }
-
         }
+        
+        vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+        
+        self.present(vc, animated: true)
     }
     
     @IBAction func onQRCode(sender :UIButton) {
-        let modalViewController = WalletQRCodeViewController(address: addressLabel.text!, amount: amountField.text)
+        let modalViewController = WalletQRCodeViewController(address: address, amount: amountField.text)
         modalViewController.delegate = self
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
         present(modalViewController, animated: true, completion: nil)
     }
-    
 }
-
-
 
 extension WalletReceiveViewController : WalletQRCodeViewControllerDelegate {
     func onCopyDone() {
@@ -176,11 +176,11 @@ extension WalletReceiveViewController : UITextFieldDelegate {
             if let text = textField.text {
                 if let v = Double(text) {
                     if v == 0 {
-                        textField.text = "0"
+                        textField.text = LocalizableStrings.zero
                     }
                 }
                 else{
-                    textField.text = "0"
+                    textField.text = LocalizableStrings.zero
                 }
             }
         }
@@ -199,7 +199,7 @@ extension WalletReceiveViewController : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         
-        let textFieldText: NSString = (textField.text ?? "") as NSString
+        let textFieldText: NSString = (textField.text ?? String.empty()) as NSString
         
         if textField == amountField {
             let mainCount = (textField == amountField) ? 9 : 15

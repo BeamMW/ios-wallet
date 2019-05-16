@@ -19,84 +19,73 @@
 
 import UIKit
 
-protocol AddressExpireCellDelegate: AnyObject {
-    func onShowPopover()
-}
-
-
-class AddressExpireCell: BaseCell {
-
-    weak var delegate: AddressExpireCellDelegate?
+class AddressExpiresCell: BaseCell {
 
     @IBOutlet weak private var expireLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var lineView: UIView!
-    @IBOutlet weak private var arrowView: UIImageView!
-    @IBOutlet weak private var expireView: UIView!
+    @IBOutlet weak private var mainView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        selectionStyle = .none
+        selectionStyle = .default
         
-        lineView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        backgroundColor = UIColor.clear
+       
+        mainView.backgroundColor = UIColor.main.marineTwo
         
-        let tapGesture = UITapGestureRecognizer(target: self,
-                                                action: #selector(hideKeyboard))
-        expireView.addGestureRecognizer(tapGesture)
+        let selectedView = UIView()
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        self.selectedBackgroundView = selectedView
     }
     
-    
-    @objc private func hideKeyboard() {
-        self.delegate?.onShowPopover()
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
 }
 
-extension AddressExpireCell: Configurable {
+extension AddressExpiresCell: Configurable {
     
     func configure(with address: BMAddress) {
-        lineView.alpha = 1
-        arrowView.alpha = 1
-        expireView.isUserInteractionEnabled = true
-        
-        if address.isExpired() {
+
+        if address.isExpired() || address.isNowActive {
             if(address.isNowActiveDuration == 0)
             {
                 expireLabel.text = "never"
-                dateLabel.text = ""
+                dateLabel.isHidden = true
             }
             else{
                 expireLabel.text = "in 24 hours"
                 dateLabel.text = address.expireNowDate()
+                dateLabel.isHidden = false
             }
         }
         else{
             if address.isNowExpired {
-                expireView.isUserInteractionEnabled = false
-
-                lineView.alpha = 0
-                arrowView.alpha = 0
-
                 expireLabel.text = "now"
                 dateLabel.text = address.nowDate()
+                dateLabel.isHidden = false
             }
             else{
-                
                 if(address.duration == 0)
                 {
                     expireLabel.text = "never"
-                    dateLabel.text = ""
+                    dateLabel.isHidden = true
                 }
                 else{
                     expireLabel.text = "in 24 hours"
                     dateLabel.text = address.formattedDate()
+                    dateLabel.isHidden = false
                 }
             }
         }
+    }
+}
+
+extension AddressExpiresCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 80
     }
 }

@@ -1,6 +1,6 @@
 //
-//  AddressSwitchCell.swift
-//  BeamWallet
+// AddressExpiredCell.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -19,18 +19,10 @@
 
 import UIKit
 
-protocol AddressSwitchCellDelegate: AnyObject {
-    func onSwitch(value:Bool)
-}
+class AddressExpiredCell: UITableViewCell {
 
+    @IBOutlet weak private var dateLabel: UILabel!
 
-class AddressSwitchCell: UITableViewCell {
-
-    weak var delegate: AddressSwitchCellDelegate?
-
-    @IBOutlet weak private var nameLabel: UILabel!
-    @IBOutlet weak private var switchView: UISwitch!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -38,22 +30,21 @@ class AddressSwitchCell: UITableViewCell {
 
         selectionStyle = .none
     }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
     
+}
+
+extension AddressExpiredCell: Configurable {
     
-    @IBAction func onSend(sender : UISwitch) {
-        self.delegate?.onSwitch(value: sender.isOn)
+    func configure(with address: BMAddress) {
+        dateLabel.text = address.formattedDate()
     }
 }
 
-extension AddressSwitchCell: Configurable {
-    
-    func configure(with options: (text: String, selected:Bool)) {
-        switchView.isOn = options.selected
-        nameLabel.text = options.text
-    }
-}
-
-extension AddressSwitchCell: DynamicContentHeight {
+extension AddressExpiredCell: DynamicContentHeight {
     
     static func height() -> CGFloat {
         return 50

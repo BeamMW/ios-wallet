@@ -103,7 +103,8 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 -(void)generateNewWalletAddress;
 -(void)editBotAddress:(NSString*_Nonnull)address ;
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address;
--(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address ;
+-(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address;
+-(void)setWalletCategory:(NSString*_Nonnull)category toAddress:(NSString*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
 -(void)editAddress:(BMAddress*_Nonnull)address;

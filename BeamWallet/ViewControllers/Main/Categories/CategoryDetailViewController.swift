@@ -138,32 +138,27 @@ extension CategoryDetailViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell =  tableView
-            .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
-            .configured(with: self.category)
-        return cell
-        
-//        if indexPath.section == 1 {
-//            if addresses.count == 0 {
-//                let cell =  tableView
-//                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
-//                    .configured(with: "there are no addresses associated with this category")
-//                return cell
-//            }
-//            else{
-//                let cell =  tableView
-//                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-//                    .configured(with: (row: indexPath.row, address: addresses[indexPath.row], single:false, displayCategory:false))
-//                return cell
-//            }
-//
-//        }
-//        else{
-//            let cell =  tableView
-//                .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
-//                .configured(with: self.category)
-//            return cell
-//        }
+        if indexPath.section == 1 {
+            if addresses.count == 0 {
+                let cell =  tableView
+                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
+                    .configured(with: "there are no addresses associated with this category")
+                return cell
+            }
+            else{
+                let cell =  tableView
+                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, address: addresses[indexPath.row], single:false, displayCategory:false))
+                return cell
+            }
+
+        }
+        else{
+            let cell =  tableView
+                .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
+                .configured(with: self.category)
+            return cell
+        }
         
     }
     

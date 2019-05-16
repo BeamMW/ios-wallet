@@ -91,10 +91,6 @@ class WalletSendViewController: BaseViewController {
         balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
         
         sendAllButton.setBackgroundColor(color: UIColor.main.marineTwo, forState: .normal)
-        
-        if !AppDelegate.isEnableNewFeatures {
-            sendAllButton.isHidden = true
-        }
     }
     
     override func viewDidLayoutSubviews() {

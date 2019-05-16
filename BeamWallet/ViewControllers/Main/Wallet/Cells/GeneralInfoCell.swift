@@ -43,10 +43,7 @@ class GeneralInfoCell: BaseCell {
         
         selectionStyle = .none
         
-        if AppDelegate.isEnableNewFeatures {
-            detailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
-        }
-     
+        detailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -122,7 +119,7 @@ extension GeneralInfoCell: Configurable {
                 detailLabel.attributedText = attributedString
             }
         }
-        else if info.text == "Kernel ID:" && AppDelegate.isEnableNewFeatures {
+        else if info.text == "Kernel ID:" {
             detailLabel.copyText = info.detail
 
             if !info.detail.contains("00000000") {

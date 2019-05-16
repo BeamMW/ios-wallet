@@ -25,26 +25,26 @@ class ClearDataViewController: BaseViewController {
         public var title:String!
         public var isSelected:Bool!
         public var id:Int!
-        
-        init(title: String!, isSelected: Bool!, id:Int) {
+        public var name:String!
+
+        init(title: String!, isSelected: Bool!, id:Int, name:String!) {
             self.title = title
             self.isSelected = isSelected
             self.id = id
+            self.name = name
         }
     }
     
     @IBOutlet private weak var tableView: UITableView!
 
-    private var items = [ClearItem(title: "Delete all addresses", isSelected: false, id: 1),
-                         ClearItem(title: "Delete all contacts", isSelected: false, id: 2),
-                         ClearItem(title: "Delete all transactions", isSelected: false, id: 3)]
+    private var items = [ClearItem(title: LocalizableStrings.delete_all_addresses, isSelected: false, id: 1, name: LocalizableStrings.addresses.lowercased()), ClearItem(title: LocalizableStrings.delete_all_contacts, isSelected: false, id: 2, name: LocalizableStrings.contacts.lowercased()), ClearItem(title: LocalizableStrings.delete_all_transactions, isSelected: false, id: 3, name: LocalizableStrings.transactions.lowercased())]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Clear data"
+        title = LocalizableStrings.clear_data
         
-        addRightButton(title:"Clear", targer: self, selector: #selector(onClear), enabled: false)
+        addRightButton(title:LocalizableStrings.clear, targer: self, selector: #selector(onClear), enabled: false)
 
         tableView.tableFooterView = UIView()
         tableView.separatorColor = UIColor.main.marineTwo
@@ -52,36 +52,29 @@ class ClearDataViewController: BaseViewController {
 
     @objc private func onClear() {
         var deleted = [String]()
-        if items[0].isSelected {
-            deleted.append("addresses")
-        }
-        if items[1].isSelected {
-            deleted.append("contacts")
-        }
-        if items[2].isSelected {
-            deleted.append("transactions")
+        
+        for item in items {
+            if item.isSelected {
+                deleted.append(item.name)
+            }
         }
         
-        var str = ""
+        var str = String.empty()
         if deleted.count == 1 {
-            str = deleted.joined(separator: "")
+            str = deleted.joined(separator: String.empty())
         }
         else if deleted.count == 2 {
-            str = deleted.joined(separator: " and ")
+            str = deleted.joined(separator: LocalizableStrings.and)
         }
         else if deleted.count == 3 {
             str = deleted.joined(separator: ", ")
         }
         
-        let alert = UIAlertController(title: "Clear data", message: "Are you sure you want to delete all \(str) from your wallet?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-        
-        let ok = UIAlertAction(title: "Clear", style: .destructive, handler: { action in
+        self.confirmAlert(title: LocalizableStrings.clear_data, message: LocalizableStrings.delete_data_text(str: str), cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.clear, cancelHandler: { (_ ) in
+            
+        }) { (_ ) in
             self.makeClear()
-        })
-        alert.addAction(ok)
-        
-        self.present(alert, animated: true)
+        }
     }
     
     private func makeClear() {
@@ -116,7 +109,6 @@ class ClearDataViewController: BaseViewController {
     }
     
     private func checkIsEnabled() {
-        
         var isAllDisabled = true
         
         for item in items {
@@ -154,7 +146,7 @@ extension ClearDataViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
+        let cell = UITableViewCell(style: .default, reuseIdentifier: String(describing: UITableViewCell.self))
         cell.textLabel?.text = items[indexPath.row].title
         cell.textLabel?.font = RegularFont(size: 16)
         cell.backgroundColor = UIColor.clear
@@ -163,8 +155,8 @@ extension ClearDataViewController : UITableViewDataSource {
         cell.textLabel?.adjustFontSize = true
         
         let selectedButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        selectedButton.setImage(UIImage(named: "checkboxEmpty"), for: .normal)
-        selectedButton.setImage(UIImage(named: "checkboxFull"), for: .selected)
+        selectedButton.setImage(CheckboxEmpty(), for: .normal)
+        selectedButton.setImage(CheckboxFull(), for: .selected)
         selectedButton.isSelected = items[indexPath.row].isSelected
         selectedButton.tag = indexPath.row
         selectedButton.addTarget(self, action: #selector(onCheckBox), for: .touchUpInside)

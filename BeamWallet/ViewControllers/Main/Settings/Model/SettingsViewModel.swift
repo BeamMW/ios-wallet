@@ -160,9 +160,8 @@ class SettingsViewModel : NSObject {
             security.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? "Enable Face ID" : "Enable Touch ID", detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
         }
 
-        if AppDelegate.isEnableNewFeatures {
-            security.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
-        }
+        security.append(SettingsItem(title: "Allow open external link", detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
+
         
         var info = [SettingsItem]()
         info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1))
@@ -170,15 +169,13 @@ class SettingsViewModel : NSObject {
         
         var categories = [SettingsItem]()
 
-        if AppDelegate.isEnableNewFeatures {
-            if AppModel.sharedManager().categories.count > 0 {
-                for category in AppModel.sharedManager().categories as! [BMCategory] {
-                    categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, id: Int(category.id), category: category))
-                }
+        if AppModel.sharedManager().categories.count > 0 {
+            for category in AppModel.sharedManager().categories as! [BMCategory] {
+                categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, id: Int(category.id), category: category))
             }
-            else{
-                categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
-            }
+        }
+        else{
+            categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
         }
 
         var report = [SettingsItem]()
@@ -188,16 +185,13 @@ class SettingsViewModel : NSObject {
         items.append(security)
         items.append(info)
         
-        if AppDelegate.isEnableNewFeatures {
-            items.append(categories)
-        }
+        items.append(categories)
+
         
-        if AppDelegate.isEnableNewFeatures {
-            if AppModel.sharedManager().categories.count > 0 {
-                var categories = [SettingsItem]()
-                categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
-                items.append(categories)
-            }
+        if AppModel.sharedManager().categories.count > 0 {
+            var categories = [SettingsItem]()
+            categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
+            items.append(categories)
         }
         
         items.append(report)

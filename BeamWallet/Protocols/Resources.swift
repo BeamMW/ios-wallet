@@ -76,3 +76,11 @@ func IconSettings() -> UIImage? {
     return UIImage(named: "iconSettings")
 }
 
+func CheckboxFull() -> UIImage? {
+    return UIImage(named: "checkboxFull")
+}
+
+func CheckboxEmpty() -> UIImage? {
+    return UIImage(named: "checkboxEmpty")
+}
+

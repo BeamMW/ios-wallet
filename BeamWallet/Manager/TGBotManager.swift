@@ -59,13 +59,13 @@ class TGBotManager : NSObject {
     public func isValidUserFromJson(value:String)->Bool {
         if let json = try? JSONSerialization.jsonObject(with: value.data(using: .utf8)!, options: .mutableContainers) as? [String: Any] {
             
-//            if let id = json["_id"] as? u_quad_t, let name = json["username"] as? String {
-//                
-//                user.userId = String(id)
-//                user.userName = name
-//                
-//                return true
-//            }
+            if let id = json["_id"] as? u_quad_t, let name = json["username"] as? String {
+                
+                user.userId = String(id)
+                user.userName = name
+                
+                return true
+            }
         }
         
         return false;

@@ -25,10 +25,6 @@ import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    //TODO: all targets uses masternet!!!!
-    
-    public static let isEnableNewFeatures = false
     
     private var scannedTGUserId = ""
 

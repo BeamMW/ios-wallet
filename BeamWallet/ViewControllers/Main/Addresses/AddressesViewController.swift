@@ -36,8 +36,8 @@ class AddressesViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Addresses"
-        
+        title = LocalizableStrings.addresses
+
         AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
 
         tableView.register(AddressCell.self)
@@ -49,14 +49,13 @@ class AddressesViewController: BaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
-    
+        
     @objc private func didBecomeActive() {
         filterAddresses()
         tableView.reloadData()
     }
     
     @objc private func refreshData(_ sender: Any) {
-        //TODO: refresh
         tableView.stopRefreshing()
     }
 
@@ -102,7 +101,7 @@ extension AddressesViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        return AddressCell.height()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -118,10 +117,6 @@ extension AddressesViewController : UITableViewDelegate {
 
 extension AddressesViewController : UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count = selectedState == .contacts ? contacts.count : addresses.count
         return count
@@ -133,7 +128,7 @@ extension AddressesViewController : UITableViewDataSource {
 
         let cell =  tableView
             .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-            .configured(with: (row: indexPath.row, address: address, single:false))
+            .configured(with: (row: indexPath.row, address: address, single:false, displayCategory: true))
         
         return cell
     }
@@ -158,6 +153,15 @@ extension AddressesViewController : WalletModelDelegate {
     }
     
     func onContactsChange(_ contacts: [BMContact]) {
+        DispatchQueue.main.async {
+            self.filterAddresses()
+            UIView.performWithoutAnimation {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func onCategoriesChange() {
         DispatchQueue.main.async {
             self.filterAddresses()
             UIView.performWithoutAnimation {

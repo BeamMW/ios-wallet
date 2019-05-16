@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="64M-o4-RIy" customClass="AddressDurationCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="64M-o4-RIy" id="fIe-df-nNB">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="si6-ep-K1d">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Yjw-w2-kMT">
+                                <rect key="frame" x="15" y="15" width="37" height="20"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-XX-F4D">
+                                <rect key="frame" x="296" y="18.5" width="13" height="13"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="13" id="dys-ko-ix6"/>
+                                    <constraint firstAttribute="height" constant="13" id="ozG-8r-xCj"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="J5U-XX-F4D" firstAttribute="centerY" secondItem="si6-ep-K1d" secondAttribute="centerY" id="6il-KS-lcg"/>
+                            <constraint firstItem="Yjw-w2-kMT" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="15" id="NIy-2t-GzR"/>
+                            <constraint firstAttribute="bottom" secondItem="Yjw-w2-kMT" secondAttribute="bottom" constant="14.5" id="WYC-Yo-ctd"/>
+                            <constraint firstAttribute="trailing" secondItem="J5U-XX-F4D" secondAttribute="trailing" constant="11" id="Y0c-Mj-4Lw"/>
+                            <constraint firstItem="Yjw-w2-kMT" firstAttribute="leading" secondItem="si6-ep-K1d" secondAttribute="leading" constant="15" id="x5d-wl-ePn"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="si6-ep-K1d" firstAttribute="leading" secondItem="fIe-df-nNB" secondAttribute="leading" id="699-bl-DBn"/>
+                    <constraint firstAttribute="trailing" secondItem="si6-ep-K1d" secondAttribute="trailing" id="GS6-ZV-oh1"/>
+                    <constraint firstAttribute="bottom" secondItem="si6-ep-K1d" secondAttribute="bottom" id="doa-zz-iQy"/>
+                    <constraint firstItem="si6-ep-K1d" firstAttribute="top" secondItem="fIe-df-nNB" secondAttribute="top" id="zhT-Cw-Qew"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <viewLayoutGuide key="safeArea" id="J7g-wL-DrK"/>
+            <connections>
+                <outlet property="arrowView" destination="J5U-XX-F4D" id="ivX-9Y-w3h"/>
+                <outlet property="mainView" destination="si6-ep-K1d" id="hvV-Xb-too"/>
+                <outlet property="nameLabel" destination="Yjw-w2-kMT" id="j2r-tQ-1pH"/>
+            </connections>
+            <point key="canvasLocation" x="176.81159420289856" y="110.49107142857143"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="tick" width="13" height="13"/>
+    </resources>
+</document>

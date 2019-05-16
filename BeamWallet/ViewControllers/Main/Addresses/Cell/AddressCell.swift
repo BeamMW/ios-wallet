@@ -1,6 +1,6 @@
 //
-//  AddressCell.swift
-//  BeamWallet
+// AddressCell.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -26,22 +26,20 @@ class AddressCell: UITableViewCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var idLabel: UILabel!
     @IBOutlet weak private var expiredLabel: UILabel!
+    @IBOutlet weak private var categoryLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
     }
 }
 
 extension AddressCell: Configurable {
     
-    func configure(with options: (row: Int, address:BMAddress, single:Bool)) {
-        if options.row % 2 == 0 {
-            mainView.backgroundColor = UIColor.main.marineTwo
-        }
-        else{
-            mainView.backgroundColor = UIColor.main.marine
-        }
+    func configure(with options: (row: Int, address:BMAddress, single:Bool, displayCategory:Bool)) {
+
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
+        
+        backgroundColor = mainView.backgroundColor
         
         arrowImage.isHidden = options.single
         
@@ -71,8 +69,29 @@ extension AddressCell: Configurable {
         }
         else{
             let selectedView = UIView()
-            selectedView.backgroundColor = mainView.backgroundColor?.withAlphaComponent(0.9)
+            selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
             self.selectedBackgroundView = selectedView
         }
+        
+        if options.displayCategory {
+            if let category = AppModel.sharedManager().findCategory(byId: options.address.category) {
+                categoryLabel.textColor = UIColor.init(hexString: category.color)
+                categoryLabel.text = category.name
+            }
+            else{
+                categoryLabel.text = ""
+            }
+        }
+        else{
+            categoryLabel.text = ""
+        }
+        
+    }
+}
+
+extension AddressCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 90
     }
 }

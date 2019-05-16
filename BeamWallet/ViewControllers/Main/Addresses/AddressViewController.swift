@@ -22,7 +22,9 @@ import UIKit
 class AddressViewController: BaseViewController {
 
     private var address:BMAddress!
-    private var transactions:[BMTransaction]!
+    private var transactions = [BMTransaction]()
+    private var details = [GeneralInfo]()
+
     private var isContact = false
     
     @IBOutlet private weak var tableView: UITableView!
@@ -36,20 +38,21 @@ class AddressViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "iconMore"), style: .plain, target: self, action: #selector(onMore))
-
-        tableView.register(AddressCell.self)
-        tableView.register(WalletTransactionCell.self)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore))
 
         getTransactions()
+        fillDetails()
         
-        title = "Address"
+        tableView.register([GeneralInfoCell.self,WalletTransactionCell.self])
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
+        
+        title = LocalizableStrings.address
         
         AppModel.sharedManager().addDelegate(self)
     }
@@ -63,9 +66,29 @@ class AddressViewController: BaseViewController {
         }
     }
     
+    private func fillDetails() {
+        details.removeAll()
+        
+        details.append(GeneralInfo(text: LocalizableStrings.address_id, detail: self.address.walletId, failed: false, canCopy:true, color: UIColor.white))
+        
+        if !isContact {
+            details.append(GeneralInfo(text: LocalizableStrings.exp_date, detail: self.address.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
+            
+            if !self.address.category.isEmpty {
+                if let category = AppModel.sharedManager().findCategory(byId: self.address.category) {
+                    details.append(GeneralInfo(text: LocalizableStrings.category + ":", detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
+                }
+            }
+        }
+        
+        if !self.address.label.isEmpty {
+            details.append(GeneralInfo(text: LocalizableStrings.annotation, detail: self.address.label, failed: false, canCopy:false, color: UIColor.white))
+        }
+    }
+    
     @objc private func onMore(sender:UIBarButtonItem) {
 
-        var items = [BMPopoverMenu.BMPopoverMenuItem(name: "Show QR code", icon: nil, action:.show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: "Copy address", icon:nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: "Edit address", icon:nil, action: .edit_address), BMPopoverMenu.BMPopoverMenuItem(name: "Delete address", icon: nil, action: .delete_address)]
+        var items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.copy_address, icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.edit_address, icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address, icon: nil, action:.delete_address)]
         
         if isContact {
             items.remove(at: 2)
@@ -75,18 +98,56 @@ class AddressViewController: BaseViewController {
             if let item = selectedItem {
                 switch (item.action) {
                 case .show_qr_code:
-                    let modalViewController = WalletQRCodeViewController(address: self.address.walletId, amount: nil)
+                    let modalViewController = WalletQRCodeViewController(address: self.address, amount: nil)
                     modalViewController.modalPresentationStyle = .overFullScreen
                     modalViewController.modalTransitionStyle = .crossDissolve
                     self.present(modalViewController, animated: true, completion: nil)
                 case .copy_address :
                     UIPasteboard.general.string = self.address.walletId
-                    SVProgressHUD.showSuccess(withStatus: "copied to clipboard")
-                    SVProgressHUD.dismiss(withDelay: 1.5)
+                    ShowCopiedProgressHUD()
                 case .edit_address :
                     let vc = EditAddressViewController(address: self.address)
                     self.pushViewController(vc: vc)
                 case .delete_address :
+                    if self.transactions.count > 0  {
+                        self.showDeleteAddressAndTransactions()
+                    }
+                    else{
+                        AppModel.sharedManager().deleteAddress(self.address.walletId)
+                        
+                        NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                        
+                        self.navigationController?.popViewController(animated: true)
+                    }
+         
+                default:
+                    return
+                }
+            }
+        }, cancel: {
+            
+        })
+    }
+    
+    private func showDeleteAddressAndTransactions() {
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_transaction, icon: nil, action: .delete_address), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_only, icon: nil, action:.delete_address)]
+        
+        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.action) {
+                case .delete_address:
+                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                    
+                    NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                    
+                    self.navigationController?.popViewController(animated: true)
+                case .delete_address_transactions :
+                    AppModel.sharedManager().removeDelegate(self)
+                    
+                    for tr in self.transactions {
+                        AppModel.sharedManager().deleteTransaction(tr)
+                    }
+                    
                     AppModel.sharedManager().deleteAddress(self.address.walletId)
                     
                     NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
@@ -96,9 +157,9 @@ class AddressViewController: BaseViewController {
                     return
                 }
             }
-        }, cancel: {
+        }) {
             
-        })
+        }
     }
     
     private func getTransactions() {
@@ -110,17 +171,14 @@ extension AddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 40
+            return 75
         }
         
         return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            return 86
-        }
-        return 90
+        return indexPath.section == 1 ? WalletTransactionCell.height() : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -147,15 +205,15 @@ extension AddressViewController : UITableViewDataSource {
         if section == 1 {
             return transactions.count
         }
-        return 1
+        return self.details.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, address: address, single:true))
+            let cell = tableView
+                .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
+                .configured(with: details[indexPath.row])
             return cell
         }
         else{
@@ -177,6 +235,7 @@ extension AddressViewController : UITableViewDataSource {
 }
 
 extension AddressViewController : WalletModelDelegate {
+    
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
             self.getTransactions()
@@ -191,6 +250,8 @@ extension AddressViewController : WalletModelDelegate {
         DispatchQueue.main.async {
             if let address = walletAddresses.first(where: { $0.walletId == self.address.walletId }) {
                 self.address = address
+                
+                self.fillDetails()
                 
                 UIView.performWithoutAnimation {
                     self.tableView.reloadData()

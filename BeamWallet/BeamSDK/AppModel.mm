@@ -624,6 +624,31 @@ static NSString *categoriesKey = @"categoriesKey";
     }
 }
 
+
+-(void)setWalletCategory:(NSString*_Nonnull)category toAddress:(NSString*_Nonnull)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+        
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            
+            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+            
+            if ([wAddress isEqualToString:address] && ![wCategory isEqualToString:category])
+            {
+                addresses[i].m_category = category.string;
+                
+                wallet->getAsync()->saveAddress(addresses[i], true);
+                
+                break;
+            }
+        }
+    }
+}
+    
 -(void)setWalletComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
     WalletID walletID(Zero);
     if (walletID.FromHex(address.string))
@@ -703,26 +728,24 @@ static NSString *categoriesKey = @"categoriesKey";
 -(void)editAddress:(BMAddress*_Nonnull)address {
     WalletID walletID(Zero);
     if (walletID.FromHex(address.walletId.string))
-    {
-        //TODO: ENABLE for categories
-        
-//        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
-//
-//        for (int i=0; i<addresses.size(); i++)
-//        {
-//            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-//
-//            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
-//
-//            if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:address.category])
-//            {
-//                addresses[i].m_category = address.category.string;
-//
-//                wallet->getAsync()->saveAddress(addresses[i], true);
-//
-//                break;
-//            }
-//        }
+    {        
+        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+
+            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+
+            if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:address.category])
+            {
+                addresses[i].m_category = address.category.string;
+
+                wallet->getAsync()->saveAddress(addresses[i], true);
+
+                break;
+            }
+        }
         
         if(address.isNowExpired) {
             wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
@@ -740,8 +763,6 @@ static NSString *categoriesKey = @"categoriesKey";
                 wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
             }
             else  {
-                address.isChangedDate = YES;
-                
                 wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), address.isChangedDate ? true : false, false);
             }
         }

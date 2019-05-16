@@ -18,7 +18,6 @@
 //
 
 import UIKit
-import Loaf
 
 class CreateWalletProgressViewController: BaseViewController {
 

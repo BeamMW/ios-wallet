@@ -1,6 +1,6 @@
 //
-//  WalletQRCodeViewController.swift
-//  BeamWallet
+// WalletQRCodeViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -27,14 +27,14 @@ class WalletQRCodeViewController: BaseViewController {
 
     weak var delegate: WalletQRCodeViewControllerDelegate?
 
-    private var address:String!
+    private var address:BMAddress!
     private var amount:String?
 
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var codeView: QRCodeView!
     @IBOutlet weak private var shareAddress: UIButton!
     
-    init(address:String, amount:String?) {
+    init(address:BMAddress, amount:String?) {
         super.init(nibName: nil, bundle: nil)
         
         self.address = address
@@ -48,48 +48,46 @@ class WalletQRCodeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addressLabel.text = address
+        addressLabel.text = address.walletId
+        
+        if let category = AppModel.sharedManager().findCategory(byAddress: address.walletId)
+        {
+            let name = "(" + category.name + ")"
+            let text = address.walletId + "\n" + name
+            
+            let range = (text as NSString).range(of: String(name))
+            
+            let attributedString = NSMutableAttributedString(string:text)
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.init(hexString: category.color) , range: range)
+            attributedString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: range)
+            
+            addressLabel.attributedText = attributedString
+        }
         
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
         
-        let qrString = AppModel.sharedManager().generateQRCodeString(self.address, amount: self.amount)
+        let qrString = AppModel.sharedManager().generateQRCodeString(address.walletId, amount: amount)
         
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
-        
-        if !AppDelegate.isEnableNewFeatures {
-            shareAddress.setTitle("copy address", for: .normal)
-            shareAddress.setImage(UIImage(named: "iconCopyBlue"), for: .normal)
-        }
         
         addSwipeToDismiss()
     }
 
     @IBAction func onShare(sender :UIButton) {
-        if !AppDelegate.isEnableNewFeatures {
-            UIPasteboard.general.string = self.address
-            
-            ShowCopiedProgressHUD()
-            
-            self.dismiss(animated: true, completion: {
-                self.delegate?.onCopyDone()
-            })
-        }
-        else{
-            let vc = UIActivityViewController(activityItems: [address ?? ""], applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-                if completed {
-                    self.dismiss(animated: true, completion: {
-                        self.delegate?.onCopyDone()
-                    })
-                    return
-                }
+        let vc = UIActivityViewController(activityItems: [address.walletId ?? ""], applicationActivities: [])
+        vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            if completed {
+                self.dismiss(animated: true, completion: {
+                    self.delegate?.onCopyDone()
+                })
+                return
             }
-            
-            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
-            
-            self.present(vc, animated: true)
         }
+        
+        vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+        
+        self.present(vc, animated: true)
     }
         
     @IBAction func onClose(sender :UIButton) {

@@ -110,4 +110,47 @@ struct LocalizableStrings {
     static let seed_back_title = "seed_back_title".localized
     static let seed_back_text = "seed_back_text".localized
     static let generate = "generate".localized
+    static let address = "address".localized
+    
+    static let address_id = "address_id".localized
+    static let exp_date = "exp_date".localized
+    static let annotation = "annotation".localized
+    static let show_qr_code = "show_qr_code".localized
+    static let copy_address = "copy_address".localized
+    static let edit_address = "edit_address".localized
+    static let delete_address = "delete_address".localized
+    static let delete_address_transaction = "delete_address_transaction".localized
+    static let delete_address_only = "delete_address_only".localized
+    static let category = "category".localized
+    
+    static let in_24_hours = "in_24_hours".localized
+    static let never = "never".localized
+    static let address_expires = "address_expires".localized
+    static let save = "save".localized
+    
+    static let active_address = "active_address".localized
+    static let expire_now = "expire_now".localized
+    
+    static let open_settings = "open_settings".localized
+    static let camera_denied_text = "camera_denied_text".localized
+    
+    static let camera_restricted = "camera_restricted".localized
+    static let error_scan_qr_code = "error_scan_qr_code".localized
+    static let scan_qr_code = "scan_qr_code".localized
+    static let scan_tg_qr_code = "scan_tg_qr_code".localized
+    
+    static let receive = "receive".localized
+    static let hours_24 = "hours_24".localized
+    
+    static let delete_all_addresses = "delete_all_addresses".localized
+    static let delete_all_contacts = "delete_all_contacts".localized
+    static let delete_all_transactions = "delete_all_transactions".localized
+    static let clear = "clear".localized
+    static let clear_data = "clear_data".localized
+    static let contacts = "contacts".localized
+    static let and = "and".localized
+    
+    static func delete_data_text(str:String) -> String {
+        return "Are you sure you want to delete all \(str) from your wallet?"
+    }
 }

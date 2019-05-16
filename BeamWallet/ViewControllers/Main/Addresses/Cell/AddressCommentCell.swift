@@ -25,33 +25,41 @@ protocol AddressCommentCellDelegate: AnyObject {
     func onChangeComment(value:String)
 }
 
-class AddressCommentCell: BaseCell {
+class AddressCommentCell: UITableViewCell {
 
     weak var delegate: AddressCommentCellDelegate?
 
-    @IBOutlet weak private var commentField: UITextField!
+    @IBOutlet weak private var commentField: UITextViewPlacholder!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
+        
+        self.backgroundColor = UIColor.main.marineTwo
+        
+        commentField.placeholder = "Annotation"
+        commentField.delegate = self
     }
-
 }
 
-extension AddressCommentCell: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        
-        return true
+extension AddressCommentCell: UITextViewDelegate {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        print("begin")
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        let textFieldText: NSString = (textField.text ?? "") as NSString
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
         
-        let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
-     
+        let textFieldText: NSString = (textView.text ?? "") as NSString
+        
+        let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: text)
+        
         self.delegate?.onChangeComment(value: txtAfterUpdate)
         
         return true
@@ -64,3 +72,12 @@ extension AddressCommentCell: Configurable {
         commentField.text = text
     }
 }
+
+extension AddressCommentCell: DynamicContentHeight {
+    
+    static func height() -> CGFloat {
+        return 120
+    }
+}
+
+
