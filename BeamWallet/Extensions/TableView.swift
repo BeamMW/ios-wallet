@@ -1,6 +1,6 @@
 //
-//  TableView.swift
-//  BeamWallet
+// TableView.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -54,6 +54,15 @@ extension UITableView {
 
 extension UITableView {
 
+    public func findPath(_ row:AnyClass) -> IndexPath? {
+        for cell in visibleCells {
+            if cell.isKind(of: row) {
+                return self.indexPath(for: cell)
+            }
+        }
+        return nil
+    }
+    
     public func findCell(_ row:AnyClass) -> UITableViewCell? {
         for cell in visibleCells {
             if cell.isKind(of: row) {
@@ -104,5 +113,20 @@ extension UITableView {
                 control.endRefreshing()
             }
         }       
+    }
+}
+
+extension UICollectionView {
+    
+//    func register(_ cellType: Reusable.Type) {
+//        self.register(cellType.self, forCellWithReuseIdentifier: cellType.reuseIdentifier)
+//    }
+    
+    func dequeueReusableCell<T>(withType type: T.Type, for indexPath: IndexPath) -> T where T: Reusable {
+        return self.dequeueReusableCell(withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
+    }
+    
+    func dequeueReusableSupplementaryView<T>(ofKind elementKind: String, withType type: T.Type, for indexPath: IndexPath) -> T where T: Reusable {
+        return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: type.reuseIdentifier, for: indexPath) as! T
     }
 }

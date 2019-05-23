@@ -1,5 +1,5 @@
 //
-// BMCategory.h
+// ReceiveCellProtocol.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,15 +17,16 @@
 // limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+import Foundation
 
+protocol ReceiveCellProtocol: AnyObject {
+    func textValueDidChange(_ sender: UITableViewCell, _ text:String)
+    func textValueDidReturn(_ sender: UITableViewCell)
+    func textValueDidBegin(_ sender: UITableViewCell)
 
-@interface BMCategory : NSObject
-
-@property (nonatomic,strong) NSString * _Nonnull name;
-@property (nonatomic,strong) NSString * _Nonnull color;
-@property (nonatomic,assign) int ID;
-
-+(BMCategory*_Nonnull)noneCategory;
-
-@end
+    func onClickRequest()
+    func onClickRemoveRequest()
+    
+    func onClickQRCode()
+    func onClickShare()
+}

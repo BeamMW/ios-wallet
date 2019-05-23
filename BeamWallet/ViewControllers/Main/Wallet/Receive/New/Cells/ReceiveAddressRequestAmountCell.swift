@@ -1,5 +1,5 @@
 //
-// BMCategory.h
+// ReceiveAddressRequestAmountCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,15 +17,19 @@
 // limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+import UIKit
 
+class ReceiveAddressRequestAmountCell: BaseCell {
 
-@interface BMCategory : NSObject
+    weak var delegate: ReceiveCellProtocol?
 
-@property (nonatomic,strong) NSString * _Nonnull name;
-@property (nonatomic,strong) NSString * _Nonnull color;
-@property (nonatomic,assign) int ID;
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        selectionStyle = .none
+    }
 
-+(BMCategory*_Nonnull)noneCategory;
-
-@end
+    @IBAction func onRequest(sender :UIButton) {
+        delegate?.onClickRequest()
+    }
+}

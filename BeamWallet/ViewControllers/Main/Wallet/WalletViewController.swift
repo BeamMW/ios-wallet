@@ -40,6 +40,8 @@ class WalletViewController: BaseTableViewController {
 
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
+        AppStoreReviewManager.incrementAppOpenedCount()
+
         AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
         
         AppModel.sharedManager().addDelegate(self)
@@ -79,6 +81,11 @@ class WalletViewController: BaseTableViewController {
             }
             
             NotificationManager.sharedManager.clickedTransaction = ""
+        }
+        else{
+            if AppStoreReviewManager.checkAndAskForReview() {
+                showRateDialog()
+            }
         }
     }
     
@@ -328,15 +335,26 @@ extension WalletViewController : WalletModelDelegate {
 
 extension WalletViewController : WalletStatusCellDelegate {
    
-    func onClickReceived() {        
+    func onClickReceived() {
         AppModel.sharedManager().generateNewWalletAddress { (address, error) in
             if let result = address {
                 DispatchQueue.main.async {
                     NotificationManager.sharedManager.subscribeToTopic(topic: result.walletId)
+
+//                    let vc = WalletReceiveViewController(address: result)
+//                    vc.hidesBottomBarWhenPushed = true
+//                    self.pushViewController(vc: vc)
                     
-                    let vc = WalletReceiveViewController(address: result)
-                    vc.hidesBottomBarWhenPushed = true
-                    self.pushViewController(vc: vc)
+                    let n = BMGradientNavigationController(rootViewController: ReceiveDetailViewController(address: result))
+                    n.modalTransitionStyle = .crossDissolve
+                    n.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                    n.navigationBar.shadowImage = UIImage()
+                    n.navigationBar.isTranslucent = true
+                    n.navigationBar.backgroundColor = .clear
+                    n.navigationBar.tintColor = UIColor.white
+                    self.present(n, animated: true) {
+
+                    }
                 }
             }
             else if let reason = error?.localizedDescription {

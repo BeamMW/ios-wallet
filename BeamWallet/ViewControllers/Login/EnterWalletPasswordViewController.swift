@@ -58,15 +58,20 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         
         AppModel.sharedManager().cancelForgotPassword()
         
-        if (self.presentedViewController as? UIAlertController) != nil {
-            
-        }
-        else{
-            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
-                isRequestedAuthorization = true
-
-                biometricAuthorization()
-            }
+//        if (self.presentedViewController as? UIAlertController) != nil {
+//            
+//        }
+//        else{
+//            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
+//                isRequestedAuthorization = true
+//
+//                biometricAuthorization()
+//            }
+//        }
+        
+        if let password = KeychainManager.getPassword() {
+            self.passField.text = password
+            self.onLogin(sender: UIButton())
         }
     }
     

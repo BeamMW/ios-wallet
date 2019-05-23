@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import MessageUI
 
 class BaseViewController: UIViewController {
 
@@ -28,6 +29,36 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.main.marine
+    }
+    
+    public func addLeftButton(image:UIImage?, target:Any?, selector:Selector) {
+        let backButton = UIButton(type: .system)
+        backButton.frame = CGRect(x: 15, y: 60, width: 40, height: 40)
+        backButton.contentHorizontalAlignment = .left
+        backButton.tintColor = UIColor.white
+        backButton.setImage(image, for: .normal)
+        backButton.addTarget(target, action: selector, for: .touchUpInside)
+        self.navigationController?.navigationBar.addSubview(backButton)
+    }
+    
+    public func addRightButton(image:UIImage?, target:Any?, selector:Selector) {
+        let backButton = UIButton(type: .system)
+        backButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: 60, width: 40, height: 40)
+        backButton.contentHorizontalAlignment = .right
+        backButton.tintColor = UIColor.white
+        backButton.setImage(image, for: .normal)
+        backButton.addTarget(target, action: selector, for: .touchUpInside)
+        self.navigationController?.navigationBar.addSubview(backButton)
+    }
+    
+    public func addCustomBackButton(target:Any?, selector:Selector) {
+        let backButton = UIButton(type: .system)
+        backButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        backButton.contentHorizontalAlignment = .left
+        backButton.tintColor = UIColor.white
+        backButton.setImage(IconBack(), for: .normal)
+        backButton.addTarget(target, action: selector, for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
     }
     
     public func addRightButton(title:String, targer:Any?, selector:Selector?, enabled:Bool) {
@@ -54,6 +85,61 @@ class BaseViewController: UIViewController {
             }) { (_ ) in
                 UIApplication.shared.open(url , options: [:], completionHandler: nil)
             }
+        }
+    }
+    
+    public func showRateDialog() {
+        let logoView = UIImageView(frame: CGRect(x: 10, y: 14, width: 40, height: 31))
+        logoView.image = RateLogo()
+        
+        let view = UIView(frame: CGRect(x: 95, y: 15, width: 60, height: 60))
+        view.backgroundColor = UIColor.init(red: 11/255, green: 22/255, blue: 36/255, alpha: 1)
+        view.layer.cornerRadius = 8
+        view.addSubview(logoView)
+        
+        let showAlert = UIAlertController(title: LocalizableStrings.rate_title, message: LocalizableStrings.rate_text, preferredStyle: .alert)
+        showAlert.view.addSubview(view)
+        
+        let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 285)
+        let width = NSLayoutConstraint(item: showAlert.view!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 250)
+        showAlert.view.addConstraint(height)
+        showAlert.view.addConstraint(width)
+        
+        showAlert.addAction(UIAlertAction(title: LocalizableStrings.rate_app, style: .default, handler: { action in
+            AppStoreReviewManager.openAppStoreRatingPage()
+        }))
+        showAlert.addAction(UIAlertAction(title: LocalizableStrings.feedback, style: .default, handler: { action in
+            AppStoreReviewManager.resetRating()
+            
+            self.writeFeedback()
+        }))
+        showAlert.addAction(UIAlertAction(title: LocalizableStrings.not_now, style: .default, handler: { action in
+            AppStoreReviewManager.resetRating()
+        }))
+        
+        self.present(showAlert, animated: true, completion: nil)
+    }
+    
+    public func writeFeedback() {
+        if(MFMailComposeViewController.canSendMail()) {
+            let mailComposer = MFMailComposeViewController()
+            mailComposer.mailComposeDelegate = self
+            mailComposer.setToRecipients([LocalizableStrings.support_email])
+            mailComposer.setSubject(LocalizableStrings.ios_feedback)
+            present(mailComposer, animated: true, completion: nil)
+        }
+        else {
+            UIApplication.shared.open(URL(string: LocalizableStrings.support_email_mailto)!, options: [:]) { (_ ) in
+            }
+        }
+    }
+}
+
+extension BaseViewController : MFMailComposeViewControllerDelegate {
+
+    func mailComposeController(_ didFinishWithcontroller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        didFinishWithcontroller.dismiss(animated: true) {
         }
     }
 }

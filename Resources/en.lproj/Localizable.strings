@@ -17,7 +17,7 @@
 "cancel" = "Cancel";
 "cancel_lower" = "cancel";
 "open_another_wallet" = "login to another wallet";
-"seed_capture_warning" = "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds in risk. It is strictly recommended to remove the screenshot manually from your pictures gallery.";
+"seed_capture_warning" = "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds at risk. It is strictly strongly recommended to remove the screenshot manually from your pictures gallery.";
 "seed_prhase" = "Seed phrase";
 "inpur_seed" = "Type in your seed phrase";
 "confirm_seed" = "To ensure the seed phrase is written down correctly, please fill in the specific words below";
@@ -65,8 +65,6 @@
 "receiving_u" = "RECEIVING";
 "sending_u" = "SENDING";
 "maturing_u" = "MATURING";
-
-
 "sending_address" = "Sending address:";
 "receiving_address" = "Receiving address:";
 "transaction_fee" = "Transaction fee:";
@@ -149,4 +147,10 @@
 "clear_data" = "Clear data";
 "contacts" = "contacts";
 "and" = " and ";
-
+"stay_active_title" = "Stay active";
+"stay_active_text" = "Do not close the wallet otherwise transation will not be completed";
+"rate_title" = "\n\n\nYour voice matters!";
+"rate_text" = "Please rate your experience with Beam Wallet";
+"rate_app" = "Rate App";
+"feedback" = "Feedback";
+"not_now" = "Not Now";

@@ -47,7 +47,7 @@ class WalletReceiveViewController: BaseViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError(LocalizableStrings.fatalInitCoderError)
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,6 +71,9 @@ class WalletReceiveViewController: BaseViewController {
         
         addressLabel.text = address.walletId
         
+        self.alert(title: LocalizableStrings.stay_active_title, message: LocalizableStrings.stay_active_text) { (_ ) in
+            
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,6 +89,7 @@ class WalletReceiveViewController: BaseViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
+    
     
     private func didSelectCategory(category:BMCategory) {
         address.category = String(category.id)

@@ -33,12 +33,18 @@ class AddressCategoryCell: UITableViewCell {
 extension AddressCategoryCell: Configurable {
     
     func configure(with address: BMAddress) {
-        if let category = AppModel.sharedManager().findCategory(byId: address.category) {
-            categoryLabel.text = category.name
-            categoryLabel.textColor = UIColor.init(hexString: category.color)
+        if address.category == LocalizableStrings.zero {
+            categoryLabel.textColor = UIColor.main.steelGrey
+            categoryLabel.text = "None"
         }
         else{
-            categoryLabel.text = ""
+            if let category = AppModel.sharedManager().findCategory(byId: address.category) {
+                categoryLabel.text = category.name
+                categoryLabel.textColor = UIColor.init(hexString: category.color)
+            }
+            else{
+                categoryLabel.text = ""
+            }
         }
     }
 }

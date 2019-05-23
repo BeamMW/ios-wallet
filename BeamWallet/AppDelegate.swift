@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
-        //UIApplication.shared.isIdleTimerDisabled = true
+        UIApplication.shared.isIdleTimerDisabled = false
 
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppModel.sharedManager().addDelegate(self)
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
-        
+
         let rootController = UINavigationController(rootViewController: added ? EnterWalletPasswordViewController() : LoginViewController())
         rootController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         rootController.navigationBar.shadowImage = UIImage()
@@ -267,6 +267,8 @@ extension AppDelegate : WalletModelDelegate {
                         }
                     }
                     else{
+                        AppStoreReviewManager.incrementAppTransactions()
+
                         NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
                     }
                 }

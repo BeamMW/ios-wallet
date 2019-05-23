@@ -84,3 +84,8 @@ func CheckboxEmpty() -> UIImage? {
     return UIImage(named: "checkboxEmpty")
 }
 
+func RateLogo() -> UIImage? {
+    return UIImage(named: "rateLogo")
+}
+
+

@@ -32,6 +32,8 @@ class WalletConfirmSendViewController: BaseViewController {
     @IBOutlet weak private var feeLabel: UILabel!
     @IBOutlet weak private var passwordField: BMField!
     @IBOutlet weak private var passwordErrorLabel: UILabel!
+    @IBOutlet private weak var touchIdButton: UIButton!
+    @IBOutlet private weak var mainHeight: NSLayoutConstraint!
 
     private var amount:Double!
     private var fee:Double!
@@ -65,6 +67,15 @@ class WalletConfirmSendViewController: BaseViewController {
         if Device.isZoomed || Device.screenType == .iPhones_5 {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
         }
+        else{
+            if BiometricAuthorization.shared.canAuthenticate() || Settings.sharedManager().isEnableBiometric {
+                mainHeight.constant = 550
+            }
+        }
+        
+        if !BiometricAuthorization.shared.canAuthenticate() || !Settings.sharedManager().isEnableBiometric {
+            touchIdButton.isHidden = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,8 +96,53 @@ class WalletConfirmSendViewController: BaseViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
     
+    private func biometricAuthorization() {
+        if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
+            
+            BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
+                if let password = KeychainManager.getPassword() {
+                    if AppModel.sharedManager().isValidPassword(password) {
+                        self.dismiss(animated: true) {
+                            self.delegate?.onConfirmSend(amount: self.amount, fee: self.fee, toAddress: self.toAddress)
+                        }
+                    }
+                    else{
+                        self.touchIdButton.tintColor = UIColor.main.red
+                        
+                        self.passwordErrorLabel.isHidden = false
+                        self.passwordErrorLabel.text = "Incorrect password"
+                        self.passwordErrorLabel.textColor = UIColor.main.red
+                        self.passwordField.status = BMField.Status.error
+                    }
+                }
+                else{
+                    self.touchIdButton.tintColor = UIColor.main.red
+
+                    self.passwordErrorLabel.isHidden = false
+                    self.passwordErrorLabel.text = "Incorrect password"
+                    self.passwordErrorLabel.textColor = UIColor.main.red
+                    self.passwordField.status = BMField.Status.error
+                }
+                
+            }, failure: {
+                self.touchIdButton.tintColor = UIColor.main.red
+            }, retry: {
+                self.touchIdButton.tintColor = UIColor.white
+            })
+        }
+    }
+    
     @IBAction func onClose(sender :UIButton) {
         dismiss(animated: true, completion:nil)
+    }
+    
+    @IBAction func onTouchId(sender :UIButton) {
+        touchIdButton.tintColor = UIColor.white
+        
+        passwordErrorLabel.isHidden = true
+        passwordField.status = BMField.Status.normal
+
+        biometricAuthorization()
     }
     
     @IBAction func onSend(sender :UIButton) {

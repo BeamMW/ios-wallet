@@ -180,6 +180,9 @@ class SettingsViewModel : NSObject {
 
         var report = [SettingsItem]()
         report.append(SettingsItem(title: "Report a problem", detail: nil, isSwitch: nil, id: 2))
+        
+        var rate = [SettingsItem]()
+        rate.append(SettingsItem(title: "Rate App", detail: nil, isSwitch: nil, id: 11))
 
         items.append(node)
         items.append(security)
@@ -195,6 +198,8 @@ class SettingsViewModel : NSObject {
         }
         
         items.append(report)
+        
+        items.append(rate)
 
         if !NotificationManager.disableApns {
             var bots = [SettingsItem]()

@@ -65,6 +65,23 @@ extension UILabel {
     }
     
     @IBInspectable
+    var letterSpacing: CGFloat {
+        get {
+            return self.letterSpacing
+        }
+        set {
+            if newValue > 0 {
+                if let titleString = self.text, titleString.isEmpty == false {
+                    let attributedString = NSMutableAttributedString(string: titleString)
+                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                    
+                    self.attributedText = attributedString
+                }
+            }
+        }
+    }
+    
+    @IBInspectable
     var adjustFontSize: Bool {
         get {
             return self.adjustFontSize

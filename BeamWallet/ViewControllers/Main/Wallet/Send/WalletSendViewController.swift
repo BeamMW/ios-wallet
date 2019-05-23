@@ -219,31 +219,14 @@ class WalletSendViewController: BaseViewController {
             }
         }
         else if let toAddress = toAddressField.text {
-            
             if Settings.sharedManager().isNeedaskPasswordForSend {
-                
-                if Settings.sharedManager().isEnableBiometric && BiometricAuthorization.shared.canAuthenticate() {
-                    
-                    BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
-                        self.onConfirmSend(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
-                        
-                    }, failure: {
-                        
-                    }, retry: {
-                     
-                    })
-                }
-                else{
-                    
-                    let modalViewController = WalletConfirmSendViewController(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
-                    modalViewController.delegate = self
-                    modalViewController.modalPresentationStyle = .overFullScreen
-                    modalViewController.modalTransitionStyle = .crossDissolve
-                    present(modalViewController, animated: true, completion: nil)
-                }
+                let modalViewController = WalletConfirmSendViewController(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
+                modalViewController.delegate = self
+                modalViewController.modalPresentationStyle = .overFullScreen
+                modalViewController.modalTransitionStyle = .crossDissolve
+                present(modalViewController, animated: true, completion: nil)
             }
             else{
-                
                 onConfirmSend(amount: amount ?? 0, fee: fee ?? 0, toAddress: toAddress)
             }
         }
@@ -473,6 +456,7 @@ extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
 extension WalletSendViewController : WalletConfirmSendViewControllerDelegate {
     func onConfirmSend(amount: Double, fee: Double, toAddress: String) {
         AppModel.sharedManager().send(amount, fee:fee, to: toAddress, comment: commentField.text ?? "")
+        AppStoreReviewManager.incrementAppTransactions()
                 
         if let viewControllers = self.navigationController?.viewControllers{
             for vc in viewControllers {

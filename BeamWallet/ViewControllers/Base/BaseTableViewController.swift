@@ -23,6 +23,8 @@ class BaseTableViewController: BaseViewController {
 
     var tableView: UITableView!
     
+    private var offset:CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,6 +38,43 @@ class BaseTableViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.frame = self.view.bounds
+        if self.navigationController is BMGradientNavigationController {
+            tableView.frame = CGRect(x: 0, y: BMGradientNavigationBar.height - 10 - offset, width: self.view.bounds.width, height: self.view.bounds.height - BMGradientNavigationBar.height + 10 + offset)
+        }
+        else{
+            tableView.frame = self.view.bounds
+        }
+    }
+    
+    public func didScroll(scrollView:UIScrollView) {
+        if let navigationBar = self.navigationController?.navigationBar as? BMGradientNavigationBar, let navigation = self.navigationController as? BMGradientNavigationController {
+            
+            offset = scrollView.contentOffset.y
+
+            let contentHeight = scrollView.contentSize.height + scrollView.contentInset.bottom
+            
+            if  contentHeight > (view.frame.size.height - 50)  {
+                
+            }
+            else{
+                offset = 0
+            }
+            
+            print(offset)
+
+            if offset < 0 {
+                offset = 0
+            }
+            else if offset > 65 {
+                offset = 65
+            }
+            
+            if offset <= 65 {
+                tableView.frame = CGRect(x: 0, y: BMGradientNavigationBar.height - 10 - offset, width: self.view.bounds.width, height: self.view.bounds.height - BMGradientNavigationBar.height + 10 + offset)
+                
+                navigationBar.offset = offset
+                navigation.offset = offset
+            }
+        }
     }
 }

@@ -188,10 +188,10 @@ extension EditAddressViewController : UITableViewDelegate {
                         self.tableView.reloadData()
                     }
                 }
-                self.pushViewController(vc: vc)
+                pushViewController(vc: vc)
             }
             else{
-                let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address.category))
+                let vc = CategoryPickerViewController(category: self.address.category == LocalizableStrings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.address.category))
                 vc.completion = {
                     obj in
                     if let cat = obj {

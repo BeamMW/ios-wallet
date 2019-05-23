@@ -100,6 +100,8 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.onOpenTgBot()
             case 10:
                 self.viewModel.onCategory(controller: self, category: nil)
+            case 11:
+                self.showRateDialog()
             default:
                 return
             }

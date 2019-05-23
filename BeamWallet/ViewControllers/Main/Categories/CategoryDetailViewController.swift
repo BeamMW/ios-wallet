@@ -77,11 +77,15 @@ class CategoryDetailViewController: BaseViewController {
                     let vc = CategoryEditViewController(category: self.category)
                     vc.hidesBottomBarWhenPushed = true
                     self.pushViewController(vc: vc)
-                case .delete_address :
-                    AppModel.sharedManager().removeDelegate(self)
-
-                    AppModel.sharedManager().deleteCategory(self.category)
-                    self.navigationController?.popViewController(animated: true)
+                case .delete_category :
+                    self.confirmAlert(title: "Delete category", message: "Are you sure you want to delete “\(self.category.name)” category?", cancelTitle: "Cancel", confirmTitle: "Delete", cancelHandler: { (_ ) in
+                        
+                    }, confirmHandler: { (_ ) in
+                        AppModel.sharedManager().removeDelegate(self)
+                        
+                        AppModel.sharedManager().deleteCategory(self.category)
+                        self.navigationController?.popViewController(animated: true)
+                    })
                 default:
                     return
                 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,10 +25,12 @@
             <connections>
                 <outlet property="amountLabel" destination="1lO-Gt-PfW" id="XX8-88-Uv7"/>
                 <outlet property="feeLabel" destination="721-Zd-l9T" id="RCg-h6-OQc"/>
+                <outlet property="mainHeight" destination="4uU-0y-ub7" id="io2-IL-kYV"/>
                 <outlet property="passwordErrorLabel" destination="PvZ-G4-aI6" id="vgR-gV-PKP"/>
                 <outlet property="passwordField" destination="1oM-4b-wp5" id="CgN-sw-bms"/>
                 <outlet property="scrollView" destination="EST-TH-a1G" id="apA-Xs-rcL"/>
                 <outlet property="toAddressLabel" destination="JKn-xf-daU" id="wCj-LM-K2M"/>
+                <outlet property="touchIdButton" destination="fEk-XQ-HzK" id="4pV-cT-qwN"/>
                 <outlet property="view" destination="Yqk-hf-GOU" id="kq2-sv-TB4"/>
             </connections>
         </placeholder>
@@ -217,6 +219,20 @@
                                                 <action selector="onSendWithSender:" destination="-1" eventType="touchUpInside" id="iUs-n9-gxj"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEk-XQ-HzK">
+                                            <rect key="frame" x="152.5" y="468" width="30" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="30" id="soV-8T-ayB"/>
+                                                <constraint firstAttribute="height" constant="30" id="viQ-FC-KbO"/>
+                                            </constraints>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="iconTouchid">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onTouchIdWithSender:" destination="-1" eventType="touchUpInside" id="ojV-eU-h5g"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -228,7 +244,9 @@
                                         <constraint firstAttribute="trailing" secondItem="hP2-qn-Vt3" secondAttribute="trailing" constant="15" id="9Ev-ZT-jSl"/>
                                         <constraint firstItem="hP2-qn-Vt3" firstAttribute="top" secondItem="i00-Xy-8Up" secondAttribute="bottom" constant="60" id="Aat-NE-NqX"/>
                                         <constraint firstItem="8h6-FD-7MW" firstAttribute="leading" secondItem="h0y-pV-73H" secondAttribute="leading" constant="20" id="C7u-4k-yb9"/>
+                                        <constraint firstItem="fEk-XQ-HzK" firstAttribute="top" secondItem="g9u-P0-AH3" secondAttribute="bottom" constant="20" id="NJc-IO-6ek"/>
                                         <constraint firstItem="g9u-P0-AH3" firstAttribute="top" secondItem="PvZ-G4-aI6" secondAttribute="bottom" constant="25" id="PSU-At-1kk"/>
+                                        <constraint firstItem="fEk-XQ-HzK" firstAttribute="centerX" secondItem="h0y-pV-73H" secondAttribute="centerX" id="Pyu-u3-yli"/>
                                         <constraint firstAttribute="trailing" secondItem="8h6-FD-7MW" secondAttribute="trailing" constant="20" id="Uim-sK-65j"/>
                                         <constraint firstItem="8h6-FD-7MW" firstAttribute="top" secondItem="UKp-QJ-IcO" secondAttribute="bottom" constant="30" id="WeJ-BE-kbb"/>
                                         <constraint firstAttribute="trailing" secondItem="i00-Xy-8Up" secondAttribute="trailing" constant="20" id="ZnO-o4-87G"/>
@@ -289,5 +307,6 @@
     <resources>
         <image name="iconCancelBig" width="16" height="16"/>
         <image name="iconSendBlue" width="16" height="16"/>
+        <image name="iconTouchid" width="45" height="45"/>
     </resources>
 </document>

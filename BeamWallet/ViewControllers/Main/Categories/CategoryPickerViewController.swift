@@ -48,6 +48,7 @@ class CategoryPickerViewController: BaseViewController {
         title = "Category"
         
         categories = (AppModel.sharedManager().categories as! [BMCategory])
+        categories.insert(BMCategory.none(), at: 0)
         
         tableView.register(CategoryPickerCell.self)
         tableView.register(EmptyCell.self)

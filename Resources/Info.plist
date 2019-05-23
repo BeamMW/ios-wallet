@@ -65,6 +65,8 @@
 		<string>SFProText-Semibold.otf</string>
 		<string>SF-Pro-Display-LightItalic.otf</string>
 		<string>SF-Pro-Display-RegularItalic.otf</string>
+		<string>SFProText-Medium.ttf</string>
+		<string>SFProText-Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

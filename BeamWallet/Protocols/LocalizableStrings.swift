@@ -150,6 +150,18 @@ struct LocalizableStrings {
     static let contacts = "contacts".localized
     static let and = "and".localized
     
+    static let stay_active_title = "stay_active_title".localized
+    static let stay_active_text = "stay_active_text".localized
+
+    static let rate_title = "rate_title".localized
+    static let rate_text = "rate_text".localized
+    static let rate_app = "rate_app".localized
+    static let feedback = "feedback".localized
+    static let not_now = "not_now".localized
+    static let ios_feedback = "iOS Feedback"
+    static let support_email = "support@beam.mw"
+    static let support_email_mailto = "mailto:support@beam.mw"
+
     static func delete_data_text(str:String) -> String {
         return "Are you sure you want to delete all \(str) from your wallet?"
     }

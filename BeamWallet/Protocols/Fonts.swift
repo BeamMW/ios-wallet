@@ -31,3 +31,11 @@ func RegularFont(size:CGFloat) -> UIFont {
 func SemiboldFont(size:CGFloat) -> UIFont {
     return UIFont(name: "SFProDisplay-Semibold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
 }
+
+func ProMediumFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProText-Medium", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+}
+
+func ProRegularFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProText-Regular", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+}

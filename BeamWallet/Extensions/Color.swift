@@ -99,6 +99,10 @@ extension UIColor {
             return .init(red: 244/255, green: 206/255, blue: 74/255, alpha: 1)
         }
         
+        static var steelGrey: UIColor {
+            return .init(red: 112/255, green: 128/255, blue: 138/255, alpha: 1)
+        }
+        
         static var brightTeal: UIColor {
             return .init(red: 0/255, green: 246/255, blue: 210/255, alpha: 1)
         }
