@@ -101,35 +101,28 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
     }
     
     if (self.target == Testnet) {
-        _explorerAddress = @"https://testnet.explorer.beam.mw/";
+        _explorerAddress = @"https://testnet.explorer.beam.mw/block?kernel_id=";
     }
     else if (self.target == Masternet) {
-        _explorerAddress = @"https://master-net.explorer.beam.mw/";
+        _explorerAddress = @"https://master-net.explorer.beam.mw/block?kernel_id=";
     }
     else{
-        _explorerAddress = @"https://explorer.beam.mw/";
+        _explorerAddress = @"https://explorer.beam.mw/block?kernel_id=";
     }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
         _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
     }
     else{
-        if (self.target == Testnet) {
-            _nodeAddress = @"ap-node03.testnet.beam.mw:8100";
-        }
-        else if (self.target == Masternet) {
-            _nodeAddress = @"eu-node03.masternet.beam.mw:8100";
-        }
-        else{
-            _nodeAddress = @"ap-node01.mainnet.beam.mw:8100";
-        }
+        _nodeAddress = [AppModel chooseRandomNode];
     }
-    
     
     if (self.target == Testnet)
     {
         [self copyOldDatabaseToGroup];
     }
+    
+    _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
     return self;
 }
@@ -193,7 +186,12 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 
 -(NSString*_Nonnull)walletStoragePath {
     if (self.target == Testnet) {
-        return [self groupDBPath];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
+        return oldPath;
+        
+      //  return [self groupDBPath];
     }
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -268,11 +266,11 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 -(void)copyOldDatabaseToGroup {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
+    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[self groupDBPath]]) {
-            [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:[self groupDBPath] error:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[self groupDBPath]]) {
+            [[NSFileManager defaultManager] copyItemAtPath:[self groupDBPath] toPath:oldPath error:nil];
         }
     }
 }

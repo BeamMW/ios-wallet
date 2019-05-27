@@ -81,6 +81,36 @@ class CreateWalletProgressViewController: BaseViewController {
         
         AppModel.sharedManager().removeDelegate(self)
     }
+    
+    private func openMainPage() {
+        AppModel.sharedManager().refreshAddresses()
+        
+        if AppDelegate.useLegacy {
+            let vc = LegacyMainTabBarController()
+            vc.modalTransitionStyle = .crossDissolve
+            self.present(vc, animated: true, completion: nil)
+        }
+        else{
+            let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+            let menuViewController = LeftMenuViewController()
+            
+            let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+                                                          leftViewController: menuViewController,
+                                                          rightViewController: nil)
+            
+            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 120;
+            sideMenuController.leftViewPresentationStyle = .scaleFromLittle;
+            sideMenuController.rootViewLayerShadowRadius = 12
+            sideMenuController.rootViewLayerShadowColor = UIColor.black.withAlphaComponent(0.1)
+            sideMenuController.rootViewCoverAlphaForLeftView = 1
+            sideMenuController.rootViewCoverAlphaForRightView = 1
+            sideMenuController.leftViewCoverAlpha = 1
+            sideMenuController.rightViewCoverAlpha = 1
+            sideMenuController.modalTransitionStyle = .crossDissolve
+
+            self.present(sideMenuController, animated: true, completion: nil)
+        }
+    }
 
     private func startCreateWallet() {
         let appModel = AppModel.sharedManager()
@@ -175,9 +205,7 @@ class CreateWalletProgressViewController: BaseViewController {
             if !self.isPresented {
                 self.isPresented = true
                 
-                let vc = MainTabBarController()
-                vc.modalTransitionStyle = .crossDissolve
-                self.present(vc, animated: true, completion: nil)
+                self.openMainPage()
             }
         }
     }
@@ -232,9 +260,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     self.progressView.progress = 1
                 }) { (_) in
                     DispatchQueue.main.async {
-                        let vc = MainTabBarController()
-                        vc.modalTransitionStyle = .crossDissolve
-                        self.present(vc, animated: true, completion: nil)
+                        self.openMainPage()
                     }
                 }
             }
@@ -252,9 +278,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                 if !self.isPresented {
                     self.isPresented = true
                     
-                    let vc = MainTabBarController()
-                    vc.modalTransitionStyle = .crossDissolve
-                    self.present(vc, animated: true, completion: nil)
+                    self.openMainPage()
                 }
             }
             else if error.code == 1 {
@@ -290,9 +314,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
             if !self.isPresented {
                 self.isPresented = true
                 
-                let vc = MainTabBarController()
-                vc.modalTransitionStyle = .crossDissolve
-                self.present(vc, animated: true, completion: nil)
+                self.openMainPage()
             }
         }
     }

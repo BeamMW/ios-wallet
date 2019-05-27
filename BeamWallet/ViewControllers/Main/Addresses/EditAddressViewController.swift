@@ -19,13 +19,11 @@
 
 import UIKit
 
-class EditAddressViewController: BaseViewController {
+class EditAddressViewController: BaseTableViewController {
     
     private let hours_24: UInt64 = 86400
     private var address:BMAddress!
     private var oldAddress:BMAddress!
-    
-    @IBOutlet private weak var tableView: UITableView!
     
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
@@ -53,9 +51,12 @@ class EditAddressViewController: BaseViewController {
         
         title = LocalizableStrings.edit_address
         
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
-        tableView.register([AddressSwitchCell.self,AddressExpiresCell.self,AddressExpiredCell.self,
-            AddressCommentCell.self,AddressCategoryCell.self])
+    
+        tableView.register([AddressSwitchCell.self, AddressExpiresCell.self,AddressExpiredCell.self, 
+            AddressCommentCell.self, AddressCategoryCell.self])
 
         addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
     }

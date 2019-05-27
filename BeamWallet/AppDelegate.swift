@@ -23,10 +23,13 @@ import Crashlytics
 import FirebaseCore
 import FirebaseMessaging
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    private var scannedTGUserId = ""
+    public static let useLegacy = false
+
+    private var scannedTGUserId = String.empty()
 
     var securityScreen = AutoSecurityScreen()
     var lockScreen = LockScreen()
@@ -36,7 +39,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var completionHandler: ((UIBackgroundFetchResult) -> Void)?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    
+            
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marineTwo
+
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = false
@@ -55,21 +60,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
 
-        let rootController = UINavigationController(rootViewController: added ? EnterWalletPasswordViewController() : LoginViewController())
-        rootController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        rootController.navigationBar.shadowImage = UIImage()
-        rootController.navigationBar.isTranslucent = true
-        rootController.navigationBar.backgroundColor = .clear
-        rootController.navigationBar.tintColor = UIColor.white
-        rootController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-
+        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : LoginViewController())
+        
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window!.rootViewController = rootController
-        self.window!.makeKeyAndVisible()
+        self.window?.backgroundColor = UIColor.main.navy
+        self.window?.rootViewController = rootController
+        self.window?.makeKeyAndVisible()
     
-        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marineTwo
+        ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
         return true
+    }
+    
+    public func logout() {
+        AppModel.sharedManager().isLoggedin = false
+
+        AppModel.sharedManager().resetWallet(false)
+
+        let rootController = BaseNavigationController.navigationController(rootViewController: EnterWalletPasswordViewController(isNeedRequestedAuthorization: false))
+
+        self.window!.rootViewController = rootController
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -79,12 +89,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
 
         //TODO: notification - close db
-        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow
-            && Settings.sharedManager().target == Testnet {
-            AppModel.sharedManager().isConnecting = true
-            AppModel.sharedManager().resetWallet(false)
-        }
-        else if AppModel.sharedManager().isRestoreFlow {
+//        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow
+//            && Settings.sharedManager().target == Testnet {
+//            AppModel.sharedManager().isConnecting = true
+//            AppModel.sharedManager().resetWallet(false)
+//        }
+//        else
+        if AppModel.sharedManager().isRestoreFlow {
             registerBackgroundTask()
         }
     }
@@ -101,13 +112,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationManager.sharedManager.clearNotifications()
         
         //TODO: notification - close db
-        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow && Settings.sharedManager().target == Testnet {
-            if let password = KeychainManager.getPassword() {
-                if AppModel.sharedManager().isWalletInitialized() == false {
-                    AppModel.sharedManager().isConnecting = true
-                    AppModel.sharedManager().openWallet(password)
-                }
-            }
+//        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow && Settings.sharedManager().target == Testnet {
+//            if let password = KeychainManager.getPassword() {
+//                if AppModel.sharedManager().isWalletInitialized() == false {
+//                    AppModel.sharedManager().isConnecting = true
+//                    AppModel.sharedManager().openWallet(password)
+//                }
+//            }
+//        }
+        
+        if ShortcutManager.canHandle() {
+            _ = ShortcutManager.handleShortcutItem()
         }
     }
 
@@ -135,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             else{
                 if let vc = UIApplication.getTopMostViewController() {
-                    vc.alert(title: "Telegram bot", message: "Please open wallet to link telegram bot") { (_ ) in
+                    vc.alert(title: LocalizableStrings.tg_bot, message: LocalizableStrings.tg_bot_link) { (_ ) in
                         
                         if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
                             passVC.biometricAuthorization()
@@ -177,7 +192,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        print("didReceiveRemoteNotification")
         completionHandler(.noData)
 
 //        if(!AppModel.sharedManager().isRestoreFlow) {
@@ -215,8 +229,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        print("performFetchWithCompletionHandler")
-        
         if(!AppModel.sharedManager().isRestoreFlow) {
             if let password = KeychainManager.getPassword() {
                 self.completionHandler = completionHandler
@@ -245,15 +257,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+//MARK: - 3D TOUCH
+
+extension AppDelegate {
+
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        
+        ShortcutManager.launchedShortcutItem = shortcutItem
+        
+        if ShortcutManager.canHandle() {
+           _ = ShortcutManager.handleShortcutItem()
+        }
+
+        completionHandler(true)
+    }
+}
 
 extension AppDelegate : WalletModelDelegate {
+    
     public func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
             
             var oldTransactions = [BMTransaction]()
             
             //get old notifications
-            if let data = UserDefaults.standard.data(forKey: "transactions") {
+            if let data = UserDefaults.standard.data(forKey: LocalizableStrings.transactions) {
                 if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
                     oldTransactions = array
                 }
@@ -274,7 +302,7 @@ extension AppDelegate : WalletModelDelegate {
                 }
             }
             
-            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: "transactions")
+            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: LocalizableStrings.transactions)
             UserDefaults.standard.synchronize()
         }
     }

@@ -111,7 +111,6 @@ struct LocalizableStrings {
     static let seed_back_text = "seed_back_text".localized
     static let generate = "generate".localized
     static let address = "address".localized
-    
     static let address_id = "address_id".localized
     static let exp_date = "exp_date".localized
     static let annotation = "annotation".localized
@@ -122,26 +121,20 @@ struct LocalizableStrings {
     static let delete_address_transaction = "delete_address_transaction".localized
     static let delete_address_only = "delete_address_only".localized
     static let category = "category".localized
-    
     static let in_24_hours = "in_24_hours".localized
     static let never = "never".localized
     static let address_expires = "address_expires".localized
     static let save = "save".localized
-    
     static let active_address = "active_address".localized
     static let expire_now = "expire_now".localized
-    
     static let open_settings = "open_settings".localized
     static let camera_denied_text = "camera_denied_text".localized
-    
     static let camera_restricted = "camera_restricted".localized
     static let error_scan_qr_code = "error_scan_qr_code".localized
     static let scan_qr_code = "scan_qr_code".localized
     static let scan_tg_qr_code = "scan_tg_qr_code".localized
-    
     static let receive = "receive".localized
     static let hours_24 = "hours_24".localized
-    
     static let delete_all_addresses = "delete_all_addresses".localized
     static let delete_all_contacts = "delete_all_contacts".localized
     static let delete_all_transactions = "delete_all_transactions".localized
@@ -149,10 +142,8 @@ struct LocalizableStrings {
     static let clear_data = "clear_data".localized
     static let contacts = "contacts".localized
     static let and = "and".localized
-    
     static let stay_active_title = "stay_active_title".localized
     static let stay_active_text = "stay_active_text".localized
-
     static let rate_title = "rate_title".localized
     static let rate_text = "rate_text".localized
     static let rate_app = "rate_app".localized
@@ -161,8 +152,35 @@ struct LocalizableStrings {
     static let ios_feedback = "iOS Feedback"
     static let support_email = "support@beam.mw"
     static let support_email_mailto = "mailto:support@beam.mw"
+    static let amount_empty = "amount_empty".localized
+    static let amount_zero = "amount_zero".localized
+    static let next = "next".localized
+    static let where_buy_beam = "where_buy_beam".localized
+    static let logout = "logout".localized
+    static let logout_text = "logout_text".localized
+    static let yes = "yes".localized
+    static let updating = "updating".localized
+    static let connecting = "connecting".localized
+    static let online = "online".localized
+    static let online_testnet = "online_testnet".localized
+    static let offline = "offline".localized
+    static let offline_testnet = "offline_testnet".localized
+    static let tg_bot = "tg_bot".localized
+    static let tg_bot_link = "tg_bot_link".localized
+    static let share_qr_code = "share_qr_code".localized
+    static let qr_code = "qr_code".localized
+    static let create_address = "create_address".localized
+    static let new_address = "new_address".localized
 
     static func delete_data_text(str:String) -> String {
         return "Are you sure you want to delete all \(str) from your wallet?"
+    }
+    
+    static func beam_amount(_ str:String) -> String {
+        return str + " BEAM"
+    }
+    
+    static func cannot_connect_node(_ node:String) -> String {
+        return "cannot connect to node: \(node)"
     }
 }

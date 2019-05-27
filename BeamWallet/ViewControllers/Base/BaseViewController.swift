@@ -23,22 +23,79 @@ import MessageUI
 
 class BaseViewController: UIViewController {
 
-    private var initialTouchPoint = CGPoint.zero
+    private  let leftTag = 9821
+    private  let rightTag = 9822
 
+    public var largeTitle:String?
+
+    public var minimumVelocityToHide = 1500 as CGFloat
+    public var minimumScreenRatioToHide = 0.5 as CGFloat
+    public var animationDuration = 0.2 as TimeInterval
+
+    public var isNavigationGradient:Bool {
+        return ((self.navigationController as? BMGradientNavigationController) != nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.main.marine
+        
+        if self.navigationController?.viewControllers.count == 1 && AppModel.sharedManager().isLoggedin {
+           
+            if !isNavigationGradient {
+                onAddMenuIcon()
+            }
+        }
     }
     
-    public func addLeftButton(image:UIImage?, target:Any?, selector:Selector) {
-        let backButton = UIButton(type: .system)
-        backButton.frame = CGRect(x: 15, y: 60, width: 40, height: 40)
-        backButton.contentHorizontalAlignment = .left
-        backButton.tintColor = UIColor.white
-        backButton.setImage(image, for: .normal)
-        backButton.addTarget(target, action: selector, for: .touchUpInside)
-        self.navigationController?.navigationBar.addSubview(backButton)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let navigation = self.navigationController as? BMGradientNavigationController {
+            navigation.title = self.largeTitle
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if let rightButton = self.navigationController?.view.viewWithTag(rightTag)
+        {
+            rightButton.removeFromSuperview()
+        }
+    }
+    
+    @objc private func onLeftMenu() {
+        sideMenuController?.toggleLeftViewAnimated()
+    }
+    
+//MARK: - Navigation Buttons
+    
+    public func onAddMenuIcon() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: IconLeftMenu(), style: .plain, target: self, action: #selector(onLeftMenu))
+    }
+    
+    @objc private func onLeftBackButton() {
+        if self.navigationController?.viewControllers.count == 1 {
+            dismissDetail()
+        }
+        else{
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    public func addLeftButton(image:UIImage?) {
+        if self.navigationController?.view.viewWithTag(leftTag) == nil {
+            let button = UIButton(type: .system)
+            button.tag = leftTag
+            button.frame = CGRect(x: 15, y: 60, width: 40, height: 40)
+            button.contentHorizontalAlignment = .left
+            button.tintColor = UIColor.white
+            button.setImage(image, for: .normal)
+            button.addTarget(self, action: #selector(onLeftBackButton), for: .touchUpInside)
+            self.navigationController?.view.addSubview(button)
+        }
     }
     
     public func addRightButton(image:UIImage?, target:Any?, selector:Selector) {
@@ -48,7 +105,7 @@ class BaseViewController: UIViewController {
         backButton.tintColor = UIColor.white
         backButton.setImage(image, for: .normal)
         backButton.addTarget(target, action: selector, for: .touchUpInside)
-        self.navigationController?.navigationBar.addSubview(backButton)
+        self.navigationController?.view.addSubview(backButton)
     }
     
     public func addCustomBackButton(target:Any?, selector:Selector) {
@@ -62,32 +119,46 @@ class BaseViewController: UIViewController {
     }
     
     public func addRightButton(title:String, targer:Any?, selector:Selector?, enabled:Bool) {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: targer, action: selector)
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        navigationItem.rightBarButtonItem?.isEnabled = enabled
+        if isNavigationGradient {
+            
+            if let rightButton = self.navigationController?.view.viewWithTag(rightTag)
+            {
+                rightButton.removeFromSuperview()
+            }
+            
+            let button = UIButton(type: .system)
+            button.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: 60, width: 40, height: 40)
+            button.contentHorizontalAlignment = .right
+            button.tag = rightTag
+            button.tintColor = UIColor.white
+            button.isEnabled = enabled
+            button.setTitle(title, for: .normal)
+            button.addTarget(targer, action: selector!, for: .touchUpInside)
+            button.titleLabel?.font = RegularFont(size: 16)
+            self.navigationController?.view.addSubview(button)
+        }
+        else{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: targer, action: selector)
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
+            navigationItem.rightBarButtonItem?.isEnabled = enabled
+        }
     }
     
     public func enableRightButton(enabled:Bool) {
-        navigationItem.rightBarButtonItem?.isEnabled = enabled
-    }
-    
-    public func addSwipeToDismiss() {
-        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler)))
-    }
-
-    public func openUrl(url:URL) {
-        if Settings.sharedManager().isAllowOpenLink {
-            UIApplication.shared.open(url , options: [:], completionHandler: nil)
-        }
-        else{
-            self.confirmAlert(title: LocalizableStrings.external_link_title, message: LocalizableStrings.external_link_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.open, cancelHandler: { (_ ) in
-                
-            }) { (_ ) in
-                UIApplication.shared.open(url , options: [:], completionHandler: nil)
+        if isNavigationGradient {
+            if let rightButton = self.navigationController?.view.viewWithTag(rightTag) as? UIButton
+            {
+                rightButton.isEnabled = enabled
             }
         }
+        else{
+            navigationItem.rightBarButtonItem?.isEnabled = enabled
+        }
     }
     
+
+//MARK: - Feedback
+        
     public func showRateDialog() {
         let logoView = UIImageView(frame: CGRect(x: 10, y: 14, width: 40, height: 31))
         logoView.image = RateLogo()
@@ -135,6 +206,8 @@ class BaseViewController: UIViewController {
     }
 }
 
+//MARK: - MFMailComposeViewControllerDelegate
+
 extension BaseViewController : MFMailComposeViewControllerDelegate {
 
     func mailComposeController(_ didFinishWithcontroller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
@@ -144,36 +217,64 @@ extension BaseViewController : MFMailComposeViewControllerDelegate {
     }
 }
 
+//MARK: - Dismiss Swipe
+
 extension BaseViewController {
-    @objc private func panGestureRecognizerHandler(sender:UIGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
+    
+    public func addSwipeToDismiss() {
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        self.view.addGestureRecognizer(panGesture)
+    }
+    
+    private func slideViewVerticallyTo(_ y: CGFloat) {
+        let alpha = (self.view.frame.size.height - y) / self.view.frame.size.height
         
-        if sender.state == .began {
-            initialTouchPoint = touchPoint
+        if let visualView = self.view.subviews.first as? UIVisualEffectView {
+            visualView.alpha = alpha
         }
-        else if sender.state == .changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-                
-                self.view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: self.view.frame.size.width, height: self.view.frame.size.height)
-                
-                let offset = (self.view.frame.size.height - self.view.frame.origin.y)
-                
-                var percent = offset / self.view.frame.size.height
-                if percent < 0.85 {
-                    percent = 0.85
-                }
-                
-                self.view.alpha = percent
-            }
-        } else if sender.state == .ended || sender.state == .cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
+        else{
+            self.view.alpha = alpha
+        }
+        
+        self.view.frame.origin = CGPoint(x: 0, y: y)
+    }
+    
+    @objc private func onPan(_ panGesture: UIPanGestureRecognizer) {
+        if panGesture.state == .began {
+            self.view.endEditing(true)
+        }
+        
+        switch panGesture.state {
+        case .began, .changed:
+            let translation = panGesture.translation(in: view)
+            let y = max(0, translation.y)
+            self.slideViewVerticallyTo(y)
+            break
+        case .ended:
+            let translation = panGesture.translation(in: view)
+            let velocity = panGesture.velocity(in: view)
+            let closing = (translation.y > self.view.frame.size.height * minimumScreenRatioToHide) ||
+                (velocity.y > minimumVelocityToHide)
+            
+            if closing {
+                UIView.animate(withDuration: animationDuration, animations: {
+                    self.slideViewVerticallyTo(self.view.frame.size.height)
+                }, completion: { (isCompleted) in
+                    if isCompleted {
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                })
             } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.view.alpha = 1
-                    self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+                UIView.animate(withDuration: animationDuration, animations: {
+                    self.slideViewVerticallyTo(0)
                 })
             }
+            break
+        default:
+            UIView.animate(withDuration: animationDuration, animations: {
+                self.slideViewVerticallyTo(0)
+            })
+            break
         }
     }
 }

@@ -54,8 +54,9 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL isAllowOpenLink;
 
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
-
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
+@property (nonatomic, strong) NSString * _Nonnull whereBuyAddress;
+
 -(BOOL)isChangedNode;
 
 -(NSString*_Nonnull)walletStoragePath;

@@ -52,7 +52,7 @@ class BMCopyLabel: UILabel {
 
         UIMenuController.shared.setMenuVisible(false, animated: true)
         
-        ShowCopiedProgressHUD()
+        ShowCopied()
     }
     
     @objc private func showCopyMenu(sender: Any?) {

@@ -293,7 +293,7 @@ extension BMPopOverMenuView : UITableViewDataSource {
         
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.textColor = UIColor.white
-        cell.textLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 16)
+        cell.textLabel?.font = RegularFont(size: 16)
         cell.textLabel?.text = self.menuItems[indexPath.row].name
         if let image = self.menuItems[indexPath.row].icon {
             cell.imageView?.image = UIImage.init(named: image)

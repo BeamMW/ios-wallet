@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>11</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -68,6 +68,8 @@
 	<string>The camera is needed to scan QR codes</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app requires Face ID permission to authenticate using Face recognition</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save your QR Code</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SFProText-Regular.ttf</string>
@@ -80,6 +82,41 @@
 		<string>SFProText-Semibold.otf</string>
 		<string>SF-Pro-Display-LightItalic.otf</string>
 		<string>SF-Pro-Display-RegularItalic.otf</string>
+	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icSend3D</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Send</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Send</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icReceive3D</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Receive</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Receive</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icScanQr3D</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Scan QR code</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Scan</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icBeam3d</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Where to buy Beam</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Buy</string>
+		</dict>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

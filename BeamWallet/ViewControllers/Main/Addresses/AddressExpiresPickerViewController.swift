@@ -19,15 +19,13 @@
 
 import UIKit
 
-class AddressExpiresPickerViewController: BaseViewController {
+class AddressExpiresPickerViewController: BaseTableViewController {
 
     public var completion : ((Int) -> Void)?
     
     private var items:[BMDuration] = []
     private var selectedDuration:Int!
     private var currentDuration:Int!
-    
-    @IBOutlet private weak var tableView: UITableView!
     
     init(duration:Int) {
         super.init(nibName: nil, bundle: nil)
@@ -51,14 +49,42 @@ class AddressExpiresPickerViewController: BaseViewController {
         fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.address_expires;
+        if isNavigationGradient {
+            largeTitle = LocalizableStrings.address_expires.uppercased()
+            
+            navigationItem.hidesBackButton = true
+        }
+        else{
+            title = LocalizableStrings.address_expires
+            
+            addRightButton(title: LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        }
         
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorStyle = .singleLine
         tableView.register(AddressDurationCell.self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        addRightButton(title: LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        if isNavigationGradient {
+            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        }
     }
 
     @objc private func onSave(sender:UIBarButtonItem) {

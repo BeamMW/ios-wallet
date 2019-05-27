@@ -1,6 +1,6 @@
 //
-//  AddressViewController.swift
-//  BeamWallet
+// AddressViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -19,16 +19,13 @@
 
 import UIKit
 
-class AddressViewController: BaseViewController {
+class AddressViewController: BaseTableViewController {
 
     private var address:BMAddress!
     private var transactions = [BMTransaction]()
     private var details = [GeneralInfo]()
 
     private var isContact = false
-    
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private var headerView: UIView!
     
     init(address:BMAddress, isContact:Bool) {
         super.init(nibName: nil, bundle: nil)
@@ -49,7 +46,9 @@ class AddressViewController: BaseViewController {
         getTransactions()
         fillDetails()
         
-        tableView.register([GeneralInfoCell.self,WalletTransactionCell.self])
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register([GeneralInfoCell.self, WalletTransactionCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         
         title = LocalizableStrings.address
@@ -98,13 +97,13 @@ class AddressViewController: BaseViewController {
             if let item = selectedItem {
                 switch (item.action) {
                 case .show_qr_code:
-                    let modalViewController = WalletQRCodeViewController(address: self.address, amount: nil)
+                    let modalViewController = ReceiveQRViewController(address: self.address, amount: nil)
                     modalViewController.modalPresentationStyle = .overFullScreen
                     modalViewController.modalTransitionStyle = .crossDissolve
                     self.present(modalViewController, animated: true, completion: nil)
                 case .copy_address :
                     UIPasteboard.general.string = self.address.walletId
-                    ShowCopiedProgressHUD()
+                    ShowCopied()
                 case .edit_address :
                     let vc = EditAddressViewController(address: self.address)
                     self.pushViewController(vc: vc)
@@ -130,7 +129,7 @@ class AddressViewController: BaseViewController {
     }
     
     private func showDeleteAddressAndTransactions() {
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_transaction, icon: nil, action: .delete_address), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_only, icon: nil, action:.delete_address)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_transaction, icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_only, icon: nil, action:.delete_address)]
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -171,7 +170,7 @@ extension AddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 75
+            return BMTableHeaderTitleView.boldHeight
         }
         
         return 0
@@ -227,7 +226,7 @@ extension AddressViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            return headerView
+            return BMTableHeaderTitleView(title: LocalizableStrings.empty_transactions_list, bold: true)
         }
         
         return nil

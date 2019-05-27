@@ -38,8 +38,6 @@ class AddressesViewController: BaseViewController {
 
         title = LocalizableStrings.addresses
 
-        AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
-
         tableView.register(AddressCell.self)
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
@@ -48,6 +46,10 @@ class AddressesViewController: BaseViewController {
         AppModel.sharedManager().addDelegate(self)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: view)
+        }
     }
         
     @objc private func didBecomeActive() {
@@ -168,5 +170,31 @@ extension AddressesViewController : WalletModelDelegate {
                 self.tableView.reloadData()
             }
         }
+    }
+}
+
+extension AddressesViewController : UIViewControllerPreviewingDelegate {
+   
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
+        
+        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+
+        navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
+
+        let detailVC = PreviewQRCodeViewController(address: addresses[indexPath.row])
+        detailVC.preferredContentSize = CGSize(width: 0.0, height: 340)
+        
+        previewingContext.sourceRect = cell.frame
+        
+        return detailVC
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
+
+        show(viewControllerToCommit, sender: self)
     }
 }

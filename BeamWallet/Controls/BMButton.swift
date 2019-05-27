@@ -24,6 +24,17 @@ import UIKit
 @IBDesignable
 class BMButton: UIButton {
     
+    public static func defaultButton(frame:CGRect, color:UIColor) -> BMButton {
+        let button = BMButton(frame: frame)
+        button.cornerRadius = frame.size.height / 2
+        button.backgroundColor = color
+        button.awakeFromNib()
+        button.titleLabel?.font = BoldFont(size: 14)
+        button.adjustFontSize = true
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -1, right: 20)
+        return button
+    }
+    
     private var _testnetColor:UIColor?
 
     @IBInspectable

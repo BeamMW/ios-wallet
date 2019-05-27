@@ -145,4 +145,53 @@ extension String {
     static func empty() -> String {
         return ""
     }
+    
+    static func coma() -> String {
+        return ","
+    }
+    
+    static func dot() -> String {
+        return "."
+    }
+}
+
+
+extension String {
+    func isCorrectAmount() -> Bool {
+        let mainCount = 9
+        let comaCount = 8
+        
+        let txtAfterUpdate = self
+        
+        if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
+            return false
+        }
+        
+        if (!txtAfterUpdate.isDecimial()) {
+            return false
+        }
+        
+        if !txtAfterUpdate.isEmpty {
+            let split = txtAfterUpdate.split(separator: ".")
+            if split[0].lengthOfBytes(using: .utf8) > mainCount {
+                return false
+            }
+            else if split.count > 1 {
+                if split[1].lengthOfBytes(using: .utf8) > comaCount {
+                    return false
+                }
+                else if split[1].lengthOfBytes(using: .utf8) == comaCount && Double(txtAfterUpdate) == 0 {
+                    return false
+                }
+            }
+        }
+        
+        if let amount = Double(txtAfterUpdate) {
+            if AppModel.sharedManager().canReceive(amount, fee: 0) != nil {
+                return false
+            }
+        }
+        
+        return true
+    }
 }

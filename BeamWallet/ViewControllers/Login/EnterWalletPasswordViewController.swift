@@ -29,6 +29,16 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     @IBOutlet private weak var passViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var loginLabel: UILabel!
 
+    init(isNeedRequestedAuthorization:Bool = true) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.isRequestedAuthorization = !isNeedRequestedAuthorization
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(LocalizableStrings.fatalInitCoderError)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,21 +68,21 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         
         AppModel.sharedManager().cancelForgotPassword()
         
-//        if (self.presentedViewController as? UIAlertController) != nil {
-//            
-//        }
-//        else{
-//            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
-//                isRequestedAuthorization = true
-//
-//                biometricAuthorization()
-//            }
-//        }
-        
-        if let password = KeychainManager.getPassword() {
-            self.passField.text = password
-            self.onLogin(sender: UIButton())
+        if (self.presentedViewController as? UIAlertController) != nil {
+
         }
+        else{
+            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
+                isRequestedAuthorization = true
+
+                biometricAuthorization()
+            }
+        }
+
+//        if let password = KeychainManager.getPassword() {
+//            self.passField.text = password
+//            self.onLogin(sender: UIButton())
+//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

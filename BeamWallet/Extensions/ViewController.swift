@@ -22,14 +22,49 @@ import Foundation
 import UIKit
 
 extension UIViewController {
+    func presentDetail(_ viewControllerToPresent: UIViewController) {
+        let transition = CATransition()
+        transition.duration = 0.28
+        transition.type = CATransitionType.push
+        transition.subtype = CATransitionSubtype.fromRight
+        self.view.window!.layer.add(transition, forKey: kCATransition)
+        
+        present(viewControllerToPresent, animated: false)
+    }
+    
+    func dismissDetail() {
+        let transition = CATransition()
+        transition.duration = 0.28
+        transition.type = CATransitionType.push
+        transition.subtype = CATransitionSubtype.fromLeft
+        self.view.window!.layer.add(transition, forKey: kCATransition)
+        
+        dismiss(animated: false)
+    }
+}
+
+extension UIViewController {
     func pushViewController(vc:UIViewController) {
-        let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backItem        
+        navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 extension UIViewController {
+    
+    public func openUrl(url:URL) {
+        if Settings.sharedManager().isAllowOpenLink {
+            UIApplication.shared.open(url , options: [:], completionHandler: nil)
+        }
+        else{
+            self.confirmAlert(title: LocalizableStrings.external_link_title, message: LocalizableStrings.external_link_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.open, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
+                UIApplication.shared.open(url , options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
     func alert(title: String = "", message: String, handler: ((UIAlertAction) -> Void)? = nil) {
         if (self.presentedViewController as? UIAlertController) != nil {
             return

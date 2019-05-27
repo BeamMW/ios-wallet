@@ -17,9 +17,10 @@ def shared_pods
     pod 'Crashlytics'
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
-    pod 'Loaf'
     pod 'Firebase/Core'
     pod 'Firebase/Messaging'
+    pod 'SideMenuSwift'
+    pod 'LGSideMenuController'
 end
 
 def extension

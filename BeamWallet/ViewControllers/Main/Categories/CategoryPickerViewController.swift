@@ -21,15 +21,13 @@ import UIKit
 
 import UIKit
 
-class CategoryPickerViewController: BaseViewController {
+class CategoryPickerViewController: BaseTableViewController {
     
     public var completion : ((BMCategory?) -> Void)?
 
     private var categories:[BMCategory]!
     private var selectedCategory:BMCategory?
     private var currentCategory:BMCategory?
-
-    @IBOutlet private weak var tableView: UITableView!
 
     init(category:BMCategory?) {
         super.init(nibName: nil, bundle: nil)
@@ -42,20 +40,45 @@ class CategoryPickerViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Category"
+        if isNavigationGradient {
+            largeTitle = "Category".uppercased()
+            navigationItem.hidesBackButton = true
+        }
+        else{
+            title = "Category"
+            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+        }
         
         categories = (AppModel.sharedManager().categories as! [BMCategory])
         categories.insert(BMCategory.none(), at: 0)
         
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorStyle = .singleLine
         tableView.register(CategoryPickerCell.self)
         tableView.register(EmptyCell.self)
-        
-        addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if isNavigationGradient {
+            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+        }
+    }
     
     @objc private func onSave(sender:UIBarButtonItem) {
         self.completion?(selectedCategory)

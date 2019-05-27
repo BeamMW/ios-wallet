@@ -72,6 +72,8 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 
 +(AppModel*_Nonnull)sharedManager;
 
++(NSString*_Nonnull)chooseRandomNode;
+
 // delegates
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;
 -(void)removeDelegate:(id<WalletModelDelegate>_Nullable) delegate;
@@ -113,6 +115,7 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address;
 -(BOOL)isMyAddress:(NSString*_Nullable)address;
 -(void)clearAllAddresses;
+-(void)refreshAddresses;
 -(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount;
 
 // send

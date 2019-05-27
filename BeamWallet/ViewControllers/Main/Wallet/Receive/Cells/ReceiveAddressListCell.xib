@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="gZK-k0-ccp" customClass="ReceiveAddressListCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gZK-k0-ccp" id="1P1-rY-H61">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R2c-Wz-DIg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PZP-qM-XZh">
+                                <rect key="frame" x="15" y="10" width="51" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="250" id="6eh-Wf-nmw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bdi-bf-tkN">
+                                <rect key="frame" x="145" y="38" width="160" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0312312" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c0E-iu-Sck">
+                                <rect key="frame" x="15" y="38" width="100" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="dkK-YP-YzO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="c0E-iu-Sck" firstAttribute="leading" secondItem="R2c-Wz-DIg" secondAttribute="leading" constant="15" id="0D9-2A-Feq"/>
+                            <constraint firstItem="c0E-iu-Sck" firstAttribute="top" secondItem="PZP-qM-XZh" secondAttribute="bottom" constant="7" id="FCC-yY-yR2"/>
+                            <constraint firstItem="Bdi-bf-tkN" firstAttribute="leading" secondItem="c0E-iu-Sck" secondAttribute="trailing" constant="30" id="GWP-by-DuS"/>
+                            <constraint firstAttribute="bottom" secondItem="c0E-iu-Sck" secondAttribute="bottom" constant="10.5" id="GiS-H8-RMv"/>
+                            <constraint firstItem="Bdi-bf-tkN" firstAttribute="top" secondItem="R2c-Wz-DIg" secondAttribute="top" constant="38" id="Kh3-EW-hna"/>
+                            <constraint firstItem="PZP-qM-XZh" firstAttribute="top" secondItem="R2c-Wz-DIg" secondAttribute="top" constant="10" id="OCB-n9-a6c"/>
+                            <constraint firstAttribute="bottom" secondItem="Bdi-bf-tkN" secondAttribute="bottom" constant="10.5" id="WLq-6O-QuS"/>
+                            <constraint firstItem="PZP-qM-XZh" firstAttribute="leading" secondItem="R2c-Wz-DIg" secondAttribute="leading" constant="15" id="clx-Jr-IaW"/>
+                            <constraint firstAttribute="trailing" secondItem="Bdi-bf-tkN" secondAttribute="trailing" constant="15" id="o1M-6M-VGa"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="R2c-Wz-DIg" secondAttribute="trailing" id="Fje-fu-mUS"/>
+                    <constraint firstAttribute="bottom" secondItem="R2c-Wz-DIg" secondAttribute="bottom" id="GNJ-Uv-7DX"/>
+                    <constraint firstItem="R2c-Wz-DIg" firstAttribute="top" secondItem="1P1-rY-H61" secondAttribute="top" id="IUK-mQ-Fo4"/>
+                    <constraint firstItem="R2c-Wz-DIg" firstAttribute="leading" secondItem="1P1-rY-H61" secondAttribute="leading" id="pG0-4j-v9i"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="Ypn-16-zTM"/>
+            <connections>
+                <outlet property="categoryLabel" destination="Bdi-bf-tkN" id="FhM-fx-t81"/>
+                <outlet property="idLabel" destination="c0E-iu-Sck" id="n8a-hl-8Mi"/>
+                <outlet property="mainView" destination="R2c-Wz-DIg" id="6pJ-iA-yEw"/>
+                <outlet property="nameLabel" destination="PZP-qM-XZh" id="hL5-dA-QlF"/>
+            </connections>
+            <point key="canvasLocation" x="164" y="55"/>
+        </tableViewCell>
+    </objects>
+</document>

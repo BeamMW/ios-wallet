@@ -53,7 +53,7 @@ class CategoryDetailViewController: BaseViewController {
 
         AppModel.sharedManager().addDelegate(self)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         

@@ -20,7 +20,6 @@
 
 import UIKit
 import AVFoundation
-import Loaf
 
 protocol WalletQRCodeScannerViewControllerDelegate: AnyObject {
     func didScanQRCode(value:String, amount:String?)
@@ -36,7 +35,7 @@ class WalletQRCodeScannerViewController: BaseViewController {
     private var captureSession: AVCaptureSession!
     private var previewLayer: AVCaptureVideoPreviewLayer!
 
-    private var offset:CGFloat = 180
+    private var offset:CGFloat = 140
     private var scannedValue:String = ""
     public var isBotScanner = false
     
@@ -44,12 +43,6 @@ class WalletQRCodeScannerViewController: BaseViewController {
         super.viewDidLoad()
         
         title = isBotScanner ? LocalizableStrings.scan_tg_qr_code : LocalizableStrings.scan_qr_code
-        
-        if Device.screenType == .iPhones_6 || Device.screenType == .iPhones_5
-            || Device.screenType == .iPhones_Plus
-        {
-           offset = 140
-        }
         
         scannerView.frame = CGRect(x: 0, y: offset, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-offset)
     }
@@ -141,8 +134,9 @@ extension WalletQRCodeScannerViewController : AVCaptureMetadataOutputObjectsDele
     }
     
     private func showError() {
-        let loaf = Loaf(LocalizableStrings.error_scan_qr_code, state: .custom(.init(backgroundColor: UIColor.black.withAlphaComponent(0.8), icon: nil)), sender: self)
-        loaf.show(Loaf.Duration.average) { (_ ) in
+        BMToast.show(text: LocalizableStrings.error_scan_qr_code)
+      
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.scannedValue = ""
         }
     }

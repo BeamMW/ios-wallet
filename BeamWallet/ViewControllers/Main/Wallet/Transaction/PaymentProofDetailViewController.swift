@@ -76,7 +76,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
         if let transactionDetail = transaction?.details() {
             UIPasteboard.general.string = transactionDetail
             
-            ShowCopiedProgressHUD()
+            ShowCopied()
         }
     }
     
@@ -84,7 +84,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
         if let code = paymentProof?.code {
             UIPasteboard.general.string = code
             
-            ShowCopiedProgressHUD()
+            ShowCopied()
         }
     }
     
@@ -289,7 +289,7 @@ extension PaymentProofDetailViewController : GeneralInfoCellDelegate {
         {
             if details[path.section][path.row].text == LocalizableStrings.kernel_id, let transaction = self.transaction {
                 let kernelId = transaction.kernelId!
-                let link = Settings.sharedManager().explorerAddress + "block?kernel_id=" + kernelId
+                let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {
                     openUrl(url: url)
                 }

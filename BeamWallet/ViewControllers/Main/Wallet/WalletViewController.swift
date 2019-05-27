@@ -35,18 +35,14 @@ class WalletViewController: BaseTableViewController {
         tableView.dataSource = self
         
         tableView.register([WalletStatusCell.self, WalletAvailableCell.self, WalletProgressCell.self, WalletTransactionCell.self, EmptyCell.self])
-        
         tableView.tableHeaderView = BMNetworkStatusView()
-
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        
+        AppModel.sharedManager().isLoggedin = true
+        AppModel.sharedManager().addDelegate(self)
         
         AppStoreReviewManager.incrementAppOpenedCount()
 
-        AppModel.sharedManager().walletAddresses = AppModel.sharedManager().getWalletAddresses()
-        
-        AppModel.sharedManager().addDelegate(self)
-        AppModel.sharedManager().isLoggedin = true
-        
         NotificationManager.sharedManager.subscribeToTopics(addresses: AppModel.sharedManager().walletAddresses as? [BMAddress])
         
         Settings.sharedManager().addDelegate(self)
@@ -68,6 +64,12 @@ class WalletViewController: BaseTableViewController {
         else{
             NotificationManager.sharedManager.displayConfirmAlert()
         }
+        
+        if ShortcutManager.canHandle() {
+            _ = ShortcutManager.handleShortcutItem()
+        }
+        
+        onAddMenuIcon()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -335,34 +337,9 @@ extension WalletViewController : WalletModelDelegate {
 
 extension WalletViewController : WalletStatusCellDelegate {
    
-    func onClickReceived() {
-        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
-            if let result = address {
-                DispatchQueue.main.async {
-                    NotificationManager.sharedManager.subscribeToTopic(topic: result.walletId)
-
-//                    let vc = WalletReceiveViewController(address: result)
-//                    vc.hidesBottomBarWhenPushed = true
-//                    self.pushViewController(vc: vc)
-                    
-                    let n = BMGradientNavigationController(rootViewController: ReceiveDetailViewController(address: result))
-                    n.modalTransitionStyle = .crossDissolve
-                    n.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                    n.navigationBar.shadowImage = UIImage()
-                    n.navigationBar.isTranslucent = true
-                    n.navigationBar.backgroundColor = .clear
-                    n.navigationBar.tintColor = UIColor.white
-                    self.present(n, animated: true) {
-
-                    }
-                }
-            }
-            else if let reason = error?.localizedDescription {
-                DispatchQueue.main.async {
-                    self.alert(message: reason)
-                }
-            }
-        }
+    func onClickReceived() {        
+        let n = BMGradientNavigationController(rootViewController: ReceiveListViewController())
+        presentDetail(n)
     }
     
     func onClickSend() {

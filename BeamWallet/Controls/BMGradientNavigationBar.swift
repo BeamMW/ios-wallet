@@ -37,6 +37,8 @@ class BMGradientNavigationBar: UINavigationBar {
         if #available(iOS 11, *) {
             translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        layoutSubviews()
     }
     
     required init?(coder aDecoder: NSCoder) {

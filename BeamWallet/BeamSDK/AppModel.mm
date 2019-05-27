@@ -20,7 +20,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "Reachability.h"
-
 #import "AppModel.h"
 #import "MnemonicModel.h"
 #import "WalletModel.h"
@@ -36,6 +35,7 @@
 #include "wallet/wallet_network.h"
 #include "wallet/wallet_model_async.h"
 #include "wallet/wallet_client.h"
+#include "wallet/default_peers.h"
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
@@ -105,8 +105,21 @@ static NSString *categoriesKey = @"categoriesKey";
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self cancelForgotPassword];
-
+    [self loadRules];
+    
     return self;
+}
+
+-(void)loadRules{
+    Rules::get().UpdateChecksum();
+    LOG_INFO() << "Rules signature";
+}
+
++(NSString*_Nonnull)chooseRandomNode {
+    auto peers = getDefaultPeers();
+    srand(0);
+    auto node =  peers[rand() % peers.size()].c_str();
+    return [NSString stringWithUTF8String:node];
 }
 
 #pragma mark - Inetrnet
@@ -220,8 +233,6 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(BOOL)openWallet:(NSString*)pass {
-    Rules::get().UpdateChecksum();
-    
     if (walletReactor == nil) {
         walletReactor = Reactor::create();
     }
@@ -242,8 +253,6 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(BOOL)canOpenWallet:(NSString*)pass {
-    Rules::get().UpdateChecksum();
-    
     if (walletReactor == nil) {
         walletReactor = Reactor::create();
     }
@@ -284,9 +293,7 @@ static NSString *categoriesKey = @"categoriesKey";
     if (self.isInternetAvailable == NO) {
         return NO;
     }
-        
-    Rules::get().UpdateChecksum();
-
+    
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
 
     //already created. restore wallet?
@@ -371,7 +378,6 @@ static NSString *categoriesKey = @"categoriesKey";
 
 -(void)start {
     if (isStarted == NO && walletDb != nil) {
-        Rules::get().UpdateChecksum();
         
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
@@ -521,6 +527,7 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(void)didBecomeActiveNotification{
+
     if ([Settings sharedManager].target == Testnet)
     {
         [internetReachableFoo stopNotifier];
@@ -532,6 +539,13 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 #pragma mark - Addresses
+
+-(void)refreshAddresses{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.walletAddresses = [self getWalletAddresses];
+    });
+  //  wallet->getAsync()->getAddresses(true);
+}
 
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address {
     if (address!=nil) {
@@ -675,7 +689,6 @@ static NSString *categoriesKey = @"categoriesKey";
     if (walletID.FromHex(address.string))
     {
         wallet->getAsync()->deleteAddress(walletID);
-       // walletDb->deleteAddress(walletID);
     }
 }
 
@@ -691,12 +704,17 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {
+    if (self.walletAddresses.count != 0)
+    {
+        return self.walletAddresses;
+    }
+    
     std::vector<WalletAddress> addrs = walletDb->getAddresses(true);
-
+    
     NSMutableArray *addresses = [[NSMutableArray alloc] init];
     
     for (const auto& walletAddr : addrs)
-    {        
+    {
         BMAddress *address = [[BMAddress alloc] init];
         address.duration = walletAddr.m_duration;
         address.ownerId = walletAddr.m_OwnID;

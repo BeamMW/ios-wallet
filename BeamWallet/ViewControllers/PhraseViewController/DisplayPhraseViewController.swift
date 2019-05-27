@@ -96,7 +96,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
         
         UIPasteboard.general.string = copyPhrase
         
-        ShowCopiedProgressHUD()
+        ShowCopied()
     }
     
     @IBAction func onNext(sender :UIButton) {

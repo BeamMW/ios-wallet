@@ -94,5 +94,42 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save your QR Code</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Send</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Send</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icSend3D</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Receive</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Receive</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icReceive3D</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Scan</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Scan QR code</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icScanQr3D</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Buy</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Where to buy Beam</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icBeam3d</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -42,14 +42,7 @@ public class LockScreen {
             let diff = currentTime - inactiveDate
             if Int32(diff) >= Settings.sharedManager().lockScreenSeconds {
                 if let topVc = UIApplication.getTopMostViewController() {
-                    let vc = UINavigationController(rootViewController: UnlockPasswordViewController(event: .unlock))
-                    vc.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                    vc.navigationBar.shadowImage = UIImage()
-                    vc.navigationBar.isTranslucent = true
-                    vc.navigationBar.backgroundColor = .clear
-                    vc.navigationBar.tintColor = UIColor.white
-                    vc.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-                    
+                    let vc = BaseNavigationController.navigationController(rootViewController: UnlockPasswordViewController(event: .unlock))
                     topVc.present(vc, animated: false, completion: nil)
                 }
             }

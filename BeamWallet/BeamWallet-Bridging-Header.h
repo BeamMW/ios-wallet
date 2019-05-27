@@ -5,4 +5,6 @@
 #import "AppModel.h"
 #import "MnemonicModel.h"
 #import <SVProgressHUD/SVProgressHUD.h>
+#import <LGSideMenuController/LGSideMenuController.h>
+#import <LGSideMenuController/UIViewController+LGSideMenuController.h>
 

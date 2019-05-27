@@ -24,11 +24,10 @@ class CategoryEditViewController: BaseViewController {
 
     public var completion : ((BMCategory?) -> Void)?
 
-    @IBOutlet private weak var nameField: UITextField!
-    @IBOutlet private weak var nameView: UIView!
+    @IBOutlet private var nameField: UITextField!
+    @IBOutlet private var nameView: UIView!
     
-    @IBOutlet private weak var colorsView: BMCategoryColorsView!
-    @IBOutlet private var colorsWidth: NSLayoutConstraint!
+    @IBOutlet private var colorsView: BMCategoryColorsView!
 
     private var category:BMCategory!
     private let colors = [UIColor.init(hexString: "#ff746b"), UIColor.init(hexString: "#ffba55"),
@@ -64,19 +63,46 @@ class CategoryEditViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
 
-        title = category.id == 0 ? "New category" : "Edit Category"
+        if self.navigationController is BMGradientNavigationController {
+            largeTitle = category.id == 0 ? "New category".uppercased() : "Edit Category".uppercased()
+
+            navigationItem.hidesBackButton = true
+        }
+        else{
+            title = category.id == 0 ? "New category" : "Edit Category"
+
+            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+        }
         
-        nameField.text = category.name
-
-        addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
-
+        nameView = UIView(frame: CGRect(x: 0, y: (isNavigationGradient ? 200 : 20), width: UIScreen.main.bounds.size.width, height: 49))
         nameView.backgroundColor = UIColor.main.marineTwo
-        nameField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        view.addSubview(nameView)
         
+        nameField = UITextField(frame: CGRect(x: 15, y: 0, width: UIScreen.main.bounds.size.width-30, height: 49))
+        nameField.placeholder = "Category name"
+        nameField.placeHolderColor = UIColor.main.steelGrey
+        nameField.textColor = UIColor.white
+        nameField.font = RegularFont(size: 16)
+        nameField.delegate = self
+        nameField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        nameField.backgroundColor = UIColor.clear
+        nameField.text = category.name
+        nameView.addSubview(nameField)
+        
+        colorsView = BMCategoryColorsView()
         colorsView.colors = colors
         colorsView.selectedColor = UIColor.init(hexString: category.color)
         colorsView.delegate = self
-        colorsWidth.constant = colorsView.colorsWidht()
+        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: nameView.frame.origin.y + nameView.frame.size.height + 20, width: colorsView.colorsWidht(), height: 51)
+        view.addSubview(colorsView)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if isNavigationGradient {
+            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+        }
     }
     
     private func canSave(name:String, color:String) -> Bool {

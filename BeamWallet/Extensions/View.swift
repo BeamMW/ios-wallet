@@ -21,11 +21,51 @@ import Foundation
 import UIKit
 
 extension UIView {
+    func popIn(){
+        self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        UIView.animateKeyframes(withDuration: 0.2, delay: 0.0, options: UIView.KeyframeAnimationOptions.calculationModeDiscrete, animations: {
+            self.transform = .identity
+        }, completion: nil)
+    }
+    
+    func popOut(done: @escaping (() -> Void)){
+       // self.transform = .identity
+        UIView.animateKeyframes(withDuration: 0.2, delay: 0.0, options: UIView.KeyframeAnimationOptions.calculationModeDiscrete, animations: {
+           // self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+            self.alpha = 0
+        }, completion:{(_ finish : Bool) in
+            done()}
+        )
+    }
+}
+
+extension UIView {
+    func snapshot() -> UIImage? { 
+        UIGraphicsBeginImageContextWithOptions(bounds.size, true, UIScreen.main.scale)
+        
+        if let context = UIGraphicsGetCurrentContext() {
+            self.layer.render(in: context)
+            
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return image
+        }
+
+        return nil
+    }
+}
+
+extension UIView {
     func loadNib() -> UIView {
         let bundle = Bundle(for: type(of: self))
         let nibName = type(of: self).description().components(separatedBy: ".").last!
         let nib = UINib(nibName: nibName, bundle: bundle)
         return nib.instantiate(withOwner: self, options: nil).first as! UIView
+    }
+    
+    class func fromNib<T: UIView>() -> T {
+        return Bundle.main.loadNibNamed(String(describing: T.self), owner: nil, options: nil)?.first as! T
     }
 }
 

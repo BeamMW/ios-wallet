@@ -73,7 +73,7 @@ extension UILabel {
             if newValue > 0 {
                 if let titleString = self.text, titleString.isEmpty == false {
                     let attributedString = NSMutableAttributedString(string: titleString)
-                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(newValue), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
                     
                     self.attributedText = attributedString
                 }
@@ -96,9 +96,9 @@ extension UILabel {
                 if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
                     newFontSize = newFontSize + 1.0
                 }
-                else if Device.screenType == .iPhones_5{
-                    newFontSize = newFontSize - 1.5
-                }
+//                else if Device.screenType == .iPhones_5{
+//                    newFontSize = newFontSize - 1.5
+//                }
                 
                 let oldFontName = font.fontName
                 self.font = UIFont(name: oldFontName, size: newFontSize)

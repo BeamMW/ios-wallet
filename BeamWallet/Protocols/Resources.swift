@@ -88,4 +88,29 @@ func RateLogo() -> UIImage? {
     return UIImage(named: "rateLogo")
 }
 
+func IconNextLightBlue() -> UIImage? {
+    return UIImage(named: "iconNextLightBlue")
+}
+
+func IconBuyLogo() -> UIImage? {
+    return UIImage(named: "iconBuyLogo")
+}
+
+func IconExternalLinkGray() -> UIImage? {
+    return UIImage(named: "iconExternalLinkGray")
+}
+
+func MenuSelectedBackground() -> UIImage? {
+    return UIImage(named: "MenuSelectedBackground")
+}
+
+func IconLogout() -> UIImage? {
+    return UIImage(named: "iconLogout")
+}
+
+func IconLeftMenu() -> UIImage? {
+    return UIImage(named: "iconLeftMenu")
+}
+
+
 

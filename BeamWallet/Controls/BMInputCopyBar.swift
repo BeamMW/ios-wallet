@@ -43,7 +43,7 @@ class BMInputCopyBar: UIView {
         let label = UIButton(frame: CGRect(x: 50, y: 5, width: frame.size.width-100, height: 34))
         label.layer.cornerRadius = 6
         label.backgroundColor = UIColor.lightGray
-        label.titleLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 14)
+        label.titleLabel?.font = RegularFont(size: 14)
         label.setTitleColor(UIColor.black, for: .normal)
         label.setTitleColor(UIColor.gray, for: .highlighted)
         label.setTitle(copy, for: .normal)
@@ -53,7 +53,7 @@ class BMInputCopyBar: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     @objc private func onCopy(sender:UIButton) {
