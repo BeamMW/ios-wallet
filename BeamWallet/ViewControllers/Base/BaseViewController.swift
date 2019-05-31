@@ -1,8 +1,7 @@
 //
-//  BaseViewController.swift
-//  BeamWallet
+// BaseViewController.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +22,6 @@ import MessageUI
 
 class BaseViewController: UIViewController {
 
-    private  let leftTag = 9821
-    private  let rightTag = 9822
-
     public var largeTitle:String?
 
     public var minimumVelocityToHide = 1500 as CGFloat
@@ -40,34 +36,77 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.main.marine
-        
-        if self.navigationController?.viewControllers.count == 1 && AppModel.sharedManager().isLoggedin {
-           
-            if !isNavigationGradient {
-                onAddMenuIcon()
-            }
-        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if let navigation = self.navigationController as? BMGradientNavigationController {
-            navigation.title = self.largeTitle
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if let rightButton = self.navigationController?.view.viewWithTag(rightTag)
-        {
-            rightButton.removeFromSuperview()
-        }
-    }
     
     @objc private func onLeftMenu() {
         sideMenuController?.toggleLeftViewAnimated()
+    }
+    
+    public func setGradientTopBar(image:UIImage?) {
+        self.navigationController?.isNavigationBarHidden = true
+        
+        let colors = [UIColor.main.brightSkyBlue, UIColor.main.marine.withAlphaComponent(0.1)]
+
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.colors = colors.map { $0.cgColor }
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: 180)
+        
+        let backgroundImage = UIImageView()
+       // backgroundImage.image = image
+            backgroundImage.clipsToBounds = true
+        backgroundImage.contentMode = .scaleToFill
+        backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: 180)
+        backgroundImage.layer.addSublayer(gradient)
+      //  self.view.insertSubview(backgroundImage, at: 0)
+        self.view.addSubview(backgroundImage)
+        
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: 15, y: 60, width: 40, height: 40)
+        button.contentHorizontalAlignment = .left
+        button.tintColor = UIColor.white
+        button.setImage(IconBack(), for: .normal)
+        button.addTarget(self, action: #selector(onLeftBackButton), for: .touchUpInside)
+        self.view.addSubview(button)
+        
+        let statusView = BMNetworkStatusView()
+        statusView.y = 110
+        statusView.x = 0
+        self.view.addSubview(statusView)
+    }
+    
+    var attributedTitle: String? {
+        willSet {
+            if let titleString = newValue {
+                let attributedString = NSMutableAttributedString(string: titleString)
+                attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                
+                let w = UIScreen.main.bounds.size.width
+                
+                let titleLabel = UILabel()
+                titleLabel.frame = CGRect(x: 0, y: 55, width: 0, height: 50)
+                titleLabel.font = ProMediumFont(size: 20)
+                titleLabel.numberOfLines = 1
+                titleLabel.attributedText = attributedString
+                titleLabel.textColor = UIColor.white
+                titleLabel.textAlignment = .center
+                titleLabel.sizeToFit()
+                
+                if titleLabel.frame.size.width > (UIScreen.main.bounds.size.width - 100)
+                {
+                    let labelMaxW = (UIScreen.main.bounds.size.width - 100)
+                    titleLabel.frame = CGRect(x: (w - labelMaxW)/2, y: 55, width: labelMaxW, height: 50)
+                }
+                else{
+                    titleLabel.frame = CGRect(x: (w - titleLabel.frame.size.width)/2, y: 55, width: titleLabel.frame.size.width, height: 50)
+                }
+                
+                titleLabel.adjustsFontSizeToFitWidth = true
+                titleLabel.minimumScaleFactor = 0.7
+                
+                view.addSubview(titleLabel)
+            }
+        }
     }
     
 //MARK: - Navigation Buttons
@@ -77,25 +116,7 @@ class BaseViewController: UIViewController {
     }
     
     @objc private func onLeftBackButton() {
-        if self.navigationController?.viewControllers.count == 1 {
-            dismissDetail()
-        }
-        else{
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
-    
-    public func addLeftButton(image:UIImage?) {
-        if self.navigationController?.view.viewWithTag(leftTag) == nil {
-            let button = UIButton(type: .system)
-            button.tag = leftTag
-            button.frame = CGRect(x: 15, y: 60, width: 40, height: 40)
-            button.contentHorizontalAlignment = .left
-            button.tintColor = UIColor.white
-            button.setImage(image, for: .normal)
-            button.addTarget(self, action: #selector(onLeftBackButton), for: .touchUpInside)
-            self.navigationController?.view.addSubview(button)
-        }
+        self.navigationController?.popViewController(animated: true)
     }
     
     public func addRightButton(image:UIImage?, target:Any?, selector:Selector) {
@@ -119,41 +140,13 @@ class BaseViewController: UIViewController {
     }
     
     public func addRightButton(title:String, targer:Any?, selector:Selector?, enabled:Bool) {
-        if isNavigationGradient {
-            
-            if let rightButton = self.navigationController?.view.viewWithTag(rightTag)
-            {
-                rightButton.removeFromSuperview()
-            }
-            
-            let button = UIButton(type: .system)
-            button.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: 60, width: 40, height: 40)
-            button.contentHorizontalAlignment = .right
-            button.tag = rightTag
-            button.tintColor = UIColor.white
-            button.isEnabled = enabled
-            button.setTitle(title, for: .normal)
-            button.addTarget(targer, action: selector!, for: .touchUpInside)
-            button.titleLabel?.font = RegularFont(size: 16)
-            self.navigationController?.view.addSubview(button)
-        }
-        else{
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: targer, action: selector)
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-            navigationItem.rightBarButtonItem?.isEnabled = enabled
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: targer, action: selector)
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
+        navigationItem.rightBarButtonItem?.isEnabled = enabled
     }
     
     public func enableRightButton(enabled:Bool) {
-        if isNavigationGradient {
-            if let rightButton = self.navigationController?.view.viewWithTag(rightTag) as? UIButton
-            {
-                rightButton.isEnabled = enabled
-            }
-        }
-        else{
-            navigationItem.rightBarButtonItem?.isEnabled = enabled
-        }
+        navigationItem.rightBarButtonItem?.isEnabled = enabled
     }
     
 

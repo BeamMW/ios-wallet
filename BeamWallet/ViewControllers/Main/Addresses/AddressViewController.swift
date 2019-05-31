@@ -112,9 +112,11 @@ class AddressViewController: BaseTableViewController {
                         self.showDeleteAddressAndTransactions()
                     }
                     else{
-                        AppModel.sharedManager().deleteAddress(self.address.walletId)
+                        AppModel.sharedManager().prepareDelete(self.address, removeTransactions: false)
                         
-                        NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                      //  AppModel.sharedManager().deleteAddress(self.address.walletId)
+                        
+                     //   NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
                         
                         self.navigationController?.popViewController(animated: true)
                     }
@@ -135,22 +137,26 @@ class AddressViewController: BaseTableViewController {
             if let item = selectedItem {
                 switch (item.action) {
                 case .delete_address:
-                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                    AppModel.sharedManager().prepareDelete(self.address, removeTransactions: false)
+
+                  //  AppModel.sharedManager().deleteAddress(self.address.walletId)
                     
-                    NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                 //   NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
                     
                     self.navigationController?.popViewController(animated: true)
                 case .delete_address_transactions :
                     AppModel.sharedManager().removeDelegate(self)
                     
-                    for tr in self.transactions {
-                        AppModel.sharedManager().deleteTransaction(tr)
-                    }
+                  //  for tr in self.transactions {
+                    //    AppModel.sharedManager().deleteTransaction(tr)
+                  //  }
                     
-                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                  //  AppModel.sharedManager().deleteAddress(self.address.walletId)
                     
-                    NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
+                 //   NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
                     
+                    AppModel.sharedManager().prepareDelete(self.address, removeTransactions: true)
+
                     self.navigationController?.popViewController(animated: true)
                 default:
                     return
@@ -167,6 +173,14 @@ class AddressViewController: BaseTableViewController {
 }
 
 extension AddressViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 1 && transactions.count > 0 {
+            return true
+        }
+        
+        return false
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
@@ -188,6 +202,65 @@ extension AddressViewController : UITableViewDelegate {
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let transaction = transactions[indexPath.row]
+        
+        let cancel = UITableViewRowAction(style: .normal, title: LocalizableStrings.cancel) { action, index in
+            
+            self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
+                
+            }, confirmHandler: { (_) in
+                transaction.status = LocalizableStrings.cancelled
+                
+                self.tableView.performUpdate({
+                    self.tableView.reloadRows(at: [indexPath], with: .fade)
+                }, completion: {
+                    AppModel.sharedManager().cancelTransaction(transaction)
+                })
+            })
+        }
+        cancel.backgroundColor = UIColor.main.steel
+        
+        let rep = UITableViewRowAction(style: .normal, title: LocalizableStrings.rep) { action, index in
+            let vc = WalletSendViewController()
+            vc.transaction = transaction
+            self.pushViewController(vc: vc)
+        }
+        rep.backgroundColor = UIColor.main.brightBlue
+        
+        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
+            
+            self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
+                
+            }, confirmHandler: { (_ ) in
+                self.transactions.remove(at: indexPath.row)
+                self.tableView.performUpdate({
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: {
+                    AppModel.sharedManager().deleteTransaction(transaction)
+                })
+            })
+        }
+        delete.backgroundColor = UIColor.main.orangeRed
+        
+        var actions = [UITableViewRowAction]()
+        
+        if transaction.canCancel {
+            actions.append(cancel)
+        }
+        
+        if !transaction.isIncome {
+            actions.append(rep)
+        }
+        
+        if transaction.canDelete {
+            actions.append(delete)
+        }
+        
+        return actions.reversed()
     }
 }
 
@@ -226,11 +299,13 @@ extension AddressViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            return BMTableHeaderTitleView(title: LocalizableStrings.empty_transactions_list, bold: true)
+            return BMTableHeaderTitleView(title: LocalizableStrings.transactions, bold: true)
         }
         
         return nil
     }
+    
+    
 }
 
 extension AddressViewController : WalletModelDelegate {

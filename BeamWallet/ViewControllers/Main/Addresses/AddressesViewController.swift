@@ -1,6 +1,6 @@
 //
-//  AddressesViewController.swift
-//  BeamWallet
+// AddressesViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -19,7 +19,7 @@
 
 import UIKit
 
-class AddressesViewController: BaseViewController {
+class AddressesViewController: BaseTableViewController {
     enum AddressesSelectedState: Int {
         case active = 0
         case expired = 1
@@ -29,15 +29,18 @@ class AddressesViewController: BaseViewController {
     private var selectedState: AddressesSelectedState = .active
     private var addresses = [BMAddress]()
     private var contacts = [BMContact]()
-
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private var headerView: UIView!
+    private var headerView: AddressesSegmentView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = LocalizableStrings.addresses
 
+        headerView = UIView.fromNib()
+        headerView.delegate = self
+        
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.register(AddressCell.self)
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
@@ -50,6 +53,8 @@ class AddressesViewController: BaseViewController {
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: view)
         }
+        
+        onAddMenuIcon()
     }
         
     @objc private func didBecomeActive() {
@@ -78,25 +83,64 @@ class AddressesViewController: BaseViewController {
         }
     }
     
-    //MARK: -IBActions
-    
-    @IBAction func onStatus(sender : UISegmentedControl) {
-        selectedState = AddressesViewController.AddressesSelectedState(rawValue: sender.selectedSegmentIndex) ?? .active
+    private func showDeleteAddressAndTransactions(indexPath:IndexPath) {
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_transaction, icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_only, icon: nil, action:.delete_address)]
         
-        filterAddresses()
+        var address:BMAddress!
         
-        UIView.performWithoutAnimation {
-            self.tableView.reloadData()
-            self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        if selectedState == .contacts {
+            address = contacts[indexPath.row].address
+        }
+        else{
+            address = addresses[indexPath.row]
+        }
+
+        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.action) {
+                case .delete_address:
+                    if self.selectedState == .contacts {
+                        self.contacts.remove(at: indexPath.row)
+                    }
+                    else{
+                        self.addresses.remove(at: indexPath.row)
+                    }
+                    self.tableView.performUpdate({
+                        self.tableView.deleteRows(at: [indexPath], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
+                    })
+                case .delete_address_transactions :
+                    if self.selectedState == .contacts {
+                        self.contacts.remove(at: indexPath.row)
+                    }
+                    else{
+                        self.addresses.remove(at: indexPath.row)
+                    }
+                    self.tableView.performUpdate({
+                        self.tableView.deleteRows(at: [indexPath], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDelete(address, removeTransactions: true)
+                    })
+                default:
+                    return
+                }
+            }
+        }) {
+            
         }
     }
 }
 
 extension AddressesViewController : UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true;
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return 95
+            return AddressesSegmentView.height
         }
         
         return 0
@@ -114,6 +158,52 @@ extension AddressesViewController : UITableViewDelegate {
         let vc = AddressViewController(address: address, isContact:(selectedState == .contacts))
         vc.hidesBottomBarWhenPushed = true
         pushViewController(vc: vc)
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        var address:BMAddress!
+        
+        if selectedState == .contacts {
+            address = contacts[indexPath.row].address
+        }
+        else{
+            address = addresses[indexPath.row]
+        }
+        
+        let edit = UITableViewRowAction(style: .normal, title: LocalizableStrings.edit) { action, index in
+            let vc = EditAddressViewController(address: address)
+            self.pushViewController(vc: vc)
+        }
+        edit.backgroundColor = UIColor.main.steel
+        
+        
+        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
+            
+            let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
+            
+            if transactions.count > 0  {
+                self.showDeleteAddressAndTransactions(indexPath: indexPath)
+            }
+            else{
+                if self.selectedState == .contacts {
+                    self.contacts.remove(at: indexPath.row)
+                }
+                else{
+                    self.addresses.remove(at: indexPath.row)
+                }
+                self.tableView.performUpdate({
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: {
+                    AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
+                })
+            }
+            
+        }
+        delete.backgroundColor = UIColor.main.orangeRed
+        
+        return (selectedState == .contacts) ? [delete] : [delete,edit]
+
     }
 }
 
@@ -142,6 +232,7 @@ extension AddressesViewController : UITableViewDataSource {
         
         return nil
     }
+    
 }
 
 extension AddressesViewController : WalletModelDelegate {
@@ -196,5 +287,18 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
         navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
 
         show(viewControllerToCommit, sender: self)
+    }
+}
+
+extension AddressesViewController : AddressesSegmentViewDelegate {
+    func onFilterClicked(index: Int) {
+        selectedState = AddressesViewController.AddressesSelectedState(rawValue: index) ?? .active
+        
+        filterAddresses()
+        
+        UIView.performWithoutAnimation {
+            self.tableView.reloadData()
+            self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        }
     }
 }

@@ -166,6 +166,9 @@ class SettingsViewModel : NSObject {
         var info = [SettingsItem]()
         info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1))
         info.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6))
+
+        var owner = [SettingsItem]()
+        owner.append(SettingsItem(title: "Show owner key", detail: nil, isSwitch: nil, id: 12))
         
         var categories = [SettingsItem]()
 
@@ -187,18 +190,20 @@ class SettingsViewModel : NSObject {
         items.append(node)
         items.append(security)
         items.append(info)
-        
+        items.append(owner)
+
         items.append(categories)
 
-        
         if AppModel.sharedManager().categories.count > 0 {
             var categories = [SettingsItem]()
             categories.append(SettingsItem(title: "Create new category", detail: nil, isSwitch: nil, id: 10))
             items.append(categories)
         }
         
-        items.append(report)
+        //
+ 
         
+        items.append(report)
         items.append(rate)
 
         if !NotificationManager.disableApns {

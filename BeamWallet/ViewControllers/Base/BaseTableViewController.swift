@@ -34,7 +34,7 @@ class BaseTableViewController: BaseViewController {
         tableView = UITableView(frame: self.view.bounds, style: tableStyle)
         tableView.backgroundColor = UIColor.main.marine
         tableView.separatorStyle = .none
-        
+    
         self.view.addSubview(tableView)
     }
     
@@ -44,15 +44,16 @@ class BaseTableViewController: BaseViewController {
         if let navigationBar = self.navigationController?.navigationBar as? BMGradientNavigationBar, let navigation = self.navigationController as? BMGradientNavigationController {
             
             navigationBar.offset = offset
-            navigation.offset = offset            
+            navigation.offset = offset < minOffset ? minOffset : offset
         }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if self.navigationController is BMGradientNavigationController {
-            tableView.frame = CGRect(x: 0, y: BMGradientNavigationBar.height - 10 - offset, width: self.view.bounds.width, height: self.view.bounds.height - BMGradientNavigationBar.height + 10 + offset)
+        if isNavigationGradient {
+            let offset:CGFloat = tableView.style == .grouped ? 70 : 50
+            tableView.frame = CGRect(x: 0, y: BMGradientNavigationBar.height - offset, width: self.view.bounds.width, height: self.view.bounds.size.height - (BMGradientNavigationBar.height - offset))
         }
         else{
             tableView.frame = self.view.bounds
@@ -65,61 +66,57 @@ class BaseTableViewController: BaseViewController {
     }
     
     private func layoutWithOffset(animated:Bool) {
+        print(offset)
+        
         if let navigationBar = self.navigationController?.navigationBar as? BMGradientNavigationBar, let navigation = self.navigationController as? BMGradientNavigationController {
 
-            UIView.animate(withDuration: animated ? 0.3 : 0) {
-                
-                navigationBar.offset = self.offset
-                navigation.offset = self.offset
-                
-                if  self.scrollAvailable() {
-                    self.tableView.frame = CGRect(x: 0, y: BMGradientNavigationBar.height - 10 - self.offset, width: self.view.bounds.width, height: self.view.bounds.height - BMGradientNavigationBar.height + 10 + self.offset)
+            if animated {
+                UIView.animate(withDuration: 0.3) {
                     
-                    if animated {
-                        self.tableView.setContentOffset(CGPoint(x: 0, y: self.offset), animated: false)
+                    navigationBar.offset = self.offset
+                    navigation.offset = self.offset < self.minOffset ? self.minOffset : self.offset
+                    
+                    if  self.scrollAvailable() {
+                        self.tableView.setContentOffset(CGPoint(x: 0, y: self.offset - 88), animated: false)
                     }
                 }
+            }
+            else{
+                navigationBar.offset = self.offset
+                navigation.offset = self.offset < self.minOffset ? self.minOffset : self.offset
             }
         }
     }
     
     public func didEndScroll(scrollView:UIScrollView) {
-        if let _ = self.navigationController?.navigationBar as? BMGradientNavigationBar, let _ = self.navigationController as? BMGradientNavigationController {
+        if isNavigationGradient {
 
-            if  self.scrollAvailable() {
-                if offset > minOffset {
-                    let progress = (offset/maxOffset)
-                    if progress > 0.1 && progress < 1 {
-                        offset = maxOffset
-                        
-                        layoutWithOffset(animated: true)
-                    }
-                    else if progress <= 0.1 {
-                        offset = minOffset
-                        
-                        layoutWithOffset(animated: true)
-                    }
+            if offset > minOffset && self.scrollAvailable() {
+                let progress = (offset/maxOffset)
+                if progress > 0.1 && progress < 1 {
+                    offset = maxOffset
+                    
+                    layoutWithOffset(animated: true)
                 }
-            }   
+                else if progress <= 0.1 {
+                    offset = minOffset
+                    
+                    layoutWithOffset(animated: true)
+                }
+            }
         }
     }
     
     public func didScroll(scrollView:UIScrollView) {
-        if let _ = self.navigationController?.navigationBar as? BMGradientNavigationBar, let _ = self.navigationController as? BMGradientNavigationController {
+        if isNavigationGradient {
             
-            offset = scrollView.contentOffset.y
-            print(offset)
+            offset = scrollView.contentOffset.y + 88
             
-            if offset < minOffset {
-                offset = minOffset
-            }
-            else if offset > maxOffset {
+            if offset > maxOffset {
                 offset = maxOffset
             }
             
-           // if offset <= maxOffset {
-                layoutWithOffset(animated: false)
-          //  }
+            layoutWithOffset(animated: false)
         }
     }
 }

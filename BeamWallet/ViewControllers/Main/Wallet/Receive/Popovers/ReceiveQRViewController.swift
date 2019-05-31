@@ -116,6 +116,9 @@ class ReceiveQRViewController: BaseViewController {
             vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
                 if completed {
                     self.dismiss(animated: true, completion: {
+                        if activityType == UIActivity.ActivityType.copyToPasteboard {
+                            ShowCopied()
+                        }
                         self.delegate?.onCopyDone()
                     })
                 }

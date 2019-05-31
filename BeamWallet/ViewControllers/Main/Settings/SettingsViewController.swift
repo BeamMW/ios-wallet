@@ -42,6 +42,8 @@ class SettingsViewController: BaseViewController {
         talbeView.register(SettingsCell.self)
         talbeView.tableHeaderView = BMNetworkStatusView()
         talbeView.tableFooterView = versionView
+        
+        onAddMenuIcon()
     }
 }
 
@@ -57,10 +59,10 @@ extension SettingsViewController : UITableViewDelegate {
         if section == 0 {
             return BMTableHeaderTitleView.height
         }
-        else if section == 3 {
+        else if section == 4 {
             return BMTableHeaderTitleView.height
         }
-        else if section == 4 && AppModel.sharedManager().categories.count > 0 {
+        else if section == 5 && AppModel.sharedManager().categories.count > 0 {
             return 10
         }
         
@@ -102,6 +104,10 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.onCategory(controller: self, category: nil)
             case 11:
                 self.showRateDialog()
+            case 12:
+                let vc = OwnerKeyUnlockViewController()
+                vc.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: vc)
             default:
                 return
             }
@@ -117,7 +123,7 @@ extension SettingsViewController : UITableViewDataSource {
         if section == 0 {
             return BMTableHeaderTitleView(title: "node", bold: false)
         }
-        else if section == 3 {
+        else if section == 4 {
             return BMTableHeaderTitleView(title: "categories", bold: false)
         }
         

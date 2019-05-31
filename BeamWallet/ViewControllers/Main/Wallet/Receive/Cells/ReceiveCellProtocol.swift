@@ -23,16 +23,15 @@ import Foundation
     @objc optional func textValueDidChange(_ sender: UITableViewCell, _ text:String)
     @objc optional func textValueDidReturn(_ sender: UITableViewCell)
     @objc optional func textValueDidBegin(_ sender: UITableViewCell)
-
-    @objc optional func onClickRequest()
-    @objc optional func onClickRemoveRequest()
     
     @objc optional func onClickQRCode()
     @objc optional func onClickShare()
     
-    @objc optional func onNewAddress()
+    @objc optional func onChangeAddress()
     
     @objc optional func onConfirmCreate()
     @objc optional func onCancelCreate()
-
+    
+    @objc optional func onExpandRecieveAddress(_ sender: UITableViewCell)
+    
 }

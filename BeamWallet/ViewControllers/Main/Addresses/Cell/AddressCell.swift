@@ -79,11 +79,11 @@ extension AddressCell: Configurable {
                 categoryLabel.text = category.name
             }
             else{
-                categoryLabel.text = ""
+                categoryLabel.text = nil
             }
         }
         else{
-            categoryLabel.text = ""
+            categoryLabel.text = nil
         }
         
     }

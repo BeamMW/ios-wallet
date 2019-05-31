@@ -20,17 +20,21 @@
 import UIKit
 
 class ReceiveAddressCell: BaseCell {
-
+    
     @IBOutlet weak private var addressLabel: UILabel!
-    @IBOutlet weak private var line: UIView!
-    @IBOutlet weak private var titleLabel: UILabel!
+
+    weak var delegate: ReceiveCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
         
-        line.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+       // contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.2)
+    }
+    
+    @IBAction func onChange(sender :UIButton) {
+        delegate?.onChangeAddress?()
     }
 }
 
@@ -38,11 +42,5 @@ extension ReceiveAddressCell: Configurable {
     
     func configure(with options: (hideLine: Bool, address:BMAddress?, title:String?)) {
         addressLabel.text = options.address?.walletId
-        line.isHidden = options.hideLine
-        
-        if let title = options.title {
-            titleLabel.text = title
-            titleLabel.letterSpacing = 1.5
-        }
     }
 }

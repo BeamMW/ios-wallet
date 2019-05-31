@@ -23,6 +23,7 @@
                 <outlet property="collectionView" destination="y0S-AP-q9n" id="abe-Wp-jOr"/>
                 <outlet property="mainStack" destination="SY7-Yz-blR" id="h1A-Fi-2dN"/>
                 <outlet property="nextButton" destination="EZh-RJ-DHb" id="1j0-Cv-7nK"/>
+                <outlet property="stackHeight" destination="K1p-pc-lYP" id="LPc-04-Uwx"/>
                 <outlet property="stackWidth" destination="rD3-0f-E9e" id="4CV-LF-GQc"/>
                 <outlet property="stackY" destination="3oE-a9-erR" id="3Ql-mW-1bp"/>
                 <outlet property="titleLabel" destination="p1T-xu-CLB" id="3gb-vv-FjX"/>

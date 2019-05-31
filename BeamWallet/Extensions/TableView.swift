@@ -54,6 +54,19 @@ extension UITableView {
 
 extension UITableView {
 
+    func performUpdate(_ update: ()->Void, completion: (()->Void)?) {
+        
+        CATransaction.begin()
+        CATransaction.setCompletionBlock(completion)
+        
+        // Table View update on row / section
+        beginUpdates()
+        update()
+        endUpdates()
+        
+        CATransaction.commit()
+    }
+    
     public func findPath(_ row:AnyClass) -> IndexPath? {
         for cell in visibleCells {
             if cell.isKind(of: row) {

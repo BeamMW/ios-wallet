@@ -24,6 +24,7 @@ class BaseCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        self.backgroundColor = UIColor.clear
         self.contentView.backgroundColor = UIColor.main.marine
     }
     

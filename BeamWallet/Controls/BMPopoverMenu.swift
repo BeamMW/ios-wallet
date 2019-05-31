@@ -66,6 +66,7 @@ class BMPopoverMenu: NSObject {
         case edit_category = 10
         case delete_category = 11
         case delete_address_transactions = 12
+        case repeat_transaction = 13
     }
     
     

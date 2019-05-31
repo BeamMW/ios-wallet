@@ -98,6 +98,7 @@ extension UIViewController {
             confirmHandler(action)
         }
         alertController.addAction(confirmAction)
+        alertController.preferredAction = confirmAction
         
         self.present(alertController, animated: true, completion: nil)
     }

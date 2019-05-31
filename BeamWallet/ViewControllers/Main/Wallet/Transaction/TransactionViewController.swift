@@ -116,15 +116,32 @@ class TransactionViewController: BaseTableViewController {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_transaction, icon: nil, action: .delete_transaction))
         }
         
+        if !transaction.isIncome {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.rep, icon: nil, action: .repeat_transaction))
+        }
+
+        
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.action) {
+                case .repeat_transaction:
+                    let vc = WalletSendViewController()
+                    vc.transaction = self.transaction
+                    self.pushViewController(vc: vc)
                 case .cancel_transaction :
-                    AppModel.sharedManager().cancelTransaction(self.transaction)
-                    self.navigationController?.popViewController(animated: true)
+                    self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
+                        
+                    }, confirmHandler: { (_) in
+                        AppModel.sharedManager().cancelTransaction(self.transaction)
+                        self.navigationController?.popViewController(animated: true)
+                    })
                 case .delete_transaction :
-                    AppModel.sharedManager().deleteTransaction(self.transaction)
-                    self.navigationController?.popViewController(animated: true)
+                    self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
+                        
+                    }, confirmHandler: { (_ ) in
+                        AppModel.sharedManager().deleteTransaction(self.transaction)
+                        self.navigationController?.popViewController(animated: true)
+                    })
                 default:
                     return
                 }

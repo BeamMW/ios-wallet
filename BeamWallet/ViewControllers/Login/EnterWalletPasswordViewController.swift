@@ -24,7 +24,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     private var isRequestedAuthorization = false
     
     @IBOutlet private weak var passField: BMField!
-    @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var touchIdButton: UIButton!
     @IBOutlet private weak var passViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var loginLabel: UILabel!
@@ -123,22 +122,23 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     @IBAction func onLogin(sender :UIButton) {
+
         AppModel.sharedManager().isRestoreFlow = false;
 
         if passField.text?.isEmpty ?? true {
-            errorLabel.text = LocalizableStrings.empty_password
+            passField.error = LocalizableStrings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let appModel = AppModel.sharedManager()
             let valid = appModel.canOpenWallet(pass)
             if !valid {
-                errorLabel.text = LocalizableStrings.incorrect_password
+                passField.error = LocalizableStrings.incorrect_password
                 passField.status = BMField.Status.error
             }
             else{
                 _ = KeychainManager.addPassword(password: pass)
-                
+
                 let vc = CreateWalletProgressViewController()
                     .withPassword(password: pass)
                 pushViewController(vc: vc)
@@ -157,13 +157,6 @@ extension EnterWalletPasswordViewController : UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        return true
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        errorLabel.text = String.empty()
-     
         return true
     }
 }

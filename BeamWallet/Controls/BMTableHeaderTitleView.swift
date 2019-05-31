@@ -62,4 +62,19 @@ class BMTableHeaderTitleView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError(LocalizableStrings.fatalInitCoderError)
     }
+    
+    var letterSpacing: CGFloat = 0 {
+        didSet {
+            if self.letterSpacing > 0 {
+                if let titleString = self.titleLabel.text {
+                    let attributedString = NSMutableAttributedString(string: titleString)
+                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(self.letterSpacing), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                    attributedString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                    attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey, range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                    
+                    self.titleLabel.attributedText = attributedString
+                }
+            }
+        }
+    }
 }

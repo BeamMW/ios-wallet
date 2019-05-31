@@ -19,6 +19,11 @@
 
 import Foundation
 
-func ShowCopied () {
-    BMToast.show(text: LocalizableStrings.copied_to_clipboard)
+func ShowCopied (text:String? = nil) {
+    if let s = text {
+        BMToast.show(text: s)
+    }
+    else{
+        BMToast.show(text: LocalizableStrings.copied_to_clipboard)
+    }
 }

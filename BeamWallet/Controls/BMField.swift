@@ -27,9 +27,19 @@ class BMField: UITextField {
     }
     
     var line = UIView()
+    
+    private var _defaultHeight:CGFloat = 30
 
-    private var errorLabel:UILabel?
-
+    @IBInspectable
+    var defaultHeight: CGFloat {
+        get {
+            return _defaultHeight
+        }
+        set{
+            _defaultHeight = newValue
+        }
+    }
+    
     private var _lineColor:UIColor?
     private var _lineHeight:CGFloat = 2
     private var _error:String?
@@ -39,18 +49,43 @@ class BMField: UITextField {
         didSet {
             switch status {
             case .error?:
+                if error != nil {
+                    self.heightConstraint.constant = 50
+                }
                 self.textColor = UIColor.main.red
                 self.line.backgroundColor = UIColor.main.red
-                self.errorLabel?.isHidden = false
+                self.errorLabel.isHidden = false
             case .normal?:
+                self.heightConstraint.constant = defaultHeight
                 self.textColor = _oldColor
                 self.line.backgroundColor = lineColor
-                self.errorLabel?.isHidden = true
+                self.errorLabel.isHidden = true
             case .none:
                 break
             }
         }
     }
+    
+    private var neededConstraint = [NSLayoutConstraint]()
+    lazy var heightConstraint: NSLayoutConstraint = {
+        return NSLayoutConstraint(item: self,
+                                  attribute: .height,
+                                  relatedBy: .equal,
+                                  toItem: nil,
+                                  attribute: .notAnAttribute,
+                                  multiplier: 1,
+                                  constant: 0)
+    }()
+    
+    private lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.main.red
+        label.font = RegularFont(size: 16)
+        label.isHidden = true
+        addSubview(label)
+
+        return label
+    }()
     
     @IBInspectable
     var lineColor: UIColor? {
@@ -81,7 +116,10 @@ class BMField: UITextField {
         }
         set{
             _error = newValue
-            errorLabel?.text = newValue
+            errorLabel.text = newValue
+            if status == .error {
+                self.heightConstraint.constant = 50
+            }
             layoutSubviews()
         }
     }
@@ -102,23 +140,62 @@ class BMField: UITextField {
             guard let strongSelf = self else { return }
             guard let object = notification.object as? BMField, object == strongSelf else { return }
             
-            strongSelf.status = .normal
+            if strongSelf.status != .normal {
+                strongSelf.status = .normal
+            }
         }
         
         if isSecureTextEntry {
             disablePasswordAutoFill()
         }
+        
+        heightConstraint.constant = defaultHeight
+
+        neededConstraint.append(heightConstraint)
+        
+        NSLayoutConstraint.activate(neededConstraint)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        line.frame = CGRect(x: 0, y: self.frame.size.height-lineHeight, width: self.frame.size.width, height: lineHeight)
+        line.frame = CGRect(x: 0, y: defaultHeight - lineHeight, width: self.frame.size.width, height: lineHeight)
+        
+        errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: 18)
     }
 
     override var text: String? {
         didSet {
-           status = .normal
+            if status != .normal {
+                status = .normal
+            }
         }
+    }
+    
+    open override func textRect(forBounds bounds: CGRect) -> CGRect {
+        var isNormal = self.status == .normal || self.status == nil
+        if !isNormal && error == nil {
+            isNormal = true
+        }
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : -16), left: 0, bottom: 0, right: 0)
+        return bounds.inset(by: padding)
+    }
+    
+    open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        var isNormal = self.status == .normal || self.status == nil
+        if !isNormal && error == nil {
+            isNormal = true
+        }
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : -16), left: 0, bottom: 0, right: 0)
+        return bounds.inset(by: padding)
+    }
+    
+    open override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        var isNormal = self.status == .normal || self.status == nil
+        if !isNormal && error == nil {
+            isNormal = true
+        }
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : -16), left: 0, bottom: 0, right: 0)
+        return bounds.inset(by: padding)
     }
 }

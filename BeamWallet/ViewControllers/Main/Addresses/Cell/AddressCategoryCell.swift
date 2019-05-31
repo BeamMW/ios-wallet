@@ -43,7 +43,8 @@ extension AddressCategoryCell: Configurable {
                 categoryLabel.textColor = UIColor.init(hexString: category.color)
             }
             else{
-                categoryLabel.text = ""
+                categoryLabel.textColor = UIColor.main.steelGrey
+                categoryLabel.text = "None"
             }
         }
     }

@@ -179,17 +179,7 @@ extension EditAddressViewController : UITableViewDelegate {
         }
         else if indexPath.section == 3 {
             if AppModel.sharedManager().categories.count == 0 {
-               
-                let vc = CategoryEditViewController(category: nil)
-                vc.completion = {
-                    obj in
-                    if let category = obj {
-                        self.address.category = String(category.id)
-                        self.checkIsChanges()
-                        self.tableView.reloadData()
-                    }
-                }
-                pushViewController(vc: vc)
+                self.alert(title: LocalizableStrings.categories_empty_title, message: LocalizableStrings.categories_empty_text, handler: nil)
             }
             else{
                 let vc = CategoryPickerViewController(category: self.address.category == LocalizableStrings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.address.category))
@@ -203,7 +193,6 @@ extension EditAddressViewController : UITableViewDelegate {
                 }
                 pushViewController(vc: vc)
             }
-
         }
     }
 }

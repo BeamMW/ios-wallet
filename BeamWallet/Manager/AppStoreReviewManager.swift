@@ -70,7 +70,6 @@ struct AppStoreReviewManager {
         case _ where appOpenCount%maxTransactionsCount == 0 :
             return true
         default:
-            print("App run count is : \(appOpenCount)")
             return false
         }
     }

@@ -281,7 +281,7 @@ extension WalletSendViewController : UITextFieldDelegate {
             let mainCount = (textField == amountField) ? 9 : 15
             let comaCount = 8
 
-            let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
+            var txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
             if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
                 return false
@@ -318,6 +318,10 @@ extension WalletSendViewController : UITextFieldDelegate {
                 let fee = Double(feeField.text?.replacingOccurrences(of: ",", with: ".") ?? "0")
                 let amount = Double(txtAfterUpdate.replacingOccurrences(of: ",", with: ".") )
 
+                if amount == 0 && txtAfterUpdate.contains(".") == false {
+                    txtAfterUpdate = "0"
+                }
+                
                 if AppModel.sharedManager().canReceive(amount ?? 00, fee: fee ?? 0) != nil {
                     return false
                 }
@@ -454,8 +458,12 @@ extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
 }
 
 extension WalletSendViewController : WalletConfirmSendViewControllerDelegate {
+    
     func onConfirmSend(amount: Double, fee: Double, toAddress: String) {
-        AppModel.sharedManager().send(amount, fee:fee, to: toAddress, comment: commentField.text ?? "")
+    //    AppModel.sharedManager().send(amount, fee:fee, to: toAddress, comment: commentField.text ?? "")
+        
+        AppModel.sharedManager().prepareSend(amount, fee: fee, to: toAddress, comment: commentField.text ?? "")
+        
         AppStoreReviewManager.incrementAppTransactions()
                 
         if let viewControllers = self.navigationController?.viewControllers{

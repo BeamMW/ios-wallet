@@ -67,11 +67,18 @@ class BiometricAuthorization: NSObject {
         return canEvaluate
     }
     
-    public func authenticateWithBioMetrics(success successBlock: @escaping AuthorizationSuccess, failure failureBlock: @escaping AuthorizationFailure, retry retryBlock: @escaping AuthorizationRetry) {
+    public func authenticateWithBioMetrics(success successBlock: @escaping AuthorizationSuccess, failure failureBlock: @escaping AuthorizationFailure, retry retryBlock: @escaping AuthorizationRetry, reasonText:String? = nil) {
         
         let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID" : "Touch ID"
 
-        let reason = faceIDAvailable() ? "Confirm your face to authenticate" : "Confirm your fingerprint to authenticate"
+         var reason = ""
+        
+        if let value = reasonText {
+            reason = value
+        }
+        else{
+            reason = faceIDAvailable() ? "Confirm your face to authenticate" : "Confirm your fingerprint to authenticate"
+        }
         
         let context = LAContext()
         context.localizedFallbackTitle = ""

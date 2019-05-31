@@ -73,10 +73,7 @@ class ShortcutManager {
             navigationController.viewControllers = [WalletViewController(), WalletSendViewController()]
         case ShortcutIdentifier.Receive.type:
             handled = true
-            navigationController.viewControllers = [WalletViewController()]
-            
-            let receiveVC = BMGradientNavigationController(rootViewController: ReceiveListViewController())
-            navigationController.present(receiveVC, animated: false, completion: nil)
+            navigationController.viewControllers = [WalletViewController(), LegacyWalletReceiveViewController(address: BMAddress())]
         case ShortcutIdentifier.Scan.type:
             handled = true
             navigationController.viewControllers = [WalletViewController(), WalletSendViewController(), WalletQRCodeScannerViewController()]

@@ -24,6 +24,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     @IBOutlet private weak var nextButton: UIButton!
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var stackHeight: NSLayoutConstraint!
 
     private var inputWords = [BMWord]()
     private var maxWords = 6
@@ -60,6 +61,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
             mainStack?.spacing = 30
         }
         else if Device.screenType == .iPhones_5 {
+            stackHeight.constant = 250
             mainStack?.spacing = 50
         }
         else{

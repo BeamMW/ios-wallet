@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-LightItalic.otf">
+            <string>SFProDisplay-LightItalic</string>
+        </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OwnerKeyViewController" customModule="BeamWallet" customModuleProvider="target">
+            <connections>
+                <outlet property="ownerKeyLabel" destination="Fba-dd-bWj" id="ukm-ze-xbu"/>
+                <outlet property="view" destination="eSk-Xs-FZ0" id="19l-1c-9rk"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="eSk-Xs-FZ0">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="5tE-lD-TaR">
+                    <rect key="frame" x="20" y="94" width="374" height="294"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="u5q-PR-C50">
+                            <rect key="frame" x="0.0" y="0.0" width="374" height="46.5"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KEY CODE:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25z-VT-NVW">
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="17"/>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                            <real key="value" value="1.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="10312" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fba-dd-bWj" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="27" width="374" height="19.5"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="19.5" id="XJW-dE-wbB"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ov3-aD-402">
+                            <rect key="frame" x="0.0" y="116.5" width="374" height="57.5"/>
+                            <string key="text">Please notice, that knowing your owner key allows to know all your funds (UTXO). Make sure that you deploy the key at the node you trust completely.</string>
+                            <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="16"/>
+                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEX-lg-7i7">
+                            <rect key="frame" x="0.0" y="244" width="374" height="50"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gzx-IL-d5E" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                    <rect key="frame" x="60.5" y="3" width="253" height="44"/>
+                                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="253" id="VKf-6O-d4r"/>
+                                        <constraint firstAttribute="height" constant="44" id="a7U-e1-SPK"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                    <state key="normal" title="copy" image="iconCopyBlue">
+                                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="22"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onCopyWithSender:" destination="-1" eventType="touchUpInside" id="DSV-RN-QEQ"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="gzx-IL-d5E" firstAttribute="top" secondItem="SEX-lg-7i7" secondAttribute="top" constant="3" id="4Nu-Il-ApB"/>
+                                <constraint firstItem="gzx-IL-d5E" firstAttribute="centerY" secondItem="SEX-lg-7i7" secondAttribute="centerY" id="fSP-kR-9zP"/>
+                                <constraint firstItem="gzx-IL-d5E" firstAttribute="centerX" secondItem="SEX-lg-7i7" secondAttribute="centerX" id="haT-BL-BK2"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="5tE-lD-TaR" firstAttribute="top" secondItem="d12-Nl-WeK" secondAttribute="top" constant="50" id="F9x-Ke-NtC"/>
+                <constraint firstAttribute="trailing" secondItem="5tE-lD-TaR" secondAttribute="trailing" constant="20" id="G2e-QI-skM"/>
+                <constraint firstItem="5tE-lD-TaR" firstAttribute="leading" secondItem="d12-Nl-WeK" secondAttribute="leading" constant="20" id="Sa6-yB-KRj"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="d12-Nl-WeK"/>
+            <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="iconCopyBlue" width="16" height="16"/>
+    </resources>
+</document>

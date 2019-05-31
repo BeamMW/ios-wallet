@@ -81,6 +81,8 @@ void WalletModel::onStatus(const WalletStatus& status)
 
 void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::TxDescription>& items)
 {
+    NSLog(@"onTxStatus");
+    
     NSMutableArray *transactions = [NSMutableArray new];
     
     for (const auto& item : items)
@@ -185,6 +187,22 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
     [[[AppModel sharedManager]transactions] removeAllObjects];
     [[[AppModel sharedManager]transactions] addObjectsFromArray:sortedArray];
 
+    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+    
+    for (int i=0; i<[AppModel sharedManager].preparedDeleteTransactionss.count; i++) {
+        NSString *id1 = [AppModel sharedManager].preparedDeleteTransactionss[i].ID;
+        
+        for (int j=0; j<[[AppModel sharedManager]transactions].count; j++) {
+            NSString *id2 = [AppModel sharedManager].transactions[j].ID;
+            
+            if ([id1 isEqualToString:id2]) {
+                [set addIndex:j];
+            }
+        }
+    }
+    
+    [[[AppModel sharedManager]transactions] removeObjectsAtIndexes:set];
+    
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
@@ -276,7 +294,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
     
     if (own)
     {
-        NSMutableArray *addresses = [[NSMutableArray alloc] init];
+        NSMutableArray <BMAddress*> *addresses = [[NSMutableArray alloc] init];
         
         for (const auto& walletAddr : addrs)
         {
@@ -291,8 +309,25 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
             [addresses addObject:address];
         }
         
-        [[AppModel sharedManager] setWalletAddresses:addresses];
         
+        NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+        
+        for (int i=0; i<[AppModel sharedManager].preparedDeleteAddresses.count; i++) {
+            NSString *id1 = [AppModel sharedManager].preparedDeleteAddresses[i].walletId;
+                             
+            for (int j=0; j<addresses.count; j++) {
+                NSString *id2 = addresses[j].walletId;
+                
+                if ([id1 isEqualToString:id2]) {
+                    [set addIndex:j];
+                }
+            }
+        }
+        
+        [addresses removeObjectsAtIndexes:set];
+        
+        [[AppModel sharedManager] setWalletAddresses:addresses];
+
         for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
         {
             if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
@@ -301,7 +336,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
         }
     }
     else{
-        NSMutableArray *contacts = [[NSMutableArray alloc] init];
+        NSMutableArray <BMContact*>*contacts = [[NSMutableArray alloc] init];
 
         for (const auto& walletAddr : addrs)
         {
@@ -316,6 +351,22 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
             
             [contacts addObject:contact];
         }
+        
+        NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+        
+        for (int i=0; i<[AppModel sharedManager].preparedDeleteAddresses.count; i++) {
+            NSString *id1 = [AppModel sharedManager].preparedDeleteAddresses[i].walletId;
+            
+            for (int j=0; j<contacts.count; j++) {
+                NSString *id2 = contacts[j].address.walletId;
+                
+                if ([id1 isEqualToString:id2]) {
+                    [set addIndex:j];
+                }
+            }
+        }
+        
+        [contacts removeObjectsAtIndexes:set];
         
         [[AppModel sharedManager] setContacts:contacts];
         

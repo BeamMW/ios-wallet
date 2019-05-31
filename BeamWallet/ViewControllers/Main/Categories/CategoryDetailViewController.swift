@@ -20,10 +20,7 @@
 
 import UIKit
 
-class CategoryDetailViewController: BaseViewController {
-
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private var headerView: UIView!
+class CategoryDetailViewController: BaseTableViewController {
 
     private var category:BMCategory!
     private var addresses = [BMAddress]()
@@ -35,21 +32,23 @@ class CategoryDetailViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Category"
+        title = LocalizableStrings.category
         
         loadAddresses()
         
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.register(AddressCell.self)
         tableView.register(CategoryNameCell.self)
         tableView.register(EmptyCell.self)
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "iconMore"), style: .plain, target: self, action: #selector(onMore))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore))
 
         AppModel.sharedManager().addDelegate(self)
     }
@@ -68,7 +67,7 @@ class CategoryDetailViewController: BaseViewController {
     }
     
     @objc private func onMore(sender:UIBarButtonItem) {        
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: "Edit", icon: nil, action:.edit_category), BMPopoverMenu.BMPopoverMenuItem(name: "Delete", icon: nil, action:.delete_category)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.edit, icon: nil, action:.edit_category), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete, icon: nil, action:.delete_category)]
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -78,7 +77,7 @@ class CategoryDetailViewController: BaseViewController {
                     vc.hidesBottomBarWhenPushed = true
                     self.pushViewController(vc: vc)
                 case .delete_category :
-                    self.confirmAlert(title: "Delete category", message: "Are you sure you want to delete “\(self.category.name)” category?", cancelTitle: "Cancel", confirmTitle: "Delete", cancelHandler: { (_ ) in
+                    self.confirmAlert(title: LocalizableStrings.delete_category, message:LocalizableStrings.delete_category_text(str:self.category.name) , cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
                         
                     }, confirmHandler: { (_ ) in
                         AppModel.sharedManager().removeDelegate(self)
@@ -100,7 +99,7 @@ extension CategoryDetailViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 50
+            return BMTableHeaderTitleView.boldHeight
         }
         
         return 0
@@ -146,7 +145,7 @@ extension CategoryDetailViewController : UITableViewDataSource {
             if addresses.count == 0 {
                 let cell =  tableView
                     .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
-                    .configured(with: "there are no addresses associated with this category")
+                    .configured(with: LocalizableStrings.no_category_addresses)
                 return cell
             }
             else{
@@ -168,7 +167,7 @@ extension CategoryDetailViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            return headerView
+            return BMTableHeaderTitleView(title: LocalizableStrings.addresses, bold: true)
         }
         
         return nil

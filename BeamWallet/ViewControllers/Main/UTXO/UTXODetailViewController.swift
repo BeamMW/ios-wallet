@@ -129,6 +129,7 @@ extension UTXODetailViewController : UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
                 .configured(with: details[indexPath.row])
+            cell.delegate = self
             return cell
         case 2:
             let cell = tableView
@@ -151,6 +152,21 @@ extension UTXODetailViewController : UITableViewDataSource {
             return UTXOTransactionsHeaderView().loadNib()
         default:
             return nil
+        }
+    }
+}
+
+extension UTXODetailViewController : GeneralInfoCellDelegate {
+    func onClickToCell(cell: UITableViewCell) {
+        if let path = tableView.indexPath(for: cell)
+        {
+            if details[path.row].text == LocalizableStrings.kernel_id {
+                let kernelId = details[path.row].detail!
+                let link = Settings.sharedManager().explorerAddress + kernelId
+                if let url = URL(string: link) {
+                    openUrl(url: url)
+                }
+            }
         }
     }
 }

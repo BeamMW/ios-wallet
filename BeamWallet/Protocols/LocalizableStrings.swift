@@ -171,7 +171,49 @@ struct LocalizableStrings {
     static let qr_code = "qr_code".localized
     static let create_address = "create_address".localized
     static let new_address = "new_address".localized
+    static let new_category = "new_category".localized
+    static let edit_category = "edit_category".localized
+    static let category_name = "category_name".localized
+    static let category_exist = "category_exist".localized
+    static let edit = "edit".localized
+    static let delete = "delete".localized
+    static let no_category_addresses = "no_category_addresses".localized
+    static let delete_category = "delete_category".localized
+    static let beams_send = "beams_send".localized
+    static let undo = "undo".localized
+    static let rep = "repeat".localized
+    static let cancelled = "cancelled".localized
+    static let delete_transaction_title = "delete_transaction_title".localized
+    static let delete_transaction_text = "delete_transaction_text".localized
+    static let current_password_error = "current_password_error".localized
+    static let categories_empty_title = "categories_empty_title".localized
+    static let categories_empty_text = "categories_empty_text".localized
+    static let cancel_transaction_text = "cancel_transaction_text".localized
+    static let no = "no".localized
+    static let address_deleted = "address_deleted".localized
 
+    static let show_owner_key = "show_owner_key".localized
+    static let ownerkey_touchid_text = "ownerkey_touchid_text".localized
+    static let ownerkey_faceid_text = "ownerkey_faceid_text".localized
+    static let ownerkey_faceid_subtext = "ownerkey_faceid_subtext".localized
+    static let ownerkey_touchid_subtext = "ownerkey_touchid_subtext".localized
+    static let ownerkey_text = "ownerkey_text".localized
+    static let ownerkey_subtext = "ownerkey_subtext".localized
+    static let ownerkey_copied = "ownerkey_copied".localized
+    static let advanced = "advanced".localized
+    static let expires = "expires".localized
+    static let none = "none".localized
+    static let change_address = "change_address".localized
+    static let auto_address = "auto_address".localized
+    static let local_annotation_not_shared = "local_annotation_not_shared".localized
+    static let existing_addresses = "existing_addresses".localized
+    static let address_search = "address_search".localized
+    static let not_found = "not_found".localized
+    static let touch_id_ownerkey_verefication = "touch_id_ownerkey_verefication".localized
+
+    static func delete_category_text(str:String) -> String {
+        return "Are you sure you want to delete “\(str)” category?"
+    }
     static func delete_data_text(str:String) -> String {
         return "Are you sure you want to delete all \(str) from your wallet?"
     }

@@ -36,6 +36,8 @@ class MenuItem {
 
 class LeftMenuViewController: BaseTableViewController {
 
+    private var topView:UIView!
+
     private var buyButton:UIButton!
     
     private let items = [MenuItem(name: LocalizableStrings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: LocalizableStrings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: LocalizableStrings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: LocalizableStrings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
@@ -77,11 +79,20 @@ class LeftMenuViewController: BaseTableViewController {
         buyButton.titleLabel?.font = RegularFont(size: 16)
         buyButton.addTarget(self, action: #selector(onBuy), for: .touchUpInside)
         view.addSubview(buyButton)
+        
+        topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20))
+        topView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        
+        if Device.screenType == .iPhones_5 || Device.screenType == .iPhones_6 || Device.screenType == .iPhones_Plus {
+            tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 33))
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
        
+        topView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20)
+
         let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15
         buyButton.frame = CGRect(x: 0, y: self.view.bounds.size.height-50-offset, width: self.view.bounds.size.width, height: 50)
         

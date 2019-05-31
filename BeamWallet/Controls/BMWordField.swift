@@ -69,6 +69,12 @@ class BMWordField: BMField {
         setupSuggestionsView()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        defaultHeight = 25
+        heightConstraint.constant = 25
+    }
     
     private func setupSuggestionsView() {
         accessoryView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))

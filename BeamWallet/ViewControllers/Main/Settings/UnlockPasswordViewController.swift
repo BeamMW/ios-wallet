@@ -27,7 +27,6 @@ class UnlockPasswordViewController: BaseWizardViewController {
     }
     
     @IBOutlet private weak var passField: BMField!
-    @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private var heightConstraint: NSLayoutConstraint!
 
     private var event:UnlockEvent!
@@ -75,13 +74,13 @@ class UnlockPasswordViewController: BaseWizardViewController {
     
     @IBAction func onLogin(sender :UIButton) {        
         if passField.text?.isEmpty ?? true {
-            errorLabel.text = "Password can not be empty"
+            passField.error = LocalizableStrings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let valid = AppModel.sharedManager().isValidPassword(pass)
             if !valid {
-                errorLabel.text = "Current password is incorrect"
+                passField.error = LocalizableStrings.current_password_error
                 passField.status = BMField.Status.error
             }
             else{
@@ -119,12 +118,5 @@ extension UnlockPasswordViewController : UITextFieldDelegate {
        /// self.onLogin(sender: UIButton())
         
         return true
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        errorLabel.text = ""
-        
-        return true
-    }    
+    }  
 }

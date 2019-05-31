@@ -29,12 +29,17 @@
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
+@property (nonatomic,strong) NSString *categoryName;
 
+    
+    
 //edit
 @property (nonatomic,assign) BOOL isNowExpired;
 @property (nonatomic,assign) BOOL isNowActive;
 @property (nonatomic,assign) UInt64 isNowActiveDuration;
 @property (nonatomic,assign) BOOL isChangedDate;
+@property (nonatomic,assign) BOOL isNeedRemoveTransactions;
+
 
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;

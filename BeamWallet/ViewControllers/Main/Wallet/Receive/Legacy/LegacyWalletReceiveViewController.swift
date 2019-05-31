@@ -69,10 +69,28 @@ class LegacyWalletReceiveViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
         
-        addressLabel.text = address.walletId
+        if address.walletId != nil {
+            addressLabel.text = address.walletId
+        }
+        else{
+            AppModel.sharedManager().generateNewWalletAddress { (address, error) in
+                if let result = address {
+                    DispatchQueue.main.async {
+                        NotificationManager.sharedManager.subscribeToTopic(topic: result.walletId)
+                        self.address = result
+                        self.addressLabel.text = self.address.walletId
+                    }
+                }
+                else if let reason = error?.localizedDescription {
+                    DispatchQueue.main.async {
+                        self.alert(message: reason)
+                    }
+                }
+            }
+        }
+        
         
         self.alert(title: LocalizableStrings.stay_active_title, message: LocalizableStrings.stay_active_text) { (_ ) in
-            
         }
     }
     
@@ -103,17 +121,8 @@ class LegacyWalletReceiveViewController: BaseViewController {
     //MARK: IBAction
     
     @IBAction func onCategory(sender :UIButton) {
-        
         if AppModel.sharedManager().categories.count == 0 {
-            
-            let vc = CategoryEditViewController(category: nil)
-            vc.completion = {
-                obj in
-                if let category = obj {
-                    self.didSelectCategory(category: category)
-                }
-            }
-            pushViewController(vc: vc)
+            self.alert(title: LocalizableStrings.categories_empty_title, message: LocalizableStrings.categories_empty_text, handler: nil)
         }
         else{
             let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address.category))
@@ -125,6 +134,7 @@ class LegacyWalletReceiveViewController: BaseViewController {
             }
             pushViewController(vc: vc)
         }
+   
     }
     
     @IBAction func onExpire(sender :UIButton) {
@@ -209,7 +219,7 @@ extension LegacyWalletReceiveViewController : UITextFieldDelegate {
             let mainCount = (textField == amountField) ? 9 : 15
             let comaCount = 8
             
-            let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
+            var txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: ",", with: ".")
             
             if Double(txtAfterUpdate) == nil && !txtAfterUpdate.isEmpty {
                 return false
@@ -244,6 +254,10 @@ extension LegacyWalletReceiveViewController : UITextFieldDelegate {
             shareAddress.alpha = 1
             
             if let amount = Double(txtAfterUpdate) {
+                if amount == 0 && txtAfterUpdate.contains(".") == false {
+                    txtAfterUpdate = "0"
+                }
+                
                 if AppModel.sharedManager().canReceive(amount, fee: 0) != nil {
                     return false
                 }

@@ -74,9 +74,7 @@ class BMGradientNavigationController: UINavigationController {
         titleLabel = UILabel()
         navigationBar.addSubview(titleLabel)
 
-        statusView = BMNetworkStatusView()
-        statusView.y = statusViewY
-        navigationBar.addSubview(statusView)
+ 
     }
     
     override var title: String? {

@@ -27,6 +27,7 @@
 #import "Settings.h"
 #import "BMCategory.h"
 #import "BMDuration.h"
+#import "BMPreparedTransaction.h"
 
 @protocol WalletModelDelegate <NSObject>
 @optional
@@ -45,9 +46,12 @@
 -(void)onReceivePaymentProof:(BMPaymentProof*_Nonnull)proof;
 -(void)onLocalNodeStarted;
 -(void)onCategoriesChange;
+-(void)onAddedPrepareTransaction:(BMPreparedTransaction*_Nonnull)transaction;
+-(void)onAddedPrepareAddress:(BMAddress*_Nonnull)address;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
+typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 @interface AppModel : NSObject
 
@@ -69,6 +73,9 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nullable walletAddresses;
 @property (nonatomic,strong) NSMutableArray<BMContact*>*_Nonnull contacts;
 @property (nonatomic,strong) NSMutableArray<BMCategory*>*_Nonnull categories;
+@property (nonatomic,strong) NSMutableArray<BMPreparedTransaction*>*_Nonnull preparedTransactions;
+@property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
+@property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactionss;
 
 +(AppModel*_Nonnull)sharedManager;
 
@@ -94,6 +101,7 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 -(void)changeNodeAddress;
 -(BOOL)isValidNodeAddress:(NSString*_Nonnull)string;
 -(BOOL)isWalletInitialized;
+-(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block;
 
 // updates
 -(void)getWalletStatus;
@@ -117,11 +125,16 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 -(void)clearAllAddresses;
 -(void)refreshAddresses;
 -(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount;
+-(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
+-(void)cancelDeleteAddress:(NSString*_Nonnull)address;
+-(void)deletePreparedAddresses:(NSString*_Nonnull)address;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
+-(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
 
 
@@ -133,6 +146,8 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 -(void)getPaymentProof:(BMTransaction*_Nonnull)transaction;
 -(void)deleteTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)cancelTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)cancelPreparedTransaction:(NSString*_Nonnull)transaction;
+-(void)cancelTransactionByID:(NSString*_Nonnull)transaction;
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback;

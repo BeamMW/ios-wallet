@@ -24,7 +24,6 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var confirmPassField: BMField!
     @IBOutlet private weak var passProgressView: BMStepView!
-    @IBOutlet private weak var passConfirmLabel: UILabel!
 
     private var phrase:String!
     
@@ -77,13 +76,13 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         let confirmPass = confirmPassField.text ?? String.empty()
         
         if pass.isEmpty {
-            self.passConfirmLabel.text = LocalizableStrings.empty_password
+            self.confirmPassField.error = LocalizableStrings.empty_password
             
             self.passField.status = BMField.Status.error
         }
         
         if confirmPass.isEmpty {
-            self.passConfirmLabel.text = LocalizableStrings.empty_password
+            self.confirmPassField.error = LocalizableStrings.empty_password
 
             self.confirmPassField.status = BMField.Status.error
         }
@@ -93,7 +92,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 if AppModel.sharedManager().isLoggedin {
                     if AppModel.sharedManager().isValidPassword(pass)
                     {
-                        self.passConfirmLabel.text = LocalizableStrings.old_password
+                        self.confirmPassField.error = LocalizableStrings.old_password
                         self.confirmPassField.status = BMField.Status.error
                         self.passField.status = BMField.Status.error
                     }
@@ -125,7 +124,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 }
             }
             else{
-                self.passConfirmLabel.text = LocalizableStrings.passwords_dont_match
+                self.confirmPassField.error = LocalizableStrings.passwords_dont_match
                 self.confirmPassField.status = BMField.Status.error
                 self.passField.status = BMField.Status.error
             }
@@ -188,7 +187,8 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
             }
         }
         
-        self.passConfirmLabel.text = String.empty()
+        self.passField.status = BMField.Status.normal
+        self.confirmPassField.status = BMField.Status.normal
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

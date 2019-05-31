@@ -1,6 +1,6 @@
 //
-//  WalletTransactionCell.swift
-//  BeamWallet
+// WalletTransactionCell.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //

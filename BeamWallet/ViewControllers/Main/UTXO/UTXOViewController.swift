@@ -65,7 +65,8 @@ class UTXOViewController: BaseTableViewController {
         filterUTXOS()
 
         rightButton()
-        
+        onAddMenuIcon()
+
         self.view.addSubview(hideUTXOView)
     }
     

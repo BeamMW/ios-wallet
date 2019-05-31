@@ -87,7 +87,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+    
+        if AppModel.sharedManager().isRestoreFlow {
+            registerBackgroundTask()
+        }
+        
+        if let transactions = AppModel.sharedManager().preparedTransactions as? [BMPreparedTransaction] {
+            
+            if transactions.count > 0 && AppModel.sharedManager().isLoggedin {
+                BMSnackBar.dismiss(canceled: true)
 
+                for tr in transactions {
+                    AppModel.sharedManager().sendPreparedTransaction(tr.id)
+                }
+            }
+        }
+        
+        if let addresses = AppModel.sharedManager().preparedDeleteAddresses as? [BMAddress] {
+            
+            if addresses.count > 0 && AppModel.sharedManager().isLoggedin {
+                BMSnackBar.dismiss(canceled: true)
+                
+                for a in addresses {
+                    AppModel.sharedManager().deletePreparedAddresses(a.walletId)
+                }
+            }
+        }
+
+        
         //TODO: notification - close db
 //        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow
 //            && Settings.sharedManager().target == Testnet {
@@ -95,9 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            AppModel.sharedManager().resetWallet(false)
 //        }
 //        else
-        if AppModel.sharedManager().isRestoreFlow {
-            registerBackgroundTask()
-        }
+    
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -274,6 +299,20 @@ extension AppDelegate {
 }
 
 extension AppDelegate : WalletModelDelegate {
+    
+    func onAddedPrepare(_ address: BMAddress) {
+        DispatchQueue.main.async {
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .address, id: address.walletId), done: { (data) in
+                if let result = data, result.type == .address {
+                    AppModel.sharedManager().cancelDeleteAddress(result.id)
+                }
+            }) { (data) in
+                if let result = data, result.type == .address {
+                    AppModel.sharedManager().deletePreparedAddresses(result.id)
+                }
+            }
+        }
+    }
     
     public func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {

@@ -157,6 +157,17 @@ extension String {
 
 
 extension String {
+    
+    var trailingSpacesTrimmed: String {
+        var newString = self
+        
+        while newString.last?.isWhitespace == true {
+            newString = String(newString.dropLast())
+        }
+        
+        return newString
+    }
+    
     func isCorrectAmount() -> Bool {
         let mainCount = 9
         let comaCount = 8
@@ -187,6 +198,8 @@ extension String {
         }
         
         if let amount = Double(txtAfterUpdate) {
+            print(amount)
+            
             if AppModel.sharedManager().canReceive(amount, fee: 0) != nil {
                 return false
             }

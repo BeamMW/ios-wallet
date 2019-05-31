@@ -54,8 +54,6 @@ class WalletViewController: BaseTableViewController {
         expandProgress = !Settings.sharedManager().isHideAmounts
         expandAvailable = !Settings.sharedManager().isHideAmounts
         
-        rightButton()
-        
         if TGBotManager.sharedManager.isNeedLinking() {
             TGBotManager.sharedManager.startLinking { (_ ) in
                 
@@ -65,11 +63,14 @@ class WalletViewController: BaseTableViewController {
             NotificationManager.sharedManager.displayConfirmAlert()
         }
         
-        if ShortcutManager.canHandle() {
-            _ = ShortcutManager.handleShortcutItem()
-        }
-        
         onAddMenuIcon()
+        rightButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.sideMenuController?.isLeftViewSwipeGestureEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -84,10 +85,11 @@ class WalletViewController: BaseTableViewController {
             
             NotificationManager.sharedManager.clickedTransaction = ""
         }
-        else{
-            if AppStoreReviewManager.checkAndAskForReview() {
-                showRateDialog()
-            }
+        else if ShortcutManager.canHandle() {
+            _ = ShortcutManager.handleShortcutItem()
+        }
+        else if AppStoreReviewManager.checkAndAskForReview(){
+            showRateDialog()
         }
     }
     
@@ -161,6 +163,15 @@ class WalletViewController: BaseTableViewController {
 }
 
 extension WalletViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 1 && transactions.count > 0 {
+            return true
+        }
+        
+        return false
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
@@ -202,12 +213,71 @@ extension WalletViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+    
         if indexPath.section == 1 && transactions.count > 0 {
             let vc = TransactionViewController(transaction: transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let transaction = transactions[indexPath.row]
+        
+        let cancel = UITableViewRowAction(style: .normal, title: LocalizableStrings.cancel) { action, index in
+            
+            self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
+                
+            }, confirmHandler: { (_) in
+                transaction.status = LocalizableStrings.cancelled
+                
+                self.tableView.performUpdate({
+                    self.tableView.reloadRows(at: [indexPath], with: .fade)
+                }, completion: {
+                    AppModel.sharedManager().cancelTransaction(transaction)
+                })
+            })
+        }
+        cancel.backgroundColor = UIColor.main.steel
+        
+        let rep = UITableViewRowAction(style: .normal, title: LocalizableStrings.rep) { action, index in
+            let vc = WalletSendViewController()
+            vc.transaction = transaction
+            self.pushViewController(vc: vc)
+        }
+        rep.backgroundColor = UIColor.main.brightBlue
+        
+        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
+            
+            self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
+                
+            }, confirmHandler: { (_ ) in
+                self.transactions.remove(at: indexPath.row)
+                self.tableView.performUpdate({
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: {
+                    AppModel.sharedManager().deleteTransaction(transaction)
+                })
+            })            
+        }
+        delete.backgroundColor = UIColor.main.orangeRed
+        
+        var actions = [UITableViewRowAction]()
+        
+        if transaction.canCancel {
+            actions.append(cancel)
+        }
+        
+        if !transaction.isIncome {
+            actions.append(rep)
+        }
+
+        if transaction.canDelete {
+            actions.append(delete)
+        }
+        
+        return actions.reversed()
     }
 }
 
@@ -308,8 +378,22 @@ extension WalletViewController : WalletModelDelegate {
         }
     }
     
+    func onAddedPrepare(_ transaction: BMPreparedTransaction) {
+        BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { (data) in
+            if let result = data, result.type == .transaction {
+                AppModel.sharedManager().cancelPreparedTransaction(result.id)
+            }
+        }) { (data) in
+            if let result = data, result.type == .transaction {
+                AppModel.sharedManager().sendPreparedTransaction(result.id)
+            }
+        }
+    }
+    
+
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
+            
             if let tr = AppModel.sharedManager().transactions {
                 self.transactions = tr as! [BMTransaction]
             }
@@ -337,9 +421,32 @@ extension WalletViewController : WalletModelDelegate {
 
 extension WalletViewController : WalletStatusCellDelegate {
    
-    func onClickReceived() {        
-        let n = BMGradientNavigationController(rootViewController: ReceiveListViewController())
-        presentDetail(n)
+    func onClickReceived() {
+        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
+            if let result = address {
+                DispatchQueue.main.async {
+                    NotificationManager.sharedManager.subscribeToTopic(topic: result.walletId)
+                    
+                    let vc = ReceiveViewController(address: result)
+                    self.pushViewController(vc: vc)
+                    
+//                    let n = BMGradientNavigationController(rootViewController: ReceiveViewController(address: result))
+//                    self.navigationController?.presentDetail(n)
+                    
+//                    let vc = ReceiveViewController(address: result)
+//                   // let vc = LegacyWalletReceiveViewController(address: result)
+//                    vc.hidesBottomBarWhenPushed = true
+//                    self.pushViewController(vc: vc)
+                }
+            }
+            else if let reason = error?.localizedDescription {
+                DispatchQueue.main.async {
+                    self.alert(message: reason)
+                }
+            }
+        }
+        
+
     }
     
     func onClickSend() {

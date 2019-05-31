@@ -98,14 +98,15 @@ class CreateWalletProgressViewController: BaseViewController {
                                                           leftViewController: menuViewController,
                                                           rightViewController: nil)
             
-            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 120;
-            sideMenuController.leftViewPresentationStyle = .scaleFromLittle;
-            sideMenuController.rootViewLayerShadowRadius = 12
-            sideMenuController.rootViewLayerShadowColor = UIColor.black.withAlphaComponent(0.1)
-            sideMenuController.rootViewCoverAlphaForLeftView = 1
-            sideMenuController.rootViewCoverAlphaForRightView = 1
-            sideMenuController.leftViewCoverAlpha = 1
-            sideMenuController.rightViewCoverAlpha = 1
+            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
+            sideMenuController.leftViewPresentationStyle = .slideAbove;
+            sideMenuController.rootViewLayerShadowRadius = 0
+            sideMenuController.rootViewLayerShadowColor = UIColor.clear
+            sideMenuController.leftViewLayerShadowRadius = 0
+            sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+            sideMenuController.rootViewCoverAlphaForRightView = 0.5
+            sideMenuController.leftViewCoverAlpha = 0.5
+            sideMenuController.rightViewCoverAlpha = 0.5
             sideMenuController.modalTransitionStyle = .crossDissolve
 
             self.present(sideMenuController, animated: true, completion: nil)

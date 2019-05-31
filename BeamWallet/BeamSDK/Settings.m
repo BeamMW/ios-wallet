@@ -110,12 +110,12 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
         _explorerAddress = @"https://explorer.beam.mw/block?kernel_id=";
     }
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
-        _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
-    }
-    else{
+   // if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+    //    _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
+   // }
+   // else{
         _nodeAddress = [AppModel chooseRandomNode];
-    }
+   // }
     
     if (self.target == Testnet)
     {

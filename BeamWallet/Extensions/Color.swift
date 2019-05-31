@@ -158,6 +158,23 @@ extension UIColor {
         static var orange: UIColor {
             return .init(red: 241/255, green: 196/255, blue: 15/255, alpha: 1)
         }
+        
+        static var marineOriginal: UIColor {
+            return .init(hexString: "#032E49")
+        }
+        
+        static var brightBlue: UIColor {
+            return .init(red: 9/255, green: 118/255, blue: 255/255, alpha: 1)
+        }
+        
+        static var steel: UIColor {
+            return .init(red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
+        }
+        
+        static var orangeRed: UIColor {
+            return .init(red: 255/255, green: 59/255, blue: 48/255, alpha: 1)
+        }
+        
     }
     
 }

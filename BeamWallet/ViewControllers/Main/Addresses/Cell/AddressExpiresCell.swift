@@ -1,6 +1,6 @@
 //
-//  AddressExpireCell.swift
-//  BeamWallet
+// AddressExpireCell.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //

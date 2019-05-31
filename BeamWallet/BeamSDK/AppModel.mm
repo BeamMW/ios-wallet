@@ -96,6 +96,10 @@ static NSString *categoriesKey = @"categoriesKey";
     
     _contacts = [[NSMutableArray alloc] init];
     
+    _preparedTransactions = [[NSMutableArray alloc] init];
+    _preparedDeleteAddresses = [[NSMutableArray alloc] init];
+    _preparedDeleteTransactionss = [[NSMutableArray alloc] init];
+    
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
     
     [self checkInternetConnection];
@@ -500,6 +504,33 @@ static NSString *categoriesKey = @"categoriesKey";
     return isValid;
 }
 
+-(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        auto pass = SecString(password.string);
+        
+        Key::IKdf::Ptr pKey = self->walletDb->get_ChildKdf(0);
+        
+        const ECC::HKdf& kdf = static_cast<ECC::HKdf&>(*pKey);
+        
+        KeyString ks;
+        ks.SetPassword(Blob(pass.data(), static_cast<uint32_t>(pass.size())));
+        ks.m_sMeta = std::to_string(0);
+        
+        ECC::HKdfPub pkdf;
+        pkdf.GenerateFrom(kdf);
+        
+        ks.Export(pkdf);
+        
+        NSString *exportedKey = [NSString stringWithUTF8String:ks.m_sRes.c_str()];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            block(exportedKey);
+        });
+    });
+}
+
 #pragma mark - Updates
 
 -(void)getWalletStatus {
@@ -684,11 +715,122 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(void)deleteAddress:(NSString*_Nullable)address {
-
     WalletID walletID(Zero);
     if (walletID.FromHex(address.string))
     {
         wallet->getAsync()->deleteAddress(walletID);
+    }
+}
+
+-(void)cancelDeleteAddress:(NSString*_Nonnull)address {
+    BOOL isNeedRequestTransactions = NO;
+    
+    for (int i=0; i<_preparedDeleteAddresses.count; i++) {
+        if ([_preparedDeleteAddresses[i].walletId isEqualToString:address]) {
+            
+            if (_preparedDeleteAddresses[i].isNeedRemoveTransactions) {
+                isNeedRequestTransactions = YES;
+                [_preparedDeleteTransactionss removeAllObjects];
+            }
+            
+            [_preparedDeleteAddresses removeObjectAtIndex:i];
+
+            break;
+        }
+    }
+    wallet->getAsync()->getAddresses(true);
+    wallet->getAsync()->getAddresses(false);
+
+    if (isNeedRequestTransactions) {
+        wallet->getAsync()->getWalletStatus();
+    }
+}
+
+-(void)deletePreparedAddresses:(NSString*_Nonnull)address {
+    for (int i=0; i<_preparedDeleteAddresses.count; i++) {
+        if ([_preparedDeleteAddresses[i].walletId isEqualToString:address]) {
+            if (_preparedDeleteAddresses[i].isNeedRemoveTransactions) {
+                NSMutableArray *transactions = [[AppModel sharedManager] getTransactionsFromAddress:_preparedDeleteAddresses[i]];
+                
+                [_preparedDeleteTransactionss removeAllObjects];
+
+                for (BMTransaction *tr in transactions) {
+                    [[AppModel sharedManager] deleteTransaction:tr];
+                }
+            }
+            
+            [[AppModel sharedManager] deleteAddress:_preparedDeleteAddresses[i].walletId];
+            
+            [_preparedDeleteAddresses removeObjectAtIndex:i];
+            
+            break;
+        }
+    }
+}
+
+-(void)prepareDeleteAddress:(BMAddress*_Nonnull)address
+         removeTransactions:(BOOL)removeTransactions {
+    
+    address.isNeedRemoveTransactions = removeTransactions;
+    
+    if (removeTransactions)
+    {
+        NSMutableArray <BMTransaction*>*transactions = [[AppModel sharedManager] getTransactionsFromAddress:address];
+
+        NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+        
+        for (int i=0; i<transactions.count; i++) {
+            NSString *id1 = transactions[i].ID;
+            
+            for (int j=0; j<_transactions.count; j++) {
+                NSString *id2 = _transactions[j].ID;
+                
+                if ([id1 isEqualToString:id2]) {
+                    [set addIndex:j];
+                }
+            }
+        }
+        
+        [_preparedDeleteTransactionss addObjectsFromArray:transactions];
+        
+        [_transactions removeObjectsAtIndexes:set];
+        
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
+                [delegate onReceivedTransactions:_transactions];
+            }
+        }
+    }
+
+    for (int i=0; i<_walletAddresses.count; i++) {
+        if ([_walletAddresses[i].walletId isEqualToString:address.walletId]) {
+            [_walletAddresses removeObjectAtIndex:i];
+            break;
+        }
+    }
+    
+    for (int i=0; i<_contacts.count; i++) {
+        if ([_contacts[i].address.walletId isEqualToString:address.walletId]) {
+            [_contacts removeObjectAtIndex:i];
+            break;
+        }
+    }
+    
+    [_preparedDeleteAddresses addObject:address];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
+            [delegate onWalletAddresses:_walletAddresses];
+        }
+    }
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onAddedPrepareAddress:)]) {
+            [delegate onAddedPrepareAddress:address];
+        }
     }
 }
 
@@ -892,6 +1034,26 @@ static NSString *categoriesKey = @"categoriesKey";
     }
 }
 
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
+        
+    BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
+    transaction.fee = fee;
+    transaction.amount = amount;
+    transaction.address = to;
+    transaction.comment = comment;
+    transaction.date = [[NSDate date] timeIntervalSince1970];
+    transaction.ID = [NSString stringWithFormat:@"%llu",transaction.date];
+    
+    [_preparedTransactions addObject:transaction];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onAddedPrepareTransaction:)]) {
+            [delegate onAddedPrepareTransaction:transaction];
+        }
+    }
+}
+
 -(NSString*_Nonnull)allAmount:(double)fee {
     Amount bAmount = _walletStatus.available - fee;
     
@@ -1060,6 +1222,28 @@ static NSString *categoriesKey = @"categoriesKey";
 
 -(void)cancelTransaction:(BMTransaction*_Nonnull)transaction {
     wallet->getAsync()->cancelTx([self txIDfromString:transaction.ID]);
+}
+
+-(void)cancelPreparedTransaction:(NSString*_Nonnull)transaction {
+    for (int i=0; i<_preparedTransactions.count; i++) {
+        if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
+            [_preparedTransactions removeObjectAtIndex:i];
+            break;
+        }
+    }
+}
+
+-(void)sendPreparedTransaction:(NSString*_Nonnull)transaction {
+    for (int i=0; i<_preparedTransactions.count; i++) {
+        if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
+            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
+            break;
+        }
+    }
+}
+    
+-(void)cancelTransactionByID:(NSString*_Nonnull)transaction {
+    wallet->getAsync()->cancelTx([self txIDfromString:transaction]);
 }
 
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction {

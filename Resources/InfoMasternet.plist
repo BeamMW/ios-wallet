@@ -55,19 +55,6 @@
 	<string>The camera is needed to scan QR codes</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app requires Face ID permission to authenticate using Face recognition</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>SFProText-Medium.ttf</string>
-		<string>SFProText-Regular.ttf</string>
-		<string>ProximaNova-Bold.ttf</string>
-		<string>ProximaNova-Regular.ttf</string>
-		<string>SF-Pro-Display-Bold.otf</string>
-		<string>SF-Pro-Display-Regular.otf</string>
-		<string>SF-Pro-Display-Semibold.otf</string>
-		<string>SFProText-Semibold.otf</string>
-		<string>SF-Pro-Display-LightItalic.otf</string>
-		<string>SF-Pro-Display-RegularItalic.otf</string>
-	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -129,6 +116,20 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>icBeam3d</string>
 		</dict>
+	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SFProText-Regular.ttf</string>
+		<string>SFProText-Medium.ttf</string>
+		<string>ProximaNova-Bold.ttf</string>
+		<string>ProximaNova-Regular.ttf</string>
+		<string>SF-Pro-Display-Bold.otf</string>
+		<string>SF-Pro-Display-Regular.otf</string>
+		<string>SF-Pro-Display-Semibold.otf</string>
+		<string>SFProText-Semibold.otf</string>
+		<string>SF-Pro-Display-LightItalic.otf</string>
+		<string>SF-Pro-Display-RegularItalic.otf</string>
+		<string>SF-Pro-Display-Light.otf</string>
 	</array>
 </dict>
 </plist>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="i2H-sC-JyQ" customClass="AddressesSegmentView" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="95"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TeP-CW-e3H" customClass="BMNetworkStatusView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="15" y="15" width="345" height="14"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="13i-97-3Q8"/>
+                    </constraints>
+                </view>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2lx-4v-I6g">
+                    <rect key="frame" x="15" y="49" width="345" height="29.5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="28.5" id="ogW-Sb-rJs"/>
+                    </constraints>
+                    <segments>
+                        <segment title="Active"/>
+                        <segment title="Expired"/>
+                        <segment title="Contacts"/>
+                    </segments>
+                    <color key="tintColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <connections>
+                        <action selector="onFilterSegmentWithSender:" destination="i2H-sC-JyQ" eventType="valueChanged" id="8xK-pW-5kd"/>
+                    </connections>
+                </segmentedControl>
+            </subviews>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="2lx-4v-I6g" firstAttribute="leading" secondItem="i2H-sC-JyQ" secondAttribute="leading" constant="15" id="8QU-LG-gDo"/>
+                <constraint firstAttribute="trailing" secondItem="TeP-CW-e3H" secondAttribute="trailing" constant="15" id="ARW-hg-jcW"/>
+                <constraint firstAttribute="trailing" secondItem="2lx-4v-I6g" secondAttribute="trailing" constant="15" id="CjY-L7-k3P"/>
+                <constraint firstItem="TeP-CW-e3H" firstAttribute="top" secondItem="i2H-sC-JyQ" secondAttribute="top" constant="15" id="IeS-dN-Tzr"/>
+                <constraint firstItem="2lx-4v-I6g" firstAttribute="top" secondItem="TeP-CW-e3H" secondAttribute="bottom" constant="20" id="Wkj-hT-Kla"/>
+                <constraint firstItem="TeP-CW-e3H" firstAttribute="leading" secondItem="i2H-sC-JyQ" secondAttribute="leading" constant="15" id="o95-fu-hlC"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="53.600000000000001" y="66.11694152923539"/>
+        </view>
+    </objects>
+</document>

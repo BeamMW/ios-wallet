@@ -26,6 +26,17 @@ class ReceiveAddressListCell: BaseCell {
     @IBOutlet weak private var idLabel: UILabel!
     @IBOutlet weak private var categoryLabel: UILabel!
     
+    @IBOutlet weak private var transactionCommentIcon: UIImageView!
+    @IBOutlet weak private var transactionCommentLabel: UILabel!
+    @IBOutlet weak private var transactionCommentDate: UILabel!
+
+    @IBOutlet weak private var transactionCommentIconY: NSLayoutConstraint!
+    @IBOutlet weak private var transactionCommentLabelY: NSLayoutConstraint!
+    @IBOutlet weak private var transactionCommentDateY: NSLayoutConstraint!
+    
+    @IBOutlet weak private var transactionCommentIconHeight: NSLayoutConstraint!
+    @IBOutlet weak private var transactionCommentIconWidth: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -65,6 +76,16 @@ extension ReceiveAddressListCell: Configurable {
             categoryLabel.text = ""
         }
         
+        transactionCommentIcon.image = nil
+        transactionCommentLabel.text = nil
+        transactionCommentDate.text = nil
+        
+        transactionCommentIconY.constant = 0
+        transactionCommentLabelY.constant = 0
+        transactionCommentDateY.constant = 0
+        
+        transactionCommentIconHeight.constant = 0
+        transactionCommentIconWidth.constant = 0
     }
 }
 

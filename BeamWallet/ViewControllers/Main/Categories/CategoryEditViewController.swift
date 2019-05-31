@@ -30,9 +30,7 @@ class CategoryEditViewController: BaseViewController {
     @IBOutlet private var colorsView: BMCategoryColorsView!
 
     private var category:BMCategory!
-    private let colors = [UIColor.init(hexString: "#ff746b"), UIColor.init(hexString: "#ffba55"),
-                           UIColor.init(hexString: "#fee65a"), UIColor.init(hexString: "#73ff7c"),
-                           UIColor.init(hexString: "#4fa5ff"), UIColor.init(hexString: "#d785ff")]
+    private let colors = [UIColor.init(hexString: "#ff746b"), UIColor.init(hexString: "#ffba55"), UIColor.init(hexString: "#fee65a"), UIColor.init(hexString: "#73ff7c"), UIColor.init(hexString: "#4fa5ff"), UIColor.init(hexString: "#d785ff")]
     
     private var selectedColor:String!
     
@@ -48,14 +46,14 @@ class CategoryEditViewController: BaseViewController {
             self.selectedColor = self.colors.randomElement()?.toHexString()
             
             self.category = BMCategory()
-            self.category.name = ""
+            self.category.name = String.empty()
             self.category.id = 0
             self.category.color = self.selectedColor
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -64,14 +62,14 @@ class CategoryEditViewController: BaseViewController {
         hideKeyboardWhenTappedAround()
 
         if self.navigationController is BMGradientNavigationController {
-            largeTitle = category.id == 0 ? "New category".uppercased() : "Edit Category".uppercased()
+            largeTitle = category.id == 0 ? LocalizableStrings.new_category.uppercased() : LocalizableStrings.edit_category.uppercased()
 
             navigationItem.hidesBackButton = true
         }
         else{
-            title = category.id == 0 ? "New category" : "Edit Category"
+            title = category.id == 0 ? LocalizableStrings.new_category : LocalizableStrings.edit_category
 
-            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
         }
         
         nameView = UIView(frame: CGRect(x: 0, y: (isNavigationGradient ? 200 : 20), width: UIScreen.main.bounds.size.width, height: 49))
@@ -79,13 +77,16 @@ class CategoryEditViewController: BaseViewController {
         view.addSubview(nameView)
         
         nameField = UITextField(frame: CGRect(x: 15, y: 0, width: UIScreen.main.bounds.size.width-30, height: 49))
-        nameField.placeholder = "Category name"
+        nameField.placeholder = LocalizableStrings.category_name
         nameField.placeHolderColor = UIColor.main.steelGrey
         nameField.textColor = UIColor.white
         nameField.font = RegularFont(size: 16)
+        nameField.tintColor = UIColor.white
         nameField.delegate = self
         nameField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         nameField.backgroundColor = UIColor.clear
+        nameField.autocorrectionType = .no
+        nameField.spellCheckingType = .no
         nameField.text = category.name
         nameView.addSubview(nameField)
         
@@ -101,7 +102,7 @@ class CategoryEditViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         if isNavigationGradient {
-            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
         }
     }
     
@@ -119,18 +120,22 @@ class CategoryEditViewController: BaseViewController {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let name = nameField.text {
-            enableRightButton(enabled: self.canSave(name: name, color: selectedColor))
+            let trimmedString = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            enableRightButton(enabled: self.canSave(name: trimmedString, color: selectedColor))
         }
     }
     
     @objc private func onSave() {
+
         if let name = nameField.text {
-            
-            if AppModel.sharedManager().isNameAlreadyExist(name, id: category.id) {
-                self.alert(message: "This category name already exists")
+            let trimmedString = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            if AppModel.sharedManager().isNameAlreadyExist(trimmedString, id: category.id) {
+                self.alert(message: LocalizableStrings.category_exist)
             }
             else{
-                category.name = name
+                category.name = trimmedString
                 category.color = selectedColor
                 
                 if category.id == 0 {

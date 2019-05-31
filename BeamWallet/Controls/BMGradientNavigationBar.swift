@@ -22,14 +22,15 @@ import UIKit
 class BMGradientNavigationBar: UINavigationBar {
     
     public static let height:CGFloat = 180
+    private var backgroundImage:UIImageView!
     
     public var offset:CGFloat = 0 {
         didSet {
-            self.layoutSubviews()
+            changeFrame()
         }
     }
     
-    private let colors = [UIColor.main.brightSkyBlue, UIColor.main.marine.withAlphaComponent(0.5)]
+    private let colors = [UIColor.main.brightSkyBlue, UIColor.main.marine]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,26 +57,32 @@ class BMGradientNavigationBar: UINavigationBar {
             return
         }
         
+        changeFrame()
+    }
+    
+    private func changeFrame() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+
         frame = CGRect(x: frame.origin.x, y:  0, width: frame.size.width, height: BMGradientNavigationBar.height - offset)
         
         for subview in self.subviews {
             var stringFromClass = NSStringFromClass(subview.classForCoder)
             if stringFromClass.contains("BarBackground") {
-                subview.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: BMGradientNavigationBar.height - offset)
-                
+                subview.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.self.width, height: BMGradientNavigationBar.height - offset)
+
                 if subview.layer.sublayers?.first as? CAGradientLayer == nil {
                     let gradient: CAGradientLayer = CAGradientLayer()
-                    
+
                     gradient.colors = colors.map { $0.cgColor }
-                    gradient.startPoint = CGPoint(x: 0.0, y: 0.0)
-                    gradient.endPoint = CGPoint(x: 0.0, y: 1.0)
-                    gradient.frame = CGRect(x: 0.0, y: 0.0, width: subview.frame.size.width, height: subview.frame.size.height)
-                    
+                    gradient.locations = [0.0, 1.0]
+                    gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.self.width, height: subview.frame.size.height)
+
                     subview.layer.insertSublayer(gradient, at: 0)
                 }
                 else{
                     let gradient = subview.layer.sublayers!.first as! CAGradientLayer
-                    gradient.frame = CGRect(x: 0.0, y: 0.0, width: subview.frame.size.width, height: subview.frame.size.height)
+                    gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.self.width, height: subview.frame.size.height)
                 }
             }
             
@@ -84,5 +91,7 @@ class BMGradientNavigationBar: UINavigationBar {
                 subview.frame = CGRect(x: subview.frame.origin.x, y: 40, width: subview.frame.width, height: subview.frame.height)
             }
         }
+        
+        CATransaction.commit()
     }
 }

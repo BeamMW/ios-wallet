@@ -112,5 +112,16 @@ func IconLeftMenu() -> UIImage? {
     return UIImage(named: "iconLeftMenu")
 }
 
+func IconDownArrow() -> UIImage? {
+    return UIImage(named: "iconDownArrow")
+}
+
+func IconNextArrow() -> UIImage? {
+    return UIImage(named: "iconNextArrow")
+}
+
+func GradientBlue() -> UIImage? {
+    return UIImage(named: "gradientBlue")
+}
 
 

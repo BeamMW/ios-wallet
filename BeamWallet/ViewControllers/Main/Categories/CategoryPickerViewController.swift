@@ -33,11 +33,17 @@ class CategoryPickerViewController: BaseTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.currentCategory = category
-        self.selectedCategory = category
+        
+        if category == nil {
+            self.selectedCategory = BMCategory.none()
+        }
+        else{
+            self.selectedCategory = category
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override var tableStyle: UITableView.Style {
@@ -53,12 +59,12 @@ class CategoryPickerViewController: BaseTableViewController {
         super.viewDidLoad()
         
         if isNavigationGradient {
-            largeTitle = "Category".uppercased()
+            largeTitle = LocalizableStrings.category.uppercased()
             navigationItem.hidesBackButton = true
         }
         else{
-            title = "Category"
-            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+            title = LocalizableStrings.category
+            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
         }
         
         categories = (AppModel.sharedManager().categories as! [BMCategory])
@@ -76,7 +82,7 @@ class CategoryPickerViewController: BaseTableViewController {
         super.viewWillAppear(animated)
         
         if isNavigationGradient {
-            addRightButton(title:"Save", targer: self, selector: #selector(onSave), enabled: false)
+            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
         }
     }
     
@@ -116,18 +122,10 @@ extension CategoryPickerViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if categories.count == 0 {
-            let cell =  tableView
-                .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
-                .configured(with: "categories not found")
-            return cell
-        }
-        else{
-            let cell =  tableView
-                .dequeueReusableCell(withType: CategoryPickerCell.self, for: indexPath)
-                .configured(with: (category: categories[indexPath.row], selected: categories[indexPath.row].id == selectedCategory?.id))
-            return cell
-        }
+        let cell =  tableView
+            .dequeueReusableCell(withType: CategoryPickerCell.self, for: indexPath)
+            .configured(with: (category: categories[indexPath.row], selected: categories[indexPath.row].id == selectedCategory?.id))
+        return cell
     }
 }
 
