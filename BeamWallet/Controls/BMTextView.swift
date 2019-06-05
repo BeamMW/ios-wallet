@@ -24,6 +24,8 @@ class BMTextView: UITextView {
     
     var line = UIView()
     
+    public var defaultOffset:CGFloat = 12
+    
     private var _lineColor:UIColor?
     private var _lineHeight:CGFloat = 2
     
@@ -69,7 +71,7 @@ class BMTextView: UITextView {
         super.layoutSubviews()
         
         if self.frame.size.height <= 42 {
-            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - 12, width: self.frame.size.width, height: lineHeight)
+            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - defaultOffset, width: self.frame.size.width, height: lineHeight)
         }
         else{
             line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - 4, width: self.frame.size.width, height: lineHeight)

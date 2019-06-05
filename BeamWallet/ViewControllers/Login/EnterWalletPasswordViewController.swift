@@ -66,7 +66,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         super.viewWillAppear(animated)
         
         AppModel.sharedManager().cancelForgotPassword()
-        
+
         if (self.presentedViewController as? UIAlertController) != nil {
 
         }

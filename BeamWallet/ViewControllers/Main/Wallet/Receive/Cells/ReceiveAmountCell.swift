@@ -1,5 +1,5 @@
 //
-// ReceiveAmountCell.swift
+// BMAmountCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,12 +19,26 @@
 
 import UIKit
 
-class ReceiveAmountCell: BaseCell {
+class BMAmountCell: BaseCell {
     
     weak var delegate: ReceiveCellProtocol?
 
     @IBOutlet weak private var textField: BMField!
+    @IBOutlet weak private var nameLabel: UILabel!
 
+    public var error:String?
+    {
+        didSet{
+            if error == nil {
+                textField.status = .normal
+            }
+            else{
+                textField.error = error
+                textField.status = .error
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -33,14 +47,17 @@ class ReceiveAmountCell: BaseCell {
     }
 }
 
-extension ReceiveAmountCell: Configurable {
+extension BMAmountCell: Configurable {
     
-    func configure(with amount: String?) {
-        textField.text = amount
+    func configure(with options: (name: String, value:String?)) {
+        nameLabel.text = options.name
+        nameLabel.letterSpacing = 2
+
+        textField.text = options.value
     }
 }
 
-extension ReceiveAmountCell : UITextFieldDelegate {
+extension BMAmountCell : UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         self.delegate?.textValueDidReturn?(self)

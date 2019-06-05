@@ -51,6 +51,7 @@ typedef UInt64 BMTransactionStatus;
 
     
 -(NSString*)formattedDate;
+-(NSString*)shortDate;
 -(BOOL)isFailed;
 -(BOOL)hasPaymentProof;
 -(BOOL)isCancelled;

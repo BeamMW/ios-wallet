@@ -50,8 +50,10 @@
 
 using namespace beam;
 using namespace ECC;
-using namespace std;
+using namespace beam;
 using namespace beam::io;
+using namespace beam::wallet;
+using namespace std;
 
 static int proofSize = 330;
 static NSString *categoriesKey = @"categoriesKey";
@@ -333,7 +335,7 @@ static NSString *categoriesKey = @"categoriesKey";
     }
     
     // generate default address
-    auto address = wallet::createAddress(*walletDb);
+    auto address = beam::wallet::storage::createAddress(*walletDb);
     address.m_label = "default";
     walletDb->saveAddress(address);
     
@@ -886,44 +888,61 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(void)editAddress:(BMAddress*_Nonnull)address {
-    WalletID walletID(Zero);
-    if (walletID.FromHex(address.walletId.string))
-    {        
-        std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
-
-        for (int i=0; i<addresses.size(); i++)
+    BMContact *contact = [self getContactFromId:address.walletId];
+    
+    if(contact != nil)
+    {
+        WalletID walletID(Zero);
+        if (walletID.FromHex(address.walletId.string))
         {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-
-            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
-
-            if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:address.category])
+            WalletAddress _address;
+            _address.m_label = address.label.string;
+            _address.m_category = address.category.string;
+            _address.m_walletID = walletID;
+            _address.m_createTime = NSDate.date.timeIntervalSince1970;
+            walletDb->saveAddress(_address);
+        }
+    }
+    else{
+        WalletID walletID(Zero);
+        if (walletID.FromHex(address.walletId.string))
+        {
+            std::vector<WalletAddress> addresses = walletDb->getAddresses(true);
+            
+            for (int i=0; i<addresses.size(); i++)
             {
-                addresses[i].m_category = address.category.string;
-
-                wallet->getAsync()->saveAddress(addresses[i], true);
-
-                break;
+                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+                
+                NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+                
+                if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:address.category])
+                {
+                    addresses[i].m_category = address.category.string;
+                    
+                    wallet->getAsync()->saveAddress(addresses[i], true);
+                    
+                    break;
+                }
             }
-        }
-        
-        if(address.isNowExpired) {
-            wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
-        }
-        else if(address.isNowActive) {
-            if (address.isNowActiveDuration == 0){
-                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, true, true, false);
-            }
-            else{
-                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, true, false);
-            }
-        }
-        else{
-            if (address.isExpired) {
+            
+            if(address.isNowExpired) {
                 wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
             }
-            else  {
-                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), address.isChangedDate ? true : false, false);
+            else if(address.isNowActive) {
+                if (address.isNowActiveDuration == 0){
+                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, true, true, false);
+                }
+                else{
+                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, true, false);
+                }
+            }
+            else{
+                if (address.isExpired) {
+                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
+                }
+                else  {
+                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), address.isChangedDate ? true : false, false);
+                }
             }
         }
     }
@@ -948,6 +967,20 @@ static NSString *categoriesKey = @"categoriesKey";
     return  qrString;
 }
 
+-(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name category:(NSString*_Nonnull)category {
+    
+    WalletID walletID(Zero);
+    if (walletID.FromHex(addressId.string))
+    {
+        WalletAddress address;
+        address.m_label = name.string;
+        address.m_category = category.string;
+        address.m_walletID = walletID;
+        address.m_createTime = NSDate.date.timeIntervalSince1970;
+        walletDb->saveAddress(address);
+    }
+}
+
 #pragma mark - Delegates
 
 -(void)addDelegate:(id<WalletModelDelegate>) delegate{
@@ -962,6 +995,13 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 #pragma mark - Send
+
+-(double)realTotal:(double)amount fee:(double)fee {
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    double realAmount = double(int64_t(bTotal)) / Rules::Coin;
+    return realAmount;
+}
 
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
    
@@ -992,11 +1032,7 @@ static NSString *categoriesKey = @"categoriesKey";
     Amount bTotal = bAmount + fee;
     Amount bMax = round(MAX_AMOUNT * Rules::Coin);
 
-    if(![self isValidAddress:to])
-    {
-        return @"Incorrect address";
-    }
-    else if (amount==0) {
+    if (amount==0) {
         return @"Amount can’t be 0";;
     }
     else if(_walletStatus.available < bTotal)
@@ -1012,6 +1048,10 @@ static NSString *categoriesKey = @"categoriesKey";
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
         
         return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
+    }
+    else if(![self isValidAddress:to])
+    {
+        return @"Incorrect address";
     }
     else{
         return nil;
@@ -1042,7 +1082,7 @@ static NSString *categoriesKey = @"categoriesKey";
     transaction.address = to;
     transaction.comment = comment;
     transaction.date = [[NSDate date] timeIntervalSince1970];
-    transaction.ID = [NSString stringWithFormat:@"%llu",transaction.date];
+    transaction.ID = [NSString randomAlphanumericStringWithLength:10];
     
     [_preparedTransactions addObject:transaction];
     
@@ -1144,9 +1184,12 @@ static NSString *categoriesKey = @"categoriesKey";
 #pragma mark - Transactions
 
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction {
+    
+    NSMutableArray *utxos = [NSMutableArray arrayWithArray:_utxos];
+    
     NSMutableArray *result = [NSMutableArray array];
     
-    for(BMUTXO *utxo in _utxos)
+    for(BMUTXO *utxo in utxos)
     {
         if (utxo.createTxId!=nil)
         {
@@ -1188,7 +1231,7 @@ static NSString *categoriesKey = @"categoriesKey";
     
     try{
         auto buffer = from_hex(code.string);
-        beam::wallet::PaymentInfo m_paymentInfo = wallet::PaymentInfo::FromByteBuffer(buffer);
+        beam::wallet::storage::PaymentInfo m_paymentInfo = beam::wallet::storage::PaymentInfo::FromByteBuffer(buffer);
         
         if (m_paymentInfo.IsValid()) {
             auto kernelId = to_hex(m_paymentInfo.m_KernelID.m_pData, m_paymentInfo.m_KernelID.nBytes);
@@ -1281,6 +1324,18 @@ static NSString *categoriesKey = @"categoriesKey";
     for (BMTransaction *tr in _transactions) {
         [self deleteTransaction:tr];
     }
+}
+
+-(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID {
+    NSMutableArray *transactions = [NSMutableArray arrayWithArray:_transactions];
+    
+    for (BMTransaction *tr in transactions) {
+        if ([tr.senderAddress isEqualToString:ID] || [tr.receiverAddress isEqualToString:ID]) {
+            return tr;
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark - UTXO
@@ -1414,9 +1469,19 @@ static NSString *categoriesKey = @"categoriesKey";
         return nil;
     }
     
-    for (BMAddress *address in _walletAddresses) {
+    NSMutableArray *addresses = [NSMutableArray arrayWithArray:_walletAddresses];
+    
+    for (BMAddress *address in addresses) {
         if ([address.walletId isEqualToString:ID]) {
             return [self findCategoryById:address.category];
+        }
+    }
+    
+    NSMutableArray *contacts = [NSMutableArray arrayWithArray:_contacts];
+    
+    for (BMContact *contact in contacts) {
+        if ([contact.address.walletId isEqualToString:ID]) {
+            return [self findCategoryById:contact.address.category];
         }
     }
     
@@ -1512,9 +1577,19 @@ static NSString *categoriesKey = @"categoriesKey";
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressFromCategory:(BMCategory*_Nonnull)category {
     NSMutableArray *addresses = [NSMutableArray array];
     
-    for (BMAddress *address in _walletAddresses) {
+    NSMutableArray *walletAddresses = [NSMutableArray arrayWithArray:_walletAddresses];
+    
+    for (BMAddress *address in walletAddresses) {
         if (address.category.intValue == category.ID) {
             [addresses addObject:address];
+        }
+    }
+    
+    NSMutableArray *contacts = [NSMutableArray arrayWithArray:_contacts];
+    
+    for (BMContact *contact in contacts) {
+        if (contact.address.category.intValue == category.ID) {
+            [addresses addObject:contact.address];
         }
     }
     

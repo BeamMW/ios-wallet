@@ -70,13 +70,13 @@ class ShortcutManager {
         switch shortCutType {
         case ShortcutIdentifier.Send.type:
             handled = true
-            navigationController.viewControllers = [WalletViewController(), WalletSendViewController()]
+            navigationController.viewControllers = [WalletViewController(), SendViewController()]
         case ShortcutIdentifier.Receive.type:
             handled = true
-            navigationController.viewControllers = [WalletViewController(), LegacyWalletReceiveViewController(address: BMAddress())]
+            navigationController.viewControllers = [WalletViewController(), ReceiveViewController(address: BMAddress())]
         case ShortcutIdentifier.Scan.type:
             handled = true
-            navigationController.viewControllers = [WalletViewController(), WalletSendViewController(), WalletQRCodeScannerViewController()]
+            navigationController.viewControllers = [WalletViewController(), SendViewController(), QRScannerViewController()]
         case ShortcutIdentifier.Buy.type:
             handled = true
             topVC.openUrl(url: URL(string: Settings.sharedManager().whereBuyAddress)!)

@@ -125,3 +125,31 @@ func GradientBlue() -> UIImage? {
 }
 
 
+func IconScanQr() -> UIImage? {
+    return UIImage(named: "iconScanQr")
+}
+
+func IconNextPink() -> UIImage? {
+    return UIImage(named: "iconNextPink")
+}
+
+func SliderDot() -> UIImage? {
+    return UIImage(named: "sliderDot")
+}
+
+func IconSendBlue() -> UIImage? {
+    return UIImage(named: "iconSendBlue")
+}
+
+func IconDoneBlue() -> UIImage? {
+    return UIImage(named: "iconDoneBlue")
+}
+
+func IconCancel() -> UIImage? {
+    return UIImage(named: "iconCancel")
+}
+
+func IconComment() -> UIImage? {
+    return UIImage(named: "iconComment")
+}
+

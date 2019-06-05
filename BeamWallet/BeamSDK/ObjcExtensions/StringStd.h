@@ -22,6 +22,7 @@
 @interface NSString (Additions)
 
 -(BOOL)isEmpty;
++(NSString *)randomAlphanumericStringWithLength:(NSInteger)length;
 
 @end
 

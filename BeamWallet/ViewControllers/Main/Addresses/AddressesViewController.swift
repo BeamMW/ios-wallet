@@ -84,7 +84,7 @@ class AddressesViewController: BaseTableViewController {
     }
     
     private func showDeleteAddressAndTransactions(indexPath:IndexPath) {
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_transaction, icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_only, icon: nil, action:.delete_address)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
         
         var address:BMAddress!
         
@@ -171,6 +171,14 @@ extension AddressesViewController : UITableViewDelegate {
             address = addresses[indexPath.row]
         }
         
+        let copy = UITableViewRowAction(style: .normal, title: LocalizableStrings.copy) { action, index in
+           
+            UIPasteboard.general.string = address.walletId
+            
+            ShowCopied(text: LocalizableStrings.address_copied)
+        }
+        copy.backgroundColor = UIColor.main.warmBlue
+        
         let edit = UITableViewRowAction(style: .normal, title: LocalizableStrings.edit) { action, index in
             let vc = EditAddressViewController(address: address)
             self.pushViewController(vc: vc)
@@ -202,7 +210,7 @@ extension AddressesViewController : UITableViewDelegate {
         }
         delete.backgroundColor = UIColor.main.orangeRed
         
-        return (selectedState == .contacts) ? [delete] : [delete,edit]
+        return [delete,copy,edit]
 
     }
 }
@@ -274,7 +282,7 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
 
         navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
 
-        let detailVC = PreviewQRCodeViewController(address: addresses[indexPath.row])
+        let detailVC = PreviewQRViewController(address: addresses[indexPath.row])
         detailVC.preferredContentSize = CGSize(width: 0.0, height: 340)
         
         previewingContext.sourceRect = cell.frame

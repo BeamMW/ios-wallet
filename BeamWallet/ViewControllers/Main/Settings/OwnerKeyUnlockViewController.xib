@@ -23,6 +23,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OwnerKeyUnlockViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="confirmLabel" destination="N4e-oF-XKR" id="Ikg-CW-clu"/>
                 <outlet property="mainStack" destination="dF7-SV-PnC" id="8Bt-Yp-PfX"/>
                 <outlet property="passField" destination="wpy-QC-RxL" id="DQ6-cb-2By"/>
                 <outlet property="subTitleLabel" destination="z35-nF-MGS" id="1jS-0f-hNr"/>
@@ -113,6 +114,15 @@ to access the wallet</string>
                                 <constraint firstItem="hHU-2Y-hjL" firstAttribute="centerX" secondItem="AB7-ts-VYb" secondAttribute="centerX" id="MPa-ro-o3f"/>
                             </constraints>
                         </view>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please use Face ID to finish verification" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N4e-oF-XKR">
+                            <rect key="frame" x="0.0" y="378" width="374" height="0.0"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="16"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
                     </subviews>
                 </stackView>
             </subviews>

@@ -1,6 +1,6 @@
 //
-//  WalletSendViewController.swift
-//  BeamWallet
+// LegacyWalletSendViewController.swift
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -21,7 +21,7 @@
 import UIKit
 import AVFoundation
 
-class WalletSendViewController: BaseViewController {
+class LegacyWalletSendViewController: BaseViewController {
 
     @IBOutlet weak private var balanceTotalLabel: UILabel!
     @IBOutlet weak private var balanceTotalIcon: UIImageView!
@@ -258,7 +258,7 @@ class WalletSendViewController: BaseViewController {
 
 // MARK: TextField Actions
 
-extension WalletSendViewController : UITextFieldDelegate {
+extension LegacyWalletSendViewController : UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -424,7 +424,7 @@ extension WalletSendViewController : UITextFieldDelegate {
 
 // MARK: Keyboard Handling
 
-extension WalletSendViewController {
+extension LegacyWalletSendViewController {
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
@@ -441,7 +441,7 @@ extension WalletSendViewController {
 
 //MARK: - WalletQRCodeScannerViewControllerDelegate
 
-extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
+extension LegacyWalletSendViewController : WalletQRCodeScannerViewControllerDelegate
 {
     func didScanQRCode(value:String, amount:String?) {        
         self.toAddressErrorLabel.text = "Input or scan the recipient's address"
@@ -457,7 +457,7 @@ extension WalletSendViewController : WalletQRCodeScannerViewControllerDelegate
     }
 }
 
-extension WalletSendViewController : WalletConfirmSendViewControllerDelegate {
+extension LegacyWalletSendViewController : WalletConfirmSendViewControllerDelegate {
     
     func onConfirmSend(amount: Double, fee: Double, toAddress: String) {
     //    AppModel.sharedManager().send(amount, fee:fee, to: toAddress, comment: commentField.text ?? "")

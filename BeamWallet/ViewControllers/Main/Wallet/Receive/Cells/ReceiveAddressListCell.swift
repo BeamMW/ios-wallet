@@ -86,6 +86,23 @@ extension ReceiveAddressListCell: Configurable {
         
         transactionCommentIconHeight.constant = 0
         transactionCommentIconWidth.constant = 0
+        
+        if let last = AppModel.sharedManager().lastTransaction(fromAddress: options.address.walletId)
+        {
+            transactionCommentIconY.constant = 10
+            transactionCommentLabelY.constant = 10
+            transactionCommentDateY.constant = 10
+            
+            transactionCommentIconHeight.constant = 16
+            transactionCommentIconWidth.constant = 16
+            
+            if !last.comment.isEmpty {
+                transactionCommentIcon.image = IconComment()
+                transactionCommentLabel.text =  "”" + last.comment + "”"
+            }
+            
+            transactionCommentDate.text = last.shortDate()
+        }
     }
 }
 

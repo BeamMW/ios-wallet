@@ -128,6 +128,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
+-(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name category:(NSString*_Nonnull)category;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
@@ -136,7 +137,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
-
+-(double)realTotal:(double)amount fee:(double)fee;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
@@ -152,6 +153,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback;
 -(void)clearAllTransactions;
+-(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID;
 
 // utxo
 -(void)getUTXO;

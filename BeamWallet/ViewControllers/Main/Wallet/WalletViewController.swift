@@ -34,7 +34,7 @@ class WalletViewController: BaseTableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.register([WalletStatusCell.self, WalletAvailableCell.self, WalletProgressCell.self, WalletTransactionCell.self, EmptyCell.self])
+        tableView.register([WalletStatusCell.self, WalletAvailableCell.self, WalletProgressCell.self, WalletTransactionCell.self, BMEmptyCell.self])
         tableView.tableHeaderView = BMNetworkStatusView()
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
@@ -70,6 +70,8 @@ class WalletViewController: BaseTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.isNavigationBarHidden = false
+
         self.sideMenuController?.isLeftViewSwipeGestureEnabled = true
     }
     
@@ -242,7 +244,7 @@ extension WalletViewController : UITableViewDelegate {
         cancel.backgroundColor = UIColor.main.steel
         
         let rep = UITableViewRowAction(style: .normal, title: LocalizableStrings.rep) { action, index in
-            let vc = WalletSendViewController()
+            let vc = SendViewController()
             vc.transaction = transaction
             self.pushViewController(vc: vc)
         }
@@ -335,7 +337,7 @@ extension WalletViewController : UITableViewDataSource {
         case 1:
             if transactions.count == 0 {
                 let cell = tableView
-                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
+                    .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
                     .configured(with: LocalizableStrings.empty_transactions_list)
                 return cell
             }
@@ -429,14 +431,6 @@ extension WalletViewController : WalletStatusCellDelegate {
                     
                     let vc = ReceiveViewController(address: result)
                     self.pushViewController(vc: vc)
-                    
-//                    let n = BMGradientNavigationController(rootViewController: ReceiveViewController(address: result))
-//                    self.navigationController?.presentDetail(n)
-                    
-//                    let vc = ReceiveViewController(address: result)
-//                   // let vc = LegacyWalletReceiveViewController(address: result)
-//                    vc.hidesBottomBarWhenPushed = true
-//                    self.pushViewController(vc: vc)
                 }
             }
             else if let reason = error?.localizedDescription {
@@ -445,12 +439,10 @@ extension WalletViewController : WalletStatusCellDelegate {
                 }
             }
         }
-        
-
     }
     
     func onClickSend() {
-        let vc = WalletSendViewController()
+        let vc = SendViewController()
         vc.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: vc)
     }

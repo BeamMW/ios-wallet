@@ -58,15 +58,16 @@ class CategoryPickerViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isNavigationGradient {
-            largeTitle = LocalizableStrings.category.uppercased()
-            navigationItem.hidesBackButton = true
+        if isGradient {
+            setGradientTopBar(mainColor: UIColor.main.brightSkyBlue, addedStatusView: false)
+            attributedTitle = LocalizableStrings.category.uppercased()
         }
         else{
             title = LocalizableStrings.category
-            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
         }
         
+        addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+
         categories = (AppModel.sharedManager().categories as! [BMCategory])
         categories.insert(BMCategory.none(), at: 0)
         
@@ -75,7 +76,7 @@ class CategoryPickerViewController: BaseTableViewController {
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
         tableView.separatorStyle = .singleLine
         tableView.register(CategoryPickerCell.self)
-        tableView.register(EmptyCell.self)
+        tableView.register(BMEmptyCell.self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,6 +84,16 @@ class CategoryPickerViewController: BaseTableViewController {
         
         if isNavigationGradient {
             addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        if isGradient {
+            tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
+        }
+        else{
+            super.viewDidLayoutSubviews()
         }
     }
     

@@ -29,6 +29,7 @@ class BMField: UITextField {
     var line = UIView()
     
     private var _defaultHeight:CGFloat = 30
+    private var _errorHeight:CGFloat = 50
 
     @IBInspectable
     var defaultHeight: CGFloat {
@@ -44,13 +45,22 @@ class BMField: UITextField {
     private var _lineHeight:CGFloat = 2
     private var _error:String?
     private var _oldColor:UIColor?
-        
+    
+    public func setNormalColor(color:UIColor) {
+        _oldColor = color
+    }
+    
     var status: Status?  {
         didSet {
             switch status {
             case .error?:
                 if error != nil {
-                    self.heightConstraint.constant = 50
+                    errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: 0)
+                    errorLabel.sizeToFit()
+                    if status == .error {
+                        _errorHeight = defaultHeight + errorLabel.frame.size.height + 5
+                    }
+                    self.heightConstraint.constant = _errorHeight
                 }
                 self.textColor = UIColor.main.red
                 self.line.backgroundColor = UIColor.main.red
@@ -82,6 +92,7 @@ class BMField: UITextField {
         label.textColor = UIColor.main.red
         label.font = RegularFont(size: 16)
         label.isHidden = true
+        label.numberOfLines = 0
         addSubview(label)
 
         return label
@@ -117,8 +128,11 @@ class BMField: UITextField {
         set{
             _error = newValue
             errorLabel.text = newValue
+            errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: 0)
+            errorLabel.sizeToFit()
             if status == .error {
-                self.heightConstraint.constant = 50
+                _errorHeight = defaultHeight + errorLabel.frame.size.height + 5
+                self.heightConstraint.constant = _errorHeight
             }
             layoutSubviews()
         }
@@ -159,9 +173,16 @@ class BMField: UITextField {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        line.frame = CGRect(x: 0, y: defaultHeight - lineHeight, width: self.frame.size.width, height: lineHeight)
+        var w = self.frame.size.width
         
-        errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: 18)
+        if let view = self.rightView {
+            w = w - view.frame.size.width - 10
+            view.y = 0
+        }
+        
+        line.frame = CGRect(x: 0, y: defaultHeight - lineHeight, width: w, height: lineHeight)
+        
+        errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: errorLabel.frame.size.height)
     }
 
     override var text: String? {
@@ -177,7 +198,14 @@ class BMField: UITextField {
         if !isNormal && error == nil {
             isNormal = true
         }
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : -16), left: 0, bottom: 0, right: 0)
+        
+        var right:CGFloat = 0
+        
+        if let view = self.rightView {
+            right = view.frame.size.width + 10
+        }
+        
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
         return bounds.inset(by: padding)
     }
     
@@ -186,7 +214,13 @@ class BMField: UITextField {
         if !isNormal && error == nil {
             isNormal = true
         }
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : -16), left: 0, bottom: 0, right: 0)
+        var right:CGFloat = 0
+        
+        if let view = self.rightView {
+            right = view.frame.size.width + 10
+        }
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
+        
         return bounds.inset(by: padding)
     }
     
@@ -195,7 +229,12 @@ class BMField: UITextField {
         if !isNormal && error == nil {
             isNormal = true
         }
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : -16), left: 0, bottom: 0, right: 0)
+        var right:CGFloat = 0
+        
+        if let view = self.rightView {
+            right = view.frame.size.width + 10
+        }
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
         return bounds.inset(by: padding)
     }
 }

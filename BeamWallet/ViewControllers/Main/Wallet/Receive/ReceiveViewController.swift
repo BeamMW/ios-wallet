@@ -25,6 +25,7 @@ class ReceiveViewController: BaseTableViewController {
     private var amount:String?
     private var showAdvanced = false
     private var showEdit = false
+    private var isShared = false
 
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
@@ -39,39 +40,63 @@ class ReceiveViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setGradientTopBar(image: GradientBlue())
+        setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
         attributedTitle = LocalizableStrings.receive.uppercased()
         
-        tableView.register([ReceiveFieldCell.self, ReceiveAddressButtonsCell.self, ReceiveAmountCell.self, ReceiveExpandCell.self, ReceiveAddressCell.self, ReceiveDetailCell.self])
+        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, ReceiveAddressCell.self, BMDetailCell.self])
 
-        tableView.delegate = self
-        tableView.dataSource = self
+        if address.walletId == nil {
+            AppModel.sharedManager().generateNewWalletAddress { (address, error) in
+                if let result = address {
+                    DispatchQueue.main.async {
+                        self.address = result
+                        self.tableView.delegate = self
+                        self.tableView.dataSource = self
+                        self.tableView.reloadData()
+                    }
+                }
+                else if let reason = error?.localizedDescription {
+                    DispatchQueue.main.async {
+                        self.alert(message: reason)
+                    }
+                }
+            }
+        }
+        else{
+            tableView.delegate = self
+            tableView.dataSource = self
+        }
+        
         tableView.keyboardDismissMode = .interactive
         
+        (self.navigationController as! BaseNavigationController).enableSwipeToDismiss = false
         self.sideMenuController?.isLeftViewSwipeGestureEnabled = false
     }
     
     override func viewDidLayoutSubviews() {
-        
-        tableView.frame = CGRect(x: 0, y: 150, width: self.view.bounds.width, height: self.view.bounds.size.height - 150)
+        tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.isNavigationBarHidden = true
-
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.navigationController?.isNavigationBarHidden = false
-
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
+        if isMovingFromParent {
+            if ((self.address.category.isEmpty || self.address.category == LocalizableStrings.zero) && self.address.label.isEmpty)
+            {
+                if (!self.isShared)
+                {
+                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                }
+            }
+            
+            self.navigationController?.isNavigationBarHidden = false
+        }
     }
     
     private func onExpire() {
@@ -85,6 +110,7 @@ class ReceiveViewController: BaseTableViewController {
             
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
         }
+        vc.isGradient = true
         pushViewController(vc: vc)
     }
     
@@ -100,6 +126,7 @@ class ReceiveViewController: BaseTableViewController {
                     self.didSelectCategory(category: category)
                 }
             }
+            vc.isGradient = true
             pushViewController(vc: vc)
         }
     }
@@ -177,13 +204,13 @@ extension ReceiveViewController : UITableViewDataSource {
             return cell
         case 1:
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveExpandCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
                 .configured(with: (expand: showEdit, title: LocalizableStrings.edit_address.uppercased()))
             cell.delegate = self
             return cell
         case 2:
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveDetailCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
                 .configured(with: (title: LocalizableStrings.expires.uppercased(), value: (address.duration > 0 ? LocalizableStrings.hours_24 : LocalizableStrings.never), valueColor: UIColor.white))
             return cell
         case 3:
@@ -196,25 +223,27 @@ extension ReceiveViewController : UITableViewDataSource {
             }
      
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveDetailCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
                 .configured(with: (title: LocalizableStrings.category.uppercased(), value: name, valueColor: color))
             return cell
         case 4:
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveFieldCell.self, for: indexPath)
-                .configured(with: (name: LocalizableStrings.local_annotation_not_shared, value: address.label))
+                .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                .configured(with: (name: LocalizableStrings.name.uppercased(), value: address.label, rightIcon:nil))
             cell.delegate = self
+            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
         case 5:
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveExpandCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
                 .configured(with: (expand: showAdvanced, title: LocalizableStrings.advanced.uppercased()))
             cell.delegate = self
             return cell
         case 6:
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveAmountCell.self, for: indexPath).configured(with: amount)
+                .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.request_amount   , value: amount))
             cell.delegate = self
+            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
         case 7:
             let cell = tableView
@@ -228,12 +257,18 @@ extension ReceiveViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = section > 0 ? UIColor.clear : UIColor.main.marineTwo.withAlphaComponent(0.2)
+        switch section {
+        case 2, 3, 4, 5, 6:
+            view.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        default:
+            view.backgroundColor = UIColor.clear
+        }
+
         return view
     }
 }
 
-extension ReceiveViewController : ReceiveCellProtocol {
+extension ReceiveViewController : BMCellProtocol {
     
     func textValueDidBegin(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender)  {
@@ -241,22 +276,22 @@ extension ReceiveViewController : ReceiveCellProtocol {
         }
     }
     
-    func textValueDidChange(_ sender: UITableViewCell, _ text: String) {
-        if sender is ReceiveFieldCell {
+    func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
+        if sender is BMFieldCell {
             address.label = text
         }
-        else if sender is ReceiveAmountCell {
+        else if sender is BMAmountCell {
             amount = text
         }
     }
     
     func textValueDidReturn(_ sender: UITableViewCell) {
-        if sender is ReceiveFieldCell {
+        if sender is BMFieldCell {
             AppModel.sharedManager().setWalletComment(address.label, toAddress: address.walletId)
         }
     }
     
-    func onExpandRecieveAddress(_ sender: UITableViewCell) {
+    func onExpandCell(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender)
         {
             if path.section == 1 {
@@ -282,16 +317,20 @@ extension ReceiveViewController : ReceiveCellProtocol {
         }
     }
     
-    func onChangeAddress() {
+    func onRightButton(_ sender: UITableViewCell) {
         let vc = ReceiveListViewController()
         vc.completion = {
             obj in
             
             if ((self.address.category.isEmpty || self.address.category == LocalizableStrings.zero) && self.address.label.isEmpty)
             {
-                AppModel.sharedManager().deleteAddress(self.address.walletId)
+                if (!self.isShared)
+                {
+                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                }
             }
             
+            self.isShared = true
             self.address = obj
             self.tableView.reloadData()
         }
@@ -301,7 +340,7 @@ extension ReceiveViewController : ReceiveCellProtocol {
     func onClickQRCode() {
         self.view.endEditing(true)
 
-        let modalViewController = ReceiveQRViewController(address: address, amount: amount)
+        let modalViewController = QRViewController(address: address, amount: amount)
         modalViewController.delegate = self
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -314,7 +353,8 @@ extension ReceiveViewController : ReceiveCellProtocol {
         let vc = UIActivityViewController(activityItems: [address.walletId ?? String.empty()], applicationActivities: [])
         vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
             if completed {
-             
+                self.isShared = true
+                
                 if activityType == UIActivity.ActivityType.copyToPasteboard {
                     ShowCopied()
                 }
@@ -327,26 +367,10 @@ extension ReceiveViewController : ReceiveCellProtocol {
     }
 }
 
-extension ReceiveViewController : ReceiveQRViewControllerDelegate {
+extension ReceiveViewController : QRViewControllerDelegate {
     func onCopyDone() {
+        self.isShared = true
+
         self.navigationController?.popViewController(animated: true)
-    }
-}
-
-// MARK: Keyboard Handling
-
-extension ReceiveViewController {
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            
-            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        tableView.contentInset = UIEdgeInsets.zero
     }
 }

@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.3</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>23</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -55,6 +55,57 @@
 	<string>The camera is needed to scan QR codes</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app requires Face ID permission to authenticate using Face recognition</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save your QR Code</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SFProText-Regular.ttf</string>
+		<string>SFProText-Medium.ttf</string>
+		<string>ProximaNova-Bold.ttf</string>
+		<string>ProximaNova-Regular.ttf</string>
+		<string>SF-Pro-Display-Bold.otf</string>
+		<string>SF-Pro-Display-Regular.otf</string>
+		<string>SF-Pro-Display-Semibold.otf</string>
+		<string>SFProText-Semibold.otf</string>
+		<string>SF-Pro-Display-LightItalic.otf</string>
+		<string>SF-Pro-Display-RegularItalic.otf</string>
+		<string>SF-Pro-Display-Light.otf</string>
+	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icSend3D</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Send</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Send</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icReceive3D</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Receive</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Receive</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icScanQr3D</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Scan QR code</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Scan</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>icBeam3d</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Where to buy Beam</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Buy</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -80,56 +131,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Save your QR Code</string>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Send</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Send</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>icSend3D</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Receive</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Receive</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>icReceive3D</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Scan</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Scan QR code</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>icScanQr3D</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).Buy</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Where to buy Beam</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>icBeam3d</string>
-		</dict>
-	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>SFProText-Regular.ttf</string>
-		<string>SFProText-Medium.ttf</string>
-		<string>ProximaNova-Bold.ttf</string>
-		<string>ProximaNova-Regular.ttf</string>
-		<string>SF-Pro-Display-Bold.otf</string>
-		<string>SF-Pro-Display-Regular.otf</string>
-		<string>SF-Pro-Display-Semibold.otf</string>
-		<string>SFProText-Semibold.otf</string>
-		<string>SF-Pro-Display-LightItalic.otf</string>
-		<string>SF-Pro-Display-RegularItalic.otf</string>
-		<string>SF-Pro-Display-Light.otf</string>
-	</array>
 </dict>
 </plist>

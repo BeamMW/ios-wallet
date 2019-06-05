@@ -38,6 +38,10 @@ class Device {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
     
+    static var isXDevice: Bool {
+        return Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS
+    }
+    
     static var isLarge: Bool {
         return Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus
     }

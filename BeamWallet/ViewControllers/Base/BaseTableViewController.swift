@@ -20,7 +20,8 @@
 import Foundation
 
 class BaseTableViewController: BaseViewController {
-
+    
+    var gradientOffset:CGFloat = Device.isXDevice ? 150 : 120
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
     
@@ -46,6 +47,16 @@ class BaseTableViewController: BaseViewController {
             navigationBar.offset = offset
             navigation.offset = offset < minOffset ? minOffset : offset
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -118,5 +129,21 @@ class BaseTableViewController: BaseViewController {
             
             layoutWithOffset(animated: false)
         }
+    }
+}
+
+extension BaseTableViewController {
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        tableView.contentInset = UIEdgeInsets.zero
     }
 }

@@ -106,6 +106,7 @@
             <connections>
                 <outlet property="arrowImage" destination="c1b-hm-9Et" id="mkh-qr-Z8W"/>
                 <outlet property="categoryLabel" destination="cWN-Y8-WUd" id="Kn0-bY-rKT"/>
+                <outlet property="categoryTopY" destination="zfm-lj-cPs" id="QGA-tP-tRh"/>
                 <outlet property="expiredLabel" destination="Otz-SI-3Wv" id="syX-ZD-8KO"/>
                 <outlet property="idLabel" destination="DQY-Eh-qS0" id="hdC-fE-O67"/>
                 <outlet property="mainView" destination="6m3-TY-RcF" id="JvG-ZX-ZJo"/>

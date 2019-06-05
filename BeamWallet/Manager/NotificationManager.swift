@@ -481,7 +481,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                         rootVC.navigationController?.popViewController(animated: false)
                     }
                     
-                    if rootVC is ReceiveQRViewController {
+                    if rootVC is QRViewController {
                         rootVC.dismiss(animated: true) {
                             if let transactions = AppModel.sharedManager().transactions as? [BMTransaction] {
                                 if let transaction = transactions.first(where: { $0.id == response.notification.request.identifier }) {

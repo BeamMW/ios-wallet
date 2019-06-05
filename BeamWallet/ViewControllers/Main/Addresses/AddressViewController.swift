@@ -31,7 +31,6 @@ class AddressViewController: BaseTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.address = address
-        self.isContact = isContact
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -43,6 +42,8 @@ class AddressViewController: BaseTableViewController {
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore))
 
+        isContact = (AppModel.sharedManager().getContactFromId(self.address.walletId) != nil)
+        
         getTransactions()
         fillDetails()
         
@@ -51,7 +52,7 @@ class AddressViewController: BaseTableViewController {
         tableView.register([GeneralInfoCell.self, WalletTransactionCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         
-        title = LocalizableStrings.address
+        title = (isContact ? LocalizableStrings.contact : LocalizableStrings.address)
         
         AppModel.sharedManager().addDelegate(self)
     }
@@ -72,32 +73,33 @@ class AddressViewController: BaseTableViewController {
         
         if !isContact {
             details.append(GeneralInfo(text: LocalizableStrings.exp_date, detail: self.address.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
-            
-            if !self.address.category.isEmpty {
-                if let category = AppModel.sharedManager().findCategory(byId: self.address.category) {
-                    details.append(GeneralInfo(text: LocalizableStrings.category + ":", detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
-                }
+        }
+        
+        if !self.address.category.isEmpty {
+            if let category = AppModel.sharedManager().findCategory(byId: self.address.category) {
+                details.append(GeneralInfo(text: LocalizableStrings.category + ":", detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
             }
         }
         
         if !self.address.label.isEmpty {
-            details.append(GeneralInfo(text: LocalizableStrings.annotation, detail: self.address.label, failed: false, canCopy:false, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.name2, detail: self.address.label, failed: false, canCopy:false, color: UIColor.white))
         }
     }
     
     @objc private func onMore(sender:UIBarButtonItem) {
 
-        var items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.copy_address, icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.edit_address, icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address, icon: nil, action:.delete_address)]
+        var items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.copy_contact : LocalizableStrings.copy_address), icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.edit_contact : LocalizableStrings.edit_address), icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact : LocalizableStrings.delete_address), icon: nil, action:.delete_address)]
         
-        if isContact {
-            items.remove(at: 2)
-        }
 
+        if isContact {
+            items.remove(at: 0)
+        }
+        
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.action) {
                 case .show_qr_code:
-                    let modalViewController = ReceiveQRViewController(address: self.address, amount: nil)
+                    let modalViewController = QRViewController(address: self.address, amount: nil)
                     modalViewController.modalPresentationStyle = .overFullScreen
                     modalViewController.modalTransitionStyle = .crossDissolve
                     self.present(modalViewController, animated: true, completion: nil)
@@ -131,8 +133,8 @@ class AddressViewController: BaseTableViewController {
     }
     
     private func showDeleteAddressAndTransactions() {
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_transaction, icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_address_only, icon: nil, action:.delete_address)]
-        
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
+                
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.action) {
@@ -225,7 +227,7 @@ extension AddressViewController : UITableViewDelegate {
         cancel.backgroundColor = UIColor.main.steel
         
         let rep = UITableViewRowAction(style: .normal, title: LocalizableStrings.rep) { action, index in
-            let vc = WalletSendViewController()
+            let vc = SendViewController()
             vc.transaction = transaction
             self.pushViewController(vc: vc)
         }
@@ -324,6 +326,20 @@ extension AddressViewController : WalletModelDelegate {
         DispatchQueue.main.async {
             if let address = walletAddresses.first(where: { $0.walletId == self.address.walletId }) {
                 self.address = address
+                
+                self.fillDetails()
+                
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func onContactsChange(_ contacts: [BMContact]) {
+        DispatchQueue.main.async {
+            if let contact = contacts.first(where: { $0.address.walletId == self.address.walletId }) {
+                self.address = contact.address
                 
                 self.fillDetails()
                 

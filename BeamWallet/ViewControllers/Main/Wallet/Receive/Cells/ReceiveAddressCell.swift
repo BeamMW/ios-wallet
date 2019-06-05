@@ -23,7 +23,7 @@ class ReceiveAddressCell: BaseCell {
     
     @IBOutlet weak private var addressLabel: UILabel!
 
-    weak var delegate: ReceiveCellProtocol?
+    weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,7 +34,7 @@ class ReceiveAddressCell: BaseCell {
     }
     
     @IBAction func onChange(sender :UIButton) {
-        delegate?.onChangeAddress?()
+        delegate?.onRightButton?(self)
     }
 }
 

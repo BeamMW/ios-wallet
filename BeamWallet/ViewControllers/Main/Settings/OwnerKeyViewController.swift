@@ -24,10 +24,17 @@ class OwnerKeyViewController: BaseViewController {
     public var ownerKey:String!
     
     @IBOutlet private weak var ownerKeyLabel: UILabel!
+    @IBOutlet private weak var detailLabelRight: NSLayoutConstraint!
+    @IBOutlet private weak var detailLabelLeft: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if Device.screenType == .iPhones_5 {
+            detailLabelRight.constant = 0
+            detailLabelLeft.constant = 0
+        }
+        
         title = LocalizableStrings.show_owner_key
         
         ownerKeyLabel.text = ownerKey

@@ -27,6 +27,7 @@ class AddressCell: UITableViewCell {
     @IBOutlet weak private var idLabel: UILabel!
     @IBOutlet weak private var expiredLabel: UILabel!
     @IBOutlet weak private var categoryLabel: UILabel!
+    @IBOutlet weak private var categoryTopY: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -47,8 +48,12 @@ extension AddressCell: Configurable {
         
         if options.address.createTime == 0 {
             expiredLabel.text = ""
+            
+            //categoryTopY.constant = 53
         }
         else{
+            //categoryTopY.constant = 27
+            
             if options.address.isExpired() {
                 expiredLabel.text = "Expired: " + options.address.formattedDate()
             }

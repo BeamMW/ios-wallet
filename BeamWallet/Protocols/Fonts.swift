@@ -28,6 +28,10 @@ func RegularFont(size:CGFloat) -> UIFont {
     return UIFont(name: "SFProDisplay-Regular", size: size) ?? UIFont.boldSystemFont(ofSize: size)
 }
 
+func ItalicFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProDisplay-Italic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
+}
+
 func SemiboldFont(size:CGFloat) -> UIFont {
     return UIFont(name: "SFProDisplay-Semibold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
 }

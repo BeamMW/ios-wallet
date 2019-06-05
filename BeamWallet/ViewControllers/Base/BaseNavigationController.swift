@@ -21,6 +21,8 @@ import UIKit
 
 class BaseNavigationController: UINavigationController {
     
+    public var enableSwipeToDismiss = true
+    
     public static func navigationController(rootViewController:UIViewController) -> BaseNavigationController {
         let navigation = BaseNavigationController(rootViewController: rootViewController)
         navigation.navigationBar.setBackgroundImage(UIImage.fromColor(color: UIColor.main.marine), for: .default)
@@ -32,4 +34,29 @@ class BaseNavigationController: UINavigationController {
         return navigation
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if enableSwipeToDismiss {
+            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+                interactivePopGestureRecognizer?.delegate = self
+                delegate = self
+            }
+        }
+    }
+    
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+            interactivePopGestureRecognizer?.isEnabled = false
+        }
+        super.pushViewController(viewController, animated: animated)
+    }
 }
+
+extension BaseNavigationController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        interactivePopGestureRecognizer?.isEnabled = (responds(to: #selector(getter: interactivePopGestureRecognizer)) && viewControllers.count > 1) && enableSwipeToDismiss
+    }
+}
+
+extension BaseNavigationController: UIGestureRecognizerDelegate {}

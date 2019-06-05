@@ -46,6 +46,15 @@
     return self;
 }
 
+-(NSString*)shortDate {
+    NSDateFormatter *f = [NSDateFormatter new];
+    [f setDateFormat:@"dd MMM"];
+    
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
+    
+    return [f stringFromDate:date];
+}
+
 -(NSString*)formattedDate {
     NSDateFormatter *f = [NSDateFormatter new];
     [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];

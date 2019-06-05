@@ -56,10 +56,10 @@ class ReceiveListViewController: BaseTableViewController {
         
         filterAddresses()
         
-        setGradientTopBar(image: GradientBlue())
+        setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
         attributedTitle = LocalizableStrings.change_address.uppercased()
                 
-        tableView.register([ReceiveAddressListCell.self, ReceiveFieldCell.self, EmptyCell.self])
+        tableView.register([ReceiveAddressListCell.self, BMFieldCell.self, BMEmptyCell.self])
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -84,17 +84,8 @@ class ReceiveListViewController: BaseTableViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.isNavigationBarHidden = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-                
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
-    }
     
     private func filterAddresses() {
         if let addresses = AppModel.sharedManager().walletAddresses {
@@ -128,7 +119,7 @@ extension ReceiveListViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return addresses.count > 0 ? UITableView.automaticDimension : EmptyCell.height()
+        return addresses.count > 0 ? UITableView.automaticDimension : BMEmptyCell.height()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -155,7 +146,7 @@ extension ReceiveListViewController : UITableViewDataSource {
         
         if addresses.count == 0 {
             let cell = tableView
-                .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
                 .configured(with: LocalizableStrings.not_found)
             return cell
         }
@@ -194,22 +185,3 @@ extension ReceiveListViewController : UITextFieldDelegate {
         return true
     }
 }
-
-// MARK: Keyboard Handling
-
-extension ReceiveListViewController {
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            
-            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        tableView.contentInset = UIEdgeInsets.zero
-    }
-}
-

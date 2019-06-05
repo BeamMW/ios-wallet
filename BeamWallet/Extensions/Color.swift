@@ -175,6 +175,9 @@ extension UIColor {
             return .init(red: 255/255, green: 59/255, blue: 48/255, alpha: 1)
         }
         
+        static var warmBlue: UIColor {
+            return .init(red: 88/255, green: 86/255, blue: 214/255, alpha: 1)
+        }
     }
     
 }

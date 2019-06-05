@@ -137,6 +137,9 @@ public class CountdownView: UIView {
         delegate?.timerDidEnd?()
     }
     
+    public func cancel() {
+        timer?.invalidate()
+    }
     
     private func getMinutesAndSeconds(remainingSeconds: Int) -> (String) {
         return remainingSeconds.description

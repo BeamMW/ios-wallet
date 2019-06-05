@@ -168,7 +168,7 @@ extension String {
         return newString
     }
     
-    func isCorrectAmount() -> Bool {
+    func isCorrectAmount(fee:Double = 0) -> Bool {
         let mainCount = 9
         let comaCount = 8
         
@@ -198,9 +198,14 @@ extension String {
         }
         
         if let amount = Double(txtAfterUpdate) {
-            print(amount)
-            
-            if AppModel.sharedManager().canReceive(amount, fee: 0) != nil {
+           
+            if AppModel.sharedManager().canReceive(amount, fee: fee) != nil {
+                return false
+            }
+            else if amount == 0 && txtAfterUpdate.contains(".") == false && txtAfterUpdate.lengthOfBytes(using: .utf8) > 1 {
+                return false
+            }
+            else if amount > 0 && txtAfterUpdate.contains(".") == false && txtAfterUpdate.lengthOfBytes(using: .utf8) > 1 && txtAfterUpdate.first == "0" {
                 return false
             }
         }

@@ -61,16 +61,16 @@ class AddressExpiresPickerViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isNavigationGradient {
-            largeTitle = LocalizableStrings.address_expires.uppercased()
-            
-            navigationItem.hidesBackButton = true
+        if isGradient {
+            setGradientTopBar(mainColor: UIColor.main.brightSkyBlue, addedStatusView: false)
+            attributedTitle = LocalizableStrings.expires.uppercased()
         }
         else{
             title = LocalizableStrings.address_expires
-            
-            addRightButton(title: LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
         }
+   
+        addRightButton(title: LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -79,14 +79,16 @@ class AddressExpiresPickerViewController: BaseTableViewController {
         tableView.register(AddressDurationCell.self)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLayoutSubviews() {
         
-        if isNavigationGradient {
-            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        if isGradient {
+            tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
+        }
+        else{
+            super.viewDidLayoutSubviews()
         }
     }
-
+    
     @objc private func onSave(sender:UIBarButtonItem) {
         self.completion?(selectedDuration)
         self.navigationController?.popViewController(animated: true)

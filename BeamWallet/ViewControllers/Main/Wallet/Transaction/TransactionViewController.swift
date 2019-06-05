@@ -125,7 +125,7 @@ class TransactionViewController: BaseTableViewController {
             if let item = selectedItem {
                 switch (item.action) {
                 case .repeat_transaction:
-                    let vc = WalletSendViewController()
+                    let vc = SendViewController()
                     vc.transaction = self.transaction
                     self.pushViewController(vc: vc)
                 case .cancel_transaction :

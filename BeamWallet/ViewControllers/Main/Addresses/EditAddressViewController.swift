@@ -21,6 +21,8 @@ import UIKit
 
 class EditAddressViewController: BaseTableViewController {
     
+    private var isContact = false
+    
     private let hours_24: UInt64 = 86400
     private var address:BMAddress!
     private var oldAddress:BMAddress!
@@ -49,8 +51,10 @@ class EditAddressViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.edit_address
+        isContact = (AppModel.sharedManager().getContactFromId(self.oldAddress.walletId) != nil)
         
+        title = (isContact ? LocalizableStrings.edit_contact : LocalizableStrings.edit_address)
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
@@ -59,21 +63,6 @@ class EditAddressViewController: BaseTableViewController {
             AddressCommentCell.self, AddressCategoryCell.self])
 
         addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
     
     private func checkIsChanges(){
@@ -107,6 +96,13 @@ class EditAddressViewController: BaseTableViewController {
 extension EditAddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if isContact {
+            if section < 3 {
+                return 0
+            }
+        }
+        
         if section == 2 && address.isNowActive && address.isExpired() {
             return 30
         }
@@ -204,6 +200,11 @@ extension EditAddressViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isContact {
+            if section < 3 {
+                return 0
+            }
+        }
         return 1
     }
     
@@ -293,18 +294,10 @@ extension EditAddressViewController : AddressCommentCellDelegate {
 }
 
 extension EditAddressViewController {
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            
-            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-            tableView.scrollToRow(at: IndexPath(row: 0, section: 4), at: .top, animated: false)
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        tableView.contentInset = UIEdgeInsets.zero
+    @objc override func keyboardWillShow(_ notification: Notification) {
+        super.keyboardWillShow(notification)
+        
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 4), at: .top, animated: false)
     }
 }
 

@@ -46,7 +46,7 @@ class CategoryDetailViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.register(AddressCell.self)
         tableView.register(CategoryNameCell.self)
-        tableView.register(EmptyCell.self)
+        tableView.register(BMEmptyCell.self)
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore))
 
@@ -93,9 +93,47 @@ class CategoryDetailViewController: BaseTableViewController {
             
         })
     }
+    
+    private func showDeleteAddressAndTransactions(indexPath:IndexPath) {
+   
+        let address:BMAddress = addresses[indexPath.row]
+
+        let isContact = (AppModel.sharedManager().getContactFromId(address.walletId) != nil)
+
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
+        
+        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
+            if let item = selectedItem {
+                switch (item.action) {
+                case .delete_address:
+                    self.addresses.remove(at: indexPath.row)
+                    self.tableView.performUpdate({
+                        self.tableView.deleteRows(at: [indexPath], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
+                    })
+                case .delete_address_transactions :
+                    self.addresses.remove(at: indexPath.row)
+                    self.tableView.performUpdate({
+                        self.tableView.deleteRows(at: [indexPath], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDelete(address, removeTransactions: true)
+                    })
+                default:
+                    return
+                }
+            }
+        }) {
+            
+        }
+    }
 }
 
 extension CategoryDetailViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return ((addresses.count > 0) && indexPath.section == 1)
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
@@ -121,6 +159,48 @@ extension CategoryDetailViewController : UITableViewDelegate {
             pushViewController(vc: vc)
         }
     }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let address:BMAddress = addresses[indexPath.row]
+        
+        let copy = UITableViewRowAction(style: .normal, title: LocalizableStrings.copy) { action, index in
+            
+            UIPasteboard.general.string = address.walletId
+            
+            ShowCopied(text: LocalizableStrings.address_copied)
+        }
+        copy.backgroundColor = UIColor.main.warmBlue
+        
+        let edit = UITableViewRowAction(style: .normal, title: LocalizableStrings.edit) { action, index in
+            let vc = EditAddressViewController(address: address)
+            self.pushViewController(vc: vc)
+        }
+        edit.backgroundColor = UIColor.main.steel
+        
+        
+        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
+            
+            let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
+            
+            if transactions.count > 0  {
+                self.showDeleteAddressAndTransactions(indexPath: indexPath)
+            }
+            else{
+                self.addresses.remove(at: indexPath.row)
+
+                self.tableView.performUpdate({
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: {
+                    AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
+                })
+            }
+            
+        }
+        delete.backgroundColor = UIColor.main.orangeRed
+        
+        return [delete,copy,edit]
+    }
 }
 
 extension CategoryDetailViewController : UITableViewDataSource {
@@ -144,7 +224,7 @@ extension CategoryDetailViewController : UITableViewDataSource {
         if indexPath.section == 1 {
             if addresses.count == 0 {
                 let cell =  tableView
-                    .dequeueReusableCell(withType: EmptyCell.self, for: indexPath)
+                    .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
                     .configured(with: LocalizableStrings.no_category_addresses)
                 return cell
             }
@@ -184,6 +264,16 @@ extension CategoryDetailViewController : WalletModelDelegate {
             }
         }
     }
+    
+    func onContactsChange(_ contacts: [BMContact]) {
+        DispatchQueue.main.async {
+            self.loadAddresses()
+            UIView.performWithoutAnimation {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     func onCategoriesChange() {
         DispatchQueue.main.async {
             let categories = AppModel.sharedManager().categories as! [BMCategory]

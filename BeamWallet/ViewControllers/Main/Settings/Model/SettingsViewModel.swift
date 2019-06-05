@@ -164,8 +164,8 @@ class SettingsViewModel : NSObject {
 
         
         var info = [SettingsItem]()
-        info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1))
         info.append(SettingsItem(title: "Clear data", detail: nil, isSwitch: nil, id: 6))
+        info.append(SettingsItem(title: "Change wallet password", detail: nil, isSwitch: nil, id: 1))
 
         var owner = [SettingsItem]()
         owner.append(SettingsItem(title: "Show owner key", detail: nil, isSwitch: nil, id: 12))

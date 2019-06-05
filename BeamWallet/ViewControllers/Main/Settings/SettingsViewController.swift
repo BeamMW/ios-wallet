@@ -93,7 +93,7 @@ extension SettingsViewController : UITableViewDelegate {
             case 6:
                 self.viewModel.onClearData(controller: self)
             case 7:
-                let vc = WalletQRCodeScannerViewController()
+                let vc = QRScannerViewController()
                 vc.delegate = self
                 vc.isBotScanner = true
                 vc.hidesBottomBarWhenPushed = true
@@ -213,7 +213,7 @@ extension SettingsViewController : SettingsCellDelegate {
     }
 }
 
-extension SettingsViewController : WalletQRCodeScannerViewControllerDelegate {
+extension SettingsViewController : QRScannerViewControllerDelegate {
    
     func didScanQRCode(value:String, amount:String?) {
         if TGBotManager.sharedManager.isValidUserFromJson(value: value) {

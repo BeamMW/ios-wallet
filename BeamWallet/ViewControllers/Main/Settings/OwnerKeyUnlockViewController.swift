@@ -23,6 +23,7 @@ class OwnerKeyUnlockViewController: BaseViewController {
 
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subTitleLabel: UILabel!
+    @IBOutlet private weak var confirmLabel: UILabel!
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var mainStack: UIStackView!
 
@@ -35,10 +36,12 @@ class OwnerKeyUnlockViewController: BaseViewController {
             if BiometricAuthorization.shared.faceIDAvailable() {
                 titleLabel.text = LocalizableStrings.ownerkey_faceid_text
                 subTitleLabel.text = LocalizableStrings.ownerkey_faceid_subtext
+                confirmLabel.text = LocalizableStrings.ownerkey_faceid_confirm
             }
             else{
                 titleLabel.text = LocalizableStrings.ownerkey_touchid_text
                 subTitleLabel.text = LocalizableStrings.ownerkey_touchid_subtext
+                confirmLabel.text = LocalizableStrings.ownerkey_touchid_confirm
             }
         }
         else{
@@ -68,9 +71,9 @@ class OwnerKeyUnlockViewController: BaseViewController {
                     }
                 }
             }, failure: {
-                self.passField.text = String.empty()
+                self.confirmLabel.isHidden = false
             }, retry: {
-                self.passField.text = String.empty()
+                self.confirmLabel.isHidden = false
             }, reasonText: LocalizableStrings.touch_id_ownerkey_verefication)
         }
         else{
@@ -91,6 +94,8 @@ class OwnerKeyUnlockViewController: BaseViewController {
     }
     
     @IBAction func onLogin(sender :UIButton) {
+        self.confirmLabel.isHidden = true
+
         if passField.text?.isEmpty ?? true {
             passField.error = LocalizableStrings.empty_password
             passField.status = BMField.Status.error

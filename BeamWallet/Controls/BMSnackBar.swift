@@ -39,7 +39,8 @@ class BMSnackBar: UIView, CountdownViewDelegate {
     private var data:SnackData!
     private var done : ((_ clickUndo : SnackData?) -> Void)!
     private var ended : ((_ clickUndo : SnackData?) -> Void)!
-
+    private var timer:CountdownView?
+    
     fileprivate init(data:SnackData!, done: @escaping (SnackData?) -> Void, ended: @escaping (SnackData?) -> Void) {
         let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15
 
@@ -74,10 +75,15 @@ class BMSnackBar: UIView, CountdownViewDelegate {
         button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
         addSubview(button)
         
-        let timer = CountdownView(frame: CGRect(x: 15, y: 10, width: 28, height: 28))
-        timer.delegate = self
-        timer.start(beginingValue: 5)
-        addSubview(timer)
+        timer = CountdownView(frame: CGRect(x: 15, y: 10, width: 28, height: 28))
+        timer?.delegate = self
+        timer?.start(beginingValue: 5)
+        addSubview(timer ?? UIView())
+        
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(onUndo))
+        tapGesture.cancelsTouchesInView = false
+        addGestureRecognizer(tapGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -85,6 +91,8 @@ class BMSnackBar: UIView, CountdownViewDelegate {
     }
     
     @objc private func onUndo() {
+        self.timer?.cancel()
+        
         self.done(self.data)
 
         BMSnackBar.dismiss(canceled: true)
@@ -99,31 +107,31 @@ class BMSnackBar: UIView, CountdownViewDelegate {
 
 extension BMSnackBar {
     
-    private static var snack: BMSnackBar!
+    private static var snack: BMSnackBar?
 
     public static func show (data:SnackData!, done: @escaping (SnackData?) -> Void, ended: @escaping (SnackData?) -> Void) {
        
-        if snack != nil && snack.data.id == data.id {
+        if snack != nil && snack?.data.id == data.id {
             return
         }
         else if snack != nil {
-            snack.ended(snack.data)
-            snack.removeFromSuperview()
+            snack?.ended(snack?.data)
+            snack?.removeFromSuperview()
             snack = nil
         }
         
         snack = BMSnackBar(data: data, done: done, ended: ended)
         
         let app = UIApplication.shared.delegate as! AppDelegate
-        app.window?.addSubview(snack)
+        app.window?.addSubview(snack!)
         
-        snack.popIn()
+        snack?.popIn()
     }
     
     @objc public static func dismiss(canceled:Bool) {
         if BMSnackBar.snack != nil {
-            BMSnackBar.snack.popOut {
-                BMSnackBar.snack.removeFromSuperview()
+            BMSnackBar.snack?.popOut {
+                BMSnackBar.snack?.removeFromSuperview()
                 BMSnackBar.snack = nil
             }
         }

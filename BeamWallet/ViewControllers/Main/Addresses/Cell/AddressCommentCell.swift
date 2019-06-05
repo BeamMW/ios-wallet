@@ -38,7 +38,7 @@ class AddressCommentCell: UITableViewCell {
         
         self.backgroundColor = UIColor.main.marineTwo
         
-        commentField.placeholder = "Annotation"
+        commentField.placeholder = LocalizableStrings.name
         commentField.delegate = self
     }
 }
@@ -46,7 +46,7 @@ class AddressCommentCell: UITableViewCell {
 extension AddressCommentCell: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        print("begin")
+        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

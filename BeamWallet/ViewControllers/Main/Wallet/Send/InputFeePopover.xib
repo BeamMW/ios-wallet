@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-Light.otf">
+            <string>SFProDisplay-Light</string>
+        </array>
+        <array key="SF-Pro-Display-Semibold.otf">
+            <string>SFProDisplay-Semibold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InputFeePopover" customModule="BeamWallet" customModuleProvider="target">
+            <connections>
+                <outlet property="feeField" destination="YOk-TX-DM6" id="TeB-k6-DB2"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HKO-EM-dzb">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Zck-xQ-YKt">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    </view>
+                    <blurEffect style="light"/>
+                </visualEffectView>
+                <view verifyAmbiguity="off" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tFf-TN-Dqo" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="20" y="253" width="374" height="270"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M0h-a5-hOs">
+                            <rect key="frame" x="331" y="3" width="40" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="3wi-po-exY"/>
+                                <constraint firstAttribute="width" constant="40" id="i8o-kA-yA6"/>
+                            </constraints>
+                            <state key="normal" image="iconCancelBig"/>
+                            <connections>
+                                <action selector="onCloseWithSender:" destination="-1" eventType="touchUpInside" id="Zce-uh-GYP"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEB-ZD-CPb">
+                            <rect key="frame" x="15" y="63" width="344" height="83"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRANSACTION FEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6VT-6U-Hnp">
+                                    <rect key="frame" x="15" y="10" width="314" height="17"/>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                    <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                            <real key="value" value="1.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GROTH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-v9-g43">
+                                    <rect key="frame" x="259" y="44" width="70" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="70" id="csr-gL-HN4"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="16"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                            <real key="value" value="2.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YOk-TX-DM6" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
+                                    <rect key="frame" x="15" y="37" width="239" height="36"/>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="textColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="30"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                            <color key="value" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
+                                            <real key="value" value="1"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="defaultHeight">
+                                            <real key="value" value="37"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <outlet property="delegate" destination="-1" id="kQv-Nb-ZSa"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="Ieq-v9-g43" secondAttribute="bottom" constant="18" id="1J0-hs-byy"/>
+                                <constraint firstAttribute="trailing" secondItem="Ieq-v9-g43" secondAttribute="trailing" constant="15" id="2ON-pO-hDf"/>
+                                <constraint firstAttribute="bottom" secondItem="YOk-TX-DM6" secondAttribute="bottom" constant="10" id="IRG-Bx-xy1"/>
+                                <constraint firstItem="YOk-TX-DM6" firstAttribute="top" secondItem="6VT-6U-Hnp" secondAttribute="bottom" constant="10" id="OJe-hk-sWz"/>
+                                <constraint firstAttribute="trailing" secondItem="6VT-6U-Hnp" secondAttribute="trailing" constant="15" id="dZ8-3v-mYF"/>
+                                <constraint firstItem="6VT-6U-Hnp" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="ev2-iZ-eCA"/>
+                                <constraint firstItem="YOk-TX-DM6" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="fug-Gi-r9f"/>
+                                <constraint firstItem="6VT-6U-Hnp" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="top" constant="10" id="jGX-zS-LgC"/>
+                                <constraint firstItem="Ieq-v9-g43" firstAttribute="leading" secondItem="YOk-TX-DM6" secondAttribute="trailing" constant="5" id="r1A-pU-o32"/>
+                                <constraint firstItem="Ieq-v9-g43" firstAttribute="top" secondItem="6VT-6U-Hnp" secondAttribute="bottom" constant="17" id="tOq-Ur-coI"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QhX-9d-901" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                            <rect key="frame" x="126.5" y="196" width="121" height="44"/>
+                            <color key="backgroundColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="TU4-fI-zIF"/>
+                                <constraint firstAttribute="width" constant="121" id="vu0-3x-KOC"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                            <state key="normal" title="save" image="iconDoneBlue">
+                                <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="22"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onSaveWithSender:" destination="-1" eventType="touchUpInside" id="oXS-tP-17b"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="pEB-ZD-CPb" secondAttribute="trailing" constant="15" id="1Ie-Mv-l9C"/>
+                        <constraint firstItem="QhX-9d-901" firstAttribute="centerX" secondItem="tFf-TN-Dqo" secondAttribute="centerX" id="ARf-TX-GPa"/>
+                        <constraint firstItem="QhX-9d-901" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="bottom" constant="50" id="UbR-Bt-bRC"/>
+                        <constraint firstAttribute="trailing" secondItem="M0h-a5-hOs" secondAttribute="trailing" constant="3" id="cSe-2V-mrY"/>
+                        <constraint firstItem="M0h-a5-hOs" firstAttribute="top" secondItem="tFf-TN-Dqo" secondAttribute="top" constant="3" id="ds0-Jd-wdd"/>
+                        <constraint firstAttribute="height" constant="270" id="mr1-Ae-ddd"/>
+                        <constraint firstItem="pEB-ZD-CPb" firstAttribute="leading" secondItem="tFf-TN-Dqo" secondAttribute="leading" constant="15" id="nx6-gc-JKW"/>
+                        <constraint firstItem="pEB-ZD-CPb" firstAttribute="top" secondItem="M0h-a5-hOs" secondAttribute="bottom" constant="20" id="oDx-vo-AjR"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="20"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="HKO-EM-dzb" secondAttribute="bottom" id="5Rj-fB-LOC"/>
+                <constraint firstItem="HKO-EM-dzb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="BVD-1p-PkH"/>
+                <constraint firstItem="tFf-TN-Dqo" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Q5Z-f2-o93"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="HKO-EM-dzb" secondAttribute="trailing" id="STT-L6-ir4"/>
+                <constraint firstItem="tFf-TN-Dqo" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-60" id="WWV-ok-AKl"/>
+                <constraint firstItem="HKO-EM-dzb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Y2k-X5-XE3"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="tFf-TN-Dqo" secondAttribute="trailing" constant="20" id="rnO-Kk-nxO"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="iconCancelBig" width="16" height="16"/>
+        <image name="iconDoneBlue" width="16" height="16"/>
+    </resources>
+</document>

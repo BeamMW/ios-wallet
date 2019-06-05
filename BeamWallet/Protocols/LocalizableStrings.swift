@@ -210,7 +210,36 @@ struct LocalizableStrings {
     static let address_search = "address_search".localized
     static let not_found = "not_found".localized
     static let touch_id_ownerkey_verefication = "touch_id_ownerkey_verefication".localized
+    static let send = "send".localized
+    static let paste_enter_address = "paste_enter_address".localized
+    static let incorrect_address = "incorrect_address".localized
+    static let request_amount = "request_amount".localized
+    static let enter_amount = "enter_amount".localized
+    static let address_is_expired = "address_is_expired".localized
+    static let groth = "groth".localized
+    static let ownerkey_faceid_confirm = "ownerkey_faceid_confirm".localized
+    static let ownerkey_touchid_confirm = "ownerkey_touchid_confirm".localized
+    static let name = "name".localized
+    static let confirm = "confirm".localized
+    static let send_to = "send_to".localized
+    static let amount_to_send = "amount_to_send".localized
+    static let transaction_fees = "transaction_fees".localized
+    static let total_utxo = "total_utxo".localized
+    static let send_notice = "send_notice".localized
+    static let save_address_title = "save_address_title".localized
+    static let save_address_text = "save_address_text".localized
+    static let not_save = "not_save".localized
+    static let address_copied = "address_copied".localized
+    static let copy = "copy".localized
+    static let name2 = "name2".localized
+    static let contact = "contact".localized
+    static let edit_contact = "edit_contact".localized
+    static let delete_contact = "delete_contact".localized
+    static let copy_contact = "copy_contact".localized
+    static let delete_contact_transaction = "delete_contact_transaction".localized
+    static let delete_contact_only = "delete_contact_only".localized
 
+    
     static func delete_category_text(str:String) -> String {
         return "Are you sure you want to delete “\(str)” category?"
     }

@@ -21,7 +21,7 @@ import UIKit
 
 class ReceiveAddressButtonsCell: BaseCell {
 
-    weak var delegate: ReceiveCellProtocol?
+    weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
