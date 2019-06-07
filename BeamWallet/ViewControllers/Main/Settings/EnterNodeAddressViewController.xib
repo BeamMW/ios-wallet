@@ -19,6 +19,7 @@
             <connections>
                 <outlet property="nodeAddressField" destination="AKB-1E-OQ8" id="Fer-4U-Hhu"/>
                 <outlet property="nodeAddressView" destination="GDO-Hv-JeU" id="mRd-cq-eRc"/>
+                <outlet property="topOffset" destination="cII-sv-Sh1" id="N57-sd-z5U"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

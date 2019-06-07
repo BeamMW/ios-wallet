@@ -39,13 +39,12 @@ class DisplayPhraseViewController: BaseWizardViewController {
         }
         
         if Device.isZoomed {
-            stackY?.constant = 10
             mainStack?.spacing = 10
         }
         else{
             switch Device.screenType {
             case .iPhones_5:
-                mainStack?.spacing = 20
+                mainStack?.spacing = 15
             case .iPhones_6:
                 mainStack?.spacing = 30
             case .iPhone_XSMax:

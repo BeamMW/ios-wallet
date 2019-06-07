@@ -91,6 +91,8 @@ class LeftMenuViewController: BaseTableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
        
+        tableView.frame = self.view.bounds
+        
         topView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20)
 
         let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15

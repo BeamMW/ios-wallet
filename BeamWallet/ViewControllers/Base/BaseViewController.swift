@@ -22,21 +22,54 @@ import MessageUI
 
 class BaseViewController: UIViewController {
 
-    public var largeTitle:String?
+    public var navigationBarOffset:CGFloat = Device.isXDevice ? 150 : 120
+
+    @IBOutlet weak var topOffset: NSLayoutConstraint?
     public var isGradient = false
 
     public var minimumVelocityToHide = 1500 as CGFloat
     public var minimumScreenRatioToHide = 0.5 as CGFloat
     public var animationDuration = 0.2 as TimeInterval
 
-    public var isNavigationGradient:Bool {
-        return ((self.navigationController as? BMGradientNavigationController) != nil)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.isNavigationBarHidden = true
+
+        topOffset?.constant = Device.isXDevice ? 100 : 70
+        
         view.backgroundColor = UIColor.main.marine
+        
+        if self.navigationController?.viewControllers.count ?? 0 > 1 {
+            self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+        }
+    }
+    
+    private var _isUppercasedTitle = false
+    var isUppercasedTitle: Bool{
+        get{
+            return _isUppercasedTitle
+        }
+        set{
+            _isUppercasedTitle = newValue
+        }
+    }
+    
+    override var title: String?{
+        get{
+            return attributedTitle
+        }
+        set{
+            attributedTitle = newValue?.uppercased()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let navigation = navigationController {
+            self.sideMenuController?.isLeftViewSwipeGestureEnabled = (navigation.viewControllers.count == 1)
+        }
     }
     
     
@@ -44,11 +77,8 @@ class BaseViewController: UIViewController {
         sideMenuController?.toggleLeftViewAnimated()
     }
     
-    public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true) {
-        self.navigationController?.isNavigationBarHidden = true
-        
+    public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true) {        
         let height:CGFloat = Device.isXDevice ? 180 : 150
-        let y:CGFloat = Device.isXDevice ? 60 : 35
 
         let colors = [mainColor, UIColor.main.marine.withAlphaComponent(0.1)]
 
@@ -63,13 +93,7 @@ class BaseViewController: UIViewController {
         backgroundImage.layer.addSublayer(gradient)
         self.view.addSubview(backgroundImage)
         
-        let button = UIButton(type: .system)
-        button.frame = CGRect(x: 15, y: y, width: 40, height: 40)
-        button.contentHorizontalAlignment = .left
-        button.tintColor = UIColor.white
-        button.setImage(IconBack(), for: .normal)
-        button.addTarget(self, action: #selector(onLeftBackButton), for: .touchUpInside)
-        self.view.addSubview(button)
+        self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
         
         if addedStatusView {
             let statusView = BMNetworkStatusView()
@@ -82,8 +106,11 @@ class BaseViewController: UIViewController {
     var attributedTitle: String? {
         willSet {
             if let titleString = newValue {
-                let attributedString = NSMutableAttributedString(string: titleString)
-                attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                let attributedString = NSMutableAttributedString(string: (isUppercasedTitle) ? titleString.uppercased() : titleString.capitalizingFirstLetter())
+                
+                if isUppercasedTitle {
+                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                }
                 
                 let w = UIScreen.main.bounds.size.width
                 
@@ -91,7 +118,7 @@ class BaseViewController: UIViewController {
                 
                 let titleLabel = UILabel()
                 titleLabel.frame = CGRect(x: 0, y: y, width: 0, height: 50)
-                titleLabel.font = ProMediumFont(size: 20)
+                titleLabel.font = isUppercasedTitle ? ProMediumFont(size: 20) : SemiboldFont(size: 17)
                 titleLabel.numberOfLines = 1
                 titleLabel.attributedText = attributedString
                 titleLabel.textColor = UIColor.white
@@ -118,79 +145,81 @@ class BaseViewController: UIViewController {
 //MARK: - Navigation Buttons
     
     public func onAddMenuIcon() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: IconLeftMenu(), style: .plain, target: self, action: #selector(onLeftMenu))
+        let y:CGFloat = Device.isXDevice ? 60 : 35
+
+        let menuButton = UIButton(type: .system)
+        menuButton.contentHorizontalAlignment = .left
+        menuButton.tintColor = UIColor.white
+        menuButton.setImage(IconLeftMenu(), for: .normal)
+        menuButton.addTarget(self, action: #selector(onLeftMenu), for: .touchUpInside)
+        menuButton.frame = CGRect(x: 15, y: y, width: 40, height: 40)
+        self.view.addSubview(menuButton)
     }
     
-    @objc private func onLeftBackButton() {
+    @objc public func onLeftBackButton() {
         self.navigationController?.popViewController(animated: true)
     }
     
     
     public func addCustomBackButton(target:Any?, selector:Selector) {
-        let backButton = UIButton(type: .system)
-        backButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        backButton.contentHorizontalAlignment = .left
-        backButton.tintColor = UIColor.white
-        backButton.setImage(IconBack(), for: .normal)
-        backButton.addTarget(target, action: selector, for: .touchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        let y:CGFloat = Device.isXDevice ? 60 : 35
+
+        self.view.viewWithTag(20192)?.removeFromSuperview()
+
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: 15, y: y, width: 40, height: 40)
+        button.contentHorizontalAlignment = .left
+        button.tintColor = UIColor.white
+        button.setImage(IconBack(), for: .normal)
+        button.tag = 20192
+        button.addTarget(target, action: selector, for: .touchUpInside)
+        self.view.addSubview(button)
     }
     
-    public func addRightButton(image:UIImage?, targer:Any?, selector:Selector?) {
-        if isGradient {
-            let y:CGFloat = Device.isXDevice ? 60 : 35
-
-            self.view.viewWithTag(20191)?.removeFromSuperview()
-            
-            let rightButton = UIButton(type: .system)
-            rightButton.tag = 20191
-            rightButton.contentHorizontalAlignment = .right
-            rightButton.tintColor = UIColor.white
-            rightButton.setImage(image, for: .normal)
-            rightButton.addTarget(target, action: selector!, for: .touchUpInside)
-            rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: y, width: 40, height: 40)
-            self.view.addSubview(rightButton)
-        }
-        else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: targer, action: selector)
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-        }
+    public func addRightButton(image:UIImage?, target:Any?, selector:Selector?) {
+        let y:CGFloat = Device.isXDevice ? 60 : 35
+        
+        self.view.viewWithTag(20191)?.removeFromSuperview()
+        
+        let rightButton = UIButton(type: .system)
+        rightButton.tag = 20191
+        rightButton.contentHorizontalAlignment = .right
+        rightButton.tintColor = UIColor.white
+        rightButton.setImage(image, for: .normal)
+        rightButton.addTarget(target, action: selector!, for: .touchUpInside)
+        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: y, width: 40, height: 40)
+        self.view.addSubview(rightButton)
     }
     
-    public func addRightButton(title:String, targer:Any?, selector:Selector?, enabled:Bool) {
-        if isGradient {
-            let y:CGFloat = Device.isXDevice ? 60 : 35
-
-            self.view.viewWithTag(20191)?.removeFromSuperview()
-
-            let rightButton = UIButton(type: .system)
-            rightButton.tag = 20191
-            rightButton.contentHorizontalAlignment = .right
-            rightButton.tintColor = UIColor.white
-            rightButton.setTitle(title, for: .normal)
-            rightButton.addTarget(target, action: selector!, for: .touchUpInside)
-            rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: y, width: 40, height: 40)
-            rightButton.isEnabled = enabled
-            self.view.addSubview(rightButton)
-        }
-        else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: targer, action: selector)
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.main.brightTeal
-            navigationItem.rightBarButtonItem?.isEnabled = enabled
-        }
+    public func addRightButton(title:String, target:Any?, selector:Selector?, enabled:Bool) {
+        let y:CGFloat = Device.isXDevice ? 60 : 35
+        
+        self.view.viewWithTag(20191)?.removeFromSuperview()
+        
+        let rightButton = UIButton(type: .system)
+        rightButton.tag = 20191
+        rightButton.contentHorizontalAlignment = .right
+        rightButton.tintColor = UIColor.white
+        rightButton.setTitle(title, for: .normal)
+        rightButton.addTarget(target, action: selector!, for: .touchUpInside)
+        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: y, width: 40, height: 40)
+        rightButton.isEnabled = enabled
+        self.view.addSubview(rightButton)
     }
     
     public func enableRightButton(enabled:Bool) {
-        if isGradient {
-            if let button = view.viewWithTag(20191) as? UIButton {
-                button.isEnabled = enabled
-            }
-        }
-        else{
-            navigationItem.rightBarButtonItem?.isEnabled = enabled
+        if let button = view.viewWithTag(20191) as? UIButton {
+            button.isEnabled = enabled
         }
     }
     
+    public func removeRightButton() {
+        self.view.viewWithTag(20191)?.removeFromSuperview()
+    }
+    
+    public func removeLeftButton() {
+        self.view.viewWithTag(20192)?.removeFromSuperview()
+    }
 
 //MARK: - Feedback
         

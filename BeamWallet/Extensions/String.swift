@@ -31,6 +31,15 @@ extension String: Localizable {
 }
 
 extension String {
+    
+    func capitalizingFirstLetter() -> String {
+        let lowerCasedString = self.lowercased()
+        return lowerCasedString.replacingCharacters(in: lowerCasedString.startIndex...lowerCasedString.startIndex, with: String(lowerCasedString[lowerCasedString.startIndex]).uppercased())
+    }
+    
+}
+
+extension String {
     func countInstances(of stringToFind: String) -> Int {
         assert(!stringToFind.isEmpty)
         var count = 0

@@ -49,7 +49,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = paymentProof == nil ? LocalizableStrings.payment_proof_verefication : LocalizableStrings.payment_proof
+        title = LocalizableStrings.payment_proof
         
         tableView.delegate = self
         tableView.dataSource = self

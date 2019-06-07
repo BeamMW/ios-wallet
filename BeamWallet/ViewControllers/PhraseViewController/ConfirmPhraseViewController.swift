@@ -57,7 +57,6 @@ class ConfirmPhraseViewController: BaseWizardViewController {
         self.title = LocalizableStrings.confirm_seed
         
         if Device.isZoomed {
-            stackY?.constant = 10
             mainStack?.spacing = 30
         }
         else if Device.screenType == .iPhones_5 {

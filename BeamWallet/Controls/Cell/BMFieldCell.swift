@@ -58,6 +58,14 @@ class BMFieldCell: BaseCell {
     @objc private func onRightButton() {
         delegate?.onRightButton?(self)
     }
+    
+    public var isSecure:Bool? {
+        didSet {
+            if isSecure != nil {
+                textField.isSecureTextEntry = isSecure!
+            }
+        }
+    }
 }
 
 extension BMFieldCell : UITextFieldDelegate {

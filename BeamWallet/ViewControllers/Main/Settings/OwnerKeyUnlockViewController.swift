@@ -30,6 +30,8 @@ class OwnerKeyUnlockViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        topOffset?.constant = topOffset?.constant ?? 0 + 30
+        
         title = LocalizableStrings.show_owner_key
         
         if BiometricAuthorization.shared.canAuthenticate() {

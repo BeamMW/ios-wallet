@@ -40,8 +40,8 @@ class CreateWalletProgressViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.hidesBackButton = true
-
+        removeLeftButton()
+        
         let progressViewHeight: CGFloat = 4.0
         
         let transformScale = CGAffineTransform(scaleX: 1.0, y: progressViewHeight)

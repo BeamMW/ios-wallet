@@ -37,11 +37,23 @@ class ReceiveViewController: BaseTableViewController {
         fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        isGradient = true
+        
         setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
-        attributedTitle = LocalizableStrings.receive.uppercased()
+        
+        title = LocalizableStrings.receive.uppercased()
         
         tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, ReceiveAddressCell.self, BMDetailCell.self])
 
@@ -68,19 +80,6 @@ class ReceiveViewController: BaseTableViewController {
         }
         
         tableView.keyboardDismissMode = .interactive
-        
-        (self.navigationController as! BaseNavigationController).enableSwipeToDismiss = false
-        self.sideMenuController?.isLeftViewSwipeGestureEnabled = false
-    }
-    
-    override func viewDidLayoutSubviews() {
-        tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -94,8 +93,6 @@ class ReceiveViewController: BaseTableViewController {
                     AppModel.sharedManager().deleteAddress(self.address.walletId)
                 }
             }
-            
-            self.navigationController?.isNavigationBarHidden = false
         }
     }
     
@@ -338,6 +335,8 @@ extension ReceiveViewController : BMCellProtocol {
     }
     
     func onClickQRCode() {
+        self.isShared = true
+        
         self.view.endEditing(true)
 
         let modalViewController = QRViewController(address: address, amount: amount)

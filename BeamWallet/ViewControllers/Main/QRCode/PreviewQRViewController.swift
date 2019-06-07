@@ -26,7 +26,8 @@ class PreviewQRViewController: BaseViewController {
     private var oldAddress:BMAddress!
     private var codeView:QRCodeView!
     private var fromMore = false
-    
+    private var addressLabel:UILabel!
+
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
         
@@ -40,12 +41,9 @@ class PreviewQRViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.qr_code
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore))
-
         let qrString = AppModel.sharedManager().generateQRCodeString(address.walletId, amount: nil)
         
-        codeView = QRCodeView(frame: CGRect(x: (UIScreen.main.bounds.size.width-200)/2, y: 40, width: 200, height: 200))
+        codeView = QRCodeView(frame: CGRect(x: (UIScreen.main.bounds.size.width-200)/2, y: 40 , width: 200, height: 200))
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         view.addSubview(codeView)
         
@@ -57,16 +55,28 @@ class PreviewQRViewController: BaseViewController {
         attributedString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: range)
         attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: range)
 
-        let label = UILabel(frame: CGRect(x: 30, y: 260, width: UIScreen.main.bounds.size.width-60, height: 0))
-        label.numberOfLines = 0
-        label.font = RegularFont(size: 14)
-        label.textColor = UIColor.main.steelGrey
-        label.textAlignment = .center
-        label.attributedText = attributedString
-        label.sizeToFit()
-        view.addSubview(label)
+        addressLabel = UILabel(frame: CGRect(x: 30, y: 260, width: UIScreen.main.bounds.size.width-60, height: 0))
+        addressLabel.numberOfLines = 0
+        addressLabel.font = RegularFont(size: 14)
+        addressLabel.textColor = UIColor.main.steelGrey
+        addressLabel.textAlignment = .center
+        addressLabel.attributedText = attributedString
+        addressLabel.sizeToFit()
+        view.addSubview(addressLabel)
     }
     
+    public func didShow() {
+        title = LocalizableStrings.qr_code
+        
+        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
+        
+        self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+        
+        codeView.y = codeView.y + navigationBarOffset
+        addressLabel.y = addressLabel.y + navigationBarOffset
+    }
+    
+
     @objc private func onMore(sender:UIBarButtonItem) {
         fromMore = true
         

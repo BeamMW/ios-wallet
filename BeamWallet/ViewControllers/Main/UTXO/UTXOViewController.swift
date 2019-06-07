@@ -33,6 +33,15 @@ class UTXOViewController: BaseTableViewController {
     private var headerView: UTXOSegmentView!
     private lazy var hideUTXOView = UTXOSecurityView().loadNib()
 
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -73,12 +82,14 @@ class UTXOViewController: BaseTableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        hideUTXOView.frame = CGRect(x: 0, y: 30, width: tableView.frame.size.width, height: tableView.frame.size.height-30)
+        hideUTXOView.frame = CGRect(x: 0, y: tableView.frame.origin.y+30, width: tableView.frame.size.width, height: tableView.frame.size.height-30)
     }
     
     private func rightButton() {
         let icon = Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(onHideAmounts))
+        
+        addRightButton(image: icon, target: self, selector: #selector(onHideAmounts))
+
     }
     
     @objc private func refreshData(_ sender: Any) {

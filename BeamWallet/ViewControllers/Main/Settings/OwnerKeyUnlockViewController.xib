@@ -28,6 +28,7 @@
                 <outlet property="passField" destination="wpy-QC-RxL" id="DQ6-cb-2By"/>
                 <outlet property="subTitleLabel" destination="z35-nF-MGS" id="1jS-0f-hNr"/>
                 <outlet property="titleLabel" destination="PsH-3s-Vby" id="afS-hR-Vel"/>
+                <outlet property="topOffset" destination="5tx-ZJ-SNZ" id="RaH-xL-qzq"/>
                 <outlet property="view" destination="OOM-GL-5e9" id="f0o-IU-67D"/>
             </connections>
         </placeholder>

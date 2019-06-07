@@ -501,6 +501,19 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(BOOL)isValidNodeAddress:(NSString*_Nonnull)string {
+    NSString *port = [string componentsSeparatedByString:@":"].lastObject;
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *myNumber = [formatter numberFromString:port];
+    
+    if (myNumber == nil) {
+        return NO;
+    }
+    else if (port.length < 2) {
+        return NO;
+    }
+    
     Address nodeAddr;
     BOOL isValid =  nodeAddr.resolve(string.string.c_str());
     return isValid;

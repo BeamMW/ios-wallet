@@ -238,8 +238,8 @@ struct LocalizableStrings {
     static let copy_contact = "copy_contact".localized
     static let delete_contact_transaction = "delete_contact_transaction".localized
     static let delete_contact_only = "delete_contact_only".localized
+    static let enter_password_title_3 = "enter_password_title_3".localized
 
-    
     static func delete_category_text(str:String) -> String {
         return "Are you sure you want to delete “\(str)” category?"
     }

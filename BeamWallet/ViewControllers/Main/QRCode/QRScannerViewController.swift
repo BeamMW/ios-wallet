@@ -51,12 +51,10 @@ class QRScannerViewController: BaseViewController {
             offset = 180
             
             setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
-            
-            attributedTitle = isBotScanner ? LocalizableStrings.scan_tg_qr_code.uppercased() : LocalizableStrings.scan_qr_code.uppercased()
         }
-        else{
-            title = isBotScanner ? LocalizableStrings.scan_tg_qr_code : LocalizableStrings.scan_qr_code
-        }
+     
+        title = isBotScanner ? LocalizableStrings.scan_tg_qr_code : LocalizableStrings.scan_qr_code
+
         
         scannerView.frame = CGRect(x: 0, y: offset, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-offset)
     }

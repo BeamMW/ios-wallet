@@ -498,6 +498,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                     else{
                         if let transactions = AppModel.sharedManager().transactions as? [BMTransaction] {
                             if let transaction = transactions.first(where: { $0.id == response.notification.request.identifier }) {
+                               
                                 let vc = TransactionViewController(transaction: transaction)
                                 vc.hidesBottomBarWhenPushed = true
                                 

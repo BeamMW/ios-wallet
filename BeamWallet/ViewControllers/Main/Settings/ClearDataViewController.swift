@@ -19,7 +19,7 @@
 
 import UIKit
 
-class ClearDataViewController: BaseViewController {
+class ClearDataViewController: BaseTableViewController {
 
     class ClearItem {
         public var title:String!
@@ -35,8 +35,6 @@ class ClearDataViewController: BaseViewController {
         }
     }
     
-    @IBOutlet private weak var tableView: UITableView!
-
     private var items = [ClearItem(title: LocalizableStrings.delete_all_addresses, isSelected: false, id: 1, name: LocalizableStrings.addresses.lowercased()), ClearItem(title: LocalizableStrings.delete_all_contacts, isSelected: false, id: 2, name: LocalizableStrings.contacts.lowercased()), ClearItem(title: LocalizableStrings.delete_all_transactions, isSelected: false, id: 3, name: LocalizableStrings.transactions.lowercased())]
     
     override func viewDidLoad() {
@@ -44,10 +42,13 @@ class ClearDataViewController: BaseViewController {
 
         title = LocalizableStrings.clear_data
         
-        addRightButton(title:LocalizableStrings.clear, targer: self, selector: #selector(onClear), enabled: false)
+        addRightButton(title:LocalizableStrings.clear, target: self, selector: #selector(onClear), enabled: false)
 
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.tableFooterView = UIView()
-        tableView.separatorColor = UIColor.main.marineTwo
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorStyle = .singleLine
     }
 
     @objc private func onClear() {

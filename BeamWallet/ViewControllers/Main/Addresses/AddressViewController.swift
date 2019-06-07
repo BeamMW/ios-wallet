@@ -40,7 +40,7 @@ class AddressViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore))
+        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
 
         isContact = (AppModel.sharedManager().getContactFromId(self.address.walletId) != nil)
         
@@ -116,10 +116,6 @@ class AddressViewController: BaseTableViewController {
                     else{
                         AppModel.sharedManager().prepareDelete(self.address, removeTransactions: false)
                         
-                      //  AppModel.sharedManager().deleteAddress(self.address.walletId)
-                        
-                     //   NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
-                        
                         self.navigationController?.popViewController(animated: true)
                     }
          
@@ -132,7 +128,7 @@ class AddressViewController: BaseTableViewController {
         })
     }
     
-    private func showDeleteAddressAndTransactions() {
+    private func showDeleteAddressAndTransactions() {        
         let items = [BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
                 
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
@@ -141,21 +137,9 @@ class AddressViewController: BaseTableViewController {
                 case .delete_address:
                     AppModel.sharedManager().prepareDelete(self.address, removeTransactions: false)
 
-                  //  AppModel.sharedManager().deleteAddress(self.address.walletId)
-                    
-                 //   NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
-                    
                     self.navigationController?.popViewController(animated: true)
                 case .delete_address_transactions :
                     AppModel.sharedManager().removeDelegate(self)
-                    
-                  //  for tr in self.transactions {
-                    //    AppModel.sharedManager().deleteTransaction(tr)
-                  //  }
-                    
-                  //  AppModel.sharedManager().deleteAddress(self.address.walletId)
-                    
-                 //   NotificationManager.sharedManager.unSubscribeToTopic(topic: self.address.walletId)
                     
                     AppModel.sharedManager().prepareDelete(self.address, removeTransactions: true)
 
@@ -206,11 +190,12 @@ extension AddressViewController : UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
         let transaction = transactions[indexPath.row]
         
-        let cancel = UITableViewRowAction(style: .normal, title: LocalizableStrings.cancel) { action, index in
+        let cancel = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
             
             self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
                 
@@ -224,17 +209,20 @@ extension AddressViewController : UITableViewDelegate {
                 })
             })
         }
+        cancel.image = IconRowCancel()
         cancel.backgroundColor = UIColor.main.steel
         
-        let rep = UITableViewRowAction(style: .normal, title: LocalizableStrings.rep) { action, index in
+        let rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
             let vc = SendViewController()
             vc.transaction = transaction
             self.pushViewController(vc: vc)
         }
+        rep.image = IconRowRepeat()
         rep.backgroundColor = UIColor.main.brightBlue
         
-        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
-            
+        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
             self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
                 
             }, confirmHandler: { (_ ) in
@@ -246,9 +234,10 @@ extension AddressViewController : UITableViewDelegate {
                 })
             })
         }
+        delete.image = IconRowDelete()
         delete.backgroundColor = UIColor.main.orangeRed
         
-        var actions = [UITableViewRowAction]()
+        var actions = [UIContextualAction]()
         
         if transaction.canCancel {
             actions.append(cancel)
@@ -262,7 +251,9 @@ extension AddressViewController : UITableViewDelegate {
             actions.append(delete)
         }
         
-        return actions.reversed()
+        let configuration = UISwipeActionsConfiguration(actions: actions.reversed())
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
     }
 }
 

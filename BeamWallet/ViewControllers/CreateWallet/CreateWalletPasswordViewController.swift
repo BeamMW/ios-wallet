@@ -33,7 +33,6 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         self.title = AppModel.sharedManager().isLoggedin ? LocalizableStrings.change_password : LocalizableStrings.password
 
         if Device.isZoomed {
-            stackY?.constant = 10
             mainStack?.spacing = 30
         }
         else if Device.screenType == .iPhones_5 {
@@ -216,7 +215,7 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
         if textField == confirmPassField && (Device.screenType == .iPhones_5 || Device.isZoomed) {
             UIView.animate(withDuration: 0.25) {
                 var frame = self.navigationController?.view.frame
-                frame?.origin.y = -48
+                frame?.origin.y = -105
                 self.navigationController?.view.frame = frame ?? CGRect.zero
             }
         }

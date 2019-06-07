@@ -51,12 +51,6 @@
 		92227B072281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92227B062281C28D0070DC68 /* BMCategoryColorsView.swift */; };
 		92227B082281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92227B062281C28D0070DC68 /* BMCategoryColorsView.swift */; };
 		92227B092281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92227B062281C28D0070DC68 /* BMCategoryColorsView.swift */; };
-		9225D5272294076C0067B4EA /* BMGradientNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D5262294076C0067B4EA /* BMGradientNavigationBar.swift */; };
-		9225D5282294076C0067B4EA /* BMGradientNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D5262294076C0067B4EA /* BMGradientNavigationBar.swift */; };
-		9225D5292294076C0067B4EA /* BMGradientNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D5262294076C0067B4EA /* BMGradientNavigationBar.swift */; };
-		9225D52B229407950067B4EA /* BMGradientNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D52A229407950067B4EA /* BMGradientNavigationController.swift */; };
-		9225D52C229407950067B4EA /* BMGradientNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D52A229407950067B4EA /* BMGradientNavigationController.swift */; };
-		9225D52D229407950067B4EA /* BMGradientNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D52A229407950067B4EA /* BMGradientNavigationController.swift */; };
 		9225D52F229416280067B4EA /* BMPageSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D52E229416280067B4EA /* BMPageSegmentView.swift */; };
 		9225D530229416280067B4EA /* BMPageSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D52E229416280067B4EA /* BMPageSegmentView.swift */; };
 		9225D531229416280067B4EA /* BMPageSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9225D52E229416280067B4EA /* BMPageSegmentView.swift */; };
@@ -113,6 +107,9 @@
 		9231E3FA225CC3A000121B33 /* SF-Pro-Display-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */; };
 		9231E3FB225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */; };
 		9231E3FC225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */; };
+		923243DC22AA9E38002BF40C /* wallet1 in Resources */ = {isa = PBXBuildFile; fileRef = 923243DB22AA9E38002BF40C /* wallet1 */; };
+		923243DD22AA9E38002BF40C /* wallet1 in Resources */ = {isa = PBXBuildFile; fileRef = 923243DB22AA9E38002BF40C /* wallet1 */; };
+		923243DE22AA9E38002BF40C /* wallet1 in Resources */ = {isa = PBXBuildFile; fileRef = 923243DB22AA9E38002BF40C /* wallet1 */; };
 		9232EC962267334A00A12EEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9232EC952267334900A12EEE /* GoogleService-Info.plist */; };
 		9232EC982267383700A12EEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9232EC952267334900A12EEE /* GoogleService-Info.plist */; };
 		923544732254C6CE00889C74 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923544712254C6CE00889C74 /* openssl.framework */; };
@@ -939,8 +936,6 @@
 		92227AF82281981E0070DC68 /* BMCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMCategory.m; sourceTree = "<group>"; };
 		92227AFE2281B1B00070DC68 /* CategoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditViewController.swift; sourceTree = "<group>"; };
 		92227B062281C28D0070DC68 /* BMCategoryColorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMCategoryColorsView.swift; sourceTree = "<group>"; };
-		9225D5262294076C0067B4EA /* BMGradientNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMGradientNavigationBar.swift; sourceTree = "<group>"; };
-		9225D52A229407950067B4EA /* BMGradientNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMGradientNavigationController.swift; sourceTree = "<group>"; };
 		9225D52E229416280067B4EA /* BMPageSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPageSegmentView.swift; sourceTree = "<group>"; };
 		9225D53222941F900067B4EA /* SFProText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProText-Regular.ttf"; sourceTree = "<group>"; };
 		9225D53322941F940067B4EA /* SFProText-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProText-Medium.ttf"; sourceTree = "<group>"; };
@@ -961,6 +956,7 @@
 		9227AEEB2282F6F800FB221F /* BMDuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDuration.m; sourceTree = "<group>"; };
 		9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-LightItalic.otf"; sourceTree = "<group>"; };
 		9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
+		923243DB22AA9E38002BF40C /* wallet1 */ = {isa = PBXFileReference; lastKnownFileType = file; path = wallet1; sourceTree = "<group>"; };
 		9232EC952267334900A12EEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		923544712254C6CE00889C74 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
 		923544742254C9A700889C74 /* AutoSecurityScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoSecurityScreen.swift; sourceTree = "<group>"; };
@@ -1666,6 +1662,7 @@
 		925AD5ED2228260C00DDE66B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				923243DB22AA9E38002BF40C /* wallet1 */,
 				92C4DBDB2278E2DE0073AEED /* Images */,
 				9232EC972267382A00A12EEE /* FirebaseTestnet */,
 				925AD5F52228298C00DDE66B /* Fonts */,
@@ -1733,8 +1730,6 @@
 				92D2AE0D22578D2200642789 /* LockScreen.swift */,
 				9219595422821F9C007E9723 /* BMTableHeaderTitleView.swift */,
 				92227B062281C28D0070DC68 /* BMCategoryColorsView.swift */,
-				9225D5262294076C0067B4EA /* BMGradientNavigationBar.swift */,
-				9225D52A229407950067B4EA /* BMGradientNavigationController.swift */,
 				9225D52E229416280067B4EA /* BMPageSegmentView.swift */,
 				925AFBC22298457500B1C680 /* BMToast.swift */,
 				92F006E1229D44BB00333409 /* BMSnackBar.swift */,
@@ -2347,6 +2342,7 @@
 				9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */,
 				925AD5F4222827A500DDE66B /* LoginViewController.xib in Resources */,
 				92E2EB89226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */,
+				923243DC22AA9E38002BF40C /* wallet1 in Resources */,
 				92FC611D22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib in Resources */,
 				925AD5F9222829A400DDE66B /* ProximaNova-Bold.ttf in Resources */,
 				92090D09223A67D400A1CFBB /* LaunchScreenTestNet.storyboard in Resources */,
@@ -2376,6 +2372,7 @@
 				9288DD77223A55410020C501 /* WalletTransactionCell.xib in Resources */,
 				927EDE2822A66A90005D5CEA /* SearchAddressCell.xib in Resources */,
 				9227AEBC2282CA7700FB221F /* CategoryNameCell.xib in Resources */,
+				923243DD22AA9E38002BF40C /* wallet1 in Resources */,
 				92480DA6229540280084512A /* BMAmountCell.xib in Resources */,
 				92790DA7224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */,
 				92FB68E6228AC9730015BC2E /* UTXOSecurityView.xib in Resources */,
@@ -2460,6 +2457,7 @@
 				9246F75F227C48830091FB0B /* BMEmptyCell.xib in Resources */,
 				92C00D3022A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */,
 				9227AEBD2282CA7700FB221F /* CategoryNameCell.xib in Resources */,
+				923243DE22AA9E38002BF40C /* wallet1 in Resources */,
 				92E2EB46226F21C700367928 /* TransactionUTXOCell.xib in Resources */,
 				92F006E0229D2E9A00333409 /* AddressesSegmentView.xib in Resources */,
 				92E2EB47226F21C700367928 /* phrases.txt in Resources */,
@@ -2900,8 +2898,6 @@
 				92F68C8D2245070200197D4D /* UTXOTransactionCell.swift in Sources */,
 				9261C289228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92D3CBD12264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */,
-				9225D52B229407950067B4EA /* BMGradientNavigationController.swift in Sources */,
-				9225D5272294076C0067B4EA /* BMGradientNavigationBar.swift in Sources */,
 				92435246222DF9AE00A0EF37 /* BMAddress.mm in Sources */,
 				92C00D1B22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */,
 				920F460D223A9EA20048966E /* BMInputCopyBar.swift in Sources */,
@@ -3100,8 +3096,6 @@
 				92F68C8E2245070200197D4D /* UTXOTransactionCell.swift in Sources */,
 				9261C28A228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92D3CBD22264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */,
-				9225D52C229407950067B4EA /* BMGradientNavigationController.swift in Sources */,
-				9225D5282294076C0067B4EA /* BMGradientNavigationBar.swift in Sources */,
 				9288DD52223A55410020C501 /* BMAddress.mm in Sources */,
 				92C00D1C22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */,
 				920F460E223A9EA20048966E /* BMInputCopyBar.swift in Sources */,
@@ -3264,8 +3258,6 @@
 				92E2EB0C226F21C700367928 /* UTXOTransactionCell.swift in Sources */,
 				9261C28B228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92E2EB0E226F21C700367928 /* BiometricAuthorization.swift in Sources */,
-				9225D52D229407950067B4EA /* BMGradientNavigationController.swift in Sources */,
-				9225D5292294076C0067B4EA /* BMGradientNavigationBar.swift in Sources */,
 				92E2EB0F226F21C700367928 /* BMAddress.mm in Sources */,
 				92C00D1D22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */,
 				92E2EB10226F21C700367928 /* BMInputCopyBar.swift in Sources */,

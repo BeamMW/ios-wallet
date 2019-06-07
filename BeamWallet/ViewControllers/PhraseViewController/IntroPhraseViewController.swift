@@ -28,7 +28,7 @@ class IntroPhraseViewController: BaseWizardViewController {
         
         switch Device.screenType {
         case .iPhones_5:
-            mainStack?.spacing = 60
+            mainStack?.spacing = 50
         default:
             return
         }

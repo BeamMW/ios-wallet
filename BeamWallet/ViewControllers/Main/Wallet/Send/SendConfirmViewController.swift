@@ -36,15 +36,16 @@ class ConfirmItem {
 class SendConfirmViewController: BaseTableViewController {
 
     private lazy var footerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 95))
+        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 95))
         
-        let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope)
-        button.setImage(IconSendBlue(), for: .normal)
-        button.setTitle(LocalizableStrings.send, for: .normal)
-        button.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-        button.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        button.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-        view.addSubview(button)
+        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope)
+        sendButton.setImage(IconSendBlue(), for: .normal)
+        sendButton.setTitle(LocalizableStrings.send, for: .normal)
+        sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+        sendButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+        sendButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+        view.addSubview(sendButton)
+        
         
         return view
     }()
@@ -55,7 +56,10 @@ class SendConfirmViewController: BaseTableViewController {
     private var fee:String!
     private var comment:String!
     private var contact:BMContact?
+    private var password:String?
+    private var passwordError:String?
 
+    
     init(toAddress:String, amount:String!, fee:String!, comment:String!, contact:BMContact?) {
         super.init(nibName: nil, bundle: nil)
         
@@ -68,6 +72,15 @@ class SendConfirmViewController: BaseTableViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError(LocalizableStrings.fatalInitCoderError)
+    }
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
     }
     
     override func viewDidLoad() {
@@ -87,40 +100,59 @@ class SendConfirmViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
-        attributedTitle = LocalizableStrings.confirm.uppercased()
+        title = LocalizableStrings.confirm.uppercased()
         
-        tableView.register([ConfirmCell.self])
+        tableView.register([ConfirmCell.self, BMFieldCell.self])
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
-        
-        (self.navigationController as! BaseNavigationController).enableSwipeToDismiss = false
-        self.sideMenuController?.isLeftViewSwipeGestureEnabled = false
-        
-      //  hideKeyboardWhenTappedAround()
     }
     
-    override func viewDidLayoutSubviews() {
-        tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @objc private func onTouchId() {
+        if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
+            
+            BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
+                if KeychainManager.getPassword() != nil {
+                    self.askForSaveContact()
+                }
                 
-        if isMovingFromParent {
-            self.navigationController?.isNavigationBarHidden = false
+            }, failure: {
+            }, retry: {
+            })
         }
     }
-    
+     
     @objc private func onNext() {
+        view.endEditing(true)
+        
+        if Settings.sharedManager().isNeedaskPasswordForSend {
+            if let pass = password {
+                if pass.isEmpty {
+                    passwordError = LocalizableStrings.empty_password
+                    tableView.reloadData()
+                    tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
+                }
+                else if(AppModel.sharedManager().isValidPassword(pass) == false) {
+                    passwordError = LocalizableStrings.incorrect_password
+                    tableView.reloadData()
+                    tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
+                    return
+                }
+            }
+            else{
+                passwordError = LocalizableStrings.empty_password
+                tableView.reloadData()
+                tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
+                return
+            }
+        }
+        
+        askForSaveContact()
+    }
+    
+    private func askForSaveContact() {
         let isContactFound = (AppModel.sharedManager().getContactFromId(toAddress) != nil)
         
         if contact == nil && !isContactFound {
@@ -194,7 +226,7 @@ extension SendConfirmViewController : UITableViewDelegate {
 extension SendConfirmViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return items.count
+        return items.count + (Settings.sharedManager().isNeedaskPasswordForSend ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -203,10 +235,47 @@ extension SendConfirmViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell =  tableView
-            .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
-            .configured(with: items[indexPath.section])
-        
-        return cell
+        if indexPath.section == items.count {
+            let icon = (BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric && Settings.sharedManager().isNeedaskPasswordForSend) ? IconTouchid() : nil
+            
+            let cell = tableView
+                .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                .configured(with: (name: LocalizableStrings.enter_password_title_3.uppercased(), value: password ?? "", rightIcon:icon))
+            cell.delegate = self
+            cell.error = passwordError
+            cell.isSecure = true
+            
+            return cell
+        }
+        else{
+            let cell =  tableView
+                .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
+                .configured(with: items[indexPath.section])
+            
+            return cell
+        }
     }
 }
+
+extension SendConfirmViewController : BMCellProtocol {
+    
+    func onRightButton(_ sender: UITableViewCell) {
+        self.onTouchId()
+    }
+    
+    func textValueDidBegin(_ sender: UITableViewCell) {
+        if let path = tableView.indexPath(for: sender)  {
+            tableView.scrollToRow(at: path, at: .middle, animated: true)
+        }
+    }
+    
+    func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
+        password = text
+        
+        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
+    }
+}
+

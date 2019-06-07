@@ -49,6 +49,9 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             mainStack?.spacing = 60
             passViewHeight.constant = 70
         }
+        else if Device.screenType == .iPhones_6 {
+            passViewHeight.constant = 70
+        }
         
         if !BiometricAuthorization.shared.canAuthenticate() || !Settings.sharedManager().isEnableBiometric {
             touchIdButton.isHidden = true

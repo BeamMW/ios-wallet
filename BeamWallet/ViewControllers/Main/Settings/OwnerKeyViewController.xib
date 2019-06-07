@@ -26,6 +26,7 @@
                 <outlet property="detailLabelLeft" destination="KAz-wx-M01" id="DhZ-B5-4jn"/>
                 <outlet property="detailLabelRight" destination="nCI-eI-0X3" id="696-4s-Bmt"/>
                 <outlet property="ownerKeyLabel" destination="Fba-dd-bWj" id="ukm-ze-xbu"/>
+                <outlet property="topOffset" destination="F9x-Ke-NtC" id="2Gl-3g-E3y"/>
                 <outlet property="view" destination="eSk-Xs-FZ0" id="19l-1c-9rk"/>
             </connections>
         </placeholder>

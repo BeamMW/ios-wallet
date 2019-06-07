@@ -51,13 +51,22 @@ class ReceiveListViewController: BaseTableViewController {
         return field
     }()
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         filterAddresses()
         
         setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
-        attributedTitle = LocalizableStrings.change_address.uppercased()
+        title = LocalizableStrings.change_address.uppercased()
                 
         tableView.register([ReceiveAddressListCell.self, BMFieldCell.self, BMEmptyCell.self])
         
@@ -71,8 +80,6 @@ class ReceiveListViewController: BaseTableViewController {
         textField.frame = CGRect(x: 15, y: 190, width: UIScreen.main.bounds.size.width-30, height: 32)
         textField.awakeFromNib()
         view.addSubview(textField)
-        
-        self.sideMenuController?.isLeftViewSwipeGestureEnabled = false
     }
     
     override func viewDidLayoutSubviews() {
@@ -80,13 +87,7 @@ class ReceiveListViewController: BaseTableViewController {
         tableView.frame = CGRect(x: 0, y: 240, width: self.view.bounds.width, height: self.view.bounds.size.height - 240)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = true
-    }
-    
-    
+
     private func filterAddresses() {
         if let addresses = AppModel.sharedManager().walletAddresses {
             self.addresses = addresses as! [BMAddress]

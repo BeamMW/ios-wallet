@@ -61,18 +61,11 @@ class CategoryEditViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
 
-        if self.navigationController is BMGradientNavigationController {
-            largeTitle = category.id == 0 ? LocalizableStrings.new_category.uppercased() : LocalizableStrings.edit_category.uppercased()
-
-            navigationItem.hidesBackButton = true
-        }
-        else{
-            title = category.id == 0 ? LocalizableStrings.new_category : LocalizableStrings.edit_category
-
-            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
-        }
+        title = category.id == 0 ? LocalizableStrings.new_category : LocalizableStrings.edit_category
         
-        nameView = UIView(frame: CGRect(x: 0, y: (isNavigationGradient ? 200 : 20), width: UIScreen.main.bounds.size.width, height: 49))
+        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        
+        nameView = UIView(frame: CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width, height: 49))
         nameView.backgroundColor = UIColor.main.marineTwo
         view.addSubview(nameView)
         
@@ -100,10 +93,6 @@ class CategoryEditViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if isNavigationGradient {
-            addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
-        }
     }
     
     private func canSave(name:String, color:String) -> Bool {

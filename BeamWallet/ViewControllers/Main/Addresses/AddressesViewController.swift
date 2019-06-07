@@ -31,6 +31,15 @@ class AddressesViewController: BaseTableViewController {
     private var contacts = [BMContact]()
     private var headerView: AddressesSegmentView!
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -134,10 +143,6 @@ class AddressesViewController: BaseTableViewController {
 
 extension AddressesViewController : UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true;
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return AddressesSegmentView.height
@@ -160,36 +165,19 @@ extension AddressesViewController : UITableViewDelegate {
         pushViewController(vc: vc)
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+//        return self.rowActions(indexPath: indexPath, array: addresses, afterAction: { (array) in
+//            self.addresses = array as! [BMad]
+//        })
         
-        var address:BMAddress!
-        
-        if selectedState == .contacts {
-            address = contacts[indexPath.row].address
-        }
-        else{
-            address = addresses[indexPath.row]
-        }
-        
-        let copy = UITableViewRowAction(style: .normal, title: LocalizableStrings.copy) { action, index in
-           
-            UIPasteboard.general.string = address.walletId
-            
-            ShowCopied(text: LocalizableStrings.address_copied)
-        }
-        copy.backgroundColor = UIColor.main.warmBlue
-        
-        let edit = UITableViewRowAction(style: .normal, title: LocalizableStrings.edit) { action, index in
-            let vc = EditAddressViewController(address: address)
-            self.pushViewController(vc: vc)
-        }
-        edit.backgroundColor = UIColor.main.steel
-        
-        
-        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
-            
+        let address:BMAddress = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
+
+        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
+
             let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
-            
+
             if transactions.count > 0  {
                 self.showDeleteAddressAndTransactions(indexPath: indexPath)
             }
@@ -206,12 +194,30 @@ extension AddressesViewController : UITableViewDelegate {
                     AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
                 })
             }
-            
         }
+        delete.image = IconRowDelete()
         delete.backgroundColor = UIColor.main.orangeRed
-        
-        return [delete,copy,edit]
 
+        let copy = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
+
+            UIPasteboard.general.string = address.walletId
+            ShowCopied(text: LocalizableStrings.address_copied)
+        }
+        copy.image = IconRowCopy()
+        copy.backgroundColor = UIColor.main.warmBlue
+
+        let edit = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
+            let vc = EditAddressViewController(address: address)
+            self.pushViewController(vc: vc)
+        }
+        edit.image = IconRowEdit()
+        edit.backgroundColor = UIColor.main.steel
+
+        let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
     }
 }
 
@@ -280,8 +286,6 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
         
         guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
 
-        navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
-
         let detailVC = PreviewQRViewController(address: addresses[indexPath.row])
         detailVC.preferredContentSize = CGSize(width: 0.0, height: 340)
         
@@ -292,9 +296,9 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         
-        navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
-
         show(viewControllerToCommit, sender: self)
+        
+        (viewControllerToCommit as! PreviewQRViewController).didShow()
     }
 }
 

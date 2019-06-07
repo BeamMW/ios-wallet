@@ -24,7 +24,6 @@ class BaseWizardViewController: BaseViewController {
 
     @IBOutlet weak var stackWidth: NSLayoutConstraint?
     @IBOutlet weak var mainStack: UIStackView?
-    @IBOutlet weak var stackY: NSLayoutConstraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,24 +31,22 @@ class BaseWizardViewController: BaseViewController {
         if Device.screenType == .iPhones_5 {
             stackWidth?.constant = 290
             mainStack?.spacing = 25
-            stackY?.constant = 15
         }
         else if Device.screenType == .iPhones_Plus{
-            stackY?.constant = 80
             mainStack?.spacing = 60
         }
         else if Device.screenType == .iPhones_X_XS ||
             Device.screenType == .iPhone_XR{
-            stackY?.constant = 80
             mainStack?.spacing = 80
         }
         else if Device.screenType == .iPhone_XSMax {
-            stackY?.constant = 80
             mainStack?.spacing = 120
             stackWidth?.constant = 340
         }
         
         hideKeyboardWhenTappedAround()
+        
+        topOffset?.constant = Device.isXDevice ? 100 : 70
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

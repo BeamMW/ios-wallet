@@ -63,30 +63,17 @@ class AddressExpiresPickerViewController: BaseTableViewController {
         
         if isGradient {
             setGradientTopBar(mainColor: UIColor.main.brightSkyBlue, addedStatusView: false)
-            attributedTitle = LocalizableStrings.expires.uppercased()
         }
-        else{
-            title = LocalizableStrings.address_expires
-        }
-   
-        addRightButton(title: LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        
+        title = LocalizableStrings.expires.uppercased()
 
+        addRightButton(title: LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
         tableView.separatorStyle = .singleLine
         tableView.register(AddressDurationCell.self)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        
-        if isGradient {
-            tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
-        }
-        else{
-            super.viewDidLayoutSubviews()
-        }
     }
     
     @objc private func onSave(sender:UIBarButtonItem) {

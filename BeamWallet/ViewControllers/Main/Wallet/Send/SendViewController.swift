@@ -38,7 +38,7 @@ class SendViewController: BaseTableViewController {
             searchTableView.isHidden = !isSearch
             
             let rect = self.tableView.rectForRow(at: IndexPath(row: 0, section: 0))
-            let y:CGFloat = gradientOffset + rect.size.height + 20
+            let y:CGFloat = navigationBarOffset + rect.size.height + 20
             
             searchTableView.frame = CGRect(x: 0, y: y, width: self.view.bounds.width, height: self.view.bounds.size.height - y)
 
@@ -80,6 +80,15 @@ class SendViewController: BaseTableViewController {
         return view
     }()
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -87,9 +96,9 @@ class SendViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
-        attributedTitle = LocalizableStrings.send.uppercased()
+        title = LocalizableStrings.send.uppercased()
         
-        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), targer: self, selector: #selector(onHideAmounts))
+        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
 
         tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, SearchAddressCell.self, AddressCell.self])
         
@@ -100,10 +109,7 @@ class SendViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
-        
-        (self.navigationController as! BaseNavigationController).enableSwipeToDismiss = false
-        self.sideMenuController?.isLeftViewSwipeGestureEnabled = false
-        
+                
         if let repeatTransaction = transaction {
             toAddress = repeatTransaction.receiverAddress
             amount = String.currency(value: repeatTransaction.realAmount)
@@ -116,9 +122,6 @@ class SendViewController: BaseTableViewController {
        // hideKeyboardWhenTappedAround()
     }
     
-    override func viewDidLayoutSubviews() {
-        tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -143,18 +146,12 @@ class SendViewController: BaseTableViewController {
         super.viewWillAppear(animated)
         
         Settings.sharedManager().addDelegate(self)
-        
-        self.navigationController?.isNavigationBarHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         Settings.sharedManager().removeDelegate(self)
-
-        if isMovingFromParent {
-            self.navigationController?.isNavigationBarHidden = false
-        }
     }
     
     private func didSelectAddress(value:String) {
@@ -547,7 +544,7 @@ extension SendViewController : QRScannerViewControllerDelegate
 
 extension SendViewController : SettingsModelDelegate {
     func onChangeHideAmounts() {
-        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), targer: self, selector: #selector(onHideAmounts))
+        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
 
         if Settings.sharedManager().isHideAmounts {
             tableView.deleteRows(at: [IndexPath(row: 0, section: 2)], with: .fade)

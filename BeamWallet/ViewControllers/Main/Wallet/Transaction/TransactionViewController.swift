@@ -73,8 +73,15 @@ class TransactionViewController: BaseTableViewController {
     
 
     private func fillTransactionInfo() {
-        self.navigationItem.rightBarButtonItem = (transaction.canCancel || transaction.canDelete) ? UIBarButtonItem(image: MoreIcon(), style: .plain, target: self, action: #selector(onMore)) : nil
-        
+       
+        if (transaction.canCancel || transaction.canDelete)
+        {
+            addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
+        }
+        else{
+            removeRightButton()
+        }
+
         details.removeAll()
         
         details.append(GeneralInfo(text: LocalizableStrings.sending_address, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))

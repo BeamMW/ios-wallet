@@ -62,7 +62,7 @@ class EditAddressViewController: BaseTableViewController {
         tableView.register([AddressSwitchCell.self, AddressExpiresCell.self,AddressExpiredCell.self, 
             AddressCommentCell.self, AddressCategoryCell.self])
 
-        addRightButton(title:LocalizableStrings.save, targer: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
     }
     
     private func checkIsChanges(){

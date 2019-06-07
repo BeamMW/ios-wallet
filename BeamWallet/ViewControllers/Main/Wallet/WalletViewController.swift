@@ -26,10 +26,19 @@ class WalletViewController: BaseTableViewController {
     
     private var transactions = [BMTransaction]()
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = LocalizableStrings.wallet
+        title = LocalizableStrings.wallet
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -67,12 +76,9 @@ class WalletViewController: BaseTableViewController {
         rightButton()
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = false
-
-        self.sideMenuController?.isLeftViewSwipeGestureEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,7 +105,7 @@ class WalletViewController: BaseTableViewController {
     private func rightButton() {
         let icon = Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance()
       
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(onHideAmounts))
+        addRightButton(image: icon, target: self, selector: #selector(onHideAmounts))       
     }
 
     
@@ -223,11 +229,12 @@ extension WalletViewController : UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
         let transaction = transactions[indexPath.row]
-        
-        let cancel = UITableViewRowAction(style: .normal, title: LocalizableStrings.cancel) { action, index in
+
+        let cancel = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
             
             self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
                 
@@ -241,17 +248,20 @@ extension WalletViewController : UITableViewDelegate {
                 })
             })
         }
+        cancel.image = IconRowCancel()
         cancel.backgroundColor = UIColor.main.steel
-        
-        let rep = UITableViewRowAction(style: .normal, title: LocalizableStrings.rep) { action, index in
+
+        let rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
             let vc = SendViewController()
             vc.transaction = transaction
             self.pushViewController(vc: vc)
         }
+        rep.image = IconRowRepeat()
         rep.backgroundColor = UIColor.main.brightBlue
-        
-        let delete = UITableViewRowAction(style: .normal, title: LocalizableStrings.delete) { action, index in
-            
+
+        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            handler(true)
             self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
                 
             }, confirmHandler: { (_ ) in
@@ -261,11 +271,12 @@ extension WalletViewController : UITableViewDelegate {
                 }, completion: {
                     AppModel.sharedManager().deleteTransaction(transaction)
                 })
-            })            
+            })
         }
+        delete.image = IconRowDelete()
         delete.backgroundColor = UIColor.main.orangeRed
-        
-        var actions = [UITableViewRowAction]()
+
+        var actions = [UIContextualAction]()
         
         if transaction.canCancel {
             actions.append(cancel)
@@ -274,12 +285,14 @@ extension WalletViewController : UITableViewDelegate {
         if !transaction.isIncome {
             actions.append(rep)
         }
-
+        
         if transaction.canDelete {
             actions.append(delete)
         }
-        
-        return actions.reversed()
+                
+        let configuration = UISwipeActionsConfiguration(actions: actions.reversed())
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
     }
 }
 

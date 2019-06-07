@@ -30,6 +30,8 @@ class OwnerKeyViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        topOffset?.constant = topOffset?.constant ?? 0 + 30
+
         if Device.screenType == .iPhones_5 {
             detailLabelRight.constant = 0
             detailLabelLeft.constant = 0

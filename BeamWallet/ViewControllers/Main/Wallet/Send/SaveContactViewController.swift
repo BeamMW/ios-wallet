@@ -62,6 +62,15 @@ class SaveContactViewController: BaseTableViewController {
         fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,7 +78,7 @@ class SaveContactViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
-        attributedTitle = LocalizableStrings.save_address_title.uppercased()
+        title = LocalizableStrings.save_address_title.uppercased()
         
         tableView.register([BMFieldCell.self, ConfirmCell.self, BMDetailCell.self])
         
@@ -78,28 +87,7 @@ class SaveContactViewController: BaseTableViewController {
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
         
-        (self.navigationController as! BaseNavigationController).enableSwipeToDismiss = false
-        self.sideMenuController?.isLeftViewSwipeGestureEnabled = false
-        
        // hideKeyboardWhenTappedAround()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        tableView.frame = CGRect(x: 0, y: gradientOffset, width: self.view.bounds.width, height: self.view.bounds.size.height - gradientOffset)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if isMovingFromParent {
-            self.navigationController?.isNavigationBarHidden = false
-        }
     }
     
     @objc private func onSave() {

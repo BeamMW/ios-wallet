@@ -153,3 +153,27 @@ func IconComment() -> UIImage? {
     return UIImage(named: "iconComment")
 }
 
+func IconRowCancel() -> UIImage? {
+    return UIImage(named: "iconRowCancel")
+}
+
+func IconRowEdit() -> UIImage? {
+    return UIImage(named: "iconRowEdit")
+}
+
+func IconRowCopy() -> UIImage? {
+    return UIImage(named: "iconRowCopy")
+}
+
+func IconRowDelete() -> UIImage? {
+    return UIImage(named: "iconRowDelete")
+}
+
+func IconRowRepeat() -> UIImage? {
+    return UIImage(named: "iconRowRepeat")
+}
+
+func IconTouchid() -> UIImage? {
+    return UIImage(named: "iconTouchidSmall")
+}
+

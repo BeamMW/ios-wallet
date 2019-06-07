@@ -110,17 +110,17 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
         _explorerAddress = @"https://explorer.beam.mw/block?kernel_id=";
     }
     
-//    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
-//        _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
-//    }
-//    else{
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+        _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
+    }
+    else{
         _nodeAddress = [AppModel chooseRandomNode];
-//    }
+    }
     
     if (self.target == Testnet)
     {
         [self copyOldDatabaseToGroup];
-    }
+   }
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
@@ -264,15 +264,18 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 }
 
 -(void)copyOldDatabaseToGroup {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
+//    [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
+//    [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet1" ofType:nil] toPath:[self walletStoragePath] error:nil];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[self groupDBPath]]) {
-            [[NSFileManager defaultManager] copyItemAtPath:[self groupDBPath] toPath:oldPath error:nil];
-        }
-    }
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
+//
+//    if (![[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+//        if ([[NSFileManager defaultManager] fileExistsAtPath:[self groupDBPath]]) {
+//            [[NSFileManager defaultManager] copyItemAtPath:[self groupDBPath] toPath:oldPath error:nil];
+//        }
+//    }
 }
 
 -(NSString *)groupPath{

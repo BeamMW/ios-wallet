@@ -21,10 +21,10 @@ import Foundation
 
 class BaseTableViewController: BaseViewController {
     
-    var gradientOffset:CGFloat = Device.isXDevice ? 150 : 120
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
-    
+    var contentArray:[Any]?
+
     private var offset:CGFloat = 0
     private var maxOffset:CGFloat = 65
     private var minOffset:CGFloat = 0
@@ -42,12 +42,6 @@ class BaseTableViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let navigationBar = self.navigationController?.navigationBar as? BMGradientNavigationBar, let navigation = self.navigationController as? BMGradientNavigationController {
-            
-            navigationBar.offset = offset
-            navigation.offset = offset < minOffset ? minOffset : offset
-        }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -62,73 +56,11 @@ class BaseTableViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if isNavigationGradient {
-            let offset:CGFloat = tableView.style == .grouped ? 70 : 50
-            tableView.frame = CGRect(x: 0, y: BMGradientNavigationBar.height - offset, width: self.view.bounds.width, height: self.view.bounds.size.height - (BMGradientNavigationBar.height - offset))
+        var offset:CGFloat = tableStyle == .grouped ? 0 : 0
+        if !isGradient {
+            offset = offset + 30
         }
-        else{
-            tableView.frame = self.view.bounds
-        }
-    }
-    
-    private func scrollAvailable() -> Bool {
-        let contentHeight = self.tableView.contentSize.height + self.tableView.contentInset.bottom
-        return contentHeight > (self.view.frame.size.height - 50)
-    }
-    
-    private func layoutWithOffset(animated:Bool) {
-        print(offset)
-        
-        if let navigationBar = self.navigationController?.navigationBar as? BMGradientNavigationBar, let navigation = self.navigationController as? BMGradientNavigationController {
-
-            if animated {
-                UIView.animate(withDuration: 0.3) {
-                    
-                    navigationBar.offset = self.offset
-                    navigation.offset = self.offset < self.minOffset ? self.minOffset : self.offset
-                    
-                    if  self.scrollAvailable() {
-                        self.tableView.setContentOffset(CGPoint(x: 0, y: self.offset - 88), animated: false)
-                    }
-                }
-            }
-            else{
-                navigationBar.offset = self.offset
-                navigation.offset = self.offset < self.minOffset ? self.minOffset : self.offset
-            }
-        }
-    }
-    
-    public func didEndScroll(scrollView:UIScrollView) {
-        if isNavigationGradient {
-
-            if offset > minOffset && self.scrollAvailable() {
-                let progress = (offset/maxOffset)
-                if progress > 0.1 && progress < 1 {
-                    offset = maxOffset
-                    
-                    layoutWithOffset(animated: true)
-                }
-                else if progress <= 0.1 {
-                    offset = minOffset
-                    
-                    layoutWithOffset(animated: true)
-                }
-            }
-        }
-    }
-    
-    public func didScroll(scrollView:UIScrollView) {
-        if isNavigationGradient {
-            
-            offset = scrollView.contentOffset.y + 88
-            
-            if offset > maxOffset {
-                offset = maxOffset
-            }
-            
-            layoutWithOffset(animated: false)
-        }
+        tableView.frame = CGRect(x: 0, y: navigationBarOffset - offset, width: self.view.bounds.width, height: self.view.bounds.size.height - navigationBarOffset + offset)
     }
 }
 
@@ -146,4 +78,63 @@ extension BaseTableViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         tableView.contentInset = UIEdgeInsets.zero
     }
+}
+
+
+extension BaseTableViewController {
+    
+//    func rowActionsForAddress(indexPath: IndexPath, array: [BMAddress], afterAction:@escaping (([BMAddress]) -> Void)) -> UISwipeActionsConfiguration? {
+//
+//        var addresses = array
+//        let address:BMAddress = addresses[indexPath.row]
+//
+//        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+//            handler(true)
+//
+//            let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
+//
+//            if transactions.count > 0  {
+//                self.showDeleteAddressAndTransactions(indexPath: indexPath)
+//            }
+//            else{
+//                addresses.remove(at: indexPath.row)
+//                afterAction(addresses)
+//
+//                self.tableView.performUpdate({
+//                    self.tableView.deleteRows(at: [indexPath], with: .left)
+//                }, completion: {
+//                    AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
+//                })
+//            }
+//        }
+//        delete.image = IconRowDelete()
+//        delete.backgroundColor = UIColor.main.orangeRed
+//
+//        let copy = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+//            handler(true)
+//
+//            UIPasteboard.general.string = address.walletId
+//            ShowCopied(text: LocalizableStrings.address_copied)
+//        }
+//        copy.image = IconRowCopy()
+//        copy.backgroundColor = UIColor.main.warmBlue
+//
+//        let edit = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+//            handler(true)
+//            let vc = EditAddressViewController(address: address)
+//            self.pushViewController(vc: vc)
+//        }
+//        edit.image = IconRowEdit()
+//        edit.backgroundColor = UIColor.main.steel
+//
+//        let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
+//        configuration.performsFirstActionWithFullSwipe = false
+//        return configuration
+//    }
+//
+//
+    
+//    private func showDeleteAddressAndTransactions(state:AddressesViewController.AddressesSelectedState, indexPath:IndexPath, array:[Any], completion) {
+//
+//    }
 }

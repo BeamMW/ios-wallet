@@ -19,29 +19,50 @@
 
 import UIKit
 
-class SettingsViewController: BaseViewController {
+class SettingsViewController: BaseTableViewController {
     
-    @IBOutlet private weak var talbeView: UITableView!
     @IBOutlet private weak var versionLabel:UILabel!
     @IBOutlet private var versionView:UIView!
 
     private var viewModel:SettingsViewModel!
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Settings"
+        title = LocalizableStrings.settings
         
         viewModel = SettingsViewModel()
         viewModel.needReloadTable = {
-            self.talbeView.reloadData()
+            self.tableView.reloadData()
         }
         
         versionLabel.text = UIApplication.version()
         
-        talbeView.register(SettingsCell.self)
-        talbeView.tableHeaderView = BMNetworkStatusView()
-        talbeView.tableFooterView = versionView
+        tableView.register(SettingsCell.self)
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorStyle = .singleLine
+        tableView.tableHeaderView = BMNetworkStatusView()
+        tableView.tableFooterView = versionView
+        tableView.dataSource = self
+        tableView.delegate = self
         
         onAddMenuIcon()
     }
@@ -88,7 +109,7 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.onChangePassword(controller: self)
             case 5:
                 self.viewModel.onChangeNode(controller: self) { (_) in
-                    self.talbeView.reloadData()
+                    self.tableView.reloadData()
                 }
             case 6:
                 self.viewModel.onClearData(controller: self)
@@ -157,7 +178,7 @@ extension SettingsViewController : SettingsCellDelegate {
     
     func onClickSwitch(value: Bool, cell: SettingsCell) {
         
-        if let indexPath = talbeView.indexPath(for: cell) {
+        if let indexPath = tableView.indexPath(for: cell) {
            // viewModel.onSwitch(controller: self, indexPath: indexPath)
             
             let item = viewModel.getItem(indexPath: indexPath)
@@ -174,7 +195,7 @@ extension SettingsViewController : SettingsCellDelegate {
                     
                         item.isSwitch = true
                         
-                        self.talbeView.reloadData()
+                        self.tableView.reloadData()
                     }
                     else{
                         Settings.sharedManager().isNeedaskPasswordForSend = false
@@ -195,7 +216,7 @@ extension SettingsViewController : SettingsCellDelegate {
                         
                         item.isSwitch = true
                         
-                        self.talbeView.reloadData()
+                        self.tableView.reloadData()
                     }
                     else{
                         Settings.sharedManager().isEnableBiometric = false

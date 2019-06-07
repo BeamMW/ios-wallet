@@ -55,11 +55,14 @@ class FeeCell: BaseCell {
         super.layoutSubviews()
 
         let point = setUISliderThumbValueWithLabel(slider: feeSlider)
-        valueLabel.frame = CGRect(x: point.x, y: point.y, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
     }
     
     @objc private func showPicker(sender:UILongPressGestureRecognizer) {
         if sender.state == .began {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            
             let modalViewController = InputFeePopover()
             modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: LocalizableStrings.groth, with: "")) ?? ""
             modalViewController.modalPresentationStyle = .overFullScreen
@@ -92,7 +95,7 @@ class FeeCell: BaseCell {
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: sender)
-        valueLabel.frame = CGRect(x: point.x, y: point.y, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
         
         delegate?.onDidChangeFee?(value: Double(roundedStepValue))
     }
@@ -125,6 +128,6 @@ extension FeeCell: Configurable {
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: feeSlider)
-        valueLabel.frame = CGRect(x: point.x, y: point.y, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
     }
 }
