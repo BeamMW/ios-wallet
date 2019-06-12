@@ -77,6 +77,7 @@
                 <outlet property="mainStack" destination="iKw-bk-4dQ" id="cuA-0a-5GM"/>
                 <outlet property="nameLabel" destination="Tmv-KK-qjS" id="psa-AD-ri2"/>
                 <outlet property="textField" destination="T0u-EJ-vev" id="3gg-t7-svw"/>
+                <outlet property="topOffset" destination="Z12-Dt-hVc" id="1aH-10-Qb3"/>
             </connections>
             <point key="canvasLocation" x="209" y="111"/>
         </tableViewCell>

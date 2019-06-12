@@ -21,6 +21,8 @@ def shared_pods
     pod 'Firebase/Messaging'
     pod 'SideMenuSwift'
     pod 'LGSideMenuController'
+    pod 'RxSwift', '~> 5'
+    pod 'RxCocoa', '~> 5'
 end
 
 def extension

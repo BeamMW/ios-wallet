@@ -28,6 +28,7 @@
 #import "BMCategory.h"
 #import "BMDuration.h"
 #import "BMPreparedTransaction.h"
+#import "BMWord.h"
 
 @protocol WalletModelDelegate <NSObject>
 @optional
@@ -56,16 +57,15 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @interface AppModel : NSObject
 
 @property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
-@property (nonatomic,strong) NSHashTable * _Nonnull delegates;
+@property (nonatomic,readwrite) NSPointerArray * _Nonnull delegates;
 
 @property (nonatomic,assign) BOOL isConnected;
 @property (nonatomic,assign) BOOL isInternetAvailable;
 @property (nonatomic,assign) BOOL isUpdating;
 @property (nonatomic,assign) BOOL isConnecting;
 @property (nonatomic,assign) BOOL isLoggedin;
-@property (nonatomic,assign) BOOL isLocalNodeStarted;
 @property (nonatomic,assign) BOOL isRestoreFlow;
-@property (nonatomic,assign) BOOL isForgotPasswordFlow;
+@property (nonatomic,assign) BOOL isRestoring;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
@@ -92,12 +92,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)openWallet:(NSString*_Nonnull)pass;
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
 -(void)resetWallet:(BOOL)removeDatabase;
--(void)startForgotPassword;
--(void)stopForgotPassword;
--(void)cancelForgotPassword;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
--(void)onSyncWithLocalNodeCompleted;
 -(void)changeNodeAddress;
 -(BOOL)isValidNodeAddress:(NSString*_Nonnull)string;
 -(BOOL)isWalletInitialized;
@@ -129,12 +125,13 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
 -(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name category:(NSString*_Nonnull)category;
+-(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
 -(double)realTotal:(double)amount fee:(double)fee;

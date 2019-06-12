@@ -37,9 +37,10 @@
 #include "wallet/wallet_client.h"
 #include "wallet/default_peers.h"
 
+#include "core/block_rw.h"
+
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
-//#include "utility/options.h"
 
 #include "mnemonic/mnemonic.h"
 
@@ -92,8 +93,8 @@ static NSString *categoriesKey = @"categoriesKey";
     
      walletReactor = Reactor::create();
     
-    _delegates = [[NSHashTable alloc] init];
-    
+    _delegates = [NSPointerArray weakObjectsPointerArray];
+
     _transactions = [[NSMutableArray alloc] init];
     
     _contacts = [[NSMutableArray alloc] init];
@@ -110,7 +111,6 @@ static NSString *categoriesKey = @"categoriesKey";
                                              selector:@selector(didBecomeActiveNotification)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    [self cancelForgotPassword];
     [self loadRules];
     
     return self;
@@ -178,50 +178,6 @@ static NSString *categoriesKey = @"categoriesKey";
     }
 }
 
--(void)setIsLocalNodeStarted:(BOOL)isLocalNodeStarted {
-    _isLocalNodeStarted = isLocalNodeStarted;
-    
-    if (_isLocalNodeStarted) {
-        if ([[Settings sharedManager] isLocalNode]) {
-            wallet->start();
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-               
-              ///  self->nodeModel.stopNode();
-
-              ///  string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-               
-              ///  self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
-
-                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-                {
-                    if ([delegate respondsToSelector:@selector(onLocalNodeStarted)]) {
-                        [delegate onLocalNodeStarted];
-                    }
-                }
-                
-           ///     [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
-                
-                if([AppModel sharedManager].isForgotPasswordFlow) {
-                    [[AppModel sharedManager] stopForgotPassword];
-                }
-            });
-        }
-    }
-}
-
--(void)setIsRestoreFlow:(BOOL)isRestoreFlow {
-    _isRestoreFlow = isRestoreFlow;
-    
-    if (_isRestoreFlow) {
-        if (!nodeModel.isStarted())
-        {
-            nodeModel.start();
-        }
-    }
-    
-    [Settings sharedManager].isLocalNode = _isRestoreFlow;
-}
 
 #pragma mark - Open, Create
 
@@ -274,17 +230,6 @@ static NSString *categoriesKey = @"categoriesKey";
     if (!walletDb) {
         return NO;
     }
-    
-//    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].localNodeStorage]) {
-//        // self.isRestoreFlow = YES;
-//        
-//        if (!nodeModel.isStarted())
-//        {
-//            nodeModel.start();
-//        }
-//        
-//        [Settings sharedManager].isLocalNode = YES;
-//    }
     
     return YES;
 }
@@ -347,7 +292,6 @@ static NSString *categoriesKey = @"categoriesKey";
 -(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
-        self->nodeModel.stopNode();
     }
     
     isStarted = NO;
@@ -385,28 +329,30 @@ static NSString *categoriesKey = @"categoriesKey";
 -(void)start {
     if (isStarted == NO && walletDb != nil) {
         
-        string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-        
-        if ([[Settings sharedManager] isLocalNode]) {
-            
-            nodeModel.setKdf(walletDb->get_MasterKdf());
-            
-            nodeModel.startNode();
-            
-            io::Address nodeAddr = io::Address::LOCALHOST;
-            nodeAddr.port([[Settings sharedManager] nodePort]);
-            nodeAddrStr = nodeAddr.str();
+        if (self.isRestoreFlow)
+        {
+            if(!self.isRestoring)
+            {
+                self.isRestoring = YES;
+                
+                string recoveryPath = [[NSBundle mainBundle] pathForResource:@"masternet_recovery" ofType:@"bin"].string;
+                
+                walletDb->ImportRecovery(recoveryPath);
+            }
         }
-        
-        wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
-        wallet->getAsync()->setNodeAddress(nodeAddrStr);
-        
-        if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
-            isRunning = YES;
-            wallet->start();
+        else{
+            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+            
+            wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+            wallet->getAsync()->setNodeAddress(nodeAddrStr);
+            
+            if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
+                isRunning = YES;
+                wallet->start();
+            }
+            
+            isStarted = YES;
         }
-        
-        isStarted = YES;
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
         for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
@@ -423,53 +369,6 @@ static NSString *categoriesKey = @"categoriesKey";
             isRunning = YES;
             wallet->start();
         }
-    }
-}
-
--(void)startForgotPassword{
-    _isForgotPasswordFlow = YES;
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[Settings sharedManager].walletStoragePath]) {
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet_old"];
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath] == YES) {
-            [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil];
-        }
-        
-        [[NSFileManager defaultManager] copyItemAtPath:[Settings sharedManager].walletStoragePath toPath:dataPath error:nil];
-        
-        [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
-    }
-}
-
--(void)stopForgotPassword {
-    _isForgotPasswordFlow = NO;
-
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet_old"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
-        
-        [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil];
-    }
-}
-
--(void)cancelForgotPassword {
-    _isForgotPasswordFlow = NO;
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet_old"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
-        
-        [[NSFileManager defaultManager] copyItemAtPath:dataPath toPath:[Settings sharedManager].walletStoragePath error:nil];
-        
-        [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil];
     }
 }
 
@@ -765,7 +664,7 @@ static NSString *categoriesKey = @"categoriesKey";
     for (int i=0; i<_preparedDeleteAddresses.count; i++) {
         if ([_preparedDeleteAddresses[i].walletId isEqualToString:address]) {
             if (_preparedDeleteAddresses[i].isNeedRemoveTransactions) {
-                NSMutableArray *transactions = [[AppModel sharedManager] getTransactionsFromAddress:_preparedDeleteAddresses[i]];
+                NSMutableArray *transactions = [[AppModel sharedManager] getPreparedTransactionsFromAddress:_preparedDeleteAddresses[i]];
                 
                 [_preparedDeleteTransactionss removeAllObjects];
 
@@ -886,6 +785,20 @@ static NSString *categoriesKey = @"categoriesKey";
     return addresses;
 }
 
+-(NSMutableArray<BMTransaction*>*_Nonnull)getPreparedTransactionsFromAddress:(BMAddress*_Nonnull)address {
+    
+    NSMutableArray *result = [NSMutableArray array];
+    for (BMTransaction *tr in _preparedDeleteTransactionss)
+    {
+        if ([tr.senderAddress isEqualToString:address.walletId]
+            || [tr.receiverAddress isEqualToString:address.walletId]) {
+            [result addObject:tr];
+        }
+    }
+    
+    return result;
+}
+
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address {
     
     NSMutableArray *result = [NSMutableArray array];
@@ -994,18 +907,67 @@ static NSString *categoriesKey = @"categoriesKey";
     }
 }
 
+-(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID {
+    for (BMAddress *add in _walletAddresses) {
+        if ([add.walletId isEqualToString:ID]) {
+            return add;
+        }
+    }
+    
+    for (BMContact *contact in _contacts) {
+        if ([contact.address.walletId isEqualToString:ID]) {
+            return contact.address;
+        }
+    }
+    
+    return nil;
+}
+
 #pragma mark - Delegates
 
--(void)addDelegate:(id<WalletModelDelegate>) delegate{
-    if(![_delegates containsObject:delegate])
-    {
-        [_delegates addObject: delegate];
+- (NSUInteger)indexOfDelegate:(id)delegate {
+    for (NSUInteger i = 0; i < _delegates.count; i ++) {
+        if ([_delegates pointerAtIndex:i] == (__bridge void *)(delegate)) {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
+
+-(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate {
+    [_delegates compact];
+
+    void * objPtr = (__bridge void *)delegate;
+    [_delegates addPointer:objPtr];
+}
+
+-(void)removeDelegate:(id<WalletModelDelegate>_Nullable) delegate {
+    [_delegates compact];
+    
+    void * objPtr = (__bridge void *)delegate;
+
+    for(NSUInteger i = 0; i < _delegates.count; i++) {
+        void * ptr = [_delegates pointerAtIndex:i];
+        if (ptr == objPtr) {
+            [_delegates removePointerAtIndex: i];
+            break;
+        }
     }
 }
 
--(void)removeDelegate:(id<WalletModelDelegate>) delegate {
-    [_delegates removeObject: delegate];
-}
+//- (void)removeAllNulls
+//{
+//    NSMutableSet *indexesToRemove = [NSMutableSet new];
+//    for (NSUInteger i = 0; i < [_delegates count]; i++) {
+//        if (![_delegates pointerAtIndex:i]) {
+//            [indexesToRemove addObject:@(i)];
+//        }
+//    }
+//
+//    for (NSNumber *indexToRemove in indexesToRemove) {
+//        [_delegates removePointerAtIndex:[indexToRemove unsignedIntegerValue]];
+//    }
+//}
 
 #pragma mark - Send
 
@@ -1087,12 +1049,33 @@ static NSString *categoriesKey = @"categoriesKey";
     }
 }
 
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from {
+    
+    WalletID walletID(Zero);
+    if (walletID.FromHex(to.string))
+    {
+        WalletID fromID(Zero);
+        fromID.FromHex(from.string);
         
+        auto bAmount = round(amount * Rules::Coin);
+        
+        try{
+            wallet->getAsync()->sendMoney(fromID, walletID, comment.string, bAmount, fee);
+        }
+        catch(NSException *ex) {
+            NSLog(@"%@",ex);
+        }
+    }
+}
+
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from {
+    LOG_INFO() << "prepareSend";
+
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
     transaction.amount = amount;
     transaction.address = to;
+    transaction.from = from;
     transaction.comment = comment;
     transaction.date = [[NSDate date] timeIntervalSince1970];
     transaction.ID = [NSString randomAlphanumericStringWithLength:10];
@@ -1281,6 +1264,8 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(void)cancelPreparedTransaction:(NSString*_Nonnull)transaction {
+    LOG_INFO() << "cancelPreparedTransaction";
+
     for (int i=0; i<_preparedTransactions.count; i++) {
         if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
             [_preparedTransactions removeObjectAtIndex:i];
@@ -1290,9 +1275,17 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction {
+    LOG_INFO() << "sendPreparedTransaction";
+
     for (int i=0; i<_preparedTransactions.count; i++) {
         if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
-            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
+            if (_preparedTransactions[i].from == nil) {
+                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
+            }
+            else{
+                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from];
+            }
+            [_preparedTransactions removeObjectAtIndex:i];
             break;
         }
     }
@@ -1352,25 +1345,6 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 #pragma mark - UTXO
-
--(void)onSyncWithLocalNodeCompleted {
-    if ([Settings sharedManager].isLocalNode) {
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-            self->nodeModel.stopNode();
-            
-            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-            
-            self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
-            
-            [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
-        });
-           
-        self.isLocalNodeStarted = NO;
-        self.isRestoreFlow = NO;
-    }
-}
 
 -(void)setUtxos:(NSMutableArray<BMUTXO *> *)utxos {
     _utxos = utxos;

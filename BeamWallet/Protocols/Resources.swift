@@ -177,3 +177,8 @@ func IconTouchid() -> UIImage? {
     return UIImage(named: "iconTouchidSmall")
 }
 
+func IconShufflePink() -> UIImage? {
+    return UIImage(named: "iconShufflePink")
+}
+
+

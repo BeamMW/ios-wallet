@@ -25,9 +25,15 @@ protocol AddressesSegmentViewDelegate: AnyObject {
 
 class AddressesSegmentView: BaseView {
 
+    @IBOutlet weak private var segmetnView: UISegmentedControl!
+
     public static let height:CGFloat = 95
     
     weak var delegate: AddressesSegmentViewDelegate?
+
+    public func setSelectedIndex(index:Int) {
+        segmetnView.selectedSegmentIndex = index
+    }
     
     @IBAction func onFilterSegment(sender :UISegmentedControl) {
         delegate?.onFilterClicked(index: sender.selectedSegmentIndex)

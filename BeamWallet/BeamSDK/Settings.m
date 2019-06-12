@@ -42,7 +42,7 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 -(id)init {
     self = [super init];
     
-    _delegates = [[NSHashTable alloc] init];
+    _delegates = [NSHashTable weakObjectsHashTable];
 
     NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
     

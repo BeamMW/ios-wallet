@@ -42,7 +42,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="8jdu7wsdjkflk39902mnsdnkbkjadavfd39nas7877qwbn" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kgd-in-EgB" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="8jdu7wsdjkflk39902mnsdnkbkjadavfd39nas7877qwbn" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kgd-in-EgB">
                                 <rect key="frame" x="15" y="32" width="145" height="57.5"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -105,6 +105,8 @@
             <viewLayoutGuide key="safeArea" id="cSO-ky-jCe"/>
             <connections>
                 <outlet property="addressLabel" destination="Kgd-in-EgB" id="zH4-8b-Bxm"/>
+                <outlet property="button" destination="ht8-am-Vdw" id="f4f-eK-LtY"/>
+                <outlet property="nameLabel" destination="YRY-yO-e5U" id="mJY-Wd-BJJ"/>
             </connections>
             <point key="canvasLocation" x="105.79710144927537" y="85.044642857142847"/>
         </tableViewCell>

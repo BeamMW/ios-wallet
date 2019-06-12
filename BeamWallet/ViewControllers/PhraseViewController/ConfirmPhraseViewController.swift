@@ -44,7 +44,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
                     }
                     
                     if !added {
-                        inputWords.append(BMWord(word: String.empty(), index: index, correct: false))
+                        inputWords.append(BMWord(String.empty(), index: UInt(index), correct: false))
                     }
                 }
             }
@@ -127,7 +127,7 @@ extension ConfirmPhraseViewController : InputWordCellCellDelegate {
         
         inputWords[path].value = text
         
-        inputWords[path].correct = (words[index!]==text)
+        inputWords[path].correct = (words[Int(index)]==text)
     }
     
     func textValueCellReturn(_ sender: InputWordCell, _ text:String) {

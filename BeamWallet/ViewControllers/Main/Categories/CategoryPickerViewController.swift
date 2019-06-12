@@ -59,7 +59,17 @@ class CategoryPickerViewController: BaseTableViewController {
         super.viewDidLoad()
         
         if isGradient {
-            setGradientTopBar(mainColor: UIColor.main.brightSkyBlue, addedStatusView: false)
+            var mainColor = UIColor.main.brightSkyBlue
+            
+            if let viewControllers = self.navigationController?.viewControllers{
+                for vc in viewControllers {
+                    if vc is SendViewController {
+                        mainColor = UIColor.main.heliotrope
+                    }
+                }
+            }
+            
+            setGradientTopBar(mainColor: mainColor, addedStatusView: false)
         }
  
         title = LocalizableStrings.category

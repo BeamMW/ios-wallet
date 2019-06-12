@@ -226,11 +226,6 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
             [delegate onSyncProgressUpdated:done total:total];
         }
     }
-    
-    if (done == total)
-    {
-        [[AppModel sharedManager] onSyncWithLocalNodeCompleted];
-    }
 }
 
 void WalletModel::onChangeCalculated(beam::Amount change)

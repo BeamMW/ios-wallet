@@ -39,6 +39,9 @@ extension UIApplication {
         if let presented = base?.presentedViewController {
             return getTopMostViewController(base: presented)
         }
+        if let sideMenu = base as? LGSideMenuController {
+            return getTopMostViewController(base: sideMenu.rootViewController)
+        }
         return base
     }
 }

@@ -19,24 +19,12 @@
 
 import UIKit
 
-protocol UTXOBlockCellDelegate: AnyObject {
-    func onClickExpand()
-}
-
-
 class UTXOBlockCell: BaseCell {
-
-    weak var delegate: UTXOBlockCellDelegate?
 
     @IBOutlet weak private var heightLabel: UILabel!
     @IBOutlet weak private var hashLabel: UILabel!
     @IBOutlet weak private var hashTitleLabel: UILabel!
-    @IBOutlet weak private var arrowIcon: UIImageView!
 
-    public static func hideHeight() -> CGFloat {
-        return 70
-    }
-    
     public static func mainHeight() -> CGFloat {
         return 123
     }
@@ -46,49 +34,19 @@ class UTXOBlockCell: BaseCell {
         
         self.selectionStyle = .none
     }
-    
-    @IBAction func onExpand(sender :UIButton) {
-        if hashLabel.alpha == 1 {
-            UIView.animate(withDuration: 0.3) {
-                self.hashLabel.alpha = 0
-                self.hashTitleLabel.alpha = 0
-                self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
-            }
-        }
-        else{
-            UIView.animate(withDuration: 0.3) {
-                self.hashLabel.alpha = 1
-                self.hashTitleLabel.alpha = 1
-                self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
-            }
-        }
-        
-        self.delegate?.onClickExpand()
-    }
 }
 
 extension UTXOBlockCell: Configurable {
     
-    func configure(with options: (status:BMWalletStatus? , expand:Bool)) {
+    func configure(with status:BMWalletStatus?) {
                 
-        if let walletStatus = options.status {
+        if let walletStatus = status {
             heightLabel.text = walletStatus.currentHeight
             hashLabel.text = walletStatus.currentStateHash
         }
         else{
             heightLabel.text = ""
             hashLabel.text = ""
-        }
-        
-        if options.expand {
-            hashLabel.alpha = 1
-            hashTitleLabel.alpha = 1
-            arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
-        }
-        else{
-            hashLabel.alpha = 0
-            hashTitleLabel.alpha = 0
-            arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
         }
     }
 }

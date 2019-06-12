@@ -239,7 +239,23 @@ struct LocalizableStrings {
     static let delete_contact_transaction = "delete_contact_transaction".localized
     static let delete_contact_only = "delete_contact_only".localized
     static let enter_password_title_3 = "enter_password_title_3".localized
+    static let outgoing = "outgoing".localized
+    static let outgoing_address = "outgoing_address".localized
+    static let your_password = "your_password".localized
+    static let node = "node".localized
+    static let categories = "categories".localized
+    static let ip_port = "ip_port".localized
+    static let ask_password = "ask_password".localized
+    static let allow_open_link = "allow_open_link".localized
+    static let change_wallet_password = "change_wallet_password".localized
+    static let create_new_category = "create_new_category".localized
+    static let report_problem = "report_problem".localized
+    static let open_tg_bot = "open_tg_bot".localized
+    static let link_tg_bot = "link_tg_bot".localized
+    static let unlock_password = "unlock_password".localized
+    static let send_confirm_utxo = "send_confirm_utxo".localized
 
+    
     static func delete_category_text(str:String) -> String {
         return "Are you sure you want to delete “\(str)” category?"
     }

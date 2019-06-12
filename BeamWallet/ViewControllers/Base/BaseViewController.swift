@@ -268,6 +268,28 @@ class BaseViewController: UIViewController {
             }
         }
     }
+    
+    //MARK: - Security
+    
+    @objc public func onHideAmounts() {
+        if !Settings.sharedManager().isHideAmounts {
+            if Settings.sharedManager().isAskForHideAmounts {
+                
+                self.confirmAlert(title: LocalizableStrings.activate_security_title, message: LocalizableStrings.activate_security_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.activate, cancelHandler: { (_ ) in
+                    
+                }) { (_ ) in
+                    Settings.sharedManager().isAskForHideAmounts = false
+                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+                }
+            }
+            else{
+                Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+            }
+        }
+        else{
+            Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+        }
+    }
 }
 
 //MARK: - MFMailComposeViewControllerDelegate

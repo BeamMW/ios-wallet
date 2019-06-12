@@ -138,9 +138,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             self.navigationController?.popViewController(animated: true)
         }
         else{
-            let vc = CreateWalletProgressViewController()
-                .withPassword(password: pass)
-                .withPhrase(phrase: phrase)
+            let vc = CreateWalletProgressViewController(password: pass, phrase: phrase)
             pushViewController(vc: vc)
         }
     }

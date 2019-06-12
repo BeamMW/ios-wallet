@@ -23,6 +23,23 @@
 
 @implementation BMAddress
 
++(BMAddress*)emptyAddress{
+    BMAddress *empty = [BMAddress new];
+    empty.category = @"";
+    empty.label = @"";
+    return empty;
+}
+
++(BMAddress*)fromAddress:(BMAddress*)address{
+    BMAddress *copied = [BMAddress new];
+    copied.walletId = [NSString stringWithString:address.walletId];
+    copied.category = [NSString stringWithString:address.category];
+    copied.label = [NSString stringWithString:address.label];
+    copied.duration = address.duration;
+    copied.createTime = address.createTime;
+    return copied;
+}
+
 -(BOOL)isExpired {
     if (_duration == 0)
     {

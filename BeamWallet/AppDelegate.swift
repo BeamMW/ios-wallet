@@ -113,16 +113,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-
-        
-        //TODO: notification - close db
-//        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow
-//            && Settings.sharedManager().target == Testnet {
-//            AppModel.sharedManager().isConnecting = true
-//            AppModel.sharedManager().resetWallet(false)
-//        }
-//        else
-    
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -135,17 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
 
         NotificationManager.sharedManager.clearNotifications()
-        
-        //TODO: notification - close db
-//        if AppModel.sharedManager().isLoggedin && !AppModel.sharedManager().isRestoreFlow && Settings.sharedManager().target == Testnet {
-//            if let password = KeychainManager.getPassword() {
-//                if AppModel.sharedManager().isWalletInitialized() == false {
-//                    AppModel.sharedManager().isConnecting = true
-//                    AppModel.sharedManager().openWallet(password)
-//                }
-//            }
-//        }
-        
+                
         if ShortcutManager.canHandle() {
             _ = ShortcutManager.handleShortcutItem()
         }
@@ -299,6 +279,20 @@ extension AppDelegate {
 }
 
 extension AppDelegate : WalletModelDelegate {
+    
+    func onAddedPrepare(_ transaction: BMPreparedTransaction) {
+        DispatchQueue.main.async {
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { (data) in
+                if let result = data, result.type == .transaction {
+                    AppModel.sharedManager().cancelPreparedTransaction(result.id)
+                }
+            }) { (data) in
+                if let result = data, result.type == .transaction {
+                    AppModel.sharedManager().sendPreparedTransaction(result.id)
+                }
+            }
+        }
+    }
     
     func onAddedPrepare(_ address: BMAddress) {
         DispatchQueue.main.async {

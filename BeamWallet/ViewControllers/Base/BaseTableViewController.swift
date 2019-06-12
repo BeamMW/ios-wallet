@@ -23,11 +23,6 @@ class BaseTableViewController: BaseViewController {
     
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
-    var contentArray:[Any]?
-
-    private var offset:CGFloat = 0
-    private var maxOffset:CGFloat = 65
-    private var minOffset:CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,63 +73,4 @@ extension BaseTableViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         tableView.contentInset = UIEdgeInsets.zero
     }
-}
-
-
-extension BaseTableViewController {
-    
-//    func rowActionsForAddress(indexPath: IndexPath, array: [BMAddress], afterAction:@escaping (([BMAddress]) -> Void)) -> UISwipeActionsConfiguration? {
-//
-//        var addresses = array
-//        let address:BMAddress = addresses[indexPath.row]
-//
-//        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-//            handler(true)
-//
-//            let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
-//
-//            if transactions.count > 0  {
-//                self.showDeleteAddressAndTransactions(indexPath: indexPath)
-//            }
-//            else{
-//                addresses.remove(at: indexPath.row)
-//                afterAction(addresses)
-//
-//                self.tableView.performUpdate({
-//                    self.tableView.deleteRows(at: [indexPath], with: .left)
-//                }, completion: {
-//                    AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
-//                })
-//            }
-//        }
-//        delete.image = IconRowDelete()
-//        delete.backgroundColor = UIColor.main.orangeRed
-//
-//        let copy = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-//            handler(true)
-//
-//            UIPasteboard.general.string = address.walletId
-//            ShowCopied(text: LocalizableStrings.address_copied)
-//        }
-//        copy.image = IconRowCopy()
-//        copy.backgroundColor = UIColor.main.warmBlue
-//
-//        let edit = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-//            handler(true)
-//            let vc = EditAddressViewController(address: address)
-//            self.pushViewController(vc: vc)
-//        }
-//        edit.image = IconRowEdit()
-//        edit.backgroundColor = UIColor.main.steel
-//
-//        let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
-//        configuration.performsFirstActionWithFullSwipe = false
-//        return configuration
-//    }
-//
-//
-    
-//    private func showDeleteAddressAndTransactions(state:AddressesViewController.AddressesSelectedState, indexPath:IndexPath, array:[Any], completion) {
-//
-//    }
 }

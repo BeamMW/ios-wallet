@@ -24,9 +24,6 @@ class BMSlider: UISlider {
     private var maxSteps = 5
     private var height:CGFloat = 4
     
-//    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-//        return true
-//    }
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         var newBounds = super.trackRect(forBounds: bounds)

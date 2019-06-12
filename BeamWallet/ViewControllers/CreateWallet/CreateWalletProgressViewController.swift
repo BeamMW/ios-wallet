@@ -30,13 +30,25 @@ class CreateWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var logoYOffset: NSLayoutConstraint!
     @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
 
-    private var timeoutTimer = Timer()
+    private var timeoutTimer:Timer?
     
-    private var password:String!
+    private var password:String?
     private var phrase:String?
     private var isPresented = false
     private var start = Date.timeIntervalSinceReferenceDate;
 
+    init(password:String, phrase:String?) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.password = password
+        self.phrase = phrase
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(LocalizableStrings.fatalInitCoderError)
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -77,48 +89,44 @@ class CreateWalletProgressViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        timeoutTimer.invalidate()
+        timeoutTimer?.invalidate()
         
         AppModel.sharedManager().removeDelegate(self)
     }
     
     private func openMainPage() {
+        timeoutTimer?.invalidate()
+        
+        AppModel.sharedManager().removeDelegate(self)
+        
         AppModel.sharedManager().refreshAddresses()
         
-        if AppDelegate.useLegacy {
-            let vc = LegacyMainTabBarController()
-            vc.modalTransitionStyle = .crossDissolve
-            self.present(vc, animated: true, completion: nil)
-        }
-        else{
-            let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
-            let menuViewController = LeftMenuViewController()
-            
-            let sideMenuController = LGSideMenuController(rootViewController: mainVC,
-                                                          leftViewController: menuViewController,
-                                                          rightViewController: nil)
-            
-            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-            sideMenuController.leftViewPresentationStyle = .slideAbove;
-            sideMenuController.rootViewLayerShadowRadius = 0
-            sideMenuController.rootViewLayerShadowColor = UIColor.clear
-            sideMenuController.leftViewLayerShadowRadius = 0
-            sideMenuController.rootViewCoverAlphaForLeftView = 0.5
-            sideMenuController.rootViewCoverAlphaForRightView = 0.5
-            sideMenuController.leftViewCoverAlpha = 0.5
-            sideMenuController.rightViewCoverAlpha = 0.5
-            sideMenuController.modalTransitionStyle = .crossDissolve
-
-            self.present(sideMenuController, animated: true, completion: nil)
-        }
+        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+        let menuViewController = LeftMenuViewController()
+        
+        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+                                                      leftViewController: menuViewController,
+                                                      rightViewController: nil)
+        
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
+        sideMenuController.leftViewPresentationStyle = .slideAbove;
+        sideMenuController.rootViewLayerShadowRadius = 0
+        sideMenuController.rootViewLayerShadowColor = UIColor.clear
+        sideMenuController.leftViewLayerShadowRadius = 0
+        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+        sideMenuController.rootViewCoverAlphaForRightView = 0.5
+        sideMenuController.leftViewCoverAlpha = 0.5
+        sideMenuController.rightViewCoverAlpha = 0.5
+        sideMenuController.modalTransitionStyle = .crossDissolve
+        
+        self.navigationController?.setViewControllers([sideMenuController], animated: true)
     }
 
     private func startCreateWallet() {
-        let appModel = AppModel.sharedManager()
-        appModel.addDelegate(self)
-
-        if !appModel.isInternetAvailable {
-            appModel.resetWallet(false)
+        AppModel.sharedManager().addDelegate(self)
+        
+        if !AppModel.sharedManager().isInternetAvailable {
+            AppModel.sharedManager().resetWallet(false)
 
             self.navigationController?.popViewController(animated: true)
 
@@ -128,11 +136,11 @@ class CreateWalletProgressViewController: BaseViewController {
         }
         else{
             if let phrase = phrase {
-                let created = appModel.createWallet(phrase, pass: password)
+                let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
                 if(!created)
                 {
                     self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_created) { (_ ) in
-                        if appModel.isInternetAvailable {
+                        if AppModel.sharedManager().isInternetAvailable {
                             self.navigationController?.popToRootViewController(animated: true)
                         }
                         else{
@@ -143,7 +151,7 @@ class CreateWalletProgressViewController: BaseViewController {
                     }
                 }
                 else{
-                    if (!appModel.isRestoreFlow)
+                    if (!AppModel.sharedManager().isRestoreFlow)
                     {
                         UIView.animate(withDuration: 0.3) {
                             self.progressView.progress = 0.2
@@ -152,7 +160,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 }
             }
             else{
-                let opened = appModel.openWallet(password)
+                let opened = AppModel.sharedManager().openWallet(password!)
                 if(!opened)
                 {
                     self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_opened) { (_ ) in
@@ -174,18 +182,18 @@ class CreateWalletProgressViewController: BaseViewController {
     
     private func openNodeController() {
         let vc = EnterNodeAddressViewController()
-        vc.completion = {
+        vc.completion = { [weak self]
             obj in
             
             if obj == true {
                 AppModel.sharedManager().isConnecting = false
                 
-                self.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(self.onTimeOut), userInfo: nil, repeats: false)
+                self?.timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self as Any, selector: #selector(self?.onTimeOut), userInfo: nil, repeats: false)
                 
-                self.startCreateWallet()
+                self?.startCreateWallet()
             }
             else{
-                self.navigationController?.popToRootViewController(animated: true)
+                self?.navigationController?.popToRootViewController(animated: true)
             }
         }
         vc.hidesBottomBarWhenPushed = true
@@ -212,31 +220,15 @@ class CreateWalletProgressViewController: BaseViewController {
     }
 }
 
-extension CreateWalletProgressViewController {
-    
-    func withPassword(password: String) -> Self {
-        
-        self.password = password
-        
-        return self
-    }
-    
-    func withPhrase(phrase: String) -> Self {
-        
-        self.phrase = phrase
-        
-        return self
-    }
-}
-
-
 extension CreateWalletProgressViewController : WalletModelDelegate {
     
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+
             if AppModel.sharedManager().isRestoreFlow {
                 if total > 0 {
-                    let speed = Double(done) / Double((Date.timeIntervalSinceReferenceDate - self.start))
+                    let speed = Double(done) / Double((Date.timeIntervalSinceReferenceDate - strongSelf.start))
                    
                     if speed > 0 {
                         let sizeLeft = Double(total-done)
@@ -250,72 +242,71 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     let progress: Float = Float(done) / Float(total)
                     let percent = Int32(progress * 100)
                     
-                    self.progressValueLabel.text = LocalizableStrings.restored + "\(percent)%"
+                    strongSelf.progressValueLabel.text = LocalizableStrings.restored + "\(percent)%"
                 }
             }
             
-            if total == done && !self.isPresented && !AppModel.sharedManager().isRestoreFlow {
-                self.isPresented = true
-                
-                UIView.animate(withDuration: 2, animations: {
-                    self.progressView.progress = 1
-                }) { (_) in
-                    DispatchQueue.main.async {
-                        self.openMainPage()
-                    }
-                }
+            if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
+                strongSelf.isPresented = true
+                strongSelf.progressView.progress = 1
+                strongSelf.openMainPage()
             }
             else{
-                self.progressView.progress = Float(Float(done)/Float(total))
+                strongSelf.progressView.progress = Float(Float(done)/Float(total))
             }
         }
     }
     
     func onWalletError(_ _error: Error) {
         DispatchQueue.main.async {
+            [weak self] in
+            guard let strongSelf = self else { return }
+            
             let error = _error as NSError
             
             if error.code == 2 && Settings.sharedManager().isChangedNode() {
-                if !self.isPresented {
-                    self.isPresented = true
+                if !strongSelf.isPresented {
+                    strongSelf.isPresented = true
                     
-                    self.openMainPage()
+                    strongSelf.openMainPage()
                 }
             }
             else if error.code == 1 {
                 
-                self.confirmAlert(title: LocalizableStrings.incompatible_node_title, message: LocalizableStrings.incompatible_node_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.change_settings, cancelHandler: { (_ ) in
+                strongSelf.confirmAlert(title: LocalizableStrings.incompatible_node_title, message: LocalizableStrings.incompatible_node_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.change_settings, cancelHandler: { (_ ) in
                     
                     AppModel.sharedManager().resetWallet(false)
-                    self.navigationController?.popViewController(animated: true)
+                    strongSelf.navigationController?.popViewController(animated: true)
                     
                 }, confirmHandler: { (_ ) in
                     
-                    self.openNodeController()
+                    strongSelf.openNodeController()
                 })
             }
             else{
-                if let controllers = self.navigationController?.viewControllers {
+                if let controllers = strongSelf.navigationController?.viewControllers {
                     for vc in controllers {
                         if vc is EnterNodeAddressViewController {
                             return
                         }
                     }
                 }
-                self.alert(title: LocalizableStrings.error, message: error.localizedDescription, handler: { (_ ) in
+                strongSelf.alert(title: LocalizableStrings.error, message: error.localizedDescription, handler: { (_ ) in
                     AppModel.sharedManager().resetWallet(false)
-                    self.navigationController?.popViewController(animated: true)
+                    strongSelf.navigationController?.popViewController(animated: true)
                 })
             }
         }
     }
     
     func onLocalNodeStarted() {
-        DispatchQueue.main.async {
-            if !self.isPresented {
-                self.isPresented = true
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            if !strongSelf.isPresented {
+                strongSelf.isPresented = true
                 
-                self.openMainPage()
+                strongSelf.openMainPage()
             }
         }
     }

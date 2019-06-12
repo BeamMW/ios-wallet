@@ -32,7 +32,7 @@ class InputPhraseViewController: BaseWizardViewController {
         self.title = LocalizableStrings.seed_prhase
         
         for i in 0 ... 11 {
-            inputWords.append(BMWord(word: String.empty(), index: i, correct: false))
+            inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
         }
         
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)

@@ -44,6 +44,10 @@ extension UIViewController {
 }
 
 extension UIViewController {
+    func back() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     func pushViewController(vc:UIViewController) {
         navigationItem.backBarButtonItem = UIBarButtonItem.arrowButton()
         navigationController?.pushViewController(vc, animated: true)

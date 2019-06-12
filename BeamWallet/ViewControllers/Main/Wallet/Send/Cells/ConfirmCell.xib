@@ -16,51 +16,74 @@
         <array key="SFProText-Medium.ttf">
             <string>SFProText-Medium</string>
         </array>
+        <array key="SFProText-Regular.ttf">
+            <string>SFProText-Regular</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="148" id="jkk-NP-RAX" customClass="ConfirmCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="jkk-NP-RAX" customClass="ConfirmCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jkk-NP-RAX" id="hR2-Nc-TBP">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="103.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="isU-e1-c3h">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="103.5"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hmE-6R-HFL">
-                                <rect key="frame" x="15" y="10" width="290" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
-                                        <real key="value" value="1.5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-Bh-1cM">
-                                <rect key="frame" x="15" y="32" width="290" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="fR0-7Y-uoA">
+                                <rect key="frame" x="15" y="10" width="290" height="83"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hmE-6R-HFL">
+                                        <rect key="frame" x="0.0" y="0.0" width="290" height="17"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                        <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                                <real key="value" value="1.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-Bh-1cM">
+                                        <rect key="frame" x="0.0" y="22" width="290" height="17"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
+                                        <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="default" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LJw-Lu-G8l">
+                                        <rect key="frame" x="0.0" y="44" width="290" height="17"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="0.50350492294520544" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="category" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="w6l-ps-aTh">
+                                        <rect key="frame" x="0.0" y="66" width="290" height="17"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
+                                        <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="1OB-Bh-1cM" secondAttribute="trailing" constant="15" id="73Q-yV-lF3"/>
-                            <constraint firstAttribute="bottom" secondItem="1OB-Bh-1cM" secondAttribute="bottom" constant="10.5" id="8kz-SL-t6w"/>
-                            <constraint firstItem="hmE-6R-HFL" firstAttribute="leading" secondItem="isU-e1-c3h" secondAttribute="leading" constant="15" id="9sV-8y-RJW"/>
-                            <constraint firstAttribute="trailing" secondItem="hmE-6R-HFL" secondAttribute="trailing" constant="15" id="IaV-1w-JG4"/>
-                            <constraint firstItem="1OB-Bh-1cM" firstAttribute="leading" secondItem="isU-e1-c3h" secondAttribute="leading" constant="15" id="JWk-gW-h0B"/>
-                            <constraint firstItem="1OB-Bh-1cM" firstAttribute="top" secondItem="hmE-6R-HFL" secondAttribute="bottom" constant="5" id="diH-Ec-phF"/>
-                            <constraint firstItem="hmE-6R-HFL" firstAttribute="top" secondItem="isU-e1-c3h" secondAttribute="top" constant="10" id="sdp-gP-OID"/>
+                            <constraint firstItem="fR0-7Y-uoA" firstAttribute="top" secondItem="isU-e1-c3h" secondAttribute="top" constant="10" id="3rh-18-lrU"/>
+                            <constraint firstItem="fR0-7Y-uoA" firstAttribute="leading" secondItem="isU-e1-c3h" secondAttribute="leading" constant="15" id="5Oj-Hu-zBj"/>
+                            <constraint firstAttribute="trailing" secondItem="fR0-7Y-uoA" secondAttribute="trailing" constant="15" id="aZZ-9d-v4g"/>
+                            <constraint firstAttribute="bottom" secondItem="fR0-7Y-uoA" secondAttribute="bottom" constant="10.5" id="xxq-cf-WuX"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -74,10 +97,12 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="Roz-AP-ohd"/>
             <connections>
+                <outlet property="addressNameLabel" destination="LJw-Lu-G8l" id="axG-0u-Jgh"/>
+                <outlet property="categoryLabel" destination="w6l-ps-aTh" id="T6x-YO-Cbd"/>
                 <outlet property="nameLabel" destination="hmE-6R-HFL" id="gry-3I-PYr"/>
                 <outlet property="valueLabel" destination="1OB-Bh-1cM" id="hPR-GP-8Vv"/>
             </connections>
-            <point key="canvasLocation" x="97.101449275362327" y="94.754464285714278"/>
+            <point key="canvasLocation" x="97.101449275362327" y="109.48660714285714"/>
         </tableViewCell>
     </objects>
 </document>

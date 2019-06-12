@@ -20,16 +20,9 @@
 import UIKit
 
 class AddressesViewController: BaseTableViewController {
-    enum AddressesSelectedState: Int {
-        case active = 0
-        case expired = 1
-        case contacts = 2
-    }
     
-    private var selectedState: AddressesSelectedState = .active
-    private var addresses = [BMAddress]()
-    private var contacts = [BMContact]()
-    private var headerView: AddressesSegmentView!
+    private let headerView: AddressesSegmentView = UIView.fromNib()
+    private let viewModel = AddressViewModel(selected: .active)
     
     override var isUppercasedTitle: Bool {
         get{
@@ -42,20 +35,15 @@ class AddressesViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         title = LocalizableStrings.addresses
-
-        headerView = UIView.fromNib()
+        
         headerView.delegate = self
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AddressCell.self)
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-
-        filterAddresses()
-        
-        AppModel.sharedManager().addDelegate(self)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         
@@ -63,92 +51,40 @@ class AddressesViewController: BaseTableViewController {
             registerForPreviewing(with: self, sourceView: view)
         }
         
+        subscribeToChages()
         onAddMenuIcon()
     }
-        
+    
+    private func subscribeToChages() {
+        viewModel.onDataChanged = { [weak self] in
+            self?.tableView.reloadData()
+        }
+        viewModel.onDataDeleted = { [weak self]
+            indexPath, address in
+            
+            if let path = indexPath {
+                self?.tableView.performUpdate({
+                    self?.tableView.deleteRows(at: [path], with: .left)
+                }, completion: {
+                    AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
+                })
+            }
+        }
+    }
+    
     @objc private func didBecomeActive() {
-        filterAddresses()
-        tableView.reloadData()
+        viewModel.filterAddresses()
     }
     
     @objc private func refreshData(_ sender: Any) {
         tableView.stopRefreshing()
-    }
-
-    private func filterAddresses() {
-        switch selectedState {
-        case .active:
-            if let addresses = AppModel.sharedManager().walletAddresses {
-                self.addresses = addresses as! [BMAddress]
-            }
-            self.addresses = self.addresses.filter { $0.isExpired() == false}
-        case .expired:
-            if let addresses = AppModel.sharedManager().walletAddresses {
-                self.addresses = addresses as! [BMAddress]
-            }
-            self.addresses = self.addresses.filter { $0.isExpired() == true}
-        case .contacts:
-            self.contacts = AppModel.sharedManager().contacts as! [BMContact]
-        }
-    }
-    
-    private func showDeleteAddressAndTransactions(indexPath:IndexPath) {
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
-        
-        var address:BMAddress!
-        
-        if selectedState == .contacts {
-            address = contacts[indexPath.row].address
-        }
-        else{
-            address = addresses[indexPath.row]
-        }
-
-        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
-            if let item = selectedItem {
-                switch (item.action) {
-                case .delete_address:
-                    if self.selectedState == .contacts {
-                        self.contacts.remove(at: indexPath.row)
-                    }
-                    else{
-                        self.addresses.remove(at: indexPath.row)
-                    }
-                    self.tableView.performUpdate({
-                        self.tableView.deleteRows(at: [indexPath], with: .left)
-                    }, completion: {
-                        AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
-                    })
-                case .delete_address_transactions :
-                    if self.selectedState == .contacts {
-                        self.contacts.remove(at: indexPath.row)
-                    }
-                    else{
-                        self.addresses.remove(at: indexPath.row)
-                    }
-                    self.tableView.performUpdate({
-                        self.tableView.deleteRows(at: [indexPath], with: .left)
-                    }, completion: {
-                        AppModel.sharedManager().prepareDelete(address, removeTransactions: true)
-                    })
-                default:
-                    return
-                }
-            }
-        }) {
-            
-        }
     }
 }
 
 extension AddressesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return AddressesSegmentView.height
-        }
-        
-        return 0
+        return section == 0 ? AddressesSegmentView.height : 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -158,80 +94,30 @@ extension AddressesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let address = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
+        let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
         
-        let vc = AddressViewController(address: address, isContact:(selectedState == .contacts))
+        let vc = AddressViewController(address: address)
         vc.hidesBottomBarWhenPushed = true
         pushViewController(vc: vc)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-//        return self.rowActions(indexPath: indexPath, array: addresses, afterAction: { (array) in
-//            self.addresses = array as! [BMad]
-//        })
-        
-        let address:BMAddress = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
-
-        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-
-            let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
-
-            if transactions.count > 0  {
-                self.showDeleteAddressAndTransactions(indexPath: indexPath)
-            }
-            else{
-                if self.selectedState == .contacts {
-                    self.contacts.remove(at: indexPath.row)
-                }
-                else{
-                    self.addresses.remove(at: indexPath.row)
-                }
-                self.tableView.performUpdate({
-                    self.tableView.deleteRows(at: [indexPath], with: .left)
-                }, completion: {
-                    AppModel.sharedManager().prepareDelete(address, removeTransactions: false)
-                })
-            }
-        }
-        delete.image = IconRowDelete()
-        delete.backgroundColor = UIColor.main.orangeRed
-
-        let copy = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-
-            UIPasteboard.general.string = address.walletId
-            ShowCopied(text: LocalizableStrings.address_copied)
-        }
-        copy.image = IconRowCopy()
-        copy.backgroundColor = UIColor.main.warmBlue
-
-        let edit = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-            let vc = EditAddressViewController(address: address)
-            self.pushViewController(vc: vc)
-        }
-        edit.image = IconRowEdit()
-        edit.backgroundColor = UIColor.main.steel
-
-        let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
-        configuration.performsFirstActionWithFullSwipe = false
-        return configuration
+       return viewModel.trailingSwipeActions(indexPath: indexPath)
     }
 }
 
 extension AddressesViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let count = selectedState == .contacts ? contacts.count : addresses.count
+        let count = viewModel.selectedState == .contacts ? viewModel.contacts.count : viewModel.addresses.count
         return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let address = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
-
+        let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
+        
         let cell =  tableView
             .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
             .configured(with: (row: indexPath.row, address: address, single:false, displayCategory: true))
@@ -240,58 +126,29 @@ extension AddressesViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return headerView
-        }
-        
-        return nil
-    }
-    
-}
-
-extension AddressesViewController : WalletModelDelegate {
-    func onWalletAddresses(_ walletAddresses: [BMAddress]) {
-        DispatchQueue.main.async {
-            self.filterAddresses()
-            UIView.performWithoutAnimation {
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    func onContactsChange(_ contacts: [BMContact]) {
-        DispatchQueue.main.async {
-            self.filterAddresses()
-            UIView.performWithoutAnimation {
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    func onCategoriesChange() {
-        DispatchQueue.main.async {
-            self.filterAddresses()
-            UIView.performWithoutAnimation {
-                self.tableView.reloadData()
-            }
-        }
+        return section == 0 ? headerView : nil
     }
 }
 
 extension AddressesViewController : UIViewControllerPreviewingDelegate {
-   
+    
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
-        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
-        
-        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
-
-        let detailVC = PreviewQRViewController(address: addresses[indexPath.row])
-        detailVC.preferredContentSize = CGSize(width: 0.0, height: 340)
-        
-        previewingContext.sourceRect = cell.frame
-        
-        return detailVC
+        if viewModel.selectedState != .contacts {
+            guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
+            
+            guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+            
+            let detailVC = PreviewQRViewController(address: viewModel.addresses[indexPath.row])
+            detailVC.preferredContentSize = CGSize(width: 0.0, height: 340)
+            
+            previewingContext.sourceRect = cell.frame
+            
+            return detailVC
+        }
+        else{
+            return nil
+        }
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
@@ -304,13 +161,6 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
 
 extension AddressesViewController : AddressesSegmentViewDelegate {
     func onFilterClicked(index: Int) {
-        selectedState = AddressesViewController.AddressesSelectedState(rawValue: index) ?? .active
-        
-        filterAddresses()
-        
-        UIView.performWithoutAnimation {
-            self.tableView.reloadData()
-            self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        }
+        viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: index) ?? .active
     }
 }

@@ -22,6 +22,8 @@ import UIKit
 class ReceiveAddressCell: BaseCell {
     
     @IBOutlet weak private var addressLabel: UILabel!
+    @IBOutlet weak private var nameLabel: UILabel!
+    @IBOutlet weak private var button: BMButton!
 
     weak var delegate: BMCellProtocol?
 
@@ -42,5 +44,17 @@ extension ReceiveAddressCell: Configurable {
     
     func configure(with options: (hideLine: Bool, address:BMAddress?, title:String?)) {
         addressLabel.text = options.address?.walletId
+        
+        if options.title != nil {
+            nameLabel.text = options.title
+        }
+        
+        if options.title == LocalizableStrings.outgoing {
+            button.setTitleColor(UIColor.main.heliotrope, for: .normal)
+            button.setTitleColor(UIColor.main.heliotrope.withAlphaComponent(0.3), for: .highlighted)
+            button.layer.borderColor = UIColor.main.heliotrope.cgColor
+            button.setImage(IconShufflePink(), for: .normal)
+            button.setBackgroundColor(color: UIColor.main.heliotrope.withAlphaComponent(0.3), forState: .highlighted)
+        }
     }
 }

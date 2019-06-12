@@ -21,16 +21,11 @@ import UIKit
 
 class AddressViewController: BaseTableViewController {
 
-    private var address:BMAddress!
-    private var transactions = [BMTransaction]()
-    private var details = [GeneralInfo]()
-
-    private var isContact = false
+    private var addressViewModel:DetailAddressViewModel!
     
-    init(address:BMAddress, isContact:Bool) {
+    init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
-        
-        self.address = address
+        self.addressViewModel = DetailAddressViewModel(address: address)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,128 +35,82 @@ class AddressViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
-
-        isContact = (AppModel.sharedManager().getContactFromId(self.address.walletId) != nil)
-        
-        getTransactions()
-        fillDetails()
-        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register([GeneralInfoCell.self, WalletTransactionCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         
-        title = (isContact ? LocalizableStrings.contact : LocalizableStrings.address)
+        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
+
+        title = (addressViewModel.isContact ? LocalizableStrings.contact : LocalizableStrings.address)
         
-        AppModel.sharedManager().addDelegate(self)
+        subscribeToUpdates()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if isMovingFromParent
-        {
-            AppModel.sharedManager().removeDelegate(self)
-        }
-    }
-    
-    private func fillDetails() {
-        details.removeAll()
-        
-        details.append(GeneralInfo(text: LocalizableStrings.address_id, detail: self.address.walletId, failed: false, canCopy:true, color: UIColor.white))
-        
-        if !isContact {
-            details.append(GeneralInfo(text: LocalizableStrings.exp_date, detail: self.address.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
+    private func subscribeToUpdates() {
+        addressViewModel.onDataChanged = { [weak self] in
+            self?.tableView.reloadData()
         }
         
-        if !self.address.category.isEmpty {
-            if let category = AppModel.sharedManager().findCategory(byId: self.address.category) {
-                details.append(GeneralInfo(text: LocalizableStrings.category + ":", detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
+        addressViewModel.onDataDeleted = { [weak self]
+            indexPath, address in
+            
+            AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
+            
+            self?.back()
+        }
+        
+        addressViewModel.transactionViewModel.onDataDeleted = { [weak self]
+            indexPath, transaction in
+            
+            if let path = indexPath {
+                self?.tableView.performUpdate({
+                    self?.tableView.deleteRows(at: [path], with: .left)
+                }, completion: {
+                    AppModel.sharedManager().deleteTransaction(transaction)
+                })
             }
         }
         
-        if !self.address.label.isEmpty {
-            details.append(GeneralInfo(text: LocalizableStrings.name2, detail: self.address.label, failed: false, canCopy:false, color: UIColor.white))
+        addressViewModel.transactionViewModel.onDataUpdated = { [weak self]
+            indexPath, transaction in
+            
+            if let path = indexPath {
+                self?.tableView.performUpdate({
+                    self?.tableView.reloadRows(at: [path], with: .fade)
+                }, completion: {
+                    AppModel.sharedManager().cancelTransaction(transaction)
+                })
+            }
         }
     }
-    
+
     @objc private func onMore(sender:UIBarButtonItem) {
-
-        var items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.copy_contact : LocalizableStrings.copy_address), icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.edit_contact : LocalizableStrings.edit_address), icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact : LocalizableStrings.delete_address), icon: nil, action:.delete_address)]
-        
-
-        if isContact {
-            items.remove(at: 0)
-        }
-        
-        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
+        BMPopoverMenu.show(menuArray: addressViewModel.actionItems(), done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.action) {
                 case .show_qr_code:
-                    let modalViewController = QRViewController(address: self.address, amount: nil)
-                    modalViewController.modalPresentationStyle = .overFullScreen
-                    modalViewController.modalTransitionStyle = .crossDissolve
-                    self.present(modalViewController, animated: true, completion: nil)
+                    self.addressViewModel.onQRCodeAddress(address: self.addressViewModel.address!)
                 case .copy_address :
-                    UIPasteboard.general.string = self.address.walletId
-                    ShowCopied()
+                    self.addressViewModel.onCopyAddress(address: self.addressViewModel.address!)
                 case .edit_address :
-                    let vc = EditAddressViewController(address: self.address)
-                    self.pushViewController(vc: vc)
+                    self.addressViewModel.onEditAddress(address: self.addressViewModel.address!)
                 case .delete_address :
-                    if self.transactions.count > 0  {
-                        self.showDeleteAddressAndTransactions()
-                    }
-                    else{
-                        AppModel.sharedManager().prepareDelete(self.address, removeTransactions: false)
-                        
-                        self.navigationController?.popViewController(animated: true)
-                    }
-         
+                    self.addressViewModel.onDeleteAddress(address: self.addressViewModel.address!, indexPath: nil)
                 default:
                     return
                 }
             }
         }, cancel: {
-            
+
         })
-    }
-    
-    private func showDeleteAddressAndTransactions() {        
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
-                
-        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
-            if let item = selectedItem {
-                switch (item.action) {
-                case .delete_address:
-                    AppModel.sharedManager().prepareDelete(self.address, removeTransactions: false)
-
-                    self.navigationController?.popViewController(animated: true)
-                case .delete_address_transactions :
-                    AppModel.sharedManager().removeDelegate(self)
-                    
-                    AppModel.sharedManager().prepareDelete(self.address, removeTransactions: true)
-
-                    self.navigationController?.popViewController(animated: true)
-                default:
-                    return
-                }
-            }
-        }) {
-            
-        }
-    }
-    
-    private func getTransactions() {
-        transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
     }
 }
 
 extension AddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1 && transactions.count > 0 {
+        if indexPath.section == 1 && addressViewModel.transactions.count > 0 {
             return true
         }
         
@@ -169,7 +118,7 @@ extension AddressViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
+        if section == 1 && addressViewModel.transactions.count > 0 {
             return BMTableHeaderTitleView.boldHeight
         }
         
@@ -184,7 +133,7 @@ extension AddressViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
-            let vc = TransactionViewController(transaction: transactions[indexPath.row])
+            let vc = TransactionViewController(transaction: addressViewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
@@ -192,85 +141,21 @@ extension AddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-        let transaction = transactions[indexPath.row]
-        
-        let cancel = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-            
-            self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
-                
-            }, confirmHandler: { (_) in
-                transaction.status = LocalizableStrings.cancelled
-                
-                self.tableView.performUpdate({
-                    self.tableView.reloadRows(at: [indexPath], with: .fade)
-                }, completion: {
-                    AppModel.sharedManager().cancelTransaction(transaction)
-                })
-            })
-        }
-        cancel.image = IconRowCancel()
-        cancel.backgroundColor = UIColor.main.steel
-        
-        let rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-            let vc = SendViewController()
-            vc.transaction = transaction
-            self.pushViewController(vc: vc)
-        }
-        rep.image = IconRowRepeat()
-        rep.backgroundColor = UIColor.main.brightBlue
-        
-        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-            self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
-                
-            }, confirmHandler: { (_ ) in
-                self.transactions.remove(at: indexPath.row)
-                self.tableView.performUpdate({
-                    self.tableView.deleteRows(at: [indexPath], with: .left)
-                }, completion: {
-                    AppModel.sharedManager().deleteTransaction(transaction)
-                })
-            })
-        }
-        delete.image = IconRowDelete()
-        delete.backgroundColor = UIColor.main.orangeRed
-        
-        var actions = [UIContextualAction]()
-        
-        if transaction.canCancel {
-            actions.append(cancel)
-        }
-        
-        if !transaction.isIncome {
-            actions.append(rep)
-        }
-        
-        if transaction.canDelete {
-            actions.append(delete)
-        }
-        
-        let configuration = UISwipeActionsConfiguration(actions: actions.reversed())
-        configuration.performsFirstActionWithFullSwipe = false
-        return configuration
+        return addressViewModel.transactionViewModel.trailingSwipeActions(indexPath:indexPath)
     }
 }
 
 extension AddressViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if transactions.count > 0 {
-            return 2
-        }
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            return transactions.count
+            return addressViewModel.transactions.count
         }
-        return self.details.count
+        return addressViewModel.details.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -278,67 +163,23 @@ extension AddressViewController : UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView
                 .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
-                .configured(with: details[indexPath.row])
+                .configured(with: addressViewModel.details[indexPath.row])
             return cell
         }
         else{
-            let cell =  tableView
+            let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: transactions[indexPath.row], single:false))
+                .configured(with: (row: indexPath.row, transaction: addressViewModel.transactions[indexPath.row], single:false))
             return cell
         }
         
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1 {
+        if section == 1 && addressViewModel.transactions.count > 0 {
             return BMTableHeaderTitleView(title: LocalizableStrings.transactions, bold: true)
         }
         
         return nil
     }
-    
-    
 }
-
-extension AddressViewController : WalletModelDelegate {
-    
-    func onReceivedTransactions(_ transactions: [BMTransaction]) {
-        DispatchQueue.main.async {
-            self.getTransactions()
-            
-            UIView.performWithoutAnimation {
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    func onWalletAddresses(_ walletAddresses: [BMAddress]) {
-        DispatchQueue.main.async {
-            if let address = walletAddresses.first(where: { $0.walletId == self.address.walletId }) {
-                self.address = address
-                
-                self.fillDetails()
-                
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    }
-    
-    func onContactsChange(_ contacts: [BMContact]) {
-        DispatchQueue.main.async {
-            if let contact = contacts.first(where: { $0.address.walletId == self.address.walletId }) {
-                self.address = contact.address
-                
-                self.fillDetails()
-                
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    }
-}
-

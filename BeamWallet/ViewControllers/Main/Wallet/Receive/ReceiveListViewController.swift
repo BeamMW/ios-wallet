@@ -65,7 +65,17 @@ class ReceiveListViewController: BaseTableViewController {
         
         filterAddresses()
         
-        setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
+        var mainColor = UIColor.main.brightSkyBlue
+        
+        if let viewControllers = self.navigationController?.viewControllers{
+            for vc in viewControllers {
+                if vc is SendViewController {
+                    mainColor = UIColor.main.heliotrope
+                }
+            }
+        }
+        
+        setGradientTopBar(mainColor: mainColor)
         title = LocalizableStrings.change_address.uppercased()
                 
         tableView.register([ReceiveAddressListCell.self, BMFieldCell.self, BMEmptyCell.self])
@@ -105,7 +115,7 @@ class ReceiveListViewController: BaseTableViewController {
             }
             
             let filterdObjects = self.addresses.filter { $0.label.lowercased().contains(searchString.lowercased()) || $0.categoryName.lowercased().contains(searchString.lowercased()) ||
-                $0.walletId.lowercased().contains(searchString.lowercased())
+                $0.walletId.lowercased().starts(with: searchString.lowercased())
             }    
             self.addresses.removeAll()
             self.addresses.append(contentsOf: filterdObjects)

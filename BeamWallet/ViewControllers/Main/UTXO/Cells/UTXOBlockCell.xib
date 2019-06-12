@@ -38,9 +38,6 @@
                                                 <color key="value" red="0.20392156859999999" green="0.18039215689999999" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onExpandWithSender:" destination="J7e-aX-YPy" eventType="touchUpInside" id="RWb-nJ-AiX"/>
-                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blockchain Height:" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZe-WC-oNL">
                                         <rect key="frame" x="15" y="15" width="115" height="17"/>
@@ -61,7 +58,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="102931" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2tc-2q-9Ok">
-                                        <rect key="frame" x="140" y="15" width="102" height="17"/>
+                                        <rect key="frame" x="140" y="15" width="45.5" height="17"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -78,19 +75,10 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="Q1R-le-XIs">
-                                        <rect key="frame" x="262" y="20" width="13" height="8"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="13" id="S7z-W0-iil"/>
-                                            <constraint firstAttribute="height" constant="8" id="hoj-6Z-gCb"/>
-                                        </constraints>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="Q1R-le-XIs" firstAttribute="top" secondItem="rPQ-Hm-w8n" secondAttribute="top" constant="20" id="4nn-ea-1yJ"/>
                                     <constraint firstItem="2tc-2q-9Ok" firstAttribute="leading" secondItem="gZe-WC-oNL" secondAttribute="trailing" constant="10" id="5cD-J3-iAP"/>
-                                    <constraint firstAttribute="trailing" secondItem="Q1R-le-XIs" secondAttribute="trailing" constant="15" id="CpV-PQ-Jjm"/>
                                     <constraint firstItem="ZD0-5h-LPH" firstAttribute="top" secondItem="gZe-WC-oNL" secondAttribute="bottom" constant="15" id="Hna-jI-AVP"/>
                                     <constraint firstItem="2tc-2q-9Ok" firstAttribute="top" secondItem="rPQ-Hm-w8n" secondAttribute="top" constant="15" id="I9c-26-Btc"/>
                                     <constraint firstAttribute="height" constant="99" id="OGT-Nz-WM8"/>
@@ -104,7 +92,6 @@
                                     <constraint firstAttribute="trailing" secondItem="Q0x-1m-rBH" secondAttribute="trailing" id="hUE-sm-S28"/>
                                     <constraint firstItem="gZe-WC-oNL" firstAttribute="leading" secondItem="rPQ-Hm-w8n" secondAttribute="leading" constant="15" id="nue-Rf-zwR"/>
                                     <constraint firstAttribute="trailing" secondItem="99P-W3-q67" secondAttribute="trailing" constant="15" id="pGu-It-jS4"/>
-                                    <constraint firstItem="Q1R-le-XIs" firstAttribute="leading" secondItem="2tc-2q-9Ok" secondAttribute="trailing" constant="20" id="u9o-zV-s6B"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -133,7 +120,6 @@
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="kfx-Q2-G8F"/>
             <connections>
-                <outlet property="arrowIcon" destination="Q1R-le-XIs" id="WIs-3m-Ydl"/>
                 <outlet property="hashLabel" destination="99P-W3-q67" id="fez-We-EYu"/>
                 <outlet property="hashTitleLabel" destination="ZD0-5h-LPH" id="gaP-ln-yO8"/>
                 <outlet property="heightLabel" destination="2tc-2q-9Ok" id="37M-e3-yFn"/>
@@ -141,7 +127,4 @@
             <point key="canvasLocation" x="52.799999999999997" y="47.226386806596707"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="iconDownArrow" width="13" height="8"/>
-    </resources>
 </document>

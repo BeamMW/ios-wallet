@@ -59,4 +59,30 @@ extension BaseNavigationController: UINavigationControllerDelegate {
     }
 }
 
-extension BaseNavigationController: UIGestureRecognizerDelegate {}
+extension BaseNavigationController: UIGestureRecognizerDelegate {
+ 
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        
+        if self.viewControllers.last is SendViewController {
+            let touchLocation = touch.location(in: touch.window)
+            if let subviews = self.viewControllers.last?.view.subviews {
+                for view in subviews {
+                    if view is UITableView {
+                        let table = view as! UITableView
+                        let converted  = table.convert(touchLocation, from: touch.window)
+                        if let path = table.indexPathForRow(at: converted) {
+                            if let cell = table.cellForRow(at: path) {
+                                if cell is FeeCell {
+                                    return false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        return true
+    }
+}

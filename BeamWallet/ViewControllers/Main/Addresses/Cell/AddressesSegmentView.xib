@@ -48,6 +48,9 @@
                 <constraint firstItem="TeP-CW-e3H" firstAttribute="leading" secondItem="i2H-sC-JyQ" secondAttribute="leading" constant="15" id="o95-fu-hlC"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="segmetnView" destination="2lx-4v-I6g" id="LdW-Vo-YyV"/>
+            </connections>
             <point key="canvasLocation" x="53.600000000000001" y="66.11694152923539"/>
         </view>
     </objects>

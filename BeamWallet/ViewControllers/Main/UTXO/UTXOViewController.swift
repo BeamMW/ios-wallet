@@ -21,17 +21,10 @@ import UIKit
 
 class UTXOViewController: BaseTableViewController {
     
-    enum UTXOSelectedState: Int {
-        case active = 0
-        case all = 1
-    }
+    private let viewModel = UTXOViewModel(selected: .active)
     
-    private var selectedState: UTXOSelectedState = .active
-    private var utxos = [BMUTXO]()
-    private var expandBlock = true
-
     private var headerView: UTXOSegmentView!
-    private lazy var hideUTXOView = UTXOSecurityView().loadNib()
+    private let hideUTXOView = UTXOSecurityView().loadNib()
 
     override var isUppercasedTitle: Bool {
         get{
@@ -45,38 +38,32 @@ class UTXOViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = LocalizableStrings.utxo
-        
+        title = LocalizableStrings.utxo
+                
         tableView.delegate = self
         tableView.dataSource = self
-        
-        headerView = UTXOSegmentView { (selected) in
-            self.selectedState = UTXOSelectedState(rawValue: selected) ?? .active
-            
-            self.filterUTXOS()
-            
-            self.tableView.reloadData()
-            self.tableView.scrollToTop()
-        }
-        
         tableView.tableHeaderView = BMNetworkStatusView()
-
         tableView.register([UTXOCell.self, UTXOBlockCell.self])
-        
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
+
+        headerView = UTXOSegmentView { [weak self] (selected)  in
+            self?.viewModel.selectedState = UTXOViewModel.UTXOSelectedState(rawValue: selected) ?? .active
+        }
 
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
-        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
-        
-        AppModel.sharedManager().addDelegate(self)
-        Settings.sharedManager().addDelegate(self)
+        view.addSubview(hideUTXOView)
 
-        filterUTXOS()
+        Settings.sharedManager().addDelegate(self)
 
         rightButton()
         onAddMenuIcon()
-
-        self.view.addSubview(hideUTXOView)
+        
+        subscribeUpdates()
+    }
+    
+    deinit {
+        Settings.sharedManager().removeDelegate(self)
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,51 +72,35 @@ class UTXOViewController: BaseTableViewController {
         hideUTXOView.frame = CGRect(x: 0, y: tableView.frame.origin.y+30, width: tableView.frame.size.width, height: tableView.frame.size.height-30)
     }
     
-    private func rightButton() {
-        let icon = Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance()
+    private func subscribeUpdates() {
+        viewModel.onDataChanged = { [weak self] in
+            UIView.performWithoutAnimation {
+                self?.tableView.stopRefreshing()
+                self?.tableView.reloadData()
+            }
+        }
         
-        addRightButton(image: icon, target: self, selector: #selector(onHideAmounts))
-
+        viewModel.onStatusChanged = { [weak self] in
+            self?.tableView.stopRefreshing()
+            
+            if let cell = self?.tableView.findCell(UTXOBlockCell.self) as? UTXOBlockCell {
+                cell.configure(with: AppModel.sharedManager().walletStatus)
+            }
+            else{
+                UIView.performWithoutAnimation {
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    private func rightButton() {
+        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
     }
     
     @objc private func refreshData(_ sender: Any) {
         AppModel.sharedManager().getWalletStatus()
         AppModel.sharedManager().getUTXO()
-    }
-    
-    private func filterUTXOS() {
-        switch selectedState {
-        case .all:
-            if let utox = AppModel.sharedManager().utxos {
-                self.utxos = utox as! [BMUTXO]
-            }
-        case .active:
-            if let utxos = AppModel.sharedManager().utxos {
-                self.utxos = utxos as! [BMUTXO]
-                self.utxos = self.utxos.filter { $0.status == 1 || $0.status == 2 }
-            }
-        }
-        self.utxos = self.utxos.sorted(by: { $0.id < $1.id })
-    }
-    
-    @objc private func onHideAmounts() {
-        if !Settings.sharedManager().isHideAmounts {
-            if Settings.sharedManager().isAskForHideAmounts {
-                
-                self.confirmAlert(title: LocalizableStrings.activate_security_title, message: LocalizableStrings.activate_security_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.activate, cancelHandler: { (_ ) in
-                    
-                }) { (_ ) in
-                    Settings.sharedManager().isAskForHideAmounts = false
-                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-                }
-            }
-            else{
-                Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-            }
-        }
-        else{
-            Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-        }
     }
 }
 
@@ -147,7 +118,7 @@ extension UTXOViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return expandBlock ? UTXOBlockCell.mainHeight() : UTXOBlockCell.hideHeight()
+            return UTXOBlockCell.mainHeight()
         case 1:
             return UTXOCell.height()
         default:
@@ -159,7 +130,7 @@ extension UTXOViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
-            let vc = UTXODetailViewController(utxo: utxos[indexPath.row])
+            let vc = UTXODetailViewController(utxo: viewModel.utxos[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             self.pushViewController(vc: vc)
         }
@@ -177,7 +148,7 @@ extension UTXOViewController : UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return utxos.count
+            return viewModel.utxos.count
         default:
             return 0
         }
@@ -189,13 +160,12 @@ extension UTXOViewController : UITableViewDataSource {
         case 0:
             let cell = tableView
                 .dequeueReusableCell(withType: UTXOBlockCell.self, for: indexPath)
-            cell.configure(with: (status: AppModel.sharedManager().walletStatus, expand: expandBlock))
-            cell.delegate = self
+            cell.configure(with: AppModel.sharedManager().walletStatus)
             return cell
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: UTXOCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, utxo: utxos[indexPath.row]))
+                .configured(with: (row: indexPath.row, utxo: viewModel.utxos[indexPath.row]))
             return cell
         default:
             return BaseCell()
@@ -208,84 +178,6 @@ extension UTXOViewController : UITableViewDataSource {
             return headerView
         default:
             return nil
-        }
-    }
-}
-
-extension UTXOViewController : UTXOBlockCellDelegate {
-    func onClickExpand() {
-        expandBlock = !expandBlock
-        
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRow(UTXOBlockCell.self)
-        }
-    }
-}
-
-extension UTXOViewController : WalletModelDelegate {
-    func onReceivedUTXOs(_ utxos: [BMUTXO]) {
-        DispatchQueue.main.async {
-
-            self.tableView.stopRefreshing()
-
-            if Settings.sharedManager().isLocalNode {
-                if let utox = AppModel.sharedManager().utxos {
-                    var _utxos = utox as! [BMUTXO]
-                    
-                    if self.selectedState == .active {
-                        _utxos = _utxos.filter { $0.status == 1 || $0.status == 2 }
-                    }
-                    
-                    if _utxos.count > self.utxos.count {
-                        let diff = _utxos.count - self.utxos.count
-                        
-                        if diff >= 200 {
-                            var rows = [IndexPath]()
-                            
-                            for i in 0...diff-1 {
-                                rows.append(IndexPath(row: self.utxos.count+i, section: 1))
-                            }
-                            
-                            self.utxos = _utxos
-                            
-                            UIView.performWithoutAnimation {
-                                self.tableView.beginUpdates()
-                                self.tableView.insertRows(at: rows, with: .none)
-                                self.tableView.endUpdates()
-                            }
-                        }              
-                    }
-                    else{
-                        self.utxos = _utxos
-                        
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-            }
-            else{
-                self.filterUTXOS()
-                
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    }
-    
-    func onWalletStatusChange(_ status: BMWalletStatus) {
-        DispatchQueue.main.async {
-            self.tableView.stopRefreshing()
-
-            if let cell = self.tableView.findCell(UTXOBlockCell.self) as? UTXOBlockCell {
-                cell.configure(with: (status: AppModel.sharedManager().walletStatus, expand: self.expandBlock))
-            }
-            else{
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadData()
-                }
-            }
         }
     }
 }

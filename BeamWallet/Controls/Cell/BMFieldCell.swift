@@ -26,7 +26,8 @@ class BMFieldCell: BaseCell {
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var mainStack: UIStackView!
-    
+    @IBOutlet public var topOffset: NSLayoutConstraint?
+
     public var copyText: String?
 
     override func awakeFromNib() {

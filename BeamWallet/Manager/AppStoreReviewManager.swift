@@ -27,6 +27,7 @@ struct AppStoreReviewManager {
     static private let APP_OPENED_COUNT = "APP_OPENED_COUNT"
     static private let APP_FEEDBACK_OPENED = "APP_FEEDBACK_OPENED"
     static private let APP_TRANSACTIONS_COUNT = "APP_TRANSACTIONS_COUNT"
+    static private let writeReviewUrl = URL(string: "itms-apps://itunes.apple.com/app/id1459842353?action=write-review")!
 
     static func incrementAppTransactions() {
         guard var transactionsCount = UserDefaults.standard.value(forKey: AppStoreReviewManager.APP_TRANSACTIONS_COUNT) as? Int else {
@@ -78,9 +79,7 @@ struct AppStoreReviewManager {
         UserDefaults.standard.set(true, forKey: AppStoreReviewManager.APP_FEEDBACK_OPENED)
         UserDefaults.standard.synchronize()
         
-        let url = URL(string: "itms-apps://itunes.apple.com/app/id1459842353?action=write-review")
-        
-        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        UIApplication.shared.open(writeReviewUrl, options: [:], completionHandler: nil)
     }
     
     static func resetRating() {

@@ -23,6 +23,9 @@
     NSDateFormatter *_formatter;
 }
 
++(BMAddress*)fromAddress:(BMAddress*)address;
++(BMAddress*)emptyAddress;
+
 @property (nonatomic,strong) NSString *walletId;
 @property (nonatomic,strong) NSString *label;
 @property (nonatomic,strong) NSString *category;

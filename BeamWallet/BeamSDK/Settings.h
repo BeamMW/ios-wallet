@@ -38,7 +38,7 @@ typedef enum Target : NSUInteger {
 +(Settings*_Nonnull)sharedManager;
 
 // delegates
-@property (nonatomic,strong) NSHashTable * _Nonnull delegates;
+@property (nonatomic,readonly) NSHashTable * _Nonnull delegates;
 
 -(void)addDelegate:(id<SettingsModelDelegate>_Nullable) delegate;
 -(void)removeDelegate:(id<SettingsModelDelegate>_Nullable) delegate;

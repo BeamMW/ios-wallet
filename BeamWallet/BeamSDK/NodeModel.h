@@ -46,7 +46,6 @@ protected:
     void onStartedNode() override;
     void onStoppedNode() override;
     void onFailedToStartNode(beam::io::ErrorCode errorCode) override;
-   // void onFailedToStartNode() override;
     void onSyncError(beam::Node::IObserver::Error error) override;
 
     uint16_t getLocalNodePort() override;

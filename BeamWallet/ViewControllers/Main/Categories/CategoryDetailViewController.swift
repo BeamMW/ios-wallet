@@ -154,7 +154,7 @@ extension CategoryDetailViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 && addresses.count > 0 {
-            let vc = AddressViewController(address: addresses[indexPath.row], isContact:false)
+            let vc = AddressViewController(address: addresses[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }

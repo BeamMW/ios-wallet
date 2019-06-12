@@ -34,7 +34,6 @@ using namespace beam;
 using namespace beam::io;
 using namespace std;
 
-NSString *const AppErrorDomain = @"beam.mw";
 
 NodeModel::NodeModel()
 : m_nodeClient(this)
@@ -101,84 +100,31 @@ bool NodeModel::isStarted() const
 void NodeModel::onSyncProgressUpdated(int done, int total)
 {
     NSLog(@"onSyncProgressUpdated %d/%d",done,total);
-    
-    [AppModel sharedManager].isUpdating = (done != total);
-    
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
-            [delegate onSyncProgressUpdated:done total:total];
-        }
-    }
 }
 
 void NodeModel::onStartedNode()
 {
     NSLog(@"onStartedNode");
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [AppModel sharedManager].isLocalNodeStarted = YES;
-    });
 }
 
 void NodeModel::onStoppedNode()
 {
     NSLog(@"onStoppedNode");
-    
-    [AppModel sharedManager].isLocalNodeStarted = NO;
 }
 
 void NodeModel::onFailedToStartNode(io::ErrorCode errorCode)
 {
     NSLog(@"onFailedToStartNode");
-    
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
-                                                       code:NSUInteger(12)
-                                                   userInfo:@{ NSLocalizedDescriptionKey:@"Failed to start wallet" }];
-            
-            [delegate onWalletError:nativeError];
-        }
-    }
 }
-
-//void NodeModel::onFailedToStartNode()
-//{
-//    NSLog(@"onFailedToStartNode");
-//
-//    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-//    {
-//        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-//            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
-//                                                       code:NSUInteger(12)
-//                                                   userInfo:@{ NSLocalizedDescriptionKey:@"Failed to start wallet" }];
-//
-//            [delegate onWalletError:nativeError];
-//        }
-//    }
-//}
 
 void NodeModel::onSyncError(beam::Node::IObserver::Error error)
 {
     NSLog(@"onFailedToStartNode");
-
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
-                                                       code:NSUInteger(12)
-                                                   userInfo:@{ NSLocalizedDescriptionKey:@"Failed to start wallet" }];
-
-            [delegate onWalletError:nativeError];
-        }
-    }
 }
 
 void NodeModel::onNodeThreadFinished()
 {
-    
+    NSLog(@"onNodeThreadFinished");
 }
 
 

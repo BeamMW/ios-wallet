@@ -24,7 +24,7 @@ class ConfirmItem {
     public var detail:String?
     public var detailFont:UIFont?
     public var detailColor:UIColor?
-    
+
     required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
         self.title = title
         self.detail = detail
@@ -51,23 +51,16 @@ class SendConfirmViewController: BaseTableViewController {
     }()
     
     private var items = [ConfirmItem]()
-    private var toAddress:String!
-    private var amount:String!
-    private var fee:String!
-    private var comment:String!
-    private var contact:BMContact?
     private var password:String?
     private var passwordError:String?
-
     
-    init(toAddress:String, amount:String!, fee:String!, comment:String!, contact:BMContact?) {
+    private var viewModel:SendTransactionViewModel!
+    
+    init(viewModel:SendTransactionViewModel!) {
         super.init(nibName: nil, bundle: nil)
         
-        self.toAddress = toAddress
-        self.amount = amount
-        self.fee = fee
-        self.comment = comment
-        self.contact = contact
+        self.viewModel = viewModel
+        self.items.append(contentsOf: self.viewModel.buildConfirmItems())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -85,17 +78,7 @@ class SendConfirmViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-        let totalString = String.currency(value: total) + LocalizableStrings.beam
-        
-        items.append(ConfirmItem(title: LocalizableStrings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-        items.append(ConfirmItem(title: LocalizableStrings.amount_to_send, detail: amount + LocalizableStrings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: LocalizableStrings.transaction_fees, detail: fee + LocalizableStrings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: LocalizableStrings.total_utxo, detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
-        items.append(ConfirmItem(title: LocalizableStrings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
-
-        
+                
         isGradient = true
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
@@ -113,9 +96,10 @@ class SendConfirmViewController: BaseTableViewController {
     @objc private func onTouchId() {
         if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
             
-            BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
+            BiometricAuthorization.shared.authenticateWithBioMetrics(success: { [weak self] in
+                guard let strongSelf = self else { return }
                 if KeychainManager.getPassword() != nil {
-                    self.askForSaveContact()
+                    strongSelf.askForSaveContact()
                 }
                 
             }, failure: {
@@ -153,23 +137,21 @@ class SendConfirmViewController: BaseTableViewController {
     }
     
     private func askForSaveContact() {
-        let isContactFound = (AppModel.sharedManager().getContactFromId(toAddress) != nil)
-        
-        if contact == nil && !isContactFound {
-            self.confirmAlert(title: LocalizableStrings.save_address_title, message: LocalizableStrings.save_address_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: { (_) in
-                self.onSend(needBack: true)
-            }) { (_) in
-                
-                if var controllers = self.navigationController?.viewControllers {
+        if viewModel.isNeedSaveContact() {
+            self.confirmAlert(title: LocalizableStrings.save_address_title, message: LocalizableStrings.save_address_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: {[weak self] (_) in
+                guard let strongSelf = self else { return }
+                strongSelf.onSend(needBack: true)
+            }) { [weak self] (_) in
+                guard let strongSelf = self else { return }
+                if var controllers = strongSelf.navigationController?.viewControllers {
                     controllers.removeLast()
                     controllers.removeLast()
                     
-                    let vc = SaveContactViewController(address: self.toAddress)
+                    let vc = SaveContactViewController(address: strongSelf.viewModel.toAddress)
                     controllers.append(vc)
-                    self.navigationController?.setViewControllers(controllers, animated: true)
+                    strongSelf.navigationController?.setViewControllers(controllers, animated: true)
                 }
-                
-                self.onSend(needBack: false)
+                strongSelf.onSend(needBack: false)
             }
         }
         else{
@@ -178,9 +160,7 @@ class SendConfirmViewController: BaseTableViewController {
     }
     
     private func onSend(needBack:Bool) {
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: Double(fee) ?? 0, to: toAddress, comment: comment)
-        
-        AppStoreReviewManager.incrementAppTransactions()
+        viewModel.send()
         
         if needBack {
             if let viewControllers = self.navigationController?.viewControllers{

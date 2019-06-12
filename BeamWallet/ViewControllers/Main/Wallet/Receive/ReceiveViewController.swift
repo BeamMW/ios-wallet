@@ -26,6 +26,7 @@ class ReceiveViewController: BaseTableViewController {
     private var showAdvanced = false
     private var showEdit = false
     private var isShared = false
+    private var pickedAddress:BMAddress?
 
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
@@ -85,27 +86,34 @@ class ReceiveViewController: BaseTableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        self.view.endEditing(true)
+
         if isMovingFromParent {
-            if ((self.address.category.isEmpty || self.address.category == LocalizableStrings.zero) && self.address.label.isEmpty)
-            {
-                if (!self.isShared)
-                {
-                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+            
+            if pickedAddress != nil {
+                if !isShared {
+                    if pickedAddress?.label != address.label || pickedAddress?.category != address.category {
+                        AppModel.sharedManager().edit(pickedAddress!)
+                    }
                 }
+            }
+            else if !isShared
+            {
+                AppModel.sharedManager().deleteAddress(self.address.walletId)
             }
         }
     }
     
     private func onExpire() {
         let vc = AddressExpiresPickerViewController(duration: -1)
-        vc.completion = {
+        vc.completion = { [weak self]
             obj in
             
-            self.address.duration = obj == 24 ? 86400 : 0
+            self?.address.duration = obj == 24 ? 86400 : 0
             
-            AppModel.sharedManager().setExpires(Int32(obj), toAddress: self.address.walletId)
+            AppModel.sharedManager().setExpires(Int32(obj), toAddress: self?.address.walletId ?? String.empty())
             
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
+            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
         }
         vc.isGradient = true
         pushViewController(vc: vc)
@@ -117,10 +125,10 @@ class ReceiveViewController: BaseTableViewController {
         }
         else{
             let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address.category))
-            vc.completion = {
+            vc.completion = { [weak self]
                 obj in
                 if let category = obj {
-                    self.didSelectCategory(category: category)
+                    self?.didSelectCategory(category: category)
                 }
             }
             vc.isGradient = true
@@ -133,7 +141,7 @@ class ReceiveViewController: BaseTableViewController {
         
         AppModel.sharedManager().setWalletCategory(self.address.category, toAddress: address.walletId)
         
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 4)], with: .fade)
     }
 }
 
@@ -164,9 +172,9 @@ extension ReceiveViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         switch indexPath.section {
-        case 2:
-            self.onExpire()
         case 3:
+            self.onExpire()
+        case 4:
             self.onCategory()
         default:
             return
@@ -205,12 +213,12 @@ extension ReceiveViewController : UITableViewDataSource {
                 .configured(with: (expand: showEdit, title: LocalizableStrings.edit_address.uppercased()))
             cell.delegate = self
             return cell
-        case 2:
+        case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
                 .configured(with: (title: LocalizableStrings.expires.uppercased(), value: (address.duration > 0 ? LocalizableStrings.hours_24 : LocalizableStrings.never), valueColor: UIColor.white))
             return cell
-        case 3:
+        case 4:
             var name = LocalizableStrings.none
             var color = UIColor.main.steelGrey
             
@@ -223,7 +231,7 @@ extension ReceiveViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
                 .configured(with: (title: LocalizableStrings.category.uppercased(), value: name, valueColor: color))
             return cell
-        case 4:
+        case 2:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                 .configured(with: (name: LocalizableStrings.name.uppercased(), value: address.label, rightIcon:nil))
@@ -316,20 +324,26 @@ extension ReceiveViewController : BMCellProtocol {
     
     func onRightButton(_ sender: UITableViewCell) {
         let vc = ReceiveListViewController()
-        vc.completion = {
+        vc.completion = {[weak self]
             obj in
             
-            if ((self.address.category.isEmpty || self.address.category == LocalizableStrings.zero) && self.address.label.isEmpty)
-            {
-                if (!self.isShared)
+            if let add = self?.address {
+             
+                if (self?.pickedAddress == nil && self?.isShared == false)
                 {
-                    AppModel.sharedManager().deleteAddress(self.address.walletId)
+                    AppModel.sharedManager().deleteAddress(add.walletId)
                 }
+                
+                self?.isShared = false
+                
+                self?.pickedAddress = BMAddress()
+                self?.pickedAddress?.label = obj.label
+                self?.pickedAddress?.category = obj.category
+                self?.pickedAddress?.walletId = obj.walletId
+
+                self?.address = obj
+                self?.tableView.reloadData()
             }
-            
-            self.isShared = true
-            self.address = obj
-            self.tableView.reloadData()
         }
         pushViewController(vc: vc)
     }

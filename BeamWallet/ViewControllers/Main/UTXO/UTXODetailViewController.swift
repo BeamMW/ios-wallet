@@ -20,16 +20,13 @@
 import UIKit
 
 class UTXODetailViewController: BaseTableViewController {
-
-    private var details = [GeneralInfo]()
-    private var history = [BMTransaction]()
-
-    private var utxo:BMUTXO!
+    
+    private var viewModel:DetailUTXOViewModel!
     
     init(utxo:BMUTXO) {
         super.init(nibName: nil, bundle: nil)
         
-        self.utxo = utxo
+        self.viewModel = DetailUTXOViewModel(utxo: utxo)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,36 +38,20 @@ class UTXODetailViewController: BaseTableViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
-        
         tableView.register([UTXODetailCell.self, GeneralInfoCell.self, UTXOTransactionCell.self])
         
-        fillDetailInfo()
-
         title = LocalizableStrings.utxo_details
+        
+        subscribeUpdates()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        AppModel.sharedManager().addDelegate(self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        AppModel.sharedManager().removeDelegate(self)
-    }
-    
-    private func fillDetailInfo() {
-        history = AppModel.sharedManager().getTransactionsFrom(utxo) as! [BMTransaction]
-        
-        details.removeAll()
-        
-        if let kernel = history.first?.kernelId {
-            details.append(GeneralInfo(text: LocalizableStrings.kernel_id, detail: kernel, failed: false, canCopy:true, color: UIColor.white))
+    private func subscribeUpdates() {
+        viewModel.onDataChanged = { [weak self] in
+            UIView.performWithoutAnimation {
+                self?.tableView.stopRefreshing()
+                self?.tableView.reloadData()
+            }
         }
-        
-        details.append(GeneralInfo(text: LocalizableStrings.utxo_type, detail: utxo.typeString, failed: false, canCopy:false, color: UIColor.white))
     }
 }
 
@@ -101,7 +82,7 @@ extension UTXODetailViewController : UITableViewDelegate {
 extension UTXODetailViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return (history.count > 0) ? 3 : 2
+        return (viewModel.history.count > 0) ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -109,9 +90,9 @@ extension UTXODetailViewController : UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return details.count
+            return viewModel.details.count
         case 2:
-            return history.count
+            return viewModel.history.count
         default:
             return 0
         }
@@ -123,18 +104,18 @@ extension UTXODetailViewController : UITableViewDataSource {
         case 0:
             let cell = tableView
                 .dequeueReusableCell(withType: UTXODetailCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, utxo: utxo))
+                .configured(with: (row: indexPath.row, utxo: viewModel.utxo))
             return cell
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
-                .configured(with: details[indexPath.row])
+                .configured(with: viewModel.details[indexPath.row])
             cell.delegate = self
             return cell
         case 2:
             let cell = tableView
                 .dequeueReusableCell(withType: UTXOTransactionCell.self, for: indexPath)
-                .configured(with: history[indexPath.row])
+                .configured(with: viewModel.history[indexPath.row])
             return cell
         default:
             return BaseCell()
@@ -160,38 +141,11 @@ extension UTXODetailViewController : GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell)
         {
-            if details[path.row].text == LocalizableStrings.kernel_id {
-                let kernelId = details[path.row].detail!
+            if viewModel.details[path.row].text == LocalizableStrings.kernel_id {
+                let kernelId = viewModel.details[path.row].detail!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {
                     openUrl(url: url)
-                }
-            }
-        }
-    }
-}
-
-extension UTXODetailViewController : WalletModelDelegate {
-    func onReceivedTransactions(_ transactions: [BMTransaction]) {
-        DispatchQueue.main.async {
-            self.fillDetailInfo()
-            
-            UIView.performWithoutAnimation {
-                self.tableView.stopRefreshing()
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    func onReceivedUTXOs(_ utxos: [BMUTXO]) {
-        DispatchQueue.main.async {
-            if let utxo = utxos.first(where: { $0.id == self.utxo.id }) {
-                self.utxo = utxo
-                self.fillDetailInfo()
-                
-                UIView.performWithoutAnimation {
-                    self.tableView.stopRefreshing()
-                    self.tableView.reloadData()
                 }
             }
         }

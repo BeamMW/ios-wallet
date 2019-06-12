@@ -27,6 +27,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
     }
     
     @IBOutlet private weak var passField: BMField!
+    @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private var heightConstraint: NSLayoutConstraint!
 
     private var event:UnlockEvent!
@@ -41,7 +42,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(LocalizableStrings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -49,7 +50,11 @@ class UnlockPasswordViewController: BaseWizardViewController {
         
         hideKeyboardWhenTappedAround()
         
-        title = event == .unlock ? "Your password" : "Change password"
+        title = event == .unlock ? LocalizableStrings.your_password : LocalizableStrings.change_password
+        
+        if event == .unlock {
+            titleLabel.text = LocalizableStrings.unlock_password
+        }
         
         if Device.isZoomed {
             heightConstraint.constant = 250
@@ -114,8 +119,6 @@ extension UnlockPasswordViewController : UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        
-       /// self.onLogin(sender: UIButton())
         
         return true
     }  

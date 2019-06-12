@@ -21,16 +21,12 @@ import UIKit
 
 class TransactionViewController: BaseTableViewController {
     
-    private var paymentProof:BMPaymentProof?
-    private var utxos:[BMUTXO]!
-
-    private var transaction:BMTransaction!
-    private var details = [GeneralInfo]()
-
+    private var viewModel:DetailTransactionViewModel!
+    
     init(transaction:BMTransaction) {
         super.init(nibName: nil, bundle: nil)
 
-        self.transaction = transaction
+        viewModel = DetailTransactionViewModel(transaction: transaction)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -52,103 +48,46 @@ class TransactionViewController: BaseTableViewController {
         
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
-        fillTransactionInfo()
+        addRightButton(image: MoreIcon(), target: self, selector: #selector(self.onMore))
+
+        subscribeToUpdates()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    private func subscribeToUpdates() {
+        viewModel.onDataChanged = { [weak self] in
+            UIView.performWithoutAnimation {
+                self?.tableView.stopRefreshing()
+                self?.tableView.reloadData()
+            }
+        }
         
-        AppModel.sharedManager().addDelegate(self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        viewModel.onDataUpdated = { [weak self]
+            indexPath, transaction in
+            AppModel.sharedManager().cancelTransaction(transaction)
+            self?.back()
+        }
         
-        AppModel.sharedManager().removeDelegate(self)
+        viewModel.onDataDeleted = { [weak self]
+            indexPath, transaction in
+            AppModel.sharedManager().deleteTransaction(transaction)
+            self?.back()
+        }
     }
     
     @objc private func refreshData(_ sender: Any) {
         AppModel.sharedManager().getWalletStatus()
     }
     
-
-    private func fillTransactionInfo() {
-       
-        if (transaction.canCancel || transaction.canDelete)
-        {
-            addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
-        }
-        else{
-            removeRightButton()
-        }
-
-        details.removeAll()
-        
-        details.append(GeneralInfo(text: LocalizableStrings.sending_address, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-        
-        details.append(GeneralInfo(text: LocalizableStrings.receiving_address, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
-
-        details.append(GeneralInfo(text: LocalizableStrings.transaction_fee, detail: String.currency(value: transaction.fee), failed: false, canCopy:true, color: UIColor.white))
-        
-        details.append(GeneralInfo(text: LocalizableStrings.transaction_id, detail: transaction.id, failed: false, canCopy:true, color: UIColor.white))
-        
-        details.append(GeneralInfo(text: LocalizableStrings.kernel_id, detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
-        
-        if !transaction.comment.isEmpty {
-            details.append(GeneralInfo(text: LocalizableStrings.comment, detail: transaction.comment, failed: false, canCopy:true, color: UIColor.white))
-        }
-        
-        if transaction.isFailed() {
-            details.append(GeneralInfo(text: LocalizableStrings.failure_reason, detail: transaction.failureReason, failed: true, canCopy:true, color: UIColor.white))
-        }
-        
-        //utxos
-        utxos = (AppModel.sharedManager().getUTXOSFrom(transaction) as! [BMUTXO])
-        
-        if paymentProof == nil && transaction.hasPaymentProof()  {
-            AppModel.sharedManager().getPaymentProof(transaction)
-        }
-
-        tableView.reloadData()
-    }
-    
     @objc private func onMore(sender:UIBarButtonItem) {        
-        var items = [BMPopoverMenu.BMPopoverMenuItem]()
-        
-        if transaction.canCancel {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.cancel_transaction, icon: nil, action: .cancel_transaction))
-        }
-        
-        if transaction.canDelete {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete_transaction, icon: nil, action: .delete_transaction))
-        }
-        
-        if !transaction.isIncome {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.rep, icon: nil, action: .repeat_transaction))
-        }
-
-        
-        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
+        BMPopoverMenu.show(menuArray: viewModel.actionItems(), done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.action) {
                 case .repeat_transaction:
-                    let vc = SendViewController()
-                    vc.transaction = self.transaction
-                    self.pushViewController(vc: vc)
+                    self.viewModel.onRepeat(transaction: self.viewModel.transaction!)
                 case .cancel_transaction :
-                    self.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
-                        
-                    }, confirmHandler: { (_) in
-                        AppModel.sharedManager().cancelTransaction(self.transaction)
-                        self.navigationController?.popViewController(animated: true)
-                    })
+                    self.viewModel.cancelTransation(indexPath: nil)
                 case .delete_transaction :
-                    self.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
-                        
-                    }, confirmHandler: { (_ ) in
-                        AppModel.sharedManager().deleteTransaction(self.transaction)
-                        self.navigationController?.popViewController(animated: true)
-                    })
+                    self.viewModel.deleteTransation(indexPath: nil)
                 default:
                     return
                 }
@@ -166,9 +105,9 @@ extension TransactionViewController : UITableViewDelegate {
         case 1:
             return BMTableHeaderTitleView.boldHeight
         case 2:
-            return (paymentProof != nil) ? BMTableHeaderTitleView.boldHeight : 0
+            return (viewModel.paymentProof != nil) ? BMTableHeaderTitleView.boldHeight : 0
         case 3:
-            return (utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? 60 : 0
+            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? 60 : 0
         default:
             return 0
         }
@@ -190,11 +129,11 @@ extension TransactionViewController : UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return details.count
+            return viewModel.details.count
         case 2:
-            return (paymentProof != nil) ? 1 : 0
+            return (viewModel.paymentProof != nil) ? 1 : 0
         case 3:
-            return (Settings.sharedManager().isHideAmounts) ? 0 : utxos.count
+            return (Settings.sharedManager().isHideAmounts) ? 0 : viewModel.utxos.count
         default:
             return 0
         }
@@ -206,12 +145,12 @@ extension TransactionViewController : UITableViewDataSource {
         case 0:
             let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: transaction, single:true))
+                .configured(with: (row: indexPath.row, transaction: self.viewModel.transaction!, single:true))
             return cell
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
-                .configured(with: details[indexPath.row])
+                .configured(with: viewModel.details[indexPath.row])
             cell.delegate = self
             return cell
         case 2:
@@ -222,7 +161,7 @@ extension TransactionViewController : UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: TransactionUTXOCell.self, for: indexPath)
-            cell.configure(with: utxos[indexPath.row])
+            cell.configure(with: viewModel.utxos[indexPath.row])
             return cell
         default:
             return UITableViewCell()
@@ -236,9 +175,9 @@ extension TransactionViewController : UITableViewDataSource {
         case 1:
             return BMTableHeaderTitleView(title: LocalizableStrings.general_info, bold: true)
         case 2:
-            return (paymentProof != nil) ? BMTableHeaderTitleView(title: LocalizableStrings.payment_proof, bold: true) : nil
+            return (viewModel.paymentProof != nil) ? BMTableHeaderTitleView(title: LocalizableStrings.payment_proof, bold: true) : nil
         case 3:
-            return (utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: LocalizableStrings.utxo_list, bold: true) : nil
+            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: LocalizableStrings.utxo_list, bold: true) : nil
         default:
             return nil
         }
@@ -246,45 +185,17 @@ extension TransactionViewController : UITableViewDataSource {
     
 }
 
-extension TransactionViewController : WalletModelDelegate {
-
-    func onReceivedTransactions(_ transactions: [BMTransaction]) {
-        DispatchQueue.main.async {
-            if let transaction = transactions.first(where: { $0.id == self.transaction.id }) {
-                self.transaction = transaction
-                
-                UIView.performWithoutAnimation {
-                    self.tableView.stopRefreshing()
-                    self.fillTransactionInfo()
-                }
-            }
-        }
-    }
-    
-    func onReceive(_ proof: BMPaymentProof) {
-        DispatchQueue.main.async {
-            if proof.txID == self.transaction.id {
-                self.paymentProof = proof
-                
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    }
-}
-
 extension TransactionViewController: TransactionPaymentProofCellDelegate {
     
     func onPaymentProofDetails() {
-        if let proof = paymentProof {
-            let vc = PaymentProofDetailViewController(transaction: transaction, paymentProof: proof)
+        if let proof = viewModel.paymentProof {
+            let vc = PaymentProofDetailViewController(transaction: self.viewModel.transaction!, paymentProof: proof)
             pushViewController(vc: vc)
         }
     }
     
     func onPaymentProofCopy() {
-        if let code = paymentProof?.code {
+        if let code = viewModel.paymentProof?.code {
             UIPasteboard.general.string = code
             ShowCopied()
         }
@@ -292,11 +203,11 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
 }
 
 extension TransactionViewController : GeneralInfoCellDelegate {
+    
     func onClickToCell(cell: UITableViewCell) {
-        if let path = tableView.indexPath(for: cell)
-        {
-            if details[path.row].text == LocalizableStrings.kernel_id {
-                let kernelId = self.transaction.kernelId!
+        if let path = tableView.indexPath(for: cell) {
+            if viewModel.details[path.row].text == LocalizableStrings.kernel_id {
+                let kernelId = self.viewModel.transaction!.kernelId!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {
                     openUrl(url: url)

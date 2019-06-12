@@ -100,10 +100,10 @@ extension ReceiveAddressListCell: Configurable {
                 transactionCommentIcon.image = IconComment()
                 transactionCommentLabel.text =  "”" + last.comment + "”"
             }
-            else{
-                transactionCommentIcon.image = IconComment()
-                transactionCommentLabel.text =  "”" + "Last transaction" + "”"
-            }
+//            else{
+//                transactionCommentIcon.image = IconComment()
+//                transactionCommentLabel.text =  "”" + "Last transaction" + "”"
+//            }
             
             transactionCommentDate.text = last.shortDate()
         }

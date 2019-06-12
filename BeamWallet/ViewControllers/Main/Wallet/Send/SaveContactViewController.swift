@@ -22,9 +22,7 @@ import UIKit
 
 class SaveContactViewController: BaseTableViewController {
 
-    private var address:String!
-    private var name = ""
-    private var category:BMCategory?
+    private var address:BMAddress!
 
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 110))
@@ -55,7 +53,8 @@ class SaveContactViewController: BaseTableViewController {
     init(address:String) {
         super.init(nibName: nil, bundle: nil)
         
-        self.address = address
+        self.address = BMAddress.empty()
+        self.address.walletId = address
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -85,13 +84,11 @@ class SaveContactViewController: BaseTableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
-        tableView.tableFooterView = footerView
-        
-       // hideKeyboardWhenTappedAround()
+        tableView.tableFooterView = footerView        
     }
     
     @objc private func onSave() {
-        AppModel.sharedManager().addContact(address, name: name, category: String(category?.id ?? 0))
+        AppModel.sharedManager().addContact(address.walletId, name: address.label, category: address.category)
         onBack()
     }
     
@@ -144,12 +141,13 @@ extension SaveContactViewController : UITableViewDelegate {
                 self.alert(title: LocalizableStrings.categories_empty_title, message: LocalizableStrings.categories_empty_text, handler: nil)
             }
             else{
-                let vc  = CategoryPickerViewController(category: self.category)
-                vc.completion = {
+                let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byAddress: self.address.walletId))
+                vc.completion = {[weak self]
                     obj in
+                    guard let strongSelf = self else { return }
                     if let category = obj {
-                        self.category = category
-                        self.tableView.reloadRow(BMDetailCell.self)
+                        strongSelf.address.category = String(category.id)
+                        strongSelf.tableView.reloadRow(BMDetailCell.self)
                     }
                 }
                 vc.isGradient = true
@@ -173,7 +171,7 @@ extension SaveContactViewController : UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            let item = ConfirmItem(title: LocalizableStrings.address.uppercased(), detail: self.address, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+            let item = ConfirmItem(title: LocalizableStrings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
             let cell =  tableView
                 .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
                 .configured(with: item)
@@ -181,10 +179,11 @@ extension SaveContactViewController : UITableViewDataSource {
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: LocalizableStrings.name.uppercased(), value: name, rightIcon:nil))
+                .configured(with: (name: LocalizableStrings.name.uppercased(), value: self.address.label, rightIcon:nil))
             cell.delegate = self
             return cell
         case 2:
+            let category = AppModel.sharedManager().findCategory(byAddress: self.address.walletId)
             let cell = tableView
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
                 .configured(with: (title: LocalizableStrings.category.uppercased(), value: category?.name ?? String.empty(), valueColor: UIColor.init(hexString: category?.color ?? "#FFFFFF")))
@@ -205,7 +204,7 @@ extension SaveContactViewController : BMCellProtocol {
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
-        name = text
+        self.address.label = text
         
         UIView.performWithoutAnimation {
             tableView.beginUpdates()

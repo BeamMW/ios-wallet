@@ -65,7 +65,7 @@ class CategoryEditViewController: BaseViewController {
         
         addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
         
-        nameView = UIView(frame: CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width, height: 49))
+        nameView = UIView(frame: CGRect(x: 0, y: (Device.isXDevice ? 100 : 70) + 20, width: UIScreen.main.bounds.size.width, height: 49))
         nameView.backgroundColor = UIColor.main.marineTwo
         view.addSubview(nameView)
         

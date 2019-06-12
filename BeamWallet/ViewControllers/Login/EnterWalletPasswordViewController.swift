@@ -68,15 +68,10 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        AppModel.sharedManager().cancelForgotPassword()
-
-        if (self.presentedViewController as? UIAlertController) != nil {
-
-        }
-        else{
+        if (self.presentedViewController as? UIAlertController) == nil {
             if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
                 isRequestedAuthorization = true
-
+                
                 biometricAuthorization()
             }
         }
@@ -142,8 +137,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             else{
                 _ = KeychainManager.addPassword(password: pass)
 
-                let vc = CreateWalletProgressViewController()
-                    .withPassword(password: pass)
+                let vc = CreateWalletProgressViewController(password: pass, phrase: nil)
                 pushViewController(vc: vc)
             }
         }
