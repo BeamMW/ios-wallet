@@ -49,7 +49,7 @@ class SendViewController: BaseTableViewController {
         let label = UILabel(frame: CGRect(x: 15, y: 30, width: UIScreen.main.bounds.size.width-30, height: 0))
         label.font = ItalicFont(size: 16)
         label.textColor = UIColor.white
-        label.text = LocalizableStrings.send_confirm_utxo
+        label.text = LocalizableStrings.send_notice
         label.numberOfLines = 0
         label.textAlignment = .center
         label.sizeToFit()
@@ -92,7 +92,7 @@ class SendViewController: BaseTableViewController {
         if let repeatTransaction = transaction {
             viewModel.transaction = repeatTransaction
         }
-        
+                
         isGradient = true
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
@@ -101,7 +101,7 @@ class SendViewController: BaseTableViewController {
         
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
 
-        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, SearchAddressCell.self, AddressCell.self, ReceiveAddressCell.self])
+        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, AddressCell.self, BMPickedAddressCell.self])
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
@@ -117,7 +117,7 @@ class SendViewController: BaseTableViewController {
         super.viewDidAppear(animated)
         
         if viewModel.isNeedFocus {
-            if let cell = tableView.findCell(SearchAddressCell.self) as? SearchAddressCell {
+            if let cell = tableView.findCell(BMSearchAddressCell.self) as? BMSearchAddressCell {
                 cell.beginEditing(text: viewModel.copyAddress)
             }
         }
@@ -209,6 +209,9 @@ extension SendViewController : UITableViewDelegate {
                 return 60
             }
         }
+        else if indexPath.section == 1 && indexPath.row == 1 {
+            return 17
+        }
         return UITableView.automaticDimension
     }
     
@@ -251,6 +254,8 @@ extension SendViewController : UITableViewDataSource {
         }
         
         switch section {
+        case 1:
+            return 2
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 1
         case 5:
@@ -283,7 +288,7 @@ extension SendViewController : UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView
-                .dequeueReusableCell(withType: SearchAddressCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
             cell.delegate = self
             cell.error = viewModel.toAddressError
             cell.copyText = viewModel.copyAddress
@@ -291,12 +296,25 @@ extension SendViewController : UITableViewDataSource {
             cell.contact = viewModel.selectedContact
             return cell
         case 1:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.enter_amount, value: viewModel.amount))
-            cell.delegate = self
-            cell.error = viewModel.amountError
-            cell.fee = Double(viewModel.fee) ?? 0
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.enter_amount, value: viewModel.amount))
+                cell.delegate = self
+                cell.error = viewModel.amountError
+                cell.fee = Double(viewModel.fee) ?? 0
+                return cell
+            }
+            else{
+                let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+                cell.textLabel?.textColor = UIColor.main.blueyGrey
+                cell.textLabel?.font = RegularFont(size: 14)
+                cell.textLabel?.text = "+ \(viewModel.fee) GROTH transaction fee"
+                cell.backgroundColor = UIColor.clear
+                cell.selectionStyle = .default
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.indentationLevel = 0
+                return cell
+            }
         case 2:
             var total = LocalizableStrings.zero
             if let status = AppModel.sharedManager().walletStatus {
@@ -319,9 +337,17 @@ extension SendViewController : UITableViewDataSource {
             cell.delegate = self
             return cell
         case 5:
+            var title = (viewModel.pickedOutgoingAddress == nil ? LocalizableStrings.outgoing : LocalizableStrings.outgoing_address)
+            
+            if viewModel.pickedOutgoingAddress != nil {
+                if viewModel.pickedOutgoingAddress?.walletId == viewModel.startedAddress?.walletId {
+                    title = LocalizableStrings.outgoing
+                }
+            }
+            
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveAddressCell.self, for: indexPath)
-                .configured(with: (hideLine: true, address: viewModel.outgoindAdderss, title: LocalizableStrings.outgoing))
+                .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
+                .configured(with: (hideLine: true, address: viewModel.outgoindAdderss, title: title))
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
@@ -421,6 +447,11 @@ extension SendViewController : BMCellProtocol {
             if path.section == 6 {
                 AppModel.sharedManager().setWalletComment(viewModel.outgoindAdderss!.label, toAddress: viewModel.outgoindAdderss!.walletId)
             }
+            else if path.section == 1 {
+                if viewModel.checkAmountError() != nil {
+                    tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                }
+            }
             else{
                 if path.section == 0 {
                     if !viewModel.toAddress.isEmpty {
@@ -480,15 +511,13 @@ extension SendViewController : BMCellProtocol {
                     
                     guard let strongSelf = self else { return }
 
-                    if let address = strongSelf.viewModel.outgoindAdderss, strongSelf.viewModel.pickedOutgoingAddress == nil {
-                        AppModel.sharedManager().deleteAddress(address.walletId)
-                    }
-                    
                     strongSelf.viewModel.outgoindAdderss = obj
                     strongSelf.viewModel.pickedOutgoingAddress = BMAddress.fromAddress(obj)
 
                     strongSelf.tableView.reloadData()
                 }
+                vc.excepted = viewModel.startedAddress
+                vc.currenltyPicked = viewModel.outgoindAdderss
                 pushViewController(vc: vc)
             }
         }
@@ -521,7 +550,7 @@ extension SendViewController : BMCellProtocol {
     }
     
     func onDidChangeFee(value: Double) {
-        viewModel.fee = String(value)
+        viewModel.fee = String(Int(value))
         
         if viewModel.sendAll {
             if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
@@ -530,6 +559,8 @@ extension SendViewController : BMCellProtocol {
                 cell.fee = value
             }
         }
+        
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .none)
     }
 }
 

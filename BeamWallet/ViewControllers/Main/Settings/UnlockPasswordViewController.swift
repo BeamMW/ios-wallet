@@ -68,7 +68,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        passField.becomeFirstResponder()
+        _ = passField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

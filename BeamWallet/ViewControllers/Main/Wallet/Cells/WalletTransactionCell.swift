@@ -30,17 +30,22 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var arrowImage: UIImageView!
     @IBOutlet weak private var amountOffset: NSLayoutConstraint!
     @IBOutlet weak private var balanceView: UIView!
+    @IBOutlet weak private var searchLabel: UILabel!
+    @IBOutlet weak private var searchLabelWidth: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyIcon.tintAdjustmentMode = .normal
+        
+        searchLabelWidth.constant = UIScreen.main.bounds.size.width - 200
     }
 }
 
 extension WalletTransactionCell: Configurable {
     
-    func configure(with options: (row: Int, transaction:BMTransaction, single:Bool)) {
+    func configure(with options: (row: Int, transaction:BMTransaction, single:Bool, searchString:String?)) {
      
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
         
@@ -82,6 +87,35 @@ extension WalletTransactionCell: Configurable {
         }
         
         balanceView.isHidden = Settings.sharedManager().isHideAmounts
+        searchLabel.isHidden = true
+        
+        if let string = options.searchString, string.isEmpty == false {
+            searchLabel.isHidden = false
+            
+            var mainText = String.empty()
+            
+            if options.transaction.receiverAddress.lowercased().starts(with: string.lowercased()) {
+                mainText = options.transaction.receiverAddress
+            }
+            else if options.transaction.senderAddress.lowercased().starts(with: string.lowercased()) {
+                mainText = options.transaction.senderAddress
+            }
+            else if options.transaction.id.lowercased().starts(with: string.lowercased()) {
+                mainText = options.transaction.id
+            }
+            else if options.transaction.receiverContactName.lowercased().starts(with: string.lowercased()) {
+                mainText = options.transaction.receiverContactName
+            }
+            else if options.transaction.senderContactName.lowercased().starts(with: string.lowercased()) {
+                mainText = options.transaction.senderContactName
+            }
+            
+            let range = (mainText as NSString).range(of: String(string))
+            
+            let attributedString = NSMutableAttributedString(string:mainText)
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: range)
+            searchLabel.attributedText = attributedString
+        }
     }
 }
 
@@ -89,5 +123,9 @@ extension WalletTransactionCell: DynamicContentHeight {
     
     static func height() -> CGFloat {
         return 86
+    }
+    
+    static func searchHeight() -> CGFloat {
+        return 96
     }
 }

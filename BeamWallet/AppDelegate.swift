@@ -69,6 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
+        CryptoWolfManager.sharedManager.loadData {
+            
+        }
+        
         return true
     }
     
@@ -234,31 +238,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        if(!AppModel.sharedManager().isRestoreFlow) {
-            if let password = KeychainManager.getPassword() {
-                self.completionHandler = completionHandler
+        completionHandler(.noData)
 
-                self.registerBackgroundTask()
-
-                if(AppModel.sharedManager().isLoggedin) {
-                    AppModel.sharedManager().refreshAllInfo()
-                }
-                else{
-                    AppModel.sharedManager().openWallet(password)
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
-                    self.endBackgroundTask()
-                    self.completionHandler?(.newData)
-                }
-            }
-            else{
-                completionHandler(.noData)
-            }
-        }
-        else{
-            completionHandler(.noData)
-        }
+//        if(!AppModel.sharedManager().isRestoreFlow) {
+//            if let password = KeychainManager.getPassword() {
+//                self.completionHandler = completionHandler
+//
+//                self.registerBackgroundTask()
+//
+//                if(AppModel.sharedManager().isLoggedin) {
+//                    AppModel.sharedManager().refreshAllInfo()
+//                }
+//                else{
+//                    AppModel.sharedManager().openWallet(password)
+//                }
+//
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
+//                    self.endBackgroundTask()
+//                    self.completionHandler?(.newData)
+//                }
+//            }
+//            else{
+//                completionHandler(.noData)
+//            }
+//        }
+//        else{
+//            completionHandler(.noData)
+//        }
+    }
+    
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        print("handleEventsForBackgroundURLSession: \(identifier)")
+        completionHandler()
     }
 }
 
@@ -296,7 +307,9 @@ extension AppDelegate : WalletModelDelegate {
     
     func onAddedPrepare(_ address: BMAddress) {
         DispatchQueue.main.async {
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: .address, id: address.walletId), done: { (data) in
+            let isContact = address.isContact
+            
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: isContact ? .contact : .address, id: address.walletId), done: { (data) in
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().cancelDeleteAddress(result.id)
                 }

@@ -40,6 +40,8 @@ class AddressViewModel: NSObject {
     
     public var address:BMAddress?
     
+    public var category:BMCategory?
+
     override init() {
         super.init()
     }
@@ -58,6 +60,18 @@ class AddressViewModel: NSObject {
         super.init()
         
         self.address = address
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    init(category:BMCategory?) {
+        super.init()
+        
+        self.category = category
+        
+        if let cat = category {
+            addresses = AppModel.sharedManager().getAddressFrom(cat) as! [BMAddress]
+        }
         
         AppModel.sharedManager().addDelegate(self)
     }
@@ -210,6 +224,10 @@ extension AddressViewModel : WalletModelDelegate {
                     self.onDataChanged?()
                 }
             }
+            else if self.category != nil{
+                self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
+                self.onDataChanged?()
+            }
             else{
                 self.filterAddresses()
             }
@@ -224,6 +242,10 @@ extension AddressViewModel : WalletModelDelegate {
                     self.onDataChanged?()
                 }
             }
+            else if self.category != nil{
+                self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
+                self.onDataChanged?()
+            }
             else{
                 self.filterAddresses()
             }
@@ -234,6 +256,10 @@ extension AddressViewModel : WalletModelDelegate {
         DispatchQueue.main.async {
             if self.address == nil {
                 self.filterAddresses()
+            }
+            else if self.category != nil{
+                self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
+                self.onDataChanged?()
             }
         }
     }

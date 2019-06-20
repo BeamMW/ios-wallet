@@ -237,4 +237,20 @@ class BMField: UITextField {
         let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
         return bounds.inset(by: padding)
     }
+    
+    override func becomeFirstResponder() -> Bool {
+        
+        if keyboardType == .numberPad || keyboardType == .decimalPad || returnKeyType == .next {
+            let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44))
+            let item = UIBarButtonItem(title: LocalizableStrings.done, style: .plain, target: self, action: #selector(onHide))
+            toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),item]
+            self.inputAccessoryView = toolbar
+        }
+        
+        return super.becomeFirstResponder()
+    }
+    
+    @objc private func onHide(){
+        self.resignFirstResponder()
+    }
 }

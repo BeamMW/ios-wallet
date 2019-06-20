@@ -21,23 +21,11 @@ import UIKit
 
 class ReceiveViewController: BaseTableViewController {
 
-    private var address:BMAddress!
-    private var amount:String?
+    private let viewModel = ReceiveAddressViewModel()
+    
     private var showAdvanced = false
     private var showEdit = false
-    private var isShared = false
-    private var pickedAddress:BMAddress?
 
-    init(address:BMAddress) {
-        super.init(nibName: nil, bundle: nil)
-        
-        self.address = address
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
-    }
-    
     override var isUppercasedTitle: Bool {
         get{
             return true
@@ -56,31 +44,34 @@ class ReceiveViewController: BaseTableViewController {
         
         title = LocalizableStrings.receive.uppercased()
         
-        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, ReceiveAddressCell.self, BMDetailCell.self])
-
-        if address.walletId == nil {
-            AppModel.sharedManager().generateNewWalletAddress { (address, error) in
-                if let result = address {
-                    DispatchQueue.main.async {
-                        self.address = result
-                        self.tableView.delegate = self
-                        self.tableView.dataSource = self
-                        self.tableView.reloadData()
-                    }
-                }
-                else if let reason = error?.localizedDescription {
-                    DispatchQueue.main.async {
-                        self.alert(message: reason)
-                    }
-                }
-            }
-        }
-        else{
-            tableView.delegate = self
-            tableView.dataSource = self
+        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMPickedAddressCell.self, BMDetailCell.self])
+        tableView.keyboardDismissMode = .interactive
+        
+        viewModel.onDataChanged = { [weak self] in
+            self?.tableView.reloadData()
         }
         
-        tableView.keyboardDismissMode = .interactive
+        viewModel.onShared = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        
+        viewModel.onAddressCreated = {[weak self]
+            error in
+            
+            if let reason = error?.localizedDescription {
+                self?.alert(title: LocalizableStrings.error, message: reason, handler: { (_ ) in
+                    self?.back()
+                })
+            }
+            else{
+                self?.tableView.delegate = self
+                self?.tableView.dataSource = self
+                self?.tableView.reloadData()
+            }
+        }
+        viewModel.createAddress()
+        
+        addCustomBackButton(target: self, selector: #selector(onBack))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -89,59 +80,23 @@ class ReceiveViewController: BaseTableViewController {
         self.view.endEditing(true)
 
         if isMovingFromParent {
-            
-            if pickedAddress != nil {
-                if !isShared {
-                    if pickedAddress?.label != address.label || pickedAddress?.category != address.category {
-                        AppModel.sharedManager().edit(pickedAddress!)
-                    }
-                }
-            }
-            else if !isShared
-            {
-                AppModel.sharedManager().deleteAddress(self.address.walletId)
-            }
+            viewModel.revertChanges()
         }
     }
     
-    private func onExpire() {
-        let vc = AddressExpiresPickerViewController(duration: -1)
-        vc.completion = { [weak self]
-            obj in
-            
-            self?.address.duration = obj == 24 ? 86400 : 0
-            
-            AppModel.sharedManager().setExpires(Int32(obj), toAddress: self?.address.walletId ?? String.empty())
-            
-            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
-        }
-        vc.isGradient = true
-        pushViewController(vc: vc)
-    }
-    
-    private func onCategory() {
-        if AppModel.sharedManager().categories.count == 0 {
-            self.alert(title: LocalizableStrings.categories_empty_title, message: LocalizableStrings.categories_empty_text, handler: nil)
+    @objc private func onBack() {
+        let state = viewModel.isNeedAskToSave()
+        if state != .none {
+            self.confirmAlert(title: state == .new ? LocalizableStrings.save_address_title : LocalizableStrings.save_changes, message: state == .new ? LocalizableStrings.save_address_text : LocalizableStrings.save_edit_address_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: { [weak self] (_ ) in
+                self?.back()
+            }) { [weak self] (_ ) in
+                self?.viewModel.isShared = true
+                self?.back()
+            }
         }
         else{
-            let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address.category))
-            vc.completion = { [weak self]
-                obj in
-                if let category = obj {
-                    self?.didSelectCategory(category: category)
-                }
-            }
-            vc.isGradient = true
-            pushViewController(vc: vc)
+            back()
         }
-    }
-    
-    private func didSelectCategory(category:BMCategory) {
-        address.category = String(category.id)
-        
-        AppModel.sharedManager().setWalletCategory(self.address.category, toAddress: address.walletId)
-        
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 4)], with: .fade)
     }
 }
 
@@ -173,9 +128,9 @@ extension ReceiveViewController : UITableViewDelegate {
         
         switch indexPath.section {
         case 3:
-            self.onExpire()
+            viewModel.onExpire()
         case 4:
-            self.onCategory()
+            viewModel.onCategory()
         default:
             return
         }
@@ -202,9 +157,15 @@ extension ReceiveViewController : UITableViewDataSource {
        
         switch indexPath.section {
         case 0:
+            var title = viewModel.pickedAddress == nil ? LocalizableStrings.auto_address : LocalizableStrings.address.uppercased()
+            if viewModel.pickedAddress != nil {
+                if viewModel.pickedAddress?.walletId == viewModel.startedAddress?.walletId {
+                    title = LocalizableStrings.auto_address
+                }
+            }
             let cell = tableView
-                .dequeueReusableCell(withType: ReceiveAddressCell.self, for: indexPath)
-                .configured(with: (hideLine: true, address: address, title: nil))
+                .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
+                .configured(with: (hideLine: true, address: viewModel.address, title: title))
             cell.delegate = self
             return cell
         case 1:
@@ -216,13 +177,13 @@ extension ReceiveViewController : UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                .configured(with: (title: LocalizableStrings.expires.uppercased(), value: (address.duration > 0 ? LocalizableStrings.hours_24 : LocalizableStrings.never), valueColor: UIColor.white))
+                .configured(with: (title: LocalizableStrings.expires.uppercased(), value: (viewModel.address.duration > 0 ? LocalizableStrings.hours_24 : LocalizableStrings.never), valueColor: UIColor.white))
             return cell
         case 4:
             var name = LocalizableStrings.none
             var color = UIColor.main.steelGrey
             
-            if let category = AppModel.sharedManager().findCategory(byId: address.category) {
+            if let category = AppModel.sharedManager().findCategory(byId: viewModel.address.category) {
                 name = category.name
                 color = UIColor.init(hexString: category.color)
             }
@@ -234,7 +195,7 @@ extension ReceiveViewController : UITableViewDataSource {
         case 2:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: LocalizableStrings.name.uppercased(), value: address.label, rightIcon:nil))
+                .configured(with: (name: LocalizableStrings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
@@ -246,7 +207,7 @@ extension ReceiveViewController : UITableViewDataSource {
             return cell
         case 6:
             let cell = tableView
-                .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.request_amount   , value: amount))
+                .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.request_amount, value: viewModel.amount))
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
@@ -283,16 +244,16 @@ extension ReceiveViewController : BMCellProtocol {
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
         if sender is BMFieldCell {
-            address.label = text
+            viewModel.address.label = text
         }
         else if sender is BMAmountCell {
-            amount = text
+            viewModel.amount = text
         }
     }
     
     func textValueDidReturn(_ sender: UITableViewCell) {
         if sender is BMFieldCell {
-            AppModel.sharedManager().setWalletComment(address.label, toAddress: address.walletId)
+            AppModel.sharedManager().setWalletComment(viewModel.address.label, toAddress: viewModel.address.walletId)
         }
     }
     
@@ -323,67 +284,20 @@ extension ReceiveViewController : BMCellProtocol {
     }
     
     func onRightButton(_ sender: UITableViewCell) {
-        let vc = ReceiveListViewController()
-        vc.completion = {[weak self]
-            obj in
-            
-            if let add = self?.address {
-             
-                if (self?.pickedAddress == nil && self?.isShared == false)
-                {
-                    AppModel.sharedManager().deleteAddress(add.walletId)
-                }
-                
-                self?.isShared = false
-                
-                self?.pickedAddress = BMAddress()
-                self?.pickedAddress?.label = obj.label
-                self?.pickedAddress?.category = obj.category
-                self?.pickedAddress?.walletId = obj.walletId
+        self.view.endEditing(true)
 
-                self?.address = obj
-                self?.tableView.reloadData()
-            }
-        }
-        pushViewController(vc: vc)
+        viewModel.onChangeAddress()
     }
     
     func onClickQRCode() {
-        self.isShared = true
-        
         self.view.endEditing(true)
 
-        let modalViewController = QRViewController(address: address, amount: amount)
-        modalViewController.delegate = self
-        modalViewController.modalPresentationStyle = .overFullScreen
-        modalViewController.modalTransitionStyle = .crossDissolve
-        present(modalViewController, animated: true, completion: nil)
+        viewModel.onQRCode()
     }
     
     func onClickShare() {
         self.view.endEditing(true)
-
-        let vc = UIActivityViewController(activityItems: [address.walletId ?? String.empty()], applicationActivities: [])
-        vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-            if completed {
-                self.isShared = true
-                
-                if activityType == UIActivity.ActivityType.copyToPasteboard {
-                    ShowCopied()
-                }
-                
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-        vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
-        present(vc, animated: true)
-    }
-}
-
-extension ReceiveViewController : QRViewControllerDelegate {
-    func onCopyDone() {
-        self.isShared = true
-
-        self.navigationController?.popViewController(animated: true)
+        
+        viewModel.onShare()
     }
 }

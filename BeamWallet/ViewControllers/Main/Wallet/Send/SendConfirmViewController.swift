@@ -138,7 +138,7 @@ class SendConfirmViewController: BaseTableViewController {
     
     private func askForSaveContact() {
         if viewModel.isNeedSaveContact() {
-            self.confirmAlert(title: LocalizableStrings.save_address_title, message: LocalizableStrings.save_address_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: {[weak self] (_) in
+            self.confirmAlert(title: LocalizableStrings.save_address_title, message: LocalizableStrings.save_contact_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: {[weak self] (_) in
                 guard let strongSelf = self else { return }
                 strongSelf.onSend(needBack: true)
             }) { [weak self] (_) in
@@ -216,7 +216,13 @@ extension SendConfirmViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == items.count {
-            let icon = (BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric && Settings.sharedManager().isNeedaskPasswordForSend) ? IconTouchid() : nil
+            var icon = (BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric && Settings.sharedManager().isNeedaskPasswordForSend) ? IconTouchid() : nil
+            
+            if icon != nil {
+                if BiometricAuthorization.shared.faceIDAvailable()  {
+                    icon = IconFaceId()
+                }
+            }
             
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)

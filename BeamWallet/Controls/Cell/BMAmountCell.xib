@@ -33,8 +33,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="50Q-8g-rXB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REQUEST AMOUNT (optional)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ns-1p-pyG">
-                                <rect key="frame" x="15" y="10" width="290" height="15.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="REQUEST AMOUNT (optional)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ns-1p-pyG">
+                                <rect key="frame" x="15" y="10" width="290" height="13.5"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -46,7 +46,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BEAM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RSM-WO-QCM">
-                                <rect key="frame" x="245" y="42.5" width="60" height="19"/>
+                                <rect key="frame" x="245" y="40.5" width="60" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="Yj3-Lc-8L5"/>
                                 </constraints>
@@ -61,7 +61,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bcu-hn-VIp" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="35.5" width="225" height="34"/>
+                                <rect key="frame" x="15" y="33.5" width="225" height="36"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="30"/>
@@ -89,11 +89,10 @@
                             <constraint firstItem="Bcu-hn-VIp" firstAttribute="top" secondItem="4ns-1p-pyG" secondAttribute="bottom" constant="10" id="ChQ-db-769"/>
                             <constraint firstItem="4ns-1p-pyG" firstAttribute="top" secondItem="50Q-8g-rXB" secondAttribute="top" constant="10" id="KnY-iI-f7g"/>
                             <constraint firstAttribute="bottom" secondItem="Bcu-hn-VIp" secondAttribute="bottom" constant="10" id="LCZ-mu-occ"/>
-                            <constraint firstItem="RSM-WO-QCM" firstAttribute="top" secondItem="4ns-1p-pyG" secondAttribute="bottom" constant="17" id="N4A-gW-WgL"/>
                             <constraint firstAttribute="trailing" secondItem="RSM-WO-QCM" secondAttribute="trailing" constant="15" id="WC1-Ef-L3j"/>
                             <constraint firstItem="Bcu-hn-VIp" firstAttribute="leading" secondItem="50Q-8g-rXB" secondAttribute="leading" constant="15" id="b93-pB-JfZ"/>
-                            <constraint firstAttribute="bottom" secondItem="RSM-WO-QCM" secondAttribute="bottom" constant="18" id="h8L-LQ-Foj"/>
                             <constraint firstItem="4ns-1p-pyG" firstAttribute="leading" secondItem="50Q-8g-rXB" secondAttribute="leading" constant="15" id="hwu-oI-Rt1"/>
+                            <constraint firstItem="RSM-WO-QCM" firstAttribute="top" secondItem="4ns-1p-pyG" secondAttribute="bottom" constant="17" id="neF-Wa-b9x"/>
                             <constraint firstAttribute="trailing" secondItem="4ns-1p-pyG" secondAttribute="trailing" constant="15" id="rfj-vS-duJ"/>
                         </constraints>
                     </view>
@@ -108,6 +107,7 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="Q62-1k-ged"/>
             <connections>
+                <outlet property="currencyLabel" destination="RSM-WO-QCM" id="IRl-Wq-437"/>
                 <outlet property="nameLabel" destination="4ns-1p-pyG" id="zwq-Ht-UTx"/>
                 <outlet property="textField" destination="Bcu-hn-VIp" id="k64-qq-RJi"/>
             </connections>

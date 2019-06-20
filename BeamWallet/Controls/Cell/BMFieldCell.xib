@@ -16,6 +16,9 @@
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
+        <array key="SFProText-Medium.ttf">
+            <string>SFProText-Medium</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -61,6 +64,12 @@
                                     <outlet property="delegate" destination="pQd-Rt-MFb" id="jgO-Dt-iT2"/>
                                 </connections>
                             </textField>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dD-W5-ZQb">
+                                <rect key="frame" x="0.0" y="59.5" width="290" height="0.0"/>
+                                <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
+                                <color key="textColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                     </stackView>
                 </subviews>
@@ -74,6 +83,7 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="EQz-31-f3u"/>
             <connections>
+                <outlet property="infoLabel" destination="4dD-W5-ZQb" id="AHn-Pn-fdk"/>
                 <outlet property="mainStack" destination="iKw-bk-4dQ" id="cuA-0a-5GM"/>
                 <outlet property="nameLabel" destination="Tmv-KK-qjS" id="psa-AD-ri2"/>
                 <outlet property="textField" destination="T0u-EJ-vev" id="3gg-t7-svw"/>

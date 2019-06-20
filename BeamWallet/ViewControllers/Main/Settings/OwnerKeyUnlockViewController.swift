@@ -26,6 +26,7 @@ class OwnerKeyUnlockViewController: BaseViewController {
     @IBOutlet private weak var confirmLabel: UILabel!
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var mainStack: UIStackView!
+    @IBOutlet private weak var touchIdButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,10 @@ class OwnerKeyUnlockViewController: BaseViewController {
         topOffset?.constant = topOffset?.constant ?? 0 + 30
         
         title = LocalizableStrings.show_owner_key
+        
+//        if BiometricAuthorization.shared.faceIDAvailable() {
+//            touchIdButton.setImage(IconFaceId(), for: .normal)
+//        }
         
         if BiometricAuthorization.shared.canAuthenticate() {
             if BiometricAuthorization.shared.faceIDAvailable() {

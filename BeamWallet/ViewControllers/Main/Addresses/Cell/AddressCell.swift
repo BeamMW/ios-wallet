@@ -63,7 +63,7 @@ extension AddressCell: Configurable {
         }
         
         if options.address.label.isEmpty {
-            nameLabel.text = " "
+            nameLabel.text = "No name"
         }
         else{
             nameLabel.text = options.address.label

@@ -52,7 +52,7 @@ extension InputWordCell: Configurable {
         if(word.value.isEmpty){
             numberLabel.backgroundColor = UIColor.clear
             numberLabel.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
-            numberLabel.textColor =  UIColor.main.veryLightPink50
+            numberLabel.textColor =  UIColor.white
             wordField.fState = BMWordField.FieldState.empty
         }
         else if(word.correct){

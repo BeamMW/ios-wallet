@@ -34,21 +34,8 @@ class StatusViewModel: NSObject {
     }
     
     public func onReceive() {
-        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
-            if let result = address {
-                DispatchQueue.main.async {
-                    NotificationManager.sharedManager.subscribeToTopic(topic: result.walletId)
-                    
-                    let vc = ReceiveViewController(address: result)
-                    UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
-                }
-            }
-            else if let reason = error?.localizedDescription {
-                DispatchQueue.main.async {
-                    UIApplication.getTopMostViewController()?.alert(message: reason)
-                }
-            }
-        }
+        let vc = ReceiveViewController()
+        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
     }
     
     public func onSend() {

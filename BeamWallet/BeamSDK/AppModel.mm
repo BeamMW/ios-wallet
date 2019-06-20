@@ -37,7 +37,7 @@
 #include "wallet/wallet_client.h"
 #include "wallet/default_peers.h"
 
-#include "core/block_rw.h"
+//#include "core/block_rw.h"
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
@@ -128,6 +128,17 @@ static NSString *categoriesKey = @"categoriesKey";
     return [NSString stringWithUTF8String:node];
 }
 
+-(void)setWalletAddresses:(NSMutableArray<BMAddress *> *)walletAddresses {
+    _walletAddresses = [NSMutableArray arrayWithArray:walletAddresses];
+//    
+//    BMAddress *last = walletAddresses.lastObject;
+//    if (last!=nil) {
+//        if ([last.label.lowercaseString isEqualToString:@"default"]) {
+//            last.isDefault = YES;
+//        }
+//    }
+}
+
 #pragma mark - Inetrnet
 
 -(void)checkInternetConnection{
@@ -140,7 +151,9 @@ static NSString *categoriesKey = @"categoriesKey";
         }
         
         [[AppModel sharedManager] setIsInternetAvailable:YES];
-        [[AppModel sharedManager] start];
+        if (![AppModel sharedManager].isRestoreFlow) {
+            [[AppModel sharedManager] start];
+        }
     };
     
     internetReachableFoo.unreachableBlock = ^(Reachability*reach)
@@ -244,6 +257,12 @@ static NSString *categoriesKey = @"categoriesKey";
     if (self.isInternetAvailable == NO) {
         return NO;
     }
+    else if (walletDb != nil)
+    {
+        [self onWalledOpened:SecString(pass.string)];
+        
+        return YES;
+    }
     
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
 
@@ -280,8 +299,8 @@ static NSString *categoriesKey = @"categoriesKey";
     }
     
     // generate default address
-    auto address = beam::wallet::storage::createAddress(*walletDb);
-    address.m_label = "default";
+    auto address = wallet::createAddress(*walletDb);
+    address.m_label = "Default";
     walletDb->saveAddress(address);
     
     [self onWalledOpened:SecString(pass.string)];
@@ -323,36 +342,32 @@ static NSString *categoriesKey = @"categoriesKey";
 -(void)onWalledOpened:(const SecString&) pass {
     passwordHash = pass.hash();
     
-    [self start];
+    if(!self.isRestoreFlow)
+    {
+        [self start];
+    }
+}
+    
+-(void)restore {
+//    string recoveryPath = [[NSBundle mainBundle] pathForResource:@"masternet_recovery" ofType:@"bin"].string;
+//    
+//    walletDb->ImportRecovery(recoveryPath);
 }
 
 -(void)start {
     if (isStarted == NO && walletDb != nil) {
         
-        if (self.isRestoreFlow)
-        {
-            if(!self.isRestoring)
-            {
-                self.isRestoring = YES;
-                
-                string recoveryPath = [[NSBundle mainBundle] pathForResource:@"masternet_recovery" ofType:@"bin"].string;
-                
-                walletDb->ImportRecovery(recoveryPath);
-            }
+        string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+        
+        wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+        wallet->getAsync()->setNodeAddress(nodeAddrStr);
+        
+        if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
+            isRunning = YES;
+            wallet->start();
         }
-        else{
-            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-            
-            wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
-            wallet->getAsync()->setNodeAddress(nodeAddrStr);
-            
-            if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
-                isRunning = YES;
-                wallet->start();
-            }
-            
-            isStarted = YES;
-        }
+        
+        isStarted = YES;
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
         for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
@@ -472,15 +487,7 @@ static NSString *categoriesKey = @"categoriesKey";
 }
 
 -(void)didBecomeActiveNotification{
-
-    if ([Settings sharedManager].target == Testnet)
-    {
-        [internetReachableFoo stopNotifier];
-        [internetReachableFoo startNotifier];
-    }
-    else{
-        [self refreshAllInfo];
-    }
+    [self refreshAllInfo];
 }
 
 #pragma mark - Addresses
@@ -727,6 +734,7 @@ static NSString *categoriesKey = @"categoriesKey";
     for (int i=0; i<_contacts.count; i++) {
         if ([_contacts[i].address.walletId isEqualToString:address.walletId]) {
             [_contacts removeObjectAtIndex:i];
+            [address setIsContact:YES];
             break;
         }
     }
@@ -1227,7 +1235,7 @@ static NSString *categoriesKey = @"categoriesKey";
     
     try{
         auto buffer = from_hex(code.string);
-        beam::wallet::storage::PaymentInfo m_paymentInfo = beam::wallet::storage::PaymentInfo::FromByteBuffer(buffer);
+        PaymentInfo m_paymentInfo = PaymentInfo::FromByteBuffer(buffer);
         
         if (m_paymentInfo.IsValid()) {
             auto kernelId = to_hex(m_paymentInfo.m_KernelID.m_pData, m_paymentInfo.m_KernelID.nBytes);
@@ -1425,6 +1433,7 @@ static NSString *categoriesKey = @"categoriesKey";
         }
     }
     
+    
     return nil;
 }
 
@@ -1437,7 +1446,7 @@ static NSString *categoriesKey = @"categoriesKey";
 
 #pragma mark - Categories
 
--(BMCategory*_Nullable)findCategoryById:(NSString*)ID {
+-(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID {
     if (ID.isEmpty) {
         return nil;
     }
@@ -1451,7 +1460,7 @@ static NSString *categoriesKey = @"categoriesKey";
     return nil;
 }
 
--(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nonnull)ID {
+-(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nullable)ID {
     if (ID.isEmpty) {
         return nil;
     }

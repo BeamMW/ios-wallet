@@ -181,4 +181,12 @@ func IconShufflePink() -> UIImage? {
     return UIImage(named: "iconShufflePink")
 }
 
+func IconSearchSmall() -> UIImage? {
+    return UIImage(named: "iconSearchSmall")
+}
+
+func IconFaceId() -> UIImage? {
+    return UIImage(named: "iconFaceId")
+}
+
 

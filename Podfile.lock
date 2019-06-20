@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.8.2)
   - Crashlytics (3.13.1):
     - Fabric (~> 1.10.1)
   - Fabric (1.10.1)
@@ -61,19 +62,21 @@ PODS:
   - GoogleUtilities/UserDefaults (6.2.0):
     - GoogleUtilities/Logger
   - LGSideMenuController (2.1.1)
+  - Moya (13.0.1):
+    - Moya/Core (= 13.0.1)
+  - Moya/Core (13.0.1):
+    - Alamofire (~> 4.1)
+    - Result (~> 4.1)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.8.0)
-  - RxCocoa (5.0.0):
-    - RxRelay (~> 5)
-    - RxSwift (~> 5)
-  - RxRelay (5.0.0):
-    - RxSwift (~> 5)
-  - RxSwift (5.0.0)
-  - SideMenuSwift (2.0.0)
+  - ReCaptcha (1.4.2):
+    - ReCaptcha/Core (= 1.4.2)
+  - ReCaptcha/Core (1.4.2)
+  - Result (4.1.0)
   - SSZipArchive (2.2.2)
   - SVProgressHUD (2.2.5)
 
@@ -83,14 +86,14 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Messaging
   - LGSideMenuController
-  - RxCocoa (~> 5)
-  - RxSwift (~> 5)
-  - SideMenuSwift
+  - Moya
+  - ReCaptcha
   - SSZipArchive
   - SVProgressHUD
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Alamofire
     - Crashlytics
     - Fabric
     - Firebase
@@ -102,16 +105,16 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - LGSideMenuController
+    - Moya
     - nanopb
     - Protobuf
-    - RxCocoa
-    - RxRelay
-    - RxSwift
-    - SideMenuSwift
+    - ReCaptcha
+    - Result
     - SSZipArchive
     - SVProgressHUD
 
 SPEC CHECKSUMS:
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   Crashlytics: 5aa8e90dcbf2f34898b4f5a0037787531246cca0
   Fabric: f6f21452846788bb44595d73e9909d79d328e617
   Firebase: 5965bac23e7fcb5fa6d926ed429c9ecef8a2014e
@@ -123,15 +126,14 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 51d8d9ea48f0ca44484d29cfbdef976fbd4fc336
   GoogleUtilities: 996e0db07153674fd1b54b220fda3a3dc3547cba
   LGSideMenuController: ae40c80983ab8b8801c7cef0a6804d43aaa72d45
+  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 3f617b9a6e73605565086864c9bc26b2bf2dd5a3
-  RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
-  RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
-  RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
-  SideMenuSwift: 1bee5a0e54c6df7d8106f749b82567eae5c6d974
+  ReCaptcha: bc0a66b13541f4ac749389c6e3c918117956a9e8
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 0544fa4d56058a888367d62d8b67e90465970bd6
+PODFILE CHECKSUM: 6da21230f1f3c2b80791d45ad3bf8045d7e5154a
 
 COCOAPODS: 1.5.3

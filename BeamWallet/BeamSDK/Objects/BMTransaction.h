@@ -48,6 +48,8 @@ typedef UInt64 BMTransactionStatus;
 @property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) UInt64 realFee;
 @property (nonatomic,assign) BMTransactionStatus enumStatus;
+@property (nonatomic,strong) NSString *senderContactName;
+@property (nonatomic,strong) NSString *receiverContactName;
 
     
 -(NSString*)formattedDate;

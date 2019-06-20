@@ -191,8 +191,8 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
-        if textField == passField, textField.text?.isEmpty == false {
-            confirmPassField.becomeFirstResponder()
+        if textField == passField {
+            _ = confirmPassField.becomeFirstResponder()
         }
         
         return true

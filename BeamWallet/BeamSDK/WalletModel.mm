@@ -29,9 +29,13 @@
 #include "utility/helpers.h"
 #include "utility/common.h"
 
+//using namespace beam;
+//using namespace beam::io;
+//using namespace beam::wallet;
+//using namespace std;
+
 using namespace beam;
 using namespace beam::io;
-using namespace beam::wallet;
 using namespace std;
 
 NSString *const AppErrorDomain = @"beam.mw";
@@ -80,7 +84,7 @@ void WalletModel::onStatus(const WalletStatus& status)
     }
 }
 
-void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vector<beam::wallet::TxDescription>& items)
+void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::TxDescription>& items)
 {
     NSLog(@"onTxStatus");
     
@@ -233,7 +237,7 @@ void WalletModel::onChangeCalculated(beam::Amount change)
     NSLog(@"onChangeCalculated");
 }
 
-void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
+void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
 {
   //  NSLog(@"onAllUtxoChanged");
     
@@ -284,7 +288,7 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
 //    bmUtxos = nil;
 }
 
-void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs)
+void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& addrs)
 {
     NSLog(@"onAddresses");
     
@@ -375,7 +379,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
     }
 }
 
-void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walletAddr)
+void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
 {
     NSLog(@"onGeneratedNewAddress");
 
@@ -401,7 +405,7 @@ void WalletModel::onNewAddressFailed()
     [AppModel sharedManager].generatedNewAddressBlock(nil, nativeError);
 }
 
-void WalletModel::onChangeCurrentWalletIDs(beam::wallet::WalletID senderID, beam::wallet::WalletID receiverID)
+void WalletModel::onChangeCurrentWalletIDs(beam::WalletID senderID, beam::WalletID receiverID)
 {
     NSLog(@"onChangeCurrentWalletIDs");
 }
@@ -483,7 +487,7 @@ void WalletModel::onCantSendToExpired()
     NSLog(@"onCantSendToExpired");
 }
 
-void WalletModel::onPaymentProofExported(const beam::wallet::TxID& txID, const beam::ByteBuffer& proof)
+void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof)
 {
     NSLog(@"onPaymentProofExported");
     
@@ -505,7 +509,7 @@ void WalletModel::onPaymentProofExported(const beam::wallet::TxID& txID, const b
     }
 }
 
-void WalletModel::onCoinsByTx(const std::vector<beam::wallet::Coin>& coins)
+void WalletModel::onCoinsByTx(const std::vector<beam::Coin>& coins)
 {
     
 }
@@ -613,7 +617,7 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
     return @"unknown";
 }
 
-NSString* WalletModel::GetUTXOTypeString(beam::wallet::Coin coin) {
+NSString* WalletModel::GetUTXOTypeString(beam::Coin coin) {
     switch (coin.m_ID.m_Type)
     {
         case Key::Type::Comission:

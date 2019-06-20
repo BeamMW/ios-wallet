@@ -26,6 +26,7 @@ protocol QRViewControllerDelegate: AnyObject {
 class QRViewController: BaseViewController {
 
     weak var delegate: QRViewControllerDelegate?
+    public var onShared : (() -> Void)?
 
     private var address:BMAddress!
     private var amount:String?
@@ -120,6 +121,7 @@ class QRViewController: BaseViewController {
                             ShowCopied()
                         }
                         self.delegate?.onCopyDone()
+                        self.onShared?()
                     })
                 }
             }

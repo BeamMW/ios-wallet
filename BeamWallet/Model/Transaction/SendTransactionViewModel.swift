@@ -31,7 +31,9 @@ class SendTransactionViewModel: NSObject {
     
     public var outgoindAdderss:BMAddress?
     public var pickedOutgoingAddress:BMAddress?
+    public var startedAddress:BMAddress?
 
+    
     public var selectedContact:BMContact?
 
     public var contacts = [BMContact]()
@@ -107,6 +109,19 @@ class SendTransactionViewModel: NSObject {
         AppStoreReviewManager.incrementAppTransactions()
     }
     
+    public func checkAmountError() -> String? {
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+       
+        if canSend != LocalizableStrings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
+            amountError = canSend
+        }
+        else{
+            amountError = nil
+        }
+        
+        return amountError
+    }
+    
     public func canSend() -> Bool {
         let valid = AppModel.sharedManager().isValidAddress(toAddress)
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
@@ -140,6 +155,7 @@ class SendTransactionViewModel: NSObject {
             if let result = address {
                 DispatchQueue.main.async {
                     self.outgoindAdderss = result
+                    self.startedAddress = BMAddress.fromAddress(result)
                 }
             }
         }
@@ -147,7 +163,10 @@ class SendTransactionViewModel: NSObject {
     
     public func revertOutgoingAddress() {
         if let pickedAddress = self.pickedOutgoingAddress {
-            if pickedAddress.label != outgoindAdderss?.label || pickedAddress.category != outgoindAdderss?.category || pickedAddress.duration != outgoindAdderss?.duration {
+            if pickedAddress.walletId == startedAddress?.walletId {
+                AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
+            }
+            else if pickedAddress.label != outgoindAdderss?.label || pickedAddress.category != outgoindAdderss?.category || pickedAddress.duration != outgoindAdderss?.duration {
                 
                 if pickedAddress.duration != outgoindAdderss?.duration {
                     if pickedAddress.duration > 0 {
@@ -156,6 +175,10 @@ class SendTransactionViewModel: NSObject {
                 }
                 
                 AppModel.sharedManager().edit(pickedAddress)
+            }
+            
+            if pickedAddress.walletId != startedAddress?.walletId {
+                AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
             }
         }
         else if let address = outgoindAdderss {

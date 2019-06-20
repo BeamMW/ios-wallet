@@ -31,6 +31,8 @@ class BaseViewController: UIViewController {
     public var minimumScreenRatioToHide = 0.5 as CGFloat
     public var animationDuration = 0.2 as TimeInterval
 
+    public var isAddStatusView = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -93,9 +95,16 @@ class BaseViewController: UIViewController {
         backgroundImage.layer.addSublayer(gradient)
         self.view.addSubview(backgroundImage)
         
-        self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+        if self.navigationController?.viewControllers.count ?? 0 > 1 {
+            self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+        }
+        else{
+            self.onAddMenuIcon()
+        }
         
         if addedStatusView {
+            self.isAddStatusView = true
+            
             let statusView = BMNetworkStatusView()
             statusView.y = Device.isXDevice ? 110 : 80
             statusView.x = 0

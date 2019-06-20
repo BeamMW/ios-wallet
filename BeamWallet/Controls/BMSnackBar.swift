@@ -24,11 +24,12 @@ class BMSnackBar: UIView, CountdownViewDelegate {
     enum SnackType {
         case transaction
         case address
+        case contact
     }
 
     struct SnackData {
-        let type:SnackType!
-        let id:String!
+        var type:SnackType!
+        var id:String!
         
         init(type:SnackType!, id:String!) {
             self.type = type
@@ -63,7 +64,19 @@ class BMSnackBar: UIView, CountdownViewDelegate {
         let label = UILabel(frame: CGRect(x: 60, y: 0, width: 150, height: 48))
         label.font = RegularFont(size: 14)
         label.textColor = UIColor.main.marineOriginal
-        label.text = data.type == .transaction ? LocalizableStrings.beams_send : LocalizableStrings.address_deleted
+        
+
+        if data.type == BMSnackBar.SnackType.contact {
+            self.data.type = .address
+            label.text = LocalizableStrings.contact_deleted
+        }
+        else if data.type == BMSnackBar.SnackType.address {
+            label.text = LocalizableStrings.address_deleted
+        }
+        else{
+            label.text = LocalizableStrings.beams_send
+        }
+      
         addSubview(label)
         
         let button = UIButton(frame: CGRect(x: frame.size.width - 75, y: 0, width: 60, height: 48))

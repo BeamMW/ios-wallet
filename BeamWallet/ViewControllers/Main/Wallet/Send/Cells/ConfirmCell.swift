@@ -40,7 +40,7 @@ extension ConfirmCell: Configurable {
         valueLabel.font = item.detailFont
         
         if item.detail == nil {
-            nameLabel.letterSpacing = 1
+            nameLabel.letterSpacing = 0.001
             nameLabel.textAlignment = .center
             nameLabel.font = ItalicFont(size: 16)
             nameLabel.textColor = UIColor.white

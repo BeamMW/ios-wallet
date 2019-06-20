@@ -26,6 +26,8 @@ import Foundation
 
     @objc optional func onClickQRCode()
     @objc optional func onClickShare()
+    @objc optional func onClickSave()
+
     
     @objc optional func onRightButton(_ sender: UITableViewCell)
     

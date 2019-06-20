@@ -82,13 +82,11 @@ class TGBotManager : NSObject {
             NotificationManager.sharedManager.isApnsEnabled { (enabled) in
                 DispatchQueue.main.async {
                     if enabled {
-                        SVProgressHUD.show(withStatus: "Сonnection with the telegram bot")
+                        SVProgressHUD.show(withStatus: LocalizableStrings.tg_bot_connection)
                         
                         self.completion = completion
                         
                         self.isStartLinking = true
-                        
-                        AppModel.sharedManager().addDelegate(self)
                         
                         AppModel.sharedManager().generateNewWalletAddress { (address, error) in
                             if let result = address {
@@ -97,24 +95,16 @@ class TGBotManager : NSObject {
                         }
                     }
                     else{
-                        let alertController = UIAlertController(title: "Telegram bot", message: "To link the bot, you need to enable notifications. Turn notifications on and try again.", preferredStyle: .alert)
-                        
-                        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
-                            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-                                return
-                            }
-                            if UIApplication.shared.canOpenURL(settingsUrl) {
-                                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                })
-                            }
-                        }
-                        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-                        alertController.addAction(cancelAction)
-                        alertController.addAction(settingsAction)
-                        
-                        if let vc = UIApplication.getTopMostViewController() {
-                            vc.present(alertController, animated: true, completion: {
-                                
+                        if let top = UIApplication.getTopMostViewController() {
+                            top.confirmAlert(title: LocalizableStrings.tg_bot, message: LocalizableStrings.tg_bot_not_linked_notification, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.open_settings, cancelHandler: { (_) in
+                            }, confirmHandler: { (_) in
+                                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                                    return
+                                }
+                                if UIApplication.shared.canOpenURL(settingsUrl) {
+                                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                    })
+                                }
                             })
                         }
                     }
@@ -173,7 +163,6 @@ class TGBotManager : NSObject {
             print(error.localizedDescription)
         }
         
-        
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
             
             guard error == nil else {
@@ -201,16 +190,12 @@ class TGBotManager : NSObject {
     }
 }
 
-extension TGBotManager : WalletModelDelegate {
+extension TGBotManager  {
     
     func onGeneratedNewAddress(_ address: BMAddress) {
-        #if EXTENSION
-            print("ignore")
-        #else
+        #if !EXTENSION
         DispatchQueue.main.async {
             if self.isStartLinking {
-                
-                AppModel.sharedManager().removeDelegate(self)
                 
                 self.isStartLinking = false
                 
@@ -220,25 +205,16 @@ extension TGBotManager : WalletModelDelegate {
                     
                     NotificationManager.sharedManager.subscribeToTopic(topic: address.walletId)
                     
-                    TGBotManager.linkTGUser(user: self.user, fcmToken: token, address: address.walletId) { (error ) in
+                    TGBotManager.linkTGUser(user: self.user, fcmToken: token, address: address.walletId) {[weak self] (error ) in 
                         
+                        guard let strongSelf = self else { return }
+
                         DispatchQueue.main.async {
-                            self.user.userId = ""
+                            strongSelf.user.userId = String.empty()
+                            strongSelf.completion?(error == nil ? true : false)
                             
-                            self.completion?(error == nil ? true : false)
+                            SVProgressHUD.showSuccess(withStatus: (error==nil) ? LocalizableStrings.tg_bot_linked : LocalizableStrings.tg_bot_not_linked)
                             
-                            if error == nil {
-                                SVProgressHUD.showSuccess(withStatus: "Telegram bot successfully linked")
-                                
-                                UserDefaults.standard.setValue(self.user.userName, forKey: "tg_linked_user")
-                                UserDefaults.standard.synchronize()
-                            }
-                            else{
-                                SVProgressHUD.showError(withStatus: "Error\nTelegram bot is not linked\nPlease try again")
-                                
-                                UserDefaults.standard.removeObject(forKey: "tg_linked_user")
-                                UserDefaults.standard.synchronize()
-                            }
                             SVProgressHUD.dismiss(withDelay: 2.5)
                         }
                     }

@@ -31,6 +31,28 @@ class TransactionViewModel: NSObject {
     public var address:BMAddress?
 
     public var transaction:BMTransaction?
+    
+    public var isSearch = false {
+        didSet{
+            if !isSearch {
+                searchString = String.empty()
+                transactions.removeAll()
+                transactions.append(contentsOf: (AppModel.sharedManager().transactions as! [BMTransaction]))
+                onDataChanged?()
+            }
+            else{
+                search()
+                onDataChanged?()
+            }
+        }
+    }
+    
+    public var searchString = String.empty() {
+        didSet{
+            search()
+            onDataChanged?()
+        }
+    }
 
     init(transaction:BMTransaction) {
         super.init()
@@ -142,22 +164,55 @@ class TransactionViewModel: NSObject {
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
     }
+    
+    private func search() {
+        transactions.removeAll()
+
+        if !searchString.isEmpty {
+            let all = AppModel.sharedManager().transactions as! [BMTransaction]
+            
+            for tr in all {
+                let receiverName = AppModel.sharedManager().findAddress(byID: tr.receiverAddress)?.label
+                let senderName = AppModel.sharedManager().findAddress(byID: tr.senderAddress)?.label
+
+                tr.senderContactName = senderName == nil ? String.empty() : senderName!
+                tr.receiverContactName = receiverName == nil ? String.empty() : receiverName!
+            }
+            
+            let filterdObjects = all.filter {
+                $0.receiverAddress.lowercased().starts(with: searchString.lowercased()) ||
+                    $0.senderAddress.lowercased().starts(with: searchString.lowercased()) ||
+                    $0.id.lowercased().starts(with: searchString.lowercased()) ||
+                    $0.comment.lowercased().contains(searchString.lowercased()) ||
+                    $0.senderContactName.lowercased().contains(searchString.lowercased()) ||
+                    $0.receiverContactName.lowercased().contains(searchString.lowercased())
+            }
+            
+            transactions.append(contentsOf: filterdObjects)
+        }
+    }
 }
 
 extension TransactionViewModel : WalletModelDelegate {
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
-            if self.address != nil {
-                self.transactions = (AppModel.sharedManager().getTransactionsFrom(self.address!) as! [BMTransaction])
-            }
-            else if self.transaction != nil {
-                if let transaction = transactions.first(where: { $0.id == self.transaction?.id }) {
-                    self.transaction = transaction
-                }
+            if self.isSearch {
+                self.search()
             }
             else{
-                self.transactions = transactions
+                if self.address != nil {
+                    self.transactions = (AppModel.sharedManager().getTransactionsFrom(self.address!) as! [BMTransaction])
+                }
+                else if self.transaction != nil {
+                    if let transaction = transactions.first(where: { $0.id == self.transaction?.id }) {
+                        self.transaction = transaction
+                    }
+                }
+                else{
+                    self.transactions = transactions
+                }
             }
+     
             self.onDataChanged?()
         }
     }

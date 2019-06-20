@@ -33,6 +33,7 @@
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
 @property (nonatomic,strong) NSString *categoryName;
+@property (nonatomic,assign) BOOL isDefault;
 
     
     
@@ -42,6 +43,7 @@
 @property (nonatomic,assign) UInt64 isNowActiveDuration;
 @property (nonatomic,assign) BOOL isChangedDate;
 @property (nonatomic,assign) BOOL isNeedRemoveTransactions;
+@property (nonatomic,assign) BOOL isContact;
 
 
 -(BOOL)isExpired;

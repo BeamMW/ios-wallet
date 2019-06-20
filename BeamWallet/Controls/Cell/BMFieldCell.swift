@@ -23,10 +23,12 @@ class BMFieldCell: BaseCell {
 
     weak var delegate: BMCellProtocol?
 
+    @IBOutlet public var topOffset: NSLayoutConstraint?
+
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
+    @IBOutlet weak private var infoLabel: UILabel!
     @IBOutlet weak private var mainStack: UIStackView!
-    @IBOutlet public var topOffset: NSLayoutConstraint?
 
     public var copyText: String?
 
@@ -40,7 +42,7 @@ class BMFieldCell: BaseCell {
     
     public func beginEditing(text:String?){
         copyText = text
-        textField.becomeFirstResponder()
+        _ = textField.becomeFirstResponder()
     }
     
     public var error:String?
@@ -52,6 +54,19 @@ class BMFieldCell: BaseCell {
             else{
                 textField.error = error
                 textField.status = .error
+            }
+        }
+    }
+    
+    public var info:String?
+    {
+        didSet{
+            if info == nil {
+                infoLabel.isHidden = true
+            }
+            else{
+                infoLabel.isHidden = false
+                infoLabel.text = info
             }
         }
     }
@@ -134,6 +149,11 @@ extension BMFieldCell: Configurable {
             button.addTarget(self, action: #selector(onRightButton), for: .touchUpInside)
             textField.rightView = button
             textField.rightViewMode = .always
+        }
+        
+        if options.name == LocalizableStrings.name.uppercased() {
+            textField.placeholder = LocalizableStrings.no_name
+            textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
         }
     }
 }

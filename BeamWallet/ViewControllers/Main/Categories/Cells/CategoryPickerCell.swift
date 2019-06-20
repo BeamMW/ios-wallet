@@ -39,6 +39,12 @@ class CategoryPickerCell: BaseCell {
         arrowView.image = UIImage.init(named: "tick")?.withRenderingMode(.alwaysTemplate)
         arrowView.tintColor = UIColor.main.brightTeal
     }
+    
+    func simpleConfigure(with options: (name: String, selected:Bool)) {
+        arrowView.isHidden = !options.selected
+        nameLabel.text = options.name
+        nameLabel.textColor = UIColor.white
+    }
 }
 
 extension CategoryPickerCell: Configurable {

@@ -43,8 +43,19 @@ class DetailTransactionViewModel: TransactionViewModel {
         
         details.removeAll()
 
-        details.append(GeneralInfo(text: LocalizableStrings.sending_address, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-        details.append(GeneralInfo(text: LocalizableStrings.receiving_address, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+        if transaction.isSelf {
+            details.append(GeneralInfo(text: LocalizableStrings.my_send_address, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.my_rec_address, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+        }
+        else if transaction.isIncome {
+            details.append(GeneralInfo(text: LocalizableStrings.contact2, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.my_address, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+        }
+        else{
+            details.append(GeneralInfo(text: LocalizableStrings.contact2, detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: LocalizableStrings.my_address, detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+        }
+       
         details.append(GeneralInfo(text: LocalizableStrings.transaction_fee, detail: String.currency(value: transaction.fee), failed: false, canCopy:true, color: UIColor.white))
         details.append(GeneralInfo(text: LocalizableStrings.transaction_id, detail: transaction.id, failed: false, canCopy:true, color: UIColor.white))
         details.append(GeneralInfo(text: LocalizableStrings.kernel_id, detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))

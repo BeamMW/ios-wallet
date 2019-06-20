@@ -19,10 +19,9 @@ def shared_pods
     pod 'SSZipArchive'
     pod 'Firebase/Core'
     pod 'Firebase/Messaging'
-    pod 'SideMenuSwift'
     pod 'LGSideMenuController'
-    pod 'RxSwift', '~> 5'
-    pod 'RxCocoa', '~> 5'
+    pod 'Moya'
+    pod 'ReCaptcha'
 end
 
 def extension

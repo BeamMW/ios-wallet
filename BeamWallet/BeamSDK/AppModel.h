@@ -65,7 +65,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,assign) BOOL isConnecting;
 @property (nonatomic,assign) BOOL isLoggedin;
 @property (nonatomic,assign) BOOL isRestoreFlow;
-@property (nonatomic,assign) BOOL isRestoring;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
@@ -91,6 +90,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)createWallet:(NSString*_Nonnull)phrase pass:(NSString*_Nonnull)pass;
 -(BOOL)openWallet:(NSString*_Nonnull)pass;
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
+-(void)restore;
 -(void)resetWallet:(BOOL)removeDatabase;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
@@ -166,8 +166,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)editCategory:(BMCategory*_Nonnull)category;
 -(void)addCategory:(BMCategory*_Nonnull)category;
 -(BOOL)isNameAlreadyExist:(NSString*_Nonnull)name id:(int)ID;
--(BMCategory*_Nullable)findCategoryById:(NSString*_Nonnull)ID;
--(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nonnull)ID;
+-(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID;
+-(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nullable)ID;
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressFromCategory:(BMCategory*_Nonnull)category;
 
 @end

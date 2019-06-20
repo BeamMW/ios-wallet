@@ -27,7 +27,7 @@
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7B6-eh-7Mf">
                         <rect key="frame" x="15" y="10" width="290" height="59.5"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sending address:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QT2-7K-3js">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sending address:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QT2-7K-3js">
                                 <rect key="frame" x="0.0" y="0.0" width="120" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="E7z-iX-nhM"/>
@@ -63,6 +63,7 @@
             <connections>
                 <outlet property="detailLabel" destination="Pap-u5-udU" id="erJ-uu-aFh"/>
                 <outlet property="titleLabel" destination="QT2-7K-3js" id="ut6-TN-OdZ"/>
+                <outlet property="titleWidth" destination="E7z-iX-nhM" id="kcJ-QJ-IeX"/>
             </connections>
             <point key="canvasLocation" x="-51.200000000000003" y="111.54422788605699"/>
         </tableViewCell>

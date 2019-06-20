@@ -19,8 +19,6 @@
 
 import UIKit
 
-import UIKit
-
 class CategoryPickerViewController: BaseTableViewController {
     
     public var completion : ((BMCategory?) -> Void)?

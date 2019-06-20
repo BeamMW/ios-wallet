@@ -223,13 +223,10 @@ class NotificationManager : NSObject {
     
     public func scheduleNotification(transaction:BMTransaction){
         if transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending {
-            NotificationManager.sharedManager.scheduleNotification(title: "New transaction", body: "Сlick to view details", id:transaction.id)
+            NotificationManager.sharedManager.scheduleNotification(title: "Incoming transaction", body: "Click to receive Beam", id:transaction.id)
         }
-        else if transaction.enumStatus == BMTransactionStatusCompleted {
-            NotificationManager.sharedManager.scheduleNotification(title: "Transaction update", body: "Сlick to view details", id:transaction.id)
-        }
-        else if transaction.enumStatus == BMTransactionStatusFailed {
-            NotificationManager.sharedManager.scheduleNotification(title: "Transaction failed", body: "Сlick to view details", id:transaction.id)
+        else if transaction.enumStatus == BMTransactionStatusCompleted || transaction.enumStatus == BMTransactionStatusFailed {
+            NotificationManager.sharedManager.scheduleNotification(title: "Transaction status update", body: "Сlick to view details", id:transaction.id)
         }
     }
     
@@ -245,7 +242,7 @@ class NotificationManager : NSObject {
         let key = "key=AAAAQDKSPzM:APA91bFitbu15xf3jeStYO3nMNPwdleBGqsGZ49Uy6SnspPh9yoQ9M6dAYXkjrZzh9tMAxK2wfqx-kzizSjCu-wyuVkPRNJKb2VHgj4dAJq4ZUMzXOWWgty1DQCVwFukbaAnqN5b_TTB"
 
         //"content_available":true
-        let notification: [String:Any] = ["title":"New transaction","body":"Сlick to confirm transaction","sound":"default"]
+        let notification: [String:Any] = ["title":"Incoming transaction","body":"Click to receive Beam","sound":"default"]
         let parameters: [String: Any] = ["to": "/topics/\(topic)", "priority":10,"notification": notification]
         
         let url = URL(string: "https://fcm.googleapis.com/fcm/send")!

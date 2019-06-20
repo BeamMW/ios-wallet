@@ -73,7 +73,7 @@ class ShortcutManager {
             navigationController.viewControllers = [WalletViewController(), SendViewController()]
         case ShortcutIdentifier.Receive.type:
             handled = true
-            navigationController.viewControllers = [WalletViewController(), ReceiveViewController(address: BMAddress())]
+            navigationController.viewControllers = [WalletViewController(), ReceiveViewController()]
         case ShortcutIdentifier.Scan.type:
             handled = true
             navigationController.viewControllers = [WalletViewController(), SendViewController(), QRScannerViewController()]

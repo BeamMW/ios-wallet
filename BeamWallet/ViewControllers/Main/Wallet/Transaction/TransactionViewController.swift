@@ -145,7 +145,7 @@ extension TransactionViewController : UITableViewDataSource {
         case 0:
             let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: self.viewModel.transaction!, single:true))
+                .configured(with: (row: indexPath.row, transaction: self.viewModel.transaction!, single:true, searchString:nil))
             return cell
         case 1:
             let cell = tableView

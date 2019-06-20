@@ -24,6 +24,11 @@ class BaseTableViewController: BaseViewController {
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
     
+    public var isSearching = false
+    public var searchingString = String.empty()
+
+    private var searchView:BMSearchView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,10 +57,50 @@ class BaseTableViewController: BaseViewController {
         super.viewDidLayoutSubviews()
         
         var offset:CGFloat = tableStyle == .grouped ? 0 : 0
-        if !isGradient {
+        if isSearching {
+            offset = (searchView?.frame.size.height ?? 0) + (searchView?.frame.origin.y ?? 0)
+        }
+        else if !isGradient {
             offset = offset + 30
         }
-        tableView.frame = CGRect(x: 0, y: navigationBarOffset - offset, width: self.view.bounds.width, height: self.view.bounds.size.height - navigationBarOffset + offset)
+        else if isGradient && !isAddStatusView {
+            offset = offset + 30
+        }
+       
+        let y = (!isSearching ? (navigationBarOffset - offset) : offset)
+        tableView.frame = CGRect(x: 0, y:y , width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+    }
+    
+    @objc public func startSearch(){
+        isSearching = true
+        
+        if searchView == nil {
+            searchView = BMSearchView()
+            searchView?.onSearchTextChanged = {
+                [weak self] text in
+                
+                guard let strongSelf = self else { return }
+                strongSelf.searchingString = text
+            }
+            searchView?.onCancelSearch = {
+                [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.stopSearch()
+            }
+        }
+        
+        view.addSubview(searchView!)
+        searchView?.show()
+    }
+    
+    @objc public func stopSearch() {
+        isSearching = false
+        searchView?.hide()
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            self.viewDidLayoutSubviews()
+        }) { (_) in
+        }
     }
 }
 
@@ -74,3 +119,4 @@ extension BaseTableViewController {
         tableView.contentInset = UIEdgeInsets.zero
     }
 }
+

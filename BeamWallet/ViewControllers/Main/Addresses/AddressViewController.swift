@@ -169,7 +169,7 @@ extension AddressViewController : UITableViewDataSource {
         else{
             let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: addressViewModel.transactions[indexPath.row], single:false))
+                .configured(with: (row: indexPath.row, transaction: addressViewModel.transactions[indexPath.row], single:false, searchString:nil))
             return cell
         }
         

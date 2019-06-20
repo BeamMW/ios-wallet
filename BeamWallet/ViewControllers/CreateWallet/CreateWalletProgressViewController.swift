@@ -25,7 +25,6 @@ class CreateWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var progressTitleLabel: UILabel!
     @IBOutlet private weak var progressValueLabel: UILabel!
     @IBOutlet private weak var restotingInfoLabel: UILabel!
-    @IBOutlet private weak var restotingWarningLabel: UILabel!
     @IBOutlet private weak var cancelButton: UIButton!
     @IBOutlet private weak var logoYOffset: NSLayoutConstraint!
     @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
@@ -62,7 +61,6 @@ class CreateWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = LocalizableStrings.restoring_wallet
             restotingInfoLabel.isHidden = false
-            restotingWarningLabel.isHidden = false
             progressValueLabel.text = LocalizableStrings.restored + "0%"
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
@@ -83,6 +81,8 @@ class CreateWalletProgressViewController: BaseViewController {
             stackYOffset.constant = 50
         }
         
+        AppModel.sharedManager().addDelegate(self)
+
         startCreateWallet()
     }
     
@@ -91,7 +91,9 @@ class CreateWalletProgressViewController: BaseViewController {
         
         timeoutTimer?.invalidate()
         
-        AppModel.sharedManager().removeDelegate(self)
+        if isMovingFromParent {
+            AppModel.sharedManager().removeDelegate(self)
+        }
     }
     
     private func openMainPage() {
@@ -123,7 +125,6 @@ class CreateWalletProgressViewController: BaseViewController {
     }
 
     private func startCreateWallet() {
-        AppModel.sharedManager().addDelegate(self)
         
         if !AppModel.sharedManager().isInternetAvailable {
             AppModel.sharedManager().resetWallet(false)
@@ -135,7 +136,8 @@ class CreateWalletProgressViewController: BaseViewController {
             }
         }
         else{
-            if let phrase = phrase {
+            if let phrase = phrase, AppModel.sharedManager().isRestoreFlow
+            {
                 let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
                 if(!created)
                 {
@@ -151,10 +153,40 @@ class CreateWalletProgressViewController: BaseViewController {
                     }
                 }
                 else{
-                    if (!AppModel.sharedManager().isRestoreFlow)
-                    {
-                        UIView.animate(withDuration: 0.3) {
-                            self.progressView.progress = 0.2
+                    RestoreManager.shared.startRestore(completion: { (completed) in
+                        if completed {
+                            DispatchQueue.main.async {
+                                self.restoreCompleted()
+                            }
+                        }
+                    }) { (error, progress) in
+                        DispatchQueue.main.async {
+                            if let reason = error {
+                                self.alert(title: LocalizableStrings.error, message: reason.localizedDescription) { (_ ) in
+                                    AppModel.sharedManager().isRestoreFlow = false
+                                    self.navigationController?.popToRootViewController(animated: true)
+                                }
+                            }
+                            else if let percent = progress {
+                                self.progressView.progress = percent
+                                self.progressValueLabel.text = LocalizableStrings.restored + "\(Int32(percent * 100))%"
+                            }
+                        }
+                    }
+                }
+            }
+            else if let phrase = phrase {
+                let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
+                if(!created)
+                {
+                    self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_created) { (_ ) in
+                        if AppModel.sharedManager().isInternetAvailable {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                        else{
+                            DispatchQueue.main.async {
+                                self.navigationController?.popViewController(animated: true)
+                            }
                         }
                     }
                 }
@@ -174,6 +206,14 @@ class CreateWalletProgressViewController: BaseViewController {
                 }
             }
         }
+    }
+    
+    private func restoreCompleted() {
+      //  DispatchQueue.global(qos: .background).async {
+        AppModel.sharedManager().restore()
+        AppModel.sharedManager().isRestoreFlow = false
+        self.startCreateWallet()
+       // }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -203,6 +243,11 @@ class CreateWalletProgressViewController: BaseViewController {
 // MARK: IBAction
     
     @IBAction func onCancel(sender :UIButton) {
+        if AppModel.sharedManager().isRestoreFlow {
+            RestoreManager.shared.cancelRestore()
+            AppModel.sharedManager().isRestoreFlow = false
+        }
+        
         let appModel = AppModel.sharedManager()
         appModel.resetWallet(true)
         

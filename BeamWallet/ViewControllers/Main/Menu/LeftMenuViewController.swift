@@ -36,6 +36,8 @@ class MenuItem {
 
 class LeftMenuViewController: BaseTableViewController {
 
+    private let enableBuy = true
+    
     private var topView:UIView!
 
     private var buyButton:UIButton!
@@ -124,7 +126,20 @@ class LeftMenuViewController: BaseTableViewController {
     }
     
     @objc private func onBuy() {
-        self.openUrl(url: URL(string: Settings.sharedManager().whereBuyAddress)!)
+        if enableBuy {
+            for item in self.items {
+                item.selected = false
+            }
+            
+            let navigationController = sideMenuController!.rootViewController as! UINavigationController
+            navigationController.setViewControllers([BuyBeamViewController()], animated: false)
+            sideMenuController?.hideLeftView(animated: true, completionHandler: {
+                self.tableView.reloadData()
+            })
+        }
+        else{
+            self.openUrl(url: URL(string: Settings.sharedManager().whereBuyAddress)!)
+        }
     }
 }
 

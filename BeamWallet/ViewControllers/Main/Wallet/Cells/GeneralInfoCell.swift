@@ -37,13 +37,18 @@ class GeneralInfoCell: BaseCell {
 
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var detailLabel: BMCopyLabel!
-    
+    @IBOutlet weak private var titleWidth: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
         
         detailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
+        
+        if Device.isLarge {
+            titleWidth.constant = 150
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -92,20 +97,63 @@ extension GeneralInfoCell: Configurable {
             detailLabel.textColor = info.color
         }
         
-        if info.text == "Sending address:" ||  info.text == "Receiving address:" {
-            if let category = AppModel.sharedManager().findCategory(byAddress: info.detail)
-            {
-                detailLabel.copyText = info.detail
-                
-                let text = info.detail + "\n" + category.name
-                let range = (text as NSString).range(of: String(category.name))
-                
-                let attributedString = NSMutableAttributedString(string:text)
-                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.init(hexString: category.color) , range: range)
-                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "SFProDisplay-Italic", size: 14) ?? UIFont.italicSystemFont(ofSize: 14) , range: range)
+        if info.text == LocalizableStrings.my_rec_address ||  info.text == LocalizableStrings.my_send_address || info.text == LocalizableStrings.my_address || info.text == LocalizableStrings.contact2 {
+            
+            let address = AppModel.sharedManager().findAddress(byID: info.detail)
+            let category = AppModel.sharedManager().findCategory(byAddress: info.detail)
 
-                detailLabel.attributedText = attributedString
+            let categoryName = category?.name ?? String.empty()
+            let addressName = address?.label ?? String.empty()
+
+            detailLabel.copyText = info.detail
+            
+            var strings = [String]()
+            
+            if !addressName.isEmpty {
+                strings.append(addressName)
             }
+            
+            strings.append(info.detail)
+
+            if !categoryName.isEmpty {
+                strings.append(categoryName)
+            }
+            
+            let text = (strings.count == 1 ? info.detail : strings.joined(separator: "\n"))!
+
+            let rangeCategory = (text as NSString).range(of: String(categoryName))
+            let rangeName = (text as NSString).range(of: String(addressName))
+           
+            let attributedString = NSMutableAttributedString(string:text)
+           
+//            let style1 = NSMutableParagraphStyle()
+//            style1.lineSpacing = 5
+//            style1.lineBreakMode = .byCharWrapping
+//
+            let style2 = NSMutableParagraphStyle()
+            style2.lineSpacing = 5
+            style2.lineBreakMode = .byCharWrapping
+            
+            let allStyle = NSMutableParagraphStyle()
+            allStyle.lineBreakMode = .byCharWrapping
+
+            attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: allStyle, range: NSMakeRange(0, text.count))
+
+            if !categoryName.isEmpty {
+           //     let rangeCategory2 = (text as NSString).range(of: String("\n" + categoryName))
+
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.init(hexString: category!.color) , range: rangeCategory)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: ItalicFont(size: 14) , range: rangeCategory)
+             //   attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style1, range: rangeCategory2)
+            }
+            
+            if !addressName.isEmpty {
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: rangeName)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeName)
+                attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: rangeName)
+            }
+            
+            detailLabel.attributedText = attributedString
         }
         else if info.text == "Contact:" {
             let split = info.detail.split(separator: "\n")

@@ -25,8 +25,24 @@ class BMAmountCell: BaseCell {
 
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
+    @IBOutlet weak private var currencyLabel: UILabel!
+   
+    //@IBOutlet weak private var infoLabel: UILabel?
 
     public var fee:Double = 0
+    
+    public var info:String?
+//    {
+//        didSet{
+//            if info == nil {
+//                infoLabel.isHidden = true
+//            }
+//            else{
+//                infoLabel.isHidden = false
+//                infoLabel.text = info
+//            }
+//        }
+//    }
     
     public var error:String?
     {
@@ -41,22 +57,56 @@ class BMAmountCell: BaseCell {
         }
     }
     
+    public var currency:String?
+    {
+        didSet{
+            if currency != nil {
+                
+                currencyLabel.isUserInteractionEnabled = true
+                
+                let text = currency!
+                
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(named: "iconNextArrow")
+               
+                let imageString = NSAttributedString(attachment: imageAttachment)
+                
+                let attributedString = NSMutableAttributedString(string:text)                
+                attributedString.append(NSAttributedString(string: "  "))
+                attributedString.append(imageString)
+                
+                currencyLabel.attributedText = attributedString
+                
+                textField.placeholder = "Enter amount in " + currency!
+                textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
-      //  contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.2)
+        
+        currencyLabel.isUserInteractionEnabled = false
+        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
+        
+        textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
+    }
+    
+    @objc private func titleLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+        self.delegate?.onRightButton?(self)
     }
     
     public func beginEditing(){
-        textField.becomeFirstResponder()
+        _ = textField.becomeFirstResponder()
     }
 }
 
 extension BMAmountCell: Configurable {
     
     func configure(with options: (name: String, value:String?)) {
-        if options.name == LocalizableStrings.enter_amount {
+        if options.name == LocalizableStrings.enter_amount || options.name == LocalizableStrings.you_send.uppercased() {
             textField.textColor = UIColor.main.heliotrope
             textField.setNormalColor(color: UIColor.main.heliotrope)
         }

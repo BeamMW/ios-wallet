@@ -29,7 +29,6 @@
                 <outlet property="progressValueLabel" destination="ptl-BF-NdL" id="erB-PX-mi1"/>
                 <outlet property="progressView" destination="bZD-dB-5UV" id="whc-Ut-x2W"/>
                 <outlet property="restotingInfoLabel" destination="sOp-KF-vke" id="ErO-zE-KPf"/>
-                <outlet property="restotingWarningLabel" destination="g2P-sH-Tyo" id="GIK-9d-ZUh"/>
                 <outlet property="stackYOffset" destination="YDf-uM-xWZ" id="VNk-dw-T6T"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -96,16 +95,6 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please wait for synchronization and do not close or minimize the application." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2P-sH-Tyo">
-                            <rect key="frame" x="0.0" y="55.5" width="253" height="0.0"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
-                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                            <nil key="highlightedColor"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="restor_wallet_warning"/>
-                            </userDefinedRuntimeAttributes>
-                        </label>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOp-KF-vke">
                             <rect key="frame" x="0.0" y="55.5" width="253" height="0.0"/>
                             <string key="text">Only the wallet balance (UTXO) can be restored,  transaction info is always private

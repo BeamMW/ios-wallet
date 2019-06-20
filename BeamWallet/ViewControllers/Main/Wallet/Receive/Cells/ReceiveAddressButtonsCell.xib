@@ -20,22 +20,22 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="206" id="KuL-Jr-XfQ" customClass="ReceiveAddressButtonsCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="226" id="KuL-Jr-XfQ" customClass="ReceiveAddressButtonsCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KuL-Jr-XfQ" id="cgk-y0-vp1">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="199.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="234.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZnL-da-miM">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="199.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="234.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NVr-Vl-UQM">
-                        <rect key="frame" x="15" y="10" width="290" height="90"/>
+                        <rect key="frame" x="15" y="10" width="290" height="107.5"/>
                         <string key="text">Send this address to the sender over an external secure channel.
 
-Please notice, that both you and sender should be online to succeed transaction!</string>
+For the transaction to complete, you should get online during the 12 hours after Beams are sent. </string>
                         <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="15"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -44,7 +44,7 @@ Please notice, that both you and sender should be online to succeed transaction!
                         </userDefinedRuntimeAttributes>
                     </label>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wAG-wz-QgD">
-                        <rect key="frame" x="15" y="140" width="290" height="44"/>
+                        <rect key="frame" x="15" y="157.5" width="290" height="44"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vqb-dl-gV4" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
@@ -92,6 +92,7 @@ Please notice, that both you and sender should be online to succeed transaction!
                     </stackView>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="bottom" secondItem="wAG-wz-QgD" secondAttribute="bottom" constant="33" id="1dw-Hf-1rc"/>
                     <constraint firstItem="wAG-wz-QgD" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" constant="15" id="8BJ-ri-XHb"/>
                     <constraint firstItem="ZnL-da-miM" firstAttribute="top" secondItem="cgk-y0-vp1" secondAttribute="top" id="AOI-VP-xVu"/>
                     <constraint firstItem="ZnL-da-miM" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" id="Nz9-oi-8cU"/>
@@ -101,13 +102,12 @@ Please notice, that both you and sender should be online to succeed transaction!
                     <constraint firstItem="NVr-Vl-UQM" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" constant="15" id="h7x-yN-UQq"/>
                     <constraint firstAttribute="trailing" secondItem="NVr-Vl-UQM" secondAttribute="trailing" constant="15" id="hlw-FK-uwJ"/>
                     <constraint firstItem="wAG-wz-QgD" firstAttribute="top" secondItem="NVr-Vl-UQM" secondAttribute="bottom" constant="40" id="hw8-ya-HfB"/>
-                    <constraint firstAttribute="bottom" secondItem="wAG-wz-QgD" secondAttribute="bottom" constant="15.5" id="l0l-Io-U45"/>
                     <constraint firstItem="NVr-Vl-UQM" firstAttribute="top" secondItem="cgk-y0-vp1" secondAttribute="top" constant="10" id="rQw-ZF-jcS"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="ST6-m8-Wr2"/>
-            <point key="canvasLocation" x="208.69565217391306" y="152.67857142857142"/>
+            <point key="canvasLocation" x="24.637681159420293" y="98.772321428571431"/>
         </tableViewCell>
     </objects>
     <resources>
