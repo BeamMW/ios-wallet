@@ -68,6 +68,7 @@ to access the wallet</string>
                                 <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
                                     <real key="value" value="2"/>
                                 </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="enter_password"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="Yov-iJ-AWn"/>
@@ -102,6 +103,7 @@ to access the wallet</string>
                                             <real key="value" value="22"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="next"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onLoginWithSender:" destination="-1" eventType="touchUpInside" id="bWt-ni-N3S"/>

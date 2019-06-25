@@ -33,7 +33,7 @@ class OwnerKeyUnlockViewController: BaseViewController {
 
         topOffset?.constant = topOffset?.constant ?? 0 + 30
         
-        title = LocalizableStrings.show_owner_key
+        title = Localizables.shared.strings.show_owner_key
         
 //        if BiometricAuthorization.shared.faceIDAvailable() {
 //            touchIdButton.setImage(IconFaceId(), for: .normal)
@@ -41,19 +41,19 @@ class OwnerKeyUnlockViewController: BaseViewController {
         
         if BiometricAuthorization.shared.canAuthenticate() {
             if BiometricAuthorization.shared.faceIDAvailable() {
-                titleLabel.text = LocalizableStrings.ownerkey_faceid_text
-                subTitleLabel.text = LocalizableStrings.ownerkey_faceid_subtext
-                confirmLabel.text = LocalizableStrings.ownerkey_faceid_confirm
+                titleLabel.text = Localizables.shared.strings.ownerkey_faceid_text
+                subTitleLabel.text = Localizables.shared.strings.ownerkey_faceid_subtext
+                confirmLabel.text = Localizables.shared.strings.ownerkey_faceid_confirm
             }
             else{
-                titleLabel.text = LocalizableStrings.ownerkey_touchid_text
-                subTitleLabel.text = LocalizableStrings.ownerkey_touchid_subtext
-                confirmLabel.text = LocalizableStrings.ownerkey_touchid_confirm
+                titleLabel.text = Localizables.shared.strings.ownerkey_touchid_text
+                subTitleLabel.text = Localizables.shared.strings.ownerkey_touchid_subtext
+                confirmLabel.text = Localizables.shared.strings.ownerkey_touchid_confirm
             }
         }
         else{
-            titleLabel.text = LocalizableStrings.ownerkey_text
-            subTitleLabel.text = LocalizableStrings.ownerkey_subtext
+            titleLabel.text = Localizables.shared.strings.ownerkey_text
+            subTitleLabel.text = Localizables.shared.strings.ownerkey_subtext
         }
         
         hideKeyboardWhenTappedAround()
@@ -81,7 +81,7 @@ class OwnerKeyUnlockViewController: BaseViewController {
                 self.confirmLabel.isHidden = false
             }, retry: {
                 self.confirmLabel.isHidden = false
-            }, reasonText: LocalizableStrings.touch_id_ownerkey_verefication)
+            }, reasonText: Localizables.shared.strings.touch_id_ownerkey_verefication)
         }
         else{
             if let pass = passField.text {
@@ -104,13 +104,13 @@ class OwnerKeyUnlockViewController: BaseViewController {
         self.confirmLabel.isHidden = true
 
         if passField.text?.isEmpty ?? true {
-            passField.error = LocalizableStrings.empty_password
+            passField.error = Localizables.shared.strings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let valid = AppModel.sharedManager().isValidPassword(pass)
             if !valid {
-                passField.error = LocalizableStrings.current_password_error
+                passField.error = Localizables.shared.strings.current_password_error
                 passField.status = BMField.Status.error
             }
             else{

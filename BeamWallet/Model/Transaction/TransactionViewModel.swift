@@ -90,10 +90,10 @@ class TransactionViewModel: NSObject {
         let transaction:BMTransaction = (indexPath == nil ? self.transaction! : transactions[indexPath!.row])
 
         if let top = UIApplication.getTopMostViewController() {
-            top.confirmAlert(title: LocalizableStrings.cancel_transaction, message: LocalizableStrings.cancel_transaction_text, cancelTitle: LocalizableStrings.no, confirmTitle: LocalizableStrings.yes, cancelHandler: { (_) in
+            top.confirmAlert(title: Localizables.shared.strings.cancel_transaction, message: Localizables.shared.strings.cancel_transaction_text, cancelTitle: Localizables.shared.strings.no, confirmTitle: Localizables.shared.strings.yes, cancelHandler: { (_) in
                 
             }, confirmHandler: { (_) in
-                transaction.status = LocalizableStrings.cancelled
+                transaction.status = Localizables.shared.strings.cancelled.lowercased()
                 self.onDataUpdated?(indexPath,transaction)
             })
         }
@@ -103,7 +103,7 @@ class TransactionViewModel: NSObject {
         let transaction:BMTransaction = (indexPath == nil ? self.transaction! : transactions[indexPath!.row])
 
         if let top = UIApplication.getTopMostViewController() {
-            top.confirmAlert(title: LocalizableStrings.delete_transaction_title, message: LocalizableStrings.delete_transaction_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
+            top.confirmAlert(title: Localizables.shared.strings.delete_transaction_title, message: Localizables.shared.strings.delete_transaction_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.delete, cancelHandler: { (_ ) in
                 
             }, confirmHandler: { (_ ) in
                 if indexPath?.row != nil {

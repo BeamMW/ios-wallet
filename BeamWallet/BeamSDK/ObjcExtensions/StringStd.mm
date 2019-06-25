@@ -17,6 +17,7 @@
 //
 
 #import "StringStd.h"
+#import "Settings.h"
 
 @implementation NSString (Additions)
 
@@ -42,6 +43,20 @@
 
 -(std::string)string {
     return std::string([self UTF8String]);;
+}
+
+@end
+
+
+@implementation NSString (Localization)
+
+-(NSString*)localized {
+    NSString *lang = [Settings sharedManager].language;
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:lang ofType:@"lproj"];
+    NSBundle * bundle = [[NSBundle alloc] initWithPath:path];
+    
+    return NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
 }
 
 @end

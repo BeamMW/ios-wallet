@@ -30,6 +30,7 @@
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="utxo_history"/>
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date   |   time" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="txC-k3-LC1">
@@ -42,6 +43,7 @@
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="date_time"/>
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2c8-5q-yX0">
@@ -51,6 +53,7 @@
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="id"/>
                     </userDefinedRuntimeAttributes>
                 </label>
             </subviews>

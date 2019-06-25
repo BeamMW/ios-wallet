@@ -33,13 +33,13 @@ class CategoryDetailViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.category
+        title = Localizables.shared.strings.category
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -72,7 +72,7 @@ class CategoryDetailViewController: BaseTableViewController {
     
 
     @objc private func onMore(sender:UIBarButtonItem) {        
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.edit, icon: nil, action:.edit_category), BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.delete, icon: nil, action:.delete_category)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.edit, icon: nil, action:.edit_category), BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.delete, icon: nil, action:.delete_category)]
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -82,7 +82,7 @@ class CategoryDetailViewController: BaseTableViewController {
                     vc.hidesBottomBarWhenPushed = true
                     self.pushViewController(vc: vc)
                 case .delete_category :
-                    self.confirmAlert(title: LocalizableStrings.delete_category, message:LocalizableStrings.delete_category_text(str:self.category.name) , cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.delete, cancelHandler: { (_ ) in
+                    self.confirmAlert(title: Localizables.shared.strings.delete_category, message:Localizables.shared.strings.delete_category_text(str:self.category.name) , cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.delete, cancelHandler: { (_ ) in
                         
                     }, confirmHandler: { (_ ) in
                         AppModel.sharedManager().deleteCategory(self.category)
@@ -157,7 +157,7 @@ extension CategoryDetailViewController : UITableViewDataSource {
             if addressViewModel.addresses.count == 0 {
                 let cell =  tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: LocalizableStrings.no_category_addresses)
+                    .configured(with: Localizables.shared.strings.no_category_addresses.lowercased())
                 return cell
             }
             else{
@@ -179,7 +179,7 @@ extension CategoryDetailViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            return BMTableHeaderTitleView(title: LocalizableStrings.addresses, bold: true)
+            return BMTableHeaderTitleView(title: Localizables.shared.strings.addresses, bold: true)
         }
         
         return nil

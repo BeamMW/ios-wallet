@@ -62,7 +62,13 @@ class EditAddressViewModel: DetailAddressViewModel {
     
     public func pickExpire() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = AddressExpiresPickerViewController(duration: -1)
+            var duration = Int(self.newAddress!.duration)
+            
+            if self.newAddress.isNowActive {
+                duration = Int(self.newAddress.isNowActiveDuration)
+            }
+            
+            let vc = AddressExpiresPickerViewController(duration: duration)
             vc.completion = {
                 obj in
                 
@@ -98,15 +104,28 @@ class EditAddressViewModel: DetailAddressViewModel {
     
     public func pickCategory() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = CategoryPickerViewController(category: self.newAddress.category == LocalizableStrings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.newAddress.category))
-            vc.completion = {
-                obj in
-                if let cat = obj {
-                    self.newAddress.category = String(cat.id)
-                    self.onDataChanged?()
+            if AppModel.sharedManager().categories.count == 0 {
+                let vc = CategoryEditViewController(category: nil)
+                vc.completion = { [weak self]
+                    obj in
+                    if let cat = obj {
+                        self?.newAddress.category = String(cat.id)
+                        self?.onDataChanged?()
+                    }
                 }
+                top.pushViewController(vc: vc)
             }
-            top.pushViewController(vc: vc)
+            else{
+                let vc = CategoryPickerViewController(category: self.newAddress.category == Localizables.shared.strings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.newAddress.category))
+                vc.completion = { [weak self]
+                    obj in
+                    if let cat = obj {
+                        self?.newAddress.category = String(cat.id)
+                        self?.onDataChanged?()
+                    }
+                }
+                top.pushViewController(vc: vc)
+            }
         }
     }
     

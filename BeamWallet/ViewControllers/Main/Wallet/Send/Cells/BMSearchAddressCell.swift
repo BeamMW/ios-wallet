@@ -40,11 +40,20 @@ class BMSearchAddressCell: BaseCell {
         
         selectionStyle = .none
         
+        nameLabel.isUserInteractionEnabled = true
+        nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
+        
+        textField.placholderFont = ItalicFont(size: 16)
+        textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
         textField.allowsEditingTextAttributes = true
         textField.defaultOffset = 4
         textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
         
         contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+    }
+    
+    @objc private func onTap(_ sender: UITapGestureRecognizer) {
+        textField.becomeFirstResponder()
     }
     
     public func beginEditing(text:String?){
@@ -60,6 +69,10 @@ class BMSearchAddressCell: BaseCell {
             else {
                 contactView.isHidden = false
                 contactName.text = contact?.address.label
+                
+                if contactName.text?.isEmpty ?? true {
+                    contactName.text = Localizables.shared.strings.no_name
+                }
                 
                 if let category = AppModel.sharedManager().findCategory(byId: contact?.address.category ?? String.empty()) {
                     contactCategory.textColor = UIColor.init(hexString: category.color)
@@ -150,10 +163,18 @@ extension BMSearchAddressCell : UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         self.delegate?.textValueDidReturn?(self)
+        
+        if nameLabel.text == Localizables.shared.strings.paste_enter_address {
+            textField.placeholder = String.empty()
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.delegate?.textValueDidBegin?(self)
+        
+        if nameLabel.text == Localizables.shared.strings.paste_enter_address {
+            textField.placeholder = Localizables.shared.strings.address_search
+        }
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -162,7 +183,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        if text == LocalizableStrings.new_line {
+        if text == Localizables.shared.strings.new_line {
             textView.resignFirstResponder()
             return false
         }

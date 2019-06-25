@@ -24,6 +24,7 @@ class OwnerKeyViewController: BaseViewController {
     public var ownerKey:String!
     
     @IBOutlet private weak var ownerKeyLabel: UILabel!
+    @IBOutlet private weak var ownerKeyTitleLabel: UILabel!
     @IBOutlet private weak var detailLabelRight: NSLayoutConstraint!
     @IBOutlet private weak var detailLabelLeft: NSLayoutConstraint!
 
@@ -37,15 +38,17 @@ class OwnerKeyViewController: BaseViewController {
             detailLabelLeft.constant = 0
         }
         
-        title = LocalizableStrings.show_owner_key
+        title = Localizables.shared.strings.show_owner_key
         
         ownerKeyLabel.text = ownerKey
+        ownerKeyTitleLabel.text = Localizables.shared.strings.addDots(value: Localizables.shared.strings.key_code.uppercased())
+        ownerKeyTitleLabel.letterSpacing = 1.5
     }
     
     @IBAction func onCopy(sender :UIButton) {
         UIPasteboard.general.string = ownerKey
         
-        ShowCopied(text: LocalizableStrings.ownerkey_copied)
+        ShowCopied(text: Localizables.shared.strings.ownerkey_copied)
         
         navigationController?.popViewController(animated: true)
     }

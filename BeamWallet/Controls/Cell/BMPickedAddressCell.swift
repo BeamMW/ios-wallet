@@ -21,7 +21,7 @@ import UIKit
 
 class BMPickedAddressCell: BaseCell {
     
-    @IBOutlet weak private var addressLabel: UILabel!
+    @IBOutlet weak private var addressLabel: BMCopyLabel!
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var button: BMButton!
 
@@ -30,9 +30,9 @@ class BMPickedAddressCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        selectionStyle = .none
+        addressLabel.delegate = self
         
-       // contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.2)
+        selectionStyle = .none        
     }
     
     @IBAction func onChange(sender :UIButton) {
@@ -47,14 +47,21 @@ extension BMPickedAddressCell: Configurable {
         
         if options.title != nil {
             nameLabel.text = options.title
+            nameLabel.letterSpacing = 1.5
         }
         
-        if options.title == LocalizableStrings.outgoing || options.title == LocalizableStrings.outgoing_address {
+        if options.title == Localizables.shared.strings.outgoing || options.title == Localizables.shared.strings.outgoing_address.uppercased() || options.title == Localizables.shared.strings.beam_recepient_auto || options.title == Localizables.shared.strings.beam_recepient.uppercased() {
             button.setTitleColor(UIColor.main.heliotrope, for: .normal)
             button.setTitleColor(UIColor.main.heliotrope.withAlphaComponent(0.3), for: .highlighted)
             button.layer.borderColor = UIColor.main.heliotrope.cgColor
             button.setImage(IconShufflePink(), for: .normal)
             button.setBackgroundColor(color: UIColor.main.heliotrope.withAlphaComponent(0.3), forState: .highlighted)
         }
+    }
+}
+
+extension BMPickedAddressCell: BMCopyLabelDelegate {
+    func onCopied() {
+        delegate?.onClickCopy?()
     }
 }

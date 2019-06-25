@@ -52,29 +52,29 @@ extension AddressExpiresCell: Configurable {
         if address.isExpired() || address.isNowActive {
             if(address.isNowActiveDuration == 0)
             {
-                expireLabel.text = "never"
+                expireLabel.text = Localizables.shared.strings.never.lowercased()
                 dateLabel.isHidden = true
             }
             else{
-                expireLabel.text = "in 24 hours"
+                expireLabel.text = Localizables.shared.strings.in_24_hours.lowercased()
                 dateLabel.text = address.expireNowDate()
                 dateLabel.isHidden = false
             }
         }
         else{
             if address.isNowExpired {
-                expireLabel.text = "now"
+                expireLabel.text = Localizables.shared.strings.now.lowercased()
                 dateLabel.text = address.nowDate()
                 dateLabel.isHidden = false
             }
             else{
                 if(address.duration == 0)
                 {
-                    expireLabel.text = "never"
+                    expireLabel.text = Localizables.shared.strings.never.lowercased()
                     dateLabel.isHidden = true
                 }
                 else{
-                    expireLabel.text = "in 24 hours"
+                    expireLabel.text = Localizables.shared.strings.in_24_hours.lowercased()
                     dateLabel.text = address.formattedDate()
                     dateLabel.isHidden = false
                 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -43,6 +43,7 @@
                                         <real key="value" value="22"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="details"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onDetailsWithSender:" destination="gZy-mm-Kaq" eventType="touchUpInside" id="oAd-Xi-Ilx"/>
@@ -64,6 +65,7 @@
                                         <real key="value" value="22"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="copy"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onCopyWithSender:" destination="gZy-mm-Kaq" eventType="touchUpInside" id="t3i-tr-2Rr"/>
@@ -90,6 +92,6 @@
     </objects>
     <resources>
         <image name="iconCopyWhite" width="16" height="16"/>
-        <image name="iconEyeWhite" width="32" height="22"/>
+        <image name="iconEyeWhite" width="16" height="10.5"/>
     </resources>
 </document>

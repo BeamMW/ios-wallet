@@ -30,23 +30,31 @@ class AddressExpiresPickerViewController: BaseTableViewController {
     init(duration:Int) {
         super.init(nibName: nil, bundle: nil)
         
+        let current = BMDuration()
+        current.name = Localizables.shared.strings.as_set + Localizables.shared.strings.space + ((duration > 0) ? Localizables.shared.strings.in_24_hours.lowercased() : Localizables.shared.strings.never.lowercased())
+        current.duration = Int32(duration);
+        current.selected = true
+        
         let h24 = BMDuration()
         h24.duration = 24
-        h24.name = LocalizableStrings.in_24_hours
-        
+        h24.name = Localizables.shared.strings.in_24_hours
+        h24.selected = false
+
         let never = BMDuration()
         never.duration = 0
-        never.name = LocalizableStrings.never
-        
+        never.name = Localizables.shared.strings.never
+        never.selected = false
+
+        items.append(current)
         items.append(h24)
         items.append(never)
         
-        self.currentDuration = duration
-        self.selectedDuration = duration
+        self.currentDuration = (duration > 0) ? 24 : 0
+        self.selectedDuration = -1
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override var tableStyle: UITableView.Style {
@@ -75,9 +83,9 @@ class AddressExpiresPickerViewController: BaseTableViewController {
             setGradientTopBar(mainColor: mainColor, addedStatusView: false)
         }
         
-        title = LocalizableStrings.expires.uppercased()
+        title = Localizables.shared.strings.expires.uppercased()
 
-        addRightButton(title: LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title: Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -95,21 +103,22 @@ class AddressExpiresPickerViewController: BaseTableViewController {
 extension AddressExpiresPickerViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return AddressDurationCell.height()
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        selectedDuration = (indexPath.row == 0) ? 24 : 0
-        
-        if selectedDuration == currentDuration {
-            enableRightButton(enabled: false)
-        }
-        else{
-            enableRightButton(enabled: true)
+        for item in items {
+            item.selected = false
         }
         
+        items[indexPath.row].selected = true
+
+        selectedDuration = (indexPath.row == 1) ? 24 : 0
+        
+        enableRightButton(enabled: (indexPath.row != 0))
+       
         tableView.reloadData()
     }
 }
@@ -122,9 +131,12 @@ extension AddressExpiresPickerViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        let duration = items[indexPath.row]
+        
         let cell =  tableView
             .dequeueReusableCell(withType: AddressDurationCell.self, for: indexPath)
-            .configured(with: (duration: items[indexPath.row], selected: selectedDuration == items[indexPath.row].duration))
+            .configured(with: (duration:duration , selected: duration.selected))
+        
         return cell
     }
 }

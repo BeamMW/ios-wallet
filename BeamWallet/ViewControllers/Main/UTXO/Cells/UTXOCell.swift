@@ -48,10 +48,10 @@ extension UTXOCell: Configurable {
         amountLabel.text = String.currency(value: options.utxo.realAmount)
         statusLabel.text = options.utxo.statusString
         
-        if options.utxo.statusString == "available" {
+        if options.utxo.statusString == Localizables.shared.strings.available.lowercased() {
             statusLabel.textColor = UIColor.white
         }
-        else if options.utxo.statusString == "spent" {
+        else if options.utxo.statusString == Localizables.shared.strings.spent.lowercased() {
             statusLabel.textColor = UIColor.main.heliotrope
         }
         else{

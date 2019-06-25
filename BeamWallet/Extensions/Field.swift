@@ -61,6 +61,7 @@ extension UITextField {
         set {
             if newValue != nil {
                 self.placeholder = newValue?.localized
+                self.placeHolderColor = UIColor.main.blueyGrey
             }
         }
     }
@@ -70,9 +71,19 @@ extension UITextField {
             return self.placeHolderColor
         }
         set {
-            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedString.Key.foregroundColor: newValue!])
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : String.empty(), attributes:[NSAttributedString.Key.foregroundColor: newValue!])
         }
     }
+    
+    @IBInspectable var placeHolderFont: UIFont? {
+        get {
+            return self.placeHolderFont
+        }
+        set {
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : String.empty(), attributes:[NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.2), NSAttributedString.Key.font : ItalicFont(size: 16)])
+        }
+    }
+    
     
     @IBInspectable
     var adjustFontSize: Bool {

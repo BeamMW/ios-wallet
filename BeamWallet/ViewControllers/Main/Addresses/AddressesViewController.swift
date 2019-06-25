@@ -36,7 +36,7 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.addresses
+        title = Localizables.shared.strings.addresses
         
         headerView.delegate = self
         
@@ -48,7 +48,7 @@ class AddressesViewController: BaseTableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         
         if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: view)
+            registerForPreviewing(with: self, sourceView: tableView)
         }
         
         subscribeToChages()
@@ -135,6 +135,7 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         if viewModel.selectedState != .contacts {
+
             guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
             
             guard let cell = tableView.cellForRow(at: indexPath) else { return nil }

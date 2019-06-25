@@ -24,7 +24,7 @@ class IntroPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.create_new_wallet
+        title = Localizables.shared.strings.create_new_wallet
         
         switch Device.screenType {
         case .iPhones_5:

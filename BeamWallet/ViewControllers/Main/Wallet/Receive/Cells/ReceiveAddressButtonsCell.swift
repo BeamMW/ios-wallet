@@ -21,11 +21,15 @@ import UIKit
 
 class ReceiveAddressButtonsCell: BaseCell {
 
+    @IBOutlet weak private var infoLabel: UILabel!
+
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        infoLabel.text = Localizables.shared.strings.send_address_secure + "\n\n" + Localizables.shared.strings.receive_notice
+
         selectionStyle = .none
     }
 

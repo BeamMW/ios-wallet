@@ -27,6 +27,25 @@ class CategoryPickerViewController: BaseTableViewController {
     private var selectedCategory:BMCategory?
     private var currentCategory:BMCategory?
 
+    private lazy var footerView: UIView = {
+        
+        let label = UILabel(frame: CGRect(x: defaultX, y: 30, width: defaultWidth, height: 0))
+        label.font = RegularFont(size: 16)
+        label.textColor = UIColor.main.steelGrey
+        label.text = Localizables.shared.strings.create_categories_in_settings
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.sizeToFit()
+        label.frame = CGRect(x: defaultX, y: 30, width: defaultWidth, height: label.frame.size.height);
+        
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:0))
+        view.addSubview(label)
+        
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:label.frame.origin.y + label.frame.size.height + 30)
+        
+        return view
+    }()
+    
     init(category:BMCategory?) {
         super.init(nibName: nil, bundle: nil)
         
@@ -41,7 +60,7 @@ class CategoryPickerViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override var tableStyle: UITableView.Style {
@@ -70,9 +89,9 @@ class CategoryPickerViewController: BaseTableViewController {
             setGradientTopBar(mainColor: mainColor, addedStatusView: false)
         }
  
-        title = LocalizableStrings.category
+        title = Localizables.shared.strings.category
 
-        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
         categories = (AppModel.sharedManager().categories as! [BMCategory])
         categories.insert(BMCategory.none(), at: 0)
@@ -83,6 +102,7 @@ class CategoryPickerViewController: BaseTableViewController {
         tableView.separatorStyle = .singleLine
         tableView.register(CategoryPickerCell.self)
         tableView.register(BMEmptyCell.self)
+        tableView.tableFooterView = footerView
     }
     
     @objc private func onSave(sender:UIBarButtonItem) {

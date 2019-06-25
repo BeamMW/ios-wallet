@@ -48,7 +48,11 @@ extension UIButton {
         }
         set {
             if newValue != nil {
-                self.setTitle(newValue?.localized, for: .normal)
+                var title = newValue?.localized.lowercased()
+                if title?.contains("qr") ?? false {
+                    title = title?.replacingOccurrences(of: "qr", with: "QR")
+                }
+                self.setTitle(title, for: .normal)
             }
         }
     }

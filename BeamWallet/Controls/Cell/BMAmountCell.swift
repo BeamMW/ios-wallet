@@ -67,7 +67,7 @@ class BMAmountCell: BaseCell {
                 let text = currency!
                 
                 let imageAttachment = NSTextAttachment()
-                imageAttachment.image = UIImage(named: "iconNextArrow")
+                imageAttachment.image = IconNextArrow()
                
                 let imageString = NSAttributedString(attachment: imageAttachment)
                 
@@ -77,7 +77,7 @@ class BMAmountCell: BaseCell {
                 
                 currencyLabel.attributedText = attributedString
                 
-                textField.placeholder = "Enter amount in " + currency!
+                textField.placeholder = Localizables.shared.strings.enter_amount_in_currency + " " + currency!
                 textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
             }
         }
@@ -89,12 +89,19 @@ class BMAmountCell: BaseCell {
         selectionStyle = .none
         
         currencyLabel.isUserInteractionEnabled = false
-        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
+        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCurrency(_:))))
         
-        textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
+        nameLabel.isUserInteractionEnabled = true
+        nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
+        
+        textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
     }
     
-    @objc private func titleLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+    @objc private func onTap(_ sender: UITapGestureRecognizer) {
+        _ = textField.becomeFirstResponder()
+    }
+    
+    @objc private func onCurrency(_ sender: UITapGestureRecognizer) {
         self.delegate?.onRightButton?(self)
     }
     
@@ -106,7 +113,7 @@ class BMAmountCell: BaseCell {
 extension BMAmountCell: Configurable {
     
     func configure(with options: (name: String, value:String?)) {
-        if options.name == LocalizableStrings.enter_amount || options.name == LocalizableStrings.you_send.uppercased() {
+        if options.name == Localizables.shared.strings.amount.uppercased() || options.name == Localizables.shared.strings.you_send.uppercased() {
             textField.textColor = UIColor.main.heliotrope
             textField.setNormalColor(color: UIColor.main.heliotrope)
         }
@@ -121,23 +128,19 @@ extension BMAmountCell: Configurable {
 extension BMAmountCell : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        self.delegate?.textValueDidReturn?(self)
-
-        if let text = textField.text {
-            if let v = Double(text) {
-                if v == 0 {
-                    textField.text = LocalizableStrings.zero
-                    self.delegate?.textValueDidChange?(self, LocalizableStrings.zero, true)
-                }
-            }
-            else{
-                textField.text = LocalizableStrings.zero
-                self.delegate?.textValueDidChange?(self, LocalizableStrings.zero, true)
-            }
+        if textField.placeholder == nil || textField.placeholder == Localizables.shared.strings.zero {
+            textField.placeholder = String.empty()
+            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         }
+
+        self.delegate?.textValueDidReturn?(self)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.placeholder == nil || textField.placeholder == String.empty() {
+            textField.placeholder = Localizables.shared.strings.zero
+            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
         self.delegate?.textValueDidBegin?(self)
     }
     
@@ -153,12 +156,18 @@ extension BMAmountCell : UITextFieldDelegate {
         
         let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: String.coma(), with: String.dot())
         
-        if txtAfterUpdate.isCorrectAmount(fee: fee) {
-            textField.text = txtAfterUpdate
-            self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
+        if !txtAfterUpdate.isCorrectAmount(fee: fee) {
+            return false
         }
         
-        return false
+        self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
+
+        if string == String.coma() {
+            textField.text = txtAfterUpdate
+            return false
+        }
+        
+        return true
     }
 }
 

@@ -115,10 +115,12 @@ class BaseViewController: UIViewController {
     var attributedTitle: String? {
         willSet {
             if let titleString = newValue {
+                view.viewWithTag(987)?.removeFromSuperview()
+                
                 let attributedString = NSMutableAttributedString(string: (isUppercasedTitle) ? titleString.uppercased() : titleString.capitalizingFirstLetter())
                 
                 if isUppercasedTitle {
-                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.lengthOfBytes(using: .utf8) ))
+                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.count))
                 }
                 
                 let w = UIScreen.main.bounds.size.width
@@ -133,6 +135,7 @@ class BaseViewController: UIViewController {
                 titleLabel.textColor = UIColor.white
                 titleLabel.textAlignment = .center
                 titleLabel.sizeToFit()
+                titleLabel.tag = 987
                 
                 if titleLabel.frame.size.width > (UIScreen.main.bounds.size.width - 100)
                 {
@@ -161,7 +164,7 @@ class BaseViewController: UIViewController {
         menuButton.tintColor = UIColor.white
         menuButton.setImage(IconLeftMenu(), for: .normal)
         menuButton.addTarget(self, action: #selector(onLeftMenu), for: .touchUpInside)
-        menuButton.frame = CGRect(x: 15, y: y, width: 40, height: 40)
+        menuButton.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
         self.view.addSubview(menuButton)
     }
     
@@ -176,7 +179,7 @@ class BaseViewController: UIViewController {
         self.view.viewWithTag(20192)?.removeFromSuperview()
 
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: 15, y: y, width: 40, height: 40)
+        button.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
         button.contentHorizontalAlignment = .left
         button.tintColor = UIColor.white
         button.setImage(IconBack(), for: .normal)
@@ -205,14 +208,21 @@ class BaseViewController: UIViewController {
         
         self.view.viewWithTag(20191)?.removeFromSuperview()
         
+        let aString:NSString = title as NSString
+        
+        let rectNeeded = aString.boundingRect(with: CGSize(width: 9999, height: 15), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: RegularFont(size: 16)], context: nil)
+        let w = rectNeeded.width+10
+        
         let rightButton = UIButton(type: .system)
         rightButton.tag = 20191
+        rightButton.titleLabel?.font = RegularFont(size: 16)
         rightButton.contentHorizontalAlignment = .right
         rightButton.tintColor = UIColor.white
         rightButton.setTitle(title, for: .normal)
         rightButton.addTarget(target, action: selector!, for: .touchUpInside)
-        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: y, width: 40, height: 40)
+        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-w-15, y: y, width: w, height: 40)
         rightButton.isEnabled = enabled
+        rightButton.adjustFontSize = true
         self.view.addSubview(rightButton)
     }
     
@@ -241,7 +251,7 @@ class BaseViewController: UIViewController {
         view.layer.cornerRadius = 8
         view.addSubview(logoView)
         
-        let showAlert = UIAlertController(title: LocalizableStrings.rate_title, message: LocalizableStrings.rate_text, preferredStyle: .alert)
+        let showAlert = UIAlertController(title: Localizables.shared.strings.rate_title, message: Localizables.shared.strings.rate_text, preferredStyle: .alert)
         showAlert.view.addSubview(view)
         
         let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 285)
@@ -249,15 +259,15 @@ class BaseViewController: UIViewController {
         showAlert.view.addConstraint(height)
         showAlert.view.addConstraint(width)
         
-        showAlert.addAction(UIAlertAction(title: LocalizableStrings.rate_app, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizables.shared.strings.rate_app, style: .default, handler: { action in
             AppStoreReviewManager.openAppStoreRatingPage()
         }))
-        showAlert.addAction(UIAlertAction(title: LocalizableStrings.feedback, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizables.shared.strings.feedback, style: .default, handler: { action in
             AppStoreReviewManager.resetRating()
             
             self.writeFeedback()
         }))
-        showAlert.addAction(UIAlertAction(title: LocalizableStrings.not_now, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizables.shared.strings.not_now, style: .default, handler: { action in
             AppStoreReviewManager.resetRating()
         }))
         
@@ -268,12 +278,12 @@ class BaseViewController: UIViewController {
         if(MFMailComposeViewController.canSendMail()) {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
-            mailComposer.setToRecipients([LocalizableStrings.support_email])
-            mailComposer.setSubject(LocalizableStrings.ios_feedback)
+            mailComposer.setToRecipients([Localizables.shared.strings.support_email])
+            mailComposer.setSubject(Localizables.shared.strings.ios_feedback)
             present(mailComposer, animated: true, completion: nil)
         }
         else {
-            UIApplication.shared.open(URL(string: LocalizableStrings.support_email_mailto)!, options: [:]) { (_ ) in
+            UIApplication.shared.open(URL(string: Localizables.shared.strings.support_email_mailto)!, options: [:]) { (_ ) in
             }
         }
     }
@@ -284,7 +294,7 @@ class BaseViewController: UIViewController {
         if !Settings.sharedManager().isHideAmounts {
             if Settings.sharedManager().isAskForHideAmounts {
                 
-                self.confirmAlert(title: LocalizableStrings.activate_security_title, message: LocalizableStrings.activate_security_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.activate, cancelHandler: { (_ ) in
+                self.confirmAlert(title: Localizables.shared.strings.activate_security_title, message: Localizables.shared.strings.activate_security_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.activate, cancelHandler: { (_ ) in
                     
                 }) { (_ ) in
                     Settings.sharedManager().isAskForHideAmounts = false

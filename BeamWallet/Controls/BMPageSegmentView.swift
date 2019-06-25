@@ -34,7 +34,7 @@ class BMPageSegmentViewCell: UICollectionViewCell {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func layoutSubviews() {
@@ -93,7 +93,7 @@ class BMPageSegmentView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
 }
 

@@ -32,7 +32,14 @@ extension ConfirmCell: Configurable {
         nameLabel.font = BoldFont(size: 14)
         nameLabel.textColor = UIColor.main.blueyGrey
         nameLabel.textAlignment = .left
-        nameLabel.text = item.title
+       
+        if item.detail == nil {
+            nameLabel.text = item.title
+        }
+        else{
+            nameLabel.text = item.title.uppercased()
+        }
+        
         nameLabel.letterSpacing = 2
         
         valueLabel.text = item.detail
@@ -51,7 +58,7 @@ extension ConfirmCell: Configurable {
         
         nameLabel.adjustFontSize = true
         
-        if item.title == LocalizableStrings.send_to || item.title == LocalizableStrings.outgoing_address {
+        if item.title == Localizables.shared.strings.send_to.uppercased() || item.title == Localizables.shared.strings.outgoing_address.uppercased() {
             
             if let category = AppModel.sharedManager().findCategory(byAddress: item.detail ?? String.empty())
             {
@@ -69,7 +76,7 @@ extension ConfirmCell: Configurable {
         }
         
         
-        if item.title == LocalizableStrings.send_to {
+        if item.title == Localizables.shared.strings.send_to {
             
             let text = (item.detail)!
             

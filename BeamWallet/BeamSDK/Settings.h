@@ -31,6 +31,7 @@ typedef enum Target : NSUInteger {
 @protocol SettingsModelDelegate <NSObject>
 @optional
 -(void)onChangeHideAmounts;
+-(void)onChangeLanguage;
 @end
 
 @interface Settings : NSObject
@@ -56,6 +57,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
 @property (nonatomic, strong) NSString * _Nonnull whereBuyAddress;
+@property (nonatomic, strong) NSString * _Nonnull language;
 
 -(BOOL)isChangedNode;
 
@@ -67,5 +69,6 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)localNodeStorage;
 -(NSString*_Nonnull)localNodeTemdDir;
 -(NSArray*_Nonnull)localNodePeers;
+-(NSString*_Nonnull)languageName;
 
 @end

@@ -123,6 +123,7 @@
                 <outlet property="hashLabel" destination="99P-W3-q67" id="fez-We-EYu"/>
                 <outlet property="hashTitleLabel" destination="ZD0-5h-LPH" id="gaP-ln-yO8"/>
                 <outlet property="heightLabel" destination="2tc-2q-9Ok" id="37M-e3-yFn"/>
+                <outlet property="heightTitleLabel" destination="gZe-WC-oNL" id="BQk-HD-Eby"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="47.226386806596707"/>
         </tableViewCell>

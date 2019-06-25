@@ -61,6 +61,7 @@
                                     <real key="value" value="22"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="copy_details"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="onCopyCodeDetailsWithSender:" destination="-1" eventType="touchUpInside" id="k1u-vG-ZGo"/>
@@ -82,6 +83,7 @@
                                     <real key="value" value="22"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="copy_code"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="onCopyCodeWithSender:" destination="-1" eventType="touchUpInside" id="H49-Pa-1ah"/>
@@ -110,6 +112,7 @@
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="paste_payment_proof"/>
                     </userDefinedRuntimeAttributes>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PWr-9E-sR9" customClass="BMTextView" customModule="BeamWallet" customModuleProvider="target">
@@ -138,6 +141,7 @@
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="payment_proof_error"/>
                     </userDefinedRuntimeAttributes>
                 </label>
             </subviews>

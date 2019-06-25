@@ -27,15 +27,20 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="si6-ep-K1d">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Yjw-w2-kMT">
-                                <rect key="frame" x="15" y="15" width="37" height="20"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gQs-Rr-cAd">
+                                <rect key="frame" x="15" y="15" width="37" height="19.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Yjw-w2-kMT">
+                                        <rect key="frame" x="0.0" y="0.0" width="37" height="19.5"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                            </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-XX-F4D">
                                 <rect key="frame" x="296" y="18.5" width="13" height="13"/>
                                 <constraints>
@@ -47,10 +52,10 @@
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="J5U-XX-F4D" firstAttribute="centerY" secondItem="si6-ep-K1d" secondAttribute="centerY" id="6il-KS-lcg"/>
-                            <constraint firstItem="Yjw-w2-kMT" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="15" id="NIy-2t-GzR"/>
-                            <constraint firstAttribute="bottom" secondItem="Yjw-w2-kMT" secondAttribute="bottom" constant="14.5" id="WYC-Yo-ctd"/>
+                            <constraint firstAttribute="bottom" secondItem="gQs-Rr-cAd" secondAttribute="bottom" constant="15" id="Fj1-Zt-WVC"/>
                             <constraint firstAttribute="trailing" secondItem="J5U-XX-F4D" secondAttribute="trailing" constant="11" id="Y0c-Mj-4Lw"/>
-                            <constraint firstItem="Yjw-w2-kMT" firstAttribute="leading" secondItem="si6-ep-K1d" secondAttribute="leading" constant="15" id="x5d-wl-ePn"/>
+                            <constraint firstItem="gQs-Rr-cAd" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="15" id="Zif-OU-tBF"/>
+                            <constraint firstItem="gQs-Rr-cAd" firstAttribute="leading" secondItem="si6-ep-K1d" secondAttribute="leading" constant="15" id="e2g-bc-sPE"/>
                         </constraints>
                     </view>
                 </subviews>

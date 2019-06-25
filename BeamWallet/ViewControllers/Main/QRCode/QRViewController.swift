@@ -31,11 +31,15 @@ class QRViewController: BaseViewController {
     private var address:BMAddress!
     private var amount:String?
 
+    @IBOutlet weak private var infoLabel: UILabel!
+
+    @IBOutlet weak private var addressTitleLabel: UILabel!
     @IBOutlet weak private var addressLabel: UILabel!
     @IBOutlet weak private var categoryLabel: UILabel!
     
     @IBOutlet weak private var amountStack: UIStackView!
     @IBOutlet weak private var amountLabel: UILabel!
+    @IBOutlet weak private var amountTitleLabel: UILabel!
 
     @IBOutlet weak private var visualEffectView: UIVisualEffectView!
 
@@ -54,7 +58,7 @@ class QRViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -63,6 +67,11 @@ class QRViewController: BaseViewController {
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
         
+        amountTitleLabel.text = Localizables.shared.strings.requested_amount.uppercased()
+        
+        infoLabel.text = Localizables.shared.strings.send_address_secure + "\n\n" + Localizables.shared.strings.receive_notice
+        
+        addressTitleLabel.text = Localizables.shared.strings.address.uppercased()
         addressLabel.text = address.walletId
         
         if let category = AppModel.sharedManager().findCategory(byAddress: address.walletId)
@@ -77,7 +86,7 @@ class QRViewController: BaseViewController {
         
         if let a = amount, !a.isEmpty {
             amountStack.isHidden = false
-            amountLabel.text = LocalizableStrings.beam_amount(a)
+            amountLabel.text = Localizables.shared.strings.beam_amount(a)
         }
         else{
             amountStack.isHidden = true

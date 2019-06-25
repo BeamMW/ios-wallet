@@ -33,7 +33,7 @@ class AddressCategoryCell: UITableViewCell {
 extension AddressCategoryCell: Configurable {
     
     func configure(with address: BMAddress) {
-        if address.category == LocalizableStrings.zero {
+        if address.category == Localizables.shared.strings.zero {
             categoryLabel.textColor = UIColor.main.steelGrey
             categoryLabel.text = "None"
         }

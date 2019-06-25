@@ -159,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             else{
                 if let vc = UIApplication.getTopMostViewController() {
-                    vc.alert(title: LocalizableStrings.tg_bot, message: LocalizableStrings.tg_bot_link) { (_ ) in
+                    vc.alert(title: Localizables.shared.strings.tg_bot, message: Localizables.shared.strings.tg_bot_link) { (_ ) in
                         
                         if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
                             passVC.biometricAuthorization()
@@ -290,22 +290,22 @@ extension AppDelegate {
 }
 
 extension AppDelegate : WalletModelDelegate {
-    
-    func onAddedPrepare(_ transaction: BMPreparedTransaction) {
+   
+    func onAddedDelete(_ transaction: BMTransaction) {
         DispatchQueue.main.async {
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { (data) in
-                if let result = data, result.type == .transaction {
-                    AppModel.sharedManager().cancelPreparedTransaction(result.id)
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .delete_transaction, id: transaction.id), done: { (data) in
+                if let result = data, result.type == .delete_transaction {
+                    AppModel.sharedManager().cancelDeleteTransaction(result.id)
                 }
-            }) { (data) in
-                if let result = data, result.type == .transaction {
-                    AppModel.sharedManager().sendPreparedTransaction(result.id)
+            }, ended: { (data) in
+                if let result = data, result.type == .delete_transaction {
+                    AppModel.sharedManager().deleteTransaction(result.id)
                 }
-            }
+            })
         }
     }
     
-    func onAddedPrepare(_ address: BMAddress) {
+    func onAddedDelete(_ address: BMAddress) {
         DispatchQueue.main.async {
             let isContact = address.isContact
             
@@ -321,13 +321,27 @@ extension AppDelegate : WalletModelDelegate {
         }
     }
     
+    func onAddedPrepare(_ transaction: BMPreparedTransaction) {
+        DispatchQueue.main.async {
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { (data) in
+                if let result = data, result.type == .transaction {
+                    AppModel.sharedManager().cancelPreparedTransaction(result.id)
+                }
+            }) { (data) in
+                if let result = data, result.type == .transaction {
+                    AppModel.sharedManager().sendPreparedTransaction(result.id)
+                }
+            }
+        }
+    }
+    
     public func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
             
             var oldTransactions = [BMTransaction]()
             
             //get old notifications
-            if let data = UserDefaults.standard.data(forKey: LocalizableStrings.transactions) {
+            if let data = UserDefaults.standard.data(forKey: Localizables.shared.strings.transactions) {
                 if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
                     oldTransactions = array
                 }
@@ -337,7 +351,8 @@ extension AppDelegate : WalletModelDelegate {
                 if transaction.isIncome && !transaction.isSelf {
                     if let oldTransaction = oldTransactions.first(where: { $0.id == transaction.id }) {
                         if oldTransaction.status != transaction.status && UIApplication.shared.applicationState != .active {
-                            NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
+                          
+                            //NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
                         }
                     }
                     else{
@@ -348,7 +363,7 @@ extension AppDelegate : WalletModelDelegate {
                 }
             }
             
-            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: LocalizableStrings.transactions)
+            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: Localizables.shared.strings.transactions)
             UserDefaults.standard.synchronize()
         }
     }

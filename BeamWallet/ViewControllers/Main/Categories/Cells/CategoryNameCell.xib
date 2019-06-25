@@ -27,13 +27,14 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="616-Wc-RSI">
                         <rect key="frame" x="15" y="16.5" width="55" height="19.5"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="55" id="YZK-pd-lsz"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="55" id="YZK-pd-lsz"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                         <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="category"/>
                         </userDefinedRuntimeAttributes>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuM-oN-XC6" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">

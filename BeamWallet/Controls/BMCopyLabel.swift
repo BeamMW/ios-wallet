@@ -19,7 +19,13 @@
 
 import UIKit
 
+protocol BMCopyLabelDelegate: AnyObject {
+    func onCopied()
+}
+
 class BMCopyLabel: UILabel {
+
+    weak var delegate: BMCopyLabelDelegate?
 
     public var copyText:String?
     
@@ -53,6 +59,8 @@ class BMCopyLabel: UILabel {
         UIMenuController.shared.setMenuVisible(false, animated: true)
         
         ShowCopied()
+        
+        self.delegate?.onCopied()
     }
     
     @objc private func showCopyMenu(sender: Any?) {

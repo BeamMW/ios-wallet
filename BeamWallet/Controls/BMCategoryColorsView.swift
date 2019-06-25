@@ -36,25 +36,32 @@ class BMCategoryColorsView: UIView {
             
             super.init(frame: frame)
             
+            let size:CGFloat = Device.isLarge ? 38 : 30
+            
             self.color = color
             
-            let button = UIButton(frame: CGRect(x: 4, y: 4, width: frame.size.width-8, height: frame.size.height - 8))
+            let button = UIButton(frame: CGRect(x: (frame.size.width - size + 8)/2, y: (frame.size.height - size + 8)/2, width: size-8, height: size - 8))
             button.cornerRadius = button.frame.size.width/2
             button.setBackgroundColor(color: color, forState: .normal)
-            button.addTarget(self, action: #selector(onSelectColor), for: .touchUpInside)
+            button.isUserInteractionEnabled = false
             self.addSubview(button)
             
-            circleView = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+            
+            circleView = UIView(frame: CGRect(x: (frame.size.width - size)/2, y: (frame.size.height - size)/2, width: size, height: size))
             circleView.backgroundColor = UIColor.clear
             circleView.layer.cornerRadius = circleView.frame.size.width/2
             circleView.layer.borderWidth = 2
-            circleView.layer.borderColor = UIColor.main.brightTeal.cgColor
+            circleView.layer.borderColor = color.cgColor
             circleView.alpha = 0
+            circleView.isUserInteractionEnabled = false
             self.addSubview(circleView)
+            
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(onSelectColor))
+            self.addGestureRecognizer(gesture)
         }
         
         required init?(coder aDecoder: NSCoder) {
-            fatalError(LocalizableStrings.fatalInitCoderError)
+            fatalError(Localizables.shared.strings.fatalInitCoderError)
         }
         
         @objc private func onSelectColor() {
@@ -99,8 +106,8 @@ class BMCategoryColorsView: UIView {
     
     private func fillBMColorView() {
         
-        let size:CGFloat = Device.isLarge ? 38 : 30
-        let space:CGFloat = Device.isLarge ? 30 : 20
+        let size:CGFloat = 50
+        let space:CGFloat = 10
         var x:CGFloat = 0
         
         for color in colors {

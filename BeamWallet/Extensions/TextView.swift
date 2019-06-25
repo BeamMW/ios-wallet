@@ -22,6 +22,16 @@ import Foundation
 class UITextViewPlacholder : UITextView
 {
     
+    public var placholderFont:UIFont?
+    public var placholderColor:UIColor?
+
+    
+    override open var attributedText: NSAttributedString! {
+        didSet {
+            attibutedTextChanged()
+        }
+    }
+    
     override open var text: String! {
         didSet {
             textChanged()
@@ -65,6 +75,12 @@ class UITextViewPlacholder : UITextView
         }
     }
     
+    @objc private func attibutedTextChanged() {
+        if let placeholderLabel = self.viewWithTag(100) as? UILabel {
+            placeholderLabel.isHidden = self.attributedText.string.lengthOfBytes(using: .utf8) > 0
+        }
+    }
+    
     /// Resize the placeholder UILabel to make sure it's in the same position as the UITextView text
     private func resizePlaceholder() {
         if let placeholderLabel = self.viewWithTag(100) as! UILabel? {
@@ -78,7 +94,7 @@ class UITextViewPlacholder : UITextView
     }
     
     /// Adds a placeholder UILabel to this UITextView
-    private func addPlaceholder(_ placeholderText: String) {
+    private func addPlaceholder(_ placeholderText: String, _ font:UIFont? = nil) {
         NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextView.textDidChangeNotification, object: nil)
 
         let placeholderLabel = UILabel()
@@ -86,8 +102,20 @@ class UITextViewPlacholder : UITextView
         placeholderLabel.text = placeholderText
         placeholderLabel.sizeToFit()
         
-        placeholderLabel.font = self.font
-        placeholderLabel.textColor = UIColor.init(red: 112/255, green: 128/255, blue: 138/255, alpha: 1)
+        if let f = self.placholderFont {
+            placeholderLabel.font = f
+        }
+        else{
+            placeholderLabel.font = self.font
+        }
+        
+        if let c = self.placholderColor {
+            placeholderLabel.textColor = c
+        }
+        else{
+            placeholderLabel.textColor = UIColor.init(red: 112/255, green: 128/255, blue: 138/255, alpha: 1)
+        }
+     
         placeholderLabel.tag = 100
         
         placeholderLabel.isHidden = self.text.lengthOfBytes(using: .utf8) > 0

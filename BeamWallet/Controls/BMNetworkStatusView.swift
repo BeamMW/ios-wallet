@@ -51,7 +51,7 @@ class BMNetworkStatusView: UIView {
         statusView.layer.masksToBounds = true
         addSubview(statusView)
         
-        statusLabel = UILabel(frame: CGRect(x: !fromNib ? 33 : 18, y: !fromNib ? 15 : 0, width: UIScreen.main.bounds.size.width-50, height: 14))
+        statusLabel = UILabel(frame: CGRect(x: !fromNib ? 33 : 18, y: !fromNib ? 13 : -2, width: UIScreen.main.bounds.size.width-50, height: 18))
         statusLabel.font = RegularFont(size: 14)
         statusLabel.adjustsFontSizeToFitWidth = true
         statusLabel.minimumScaleFactor = 0.5
@@ -95,7 +95,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
              if connected {
                 self.statusView.backgroundColor = UIColor.main.green
                 
-                self.statusLabel.text =  Settings.sharedManager().target == Mainnet ? LocalizableStrings.online : LocalizableStrings.online_testnet
+                self.statusLabel.text = Localizables.shared.strings.online.lowercased()
 
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
@@ -103,14 +103,14 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.statusView.backgroundColor = UIColor.main.red
           
                 if AppModel.sharedManager().isInternetAvailable == false {
-                    self.statusLabel.text =  Settings.sharedManager().target == Mainnet ? LocalizableStrings.offline : LocalizableStrings.offline_testnet
+                    self.statusLabel.text = Localizables.shared.strings.offline.lowercased()
                 }
                 else{
                     if Settings.sharedManager().isChangedNode() {
-                        self.statusLabel.text = LocalizableStrings.cannot_connect_node(Settings.sharedManager().nodeAddress)
+                        self.statusLabel.text = Localizables.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
                     }
                     else{
-                        self.statusLabel.text =  Settings.sharedManager().target == Mainnet ? LocalizableStrings.offline : LocalizableStrings.offline_testnet
+                        self.statusLabel.text = Localizables.shared.strings.offline.lowercased()
                     }
                 }
                 
@@ -127,7 +127,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.startAnimating()
                 
                 self.statusLabel.x = self.fromNib ? 20 : 35
-                self.statusLabel.text = LocalizableStrings.updating
+                self.statusLabel.text = Localizables.shared.strings.updating.lowercased()
                 self.statusView.alpha = 0
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
@@ -152,7 +152,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.startAnimating()
                 
                 self.statusLabel.x = self.fromNib ? 20 : 35
-                self.statusLabel.text = LocalizableStrings.connecting
+                self.statusLabel.text = Localizables.shared.strings.connecting.lowercased()
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusLabel.textColor = UIColor.main.orange
             }

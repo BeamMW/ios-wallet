@@ -53,7 +53,7 @@ class BMInputCopyBar: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     @objc private func onCopy(sender:UIButton) {

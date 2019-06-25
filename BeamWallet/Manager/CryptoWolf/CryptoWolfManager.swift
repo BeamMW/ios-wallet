@@ -32,11 +32,7 @@ class CryptoWolfManager: NSObject  {
     public var availableCurrencies = CryptoWolfService.Currencies()
     public var rates = Rates()
     public var order:CryptoWolfService.OrderResponse?
-    
-    private var timer:Timer?
-    private var seconds = 35 * 60
-    
-    public var onOrderStatusChange : ((Int,Bool) -> Void)?
+
     
     override init() {
         super.init()
@@ -53,12 +49,7 @@ class CryptoWolfManager: NSObject  {
     @objc private func didEnterBackground() {
         
     }
-    
-    @objc private func onTimer() {
-        seconds = seconds - 1
-        
-        onOrderStatusChange?(seconds,(seconds <= 1 ? true : false))
-    }
+ 
     
     public func findCurrencies(completion:((CryptoWolfService.Currencies?,Error?) -> Void)?) {
         CryptoWolfService.sharedManager.findCurrencies {(currencies, error) in
@@ -72,30 +63,18 @@ class CryptoWolfManager: NSObject  {
         }
     }
     
-    public func cancelOrder() {
-        onOrderStatusChange = nil
-        
-        timer?.invalidate()
-        timer = nil
-        
-        seconds = 35 * 60
-    }
-    
-    public func submitOrder(from:String, to:String, fromAddress:String, toAddress:String, amount:Double, captcha:String, emailaddress:String, completion:((CryptoWolfService.OrderResponse?,Error?) -> Void)?) {
+    public func submitOrder(from:String, to:String, fromAddress:String, toAddress:String, amount:String, captcha:String, emailaddress:String, completion:((CryptoWolfService.OrderResponse?,Error?) -> Void)?) {
         
         CryptoWolfService.sharedManager.submitOrder(from: from, to: to, fromAddress: fromAddress, toAddress: toAddress, amount: amount, captcha: captcha, emailaddress: emailaddress) { [weak self] (response, error) in
             
             guard let strongSelf = self else { return }
 
-            self?.order = response
+            strongSelf.order = response
            
-            if response != nil {
-                strongSelf.timer = Timer.scheduledTimer(timeInterval: TimeInterval(1), target: strongSelf, selector: #selector(strongSelf.onTimer), userInfo: nil, repeats: true)
-            }
-            
             completion?(response,error)
         }
     }
+    
     
     public func refreshRates(currency:String, completion:@escaping (() -> Void)) {
         self.findRates(from: currency, to: "BEAM", completion: { [weak self] (rates, _) in
@@ -118,6 +97,7 @@ class CryptoWolfManager: NSObject  {
                 {
                     self?.availableCurrencies.removeAll()
                     self?.availableCurrencies.append(contentsOf: currencies!)
+                    self?.availableCurrencies.sort()
                 }
                 semaphore.signal()
             })
@@ -145,10 +125,10 @@ class CryptoWolfManager: NSObject  {
         if let rates = self.rates[from] {
             let round = Int(CryptoWolfManager.sharedManager.round(coin: from))
 
-            var offset = LocalizableStrings.zero + "."
+            var offset = Localizables.shared.strings.zero + "."
             
             for _ in 1...round - 1{
-                offset = offset + LocalizableStrings.zero
+                offset = offset + Localizables.shared.strings.zero
             }
             
             offset = offset + "1"
@@ -240,6 +220,18 @@ class CryptoWolfManager: NSObject  {
             return value
         }
         
+        return String.empty()
+    }
+    
+    public func orderQRCode(amount:String, currency:String) -> String {
+        if let address = order?.address {
+            if currency == "BTC" || currency == "LTC" {
+                return "bitcoin:\(address)?amount=\(amount)"
+            }
+            else if currency == "ETH" {
+                return address
+            }
+        }
         return String.empty()
     }
 }

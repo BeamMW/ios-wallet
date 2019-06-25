@@ -49,13 +49,13 @@
                                 <rect key="frame" x="15" y="32" width="249" height="110"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bvg-Ua-T50">
-                                        <rect key="frame" x="0.0" y="0.0" width="249" height="60.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="249" height="90"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Hvw-FB-c0R">
-                                                <rect key="frame" x="0.0" y="0.0" width="249" height="60.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="249" height="90"/>
                                                 <subviews>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Wna-Zc-MZ6" customClass="BMTextView" customModule="BeamWallet" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="249" height="41"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="249" height="70.5"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
@@ -70,7 +70,7 @@
                                                         </connections>
                                                     </textView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TWr-4F-fIw">
-                                                        <rect key="frame" x="0.0" y="41" width="249" height="19.5"/>
+                                                        <rect key="frame" x="0.0" y="70.5" width="249" height="19.5"/>
                                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                                         <color key="textColor" red="1" green="0.38431372549999998" blue="0.36078431370000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <nil key="highlightedColor"/>
@@ -90,13 +90,17 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T9A-y8-O1r">
-                                        <rect key="frame" x="0.0" y="60.5" width="249" height="49.5"/>
+                                        <rect key="frame" x="0.0" y="90" width="249" height="20"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconContact" translatesAutoresizingMaskIntoConstraints="NO" id="J5t-2E-CMT">
-                                                <rect key="frame" x="0.0" y="2" width="16" height="45.5"/>
+                                                <rect key="frame" x="0.0" y="2" width="16" height="16"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="16" id="Iyq-1L-Qky"/>
+                                                    <constraint firstAttribute="width" constant="16" id="XY8-6Z-fKm"/>
+                                                </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lOA-qn-wAb">
-                                                <rect key="frame" x="26" y="16.5" width="49" height="17"/>
+                                                <rect key="frame" x="26" y="1.5" width="150" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="buH-eK-nCJ"/>
                                                 </constraints>
@@ -107,8 +111,8 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSI-z6-VaM">
-                                                <rect key="frame" x="192" y="16.5" width="42" height="17"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Default" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSI-z6-VaM">
+                                                <rect key="frame" x="196" y="1.5" width="53" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="oyN-kR-Mw1"/>
                                                 </constraints>
@@ -128,7 +132,8 @@
                                             <constraint firstAttribute="bottom" secondItem="J5t-2E-CMT" secondAttribute="bottom" constant="2" id="LMM-hZ-S35"/>
                                             <constraint firstItem="J5t-2E-CMT" firstAttribute="leading" secondItem="T9A-y8-O1r" secondAttribute="leading" id="Qbo-Z0-xet"/>
                                             <constraint firstItem="J5t-2E-CMT" firstAttribute="top" secondItem="T9A-y8-O1r" secondAttribute="top" constant="2" id="kkC-Td-7Je"/>
-                                            <constraint firstAttribute="trailing" secondItem="CSI-z6-VaM" secondAttribute="trailing" constant="15" id="vAR-SO-OsN"/>
+                                            <constraint firstAttribute="trailing" secondItem="CSI-z6-VaM" secondAttribute="trailing" id="vAR-SO-OsN"/>
+                                            <constraint firstItem="CSI-z6-VaM" firstAttribute="leading" secondItem="lOA-qn-wAb" secondAttribute="trailing" constant="20" id="xbY-OO-pKB"/>
                                         </constraints>
                                     </view>
                                 </subviews>

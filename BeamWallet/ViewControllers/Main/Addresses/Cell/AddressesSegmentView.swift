@@ -31,6 +31,16 @@ class AddressesSegmentView: BaseView {
     
     weak var delegate: AddressesSegmentViewDelegate?
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        segmetnView.removeAllSegments()
+        segmetnView.insertSegment(withTitle: Localizables.shared.strings.active, at: 0, animated: false)
+        segmetnView.insertSegment(withTitle: Localizables.shared.strings.expired, at: 1, animated: false)
+        segmetnView.insertSegment(withTitle: Localizables.shared.strings.contacts, at: 2, animated: false)
+        segmetnView.selectedSegmentIndex = 0
+    }
+    
     public func setSelectedIndex(index:Int) {
         segmetnView.selectedSegmentIndex = index
     }

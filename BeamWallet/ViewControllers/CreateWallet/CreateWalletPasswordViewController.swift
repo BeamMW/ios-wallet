@@ -30,7 +30,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = AppModel.sharedManager().isLoggedin ? LocalizableStrings.change_password : LocalizableStrings.password
+        self.title = AppModel.sharedManager().isLoggedin ? Localizables.shared.strings.change_password : Localizables.shared.strings.password
 
         if Device.isZoomed {
             mainStack?.spacing = 30
@@ -49,7 +49,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         super.viewDidAppear(animated)
         
         if AppModel.sharedManager().isLoggedin {
-            passField.becomeFirstResponder()
+            _ = passField.becomeFirstResponder()
         }
     }
     
@@ -60,7 +60,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             self.navigationController?.popViewController(animated: true)
         }
         else{
-            self.confirmAlert(title: LocalizableStrings.return_to_seed_title, message: LocalizableStrings.return_to_seed_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.retur, cancelHandler: { (_ ) in
+            self.confirmAlert(title: Localizables.shared.strings.return_to_seed_title, message: Localizables.shared.strings.return_to_seed_info, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.retur, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
                 let viewControllers = self.navigationController?.viewControllers
@@ -75,13 +75,13 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         let confirmPass = confirmPassField.text ?? String.empty()
         
         if pass.isEmpty {
-            self.confirmPassField.error = LocalizableStrings.empty_password
+            self.confirmPassField.error = Localizables.shared.strings.empty_password
             
             self.passField.status = BMField.Status.error
         }
         
         if confirmPass.isEmpty {
-            self.confirmPassField.error = LocalizableStrings.empty_password
+            self.confirmPassField.error = Localizables.shared.strings.empty_password
 
             self.confirmPassField.status = BMField.Status.error
         }
@@ -91,7 +91,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 if AppModel.sharedManager().isLoggedin {
                     if AppModel.sharedManager().isValidPassword(pass)
                     {
-                        self.confirmPassField.error = LocalizableStrings.old_password
+                        self.confirmPassField.error = Localizables.shared.strings.old_password
                         self.confirmPassField.status = BMField.Status.error
                         self.passField.status = BMField.Status.error
                     }
@@ -102,11 +102,11 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 else{
                     if BiometricAuthorization.shared.canAuthenticate() {
                         
-                        let title = BiometricAuthorization.shared.faceIDAvailable() ? LocalizableStrings.enable_face_id_title : LocalizableStrings.enable_touch_id_title
+                        let title = BiometricAuthorization.shared.faceIDAvailable() ? Localizables.shared.strings.enable_face_id_title : Localizables.shared.strings.enable_touch_id_title
 
-                        let message = BiometricAuthorization.shared.faceIDAvailable() ? LocalizableStrings.enable_face_id_text : LocalizableStrings.enable_touch_id_text
+                        let message = BiometricAuthorization.shared.faceIDAvailable() ? Localizables.shared.strings.enable_face_id_text : Localizables.shared.strings.enable_touch_id_text
                         
-                        self.confirmAlert(title: title, message: message, cancelTitle: LocalizableStrings.dont_use, confirmTitle: LocalizableStrings.enable, cancelHandler: { (_ ) in
+                        self.confirmAlert(title: title, message: message, cancelTitle: Localizables.shared.strings.dont_use, confirmTitle: Localizables.shared.strings.enable, cancelHandler: { (_ ) in
                             self.goNext(pass: pass)
                             
                             Settings.sharedManager().isEnableBiometric = false
@@ -123,7 +123,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                 }
             }
             else{
-                self.confirmPassField.error = LocalizableStrings.passwords_dont_match
+                self.confirmPassField.error = Localizables.shared.strings.passwords_dont_match
                 self.confirmPassField.status = BMField.Status.error
                 self.passField.status = BMField.Status.error
             }

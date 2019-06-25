@@ -34,10 +34,10 @@
                                     <constraint firstAttribute="width" constant="8" id="mBd-dV-3gK"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xdq-8a-CiY">
-                                <rect key="frame" x="15" y="23" width="51" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xdq-8a-CiY">
+                                <rect key="frame" x="15" y="23" width="190.5" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="YgY-D9-rTm"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="joe-37-Niw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -49,7 +49,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cWN-Y8-WUd">
                                 <rect key="frame" x="235.5" y="27" width="46.5" height="15"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="My9-Ah-fH6"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="46.5" id="Tpc-Wv-x86"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -82,6 +82,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="cWN-Y8-WUd" firstAttribute="leading" secondItem="Xdq-8a-CiY" secondAttribute="trailing" constant="30" id="3P9-IP-RR9"/>
                             <constraint firstItem="Otz-SI-3Wv" firstAttribute="top" secondItem="Xdq-8a-CiY" secondAttribute="bottom" constant="9" id="719-dR-EgB"/>
                             <constraint firstItem="Xdq-8a-CiY" firstAttribute="leading" secondItem="6m3-TY-RcF" secondAttribute="leading" constant="15" id="Gak-5h-mlJ"/>
                             <constraint firstItem="DQY-Eh-qS0" firstAttribute="top" secondItem="Xdq-8a-CiY" secondAttribute="bottom" constant="7" id="ShP-GZ-ULZ"/>

@@ -25,6 +25,7 @@
 
 @property (nonatomic,strong) NSString * _Nonnull name;
 @property (nonatomic,assign) int duration;
+@property (nonatomic,assign) BOOL selected;
 
 @end
 

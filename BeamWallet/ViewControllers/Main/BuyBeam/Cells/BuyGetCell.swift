@@ -11,11 +11,14 @@ import UIKit
 class BuyGetCell: BaseCell {
 
     @IBOutlet weak private var valueLabel: UILabel!
+    @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var activityIndicator: UIActivityIndicatorView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        titleLabel.text = Localizables.shared.strings.you_get.uppercased()
+        titleLabel.letterSpacing = 1.5
         
         selectionStyle = .none
     }
@@ -32,11 +35,11 @@ extension BuyGetCell: Configurable {
     
     func configure(with value:String) {
         if value.isEmpty {
-            valueLabel.text = LocalizableStrings.beam_to_receive
+            valueLabel.text = Localizables.shared.strings.beam_to_receive
             valueLabel.textColor = UIColor.main.steelGrey
         }
         else{
-            valueLabel.text = value + LocalizableStrings.beam
+            valueLabel.text = value + Localizables.shared.strings.beam
             valueLabel.textColor = UIColor.main.brightSkyBlue
         }
     }

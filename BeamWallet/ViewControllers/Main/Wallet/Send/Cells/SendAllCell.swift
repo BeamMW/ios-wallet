@@ -23,11 +23,15 @@ class SendAllCell: BaseCell {
 
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var allButton: BMButton!
+    @IBOutlet weak private var titleLabel: UILabel!
 
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        titleLabel.text = Localizables.shared.strings.total_available.uppercased()
+        titleLabel.letterSpacing = 1.5
         
         selectionStyle = .none
     }
@@ -40,7 +44,14 @@ class SendAllCell: BaseCell {
 extension SendAllCell: Configurable {
     
     func configure(with amount:String) {
-        amountLabel.text = amount + LocalizableStrings.beam
+        amountLabel.text = amount + Localizables.shared.strings.beam
         allButton.setBackgroundColor(color: UIColor.main.heliotrope.withAlphaComponent(0.3), forState: .highlighted)
+        
+        if AppModel.sharedManager().walletStatus?.available == 0 {
+            allButton.isEnabled = false
+        }
+        else{
+            allButton.isEnabled = true
+        }
     }
 }

@@ -36,7 +36,7 @@ class BMSearchView: UIView {
         let y:CGFloat = Device.isXDevice ? 60 : 35
 
         let backButton = UIButton(type: .system)
-        backButton.frame = CGRect(x: 15, y: y, width: 40, height: 40)
+        backButton.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
         backButton.contentHorizontalAlignment = .left
         backButton.tintColor = UIColor.white
         backButton.setImage(IconBack(), for: .normal)
@@ -48,7 +48,7 @@ class BMSearchView: UIView {
         titleLabel.frame = CGRect(x: 40, y: y, width: (UIScreen.main.bounds.size.width-80), height: 40)
         titleLabel.font = SemiboldFont(size: 17)
         titleLabel.numberOfLines = 1
-        titleLabel.text = LocalizableStrings.transaction_search
+        titleLabel.text = Localizables.shared.strings.transaction_search
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
         addSubview(titleLabel)
@@ -61,14 +61,14 @@ class BMSearchView: UIView {
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 36))
         leftView.addSubview(iconView)
         
-        searchField.frame = CGRect(x: 15, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 10, width:  (UIScreen.main.bounds.size.width-30), height: 36)
+        searchField.frame = CGRect(x: defaultX, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 10, width:  (defaultWidth), height: 36)
         searchField.leftView = leftView
         searchField.leftViewMode = .always
         searchField.clearButtonMode = .whileEditing
         searchField.layer.cornerRadius = 10
         searchField.font = RegularFont(size: 16)
         searchField.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.8)
-        searchField.placeholder = LocalizableStrings.search
+        searchField.placeholder = Localizables.shared.strings.search
         searchField.placeHolderColor = UIColor.main.steel
         searchField.tintColor = UIColor.white
         searchField.textColor = UIColor.white
@@ -82,7 +82,7 @@ class BMSearchView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     public func show() {

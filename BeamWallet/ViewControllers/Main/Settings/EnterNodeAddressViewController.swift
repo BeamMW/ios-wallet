@@ -37,7 +37,7 @@ class EnterNodeAddressViewController: BaseViewController {
         
         nodeAddressView.backgroundColor = UIColor.main.marineTwo
 
-        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
         oldAddress = Settings.sharedManager().nodeAddress
         nodeAddressField.text = oldAddress

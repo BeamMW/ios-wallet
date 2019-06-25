@@ -18,6 +18,7 @@
 //
 
 import Foundation
+import ReCaptcha
 
 class BuyBeamViewModel: ReceiveAddressViewModel {
     
@@ -25,6 +26,11 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
 
     public var minimumAmount = String.empty()
     public var amountError:String?
+    
+    private let recaptcha = try? ReCaptcha(
+        apiKey: "6Lcatm8UAAAAABbCBiTLWV3lRlk2hq6vUYoPvmGW",
+        baseURL: URL(string: "https://cryptowolf.eu")!
+    )
     
     override var amount: String?{
         didSet{
@@ -65,7 +71,7 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         }
         
         let min = CryptoWolfManager.sharedManager.calculateMinAmount(from: currency)
-        minimumAmount = (min > 0) ? (LocalizableStrings.minAmount(str: String.currency(value: min))) : String.empty()
+        minimumAmount = (min > 0) ? (Localizables.shared.strings.minAmount(str: String.currency(value: min))) : String.empty()
     }
     
     override init() {
@@ -77,10 +83,23 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
             currency = f
             
             let min = CryptoWolfManager.sharedManager.calculateMinAmount(from: currency)
-            minimumAmount = (min > 0) ? (LocalizableStrings.minAmount(str: String.currency(value: min))) : String.empty()
+            minimumAmount = (min > 0) ? (Localizables.shared.strings.minAmount(str: String.currency(value: min))) : String.empty()
         }
         
         loadRates()
+        
+        recaptcha?.forceVisibleChallenge = false
+        recaptcha?.configureWebView { [weak self] webview in
+            SVProgressHUD.dismiss()
+
+            webview.tag = 901
+            webview.frame = UIScreen.main.bounds
+        }
+    }
+    
+    deinit {
+        timer?.invalidate()
+        timer = nil
     }
     
     @objc private func loadRates() {
@@ -102,10 +121,7 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         }
     }
     
-    deinit {
-        timer?.invalidate()
-        timer = nil
-    }
+
     
     public func onChangeCurrency() {
         if let top = UIApplication.getTopMostViewController() {
@@ -125,28 +141,83 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
     public func onCanSend() -> Bool {
         var isValid = true
         
-        let am = Double(amount!) ?? 0
-        
+        let round = Int(CryptoWolfManager.sharedManager.round(coin: currency))
+        let am = Double(amount!)?.rounded(toPlaces: round) ?? 0
+        let min = CryptoWolfManager.sharedManager.calculateMinAmount(from: currency)
+
         if amount!.isEmpty{
             isValid = false
-            amountError = LocalizableStrings.amount_empty
+            amountError = Localizables.shared.strings.amount_empty
         }
         else if am == 0 {
             isValid = false
-            amountError = LocalizableStrings.amount_zero
+            amountError = Localizables.shared.strings.amount_zero
         }
-        else if am < CryptoWolfManager.sharedManager.calculateMinAmount(from: currency)
+        else if am < min
         {
-            isValid = false
-            amountError = LocalizableStrings.incorrect_amount
+            if amount != String.currency(value: min) {
+                isValid = false
+                amountError = Localizables.shared.strings.incorrect_amount
+            }
         }
         
         if fromAddress.isEmpty {
             isValid = false
             
-            fromAddressError = LocalizableStrings.incorrect_address
+            fromAddressError = Localizables.shared.strings.incorrect_address
         }
       
         return isValid
+    }
+    
+    public func submitOrder(completion:@escaping ((CryptoWolfService.OrderResponse?,Error?) -> Void)) {
+        
+        if let top = UIApplication.getTopMostViewController() {
+            recaptcha?.validate(on: top.view) { [weak self] (result: ReCaptchaResult) in
+                guard let strongSelf = self else { return }
+
+                top.view.viewWithTag(901)?.removeFromSuperview()
+                
+                if let captcha = try? result.dematerialize(){
+                    CryptoWolfManager.sharedManager.submitOrder(from: strongSelf.currency, to: "BEAM", fromAddress: strongSelf.fromAddress, toAddress: strongSelf.address.walletId, amount: strongSelf.amount!, captcha: captcha, emailaddress: "") { [weak self] (response, error) in
+                        
+                        guard self != nil else { return }
+                        
+                        completion(response,error)
+                    }
+                }
+                else{
+                    completion(nil,nil)
+                }
+            }
+        }
+    }
+    
+    public func onScanQRCode () {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = QRScannerViewController()
+            vc.delegate = self
+            vc.isGradient = true
+            if currency == "BTC" {
+                vc.scanType = .bitcoin
+            }
+            else if currency == "LTC" {
+                vc.scanType = .litecoin
+            }
+            else if currency == "ETH" {
+                vc.scanType = .ethereum
+            }
+            vc.hidesBottomBarWhenPushed = true
+            top.pushViewController(vc: vc)
+        }
+    }
+}
+
+extension BuyBeamViewModel : QRScannerViewControllerDelegate {
+    
+    func didScanQRCode(value: String, amount: String?) {
+        fromAddress = value
+        fromAddressError = nil
+        onDataChanged?()
     }
 }

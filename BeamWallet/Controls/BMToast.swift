@@ -40,7 +40,7 @@ class BMToast: UIView {
         layer.shadowPath = UIBezierPath(rect: bounds).cgPath
         layer.shadowRadius = 1.0
         
-        let label = UILabel(frame: CGRect(x: 20, y: 5, width: 240, height: 34))
+        let label = UILabel(frame: CGRect(x: 20, y: 5, width: frame.size.width - 30, height: 34))
         label.font = RegularFont(size: 14)
         label.textColor = UIColor.main.marineOriginal
         label.text = text
@@ -49,7 +49,7 @@ class BMToast: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     public static func show(text:String) {

@@ -59,13 +59,13 @@ extension WalletTransactionCell: Configurable {
             amountLabel.textColor = UIColor.main.brightSkyBlue
             statusLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            typeLabel.text = "Receive BEAM"
+            typeLabel.text = Localizables.shared.strings.receive_beam
         case false:
             amountLabel.text = "-" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
             statusLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
-            typeLabel.text = "Send BEAM"
+            typeLabel.text = Localizables.shared.strings.send_beam
         }
 
         

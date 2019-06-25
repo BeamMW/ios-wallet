@@ -20,14 +20,17 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WalletQRCodeViewController" customModule="BeamWallet" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QRViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="addressLabel" destination="Q11-bp-JzA" id="PUM-ka-beI"/>
+                <outlet property="addressTitleLabel" destination="kiX-gk-GjC" id="EeU-03-L10"/>
                 <outlet property="amountLabel" destination="FpH-WK-u6D" id="MyX-Bd-raG"/>
                 <outlet property="amountStack" destination="qj7-5i-6Ks" id="KW3-vb-AuU"/>
+                <outlet property="amountTitleLabel" destination="Pw5-rx-QXF" id="Vfd-YO-hGp"/>
                 <outlet property="categoryLabel" destination="I11-5Y-Uqc" id="E6v-ox-GB3"/>
                 <outlet property="codeConentView" destination="elh-Ac-Lyb" id="cw1-oq-Da1"/>
                 <outlet property="codeView" destination="I1h-L2-7Oi" id="EK1-mW-V37"/>
+                <outlet property="infoLabel" destination="cWq-Ih-hVQ" id="XNK-Cf-bEn"/>
                 <outlet property="mainView" destination="soS-x3-QUu" id="QJk-bA-Y97"/>
                 <outlet property="scrollView" destination="qKA-eP-as8" id="XCA-Yy-oSd"/>
                 <outlet property="shareAddress" destination="loc-1l-wZa" id="Klh-zY-i6f"/>
@@ -179,7 +182,7 @@ Please notice, that both you and sender should be online to succeed transaction!
                             </constraints>
                             <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                            <state key="normal" title="share QR" image="icShare">
+                            <state key="normal" title="share QR" image="iconShareNew">
                                 <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <userDefinedRuntimeAttributes>
@@ -187,6 +190,7 @@ Please notice, that both you and sender should be online to succeed transaction!
                                     <real key="value" value="22"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="share_qr"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="onShareWithSender:" destination="-1" eventType="touchUpInside" id="sRl-Jh-5hi"/>
@@ -231,7 +235,7 @@ Please notice, that both you and sender should be online to succeed transaction!
         </view>
     </objects>
     <resources>
-        <image name="icShare" width="16" height="16"/>
         <image name="iconCancelBig" width="16" height="16"/>
+        <image name="iconShareNew" width="16" height="16"/>
     </resources>
 </document>

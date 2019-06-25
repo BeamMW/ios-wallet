@@ -31,6 +31,7 @@
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                            <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="expired"/>
                         </userDefinedRuntimeAttributes>
                     </label>
                     <view alpha="0.10000000149011612" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LrV-bE-yMT">

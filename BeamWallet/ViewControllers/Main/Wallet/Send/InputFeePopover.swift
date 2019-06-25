@@ -25,10 +25,13 @@ class InputFeePopover: BaseViewController {
     public var mainFee:String!
     
     @IBOutlet weak private var feeField: BMField!
+    @IBOutlet weak private var titleLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        titleLabel.text = Localizables.shared.strings.transaction_fee.uppercased()
+
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
         
@@ -44,7 +47,7 @@ class InputFeePopover: BaseViewController {
         feeField.resignFirstResponder()
         
         if mainFee.isEmpty {
-            mainFee = LocalizableStrings.zero
+            mainFee = Localizables.shared.strings.zero
         }
         
         completion?(mainFee)
@@ -100,14 +103,14 @@ extension InputFeePopover : UITextFieldDelegate {
         if let text = textField.text {
             if let v = Double(text) {
                 if v == 0 {
-                    textField.text = LocalizableStrings.zero
+                    textField.text = Localizables.shared.strings.zero
                 }
                 else if textField == feeField {
                     textField.text = String(Int(v))
                 }
             }
             else{
-                textField.text = LocalizableStrings.zero
+                textField.text = Localizables.shared.strings.zero
             }
             
             mainFee = textField.text!

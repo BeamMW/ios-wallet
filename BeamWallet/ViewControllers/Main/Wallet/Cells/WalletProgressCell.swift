@@ -98,8 +98,8 @@ extension WalletProgressCell: Configurable {
             receivingStack.isHidden = status.realReceiving == 0 ? true : false
         }
         else{
-            sentLabel.text = LocalizableStrings.zero
-            receivingLabel.text = LocalizableStrings.zero
+            sentLabel.text = Localizables.shared.strings.zero
+            receivingLabel.text = Localizables.shared.strings.zero
         }
         
         if !options.expand {

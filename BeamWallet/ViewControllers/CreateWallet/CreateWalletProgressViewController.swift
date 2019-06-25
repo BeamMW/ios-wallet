@@ -44,7 +44,7 @@ class CreateWalletProgressViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     
@@ -59,16 +59,16 @@ class CreateWalletProgressViewController: BaseViewController {
         progressView.transform = transformScale
         
         if AppModel.sharedManager().isRestoreFlow {
-            progressTitleLabel.text = LocalizableStrings.restoring_wallet
+            progressTitleLabel.text = Localizables.shared.strings.restoring_wallet
             restotingInfoLabel.isHidden = false
-            progressValueLabel.text = LocalizableStrings.restored + "0%"
+            progressValueLabel.text = Localizables.shared.strings.restored + "0%"
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
         }
         else if phrase == nil {
             timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
             
-            progressTitleLabel.text = LocalizableStrings.loading_wallet
+            progressTitleLabel.text = Localizables.shared.strings.loading_wallet
             cancelButton.isHidden = true
         }
         
@@ -77,8 +77,8 @@ class CreateWalletProgressViewController: BaseViewController {
             stackYOffset.constant = 50
         }
         else if Device.screenType == .iPhones_6 {
-            logoYOffset.constant = 50
-            stackYOffset.constant = 50
+        //    logoYOffset.constant = 50
+         //   stackYOffset.constant = 50
         }
         
         AppModel.sharedManager().addDelegate(self)
@@ -131,7 +131,7 @@ class CreateWalletProgressViewController: BaseViewController {
 
             self.navigationController?.popViewController(animated: true)
 
-            self.alert(title: LocalizableStrings.error, message: LocalizableStrings.no_internet) { (_ ) in
+            self.alert(title: Localizables.shared.strings.error, message: Localizables.shared.strings.no_internet) { (_ ) in
 
             }
         }
@@ -141,7 +141,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
                 if(!created)
                 {
-                    self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_created) { (_ ) in
+                    self.alert(title: Localizables.shared.strings.error, message: Localizables.shared.strings.wallet_not_created) { (_ ) in
                         if AppModel.sharedManager().isInternetAvailable {
                             self.navigationController?.popToRootViewController(animated: true)
                         }
@@ -162,14 +162,14 @@ class CreateWalletProgressViewController: BaseViewController {
                     }) { (error, progress) in
                         DispatchQueue.main.async {
                             if let reason = error {
-                                self.alert(title: LocalizableStrings.error, message: reason.localizedDescription) { (_ ) in
+                                self.alert(title: Localizables.shared.strings.error, message: reason.localizedDescription) { (_ ) in
                                     AppModel.sharedManager().isRestoreFlow = false
                                     self.navigationController?.popToRootViewController(animated: true)
                                 }
                             }
                             else if let percent = progress {
                                 self.progressView.progress = percent
-                                self.progressValueLabel.text = LocalizableStrings.restored + "\(Int32(percent * 100))%"
+                                self.progressValueLabel.text = Localizables.shared.strings.restored + "\(Int32(percent * 100))%"
                             }
                         }
                     }
@@ -179,7 +179,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
                 if(!created)
                 {
-                    self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_created) { (_ ) in
+                    self.alert(title: Localizables.shared.strings.error, message: Localizables.shared.strings.wallet_not_created) { (_ ) in
                         if AppModel.sharedManager().isInternetAvailable {
                             self.navigationController?.popToRootViewController(animated: true)
                         }
@@ -195,7 +195,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 let opened = AppModel.sharedManager().openWallet(password!)
                 if(!opened)
                 {
-                    self.alert(title: LocalizableStrings.error, message: LocalizableStrings.wallet_not_opened) { (_ ) in
+                    self.alert(title: Localizables.shared.strings.error, message: Localizables.shared.strings.wallet_not_opened) { (_ ) in
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 }
@@ -287,7 +287,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     let progress: Float = Float(done) / Float(total)
                     let percent = Int32(progress * 100)
                     
-                    strongSelf.progressValueLabel.text = LocalizableStrings.restored + "\(percent)%"
+                    strongSelf.progressValueLabel.text = Localizables.shared.strings.restored + "\(percent)%"
                 }
             }
             
@@ -318,7 +318,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
             }
             else if error.code == 1 {
                 
-                strongSelf.confirmAlert(title: LocalizableStrings.incompatible_node_title, message: LocalizableStrings.incompatible_node_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.change_settings, cancelHandler: { (_ ) in
+                strongSelf.confirmAlert(title: Localizables.shared.strings.incompatible_node_title, message: Localizables.shared.strings.incompatible_node_info, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.change_settings, cancelHandler: { (_ ) in
                     
                     AppModel.sharedManager().resetWallet(false)
                     strongSelf.navigationController?.popViewController(animated: true)
@@ -336,7 +336,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                         }
                     }
                 }
-                strongSelf.alert(title: LocalizableStrings.error, message: error.localizedDescription, handler: { (_ ) in
+                strongSelf.alert(title: Localizables.shared.strings.error, message: error.localizedDescription, handler: { (_ ) in
                     AppModel.sharedManager().resetWallet(false)
                     strongSelf.navigationController?.popViewController(animated: true)
                 })

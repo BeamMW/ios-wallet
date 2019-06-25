@@ -29,7 +29,7 @@ class AddressViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -42,7 +42,7 @@ class AddressViewController: BaseTableViewController {
         
         addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
 
-        title = (addressViewModel.isContact ? LocalizableStrings.contact : LocalizableStrings.address)
+        title = (addressViewModel.isContact ? Localizables.shared.strings.contact : Localizables.shared.strings.address)
         
         subscribeToUpdates()
     }
@@ -67,7 +67,7 @@ class AddressViewController: BaseTableViewController {
                 self?.tableView.performUpdate({
                     self?.tableView.deleteRows(at: [path], with: .left)
                 }, completion: {
-                    AppModel.sharedManager().deleteTransaction(transaction)
+                    AppModel.sharedManager().prepareDeleteTransaction(transaction)
                 })
             }
         }
@@ -177,7 +177,7 @@ extension AddressViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 && addressViewModel.transactions.count > 0 {
-            return BMTableHeaderTitleView(title: LocalizableStrings.transactions, bold: true)
+            return BMTableHeaderTitleView(title: Localizables.shared.strings.transactions, bold: true)
         }
         
         return nil

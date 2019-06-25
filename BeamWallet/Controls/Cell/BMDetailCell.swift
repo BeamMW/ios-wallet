@@ -25,6 +25,16 @@ class BMDetailCell: BaseCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var valueLabel: UILabel!
 
+    @IBOutlet weak private var topSpace: NSLayoutConstraint!
+    @IBOutlet weak private var botSpace: NSLayoutConstraint!
+
+    public var space:CGFloat = 10 {
+        didSet{
+            topSpace.constant = space
+            botSpace.constant = space
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
        

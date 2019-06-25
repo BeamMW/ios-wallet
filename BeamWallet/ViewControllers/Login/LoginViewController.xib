@@ -77,6 +77,7 @@
                                             <real key="value" value="22"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="create_new_wallet"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onCreateWalletWithSender:" destination="-1" eventType="touchUpInside" id="oiX-Hv-bGB"/>
@@ -99,6 +100,7 @@
                                             <real key="value" value="22"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="restore_wallet"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onRestoreWalletWithSender:" destination="-1" eventType="touchUpInside" id="BQr-b9-pxC"/>

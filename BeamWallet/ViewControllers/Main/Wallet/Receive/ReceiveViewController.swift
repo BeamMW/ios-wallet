@@ -42,7 +42,7 @@ class ReceiveViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
         
-        title = LocalizableStrings.receive.uppercased()
+        title = Localizables.shared.strings.receive.uppercased()
         
         tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMPickedAddressCell.self, BMDetailCell.self])
         tableView.keyboardDismissMode = .interactive
@@ -59,7 +59,7 @@ class ReceiveViewController: BaseTableViewController {
             error in
             
             if let reason = error?.localizedDescription {
-                self?.alert(title: LocalizableStrings.error, message: reason, handler: { (_ ) in
+                self?.alert(title: Localizables.shared.strings.error, message: reason, handler: { (_ ) in
                     self?.back()
                 })
             }
@@ -87,7 +87,7 @@ class ReceiveViewController: BaseTableViewController {
     @objc private func onBack() {
         let state = viewModel.isNeedAskToSave()
         if state != .none {
-            self.confirmAlert(title: state == .new ? LocalizableStrings.save_address_title : LocalizableStrings.save_changes, message: state == .new ? LocalizableStrings.save_address_text : LocalizableStrings.save_edit_address_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: { [weak self] (_ ) in
+            self.confirmAlert(title: state == .new ? Localizables.shared.strings.save_address_title : Localizables.shared.strings.save_changes, message: state == .new ? Localizables.shared.strings.save_address_text : Localizables.shared.strings.save_edit_address_text, cancelTitle: Localizables.shared.strings.not_save, confirmTitle: Localizables.shared.strings.save, cancelHandler: { [weak self] (_ ) in
                 self?.back()
             }) { [weak self] (_ ) in
                 self?.viewModel.isShared = true
@@ -102,18 +102,29 @@ class ReceiveViewController: BaseTableViewController {
 
 extension ReceiveViewController : UITableViewDelegate {
 
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            return 5
+        case 3:
+            return showAdvanced ? 15 : 5
+        default:
+            return 20
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0:
             return 0
+        case 1, 3:
+            return 5
         case 2:
-            return showEdit ? 20 : 0
-        case 3:
-            return showEdit ? 20 : 0
+            return 20
         case 4:
-            return showEdit ? 20 : 0
-        case 6:
-            return showAdvanced ? 20 : 0
+            return 20
         default:
             return 30
         }
@@ -127,10 +138,13 @@ extension ReceiveViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         switch indexPath.section {
-        case 3:
-            viewModel.onExpire()
-        case 4:
-            viewModel.onCategory()
+        case 1:
+            if indexPath.row == 2 {
+                viewModel.onExpire()
+            }
+            else if indexPath.row == 3 {
+                viewModel.onCategory()
+            }
         default:
             return
         }
@@ -140,15 +154,15 @@ extension ReceiveViewController : UITableViewDelegate {
 extension ReceiveViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 8
+        return 5
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 2 || section == 3 || section == 4 {
-            return showEdit ? 1 : 0
+        if section == 1 {
+            return showEdit ? 4 : 1
         }
-        else if section == 6 {
-            return showAdvanced ? 1 : 0
+        else if section == 3 {
+            return showAdvanced ? 2 : 1
         }
         return 1
     }
@@ -157,61 +171,79 @@ extension ReceiveViewController : UITableViewDataSource {
        
         switch indexPath.section {
         case 0:
-            var title = viewModel.pickedAddress == nil ? LocalizableStrings.auto_address : LocalizableStrings.address.uppercased()
+            var title = viewModel.pickedAddress == nil ? Localizables.shared.strings.auto_address : Localizables.shared.strings.address.uppercased()
             if viewModel.pickedAddress != nil {
                 if viewModel.pickedAddress?.walletId == viewModel.startedAddress?.walletId {
-                    title = LocalizableStrings.auto_address
+                    title = Localizables.shared.strings.auto_address
                 }
             }
             let cell = tableView
                 .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
                 .configured(with: (hideLine: true, address: viewModel.address, title: title))
             cell.delegate = self
+            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
         case 1:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                .configured(with: (expand: showEdit, title: LocalizableStrings.edit_address.uppercased()))
-            cell.delegate = self
-            return cell
-        case 3:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                .configured(with: (title: LocalizableStrings.expires.uppercased(), value: (viewModel.address.duration > 0 ? LocalizableStrings.hours_24 : LocalizableStrings.never), valueColor: UIColor.white))
-            return cell
-        case 4:
-            var name = LocalizableStrings.none
-            var color = UIColor.main.steelGrey
-            
-            if let category = AppModel.sharedManager().findCategory(byId: viewModel.address.category) {
-                name = category.name
-                color = UIColor.init(hexString: category.color)
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
+                    .configured(with: (expand: showEdit, title: Localizables.shared.strings.edit_address.uppercased()))
+                cell.delegate = self
+                return cell
             }
-     
-            let cell = tableView
-                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                .configured(with: (title: LocalizableStrings.category.uppercased(), value: name, valueColor: color))
-            return cell
+            else if indexPath.row == 1 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                    .configured(with: (name: Localizables.shared.strings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
+                cell.delegate = self
+                cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                return cell
+            }
+            else if indexPath.row == 2 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
+                    .configured(with: (title: Localizables.shared.strings.expires.uppercased(), value: (viewModel.address.duration > 0 ? Localizables.shared.strings.hours_24 : Localizables.shared.strings.never), valueColor: UIColor.white))
+                cell.space = 20
+                return cell
+            }
+            else{
+                var name = Localizables.shared.strings.none
+                var color = UIColor.white
+                
+                if let category = AppModel.sharedManager().findCategory(byId: viewModel.address.category) {
+                    name = category.name
+                    color = UIColor.init(hexString: category.color)
+                }
+                
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
+                    .configured(with: (title: Localizables.shared.strings.category.uppercased(), value: name, valueColor: color))
+                cell.space = 20
+                return cell
+            }
         case 2:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: LocalizableStrings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
+                .configured(with: (name: Localizables.shared.strings.transaction_comment, value: viewModel.transactionComment, rightIcon:nil))
             cell.delegate = self
-            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            cell.contentView.backgroundColor = UIColor.clear
             return cell
-        case 5:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                .configured(with: (expand: showAdvanced, title: LocalizableStrings.advanced.uppercased()))
-            cell.delegate = self
-            return cell
-        case 6:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.request_amount, value: viewModel.amount))
-            cell.delegate = self
-            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
-            return cell
-        case 7:
+        case 3:
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
+                    .configured(with: (expand: showAdvanced, title: Localizables.shared.strings.advanced.uppercased()))
+                cell.delegate = self
+                return cell
+            }
+            else  {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizables.shared.strings.request_amount, value: viewModel.amount))
+                cell.delegate = self
+                cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                return cell
+            }
+        case 4:
             let cell = tableView
                 .dequeueReusableCell(withType: ReceiveAddressButtonsCell.self, for: indexPath)
             cell.delegate = self
@@ -224,12 +256,24 @@ extension ReceiveViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         switch section {
-        case 2, 3, 4, 5, 6:
+        case 1, 3:
             view.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
         default:
             view.backgroundColor = UIColor.clear
         }
 
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        switch section {
+        case 1, 3:
+            view.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        default:
+            view.backgroundColor = UIColor.clear
+        }
+        
         return view
     }
 }
@@ -243,17 +287,24 @@ extension ReceiveViewController : BMCellProtocol {
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
-        if sender is BMFieldCell {
-            viewModel.address.label = text
-        }
-        else if sender is BMAmountCell {
-            viewModel.amount = text
+        if let path = tableView.indexPath(for: sender) {
+            if path.section == 1 {
+                viewModel.address.label = text
+            }
+            else if path.section == 2 {
+                viewModel.transactionComment = text
+            }
+            else if path.section == 3 {
+                viewModel.amount = text
+            }
         }
     }
     
     func textValueDidReturn(_ sender: UITableViewCell) {
-        if sender is BMFieldCell {
-            AppModel.sharedManager().setWalletComment(viewModel.address.label, toAddress: viewModel.address.walletId)
+        if let path = tableView.indexPath(for: sender) {
+            if path.section == 1 {
+                AppModel.sharedManager().setWalletComment(viewModel.address.label, toAddress: viewModel.address.walletId)
+            }
         }
     }
     
@@ -264,20 +315,20 @@ extension ReceiveViewController : BMCellProtocol {
                 showEdit = !showEdit
                 
                 if showEdit {
-                    self.tableView.insertRows(at: [IndexPath(row: 0, section: 2), IndexPath(row: 0, section: 3), IndexPath(row: 0, section: 4)], with: .fade)
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1), IndexPath(row: 3, section: 1)], with: .fade)
                 }
                 else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 0, section: 2), IndexPath(row: 0, section: 3), IndexPath(row: 0, section: 4)], with: .fade)
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1), IndexPath(row: 3, section: 1)], with: .fade)
                 }
             }
             else{
                 showAdvanced = !showAdvanced
 
                 if showAdvanced {
-                    self.tableView.insertRows(at: [IndexPath(row: 0, section: 6)], with: .fade)
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
                 }
                 else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 0, section: 6)], with: .fade)
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
                 }
             }
         }
@@ -299,5 +350,13 @@ extension ReceiveViewController : BMCellProtocol {
         self.view.endEditing(true)
         
         viewModel.onShare()
+    }
+    
+    func onClickCopy() {
+        self.view.endEditing(true)
+
+        viewModel.isShared = true
+        
+        back()
     }
 }

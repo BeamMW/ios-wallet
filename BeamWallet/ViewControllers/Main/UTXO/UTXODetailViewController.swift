@@ -30,7 +30,7 @@ class UTXODetailViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -40,7 +40,7 @@ class UTXODetailViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.register([UTXODetailCell.self, GeneralInfoCell.self, UTXOTransactionCell.self])
         
-        title = LocalizableStrings.utxo_details
+        title = Localizables.shared.strings.utxo_details
         
         subscribeUpdates()
     }
@@ -128,7 +128,7 @@ extension UTXODetailViewController : UITableViewDataSource {
         case 0:
             return nil
         case 1:
-            return BMTableHeaderTitleView(title: LocalizableStrings.utxo_details, bold: true)
+            return BMTableHeaderTitleView(title: Localizables.shared.strings.utxo_details, bold: true)
         case 2:
             return UTXOTransactionsHeaderView().loadNib()
         default:
@@ -141,7 +141,7 @@ extension UTXODetailViewController : GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell)
         {
-            if viewModel.details[path.row].text == LocalizableStrings.kernel_id {
+            if viewModel.details[path.row].text == Localizables.shared.strings.addDots(value: Localizables.shared.strings.kernel_id) {
                 let kernelId = viewModel.details[path.row].detail!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {

@@ -29,7 +29,7 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = LocalizableStrings.seed_prhase
+        self.title = Localizables.shared.strings.seed_prhase
         
         for i in 0 ... 11 {
             inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
@@ -62,7 +62,7 @@ class InputPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: LocalizableStrings.seed_capture_warning)
+        self.alert(message: Localizables.shared.strings.seed_capture_warning)
     }
     
     // MARK: IBAction

@@ -23,7 +23,8 @@ import Moya
 enum CryptoWolfAPI {
     case pairs
     case rates(from:String, to: String)
-    case order(from:String, to:String, fromAddress:String, toAddress:String, amount:Double, captcha:String, emailaddress:String)
+    case order(from:String, to:String, fromAddress:String, toAddress:String, amount:String, captcha:String, emailaddress:String)
+    case transactionInfo(address:String, currency:String)
 }
 
 extension CryptoWolfAPI: TargetType {
@@ -47,13 +48,15 @@ extension CryptoWolfAPI: TargetType {
         case .rates:
             return "get-rates.php"
         case .order:
-            return "mail.php"
+            return "mail-v3.php"
+        case .transactionInfo:
+            return "tx-prog.php"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .pairs, .rates:
+        case .pairs, .rates, .transactionInfo:
             return .get
         case .order:
             return .post
@@ -66,8 +69,11 @@ extension CryptoWolfAPI: TargetType {
             return Task.requestPlain
         case let .rates(from, to):
             return .requestParameters(parameters: ["from":from,"to":to], encoding: URLEncoding.queryString)
+        case let .transactionInfo(address, currency):
+            return .requestParameters(parameters: ["daddr":address,"coin":currency], encoding: URLEncoding.queryString)
         case let .order(from, to, fromAddress, toAddress, amount, captcha, emailaddress):
-            return .requestParameters(parameters: ["from":from,"to":to, "amount":amount, "refundid":fromAddress, "receivingid":toAddress, "captcha":captcha, "emailaddress":emailaddress], encoding: URLEncoding.httpBody)
+            let params =  Task.requestParameters(parameters: ["from":from,"to":to, "amount":amount, "refundid":fromAddress, "receivingid":toAddress, "captcha":captcha, "emailaddress":emailaddress], encoding: URLEncoding.httpBody)
+            return params
         }
     }
 }

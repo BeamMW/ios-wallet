@@ -51,6 +51,22 @@ extension UILabel {
 }
 
 extension UILabel {
+        
+    private func setLetterSpacing(value:CGFloat, title:String? = nil)
+    {
+        if let titleString = title, titleString.isEmpty == false {
+            let attributedString = NSMutableAttributedString(string: titleString)
+            attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(value), range: NSRange(location: 0, length: titleString.count))
+            
+            self.attributedText = attributedString
+        }
+        else if let titleString = self.text, titleString.isEmpty == false {
+            let attributedString = NSMutableAttributedString(string: titleString)
+            attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(value), range: NSRange(location: 0, length: titleString.count))
+            
+            self.attributedText = attributedString
+        }
+    }
     
     @IBInspectable
     var localizationKey: String? {
@@ -59,6 +75,21 @@ extension UILabel {
         }
         set {
             if newValue != nil {
+                
+//                if let attributes = attributedText?.attributes(at: 0, effectiveRange: nil)
+//                {
+//                    for attr in attributes {
+//                        if attr.key == NSAttributedString.Key.kern {
+//                            let value = attr.value as! CGFloat
+//                            if value > 0 {
+//                                self.setLetterSpacing(value: value, title: newValue?.localized)
+//                                return
+//                            }
+//                            break
+//                        }
+//                    }
+//                }
+                
                 self.text = newValue?.localized
             }
         }
@@ -71,12 +102,7 @@ extension UILabel {
         }
         set {
             if newValue > 0 {
-                if let titleString = self.text, titleString.isEmpty == false {
-                    let attributedString = NSMutableAttributedString(string: titleString)
-                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(newValue), range: NSRange(location: 0, length: titleString.count))
-                    
-                    self.attributedText = attributedString
-                }
+                self.setLetterSpacing(value: newValue)
             }
         }
     }
@@ -96,9 +122,9 @@ extension UILabel {
                 if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
                     newFontSize = newFontSize + 1.0
                 }
-//                else if Device.screenType == .iPhones_5{
-//                    newFontSize = newFontSize - 1.5
-//                }
+                else if Device.screenType == .iPhones_5{
+                    newFontSize = newFontSize - 1.5
+                }
                 
                 let oldFontName = font.fontName
                 self.font = UIFont(name: oldFontName, size: newFontSize)

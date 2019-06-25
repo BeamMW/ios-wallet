@@ -54,7 +54,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = LocalizableStrings.confirm_seed
+        self.title = Localizables.shared.strings.confirm_seed
         
         if Device.isZoomed {
             mainStack?.spacing = 30
@@ -89,7 +89,7 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     
 // MARK: IBAction
     @objc private func onBack() {
-        self.confirmAlert(title: LocalizableStrings.seed_back_title, message: LocalizableStrings.seed_back_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.generate, cancelHandler: { (_ ) in
+        self.confirmAlert(title: Localizables.shared.strings.seed_back_title, message: Localizables.shared.strings.seed_back_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.generate, cancelHandler: { (_ ) in
             
         }) { (_ ) in
             self.navigationController?.popViewController(animated: true)

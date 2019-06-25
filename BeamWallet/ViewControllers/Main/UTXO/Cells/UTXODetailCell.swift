@@ -55,10 +55,10 @@ extension UTXODetailCell: Configurable {
         amountLabel.text = String.currency(value: options.utxo.realAmount)
         statusLabel.text = options.utxo.statusString
         
-        if options.utxo.statusString == "Available" {
-            statusLabel.textColor = UIColor.main.brightTeal
+        if options.utxo.statusString == Localizables.shared.strings.available.lowercased() {
+            statusLabel.textColor = UIColor.white
         }
-        else if options.utxo.statusString == "Spent" {
+        else if options.utxo.statusString == Localizables.shared.strings.spent.lowercased() {
             statusLabel.textColor = UIColor.main.heliotrope
         }
         else{

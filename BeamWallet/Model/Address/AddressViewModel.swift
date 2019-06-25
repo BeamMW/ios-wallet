@@ -128,7 +128,7 @@ class AddressViewModel: NSObject {
             address = self.address
         }
         
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? LocalizableStrings.delete_contact_transaction : LocalizableStrings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? LocalizableStrings.delete_contact_only : LocalizableStrings.delete_address_only), icon: nil, action:.delete_address)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizables.shared.strings.delete_contact_transaction : Localizables.shared.strings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizables.shared.strings.delete_contact_only : Localizables.shared.strings.delete_address_only), icon: nil, action:.delete_address)]
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -182,7 +182,7 @@ class AddressViewModel: NSObject {
     
     public func onCopyAddress(address:BMAddress) {
         UIPasteboard.general.string = address.walletId
-        ShowCopied(text: LocalizableStrings.address_copied)
+        ShowCopied(text: Localizables.shared.strings.address_copied)
     }
     
     public func trailingSwipeActions(indexPath:IndexPath) -> UISwipeActionsConfiguration? {

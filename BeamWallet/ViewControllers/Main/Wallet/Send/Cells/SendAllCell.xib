@@ -40,6 +40,7 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
                                         <real key="value" value="1.5"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="total_available"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xSg-t8-b8s">
@@ -74,6 +75,7 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="send_all"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onSendAllWithSender:" destination="nnP-fG-aiP" eventType="touchUpInside" id="CNA-I2-cEZ"/>
@@ -106,6 +108,7 @@
             <connections>
                 <outlet property="allButton" destination="6P6-9T-9EC" id="EXc-xn-Fyg"/>
                 <outlet property="amountLabel" destination="xSg-t8-b8s" id="Erc-Er-fc2"/>
+                <outlet property="titleLabel" destination="8qE-nX-ICN" id="rNA-1m-bEe"/>
             </connections>
             <point key="canvasLocation" x="97.101449275362327" y="94.754464285714278"/>
         </tableViewCell>

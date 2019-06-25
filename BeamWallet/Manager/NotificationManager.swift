@@ -225,9 +225,9 @@ class NotificationManager : NSObject {
         if transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending {
             NotificationManager.sharedManager.scheduleNotification(title: "Incoming transaction", body: "Click to receive Beam", id:transaction.id)
         }
-        else if transaction.enumStatus == BMTransactionStatusCompleted || transaction.enumStatus == BMTransactionStatusFailed {
-            NotificationManager.sharedManager.scheduleNotification(title: "Transaction status update", body: "Сlick to view details", id:transaction.id)
-        }
+//        else if transaction.enumStatus == BMTransactionStatusCompleted || transaction.enumStatus == BMTransactionStatusFailed {
+//            NotificationManager.sharedManager.scheduleNotification(title: "Transaction status update", body: "Сlick to view details", id:transaction.id)
+//        }
     }
     
     public func sendFirebaseNotification(topic:String) {

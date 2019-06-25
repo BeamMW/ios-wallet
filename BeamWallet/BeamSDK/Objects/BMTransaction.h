@@ -58,7 +58,8 @@ typedef UInt64 BMTransactionStatus;
 -(BOOL)hasPaymentProof;
 -(BOOL)isCancelled;
 -(BOOL)isNew;
-
+-(BOOL)isExpired;
+    
 -(NSString*)details;
 -(NSString*)csvLine;
 

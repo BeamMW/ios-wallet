@@ -40,6 +40,7 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
                                         <real key="value" value="1.5"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="you_get"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Zck-iI-Sz6">
@@ -79,6 +80,7 @@
             <viewLayoutGuide key="safeArea" id="suO-ZG-rfn"/>
             <connections>
                 <outlet property="activityIndicator" destination="rjF-yE-c37" id="mw3-rb-X9i"/>
+                <outlet property="titleLabel" destination="mH9-2X-yns" id="zSC-SL-MA6"/>
                 <outlet property="valueLabel" destination="Zck-iI-Sz6" id="cWa-bu-edV"/>
             </connections>
             <point key="canvasLocation" x="97.101449275362327" y="98.772321428571431"/>

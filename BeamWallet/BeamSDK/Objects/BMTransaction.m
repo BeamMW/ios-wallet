@@ -63,13 +63,17 @@
     
     return [f stringFromDate:date];
 }
+    
+-(BOOL)isExpired {
+    return  [self.status isEqualToString:[NSLocalizedString(@"expired", nil) lowercaseString]];
+}
 
 -(BOOL)isFailed {
-    return [self.status isEqualToString:@"failed"] || [self.status isEqualToString:@"expired"];
+    return [self.status isEqualToString:[NSLocalizedString(@"failed", nil) lowercaseString]] || [self.status isEqualToString:[NSLocalizedString(@"expired", nil) lowercaseString]];
 }
 
 -(BOOL)isCancelled {
-    return [self.status isEqualToString:@"cancelled"];
+    return [self.status isEqualToString:[NSLocalizedString(@"cancelled", nil) lowercaseString]];
 }
 
 -(BOOL)hasPaymentProof {

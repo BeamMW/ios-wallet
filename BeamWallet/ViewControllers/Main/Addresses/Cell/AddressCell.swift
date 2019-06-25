@@ -55,15 +55,15 @@ extension AddressCell: Configurable {
             //categoryTopY.constant = 27
             
             if options.address.isExpired() {
-                expiredLabel.text = "Expired: " + options.address.formattedDate()
+                expiredLabel.text =  (Localizables.shared.strings.addDots(value: Localizables.shared.strings.expired) + Localizables.shared.strings.space  + options.address.formattedDate()).lowercased()
             }
             else{
-                expiredLabel.text = "Expires: " + options.address.formattedDate()
+                expiredLabel.text = (Localizables.shared.strings.addDots(value: Localizables.shared.strings.expires) + Localizables.shared.strings.space + options.address.formattedDate()).lowercased()
             }
         }
         
         if options.address.label.isEmpty {
-            nameLabel.text = "No name"
+            nameLabel.text = Localizables.shared.strings.no_name
         }
         else{
             nameLabel.text = options.address.label

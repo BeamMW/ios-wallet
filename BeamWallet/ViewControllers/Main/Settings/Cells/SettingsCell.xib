@@ -27,8 +27,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eLd-yJ-xMq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="L9T-j8-Tlp">
-                                <rect key="frame" x="15" y="15" width="279" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="L9T-j8-Tlp">
+                                <rect key="frame" x="15" y="15" width="229" height="20"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -74,7 +74,7 @@
                             <constraint firstItem="L9T-j8-Tlp" firstAttribute="top" secondItem="eLd-yJ-xMq" secondAttribute="top" constant="15" id="ZNc-O0-rLl"/>
                             <constraint firstAttribute="bottom" secondItem="8vt-rz-tFN" secondAttribute="bottom" constant="15" id="aWV-Gh-fYm"/>
                             <constraint firstAttribute="trailing" secondItem="eOW-a8-ams" secondAttribute="trailing" constant="15" id="u88-7v-oxI"/>
-                            <constraint firstItem="I27-EI-w1l" firstAttribute="trailing" secondItem="L9T-j8-Tlp" secondAttribute="trailing" constant="15" id="wS1-nx-5kR"/>
+                            <constraint firstItem="I27-EI-w1l" firstAttribute="trailing" secondItem="L9T-j8-Tlp" secondAttribute="trailing" constant="65" id="wS1-nx-5kR"/>
                             <constraint firstAttribute="bottom" secondItem="L9T-j8-Tlp" secondAttribute="bottom" constant="14.5" id="wzQ-co-3uv"/>
                         </constraints>
                     </view>

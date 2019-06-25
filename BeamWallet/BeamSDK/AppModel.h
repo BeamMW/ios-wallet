@@ -48,7 +48,8 @@
 -(void)onLocalNodeStarted;
 -(void)onCategoriesChange;
 -(void)onAddedPrepareTransaction:(BMPreparedTransaction*_Nonnull)transaction;
--(void)onAddedPrepareAddress:(BMAddress*_Nonnull)address;
+-(void)onAddedDeleteAddress:(BMAddress*_Nonnull)address;
+-(void)onAddedDeleteTransaction:(BMTransaction*_Nonnull)transaction;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -74,7 +75,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) NSMutableArray<BMCategory*>*_Nonnull categories;
 @property (nonatomic,strong) NSMutableArray<BMPreparedTransaction*>*_Nonnull preparedTransactions;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
-@property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactionss;
+@property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
 
 +(AppModel*_Nonnull)sharedManager;
 
@@ -105,6 +106,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)refreshAllInfo;
 
 // addresses
+-(NSString*_Nonnull)getTransactionComment:(NSString*_Nonnull)address;
+-(void)setTransactionComment:(NSString*_Nonnull)address comment:(NSString*_Nonnull)comment;
 -(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block;
 -(void)generateNewWalletAddress;
 -(void)editBotAddress:(NSString*_Nonnull)address ;
@@ -142,7 +145,9 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 // transactions
 -(BMTransaction*_Nullable)validatePaymentProof:(NSString*_Nullable)code;
 -(void)getPaymentProof:(BMTransaction*_Nonnull)transaction;
--(void)deleteTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)deleteTransaction:(NSString*_Nonnull)ID;
+-(void)prepareDeleteTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)cancelDeleteTransaction:(NSString*_Nonnull)ID;
 -(void)cancelTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)cancelPreparedTransaction:(NSString*_Nonnull)transaction;
 -(void)cancelTransactionByID:(NSString*_Nonnull)transaction;
@@ -151,6 +156,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback;
 -(void)clearAllTransactions;
 -(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID;
+-(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
 
 // utxo
 -(void)getUTXO;
@@ -170,4 +176,5 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nullable)ID;
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressFromCategory:(BMCategory*_Nonnull)category;
 
+    
 @end

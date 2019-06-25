@@ -26,8 +26,8 @@ class BuyBeamViewController: BaseTableViewController {
 
     private lazy var footerView: UIView = {
         
-        let text = LocalizableStrings.star_transaction_notice
-        let range = (text as NSString).range(of: String(LocalizableStrings.terms_of_use))
+        let text = Localizables.shared.strings.star_transaction_notice
+        let range = (text as NSString).range(of: String(Localizables.shared.strings.terms_of_use))
         
         let titleParagraphStyle = NSMutableParagraphStyle()
         titleParagraphStyle.alignment = .center
@@ -36,7 +36,7 @@ class BuyBeamViewController: BaseTableViewController {
         attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightTeal.withAlphaComponent(0.6) , range: range)
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: titleParagraphStyle, range: NSMakeRange(0, text.count))
 
-        let label = UILabel(frame: CGRect(x: 15, y: 30, width: UIScreen.main.bounds.size.width-30, height: 0))
+        let label = UILabel(frame: CGRect(x: defaultX, y: 30, width: defaultWidth, height: 0))
         label.font = ItalicFont(size: 16)
         label.textColor = UIColor.white
         label.attributedText = attributedString
@@ -45,14 +45,14 @@ class BuyBeamViewController: BaseTableViewController {
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
         label.sizeToFit()
-        label.frame = CGRect(x: 15, y: 30, width: UIScreen.main.bounds.size.width-30, height: label.frame.size.height);
+        label.frame = CGRect(x: defaultX, y: 30, width: defaultWidth, height: label.frame.size.height);
         
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:0))
         view.addSubview(label)
         
         let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-200)/2, y: label.frame.origin.y + label.frame.size.height + 30, width: 200, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
         button.setImage(IconNextPink(), for: .normal)
-        button.setTitle(LocalizableStrings.start_transaction, for: .normal)
+        button.setTitle(Localizables.shared.strings.start_transaction.lowercased(), for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.main.heliotrope.cgColor
         button.setTitleColor(UIColor.main.heliotrope, for: .normal)
@@ -80,7 +80,7 @@ class BuyBeamViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
         
-        title = LocalizableStrings.buy_beam.uppercased()
+        title = Localizables.shared.strings.buy_beam.uppercased()
         
         tableView.register([BMFieldCell.self, BMAmountCell.self, BuyGetCell.self, BMPickedAddressCell.self, BMSearchAddressCell.self, BMExpandCell.self, BMDetailCell.self])
         
@@ -120,7 +120,7 @@ class BuyBeamViewController: BaseTableViewController {
 
             if let cell = strongSelf.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) {
                 if strongSelf.viewModel.loading {
-                    cell.textLabel?.text = LocalizableStrings.min_amount_loading
+                    cell.textLabel?.text = Localizables.shared.strings.min_amount_loading
                 }
                 else{
                     cell.textLabel?.text = strongSelf.viewModel.minimumAmount
@@ -139,7 +139,7 @@ class BuyBeamViewController: BaseTableViewController {
             guard let strongSelf = self else { return }
 
             if let reason = error?.localizedDescription {
-                strongSelf.alert(title: LocalizableStrings.error, message: reason, handler: { (_ ) in
+                strongSelf.alert(title: Localizables.shared.strings.error, message: reason, handler: { (_ ) in
                     strongSelf.back()
                 })
             }
@@ -152,6 +152,25 @@ class BuyBeamViewController: BaseTableViewController {
     @objc private func onNext() {
         if viewModel.onCanSend() {
             
+            SVProgressHUD.show()
+
+            viewModel.submitOrder {[weak self] (response, error) in
+                
+                SVProgressHUD.dismiss()
+
+                guard let strongSelf = self else { return }                
+
+                if let reason = error?.localizedDescription {
+                    strongSelf.alert(message: reason)
+                }
+                else if let reason = response?.error {
+                    strongSelf.alert(message: reason)
+                }
+                else if response != nil {
+                    let vc = BuyBeamOrderViewController(order: response!, amount: strongSelf.viewModel.amount!, currency: strongSelf.viewModel.currency, receiveAmount: strongSelf.viewModel.receiveAmount)
+                    strongSelf.pushViewController(vc: vc)
+                }
+            }
         }
         else{
             tableView.reloadData()
@@ -164,13 +183,13 @@ class BuyBeamViewController: BaseTableViewController {
         if let text = label.attributedText {
             let title = NSString(string: text.string)
             
-            let tapRange = title.range(of: LocalizableStrings.terms_of_use)
+            let tapRange = title.range(of: Localizables.shared.strings.terms_of_use)
             
             if tapRange.location != NSNotFound {
                 let tapLocation = sender.location(in: label)
                 let tapIndex = label.indexOfAttributedTextCharacterAtPoint(point: tapLocation)
                 
-                if let ranges = label.attributedText?.rangesOf(subString: LocalizableStrings.terms_of_use) {
+                if let ranges = label.attributedText?.rangesOf(subString: Localizables.shared.strings.terms_of_use) {
                     for range in ranges {
                         if tapIndex > range.location && tapIndex < range.location + range.length {
                             self.openUrl(url: CryptoWolfManager.sharedManager.termsUrl)
@@ -267,18 +286,18 @@ extension BuyBeamViewController : UITableViewDataSource {
         case 0:
             if indexPath.row == 0 {
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: LocalizableStrings.you_send.uppercased(), value: viewModel.amount))
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizables.shared.strings.you_send.uppercased(), value: viewModel.amount))
                 cell.delegate = self
                 cell.error = viewModel.amountError
                 cell.currency = viewModel.currency
                 return cell
             }
             else{
-                let cell = UITableViewCell(style: .default, reuseIdentifier: LocalizableStrings.beam)
+                let cell = UITableViewCell(style: .default, reuseIdentifier: Localizables.shared.strings.beam)
                 cell.textLabel?.textColor = UIColor.main.blueyGrey
                 cell.textLabel?.font = RegularFont(size: 14)
                 if viewModel.loading {
-                    cell.textLabel?.text = LocalizableStrings.min_amount_loading
+                    cell.textLabel?.text = Localizables.shared.strings.min_amount_loading
                 }
                 else{
                     cell.textLabel?.text = viewModel.minimumAmount
@@ -298,7 +317,7 @@ extension BuyBeamViewController : UITableViewDataSource {
         case 2:
             let fullname = CryptoWolfManager.sharedManager.fullName(coin: viewModel.currency)
 
-            let name = fullname + " " + LocalizableStrings.refund_address
+            let name = fullname + " " + Localizables.shared.strings.refund_address
             
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
@@ -308,10 +327,10 @@ extension BuyBeamViewController : UITableViewDataSource {
             cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
             return cell
         case 3:
-            var title = viewModel.pickedAddress == nil ? LocalizableStrings.beam_recepient_auto.uppercased() : LocalizableStrings.beam_recepient.uppercased()
+            var title = viewModel.pickedAddress == nil ? Localizables.shared.strings.beam_recepient_auto : Localizables.shared.strings.beam_recepient.uppercased()
             if viewModel.pickedAddress != nil {
                 if viewModel.pickedAddress?.walletId == viewModel.startedAddress?.walletId {
-                    title = LocalizableStrings.beam_recepient_auto.uppercased()
+                    title = Localizables.shared.strings.beam_recepient_auto.uppercased()
                 }
             }
             let cell = tableView
@@ -324,14 +343,14 @@ extension BuyBeamViewController : UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showEdit, title: LocalizableStrings.edit_address.uppercased()))
+                    .configured(with: (expand: showEdit, title: Localizables.shared.strings.edit_address.uppercased()))
                 cell.delegate = self
                 return cell
             }
             else if indexPath.row == 1 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: LocalizableStrings.name.uppercased(), value: viewModel.address!.label, rightIcon:nil))
+                    .configured(with: (name: Localizables.shared.strings.name.uppercased(), value: viewModel.address!.label, rightIcon:nil))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
                 cell.topOffset?.constant = 20
@@ -340,11 +359,11 @@ extension BuyBeamViewController : UITableViewDataSource {
             else if indexPath.row == 2 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: LocalizableStrings.expires.uppercased(), value: (viewModel.address!.duration > 0 ? LocalizableStrings.hours_24 : LocalizableStrings.never), valueColor: UIColor.white))
+                    .configured(with: (title: Localizables.shared.strings.expires.uppercased(), value: (viewModel.address!.duration > 0 ? Localizables.shared.strings.hours_24 : Localizables.shared.strings.never), valueColor: UIColor.white))
                 return cell
             }
             else if indexPath.row == 3 {
-                var name = LocalizableStrings.none
+                var name = Localizables.shared.strings.none
                 var color = UIColor.main.steelGrey
                 
                 if let category = AppModel.sharedManager().findCategory(byId: viewModel.address!.category) {
@@ -354,7 +373,7 @@ extension BuyBeamViewController : UITableViewDataSource {
                 
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: LocalizableStrings.category.uppercased(), value: name, valueColor: color))
+                    .configured(with: (title: Localizables.shared.strings.category.uppercased(), value: name, valueColor: color))
                 return cell
             }
             else{
@@ -407,6 +426,9 @@ extension BuyBeamViewController : BMCellProtocol {
         if let path = tableView.indexPath(for: sender)  {
             if path.section == 0 {
                 viewModel.onChangeCurrency()
+            }
+            else if path.section == 2{
+                viewModel.onScanQRCode()
             }
             else if path.section == 3 {
                 viewModel.onChangeAddress()

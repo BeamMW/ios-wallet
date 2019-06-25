@@ -24,6 +24,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InputFeePopover" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="feeField" destination="YOk-TX-DM6" id="TeB-k6-DB2"/>
+                <outlet property="titleLabel" destination="6VT-6U-Hnp" id="yNc-wz-gBf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -122,11 +123,11 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QhX-9d-901" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="126.5" y="196" width="121" height="44"/>
+                            <rect key="frame" x="117" y="196" width="140" height="44"/>
                             <color key="backgroundColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="TU4-fI-zIF"/>
-                                <constraint firstAttribute="width" constant="121" id="vu0-3x-KOC"/>
+                                <constraint firstAttribute="width" constant="140" id="vu0-3x-KOC"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
@@ -138,6 +139,7 @@
                                     <real key="value" value="22"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="save"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="onSaveWithSender:" destination="-1" eventType="touchUpInside" id="oXS-tP-17b"/>

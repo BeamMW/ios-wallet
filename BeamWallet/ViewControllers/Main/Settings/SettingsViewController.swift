@@ -58,7 +58,7 @@ class SettingsViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizableStrings.settings
+        title = Localizables.shared.strings.settings
         
         viewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()
@@ -72,7 +72,17 @@ class SettingsViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        Settings.sharedManager().addDelegate(self)
+        
         onAddMenuIcon()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if isMovingFromParent {
+            Settings.sharedManager().removeDelegate(self)
+        }
     }
 }
 
@@ -126,6 +136,8 @@ extension SettingsViewController : UITableViewDelegate {
                 self.showRateDialog()
             case 12:
                 self.viewModel.showOwnerKey()
+            case 13:
+                self.viewModel.onLanguage()
             default:
                 return
             }
@@ -139,10 +151,10 @@ extension SettingsViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if section == 0 {
-            return BMTableHeaderTitleView(title: LocalizableStrings.node.lowercased(), bold: false)
+            return BMTableHeaderTitleView(title: Localizables.shared.strings.node.lowercased(), bold: false)
         }
         else if section == 4 {
-            return BMTableHeaderTitleView(title: LocalizableStrings.categories.lowercased(), bold: false)
+            return BMTableHeaderTitleView(title: Localizables.shared.strings.categories.lowercased(), bold: false)
         }
         
         let view = UIView()
@@ -238,5 +250,14 @@ extension SettingsViewController : QRScannerViewControllerDelegate {
                 
             }
         }
+    }
+}
+
+extension SettingsViewController : SettingsModelDelegate {
+    func onChangeLanguage() {
+        
+        title = Localizables.shared.strings.settings
+        tableView.tableHeaderView = nil
+        tableView.tableHeaderView = BMNetworkStatusView()
     }
 }

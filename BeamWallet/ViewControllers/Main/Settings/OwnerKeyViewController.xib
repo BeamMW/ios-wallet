@@ -26,6 +26,7 @@
                 <outlet property="detailLabelLeft" destination="KAz-wx-M01" id="DhZ-B5-4jn"/>
                 <outlet property="detailLabelRight" destination="nCI-eI-0X3" id="696-4s-Bmt"/>
                 <outlet property="ownerKeyLabel" destination="Fba-dd-bWj" id="ukm-ze-xbu"/>
+                <outlet property="ownerKeyTitleLabel" destination="25z-VT-NVW" id="DTH-97-u3M"/>
                 <outlet property="topOffset" destination="F9x-Ke-NtC" id="2Gl-3g-E3y"/>
                 <outlet property="view" destination="eSk-Xs-FZ0" id="19l-1c-9rk"/>
             </connections>
@@ -78,6 +79,7 @@
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="owner_key_warning"/>
                                     </userDefinedRuntimeAttributes>
                                 </label>
                             </subviews>
@@ -109,6 +111,7 @@
                                             <real key="value" value="22"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="copy"/>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="onCopyWithSender:" destination="-1" eventType="touchUpInside" id="DSV-RN-QEQ"/>

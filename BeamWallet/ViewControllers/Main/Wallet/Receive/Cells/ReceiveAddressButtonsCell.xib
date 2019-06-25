@@ -62,6 +62,7 @@ For the transaction to complete, you should get online during the 12 hours after
                                         <real key="value" value="22"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="show_qr"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onQRCodeWithSender:" destination="KuL-Jr-XfQ" eventType="touchUpInside" id="ynR-yq-Yab"/>
@@ -75,7 +76,7 @@ For the transaction to complete, you should get online during the 12 hours after
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                <state key="normal" title="share address" image="icShare">
+                                <state key="normal" title="share address" image="iconShareNew">
                                     <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -83,6 +84,7 @@ For the transaction to complete, you should get online during the 12 hours after
                                         <real key="value" value="22"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="share_address"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onShareWithSender:" destination="KuL-Jr-XfQ" eventType="touchUpInside" id="DIn-7h-uAs"/>
@@ -107,11 +109,14 @@ For the transaction to complete, you should get online during the 12 hours after
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="ST6-m8-Wr2"/>
+            <connections>
+                <outlet property="infoLabel" destination="NVr-Vl-UQM" id="APT-vE-lO9"/>
+            </connections>
             <point key="canvasLocation" x="24.637681159420293" y="98.772321428571431"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="icShare" width="16" height="16"/>
         <image name="iconQr" width="16" height="16"/>
+        <image name="iconShareNew" width="16" height="16"/>
     </resources>
 </document>

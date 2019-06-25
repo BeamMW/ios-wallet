@@ -31,10 +31,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="95b-kh-txV">
-                                <rect key="frame" x="15" y="10" width="56" height="19.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="6Pj-W3-CnV"/>
-                                </constraints>
+                                <rect key="frame" x="15" y="10" width="290" height="19.5"/>
                                 <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -42,25 +39,25 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WwM-3E-Kov">
-                                <rect key="frame" x="250.5" y="32" width="54.5" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ubI-l8-7uT">
+                                <rect key="frame" x="15" y="32.5" width="100" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="ERA-P4-gtY"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="twP-MK-xop"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0312312" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ny9-EH-w00">
-                                <rect key="frame" x="15" y="32.5" width="100" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Category" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Tx-dS-VdE">
+                                <rect key="frame" x="145" y="32.5" width="160" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="wpM-Ij-acT"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="46.5" id="aNG-rg-tbQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
@@ -69,12 +66,14 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="ny9-EH-w00" firstAttribute="leading" secondItem="Qs5-cw-EFU" secondAttribute="leading" constant="15" id="PPr-vq-vqe"/>
-                            <constraint firstAttribute="trailing" secondItem="WwM-3E-Kov" secondAttribute="trailing" constant="15" id="Sqw-K1-KaB"/>
-                            <constraint firstAttribute="bottom" secondItem="ny9-EH-w00" secondAttribute="bottom" constant="10" id="TP1-JC-KEC"/>
-                            <constraint firstAttribute="bottom" secondItem="WwM-3E-Kov" secondAttribute="bottom" constant="10.5" id="cM1-lf-eIZ"/>
+                            <constraint firstAttribute="bottom" secondItem="ubI-l8-7uT" secondAttribute="bottom" constant="10" id="74H-k9-o98"/>
+                            <constraint firstAttribute="trailing" secondItem="95b-kh-txV" secondAttribute="trailing" constant="15" id="YUX-HD-Wki"/>
+                            <constraint firstItem="ubI-l8-7uT" firstAttribute="top" secondItem="95b-kh-txV" secondAttribute="bottom" constant="3" id="aVI-u6-eng"/>
+                            <constraint firstItem="ubI-l8-7uT" firstAttribute="leading" secondItem="Qs5-cw-EFU" secondAttribute="leading" constant="15" id="fXF-pe-Fge"/>
                             <constraint firstItem="95b-kh-txV" firstAttribute="leading" secondItem="Qs5-cw-EFU" secondAttribute="leading" constant="15" id="kLW-1r-MM0"/>
-                            <constraint firstItem="ny9-EH-w00" firstAttribute="top" secondItem="95b-kh-txV" secondAttribute="bottom" constant="3" id="rs2-Xg-s1P"/>
+                            <constraint firstItem="2Tx-dS-VdE" firstAttribute="leading" secondItem="ubI-l8-7uT" secondAttribute="trailing" constant="30" id="pVZ-So-E5h"/>
+                            <constraint firstAttribute="bottom" secondItem="2Tx-dS-VdE" secondAttribute="bottom" constant="10" id="rZM-Bj-Xu5"/>
+                            <constraint firstAttribute="trailing" secondItem="2Tx-dS-VdE" secondAttribute="trailing" constant="15" id="shu-8n-8Rl"/>
                             <constraint firstItem="95b-kh-txV" firstAttribute="top" secondItem="Qs5-cw-EFU" secondAttribute="top" constant="10" id="uZj-l4-mtY"/>
                         </constraints>
                     </view>
@@ -88,8 +87,9 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="LB2-ZM-zfg"/>
             <connections>
-                <outlet property="categoryLabel" destination="WwM-3E-Kov" id="0QP-ql-wkF"/>
-                <outlet property="idLabel" destination="ny9-EH-w00" id="YHC-fE-5eN"/>
+                <outlet property="categoryLabel" destination="2Tx-dS-VdE" id="Uwj-VA-8Ke"/>
+                <outlet property="categoryWidth" destination="aNG-rg-tbQ" id="PsB-Tm-7cO"/>
+                <outlet property="idLabel" destination="ubI-l8-7uT" id="Cpa-Gd-Avn"/>
                 <outlet property="mainView" destination="Qs5-cw-EFU" id="1uB-Xf-hWu"/>
                 <outlet property="nameLabel" destination="95b-kh-txV" id="6zm-tJ-XLh"/>
             </connections>

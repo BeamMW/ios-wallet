@@ -494,6 +494,9 @@
 		929885F4222A15300038C015 /* InputPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929885F2222A15300038C015 /* InputPhraseViewController.xib */; };
 		929885F6222B2B1F0038C015 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F5222B2B1E0038C015 /* Label.swift */; };
 		929885F8222B32C40038C015 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929885F7222B32C40038C015 /* Field.swift */; };
+		929AE4D822BCDCB8006BE960 /* Frames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929AE4D722BCDCB8006BE960 /* Frames.swift */; };
+		929AE4D922BCDCB8006BE960 /* Frames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929AE4D722BCDCB8006BE960 /* Frames.swift */; };
+		929AE4DA22BCDCB8006BE960 /* Frames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929AE4D722BCDCB8006BE960 /* Frames.swift */; };
 		92A0404B225813CE00C42081 /* SFProText-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 92A0404A225813CE00C42081 /* SFProText-Semibold.otf */; };
 		92A0404C225813CE00C42081 /* SFProText-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 92A0404A225813CE00C42081 /* SFProText-Semibold.otf */; };
 		92A1BA032236920C008135B5 /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA012236920C008135B5 /* QRViewController.swift */; };
@@ -604,6 +607,9 @@
 		92C5EBB6229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92C5EBB2229BFD1100ABFFF7 /* BMDetailCell.xib */; };
 		92C5EBB7229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92C5EBB2229BFD1100ABFFF7 /* BMDetailCell.xib */; };
 		92C5EBB8229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92C5EBB2229BFD1100ABFFF7 /* BMDetailCell.xib */; };
+		92CAB06222C215550059CA08 /* LanguagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAB06122C215550059CA08 /* LanguagePickerViewController.swift */; };
+		92CAB06322C215550059CA08 /* LanguagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAB06122C215550059CA08 /* LanguagePickerViewController.swift */; };
+		92CAB06422C215550059CA08 /* LanguagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAB06122C215550059CA08 /* LanguagePickerViewController.swift */; };
 		92D2329422BA5C2C00663C0E /* BuyBeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D2329322BA5C2C00663C0E /* BuyBeamViewController.swift */; };
 		92D2329522BA5C2C00663C0E /* BuyBeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D2329322BA5C2C00663C0E /* BuyBeamViewController.swift */; };
 		92D2329622BA5C2C00663C0E /* BuyBeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D2329322BA5C2C00663C0E /* BuyBeamViewController.swift */; };
@@ -619,6 +625,15 @@
 		92D232A522BA942400663C0E /* BuyGetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D232A122BA942400663C0E /* BuyGetCell.xib */; };
 		92D232A622BA942400663C0E /* BuyGetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D232A122BA942400663C0E /* BuyGetCell.xib */; };
 		92D232A722BA942400663C0E /* BuyGetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D232A122BA942400663C0E /* BuyGetCell.xib */; };
+		92D232AE22BBCEF000663C0E /* BuyBeamOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232AC22BBCEF000663C0E /* BuyBeamOrderViewController.swift */; };
+		92D232AF22BBCEF000663C0E /* BuyBeamOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232AC22BBCEF000663C0E /* BuyBeamOrderViewController.swift */; };
+		92D232B022BBCEF000663C0E /* BuyBeamOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232AC22BBCEF000663C0E /* BuyBeamOrderViewController.swift */; };
+		92D232B122BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D232AD22BBCEF000663C0E /* BuyBeamOrderViewController.xib */; };
+		92D232B222BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D232AD22BBCEF000663C0E /* BuyBeamOrderViewController.xib */; };
+		92D232B322BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D232AD22BBCEF000663C0E /* BuyBeamOrderViewController.xib */; };
+		92D232B522BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */; };
+		92D232B622BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */; };
+		92D232B722BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */; };
 		92D2AE0E22578D2200642789 /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D2AE0D22578D2200642789 /* LockScreen.swift */; };
 		92D2AE0F22578D2200642789 /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D2AE0D22578D2200642789 /* LockScreen.swift */; };
 		92D3CBD12264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */; };
@@ -1173,6 +1188,7 @@
 		929885F2222A15300038C015 /* InputPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputPhraseViewController.xib; sourceTree = "<group>"; };
 		929885F5222B2B1E0038C015 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		929885F7222B32C40038C015 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
+		929AE4D722BCDCB8006BE960 /* Frames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frames.swift; sourceTree = "<group>"; };
 		92A0404A225813CE00C42081 /* SFProText-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProText-Semibold.otf"; sourceTree = "<group>"; };
 		92A1BA012236920C008135B5 /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
 		92A1BA022236920C008135B5 /* QRViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRViewController.xib; sourceTree = "<group>"; };
@@ -1217,11 +1233,15 @@
 		92C5EBA1229BE48E00ABFFF7 /* PreviewQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewQRViewController.swift; sourceTree = "<group>"; };
 		92C5EBB1229BFD1100ABFFF7 /* BMDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMDetailCell.swift; sourceTree = "<group>"; };
 		92C5EBB2229BFD1100ABFFF7 /* BMDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMDetailCell.xib; sourceTree = "<group>"; };
+		92CAB06122C215550059CA08 /* LanguagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePickerViewController.swift; sourceTree = "<group>"; };
 		92D2329322BA5C2C00663C0E /* BuyBeamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyBeamViewController.swift; sourceTree = "<group>"; };
 		92D2329722BA647900663C0E /* BuyBeamViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyBeamViewModel.swift; sourceTree = "<group>"; };
 		92D2329B22BA68E500663C0E /* BuyBeamCurrencyPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyBeamCurrencyPicker.swift; sourceTree = "<group>"; };
 		92D232A022BA942400663C0E /* BuyGetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyGetCell.swift; sourceTree = "<group>"; };
 		92D232A122BA942400663C0E /* BuyGetCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyGetCell.xib; sourceTree = "<group>"; };
+		92D232AC22BBCEF000663C0E /* BuyBeamOrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyBeamOrderViewController.swift; sourceTree = "<group>"; };
+		92D232AD22BBCEF000663C0E /* BuyBeamOrderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyBeamOrderViewController.xib; sourceTree = "<group>"; };
+		92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyBeamOrderViewModel.swift; sourceTree = "<group>"; };
 		92D2AE0D22578D2200642789 /* LockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreen.swift; sourceTree = "<group>"; };
 		92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthorization.swift; sourceTree = "<group>"; };
 		92D9C9472240FB3C00EDE059 /* UTXOBlockCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOBlockCell.swift; sourceTree = "<group>"; };
@@ -1243,6 +1263,7 @@
 		92F006DD229D2E9A00333409 /* AddressesSegmentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddressesSegmentView.xib; sourceTree = "<group>"; };
 		92F006E1229D44BB00333409 /* BMSnackBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSnackBar.swift; sourceTree = "<group>"; };
 		92F006E5229D4E1800333409 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
+		92F2D2D622C1472500C0DF4C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		92F68C762244E37200197D4D /* UTXODetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXODetailViewController.swift; sourceTree = "<group>"; };
 		92F68C7C2244E77500197D4D /* UTXODetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXODetailCell.swift; sourceTree = "<group>"; };
 		92F68C7D2244E77500197D4D /* UTXODetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXODetailCell.xib; sourceTree = "<group>"; };
@@ -1440,6 +1461,7 @@
 				92B8374C22859210002B385B /* Resources.swift */,
 				92B837512285D218002B385B /* Fonts.swift */,
 				92B837482285816D002B385B /* Progress.swift */,
+				929AE4D722BCDCB8006BE960 /* Frames.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1607,6 +1629,7 @@
 				92C00D1A22A009F100DDB579 /* OwnerKeyUnlockViewController.xib */,
 				92C00D2122A00E2A00DDB579 /* OwnerKeyViewController.swift */,
 				92C00D2222A00E2A00DDB579 /* OwnerKeyViewController.xib */,
+				92CAB06122C215550059CA08 /* LanguagePickerViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2112,8 +2135,11 @@
 			children = (
 				92D2329F22BA940D00663C0E /* Cells */,
 				92D2329722BA647900663C0E /* BuyBeamViewModel.swift */,
+				92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */,
 				92D2329322BA5C2C00663C0E /* BuyBeamViewController.swift */,
 				92D2329B22BA68E500663C0E /* BuyBeamCurrencyPicker.swift */,
+				92D232AC22BBCEF000663C0E /* BuyBeamOrderViewController.swift */,
+				92D232AD22BBCEF000663C0E /* BuyBeamOrderViewController.xib */,
 			);
 			path = BuyBeam;
 			sourceTree = "<group>";
@@ -2336,6 +2362,7 @@
 				en,
 				Base,
 				ru,
+				"zh-Hans",
 			);
 			mainGroup = 925AD5CF2228254E00DDE66B;
 			productRefGroup = 925AD5D92228254E00DDE66B /* Products */;
@@ -2430,6 +2457,7 @@
 				92090D0C223A684000A1CFBB /* bgTestnet.jpg in Resources */,
 				9235448B2256019C00889C74 /* UnlockPasswordViewController.xib in Resources */,
 				92C00D2622A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
+				92D232B122BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2479,6 +2507,7 @@
 				9288DD81223A55410020C501 /* QRScannerViewController.xib in Resources */,
 				9288DD82223A55410020C501 /* SF-Pro-Display-Bold.otf in Resources */,
 				9288DD83223A55410020C501 /* IntroPhraseViewController.xib in Resources */,
+				92D232B222BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */,
 				9246F75E227C48830091FB0B /* BMEmptyCell.xib in Resources */,
 				92D9C94C2240FB3C00EDE059 /* UTXOBlockCell.xib in Resources */,
 				92C00D1F22A009F100DDB579 /* OwnerKeyUnlockViewController.xib in Resources */,
@@ -2578,6 +2607,7 @@
 				92D232A722BA942400663C0E /* BuyGetCell.xib in Resources */,
 				92E2EB64226F21C700367928 /* DisplayPhraseViewController.xib in Resources */,
 				92F6B79722A558530055C3C3 /* FeeCell.xib in Resources */,
+				92D232B322BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */,
 				92E2EB66226F21C700367928 /* UTXOCell.xib in Resources */,
 				92E2EB67226F21C700367928 /* GeneralInfoCell.xib in Resources */,
 				92E2EB69226F21C700367928 /* InputPhraseViewController.xib in Resources */,
@@ -2882,6 +2912,7 @@
 				9227AEC02282D2A000FB221F /* CategoryPickerViewController.swift in Sources */,
 				92FC611022295DC100AEABC1 /* BMWordField.swift in Sources */,
 				926A8579222EB7C600A3B747 /* BMTransaction.m in Sources */,
+				92D232B522BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */,
 				92F6B78922A541040055C3C3 /* SendAllCell.swift in Sources */,
 				92365AD1222D3E79000D7064 /* AppModel.mm in Sources */,
 				926A8572222EA16000A3B747 /* String.swift in Sources */,
@@ -2913,6 +2944,7 @@
 				92708DD82271FA5100B30613 /* SettingsViewModel.swift in Sources */,
 				92D9C9492240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */,
 				92435243222DED3200A0EF37 /* BMWalletStatus.m in Sources */,
+				929AE4D822BCDCB8006BE960 /* Frames.swift in Sources */,
 				92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */,
 				9288DD9F223A55DF0020C501 /* BaseViewController.swift in Sources */,
 				921FA630227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
@@ -3013,6 +3045,7 @@
 				92365ADE222D3FAB000D7064 /* MnemonicModel.mm in Sources */,
 				92BA4B7822484DCB0044B721 /* Application.swift in Sources */,
 				92554D62228A0AE900FE6041 /* UTXOSegmentView.swift in Sources */,
+				92CAB06222C215550059CA08 /* LanguagePickerViewController.swift in Sources */,
 				927EDE2C22A68F36005D5CEA /* ContactCell.swift in Sources */,
 				923544892256019C00889C74 /* UnlockPasswordViewController.swift in Sources */,
 				9288DDA2223A5A550020C501 /* BaseCell.swift in Sources */,
@@ -3021,6 +3054,7 @@
 				926A8580222ECD7600A3B747 /* Reachability.m in Sources */,
 				929885F3222A15300038C015 /* InputPhraseViewController.swift in Sources */,
 				9246F761227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
+				92D232AE22BBCEF000663C0E /* BuyBeamOrderViewController.swift in Sources */,
 				9261C29B228BF55900D666E0 /* AddressExpiresPickerViewController.swift in Sources */,
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,
 				92790D96224CD8AE00F79D64 /* BMContact.m in Sources */,
@@ -3099,6 +3133,7 @@
 				9227AEC12282D2A000FB221F /* CategoryPickerViewController.swift in Sources */,
 				9288DD2D223A55410020C501 /* BMWordField.swift in Sources */,
 				9288DD2E223A55410020C501 /* BMTransaction.m in Sources */,
+				92D232B622BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */,
 				92F6B78A22A541040055C3C3 /* SendAllCell.swift in Sources */,
 				9288DD2F223A55410020C501 /* AppModel.mm in Sources */,
 				9288DD30223A55410020C501 /* String.swift in Sources */,
@@ -3130,6 +3165,7 @@
 				92708DD92271FA5100B30613 /* SettingsViewModel.swift in Sources */,
 				92D9C94A2240FB3C00EDE059 /* UTXOBlockCell.swift in Sources */,
 				9288DD3A223A55410020C501 /* BMWalletStatus.m in Sources */,
+				929AE4D922BCDCB8006BE960 /* Frames.swift in Sources */,
 				9288DD3B223A55410020C501 /* InputWordCell.swift in Sources */,
 				9288DDA0223A56920020C501 /* BaseViewController.swift in Sources */,
 				921FA631227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
@@ -3230,6 +3266,7 @@
 				9288DD53223A55410020C501 /* MnemonicModel.mm in Sources */,
 				92BA4B7922484DCB0044B721 /* Application.swift in Sources */,
 				92554D63228A0AE900FE6041 /* UTXOSegmentView.swift in Sources */,
+				92CAB06322C215550059CA08 /* LanguagePickerViewController.swift in Sources */,
 				927EDE2D22A68F36005D5CEA /* ContactCell.swift in Sources */,
 				9235448A2256019C00889C74 /* UnlockPasswordViewController.swift in Sources */,
 				9288DDA3223A5A550020C501 /* BaseCell.swift in Sources */,
@@ -3238,6 +3275,7 @@
 				9288DD55223A55410020C501 /* Reachability.m in Sources */,
 				9288DD56223A55410020C501 /* InputPhraseViewController.swift in Sources */,
 				9246F762227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
+				92D232AF22BBCEF000663C0E /* BuyBeamOrderViewController.swift in Sources */,
 				9261C29C228BF55900D666E0 /* AddressExpiresPickerViewController.swift in Sources */,
 				9288DD58223A55410020C501 /* Configurable.swift in Sources */,
 				92790D97224CD8AE00F79D64 /* BMContact.m in Sources */,
@@ -3280,6 +3318,7 @@
 				9227AEC22282D2A000FB221F /* CategoryPickerViewController.swift in Sources */,
 				92E2EAD0226F21C700367928 /* BMWordField.swift in Sources */,
 				92E2EAD1226F21C700367928 /* BMTransaction.m in Sources */,
+				92D232B722BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */,
 				92F6B78B22A541040055C3C3 /* SendAllCell.swift in Sources */,
 				92E2EAD2226F21C700367928 /* AppModel.mm in Sources */,
 				92E2EAD3226F21C700367928 /* String.swift in Sources */,
@@ -3311,6 +3350,7 @@
 				92708DDA2271FA5100B30613 /* SettingsViewModel.swift in Sources */,
 				92E2EAE2226F21C700367928 /* UTXOBlockCell.swift in Sources */,
 				92E2EAE3226F21C700367928 /* BMWalletStatus.m in Sources */,
+				929AE4DA22BCDCB8006BE960 /* Frames.swift in Sources */,
 				92E2EAE4226F21C700367928 /* InputWordCell.swift in Sources */,
 				92E2EAE5226F21C700367928 /* BaseViewController.swift in Sources */,
 				921FA632227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
@@ -3411,6 +3451,7 @@
 				92E2EB12226F21C700367928 /* MnemonicModel.mm in Sources */,
 				92E2EB13226F21C700367928 /* Application.swift in Sources */,
 				92554D64228A0AE900FE6041 /* UTXOSegmentView.swift in Sources */,
+				92CAB06422C215550059CA08 /* LanguagePickerViewController.swift in Sources */,
 				927EDE2E22A68F36005D5CEA /* ContactCell.swift in Sources */,
 				92E2EB14226F21C700367928 /* UnlockPasswordViewController.swift in Sources */,
 				92E2EB15226F21C700367928 /* BaseCell.swift in Sources */,
@@ -3419,6 +3460,7 @@
 				92E2EB18226F21C700367928 /* Reachability.m in Sources */,
 				92E2EB1A226F21C700367928 /* InputPhraseViewController.swift in Sources */,
 				9246F763227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
+				92D232B022BBCEF000663C0E /* BuyBeamOrderViewController.swift in Sources */,
 				9261C29D228BF55900D666E0 /* AddressExpiresPickerViewController.swift in Sources */,
 				92E2EB1C226F21C700367928 /* Configurable.swift in Sources */,
 				92E2EB1D226F21C700367928 /* BMContact.m in Sources */,
@@ -3494,6 +3536,7 @@
 			children = (
 				92E2EA9C226DE5F500367928 /* en */,
 				92F9C22A22BA43BF006FCC86 /* ru */,
+				92F2D2D622C1472500C0DF4C /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

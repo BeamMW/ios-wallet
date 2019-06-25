@@ -23,6 +23,7 @@
 
 @implementation BMAddress
 
+
 +(BMAddress*)emptyAddress{
     BMAddress *empty = [BMAddress new];
     empty.category = @"";
@@ -38,6 +39,13 @@
     copied.duration = address.duration;
     copied.createTime = address.createTime;
     return copied;
+}
+
+-(NSString*)categoryName{
+    if (_categoryName == nil){
+        return @"";
+    }
+    return _categoryName;
 }
 
 -(BOOL)isExpired {

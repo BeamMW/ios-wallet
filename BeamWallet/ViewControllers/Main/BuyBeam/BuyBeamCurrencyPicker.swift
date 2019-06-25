@@ -34,7 +34,7 @@ class BuyBeamCurrencyPicker: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override var isUppercasedTitle: Bool {
@@ -60,9 +60,9 @@ class BuyBeamCurrencyPicker: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
 
-        title = LocalizableStrings.you_send
+        title = Localizables.shared.strings.you_send
         
-        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         tableView.delegate = self
         tableView.dataSource = self

@@ -24,7 +24,7 @@ extension UIApplication {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
         let build = dictionary["CFBundleVersion"] as! String
-        return "Version \(version).\(build)"
+        return Localizables.shared.strings.version  + " \(version).\(build)"
     }
     
     class func getTopMostViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {

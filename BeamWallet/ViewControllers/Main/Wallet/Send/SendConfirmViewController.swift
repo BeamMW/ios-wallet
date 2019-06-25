@@ -40,7 +40,7 @@ class SendConfirmViewController: BaseTableViewController {
         
         var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope)
         sendButton.setImage(IconSendBlue(), for: .normal)
-        sendButton.setTitle(LocalizableStrings.send, for: .normal)
+        sendButton.setTitle(Localizables.shared.strings.send.lowercased(), for: .normal)
         sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         sendButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
         sendButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
@@ -64,7 +64,7 @@ class SendConfirmViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override var isUppercasedTitle: Bool {
@@ -83,7 +83,7 @@ class SendConfirmViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
-        title = LocalizableStrings.confirm.uppercased()
+        title = Localizables.shared.strings.confirm.uppercased()
         
         tableView.register([ConfirmCell.self, BMFieldCell.self])
         
@@ -114,19 +114,19 @@ class SendConfirmViewController: BaseTableViewController {
         if Settings.sharedManager().isNeedaskPasswordForSend {
             if let pass = password {
                 if pass.isEmpty {
-                    passwordError = LocalizableStrings.empty_password
+                    passwordError = Localizables.shared.strings.empty_password
                     tableView.reloadData()
                     tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
                 }
                 else if(AppModel.sharedManager().isValidPassword(pass) == false) {
-                    passwordError = LocalizableStrings.incorrect_password
+                    passwordError = Localizables.shared.strings.incorrect_password
                     tableView.reloadData()
                     tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
                     return
                 }
             }
             else{
-                passwordError = LocalizableStrings.empty_password
+                passwordError = Localizables.shared.strings.empty_password
                 tableView.reloadData()
                 tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
                 return
@@ -138,21 +138,15 @@ class SendConfirmViewController: BaseTableViewController {
     
     private func askForSaveContact() {
         if viewModel.isNeedSaveContact() {
-            self.confirmAlert(title: LocalizableStrings.save_address_title, message: LocalizableStrings.save_contact_text, cancelTitle: LocalizableStrings.not_save, confirmTitle: LocalizableStrings.save, cancelHandler: {[weak self] (_) in
-                guard let strongSelf = self else { return }
-                strongSelf.onSend(needBack: true)
-            }) { [weak self] (_) in
-                guard let strongSelf = self else { return }
-                if var controllers = strongSelf.navigationController?.viewControllers {
-                    controllers.removeLast()
-                    controllers.removeLast()
-                    
-                    let vc = SaveContactViewController(address: strongSelf.viewModel.toAddress)
-                    controllers.append(vc)
-                    strongSelf.navigationController?.setViewControllers(controllers, animated: true)
-                }
-                strongSelf.onSend(needBack: false)
+            if var controllers = self.navigationController?.viewControllers {
+                controllers.removeLast()
+                controllers.removeLast()
+                
+                let vc = SaveContactViewController(address: self.viewModel.toAddress)
+                controllers.append(vc)
+                self.navigationController?.setViewControllers(controllers, animated: true)
             }
+            self.onSend(needBack: false)
         }
         else{
             self.onSend(needBack: true)
@@ -226,7 +220,7 @@ extension SendConfirmViewController : UITableViewDataSource {
             
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: LocalizableStrings.enter_password_title_3.uppercased(), value: password ?? "", rightIcon:icon))
+                .configured(with: (name: Localizables.shared.strings.enter_password_title.uppercased(), value: password ?? "", rightIcon:icon))
             cell.delegate = self
             cell.error = passwordError
             cell.isSecure = true

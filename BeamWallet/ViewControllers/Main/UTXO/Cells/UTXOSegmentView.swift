@@ -33,9 +33,9 @@ class UTXOSegmentView: UIView {
         
         self.done = selected
         
-        segmentView = UISegmentedControl(frame: CGRect(x: 15, y: 5, width: UIScreen.main.bounds.size.width-30, height: 27))
-        segmentView.insertSegment(withTitle: LocalizableStrings.active, at: 0, animated: false)
-        segmentView.insertSegment(withTitle: LocalizableStrings.all, at: 1, animated: false)
+        segmentView = UISegmentedControl(frame: CGRect(x: defaultX, y: 5, width: defaultWidth, height: 27))
+        segmentView.insertSegment(withTitle: Localizables.shared.strings.active, at: 0, animated: false)
+        segmentView.insertSegment(withTitle: Localizables.shared.strings.all, at: 1, animated: false)
         segmentView.tintColor = UIColor.main.brightTeal
         segmentView.selectedSegmentIndex = 0
         segmentView.addTarget(self, action: #selector(onSegment), for: .valueChanged)
@@ -43,7 +43,7 @@ class UTXOSegmentView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     @objc private func onSegment() {

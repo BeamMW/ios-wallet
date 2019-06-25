@@ -45,7 +45,7 @@ class LoginViewController: BaseViewController {
     @IBAction func onRestoreWallet(sender :UIButton) {
         if AppModel.sharedManager().canRestoreWallet() {
             
-            self.confirmAlert(title: LocalizableStrings.restore_wallet_title, message: LocalizableStrings.restore_wallet_info, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.restore_wallet_title, cancelHandler: { (_ ) in
+            self.confirmAlert(title: Localizables.shared.strings.restore_wallet_title, message: Localizables.shared.strings.restore_wallet_info, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.restore_wallet_title, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
                 AppModel.sharedManager().isRestoreFlow = true;
@@ -54,7 +54,7 @@ class LoginViewController: BaseViewController {
             }
         }
         else{
-            self.alert(title: LocalizableStrings.no_space_title, message: LocalizableStrings.no_space_info) { (_ ) in
+            self.alert(title: Localizables.shared.strings.no_space_title, message: Localizables.shared.strings.no_space_info) { (_ ) in
             }
         }
     }

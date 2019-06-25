@@ -30,7 +30,7 @@ class EditAddressViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -41,7 +41,7 @@ class EditAddressViewController: BaseTableViewController {
             self?.tableView.reloadData()
         }
         
-        title = (viewModel.isContact ? LocalizableStrings.edit_contact : LocalizableStrings.edit_address)
+        title = (viewModel.isContact ? Localizables.shared.strings.edit_contact : Localizables.shared.strings.edit_address)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -50,7 +50,7 @@ class EditAddressViewController: BaseTableViewController {
         tableView.register([AddressSwitchCell.self, AddressExpiresCell.self,AddressExpiredCell.self, 
             AddressCommentCell.self, AddressCategoryCell.self])
 
-        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
     }
     
     @IBAction func onSave(sender : UIBarButtonItem) {
@@ -110,12 +110,7 @@ extension EditAddressViewController : UITableViewDelegate {
                 viewModel.pickExpire()
         }
         else if indexPath.section == 3 {
-            if AppModel.sharedManager().categories.count == 0 {
-                self.alert(title: LocalizableStrings.categories_empty_title, message: LocalizableStrings.categories_empty_text, handler: nil)
-            }
-            else{
-                viewModel.pickCategory()
-            }
+            viewModel.pickCategory()
         }
     }
 }
@@ -153,7 +148,7 @@ extension EditAddressViewController : UITableViewDataSource {
         }
         else if indexPath.section == 1 {
             
-            let text = viewModel.newAddress.isExpired() ? LocalizableStrings.active_address : LocalizableStrings.expire_now
+            let text = viewModel.newAddress.isExpired() ? Localizables.shared.strings.active_address : Localizables.shared.strings.expire_now
             
             let selected = (viewModel.newAddress.isExpired()) ? viewModel.newAddress.isNowActive : viewModel.newAddress.isNowExpired
             

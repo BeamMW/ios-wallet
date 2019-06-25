@@ -29,6 +29,7 @@ static NSString *hideAmountsKey = @"isHideAmounts";
 static NSString *nodeKey = @"nodeKey";
 static NSString *askHideAmountsKey = @"askHideAmountsKey";
 static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
+static NSString *languageKey = @"languageKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -124,6 +125,18 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
+    }
+    else{
+        _language = [[NSLocale currentLocale] languageCode];
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+            _language = @"en";
+        }
+    }
+    
+    
     return self;
 }
 
@@ -200,6 +213,19 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
     return oldPath;
 }
 
+-(void)setLanguage:(NSString *_Nonnull)language {
+    _language = language;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:_language forKey:languageKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    for(id<SettingsModelDelegate> delegate in [Settings sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onChangeLanguage)]) {
+            [delegate onChangeLanguage];
+        }
+    }
+}
 
 -(void)setNodeAddress:(NSString *_Nonnull)nodeAddress {
     _nodeAddress = nodeAddress;
@@ -295,6 +321,20 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
     
     return appGroupDirectoryPath;
 }
+
+-(NSString*_Nonnull)languageName{
+    if ([_language isEqualToString:@"ru"]) {
+        return @"Русский";
+    }
+    else if ([_language isEqualToString:@"zh-Hans"]) {
+        return @"中文";
+    }
+    else{
+        return @"English";
+    }
+}
+
+
 
 #pragma mark - Delegates
 

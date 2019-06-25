@@ -52,25 +52,25 @@ class DetailAddressViewModel: AddressViewModel {
     public func fillDetails() {
         details.removeAll()
         
-        details.append(GeneralInfo(text: LocalizableStrings.address_id, detail: self.address!.walletId, failed: false, canCopy:true, color: UIColor.white))
+        details.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.address), detail: self.address!.walletId, failed: false, canCopy:true, color: UIColor.white))
         
         if !isContact {
-            details.append(GeneralInfo(text: LocalizableStrings.exp_date, detail: self.address!.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
+            details.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.exp_date), detail: self.address!.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
         }
         
         if !self.address!.category.isEmpty {
             if let category = AppModel.sharedManager().findCategory(byId: self.address!.category) {
-                details.append(GeneralInfo(text: LocalizableStrings.category + ":", detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
+                details.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.category), detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
             }
         }
         
         if !self.address!.label.isEmpty {
-            details.append(GeneralInfo(text: LocalizableStrings.name2, detail: self.address!.label, failed: false, canCopy:false, color: UIColor.white))
+            details.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.name), detail: self.address!.label, failed: false, canCopy:false, color: UIColor.white))
         }
     }
     
     public func actionItems() -> [BMPopoverMenu.BMPopoverMenuItem] {
-        var items = [BMPopoverMenu.BMPopoverMenuItem(name: LocalizableStrings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.copy_contact : LocalizableStrings.copy_address), icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.edit_contact : LocalizableStrings.edit_address), icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? LocalizableStrings.delete_contact : LocalizableStrings.delete_address), icon: nil, action:.delete_address)]
+        var items = [BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? Localizables.shared.strings.copy_contact : Localizables.shared.strings.copy_address), icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? Localizables.shared.strings.edit_contact : Localizables.shared.strings.edit_address), icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? Localizables.shared.strings.delete_contact : Localizables.shared.strings.delete_address), icon: nil, action:.delete_address)]
         
         
         if isContact {

@@ -29,6 +29,8 @@
 #include "utility/helpers.h"
 #include "utility/common.h"
 
+#import "StringStd.h"
+
 //using namespace beam;
 //using namespace beam::io;
 //using namespace beam::wallet;
@@ -99,7 +101,7 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
-        transaction.status = GetTransactionStatusString(item);
+        transaction.status = [GetTransactionStatusString(item) lowercaseString];
         transaction.enumStatus = (UInt64)item.m_status;
         if (item.m_failureReason != TxFailureReason::Unknown)
         {
@@ -194,8 +196,8 @@ void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::
 
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
     
-    for (int i=0; i<[AppModel sharedManager].preparedDeleteTransactionss.count; i++) {
-        NSString *id1 = [AppModel sharedManager].preparedDeleteTransactionss[i].ID;
+    for (int i=0; i<[AppModel sharedManager].preparedDeleteTransactions.count; i++) {
+        NSString *id1 = [AppModel sharedManager].preparedDeleteTransactions[i].ID;
         
         for (int j=0; j<[[AppModel sharedManager]transactions].count; j++) {
             NSString *id2 = [AppModel sharedManager].transactions[j].ID;
@@ -549,41 +551,52 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
     bool isIncome = (transaction.m_sender == false);
     
     switch (transaction.m_status)
-    {
+    {        
         case TxStatus::Pending:
-            return @"pending";
+            return [[@"pending" localized] lowercaseString];
         case TxStatus::InProgress:
-            return isIncome ? @"waiting for sender" : @"waiting for receiver";
+            return isIncome ? [[@"waiting_for_sender" localized]lowercaseString] : [[@"waiting_for_receiver" localized]lowercaseString];
         case TxStatus::Registering:
-            return isIncome ? @"receiving" : @"sending";
+            return isIncome ? [[@"receiving" localized]lowercaseString] : [[@"sending" localized] lowercaseString];
         case TxStatus::Completed:
         {
             if (transaction.m_selfTx)
             {
-                return @"completed";
+                return [[@"completed" localized] lowercaseString];
             }
-            return isIncome ? @"received" : @"sent";
+            return isIncome ? [[@"received" localized] lowercaseString] : [[@"sent" localized] lowercaseString];
         }
         case TxStatus::Cancelled:
-            return @"cancelled";
+            return [[@"cancelled" localized] lowercaseString];
         case TxStatus::Failed:
             {
                 if (transaction.m_failureReason == TxFailureReason::TransactionExpired)
                 {
-                    return @"expired";
+                    return [[@"expired" localized] lowercaseString];
                 }
             }
-            return @"failed";
+            return [[@"failed" localized] lowercaseString];
         default:
             break;
     }
     
-    return @"unknown";
+    return [[@"unknown" localized] lowercaseString];
 }
 
 NSString* WalletModel::GetTransactionFailurString(TxFailureReason reason)
 {
-    NSArray *reasons = @[@"Unknown reason",@"Transaction was cancelled",@"Peer's signature in not valid", @"Failed to register transaction", @"Transaction is not valid", @"Invalid kernel proof provided", @"Failed to send tx parameters", @"No inputs", @"Address is expired",@"Failed to get parameter",@"Transaction has expired",@"Payment not signed by the receiver"];
+    NSArray *reasons = @[[[@"tx_status_unknown" localized] lowercaseString],
+                         [[@"tx_status_cancelled" localized] lowercaseString],
+                         [[@"tx_status_signature" localized] lowercaseString],
+                         [[@"tx_status_register" localized] lowercaseString],
+                         [[@"tx_status_not_valid" localized] lowercaseString],
+                         [[@"tx_status_invalid_kernel" localized] lowercaseString],
+                         [[@"tx_status_params" localized] lowercaseString],
+                         [[@"tx_status_no_inputs" localized] lowercaseString],
+                         [[@"tx_status_expired_address" localized] lowercaseString],
+                         [[@"tx_status_failed_parameter" localized] lowercaseString],
+                         [[@"tx_status_expired" localized] lowercaseString],
+                         [[@"tx_status_not_signed" localized] lowercaseString]];
 
     return reasons[reason];
 }
@@ -593,9 +606,9 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
     switch (coin.m_status)
     {
         case Coin::Available:
-            return @"Available";
+            return [[@"available" localized] lowercaseString];
         case Coin::Maturing:
-            return @"Maturing";
+            return [[@"maturing" localized] lowercaseString];
         case Coin::Unavailable:
             return @"Unavailable";
         case Coin::Outgoing:
@@ -609,7 +622,7 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
         }
             
         case Coin::Spent:
-            return @"Spent";
+            return [[@"spent" localized] lowercaseString];
         default:
             break;
     }
@@ -621,17 +634,16 @@ NSString* WalletModel::GetUTXOTypeString(beam::Coin coin) {
     switch (coin.m_ID.m_Type)
     {
         case Key::Type::Comission:
-            return @"Transaction fee";
+            return [[@"transaction_fee" localized] lowercaseString];
         case Key::Type::Coinbase:
-            return @"Coinbase";
+            return [[@"coinbase" localized] lowercaseString];
         case Key::Type::Regular:
-            return @"Regular";
+            return [[@"regular" localized] lowercaseString];
         case Key::Type::Change:
-            return @"Change";
+            return [[@"utxo_type_change" localized] lowercaseString];
         case Key::Type::Treasury: {
-            return @"Treasury";
+            return [[@"treasury" localized] lowercaseString];
         }
     }
-    
     return @"unknown";
 }

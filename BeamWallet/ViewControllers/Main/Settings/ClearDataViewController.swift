@@ -35,14 +35,14 @@ class ClearDataViewController: BaseTableViewController {
         }
     }
     
-    private var items = [ClearItem(title: LocalizableStrings.delete_all_addresses, isSelected: false, id: 1, name: LocalizableStrings.addresses.lowercased()), ClearItem(title: LocalizableStrings.delete_all_contacts, isSelected: false, id: 2, name: LocalizableStrings.contacts.lowercased()), ClearItem(title: LocalizableStrings.delete_all_transactions, isSelected: false, id: 3, name: LocalizableStrings.transactions.lowercased())]
+    private var items = [ClearItem(title: Localizables.shared.strings.delete_all_addresses, isSelected: false, id: 1, name: Localizables.shared.strings.addresses.lowercased()), ClearItem(title: Localizables.shared.strings.delete_all_contacts, isSelected: false, id: 2, name: Localizables.shared.strings.contacts.lowercased()), ClearItem(title: Localizables.shared.strings.delete_all_transactions, isSelected: false, id: 3, name: Localizables.shared.strings.transactions.lowercased())]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = LocalizableStrings.clear_data
+        title = Localizables.shared.strings.clear_data
         
-        addRightButton(title:LocalizableStrings.clear, target: self, selector: #selector(onClear), enabled: false)
+        addRightButton(title:Localizables.shared.strings.clear, target: self, selector: #selector(onClear), enabled: false)
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -65,13 +65,13 @@ class ClearDataViewController: BaseTableViewController {
             str = deleted.joined(separator: String.empty())
         }
         else if deleted.count == 2 {
-            str = deleted.joined(separator: LocalizableStrings.and)
+            str = deleted.joined(separator: Localizables.shared.strings.and)
         }
         else if deleted.count == 3 {
             str = deleted.joined(separator: ", ")
         }
         
-        self.confirmAlert(title: LocalizableStrings.clear_data, message: LocalizableStrings.delete_data_text(str: str), cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.clear, cancelHandler: { (_ ) in
+        self.confirmAlert(title: Localizables.shared.strings.clear_data, message: Localizables.shared.strings.delete_data_text(str: str), cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.clear, cancelHandler: { (_ ) in
             
         }) { (_ ) in
             self.makeClear()

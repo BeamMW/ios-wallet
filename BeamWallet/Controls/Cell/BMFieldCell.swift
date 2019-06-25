@@ -37,7 +37,15 @@ class BMFieldCell: BaseCell {
         
         selectionStyle = .none
         
-       // contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        nameLabel.isUserInteractionEnabled = true
+        nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
+        
+        mainStack.isUserInteractionEnabled = true
+        mainStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
+    }
+    
+    @objc private func onTap(_ sender: UITapGestureRecognizer) {
+        _ = textField.becomeFirstResponder()
     }
     
     public func beginEditing(text:String?){
@@ -151,9 +159,12 @@ extension BMFieldCell: Configurable {
             textField.rightViewMode = .always
         }
         
-        if options.name == LocalizableStrings.name.uppercased() {
-            textField.placeholder = LocalizableStrings.no_name
-            textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
+        if options.name == Localizables.shared.strings.name.uppercased() {
+            textField.placeholder = Localizables.shared.strings.no_name
+            textField.placeHolderColor = UIColor.white
+        }
+        else{
+            textField.placeholder = String.empty()
         }
     }
 }

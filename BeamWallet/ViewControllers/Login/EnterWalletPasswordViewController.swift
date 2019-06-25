@@ -35,7 +35,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -57,13 +57,12 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             touchIdButton.isHidden = true
         }
         else{
-            let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? LocalizableStrings.face_id : LocalizableStrings.touch_id
-
             if BiometricAuthorization.shared.faceIDAvailable() {
                 touchIdButton.setImage(IconFaceId(), for: .normal)
             }
             
-            loginLabel.text = LocalizableStrings.use + mechanism + LocalizableStrings.enter_password_title_2
+            let loginText = BiometricAuthorization.shared.faceIDAvailable() ? Localizables.shared.strings.ownerkey_faceid_text : Localizables.shared.strings.ownerkey_touchid_text
+            loginLabel.text = loginText.replacingOccurrences(of: Localizables.shared.strings.and.lowercased(), with: Localizables.shared.strings.or.lowercased())
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -72,23 +71,23 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        if (self.presentedViewController as? UIAlertController) == nil {
-//            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
-//                isRequestedAuthorization = true
-//                
-//                biometricAuthorization()
-//            }
-//        }
+        if (self.presentedViewController as? UIAlertController) == nil {
+            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
+                isRequestedAuthorization = true
+                
+                biometricAuthorization()
+            }
+        }
 
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if let password = KeychainManager.getPassword() {
-            self.passField.text = password
-            self.onLogin(sender: UIButton())
-        }
+//        if let password = KeychainManager.getPassword() {
+//            self.passField.text = password
+//            self.onLogin(sender: UIButton())
+//        }
 
     }
     
@@ -134,14 +133,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         AppModel.sharedManager().isRestoreFlow = false;
 
         if passField.text?.isEmpty ?? true {
-            passField.error = LocalizableStrings.empty_password
+            passField.error = Localizables.shared.strings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let appModel = AppModel.sharedManager()
             let valid = appModel.canOpenWallet(pass)
             if !valid {
-                passField.error = LocalizableStrings.incorrect_password
+                passField.error = Localizables.shared.strings.incorrect_password
                 passField.status = BMField.Status.error
             }
             else{

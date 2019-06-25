@@ -26,6 +26,8 @@ class ContactCell: UITableViewCell {
     @IBOutlet weak private var idLabel: UILabel!
     @IBOutlet weak private var categoryLabel: UILabel!
     
+    @IBOutlet weak private var categoryWidth: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -49,7 +51,7 @@ extension ContactCell: Configurable {
         
         
         if address.label.isEmpty {
-            nameLabel.text = " "
+            nameLabel.text = Localizables.shared.strings.no_name
         }
         else{
             nameLabel.text = address.label
@@ -58,9 +60,16 @@ extension ContactCell: Configurable {
         if let category = AppModel.sharedManager().findCategory(byId: address.category) {
             categoryLabel.textColor = UIColor.init(hexString: category.color)
             categoryLabel.text = category.name
+            
+            let aString:NSString = category.name as NSString
+            
+            let rectNeeded = aString.boundingRect(with: CGSize(width: 9999, height: 20), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: categoryLabel.font!], context: nil)
+            
+            categoryWidth.constant = rectNeeded.width + 10
         }
         else{
             categoryLabel.text = nil
+            categoryWidth.constant = 10
         }
         
     }

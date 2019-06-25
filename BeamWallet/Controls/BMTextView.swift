@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BMTextView: UITextView {
+class BMTextView: UITextViewPlacholder {
     
     var line = UIView()
     

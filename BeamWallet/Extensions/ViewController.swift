@@ -61,7 +61,7 @@ extension UIViewController {
             UIApplication.shared.open(url , options: [:], completionHandler: nil)
         }
         else{
-            self.confirmAlert(title: LocalizableStrings.external_link_title, message: LocalizableStrings.external_link_text, cancelTitle: LocalizableStrings.cancel, confirmTitle: LocalizableStrings.open, cancelHandler: { (_ ) in
+            self.confirmAlert(title: Localizables.shared.strings.external_link_title, message: Localizables.shared.strings.external_link_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.open, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
                 UIApplication.shared.open(url , options: [:], completionHandler: nil)

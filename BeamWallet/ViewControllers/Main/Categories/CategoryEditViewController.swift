@@ -53,24 +53,41 @@ class CategoryEditViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if isGradient {
+            var mainColor = UIColor.main.brightSkyBlue
+            
+            if let viewControllers = self.navigationController?.viewControllers{
+                for vc in viewControllers {
+                    if vc is SendViewController {
+                        mainColor = UIColor.main.heliotrope
+                    }
+                }
+            }
+            
+            setGradientTopBar(mainColor: mainColor, addedStatusView: false)
+        }
+        
         hideKeyboardWhenTappedAround()
 
-        title = category.id == 0 ? LocalizableStrings.new_category : LocalizableStrings.edit_category
+        title = category.id == 0 ? Localizables.shared.strings.new_category : Localizables.shared.strings.edit_category
         
-        addRightButton(title:LocalizableStrings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         nameView = UIView(frame: CGRect(x: 0, y: (Device.isXDevice ? 100 : 70) + 20, width: UIScreen.main.bounds.size.width, height: 49))
+        if isGradient {
+            nameView.y = (Device.isXDevice ? 100 : 70) + 60
+        }
         nameView.backgroundColor = UIColor.main.marineTwo
         view.addSubview(nameView)
         
-        nameField = UITextField(frame: CGRect(x: 15, y: 0, width: UIScreen.main.bounds.size.width-30, height: 49))
-        nameField.placeholder = LocalizableStrings.category_name
+        nameField = UITextField(frame: CGRect(x: defaultX, y: 0, width: defaultWidth, height: 49))
+        nameField.placeholder = Localizables.shared.strings.category_name
         nameField.placeHolderColor = UIColor.main.steelGrey
         nameField.textColor = UIColor.white
         nameField.font = RegularFont(size: 16)
@@ -87,7 +104,8 @@ class CategoryEditViewController: BaseViewController {
         colorsView.colors = colors
         colorsView.selectedColor = UIColor.init(hexString: category.color)
         colorsView.delegate = self
-        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: nameView.frame.origin.y + nameView.frame.size.height + 20, width: colorsView.colorsWidht(), height: 51)
+        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: nameView.frame.origin.y + nameView.frame.size.height + 20, width: colorsView.colorsWidht(), height: 50)
+        colorsView.backgroundColor = UIColor.clear
         view.addSubview(colorsView)
     }
     
@@ -121,7 +139,7 @@ class CategoryEditViewController: BaseViewController {
             let trimmedString = name.trimmingCharacters(in: .whitespacesAndNewlines)
 
             if AppModel.sharedManager().isNameAlreadyExist(trimmedString, id: category.id) {
-                self.alert(message: LocalizableStrings.category_exist)
+                self.alert(message: Localizables.shared.strings.category_exist)
             }
             else{
                 category.name = trimmedString

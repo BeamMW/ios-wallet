@@ -42,7 +42,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -50,10 +50,10 @@ class UnlockPasswordViewController: BaseWizardViewController {
         
         hideKeyboardWhenTappedAround()
         
-        title = event == .unlock ? LocalizableStrings.your_password : LocalizableStrings.change_password
+        title = event == .unlock ? Localizables.shared.strings.your_password : Localizables.shared.strings.change_password
         
         if event == .unlock {
-            titleLabel.text = LocalizableStrings.unlock_password
+            titleLabel.text = Localizables.shared.strings.unlock_password
         }
         
         if Device.isZoomed {
@@ -79,13 +79,13 @@ class UnlockPasswordViewController: BaseWizardViewController {
     
     @IBAction func onLogin(sender :UIButton) {        
         if passField.text?.isEmpty ?? true {
-            passField.error = LocalizableStrings.empty_password
+            passField.error = Localizables.shared.strings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let valid = AppModel.sharedManager().isValidPassword(pass)
             if !valid {
-                passField.error = LocalizableStrings.current_password_error
+                passField.error = Localizables.shared.strings.current_password_error
                 passField.status = BMField.Status.error
             }
             else{

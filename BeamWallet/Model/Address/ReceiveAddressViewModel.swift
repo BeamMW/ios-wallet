@@ -28,6 +28,8 @@ class ReceiveAddressViewModel: NSObject {
         case edit = 2
     }
     
+    public var transactionComment = String.empty()
+    
     public var onAddressCreated : ((Error?) -> Void)?
     public var onDataChanged : (() -> Void)?
     public var onShared : (() -> Void)?
@@ -62,9 +64,12 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     public func revertChanges() {
+        var deleted = false
+        
         if pickedAddress != nil {
             if !isShared {
                 if pickedAddress?.walletId == startedAddress?.walletId {
+                    deleted = true
                     AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
                 }
                 else if pickedAddress?.label != address?.label || pickedAddress?.category != address?.category {
@@ -73,12 +78,20 @@ class ReceiveAddressViewModel: NSObject {
             }
             
             if pickedAddress?.walletId != startedAddress?.walletId {
+                deleted = true
                 AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
             }
         }
         else if !isShared
         {
+            deleted = true
             AppModel.sharedManager().deleteAddress(address?.walletId)
+        }
+        
+        if !deleted {
+            if let add = address {
+                AppModel.sharedManager().setTransactionComment(add.walletId, comment: transactionComment)
+            }
         }
     }
     
@@ -86,9 +99,7 @@ class ReceiveAddressViewModel: NSObject {
         if pickedAddress != nil {
             if !isShared {
                 if pickedAddress?.walletId == startedAddress?.walletId {
-                    if !address.label.isEmpty || (!address.category.isEmpty && address.category != LocalizableStrings.zero) {
-                        return .new
-                    }
+                    return .new
                 }
                 else if pickedAddress?.label != address?.label || pickedAddress?.category != address?.category {
                     return .edit
@@ -97,9 +108,7 @@ class ReceiveAddressViewModel: NSObject {
         }
         else if !isShared
         {
-            if !address.label.isEmpty || (!address.category.isEmpty && address.category != LocalizableStrings.zero) {
-                return .new
-            }
+            return .new
         }
         
         return .none
@@ -107,7 +116,7 @@ class ReceiveAddressViewModel: NSObject {
     
     public func onExpire() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = AddressExpiresPickerViewController(duration: -1)
+            let vc = AddressExpiresPickerViewController(duration: Int(self.address!.duration))
             vc.completion = { [weak self]
                 obj in
                 
@@ -125,7 +134,21 @@ class ReceiveAddressViewModel: NSObject {
     public func onCategory() {
         if let top = UIApplication.getTopMostViewController() {
             if AppModel.sharedManager().categories.count == 0 {
-                top.alert(title: LocalizableStrings.categories_empty_title, message: LocalizableStrings.categories_empty_text, handler: nil)
+                let vc = CategoryEditViewController(category: nil)
+                vc.completion = { [weak self]
+                    obj in
+                    guard let strongSelf = self else { return }
+                    
+                    if let category = obj {
+                        strongSelf.address?.category = String(category.id)
+                        
+                        AppModel.sharedManager().setWalletCategory(strongSelf.address!.category, toAddress: strongSelf.address!.walletId)
+                        
+                        self?.onDataChanged?()
+                    }
+                }
+                vc.isGradient = true
+                top.pushViewController(vc: vc)
             }
             else{
                 let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address!.category))
@@ -160,6 +183,8 @@ class ReceiveAddressViewModel: NSObject {
                 self?.pickedAddress?.category = obj.category
                 self?.pickedAddress?.walletId = obj.walletId
                 
+                self?.transactionComment = String.empty()
+                
                 self?.address = obj
                 
                 self?.onDataChanged?()
@@ -170,17 +195,23 @@ class ReceiveAddressViewModel: NSObject {
         }
     }
     
-    public func onQRCode() {
+    public func onQRCode() {        
+        
         if let top = UIApplication.getTopMostViewController() {
-            isShared = true
-            
-            let modalViewController = QRViewController(address: address, amount: amount)
-            modalViewController.onShared = { [weak self] in
-                self?.onShared?()
+            if amount == Localizables.shared.strings.zero {
+                top.alert(title: Localizables.shared.strings.wrong_requested_amount_title, message: Localizables.shared.strings.wrong_requested_amount_text, handler: nil)
             }
-            modalViewController.modalPresentationStyle = .overFullScreen
-            modalViewController.modalTransitionStyle = .crossDissolve
-            top.present(modalViewController, animated: true, completion: nil)
+            else{
+                isShared = true
+                
+                let modalViewController = QRViewController(address: address, amount: amount)
+                modalViewController.onShared = { [weak self] in
+                    self?.onShared?()
+                }
+                modalViewController.modalPresentationStyle = .overFullScreen
+                modalViewController.modalTransitionStyle = .crossDissolve
+                top.present(modalViewController, animated: true, completion: nil)
+            }
         }
     }
     

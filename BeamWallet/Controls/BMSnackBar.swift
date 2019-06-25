@@ -25,6 +25,7 @@ class BMSnackBar: UIView, CountdownViewDelegate {
         case transaction
         case address
         case contact
+        case delete_transaction
     }
 
     struct SnackData {
@@ -68,27 +69,31 @@ class BMSnackBar: UIView, CountdownViewDelegate {
 
         if data.type == BMSnackBar.SnackType.contact {
             self.data.type = .address
-            label.text = LocalizableStrings.contact_deleted
+            label.text = Localizables.shared.strings.contact_deleted
         }
         else if data.type == BMSnackBar.SnackType.address {
-            label.text = LocalizableStrings.address_deleted
+            label.text = Localizables.shared.strings.address_deleted
+        }
+        else if data.type == BMSnackBar.SnackType.delete_transaction {
+            label.text = Localizables.shared.strings.transaction_deleted
         }
         else{
-            label.text = LocalizableStrings.beams_send
+            label.text = Localizables.shared.strings.beams_send
         }
       
         addSubview(label)
         
-        let button = UIButton(frame: CGRect(x: frame.size.width - 75, y: 0, width: 60, height: 48))
+        let button = UIButton(frame: CGRect(x: frame.size.width - 95, y: 0, width: 80, height: 48))
         button.titleLabel?.font = SemiboldFont(size: 16)
         button.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         button.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        button.setTitle(LocalizableStrings.undo, for: .normal)
+        button.setTitle(Localizables.shared.strings.undo, for: .normal)
         button.contentHorizontalAlignment = .right
-        button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
+        button.isUserInteractionEnabled = false
+       // button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
         addSubview(button)
         
-        timer = CountdownView(frame: CGRect(x: 15, y: 10, width: 28, height: 28))
+        timer = CountdownView(frame: CGRect(x: defaultX, y: 10, width: 28, height: 28))
         timer?.delegate = self
         timer?.start(beginingValue: 5)
         addSubview(timer ?? UIView())
@@ -100,7 +105,7 @@ class BMSnackBar: UIView, CountdownViewDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(LocalizableStrings.fatalInitCoderError)
+        fatalError(Localizables.shared.strings.fatalInitCoderError)
     }
     
     @objc private func onUndo() {

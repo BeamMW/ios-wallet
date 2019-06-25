@@ -27,7 +27,12 @@ class CryptoWolfService: NSObject  {
     typealias Rates = [[Double]]
     
     struct OrderResponse: Codable {
-        let status, address: String?
+        let status, address, error: String?
+    }
+    
+    struct TransactionInfo: Codable {
+        let code:Int?
+        let dtxid, rtxid: String?
     }
 
     static let sharedManager = CryptoWolfService()
@@ -82,7 +87,7 @@ class CryptoWolfService: NSObject  {
         }
     }
     
-    public func submitOrder(from:String, to:String, fromAddress:String, toAddress:String, amount:Double, captcha:String, emailaddress:String, completion:@escaping ((OrderResponse?,Error?) -> Void)) {
+    public func submitOrder(from:String, to:String, fromAddress:String, toAddress:String, amount:String, captcha:String, emailaddress:String, completion:@escaping ((OrderResponse?,Error?) -> Void)) {
      
         let provider = MoyaProvider<CryptoWolfAPI>()
         provider.request(.order(from: from, to: to, fromAddress: fromAddress, toAddress: toAddress, amount: amount, captcha: captcha, emailaddress: emailaddress)) { [weak self] result in
@@ -99,6 +104,28 @@ class CryptoWolfService: NSObject  {
                 }
             case .failure (let error):
                 print(error)
+                completion(nil,error)
+            }
+        }
+    }
+    
+    public func getTransactionInfo(address:String, currency:String, completion:@escaping ((TransactionInfo?,Error?) -> Void)) {
+        
+        let provider = MoyaProvider<CryptoWolfAPI>()
+        provider.request(.transactionInfo(address: address, currency:currency)) { [weak self] result in
+            guard self != nil else { return }
+            
+            switch result {
+            case .success(let response):
+                print(String(data: response.data, encoding: .utf8))
+                
+                if let info = try? JSONDecoder().decode(TransactionInfo.self, from: response.data) {
+                    completion(info,nil)
+                }
+                else{
+                    completion(nil,nil)
+                }
+            case .failure (let error):
                 completion(nil,error)
             }
         }

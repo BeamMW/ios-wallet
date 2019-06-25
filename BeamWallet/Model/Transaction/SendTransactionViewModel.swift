@@ -33,11 +33,17 @@ class SendTransactionViewModel: NSObject {
     public var pickedOutgoingAddress:BMAddress?
     public var startedAddress:BMAddress?
 
-    
+    public var selectedSearchIndex = 0 {
+        didSet{
+            
+        }
+    }
+
     public var selectedContact:BMContact?
 
     public var contacts = [BMContact]()
-
+    private var addresses = [BMAddress]()
+    
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
@@ -112,7 +118,7 @@ class SendTransactionViewModel: NSObject {
     public func checkAmountError() -> String? {
         let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
        
-        if canSend != LocalizableStrings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
+        if canSend != Localizables.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
             amountError = canSend
         }
         else{
@@ -133,16 +139,16 @@ class SendTransactionViewModel: NSObject {
             toAddressError = nil
             
             if !valid {
-                toAddressError = LocalizableStrings.incorrect_address
+                toAddressError = Localizables.shared.strings.incorrect_address
             }
             else if expired {
-                toAddressError = LocalizableStrings.address_is_expired
+                toAddressError = Localizables.shared.strings.address_is_expired
             }
             
             if amount.isEmpty {
-                amountError = LocalizableStrings.amount_empty
+                amountError = Localizables.shared.strings.amount_empty
             }
-            else if canSend != LocalizableStrings.incorrect_address {
+            else if canSend != Localizables.shared.strings.incorrect_address {
                 amountError = canSend
             }
         }
@@ -187,13 +193,13 @@ class SendTransactionViewModel: NSObject {
     }
     
     public func searchForContacts() {
-        self.contacts.removeAll()
-        
-        if let contacts = AppModel.sharedManager().contacts as? [BMContact] {
-            self.contacts.append(contentsOf: contacts)
-        }
-        
-        if !toAddress.isEmpty {
+        if selectedSearchIndex == 0 {
+            self.contacts.removeAll()
+            
+            if let contacts = AppModel.sharedManager().contacts as? [BMContact] {
+                self.contacts.append(contentsOf: contacts)
+            }
+            
             for contact in contacts {
                 if let category = AppModel.sharedManager().findCategory(byId: contact.address.category) {
                     contact.address.categoryName = category.name
@@ -203,32 +209,75 @@ class SendTransactionViewModel: NSObject {
                 }
             }
             
-            let filterdObjects = contacts.filter {
-                $0.name.lowercased().contains(toAddress.lowercased()) ||
-                    $0.address.label.lowercased().contains(toAddress.lowercased()) ||
-                    $0.address.categoryName.lowercased().contains(toAddress.lowercased()) ||
-                    $0.address.walletId.lowercased().starts(with: toAddress.lowercased())
+            if !toAddress.isEmpty {
+                let filterdObjects = contacts.filter {
+                    $0.name.lowercased().contains(toAddress.lowercased()) ||
+                        $0.address.label.lowercased().contains(toAddress.lowercased()) ||
+                        $0.address.categoryName.lowercased().contains(toAddress.lowercased()) ||
+                        $0.address.walletId.lowercased().starts(with: toAddress.lowercased())
+                }
+                contacts.removeAll()
+                contacts.append(contentsOf: filterdObjects)
             }
-            contacts.removeAll()
-            contacts.append(contentsOf: filterdObjects)
+        }
+        else{
+            self.contacts.removeAll()
+
+            if let addresses = AppModel.sharedManager().walletAddresses {
+                self.addresses = addresses as! [BMAddress]
+            }
+            
+            self.addresses = self.addresses.filter { $0.isExpired() == false}
+            
+            if !toAddress.isEmpty {
+                for address in self.addresses  {
+                    if let category = AppModel.sharedManager().findCategory(byId: address.category) {
+                        address.categoryName = category.name
+                    }
+                    else{
+                        address.categoryName = String.empty()
+                    }
+                }
+                
+                let filterdObjects = self.addresses.filter {
+                        $0.label.lowercased().contains(toAddress.lowercased()) ||
+                        $0.categoryName.lowercased().contains(toAddress.lowercased()) ||
+                        $0.walletId.lowercased().starts(with: toAddress.lowercased())
+                }
+                
+                for address in filterdObjects {
+                    let contact = BMContact()
+                    contact.name = address.label
+                    contact.address = address
+                    self.contacts.append(contact)
+                }
+            }
+            else{
+                for address in self.addresses {
+                    let contact = BMContact()
+                    contact.name = address.label
+                    contact.address = address
+                    self.contacts.append(contact)
+                }
+            }
         }
     }
     
     public func buildConfirmItems() -> [ConfirmItem]{
         let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-        let totalString = String.currency(value: total) + LocalizableStrings.beam
+        let totalString = String.currency(value: total) + Localizables.shared.strings.beam
         
         var items = [ConfirmItem]()
-        items.append(ConfirmItem(title: LocalizableStrings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        items.append(ConfirmItem(title: Localizables.shared.strings.send_to.uppercased(), detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
-            items.append(ConfirmItem(title: LocalizableStrings.outgoing_address, detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            items.append(ConfirmItem(title: Localizables.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        items.append(ConfirmItem(title: LocalizableStrings.amount_to_send, detail: amount + LocalizableStrings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: LocalizableStrings.transaction_fees, detail: fee + LocalizableStrings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: LocalizableStrings.total_utxo, detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
-        items.append(ConfirmItem(title: LocalizableStrings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
+        items.append(ConfirmItem(title: Localizables.shared.strings.amount_to_send.uppercased(), detail: amount + Localizables.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(ConfirmItem(title: Localizables.shared.strings.transaction_fee.uppercased(), detail: fee + Localizables.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(ConfirmItem(title: Localizables.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
+        items.append(ConfirmItem(title: Localizables.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
         
         return items
     }

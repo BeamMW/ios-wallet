@@ -116,6 +116,7 @@
                 <outlet property="feeSlider" destination="VkK-iS-lz9" id="uI8-bU-QOV"/>
                 <outlet property="mainView" destination="klu-d3-QDr" id="HfK-b5-S8H"/>
                 <outlet property="maxLabel" destination="J1p-cQ-A4w" id="xgL-f6-tGl"/>
+                <outlet property="titleLabel" destination="FB0-DL-Bg2" id="t4Y-DZ-Fm0"/>
                 <outlet property="valueLabel" destination="OEr-mN-SqI" id="asy-Dp-ZEj"/>
             </connections>
             <point key="canvasLocation" x="97.101449275362327" y="114.50892857142857"/>
