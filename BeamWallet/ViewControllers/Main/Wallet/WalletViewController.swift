@@ -70,8 +70,8 @@ class WalletViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = Localizables.shared.strings.wallet
+            
+        title = Localizable.shared.strings.wallet
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -177,11 +177,13 @@ class WalletViewController: BaseTableViewController {
     @objc private func onMore(_ sender: Any) {
                 
         var items = [BMPopoverMenu.BMPopoverMenuItem]()
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.payment_proof, icon: nil, action: .payment_proof))
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.payment_proof, icon: nil, action: .payment_proof))
         
         if viewModel.transactions.count > 0 {
-         //   items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.search, icon: nil, action: .search), at: 0)
-            items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.export, icon: nil, action: .export_transactions), at: 0)
+            if AppDelegate.newFeaturesEnabled {
+                items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.search, icon: nil, action: .search), at: 0)
+            }
+            items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.export, icon: nil, action: .export_transactions), at: 0)
         }
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
@@ -278,7 +280,7 @@ extension WalletViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 1:
-            return isSearching ? nil : BMTableHeaderTitleView(title: Localizables.shared.strings.transactions, handler: #selector(onMore), target: self)
+            return isSearching ? nil : BMTableHeaderTitleView(title: Localizable.shared.strings.transactions, handler: #selector(onMore), target: self)
         default:
             return nil
         }
@@ -338,7 +340,7 @@ extension WalletViewController : UITableViewDataSource {
             if viewModel.transactions.count == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: Localizables.shared.strings.empty_transactions_list)
+                    .configured(with: Localizable.shared.strings.empty_transactions_list)
                 return cell
             }
             else{

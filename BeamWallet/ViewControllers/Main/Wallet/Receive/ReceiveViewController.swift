@@ -42,7 +42,7 @@ class ReceiveViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
         
-        title = Localizables.shared.strings.receive.uppercased()
+        title = Localizable.shared.strings.receive.uppercased()
         
         tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMPickedAddressCell.self, BMDetailCell.self])
         tableView.keyboardDismissMode = .interactive
@@ -52,14 +52,14 @@ class ReceiveViewController: BaseTableViewController {
         }
         
         viewModel.onShared = { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
+            self?.back()
         }
         
         viewModel.onAddressCreated = {[weak self]
             error in
             
             if let reason = error?.localizedDescription {
-                self?.alert(title: Localizables.shared.strings.error, message: reason, handler: { (_ ) in
+                self?.alert(title: Localizable.shared.strings.error, message: reason, handler: { (_ ) in
                     self?.back()
                 })
             }
@@ -87,7 +87,7 @@ class ReceiveViewController: BaseTableViewController {
     @objc private func onBack() {
         let state = viewModel.isNeedAskToSave()
         if state != .none {
-            self.confirmAlert(title: state == .new ? Localizables.shared.strings.save_address_title : Localizables.shared.strings.save_changes, message: state == .new ? Localizables.shared.strings.save_address_text : Localizables.shared.strings.save_edit_address_text, cancelTitle: Localizables.shared.strings.not_save, confirmTitle: Localizables.shared.strings.save, cancelHandler: { [weak self] (_ ) in
+            self.confirmAlert(title: state == .new ? Localizable.shared.strings.save_address_title : Localizable.shared.strings.save_changes, message: state == .new ? Localizable.shared.strings.save_address_text : Localizable.shared.strings.save_edit_address_text, cancelTitle: Localizable.shared.strings.not_save, confirmTitle: Localizable.shared.strings.save, cancelHandler: { [weak self] (_ ) in
                 self?.back()
             }) { [weak self] (_ ) in
                 self?.viewModel.isShared = true
@@ -171,10 +171,10 @@ extension ReceiveViewController : UITableViewDataSource {
        
         switch indexPath.section {
         case 0:
-            var title = viewModel.pickedAddress == nil ? Localizables.shared.strings.auto_address : Localizables.shared.strings.address.uppercased()
+            var title = viewModel.pickedAddress == nil ? Localizable.shared.strings.auto_address : Localizable.shared.strings.address.uppercased()
             if viewModel.pickedAddress != nil {
                 if viewModel.pickedAddress?.walletId == viewModel.startedAddress?.walletId {
-                    title = Localizables.shared.strings.auto_address
+                    title = Localizable.shared.strings.auto_address
                 }
             }
             let cell = tableView
@@ -187,14 +187,14 @@ extension ReceiveViewController : UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showEdit, title: Localizables.shared.strings.edit_address.uppercased()))
+                    .configured(with: (expand: showEdit, title: Localizable.shared.strings.edit_address.uppercased()))
                 cell.delegate = self
                 return cell
             }
             else if indexPath.row == 1 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizables.shared.strings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
                 return cell
@@ -202,12 +202,12 @@ extension ReceiveViewController : UITableViewDataSource {
             else if indexPath.row == 2 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizables.shared.strings.expires.uppercased(), value: (viewModel.address.duration > 0 ? Localizables.shared.strings.hours_24 : Localizables.shared.strings.never), valueColor: UIColor.white))
+                    .configured(with: (title: Localizable.shared.strings.expires.uppercased(), value: (viewModel.address.duration > 0 ? Localizable.shared.strings.hours_24 : Localizable.shared.strings.never), valueColor: UIColor.white))
                 cell.space = 20
                 return cell
             }
             else{
-                var name = Localizables.shared.strings.none
+                var name = Localizable.shared.strings.none
                 var color = UIColor.white
                 
                 if let category = AppModel.sharedManager().findCategory(byId: viewModel.address.category) {
@@ -217,14 +217,14 @@ extension ReceiveViewController : UITableViewDataSource {
                 
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizables.shared.strings.category.uppercased(), value: name, valueColor: color))
+                    .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: name, valueColor: color))
                 cell.space = 20
                 return cell
             }
         case 2:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizables.shared.strings.transaction_comment, value: viewModel.transactionComment, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.transactionComment, rightIcon:nil))
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.clear
             return cell
@@ -232,13 +232,13 @@ extension ReceiveViewController : UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showAdvanced, title: Localizables.shared.strings.advanced.uppercased()))
+                    .configured(with: (expand: showAdvanced, title: Localizable.shared.strings.advanced.uppercased()))
                 cell.delegate = self
                 return cell
             }
             else  {
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizables.shared.strings.request_amount, value: viewModel.amount))
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.request_amount, value: viewModel.amount))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
                 return cell

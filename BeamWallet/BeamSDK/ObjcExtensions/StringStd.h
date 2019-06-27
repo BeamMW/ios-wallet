@@ -32,9 +32,3 @@
 -(std::string)string;
 
 @end
-
-@interface NSString (Localization)
-
--(NSString*)localized;
-
-@end

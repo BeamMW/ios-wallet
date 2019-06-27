@@ -978,6 +978,8 @@ static NSString *transactionCommentsKey = @"transaction_comment";
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate {
     [_delegates compact];
 
+
+    
     void * objPtr = (__bridge void *)delegate;
     [_delegates addPointer:objPtr];
 }
@@ -1049,7 +1051,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     Amount bMax = round(MAX_AMOUNT * Rules::Coin);
 
     if (amount==0) {
-        return @"Amount can’t be 0";;
+        return [@"amount_zero" localized];
     }
     else if(_walletStatus.available < bTotal)
     {
@@ -1057,7 +1059,8 @@ static NSString *transactionCommentsKey = @"transaction_comment";
 
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
 
-        return [NSString stringWithFormat:@"Insufficient funds: you would need %@ beams to complete the transaction",beam];
+        NSString *s = [@"insufficient_funds" localized];
+        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
     }
     else if (bTotal > bMax)
     {
@@ -1067,7 +1070,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     }
     else if(![self isValidAddress:to])
     {
-        return @"Incorrect address";
+        return [@"incorrect_address" localized];
     }
     else{
         return nil;
@@ -1109,8 +1112,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     }
 }
 
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from {
-    LOG_INFO() << "prepareSend";
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact {
 
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
@@ -1120,6 +1122,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     transaction.comment = comment;
     transaction.date = [[NSDate date] timeIntervalSince1970];
     transaction.ID = [NSString randomAlphanumericStringWithLength:10];
+    transaction.saveContact = saveContact;
     
     [_preparedTransactions addObject:transaction];
     
@@ -1247,7 +1250,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     if (result.count > 1)
     {
         BMUTXO *total = [[BMUTXO alloc] init];
-        total.statusString = @"total";
+        total.statusString = [@"total" localized];
         
         for(BMUTXO *utxo in result)
         {
@@ -1380,6 +1383,11 @@ static NSString *transactionCommentsKey = @"transaction_comment";
             else{
                 [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from];
             }
+            
+            if (!_preparedTransactions[i].saveContact) {
+                [[AppModel sharedManager] deleteAddress:_preparedTransactions[i].address];
+            }
+            
             [_preparedTransactions removeObjectAtIndex:i];
             break;
         }

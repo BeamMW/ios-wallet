@@ -69,16 +69,16 @@ class BMSnackBar: UIView, CountdownViewDelegate {
 
         if data.type == BMSnackBar.SnackType.contact {
             self.data.type = .address
-            label.text = Localizables.shared.strings.contact_deleted
+            label.text = Localizable.shared.strings.contact_deleted
         }
         else if data.type == BMSnackBar.SnackType.address {
-            label.text = Localizables.shared.strings.address_deleted
+            label.text = Localizable.shared.strings.address_deleted
         }
         else if data.type == BMSnackBar.SnackType.delete_transaction {
-            label.text = Localizables.shared.strings.transaction_deleted
+            label.text = Localizable.shared.strings.transaction_deleted
         }
         else{
-            label.text = Localizables.shared.strings.beams_send
+            label.text = Localizable.shared.strings.beams_send
         }
       
         addSubview(label)
@@ -87,7 +87,7 @@ class BMSnackBar: UIView, CountdownViewDelegate {
         button.titleLabel?.font = SemiboldFont(size: 16)
         button.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         button.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        button.setTitle(Localizables.shared.strings.undo, for: .normal)
+        button.setTitle(Localizable.shared.strings.undo, for: .normal)
         button.contentHorizontalAlignment = .right
         button.isUserInteractionEnabled = false
        // button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
@@ -105,7 +105,7 @@ class BMSnackBar: UIView, CountdownViewDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     @objc private func onUndo() {

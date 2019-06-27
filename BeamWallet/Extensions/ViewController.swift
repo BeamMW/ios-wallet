@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  BeamWallet
+// ViewController.swift
+// BeamWallet
 //
 // 3/2/19.
 // Copyright 2018 Beam Development
@@ -44,8 +44,8 @@ extension UIViewController {
 }
 
 extension UIViewController {
-    func back() {
-        navigationController?.popViewController(animated: true)
+    func back(animated:Bool = true) {
+        navigationController?.popViewController(animated: animated)
     }
     
     func pushViewController(vc:UIViewController) {
@@ -61,7 +61,7 @@ extension UIViewController {
             UIApplication.shared.open(url , options: [:], completionHandler: nil)
         }
         else{
-            self.confirmAlert(title: Localizables.shared.strings.external_link_title, message: Localizables.shared.strings.external_link_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.open, cancelHandler: { (_ ) in
+            self.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
                 UIApplication.shared.open(url , options: [:], completionHandler: nil)

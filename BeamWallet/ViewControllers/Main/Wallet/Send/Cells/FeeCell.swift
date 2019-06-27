@@ -34,7 +34,7 @@ class FeeCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        titleLabel.text = Localizables.shared.strings.transaction_fee.uppercased()
+        titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(showPicker))
         longPress.minimumPressDuration = 1
@@ -67,7 +67,7 @@ class FeeCell: BaseCell {
             generator.impactOccurred()
             
             let modalViewController = InputFeePopover()
-            modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: Localizables.shared.strings.groth, with: "")) ?? ""
+            modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: Localizable.shared.strings.groth, with: "")) ?? ""
             modalViewController.modalPresentationStyle = .overFullScreen
             modalViewController.modalTransitionStyle = .crossDissolve
             modalViewController.completion = {
@@ -77,7 +77,7 @@ class FeeCell: BaseCell {
                 
                 if nFee > Double(self.feeSlider.maximumValue) {
                     self.feeSlider.maximumValue = Float(nFee)
-                    self.maxLabel.text = obj + Localizables.shared.strings.groth
+                    self.maxLabel.text = obj + Localizable.shared.strings.groth
                 }
                 
                 self.configure(with: nFee)
@@ -94,7 +94,7 @@ class FeeCell: BaseCell {
         let roundedStepValue = round(sender.value / stepValue) * stepValue
         sender.value = roundedStepValue
 
-        valueLabel.text = String(Int(roundedStepValue)) + Localizables.shared.strings.groth
+        valueLabel.text = String(Int(roundedStepValue)) + Localizable.shared.strings.groth
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: sender)
@@ -127,7 +127,7 @@ extension FeeCell: Configurable {
     func configure(with fee:Double) {
         feeSlider.value = Float(fee)
         
-        valueLabel.text = String(Int(fee)) + Localizables.shared.strings.groth
+        valueLabel.text = String(Int(fee)) + Localizable.shared.strings.groth
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: feeSlider)

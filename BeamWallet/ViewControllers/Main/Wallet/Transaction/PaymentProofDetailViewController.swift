@@ -43,13 +43,13 @@ class PaymentProofDetailViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = Localizables.shared.strings.payment_proof
+        title = Localizable.shared.strings.payment_proof
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -94,7 +94,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
         if let paymentProof = self.paymentProof {
             
             var section_1 = [GeneralInfo]()
-            section_1.append(GeneralInfo(text: Localizables.shared.strings.code, detail: paymentProof.code, failed: false, canCopy:true, color: UIColor.white))
+            section_1.append(GeneralInfo(text: Localizable.shared.strings.code, detail: paymentProof.code, failed: false, canCopy:true, color: UIColor.white))
 
             details.append(section_1)
             
@@ -104,10 +104,10 @@ class PaymentProofDetailViewController: BaseTableViewController {
         if let transaction = self.transaction {
             
             var section_2 = [GeneralInfo]()
-            section_2.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.sender), detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.receiver), detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.amount), detail: String.currency(value: transaction.realAmount) + Localizables.shared.strings.beam, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.kernel_id), detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.sender), detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.receiver), detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.amount), detail: String.currency(value: transaction.realAmount) + Localizable.shared.strings.beam, failed: false, canCopy:true, color: UIColor.white))
+            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
             
             details.append(section_2)
             
@@ -176,7 +176,7 @@ extension PaymentProofDetailViewController : UITableViewDataSource {
         case 0:
             return nil
         case 1:
-            return BMTableHeaderTitleView(title: Localizables.shared.strings.details, bold: true)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.details, bold: true)
         default:
             return nil
         }
@@ -275,7 +275,7 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == Localizables.shared.strings.new_line {
+        if text == Localizable.shared.strings.new_line {
             textView.resignFirstResponder()
             return false
         }
@@ -287,7 +287,7 @@ extension PaymentProofDetailViewController : GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell)
         {
-            if details[path.section][path.row].text == Localizables.shared.strings.addDots(value: Localizables.shared.strings.kernel_id), let transaction = self.transaction {
+            if details[path.section][path.row].text == Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), let transaction = self.transaction {
                 let kernelId = transaction.kernelId!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {

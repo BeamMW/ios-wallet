@@ -1,5 +1,5 @@
 //
-// IntroPhraseViewController.swift
+// BMLanguage.m
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -15,28 +15,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
 
-import UIKit
 
-class IntroPhraseViewController: BaseWizardViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        title = Localizable.shared.strings.create_new_wallet
-        
-        switch Device.screenType {
-        case .iPhones_5:
-            mainStack?.spacing = 50
-        default:
-            return
-        }
-    }
-    
-// MARK: IBAction
-    @IBAction func onNext(sender :UIButton) {
-        let vc = DisplayPhraseViewController()
-        pushViewController(vc: vc)
-    }
-}
+#import "BMLanguage.h"
+
+@implementation BMLanguage
+
+
+@end

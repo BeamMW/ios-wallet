@@ -30,7 +30,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = Localizables.shared.strings.seed_prhase
+        self.title = Localizable.shared.strings.seed_prhase
         
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         
@@ -74,7 +74,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: Localizables.shared.strings.seed_capture_warning)
+        self.alert(message: Localizable.shared.strings.seed_capture_warning)
     }
     
 // MARK: IBAction
@@ -99,7 +99,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
     }
     
     @IBAction func onNext(sender :UIButton) {
-        self.confirmAlert(title: Localizables.shared.strings.save_seed_title, message: Localizables.shared.strings.save_seed_info, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.done, cancelHandler: { (_ ) in
+        self.confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { (_ ) in
             
         }) { (_ ) in
             let vc = ConfirmPhraseViewController()

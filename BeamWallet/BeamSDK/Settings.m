@@ -125,16 +125,22 @@ static NSString *languageKey = @"languageKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
-        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
-    }
-    else{
-        _language = [[NSLocale currentLocale] languageCode];
-        
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
-            _language = @"en";
+    if (self.target == Testnet) {
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+            _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
+        }
+        else{
+            _language = [[NSLocale currentLocale] languageCode];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+                _language = @"en";
+            }
         }
     }
+    else{
+        _language = @"en";
+    }
+
     
     
     return self;
@@ -210,6 +216,7 @@ static NSString *languageKey = @"languageKey";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
+        
     return oldPath;
 }
 
@@ -322,16 +329,49 @@ static NSString *languageKey = @"languageKey";
     return appGroupDirectoryPath;
 }
 
+-(NSArray <BMLanguage*> * _Nonnull)languages {
+    BMLanguage *en = [BMLanguage new];
+    en.code = @"en";
+    en.enName = @"English";
+    en.localName = @"English";
+    
+    BMLanguage *ru = [BMLanguage new];
+    ru.code = @"ru";
+    ru.enName = @"Русский";
+    ru.localName = @"Russian";
+    
+    BMLanguage *es = [BMLanguage new];
+    es.code = @"es";
+    es.enName = @"Español";
+    es.localName = @"Spanish";
+    
+    BMLanguage *ko = [BMLanguage new];
+    ko.code = @"ko";
+    ko.enName = @"한국어";
+    ko.localName = @"Korean";
+    
+    BMLanguage *vi = [BMLanguage new];
+    vi.code = @"vi";
+    vi.enName = @"Tiếng Việt";
+    vi.localName = @"Vietnamese";
+    
+    BMLanguage *ch = [BMLanguage new];
+    ch.code = @"zh-Hans";
+    ch.enName = @"中文";
+    ch.localName = @"Chinese";
+
+    return @[en, ru, es, ko, vi, ch];
+}
+
 -(NSString*_Nonnull)languageName{
-    if ([_language isEqualToString:@"ru"]) {
-        return @"Русский";
+    
+    for (BMLanguage *lang in [self languages]) {
+        if ([lang.code isEqualToString:_language]) {
+            return lang.enName;
+        }
     }
-    else if ([_language isEqualToString:@"zh-Hans"]) {
-        return @"中文";
-    }
-    else{
-        return @"English";
-    }
+    
+    return @"English";
 }
 
 

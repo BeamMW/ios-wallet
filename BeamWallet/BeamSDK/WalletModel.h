@@ -1,8 +1,7 @@
 //
-//  WalletModel.h
-//  BeamTest
+// WalletModel.h
+// BeamTest
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

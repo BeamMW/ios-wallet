@@ -49,7 +49,7 @@ class SendViewController: BaseTableViewController {
         let label = UILabel(frame: CGRect(x: defaultX, y: 30, width: defaultWidth, height: 0))
         label.font = ItalicFont(size: 16)
         label.textColor = UIColor.white
-        label.text = Localizables.shared.strings.send_notice
+        label.text = Localizable.shared.strings.send_notice
         label.numberOfLines = 0
         label.textAlignment = .center
         label.sizeToFit()
@@ -59,7 +59,7 @@ class SendViewController: BaseTableViewController {
 
         let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: label.frame.origin.y + label.frame.size.height + 30, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
         button.setImage(IconNextPink(), for: .normal)
-        button.setTitle(Localizables.shared.strings.next.lowercased(), for: .normal)
+        button.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.main.heliotrope.cgColor
         button.setTitleColor(UIColor.main.heliotrope, for: .normal)
@@ -97,7 +97,7 @@ class SendViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
-        title = Localizables.shared.strings.send.uppercased()
+        title = Localizable.shared.strings.send.uppercased()
         
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
 
@@ -174,7 +174,7 @@ extension SendViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if tableView == searchTableView {
-            let header = BMTableHeaderTitleView.init(segments: [Localizables.shared.strings.contacts, Localizables.shared.strings.my_addresses])
+            let header = BMTableHeaderTitleView.init(segments: [Localizable.shared.strings.contacts, Localizable.shared.strings.my_addresses])
             header.selectedIndex = viewModel.selectedSearchIndex
             header.delegate = self
             return header
@@ -274,7 +274,7 @@ extension SendViewController : UITableViewDataSource {
             if viewModel.contacts.count == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: Localizables.shared.strings.not_found)
+                    .configured(with: Localizable.shared.strings.not_found)
                 cell.backgroundView?.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
                 return cell
             }
@@ -293,13 +293,13 @@ extension SendViewController : UITableViewDataSource {
             cell.delegate = self
             cell.error = viewModel.toAddressError
             cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizables.shared.strings.paste_enter_address, value: viewModel.toAddress, rightIcon:IconScanQr()))
+            cell.configure(with: (name: Localizable.shared.strings.paste_enter_address, value: viewModel.toAddress, rightIcon:IconScanQr()))
             cell.contact = viewModel.selectedContact
             return cell
         case 1:
             if indexPath.row == 0 {
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizables.shared.strings.amount.uppercased(), value: viewModel.amount))
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
                 cell.delegate = self
                 cell.error = viewModel.amountError
                 cell.fee = Double(viewModel.fee) ?? 0
@@ -310,7 +310,7 @@ extension SendViewController : UITableViewDataSource {
                 cell.textLabel?.textColor = UIColor.main.blueyGrey
                 cell.textLabel?.font = RegularFont(size: 14)
                 
-                if viewModel.fee != Localizables.shared.strings.zero {
+                if viewModel.fee != Localizable.shared.strings.zero {
                     cell.textLabel?.text = "+ \(viewModel.fee) GROTH transaction fee"
                 }
                 else{
@@ -323,7 +323,7 @@ extension SendViewController : UITableViewDataSource {
                 return cell
             }
         case 2:
-            var total = Localizables.shared.strings.zero
+            var total = Localizable.shared.strings.zero
             if let status = AppModel.sharedManager().walletStatus {
                 total = String.currency(value: status.realAmount)
             }
@@ -334,21 +334,21 @@ extension SendViewController : UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizables.shared.strings.local_annotation_not_shared, value: viewModel.comment, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.local_annotation_not_shared, value: viewModel.comment, rightIcon:nil))
             cell.delegate = self
             return cell
         case 4:
             let cell = tableView
                 .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                .configured(with: (expand: showAdvanced, title: Localizables.shared.strings.advanced.uppercased()))
+                .configured(with: (expand: showAdvanced, title: Localizable.shared.strings.advanced.uppercased()))
             cell.delegate = self
             return cell
         case 5:
-            var title = (viewModel.pickedOutgoingAddress == nil ? Localizables.shared.strings.outgoing : Localizables.shared.strings.outgoing_address.uppercased())
+            var title = (viewModel.pickedOutgoingAddress == nil ? Localizable.shared.strings.outgoing : Localizable.shared.strings.outgoing_address.uppercased())
             
             if viewModel.pickedOutgoingAddress != nil {
                 if viewModel.pickedOutgoingAddress?.walletId == viewModel.startedAddress?.walletId {
-                    title = Localizables.shared.strings.outgoing
+                    title = Localizable.shared.strings.outgoing
                 }
             }
             
@@ -362,18 +362,18 @@ extension SendViewController : UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showEdit, title: Localizables.shared.strings.edit_address.uppercased()))
+                    .configured(with: (expand: showEdit, title: Localizable.shared.strings.edit_address.uppercased()))
                 cell.delegate = self
                 return cell
             }
             else if indexPath.row == 2 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizables.shared.strings.expires.uppercased(), value: (viewModel.outgoindAdderss!.duration > 0 ? Localizables.shared.strings.hours_24 : Localizables.shared.strings.never), valueColor: UIColor.white))
+                    .configured(with: (title: Localizable.shared.strings.expires.uppercased(), value: (viewModel.outgoindAdderss!.duration > 0 ? Localizable.shared.strings.hours_24 : Localizable.shared.strings.never), valueColor: UIColor.white))
                 return cell
             }
             else if indexPath.row == 3 {
-                var name = Localizables.shared.strings.none
+                var name = Localizable.shared.strings.none
                 var color = UIColor.white
                 
                 if let category = AppModel.sharedManager().findCategory(byId: viewModel.outgoindAdderss!.category) {
@@ -383,13 +383,13 @@ extension SendViewController : UITableViewDataSource {
                 
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizables.shared.strings.category.uppercased(), value: name, valueColor: color))
+                    .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: name, valueColor: color))
                 return cell
             }
             else{
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizables.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label, rightIcon:nil))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
                 cell.topOffset?.constant = 20
@@ -435,7 +435,7 @@ extension SendViewController : BMCellProtocol {
                     }
                 }
                 
-                if input && !text.isEmpty {
+                if input {
                     isSearch = true
                     viewModel.searchForContacts()
                     searchTableView.reloadData()
@@ -482,7 +482,7 @@ extension SendViewController : BMCellProtocol {
                 if path.section == 0 {
                     if !viewModel.toAddress.isEmpty {
                         if !AppModel.sharedManager().isValidAddress(viewModel.toAddress) {
-                            viewModel.toAddressError = Localizables.shared.strings.incorrect_address
+                            viewModel.toAddressError = Localizable.shared.strings.incorrect_address
                         }
                     }
                     
@@ -527,23 +527,25 @@ extension SendViewController : BMCellProtocol {
                 pushViewController(vc: vc)
             }
             else if path.section == 2 {
-    
-                viewModel.sendAll = true
-                
-                if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
-                    cell.configure(with: (name: Localizables.shared.strings.amount.uppercased(), value: viewModel.amount))
-                    cell.error = viewModel.amountError
-                    cell.fee = Double(viewModel.fee) ?? 0
+                if !viewModel.sendAll {
+                    viewModel.sendAll = true
+                    
+                    if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
+                        cell.configure(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
+                        cell.error = viewModel.amountError
+                        cell.fee = Double(viewModel.fee) ?? 0
+                    }
+                    else{
+                        tableView.reloadData()
+                    }
+                    
+                    UIView.performWithoutAnimation {
+                        tableView.beginUpdates()
+                        tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+                        tableView.endUpdates()
+                    }
                 }
-                else{
-                    tableView.reloadData()
-                }
-              
-                UIView.performWithoutAnimation {
-                    tableView.beginUpdates()
-                    tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: .none)
-                    tableView.endUpdates()
-                }
+ 
             }
             else if path.section == 5 {
                 let vc = ReceiveListViewController()
@@ -595,13 +597,16 @@ extension SendViewController : BMCellProtocol {
         
         if viewModel.sendAll {
             if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
-                cell.configure(with: (name: Localizables.shared.strings.amount.uppercased(), value: viewModel.amount))
+                cell.configure(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
                 cell.error = viewModel.amountError
                 cell.fee = value
             }
             
             tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .none)
         }
+        
+        _ = viewModel.checkAmountError()
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
     }
 }
 

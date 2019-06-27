@@ -42,7 +42,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -50,10 +50,10 @@ class UnlockPasswordViewController: BaseWizardViewController {
         
         hideKeyboardWhenTappedAround()
         
-        title = event == .unlock ? Localizables.shared.strings.your_password : Localizables.shared.strings.change_password
+        title = event == .unlock ? Localizable.shared.strings.your_password : Localizable.shared.strings.change_password
         
         if event == .unlock {
-            titleLabel.text = Localizables.shared.strings.unlock_password
+            titleLabel.text = Localizable.shared.strings.unlock_password
         }
         
         if Device.isZoomed {
@@ -79,13 +79,13 @@ class UnlockPasswordViewController: BaseWizardViewController {
     
     @IBAction func onLogin(sender :UIButton) {        
         if passField.text?.isEmpty ?? true {
-            passField.error = Localizables.shared.strings.empty_password
+            passField.error = Localizable.shared.strings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let valid = AppModel.sharedManager().isValidPassword(pass)
             if !valid {
-                passField.error = Localizables.shared.strings.current_password_error
+                passField.error = Localizable.shared.strings.current_password_error
                 passField.status = BMField.Status.error
             }
             else{
@@ -98,7 +98,7 @@ class UnlockPasswordViewController: BaseWizardViewController {
                         }
                     }
                     else{
-                        navigationController?.popViewController(animated: true)
+                        back()
                     }
                 }
                 else{

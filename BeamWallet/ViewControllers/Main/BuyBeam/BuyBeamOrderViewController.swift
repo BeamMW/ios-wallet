@@ -74,7 +74,7 @@ class BuyBeamOrderViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
         
     override func viewDidLoad() {
@@ -95,26 +95,26 @@ class BuyBeamOrderViewController: BaseViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
         
-        title = Localizables.shared.strings.buy_beam.uppercased()
+        title = Localizable.shared.strings.buy_beam.uppercased()
         
         let fullname = CryptoWolfManager.sharedManager.fullName(coin: currency).uppercased()
         
-        addressTitleLabel.text = (fullname + Localizables.shared.strings.space + Localizables.shared.strings.address).uppercased()
+        addressTitleLabel.text = (fullname + Localizable.shared.strings.space + Localizable.shared.strings.address).uppercased()
         addressTitleLabel.letterSpacing = 1.5
         addressLabel.text = order.address
        
-        amountTitleLabel.text = Localizables.shared.strings.you_get.uppercased()
+        amountTitleLabel.text = Localizable.shared.strings.you_get.uppercased()
         amountTitleLabel.letterSpacing = 1.5
-        amountLabel.text = receiveAmount + Localizables.shared.strings.space + Localizables.shared.strings.beam
+        amountLabel.text = receiveAmount + Localizable.shared.strings.space + Localizable.shared.strings.beam
         
         orderTitleLabel.text = orderTitleLabel.text?.uppercased()
         orderTitleLabel.letterSpacing = 1.5
         orderLabel.text = order.status
         
-        awaitingDepositTitleLabel.text = Localizables.shared.strings.addDots(value: Localizables.shared.strings.awaiting_deposit)
+        awaitingDepositTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.awaiting_deposit)
         
         let value = "\(amount ?? "") \(currency ?? "")"
-        let description = (Localizables.shared.strings.buy_send_money(value: value, name: fullname).lowercased().replacingOccurrences(of: currency.lowercased(), with: currency.uppercased()).capitalizingFirstLetter() + "\n\n" + Localizables.shared.strings.receiving_amount_dif).replacingOccurrences(of: currency.lowercased(), with: currency.uppercased())
+        let description = (Localizable.shared.strings.buy_send_money(value: value, name: fullname).lowercased().replacingOccurrences(of: currency.lowercased(), with: currency.uppercased()).capitalizingFirstLetter() + "\n\n" + Localizable.shared.strings.receiving_amount_dif).replacingOccurrences(of: currency.lowercased(), with: currency.uppercased())
         
         let range = (description as NSString).range(of: String(value))
         
@@ -165,7 +165,7 @@ class BuyBeamOrderViewController: BaseViewController {
                     strongSelf.timer = nil
                     strongSelf.viewModel.stopUpdates()
                     
-                    strongSelf.alert(title: Localizables.shared.strings.buy_transaction_failed_title, message: Localizables.shared.strings.buy_transaction_failed_text_1, handler: { (_ ) in
+                    strongSelf.alert(title: Localizable.shared.strings.buy_transaction_failed_title, message: Localizable.shared.strings.buy_transaction_failed_text_1, handler: { (_ ) in
                         strongSelf.back()
                     })
                 }
@@ -174,7 +174,7 @@ class BuyBeamOrderViewController: BaseViewController {
                     strongSelf.timer = nil
                     strongSelf.viewModel.stopUpdates()
 
-                    strongSelf.alert(title: Localizables.shared.strings.buy_transaction_failed_title, message: Localizables.shared.strings.buy_transaction_failed_text_2, handler: { (_ ) in
+                    strongSelf.alert(title: Localizable.shared.strings.buy_transaction_failed_title, message: Localizable.shared.strings.buy_transaction_failed_text_2, handler: { (_ ) in
                         strongSelf.back()
                     })
                 }
@@ -183,7 +183,7 @@ class BuyBeamOrderViewController: BaseViewController {
                     strongSelf.timer = nil
                     strongSelf.viewModel.stopUpdates()
 
-                    strongSelf.alert(title: Localizables.shared.strings.buy_transaction_success_title, message: Localizables.shared.strings.buy_transaction_success_text, handler: { (_ ) in
+                    strongSelf.alert(title: Localizable.shared.strings.buy_transaction_success_title, message: Localizable.shared.strings.buy_transaction_success_text, handler: { (_ ) in
                         strongSelf.closeOrder()
                     })
                 }

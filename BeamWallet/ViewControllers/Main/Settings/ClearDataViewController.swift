@@ -35,14 +35,14 @@ class ClearDataViewController: BaseTableViewController {
         }
     }
     
-    private var items = [ClearItem(title: Localizables.shared.strings.delete_all_addresses, isSelected: false, id: 1, name: Localizables.shared.strings.addresses.lowercased()), ClearItem(title: Localizables.shared.strings.delete_all_contacts, isSelected: false, id: 2, name: Localizables.shared.strings.contacts.lowercased()), ClearItem(title: Localizables.shared.strings.delete_all_transactions, isSelected: false, id: 3, name: Localizables.shared.strings.transactions.lowercased())]
+    private var items = [ClearItem(title: Localizable.shared.strings.delete_all_addresses, isSelected: false, id: 1, name: Localizable.shared.strings.addresses.lowercased()), ClearItem(title: Localizable.shared.strings.delete_all_contacts, isSelected: false, id: 2, name: Localizable.shared.strings.contacts.lowercased()), ClearItem(title: Localizable.shared.strings.delete_all_transactions, isSelected: false, id: 3, name: Localizable.shared.strings.transactions.lowercased())]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Localizables.shared.strings.clear_data
+        title = Localizable.shared.strings.clear_data
         
-        addRightButton(title:Localizables.shared.strings.clear, target: self, selector: #selector(onClear), enabled: false)
+        addRightButton(title:Localizable.shared.strings.clear, target: self, selector: #selector(onClear), enabled: false)
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -65,13 +65,13 @@ class ClearDataViewController: BaseTableViewController {
             str = deleted.joined(separator: String.empty())
         }
         else if deleted.count == 2 {
-            str = deleted.joined(separator: Localizables.shared.strings.and)
+            str = deleted.joined(separator: Localizable.shared.strings.and)
         }
         else if deleted.count == 3 {
             str = deleted.joined(separator: ", ")
         }
         
-        self.confirmAlert(title: Localizables.shared.strings.clear_data, message: Localizables.shared.strings.delete_data_text(str: str), cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.clear, cancelHandler: { (_ ) in
+        self.confirmAlert(title: Localizable.shared.strings.clear_data, message: Localizable.shared.strings.delete_data_text(str: str), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.clear, cancelHandler: { (_ ) in
             
         }) { (_ ) in
             self.makeClear()
@@ -98,7 +98,7 @@ class ClearDataViewController: BaseTableViewController {
             }
         }
         
-        self.navigationController?.popViewController(animated: true)
+        self.back()
     }
     
     @objc private func onCheckBox(sender:UIButton){

@@ -1,5 +1,5 @@
 //
-// IntroPhraseViewController.swift
+// StringLocalize.m
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,26 +17,18 @@
 // limitations under the License.
 //
 
-import UIKit
+#import "StringLocalize.h"
+#import "AppModel.h"
 
-class IntroPhraseViewController: BaseWizardViewController {
+@implementation NSString (Localization)
+
+-(NSString*)localized {
+    NSString *lang = [Settings sharedManager].language;
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        title = Localizable.shared.strings.create_new_wallet
-        
-        switch Device.screenType {
-        case .iPhones_5:
-            mainStack?.spacing = 50
-        default:
-            return
-        }
-    }
+    NSString *path = [[NSBundle mainBundle] pathForResource:lang ofType:@"lproj"];
+    NSBundle * bundle = [[NSBundle alloc] initWithPath:path];
     
-// MARK: IBAction
-    @IBAction func onNext(sender :UIButton) {
-        let vc = DisplayPhraseViewController()
-        pushViewController(vc: vc)
-    }
+    return NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
 }
+
+@end

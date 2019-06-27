@@ -19,6 +19,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class BMLanguage;
+
 static double MAX_AMOUNT = 262800000;
 
 typedef enum Target : NSUInteger {
@@ -69,6 +71,8 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)localNodeStorage;
 -(NSString*_Nonnull)localNodeTemdDir;
 -(NSArray*_Nonnull)localNodePeers;
+
 -(NSString*_Nonnull)languageName;
+-(NSArray <BMLanguage*> * _Nonnull)languages;
 
 @end

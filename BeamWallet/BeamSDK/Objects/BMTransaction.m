@@ -18,6 +18,7 @@
 //
 
 #import "BMTransaction.h"
+#import "StringLocalize.h"
 
 @implementation BMTransaction
 
@@ -65,15 +66,15 @@
 }
     
 -(BOOL)isExpired {
-    return  [self.status isEqualToString:[NSLocalizedString(@"expired", nil) lowercaseString]];
+    return  [self.status isEqualToString:[[@"expired" localized] lowercaseString]];
 }
 
 -(BOOL)isFailed {
-    return [self.status isEqualToString:[NSLocalizedString(@"failed", nil) lowercaseString]] || [self.status isEqualToString:[NSLocalizedString(@"expired", nil) lowercaseString]];
+    return [self.status isEqualToString:[[@"failed" localized] lowercaseString]] || [self.status isEqualToString:[[@"expired" localized] lowercaseString]];
 }
 
 -(BOOL)isCancelled {
-    return [self.status isEqualToString:[NSLocalizedString(@"cancelled", nil) lowercaseString]];
+    return [self.status isEqualToString:[[@"cancelled" localized] lowercaseString]];
 }
 
 -(BOOL)hasPaymentProof {

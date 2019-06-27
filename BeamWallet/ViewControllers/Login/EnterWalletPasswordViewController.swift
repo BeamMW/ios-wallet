@@ -35,7 +35,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -61,8 +61,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 touchIdButton.setImage(IconFaceId(), for: .normal)
             }
             
-            let loginText = BiometricAuthorization.shared.faceIDAvailable() ? Localizables.shared.strings.ownerkey_faceid_text : Localizables.shared.strings.ownerkey_touchid_text
-            loginLabel.text = loginText.replacingOccurrences(of: Localizables.shared.strings.and.lowercased(), with: Localizables.shared.strings.or.lowercased())
+            let loginText = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.ownerkey_faceid_text : Localizable.shared.strings.ownerkey_touchid_text
+            loginLabel.text = loginText.replacingOccurrences(of: Localizable.shared.strings.and.lowercased(), with: Localizable.shared.strings.or.lowercased())
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -84,11 +84,10 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-//        if let password = KeychainManager.getPassword() {
-//            self.passField.text = password
-//            self.onLogin(sender: UIButton())
-//        }
-
+        if let password = KeychainManager.getPassword() {
+            self.passField.text = password
+            self.onLogin(sender: UIButton())
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -133,14 +132,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         AppModel.sharedManager().isRestoreFlow = false;
 
         if passField.text?.isEmpty ?? true {
-            passField.error = Localizables.shared.strings.empty_password
+            passField.error = Localizable.shared.strings.empty_password
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
             let appModel = AppModel.sharedManager()
             let valid = appModel.canOpenWallet(pass)
             if !valid {
-                passField.error = Localizables.shared.strings.incorrect_password
+                passField.error = Localizable.shared.strings.incorrect_password
                 passField.status = BMField.Status.error
             }
             else{

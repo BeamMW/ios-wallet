@@ -31,7 +31,7 @@ class SaveContactViewController: BaseTableViewController {
         
         let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.darkSlateBlue)
         buttonCancel.setImage(IconCancel(), for: .normal)
-        buttonCancel.setTitle(Localizables.shared.strings.cancel.lowercased(), for: .normal)
+        buttonCancel.setTitle(Localizable.shared.strings.cancel.lowercased(), for: .normal)
         buttonCancel.setTitleColor(UIColor.white, for: .normal)
         buttonCancel.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .highlighted)
         buttonCancel.addTarget(self, action: #selector(onBack), for: .touchUpInside)
@@ -39,7 +39,7 @@ class SaveContactViewController: BaseTableViewController {
         
         let buttonSave = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: UIColor.main.heliotrope)
         buttonSave.setImage(IconDoneBlue(), for: .normal)
-        buttonSave.setTitle(Localizables.shared.strings.save.lowercased(), for: .normal)
+        buttonSave.setTitle(Localizable.shared.strings.save.lowercased(), for: .normal)
         buttonSave.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         buttonSave.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
         buttonSave.addTarget(self, action: #selector(onSave), for: .touchUpInside)
@@ -58,7 +58,7 @@ class SaveContactViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override var isUppercasedTitle: Bool {
@@ -77,7 +77,7 @@ class SaveContactViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
-        title = Localizables.shared.strings.save_address_title.uppercased()
+        title = Localizable.shared.strings.save_address_title.uppercased()
         
         tableView.register([BMFieldCell.self, ConfirmCell.self, BMDetailCell.self])
         
@@ -181,7 +181,7 @@ extension SaveContactViewController : UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            let item = ConfirmItem(title: Localizables.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+            let item = ConfirmItem(title: Localizable.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
             let cell =  tableView
                 .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
                 .configured(with: item)
@@ -189,14 +189,14 @@ extension SaveContactViewController : UITableViewDataSource {
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizables.shared.strings.name.uppercased(), value: self.address.label, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: self.address.label, rightIcon:nil))
             cell.delegate = self
             return cell
         case 2:
             let category = AppModel.sharedManager().findCategory(byAddress: self.address.walletId)
             let cell = tableView
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                .configured(with: (title: Localizables.shared.strings.category.uppercased(), value: category?.name ?? String.empty(), valueColor: UIColor.init(hexString: category?.color ?? "#FFFFFF")))
+                .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: category?.name ?? String.empty(), valueColor: UIColor.init(hexString: category?.color ?? "#FFFFFF")))
             cell.contentView.backgroundColor = UIColor.clear
             return cell
         default:

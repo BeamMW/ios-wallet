@@ -242,7 +242,7 @@ class BMField: UITextField {
         
         if keyboardType == .numberPad || keyboardType == .decimalPad || returnKeyType == .next {
             let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44))
-            let item = UIBarButtonItem(title: Localizables.shared.strings.done, style: .plain, target: self, action: #selector(onHide))
+            let item = UIBarButtonItem(title: Localizable.shared.strings.done, style: .plain, target: self, action: #selector(onHide))
             item.setTitleTextAttributes([NSAttributedString.Key.font : BoldFont(size: 17)], for: .normal)
             toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),item]
             self.inputAccessoryView = toolbar

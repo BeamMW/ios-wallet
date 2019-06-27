@@ -30,7 +30,7 @@ class EditAddressViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -41,7 +41,7 @@ class EditAddressViewController: BaseTableViewController {
             self?.tableView.reloadData()
         }
         
-        title = (viewModel.isContact ? Localizables.shared.strings.edit_contact : Localizables.shared.strings.edit_address)
+        title = (viewModel.isContact ? Localizable.shared.strings.edit_contact : Localizable.shared.strings.edit_address)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -50,7 +50,7 @@ class EditAddressViewController: BaseTableViewController {
         tableView.register([AddressSwitchCell.self, AddressExpiresCell.self,AddressExpiredCell.self, 
             AddressCommentCell.self, AddressCategoryCell.self])
 
-        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
     }
     
     @IBAction func onSave(sender : UIBarButtonItem) {
@@ -148,7 +148,7 @@ extension EditAddressViewController : UITableViewDataSource {
         }
         else if indexPath.section == 1 {
             
-            let text = viewModel.newAddress.isExpired() ? Localizables.shared.strings.active_address : Localizables.shared.strings.expire_now
+            let text = viewModel.newAddress.isExpired() ? Localizable.shared.strings.active_address : Localizable.shared.strings.expire_now
             
             let selected = (viewModel.newAddress.isExpired()) ? viewModel.newAddress.isNowActive : viewModel.newAddress.isNowExpired
             

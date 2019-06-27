@@ -58,7 +58,7 @@ public class CountdownView: UIView {
     // MARK: Inits
     override public init(frame: CGRect) {
         if frame.width != frame.height {
-            fatalError(Localizables.shared.strings.fatalInitCoderError)
+            fatalError(Localizable.shared.strings.fatalInitCoderError)
         }
         
         super.init(frame: frame)

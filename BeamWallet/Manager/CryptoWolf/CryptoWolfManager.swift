@@ -125,10 +125,10 @@ class CryptoWolfManager: NSObject  {
         if let rates = self.rates[from] {
             let round = Int(CryptoWolfManager.sharedManager.round(coin: from))
 
-            var offset = Localizables.shared.strings.zero + "."
+            var offset = Localizable.shared.strings.zero + "."
             
             for _ in 1...round - 1{
-                offset = offset + Localizables.shared.strings.zero
+                offset = offset + Localizable.shared.strings.zero
             }
             
             offset = offset + "1"

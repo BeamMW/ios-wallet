@@ -38,18 +38,18 @@ class OwnerKeyViewController: BaseViewController {
             detailLabelLeft.constant = 0
         }
         
-        title = Localizables.shared.strings.show_owner_key
+        title = Localizable.shared.strings.show_owner_key
         
         ownerKeyLabel.text = ownerKey
-        ownerKeyTitleLabel.text = Localizables.shared.strings.addDots(value: Localizables.shared.strings.key_code.uppercased())
+        ownerKeyTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.key_code.uppercased())
         ownerKeyTitleLabel.letterSpacing = 1.5
     }
     
     @IBAction func onCopy(sender :UIButton) {
         UIPasteboard.general.string = ownerKey
         
-        ShowCopied(text: Localizables.shared.strings.ownerkey_copied)
+        ShowCopied(text: Localizable.shared.strings.ownerkey_copied)
         
-        navigationController?.popViewController(animated: true)
+        back()
     }
 }

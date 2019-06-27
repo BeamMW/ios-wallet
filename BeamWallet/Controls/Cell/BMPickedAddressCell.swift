@@ -31,6 +31,7 @@ class BMPickedAddressCell: BaseCell {
         super.awakeFromNib()
         
         addressLabel.delegate = self
+        addressLabel.displayCopyAlert = false
         
         selectionStyle = .none        
     }
@@ -50,7 +51,7 @@ extension BMPickedAddressCell: Configurable {
             nameLabel.letterSpacing = 1.5
         }
         
-        if options.title == Localizables.shared.strings.outgoing || options.title == Localizables.shared.strings.outgoing_address.uppercased() || options.title == Localizables.shared.strings.beam_recepient_auto || options.title == Localizables.shared.strings.beam_recepient.uppercased() {
+        if options.title == Localizable.shared.strings.outgoing || options.title == Localizable.shared.strings.outgoing_address.uppercased() || options.title == Localizable.shared.strings.beam_recepient_auto || options.title == Localizable.shared.strings.beam_recepient.uppercased() {
             button.setTitleColor(UIColor.main.heliotrope, for: .normal)
             button.setTitleColor(UIColor.main.heliotrope.withAlphaComponent(0.3), for: .highlighted)
             button.layer.borderColor = UIColor.main.heliotrope.cgColor
@@ -61,7 +62,9 @@ extension BMPickedAddressCell: Configurable {
 }
 
 extension BMPickedAddressCell: BMCopyLabelDelegate {
+
     func onCopied() {
+        ShowCopied(text: Localizable.shared.strings.address_copied)
         delegate?.onClickCopy?()
     }
 }

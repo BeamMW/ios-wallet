@@ -169,7 +169,7 @@ class BaseViewController: UIViewController {
     }
     
     @objc public func onLeftBackButton() {
-        self.navigationController?.popViewController(animated: true)
+        back()
     }
     
     
@@ -217,7 +217,7 @@ class BaseViewController: UIViewController {
         rightButton.tag = 20191
         rightButton.titleLabel?.font = RegularFont(size: 16)
         rightButton.contentHorizontalAlignment = .right
-        rightButton.tintColor = UIColor.white
+        rightButton.tintColor = isGradient ? UIColor.white : UIColor.main.brightTeal
         rightButton.setTitle(title, for: .normal)
         rightButton.addTarget(target, action: selector!, for: .touchUpInside)
         rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-w-15, y: y, width: w, height: 40)
@@ -251,7 +251,7 @@ class BaseViewController: UIViewController {
         view.layer.cornerRadius = 8
         view.addSubview(logoView)
         
-        let showAlert = UIAlertController(title: Localizables.shared.strings.rate_title, message: Localizables.shared.strings.rate_text, preferredStyle: .alert)
+        let showAlert = UIAlertController(title: Localizable.shared.strings.rate_title, message: Localizable.shared.strings.rate_text, preferredStyle: .alert)
         showAlert.view.addSubview(view)
         
         let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 285)
@@ -259,15 +259,15 @@ class BaseViewController: UIViewController {
         showAlert.view.addConstraint(height)
         showAlert.view.addConstraint(width)
         
-        showAlert.addAction(UIAlertAction(title: Localizables.shared.strings.rate_app, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.rate_app, style: .default, handler: { action in
             AppStoreReviewManager.openAppStoreRatingPage()
         }))
-        showAlert.addAction(UIAlertAction(title: Localizables.shared.strings.feedback, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.feedback, style: .default, handler: { action in
             AppStoreReviewManager.resetRating()
             
             self.writeFeedback()
         }))
-        showAlert.addAction(UIAlertAction(title: Localizables.shared.strings.not_now, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.not_now, style: .default, handler: { action in
             AppStoreReviewManager.resetRating()
         }))
         
@@ -278,12 +278,12 @@ class BaseViewController: UIViewController {
         if(MFMailComposeViewController.canSendMail()) {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
-            mailComposer.setToRecipients([Localizables.shared.strings.support_email])
-            mailComposer.setSubject(Localizables.shared.strings.ios_feedback)
+            mailComposer.setToRecipients([Localizable.shared.strings.support_email])
+            mailComposer.setSubject(Localizable.shared.strings.ios_feedback)
             present(mailComposer, animated: true, completion: nil)
         }
         else {
-            UIApplication.shared.open(URL(string: Localizables.shared.strings.support_email_mailto)!, options: [:]) { (_ ) in
+            UIApplication.shared.open(URL(string: Localizable.shared.strings.support_email_mailto)!, options: [:]) { (_ ) in
             }
         }
     }
@@ -294,7 +294,7 @@ class BaseViewController: UIViewController {
         if !Settings.sharedManager().isHideAmounts {
             if Settings.sharedManager().isAskForHideAmounts {
                 
-                self.confirmAlert(title: Localizables.shared.strings.activate_security_title, message: Localizables.shared.strings.activate_security_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.activate, cancelHandler: { (_ ) in
+                self.confirmAlert(title: Localizable.shared.strings.activate_security_title, message: Localizable.shared.strings.activate_security_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.activate, cancelHandler: { (_ ) in
                     
                 }) { (_ ) in
                     Settings.sharedManager().isAskForHideAmounts = false

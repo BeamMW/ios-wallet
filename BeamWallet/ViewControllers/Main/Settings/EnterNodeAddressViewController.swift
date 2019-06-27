@@ -31,13 +31,13 @@ class EnterNodeAddressViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "ip:port"
+        title = Localizable.shared.strings.ip_port
         
         hideKeyboardWhenTappedAround()
         
         nodeAddressView.backgroundColor = UIColor.main.marineTwo
 
-        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
         oldAddress = Settings.sharedManager().nodeAddress
         nodeAddressField.text = oldAddress
@@ -75,16 +75,16 @@ class EnterNodeAddressViewController: BaseViewController {
                     
                     completion?(true)
                     
-                    self.navigationController?.popViewController(animated: true)
+                    self.back()
                 }
                 else{
                     completion?(true)
                     
-                    self.navigationController?.popViewController(animated: true)
+                    self.back()
                 }
             }
             else{
-               self.alert(title: "Invalid address", message: "The provided node address is invalid.\n Please, check if the entered address is correct", handler: nil)
+               self.alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.invalid_address_text, handler: nil)
             }
         }
     }

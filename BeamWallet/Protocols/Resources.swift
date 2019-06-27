@@ -189,4 +189,8 @@ func IconFaceId() -> UIImage? {
     return UIImage(named: "iconFaceId")
 }
 
+func Tick() -> UIImage? {
+    return UIImage(named: "tick")
+}
+
 

@@ -33,8 +33,8 @@ class UTXOBlockCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        hashTitleLabel.text = Localizables.shared.strings.addDots(value: Localizables.shared.strings.block_hash)
-        heightTitleLabel.text = Localizables.shared.strings.addDots(value: Localizables.shared.strings.blockchain_height)
+        hashTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.block_hash)
+        heightTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.blockchain_height)
         
         self.selectionStyle = .none
     }

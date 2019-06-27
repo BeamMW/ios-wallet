@@ -35,7 +35,7 @@ class PreviewQRViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -47,9 +47,9 @@ class PreviewQRViewController: BaseViewController {
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         view.addSubview(codeView)
         
-        let addressString = Localizables.shared.strings.address + ":" + "\n\n" + address.walletId
+        let addressString = Localizable.shared.strings.address + ":" + "\n\n" + address.walletId
         
-        let range = (addressString as NSString).range(of: String(Localizables.shared.strings.address + ":"))
+        let range = (addressString as NSString).range(of: String(Localizable.shared.strings.address + ":"))
         
         let attributedString = NSMutableAttributedString(string:addressString)
         attributedString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: range)
@@ -66,7 +66,7 @@ class PreviewQRViewController: BaseViewController {
     }
     
     public func didShow() {
-        title = Localizables.shared.strings.qr_code
+        title = Localizable.shared.strings.qr_code.replacingOccurrences(of: "Qr", with: "QR")
         
         addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
         
@@ -80,7 +80,7 @@ class PreviewQRViewController: BaseViewController {
     @objc private func onMore(sender:UIBarButtonItem) {
         fromMore = true
         
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.copy_address, icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: Localizables.shared.strings.share_qr_code, icon: nil, action:.show_qr_code)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_address, icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_qr_code, icon: nil, action:.show_qr_code)]
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -105,7 +105,7 @@ class PreviewQRViewController: BaseViewController {
             vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
                 
                 if completed && self.fromMore {
-                    self.navigationController?.popViewController(animated: true)
+                    self.back()
                 }
             }
             
@@ -120,19 +120,19 @@ class PreviewQRViewController: BaseViewController {
         ShowCopied()
         
         if fromMore {
-            navigationController?.popViewController(animated: true)
+            back()
         }
     }
 
     override var previewActionItems: [UIPreviewActionItem] {
         
-        let action1 = UIPreviewAction(title: Localizables.shared.strings.share_qr_code,
+        let action1 = UIPreviewAction(title: Localizable.shared.strings.share_qr_code,
                                       style: .default,
                                       handler: { previewAction, viewController in
                                         self.onShare()
         })
         
-        let action2 = UIPreviewAction(title: Localizables.shared.strings.copy_address,
+        let action2 = UIPreviewAction(title: Localizable.shared.strings.copy_address,
                                       style: .default,
                                       handler: { previewAction, viewController in
                                         self.onCopy()

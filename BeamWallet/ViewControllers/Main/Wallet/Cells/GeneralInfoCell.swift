@@ -60,13 +60,13 @@ class GeneralInfoCell: BaseCell {
         if let text = self.detailLabel.attributedText {
             let title = NSString(string: text.string)
             
-            let tapRange = title.range(of: Localizables.shared.strings.open_in_explorer)
+            let tapRange = title.range(of: Localizable.shared.strings.open_in_explorer)
             
             if tapRange.location != NSNotFound {
                 let tapLocation = sender.location(in: self.detailLabel)
                 let tapIndex = self.detailLabel.indexOfAttributedTextCharacterAtPoint(point: tapLocation)
                 
-                if let ranges = self.detailLabel.attributedText?.rangesOf(subString: Localizables.shared.strings.open_in_explorer) {
+                if let ranges = self.detailLabel.attributedText?.rangesOf(subString: Localizable.shared.strings.open_in_explorer) {
                     for range in ranges {
                         if tapIndex > range.location && tapIndex < range.location + range.length {
                                 self.delegate?.onClickToCell(cell: self)
@@ -86,7 +86,8 @@ extension GeneralInfoCell: Configurable {
         detailLabel.text = info.detail
         detailLabel.copyText = nil
         detailLabel.isUserInteractionEnabled = info.canCopy
-        
+        detailLabel.font = RegularFont(size: 14)
+
         if info.failed {
             titleLabel.textColor = UIColor.main.red
             detailLabel.textColor = UIColor.main.red
@@ -97,7 +98,7 @@ extension GeneralInfoCell: Configurable {
             detailLabel.textColor = info.color
         }
         
-        if info.text == Localizables.shared.strings.addDots(value:Localizables.shared.strings.my_rec_address) ||  info.text == Localizables.shared.strings.addDots(value:Localizables.shared.strings.my_send_address) || info.text == Localizables.shared.strings.addDots(value:Localizables.shared.strings.my_address) || info.text == Localizables.shared.strings.addDots(value:Localizables.shared.strings.contact) {
+        if info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_rec_address) ||  info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_send_address) || info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_address) || info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.contact) {
             
             let address = AppModel.sharedManager().findAddress(byID: info.detail)
             let category = AppModel.sharedManager().findCategory(byAddress: info.detail)
@@ -143,7 +144,7 @@ extension GeneralInfoCell: Configurable {
            //     let rangeCategory2 = (text as NSString).range(of: String("\n" + categoryName))
 
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.init(hexString: category!.color) , range: rangeCategory)
-                attributedString.addAttribute(NSAttributedString.Key.font, value: ItalicFont(size: 14) , range: rangeCategory)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: rangeCategory)
              //   attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style1, range: rangeCategory2)
             }
             
@@ -155,7 +156,7 @@ extension GeneralInfoCell: Configurable {
             
             detailLabel.attributedText = attributedString
         }
-        else if info.text == Localizables.shared.strings.addDots(value:Localizables.shared.strings.contact) {
+        else if info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.contact) {
             let split = info.detail.split(separator: "\n")
             if split.count == 2 {
                 let contact = split[0]
@@ -167,14 +168,14 @@ extension GeneralInfoCell: Configurable {
                 detailLabel.attributedText = attributedString
             }
         }
-        else if info.text == Localizables.shared.strings.addDots(value:Localizables.shared.strings.kernel_id)  {
+        else if info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.kernel_id)  {
             detailLabel.copyText = info.detail
 
             if !info.detail.contains("00000000") {
                 detailLabel.isUserInteractionEnabled = true
                 
-                let text = info.detail + "\n" + Localizables.shared.strings.open_in_explorer
-                let range = (text as NSString).range(of: String(Localizables.shared.strings.open_in_explorer))
+                let text = info.detail + "\n" + Localizable.shared.strings.open_in_explorer
+                let range = (text as NSString).range(of: String(Localizable.shared.strings.open_in_explorer))
                 
                 let imageAttachment = NSTextAttachment()
                 imageAttachment.image = UIImage(named: "iconExternalLinkGreen")
@@ -189,7 +190,10 @@ extension GeneralInfoCell: Configurable {
                 detailLabel.attributedText = attributedString
             }
         }
-        
+        else if info.text == Localizable.shared.strings.addDots(value: Localizable.shared.strings.comment) {
+            
+            detailLabel.font = ItalicFont(size: 14)
+        }
     }
 }
 

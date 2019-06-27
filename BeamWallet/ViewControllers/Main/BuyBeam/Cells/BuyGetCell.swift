@@ -17,7 +17,7 @@ class BuyGetCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        titleLabel.text = Localizables.shared.strings.you_get.uppercased()
+        titleLabel.text = Localizable.shared.strings.you_get.uppercased()
         titleLabel.letterSpacing = 1.5
         
         selectionStyle = .none
@@ -35,11 +35,11 @@ extension BuyGetCell: Configurable {
     
     func configure(with value:String) {
         if value.isEmpty {
-            valueLabel.text = Localizables.shared.strings.beam_to_receive
+            valueLabel.text = Localizable.shared.strings.beam_to_receive
             valueLabel.textColor = UIColor.main.steelGrey
         }
         else{
-            valueLabel.text = value + Localizables.shared.strings.beam
+            valueLabel.text = value + Localizable.shared.strings.beam
             valueLabel.textColor = UIColor.main.brightSkyBlue
         }
     }

@@ -38,7 +38,7 @@ class UTXOViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Localizables.shared.strings.utxo
+        title = Localizable.shared.strings.utxo
                 
         tableView.delegate = self
         tableView.dataSource = self

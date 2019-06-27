@@ -31,18 +31,18 @@ class AddressExpiresPickerViewController: BaseTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         let current = BMDuration()
-        current.name = Localizables.shared.strings.as_set + Localizables.shared.strings.space + ((duration > 0) ? Localizables.shared.strings.in_24_hours.lowercased() : Localizables.shared.strings.never.lowercased())
-        current.duration = Int32(duration);
+        current.name = Localizable.shared.strings.as_set
+        current.duration = Int32(duration)
         current.selected = true
         
         let h24 = BMDuration()
         h24.duration = 24
-        h24.name = Localizables.shared.strings.in_24_hours
+        h24.name = Localizable.shared.strings.in_24_hours
         h24.selected = false
 
         let never = BMDuration()
         never.duration = 0
-        never.name = Localizables.shared.strings.never
+        never.name = Localizable.shared.strings.never
         never.selected = false
 
         items.append(current)
@@ -54,7 +54,7 @@ class AddressExpiresPickerViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override var tableStyle: UITableView.Style {
@@ -83,9 +83,9 @@ class AddressExpiresPickerViewController: BaseTableViewController {
             setGradientTopBar(mainColor: mainColor, addedStatusView: false)
         }
         
-        title = Localizables.shared.strings.expires.uppercased()
+        title = Localizable.shared.strings.address_expires.uppercased()
 
-        addRightButton(title: Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title: Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -96,7 +96,7 @@ class AddressExpiresPickerViewController: BaseTableViewController {
     
     @objc private func onSave(sender:UIBarButtonItem) {
         self.completion?(selectedDuration)
-        self.navigationController?.popViewController(animated: true)
+        self.back()
     }
 }
 

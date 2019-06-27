@@ -29,6 +29,8 @@
 #import "BMDuration.h"
 #import "BMPreparedTransaction.h"
 #import "BMWord.h"
+#import "BMLanguage.h"
+#import "StringLocalize.h"
 
 @protocol WalletModelDelegate <NSObject>
 @optional
@@ -134,7 +136,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from;
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
 -(double)realTotal:(double)amount fee:(double)fee;

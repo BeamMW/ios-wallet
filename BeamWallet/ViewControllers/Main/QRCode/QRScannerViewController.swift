@@ -64,19 +64,19 @@ class QRScannerViewController: BaseViewController {
         
         switch scanType {
         case .tg_bot:
-            title = Localizables.shared.strings.scan_tg_qr_code
+            title = Localizable.shared.strings.scan_tg_qr_code
         case .bitcoin:
-            title = Localizables.shared.strings.scan_qr_code
-            titleLabel.text = Localizables.shared.strings.scan_btc_qr_code.uppercased()
+            title = Localizable.shared.strings.scan_qr_code
+            titleLabel.text = Localizable.shared.strings.scan_btc_qr_code.uppercased()
         case .litecoin:
-            title = Localizables.shared.strings.scan_qr_code
-            titleLabel.text = Localizables.shared.strings.scan_ltc_qr_code.uppercased()
+            title = Localizable.shared.strings.scan_qr_code
+            titleLabel.text = Localizable.shared.strings.scan_ltc_qr_code.uppercased()
         case .ethereum:
-            title = Localizables.shared.strings.scan_qr_code
-            titleLabel.text = Localizables.shared.strings.scan_eth_qr_code.uppercased()
+            title = Localizable.shared.strings.scan_qr_code
+            titleLabel.text = Localizable.shared.strings.scan_eth_qr_code.uppercased()
         default:
-            title = Localizables.shared.strings.scan_qr_code
-            titleLabel.text = Localizables.shared.strings.scan_receiver_qr_code.uppercased()
+            title = Localizable.shared.strings.scan_qr_code
+            titleLabel.text = Localizable.shared.strings.scan_receiver_qr_code.uppercased()
         }
         
         scannerView.frame = CGRect(x: 0, y: offset, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-offset)
@@ -169,7 +169,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func showError() {
-        BMToast.show(text: Localizables.shared.strings.error_scan_qr_code)
+        BMToast.show(text: Localizable.shared.strings.error_scan_qr_code)
       
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.scannedValue = ""
@@ -192,7 +192,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                         print(json)
                         
                         if (json["_id"] as? u_quad_t) != nil {
-                            navigationController?.popViewController(animated: true)
+                            back()
                             
                             delegate?.didScanQRCode(value: scannedValue, amount: nil)
                         }
@@ -213,7 +213,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                         if address.contains("?") {
                             address = String(address.split(separator: "?")[0])
                         }
-                        navigationController?.popViewController(animated: true)
+                        back()
                         delegate?.didScanQRCode(value:address , amount: nil)
                     }
                     else{
@@ -263,7 +263,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                     self.showError()
                 }
                 else{
-                    navigationController?.popViewController(animated: true)
+                    back()
                     
                     delegate?.didScanQRCode(value: address, amount: amount)
                 }
@@ -297,7 +297,7 @@ extension QRScannerViewController {
             }
         }
         else if (authStatus == .restricted) {
-            self.alert(message: Localizables.shared.strings.camera_restricted)
+            self.alert(message: Localizable.shared.strings.camera_restricted)
         }
         else {
             self.camDenied()
@@ -305,11 +305,11 @@ extension QRScannerViewController {
     }
     
     private func camDenied() {
-        self.confirmAlert(title: String.empty(), message: Localizables.shared.strings.camera_denied_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.open_settings, cancelHandler: { (_ ) in
+        self.confirmAlert(title: String.empty(), message: Localizable.shared.strings.camera_denied_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open_settings, cancelHandler: { (_ ) in
             
         }) { (_ ) in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: { (_ ) in
-                self.navigationController?.popViewController(animated: true)
+                self.back()
             })
         }
     }

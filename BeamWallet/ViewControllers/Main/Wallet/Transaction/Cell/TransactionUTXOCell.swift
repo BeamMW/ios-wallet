@@ -30,9 +30,9 @@ extension TransactionUTXOCell: Configurable {
         amountLabel.text = String.currency(value: utxo.realAmount)
         
         switch utxo.statusString {
-        case Localizables.shared.strings.spent:
+        case Localizable.shared.strings.spent:
             statusIcon.image = IconSendPink()
-        case Localizables.shared.strings.total:
+        case Localizable.shared.strings.total:
             statusIcon.image = IconUtxo()
         default:
             statusIcon.image = IconReceiveLightBlue()

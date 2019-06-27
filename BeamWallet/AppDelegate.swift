@@ -27,7 +27,7 @@ import FirebaseMessaging
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    public static let useLegacy = false
+    public static let newFeaturesEnabled = true
 
     private var scannedTGUserId = String.empty()
 
@@ -159,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             else{
                 if let vc = UIApplication.getTopMostViewController() {
-                    vc.alert(title: Localizables.shared.strings.tg_bot, message: Localizables.shared.strings.tg_bot_link) { (_ ) in
+                    vc.alert(title: Localizable.shared.strings.tg_bot, message: Localizable.shared.strings.tg_bot_link) { (_ ) in
                         
                         if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
                             passVC.biometricAuthorization()
@@ -341,7 +341,7 @@ extension AppDelegate : WalletModelDelegate {
             var oldTransactions = [BMTransaction]()
             
             //get old notifications
-            if let data = UserDefaults.standard.data(forKey: Localizables.shared.strings.transactions) {
+            if let data = UserDefaults.standard.data(forKey: Localizable.shared.strings.transactions) {
                 if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
                     oldTransactions = array
                 }
@@ -363,7 +363,7 @@ extension AppDelegate : WalletModelDelegate {
                 }
             }
             
-            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: Localizables.shared.strings.transactions)
+            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: Localizable.shared.strings.transactions)
             UserDefaults.standard.synchronize()
         }
     }

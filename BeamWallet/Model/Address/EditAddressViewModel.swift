@@ -116,7 +116,7 @@ class EditAddressViewModel: DetailAddressViewModel {
                 top.pushViewController(vc: vc)
             }
             else{
-                let vc = CategoryPickerViewController(category: self.newAddress.category == Localizables.shared.strings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.newAddress.category))
+                let vc = CategoryPickerViewController(category: self.newAddress.category == Localizable.shared.strings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.newAddress.category))
                 vc.completion = { [weak self]
                     obj in
                     if let cat = obj {

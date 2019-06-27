@@ -32,7 +32,7 @@ class CategoryPickerViewController: BaseTableViewController {
         let label = UILabel(frame: CGRect(x: defaultX, y: 30, width: defaultWidth, height: 0))
         label.font = RegularFont(size: 16)
         label.textColor = UIColor.main.steelGrey
-        label.text = Localizables.shared.strings.create_categories_in_settings
+        label.text = Localizable.shared.strings.create_categories_in_settings
         label.numberOfLines = 0
         label.textAlignment = .center
         label.sizeToFit()
@@ -60,7 +60,7 @@ class CategoryPickerViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override var tableStyle: UITableView.Style {
@@ -89,9 +89,9 @@ class CategoryPickerViewController: BaseTableViewController {
             setGradientTopBar(mainColor: mainColor, addedStatusView: false)
         }
  
-        title = Localizables.shared.strings.category
+        title = Localizable.shared.strings.category
 
-        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
         categories = (AppModel.sharedManager().categories as! [BMCategory])
         categories.insert(BMCategory.none(), at: 0)
@@ -107,7 +107,7 @@ class CategoryPickerViewController: BaseTableViewController {
     
     @objc private func onSave(sender:UIBarButtonItem) {
         self.completion?(selectedCategory)
-        self.navigationController?.popViewController(animated: true)
+        self.back()
     }
 }
 

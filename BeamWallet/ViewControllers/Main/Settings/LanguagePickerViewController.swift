@@ -27,7 +27,7 @@ class LanguagePickerViewController: BaseTableViewController {
     
     public var completion : ((String) -> Void)?
     
-    private var languages = [Language]()
+    private var languages = Settings.sharedManager().languages()
     private var selectedLanguage:String!
     private var currentLanguage:String!
     
@@ -44,14 +44,11 @@ class LanguagePickerViewController: BaseTableViewController {
         super.viewDidLoad()
         
         
-        title = Localizables.shared.strings.language
+        title = Localizable.shared.strings.language
         
-        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
-        languages.append(Language(name: "English", code: "en"))
-        languages.append(Language(name: "Русский", code: "ru"))
-        languages.append(Language(name: "中文", code: "zh-Hans"))
-
+    
         for lang in languages {
             if lang.code == Settings.sharedManager().language {
                 selectedLanguage = lang.code
@@ -69,7 +66,7 @@ class LanguagePickerViewController: BaseTableViewController {
     @objc private func onSave(sender:UIBarButtonItem) {
         Settings.sharedManager().language = selectedLanguage
         
-        Localizables.shared.reset()
+        Localizable.shared.reset()
         
         Settings.sharedManager().language = selectedLanguage
 
@@ -85,7 +82,7 @@ class LanguagePickerViewController: BaseTableViewController {
 extension LanguagePickerViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 60
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -107,11 +104,31 @@ extension LanguagePickerViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell =  tableView
-            .dequeueReusableCell(withType: CategoryPickerCell.self, for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        cell.detailTextLabel?.font = RegularFont(size: 14)
+        cell.textLabel?.font = RegularFont(size: 16)
+        cell.detailTextLabel?.textColor = UIColor.main.blueyGrey
+        cell.textLabel?.textColor = UIColor.white
         
-        cell.simpleConfigure(with: (name: languages[indexPath.row].name, selected: (languages[indexPath.row].code == selectedLanguage)))
+        cell.backgroundColor = UIColor.main.marineTwo
         
+        let selectedView = UIView()
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        cell.selectedBackgroundView = selectedView
+        
+        if (languages[indexPath.row].code == selectedLanguage) {
+            let arrowView = UIImageView(frame: CGRect(x: 0, y: 0, width: 13, height: 13))
+            arrowView.image = Tick()?.withRenderingMode(.alwaysTemplate)
+            arrowView.tintColor = UIColor.main.brightTeal
+            cell.accessoryView = arrowView
+        }
+        else{
+            cell.accessoryView = nil
+        }
+        
+        cell.textLabel?.text = languages[indexPath.row].localName
+        cell.detailTextLabel?.text = languages[indexPath.row].enName
+
         return cell
     }
 }

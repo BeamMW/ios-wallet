@@ -38,7 +38,7 @@ class AddressCommentCell: UITableViewCell {
         
         self.backgroundColor = UIColor.main.marineTwo
         
-        commentField.placeholder = Localizables.shared.strings.no_name
+        commentField.placeholder = Localizable.shared.strings.no_name
         commentField.delegate = self
     }
 }

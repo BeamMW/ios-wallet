@@ -95,7 +95,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
              if connected {
                 self.statusView.backgroundColor = UIColor.main.green
                 
-                self.statusLabel.text = Localizables.shared.strings.online.lowercased()
+                self.statusLabel.text = Localizable.shared.strings.online.lowercased()
 
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
@@ -103,14 +103,14 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.statusView.backgroundColor = UIColor.main.red
           
                 if AppModel.sharedManager().isInternetAvailable == false {
-                    self.statusLabel.text = Localizables.shared.strings.offline.lowercased()
+                    self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
                 }
                 else{
                     if Settings.sharedManager().isChangedNode() {
-                        self.statusLabel.text = Localizables.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
+                        self.statusLabel.text = Localizable.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
                     }
                     else{
-                        self.statusLabel.text = Localizables.shared.strings.offline.lowercased()
+                        self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
                     }
                 }
                 
@@ -127,7 +127,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.startAnimating()
                 
                 self.statusLabel.x = self.fromNib ? 20 : 35
-                self.statusLabel.text = Localizables.shared.strings.updating.lowercased()
+                self.statusLabel.text = Localizable.shared.strings.updating.lowercased()
                 self.statusView.alpha = 0
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
@@ -152,7 +152,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.startAnimating()
                 
                 self.statusLabel.x = self.fromNib ? 20 : 35
-                self.statusLabel.text = Localizables.shared.strings.connecting.lowercased()
+                self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusLabel.textColor = UIColor.main.orange
             }

@@ -53,7 +53,7 @@ class CategoryEditViewController: BaseViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
@@ -75,9 +75,9 @@ class CategoryEditViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
 
-        title = category.id == 0 ? Localizables.shared.strings.new_category : Localizables.shared.strings.edit_category
+        title = category.id == 0 ? Localizable.shared.strings.new_category : Localizable.shared.strings.edit_category
         
-        addRightButton(title:Localizables.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         nameView = UIView(frame: CGRect(x: 0, y: (Device.isXDevice ? 100 : 70) + 20, width: UIScreen.main.bounds.size.width, height: 49))
         if isGradient {
@@ -87,7 +87,7 @@ class CategoryEditViewController: BaseViewController {
         view.addSubview(nameView)
         
         nameField = UITextField(frame: CGRect(x: defaultX, y: 0, width: defaultWidth, height: 49))
-        nameField.placeholder = Localizables.shared.strings.category_name
+        nameField.placeholder = Localizable.shared.strings.category_name
         nameField.placeHolderColor = UIColor.main.steelGrey
         nameField.textColor = UIColor.white
         nameField.font = RegularFont(size: 16)
@@ -139,7 +139,7 @@ class CategoryEditViewController: BaseViewController {
             let trimmedString = name.trimmingCharacters(in: .whitespacesAndNewlines)
 
             if AppModel.sharedManager().isNameAlreadyExist(trimmedString, id: category.id) {
-                self.alert(message: Localizables.shared.strings.category_exist)
+                self.alert(message: Localizable.shared.strings.category_exist)
             }
             else{
                 category.name = trimmedString
@@ -156,7 +156,7 @@ class CategoryEditViewController: BaseViewController {
                 
                 self.completion?(category)
                 
-                navigationController?.popViewController(animated: true)
+                back()
             }
         }
     }

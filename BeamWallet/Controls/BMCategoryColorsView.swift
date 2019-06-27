@@ -61,7 +61,7 @@ class BMCategoryColorsView: UIView {
         }
         
         required init?(coder aDecoder: NSCoder) {
-            fatalError(Localizables.shared.strings.fatalInitCoderError)
+            fatalError(Localizable.shared.strings.fatalInitCoderError)
         }
         
         @objc private func onSelectColor() {

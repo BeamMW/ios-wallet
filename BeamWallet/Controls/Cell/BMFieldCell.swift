@@ -159,8 +159,8 @@ extension BMFieldCell: Configurable {
             textField.rightViewMode = .always
         }
         
-        if options.name == Localizables.shared.strings.name.uppercased() {
-            textField.placeholder = Localizables.shared.strings.no_name
+        if options.name == Localizable.shared.strings.name.uppercased() {
+            textField.placeholder = Localizable.shared.strings.no_name
             textField.placeHolderColor = UIColor.white
         }
         else{

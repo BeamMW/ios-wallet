@@ -342,9 +342,12 @@
 "copy_details" = "Copy details";
 "copy_code" = "Copy code";
 "version" = "Version"; //example Version 3.1
-"as_set" = "as set";
+"as_set" = "as set now";
 "transaction_deleted" = "Transaction deleted";
 "transaction_comment" = "Transaction comment (won’t be shared)";
 "not_shared" = "won’t be shared";
 "language" = "Language";
 "optional" = "Optional";
+"invalid_address_title" = "Invalid address";
+"invalid_address_text" = "The provided node address is invalid.\n Please, check if the entered address is correct";
+"insufficient_funds" = "Insufficient funds: you would need (value) beams to complete the transaction";

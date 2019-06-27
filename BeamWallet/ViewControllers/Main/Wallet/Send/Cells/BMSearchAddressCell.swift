@@ -71,7 +71,7 @@ class BMSearchAddressCell: BaseCell {
                 contactName.text = contact?.address.label
                 
                 if contactName.text?.isEmpty ?? true {
-                    contactName.text = Localizables.shared.strings.no_name
+                    contactName.text = Localizable.shared.strings.no_name
                 }
                 
                 if let category = AppModel.sharedManager().findCategory(byId: contact?.address.category ?? String.empty()) {
@@ -164,7 +164,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         self.delegate?.textValueDidReturn?(self)
         
-        if nameLabel.text == Localizables.shared.strings.paste_enter_address {
+        if nameLabel.text == Localizable.shared.strings.paste_enter_address {
             textField.placeholder = String.empty()
         }
     }
@@ -172,8 +172,8 @@ extension BMSearchAddressCell : UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.delegate?.textValueDidBegin?(self)
         
-        if nameLabel.text == Localizables.shared.strings.paste_enter_address {
-            textField.placeholder = Localizables.shared.strings.address_search
+        if nameLabel.text == Localizable.shared.strings.paste_enter_address {
+            textField.placeholder = Localizable.shared.strings.address_search
         }
     }
     
@@ -183,7 +183,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        if text == Localizables.shared.strings.new_line {
+        if text == Localizable.shared.strings.new_line {
             textView.resignFirstResponder()
             return false
         }

@@ -28,7 +28,8 @@ class BMCopyLabel: UILabel {
     weak var delegate: BMCopyLabelDelegate?
 
     public var copyText:String?
-    
+    public var displayCopyAlert = true
+
     override public var canBecomeFirstResponder: Bool {
         get {
             return true
@@ -58,7 +59,9 @@ class BMCopyLabel: UILabel {
 
         UIMenuController.shared.setMenuVisible(false, animated: true)
         
-        ShowCopied()
+        if displayCopyAlert {
+            ShowCopied()
+        }
         
         self.delegate?.onCopied()
     }

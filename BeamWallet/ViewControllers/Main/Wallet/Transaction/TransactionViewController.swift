@@ -30,13 +30,13 @@ class TransactionViewController: BaseTableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Localizables.shared.strings.transaction_details
+        title = Localizable.shared.strings.transaction_details
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -173,11 +173,11 @@ extension TransactionViewController : UITableViewDataSource {
         case 0:
             return nil
         case 1:
-            return BMTableHeaderTitleView(title: Localizables.shared.strings.general_info, bold: true)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.general_info, bold: true)
         case 2:
-            return (viewModel.paymentProof != nil) ? BMTableHeaderTitleView(title: Localizables.shared.strings.payment_proof, bold: true) : nil
+            return (viewModel.paymentProof != nil) ? BMTableHeaderTitleView(title: Localizable.shared.strings.payment_proof, bold: true) : nil
         case 3:
-            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: Localizables.shared.strings.utxo_list, bold: true) : nil
+            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: Localizable.shared.strings.utxo_list, bold: true) : nil
         default:
             return nil
         }
@@ -206,7 +206,7 @@ extension TransactionViewController : GeneralInfoCellDelegate {
     
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell) {
-            if viewModel.details[path.row].text == Localizables.shared.strings.addDots(value: Localizables.shared.strings.kernel_id) {
+            if viewModel.details[path.row].text == Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id) {
                 let kernelId = self.viewModel.transaction!.kernelId!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {

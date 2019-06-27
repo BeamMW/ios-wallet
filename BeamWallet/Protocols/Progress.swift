@@ -24,6 +24,6 @@ func ShowCopied (text:String? = nil) {
         BMToast.show(text: s)
     }
     else{
-        BMToast.show(text: Localizables.shared.strings.copied_to_clipboard)
+        BMToast.show(text: Localizable.shared.strings.copied_to_clipboard)
     }
 }

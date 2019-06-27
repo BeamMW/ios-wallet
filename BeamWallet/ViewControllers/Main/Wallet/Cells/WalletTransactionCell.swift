@@ -59,15 +59,16 @@ extension WalletTransactionCell: Configurable {
             amountLabel.textColor = UIColor.main.brightSkyBlue
             statusLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            typeLabel.text = Localizables.shared.strings.receive_beam
+            typeLabel.text = Localizable.shared.strings.receive_beam
         case false:
             amountLabel.text = "-" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
             statusLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
-            typeLabel.text = Localizables.shared.strings.send_beam
+            typeLabel.text = Localizable.shared.strings.send_beam
         }
-
+        
+        
         
         if options.transaction.isSelf || options.transaction.isFailed() || options.transaction.isCancelled() {
             statusLabel.textColor = UIColor.white
@@ -115,6 +116,23 @@ extension WalletTransactionCell: Configurable {
             let attributedString = NSMutableAttributedString(string:mainText)
             attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: range)
             searchLabel.attributedText = attributedString
+        }
+        
+        if AppDelegate.newFeaturesEnabled {
+            if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
+                statusLabel.textColor = UIColor.main.greyish
+            }
+            else if options.transaction.isSelf {
+                statusLabel.textColor = UIColor.white
+            }
+            else if options.transaction.isIncome
+            {
+                statusLabel.textColor = UIColor.main.brightSkyBlue
+            }
+            else if !options.transaction.isIncome
+            {
+                statusLabel.textColor = UIColor.main.heliotrope
+            }
         }
     }
 }

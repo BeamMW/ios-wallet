@@ -32,7 +32,7 @@ class ReceiveListViewController: BaseTableViewController {
         let label = UILabel()
         label.font = BoldFont(size: 14)
         label.textColor = UIColor.main.blueyGrey
-        label.text = Localizables.shared.strings.address.uppercased()
+        label.text = Localizable.shared.strings.address.uppercased()
         label.adjustFontSize = true
         label.letterSpacing = 2
         label.isUserInteractionEnabled = true
@@ -78,7 +78,7 @@ class ReceiveListViewController: BaseTableViewController {
         }
         
         setGradientTopBar(mainColor: mainColor)
-        title = Localizables.shared.strings.change_address.uppercased()
+        title = Localizable.shared.strings.change_address.uppercased()
                 
         tableView.register([ReceiveAddressListCell.self, BMFieldCell.self, BMEmptyCell.self])
         
@@ -145,7 +145,7 @@ extension ReceiveListViewController : UITableViewDelegate {
         
         if addresses.count > 0 {
             completion?(addresses[indexPath.row])
-            navigationController?.popViewController(animated: true)
+            back()
         }
     }
 }
@@ -165,7 +165,7 @@ extension ReceiveListViewController : UITableViewDataSource {
         if addresses.count == 0 {
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: Localizables.shared.strings.not_found)
+                .configured(with: Localizable.shared.strings.not_found)
             return cell
         }
         else{
@@ -182,7 +182,7 @@ extension ReceiveListViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let view =  BMTableHeaderTitleView(title: Localizables.shared.strings.existing_addresses.uppercased(), bold: true)
+        let view =  BMTableHeaderTitleView(title: Localizable.shared.strings.existing_addresses.uppercased(), bold: true)
         view.letterSpacing = 2
         return view
     }
@@ -191,7 +191,7 @@ extension ReceiveListViewController : UITableViewDataSource {
 extension ReceiveListViewController : UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.placeholder = Localizables.shared.strings.address_search
+        textField.placeholder = Localizable.shared.strings.address_search
         textField.placeHolderFont = ItalicFont(size: 16)
     }
     

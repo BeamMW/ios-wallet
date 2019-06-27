@@ -33,11 +33,9 @@ class SendTransactionViewModel: NSObject {
     public var pickedOutgoingAddress:BMAddress?
     public var startedAddress:BMAddress?
 
-    public var selectedSearchIndex = 0 {
-        didSet{
-            
-        }
-    }
+    public var saveContact = true
+
+    public var selectedSearchIndex = 0
 
     public var selectedContact:BMContact?
 
@@ -110,7 +108,7 @@ class SendTransactionViewModel: NSObject {
     }
     
     public func send() {
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: Double(fee) ?? 0, to: toAddress, comment: comment, from: outgoindAdderss?.walletId)
+        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: Double(fee) ?? 0, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact)
         
         AppStoreReviewManager.incrementAppTransactions()
     }
@@ -118,7 +116,7 @@ class SendTransactionViewModel: NSObject {
     public func checkAmountError() -> String? {
         let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
        
-        if canSend != Localizables.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
+        if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
             amountError = canSend
         }
         else{
@@ -139,16 +137,16 @@ class SendTransactionViewModel: NSObject {
             toAddressError = nil
             
             if !valid {
-                toAddressError = Localizables.shared.strings.incorrect_address
+                toAddressError = Localizable.shared.strings.incorrect_address
             }
             else if expired {
-                toAddressError = Localizables.shared.strings.address_is_expired
+                toAddressError = Localizable.shared.strings.address_is_expired
             }
             
             if amount.isEmpty {
-                amountError = Localizables.shared.strings.amount_empty
+                amountError = Localizable.shared.strings.amount_empty
             }
-            else if canSend != Localizables.shared.strings.incorrect_address {
+            else if canSend != Localizable.shared.strings.incorrect_address {
                 amountError = canSend
             }
         }
@@ -265,19 +263,19 @@ class SendTransactionViewModel: NSObject {
     
     public func buildConfirmItems() -> [ConfirmItem]{
         let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-        let totalString = String.currency(value: total) + Localizables.shared.strings.beam
+        let totalString = String.currency(value: total) + Localizable.shared.strings.beam
         
         var items = [ConfirmItem]()
-        items.append(ConfirmItem(title: Localizables.shared.strings.send_to.uppercased(), detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        items.append(ConfirmItem(title: Localizable.shared.strings.send_to.uppercased(), detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
-            items.append(ConfirmItem(title: Localizables.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            items.append(ConfirmItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        items.append(ConfirmItem(title: Localizables.shared.strings.amount_to_send.uppercased(), detail: amount + Localizables.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: Localizables.shared.strings.transaction_fee.uppercased(), detail: fee + Localizables.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: Localizables.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
-        items.append(ConfirmItem(title: Localizables.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
+        items.append(ConfirmItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amount + Localizable.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(ConfirmItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(ConfirmItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
+        items.append(ConfirmItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
         
         return items
     }

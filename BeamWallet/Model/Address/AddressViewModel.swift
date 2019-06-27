@@ -128,7 +128,7 @@ class AddressViewModel: NSObject {
             address = self.address
         }
         
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizables.shared.strings.delete_contact_transaction : Localizables.shared.strings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizables.shared.strings.delete_contact_only : Localizables.shared.strings.delete_address_only), icon: nil, action:.delete_address)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizable.shared.strings.delete_contact_transaction : Localizable.shared.strings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizable.shared.strings.delete_contact_only : Localizable.shared.strings.delete_address_only), icon: nil, action:.delete_address)]
         
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
@@ -182,7 +182,7 @@ class AddressViewModel: NSObject {
     
     public func onCopyAddress(address:BMAddress) {
         UIPasteboard.general.string = address.walletId
-        ShowCopied(text: Localizables.shared.strings.address_copied)
+        ShowCopied(text: Localizable.shared.strings.address_copied)
     }
     
     public func trailingSwipeActions(indexPath:IndexPath) -> UISwipeActionsConfiguration? {
@@ -254,12 +254,12 @@ extension AddressViewModel : WalletModelDelegate {
     
     func onCategoriesChange() {
         DispatchQueue.main.async {
-            if self.address == nil {
-                self.filterAddresses()
-            }
-            else if self.category != nil{
+            if self.category != nil{
                 self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
                 self.onDataChanged?()
+            }
+            else if self.address == nil {
+                self.filterAddresses()
             }
         }
     }

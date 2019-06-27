@@ -71,7 +71,7 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         }
         
         let min = CryptoWolfManager.sharedManager.calculateMinAmount(from: currency)
-        minimumAmount = (min > 0) ? (Localizables.shared.strings.minAmount(str: String.currency(value: min))) : String.empty()
+        minimumAmount = (min > 0) ? (Localizable.shared.strings.minAmount(str: String.currency(value: min))) : String.empty()
     }
     
     override init() {
@@ -83,7 +83,7 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
             currency = f
             
             let min = CryptoWolfManager.sharedManager.calculateMinAmount(from: currency)
-            minimumAmount = (min > 0) ? (Localizables.shared.strings.minAmount(str: String.currency(value: min))) : String.empty()
+            minimumAmount = (min > 0) ? (Localizable.shared.strings.minAmount(str: String.currency(value: min))) : String.empty()
         }
         
         loadRates()
@@ -147,24 +147,24 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
 
         if amount!.isEmpty{
             isValid = false
-            amountError = Localizables.shared.strings.amount_empty
+            amountError = Localizable.shared.strings.amount_empty
         }
         else if am == 0 {
             isValid = false
-            amountError = Localizables.shared.strings.amount_zero
+            amountError = Localizable.shared.strings.amount_zero
         }
         else if am < min
         {
             if amount != String.currency(value: min) {
                 isValid = false
-                amountError = Localizables.shared.strings.incorrect_amount
+                amountError = Localizable.shared.strings.incorrect_amount
             }
         }
         
         if fromAddress.isEmpty {
             isValid = false
             
-            fromAddressError = Localizables.shared.strings.incorrect_address
+            fromAddressError = Localizable.shared.strings.incorrect_address
         }
       
         return isValid

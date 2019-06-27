@@ -35,9 +35,9 @@ class AddressesSegmentView: BaseView {
         super.awakeFromNib()
         
         segmetnView.removeAllSegments()
-        segmetnView.insertSegment(withTitle: Localizables.shared.strings.active, at: 0, animated: false)
-        segmetnView.insertSegment(withTitle: Localizables.shared.strings.expired, at: 1, animated: false)
-        segmetnView.insertSegment(withTitle: Localizables.shared.strings.contacts, at: 2, animated: false)
+        segmetnView.insertSegment(withTitle: Localizable.shared.strings.active, at: 0, animated: false)
+        segmetnView.insertSegment(withTitle: Localizable.shared.strings.expired, at: 1, animated: false)
+        segmetnView.insertSegment(withTitle: Localizable.shared.strings.contacts, at: 2, animated: false)
         segmetnView.selectedSegmentIndex = 0
     }
     

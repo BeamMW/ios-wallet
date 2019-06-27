@@ -195,11 +195,11 @@ class ReceiveAddressViewModel: NSObject {
         }
     }
     
-    public func onQRCode() {        
+    public func onQRCode() {
         
         if let top = UIApplication.getTopMostViewController() {
-            if amount == Localizables.shared.strings.zero {
-                top.alert(title: Localizables.shared.strings.wrong_requested_amount_title, message: Localizables.shared.strings.wrong_requested_amount_text, handler: nil)
+            if amount == Localizable.shared.strings.zero {
+                top.alert(title: Localizable.shared.strings.wrong_requested_amount_title, message: Localizable.shared.strings.wrong_requested_amount_text, handler: nil)
             }
             else{
                 isShared = true

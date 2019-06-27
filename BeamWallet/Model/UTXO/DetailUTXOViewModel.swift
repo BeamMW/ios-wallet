@@ -46,10 +46,10 @@ class DetailUTXOViewModel: UTXOViewModel {
         details.removeAll()
         
         if let kernel = history.first?.kernelId {
-            details.append(GeneralInfo(text: Localizables.shared.strings.addDots(value: Localizables.shared.strings.kernel_id), detail: kernel, failed: false, canCopy:true, color: UIColor.white))
+            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), detail: kernel, failed: false, canCopy:true, color: UIColor.white))
         }
         
-        details.append(GeneralInfo(text: Localizables.shared.strings.utxo_type, detail: utxo.typeString, failed: false, canCopy:false, color: UIColor.white))
+        details.append(GeneralInfo(text: Localizable.shared.strings.utxo_type, detail: utxo.typeString, failed: false, canCopy:false, color: UIColor.white))
         
         self.onDataChanged?()
     }

@@ -35,7 +35,7 @@ extension BMPopoverMenu {
                 }))
             }
             
-            alert.addAction(UIAlertAction(title: Localizables.shared.strings.cancel, style: .cancel, handler:{ (UIAlertAction)in
+            alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: .cancel, handler:{ (UIAlertAction)in
                 cancel()
             }))
             

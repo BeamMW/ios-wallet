@@ -77,7 +77,7 @@ class BMAmountCell: BaseCell {
                 
                 currencyLabel.attributedText = attributedString
                 
-                textField.placeholder = Localizables.shared.strings.enter_amount_in_currency + " " + currency!
+                textField.placeholder = Localizable.shared.strings.enter_amount_in_currency + " " + currency!
                 textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
             }
         }
@@ -113,7 +113,7 @@ class BMAmountCell: BaseCell {
 extension BMAmountCell: Configurable {
     
     func configure(with options: (name: String, value:String?)) {
-        if options.name == Localizables.shared.strings.amount.uppercased() || options.name == Localizables.shared.strings.you_send.uppercased() {
+        if options.name == Localizable.shared.strings.amount.uppercased() || options.name == Localizable.shared.strings.you_send.uppercased() {
             textField.textColor = UIColor.main.heliotrope
             textField.setNormalColor(color: UIColor.main.heliotrope)
         }
@@ -128,7 +128,7 @@ extension BMAmountCell: Configurable {
 extension BMAmountCell : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.placeholder == nil || textField.placeholder == Localizables.shared.strings.zero {
+        if textField.placeholder == nil || textField.placeholder == Localizable.shared.strings.zero {
             textField.placeholder = String.empty()
             textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         }
@@ -138,7 +138,7 @@ extension BMAmountCell : UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField.placeholder == nil || textField.placeholder == String.empty() {
-            textField.placeholder = Localizables.shared.strings.zero
+            textField.placeholder = Localizable.shared.strings.zero
             textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         }
         self.delegate?.textValueDidBegin?(self)

@@ -48,7 +48,7 @@ class BMSearchView: UIView {
         titleLabel.frame = CGRect(x: 40, y: y, width: (UIScreen.main.bounds.size.width-80), height: 40)
         titleLabel.font = SemiboldFont(size: 17)
         titleLabel.numberOfLines = 1
-        titleLabel.text = Localizables.shared.strings.transaction_search
+        titleLabel.text = Localizable.shared.strings.transaction_search
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
         addSubview(titleLabel)
@@ -68,7 +68,7 @@ class BMSearchView: UIView {
         searchField.layer.cornerRadius = 10
         searchField.font = RegularFont(size: 16)
         searchField.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.8)
-        searchField.placeholder = Localizables.shared.strings.search
+        searchField.placeholder = Localizable.shared.strings.search
         searchField.placeHolderColor = UIColor.main.steel
         searchField.tintColor = UIColor.white
         searchField.textColor = UIColor.white
@@ -82,7 +82,7 @@ class BMSearchView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError(Localizables.shared.strings.fatalInitCoderError)
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     public func show() {

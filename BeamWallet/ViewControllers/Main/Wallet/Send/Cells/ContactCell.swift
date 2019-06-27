@@ -51,7 +51,7 @@ extension ContactCell: Configurable {
         
         
         if address.label.isEmpty {
-            nameLabel.text = Localizables.shared.strings.no_name
+            nameLabel.text = Localizable.shared.strings.no_name
         }
         else{
             nameLabel.text = address.label

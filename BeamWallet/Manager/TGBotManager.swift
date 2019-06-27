@@ -82,7 +82,7 @@ class TGBotManager : NSObject {
             NotificationManager.sharedManager.isApnsEnabled { (enabled) in
                 DispatchQueue.main.async {
                     if enabled {
-                        SVProgressHUD.show(withStatus: Localizables.shared.strings.tg_bot_connection)
+                        SVProgressHUD.show(withStatus: Localizable.shared.strings.tg_bot_connection)
                         
                         self.completion = completion
                         
@@ -96,7 +96,7 @@ class TGBotManager : NSObject {
                     }
                     else{
                         if let top = UIApplication.getTopMostViewController() {
-                            top.confirmAlert(title: Localizables.shared.strings.tg_bot, message: Localizables.shared.strings.tg_bot_not_linked_notification, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.open_settings, cancelHandler: { (_) in
+                            top.confirmAlert(title: Localizable.shared.strings.tg_bot, message: Localizable.shared.strings.tg_bot_not_linked_notification, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open_settings, cancelHandler: { (_) in
                             }, confirmHandler: { (_) in
                                 guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
                                     return
@@ -213,7 +213,7 @@ extension TGBotManager  {
                             strongSelf.user.userId = String.empty()
                             strongSelf.completion?(error == nil ? true : false)
                             
-                            SVProgressHUD.showSuccess(withStatus: (error==nil) ? Localizables.shared.strings.tg_bot_linked : Localizables.shared.strings.tg_bot_not_linked)
+                            SVProgressHUD.showSuccess(withStatus: (error==nil) ? Localizable.shared.strings.tg_bot_linked : Localizable.shared.strings.tg_bot_not_linked)
                             
                             SVProgressHUD.dismiss(withDelay: 2.5)
                         }

@@ -58,7 +58,7 @@ extension ConfirmCell: Configurable {
         
         nameLabel.adjustFontSize = true
         
-        if item.title == Localizables.shared.strings.send_to.uppercased() || item.title == Localizables.shared.strings.outgoing_address.uppercased() {
+        if item.title == Localizable.shared.strings.send_to.uppercased() || item.title == Localizable.shared.strings.outgoing_address.uppercased() {
             
             if let category = AppModel.sharedManager().findCategory(byAddress: item.detail ?? String.empty())
             {
@@ -76,7 +76,7 @@ extension ConfirmCell: Configurable {
         }
         
         
-        if item.title == Localizables.shared.strings.send_to {
+        if item.title == Localizable.shared.strings.send_to {
             
             let text = (item.detail)!
             

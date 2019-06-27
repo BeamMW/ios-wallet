@@ -1,5 +1,5 @@
 //
-// Localizables.shared.strings.swift
+// Localizable.shared.strings.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,8 +19,8 @@
 
 import Foundation
 
-class Localizables : NSObject {
-    static let shared = Localizables()
+class Localizable : NSObject {
+    static let shared = Localizable()
 
     public var strings = LocalizableStrings()
     
@@ -325,7 +325,8 @@ class LocalizableStrings : NSObject {
     var not_shared = "not_shared".localized
     var language = "language".localized
     var as_set = "as_set".localized.capitalizingFirstLetter()
-
+    var invalid_address_title = "invalid_address_title".localized.capitalizingFirstLetter()
+    var invalid_address_text = "invalid_address_text".localized.capitalizingFirstLetter()
 
     public func minAmount(str:String) -> String {
         return "min_amount".localized + " " + str

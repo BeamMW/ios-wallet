@@ -42,8 +42,8 @@ class LeftMenuViewController: BaseTableViewController {
 
     private var buyButton:UIButton!
     
-    private var items = [MenuItem(name: Localizables.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizables.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizables.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizables.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
-    //MenuItem(name: Localizables.shared.strings.logout, icon: IconLogout(), selected: false, type: AnyClass.self)
+    private var items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
+    //MenuItem(name: Localizable.shared.strings.logout, icon: IconLogout(), selected: false, type: AnyClass.self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,14 +80,14 @@ class LeftMenuViewController: BaseTableViewController {
         imageAttachment.image = IconExternalLinkGray()?.maskWithColor(color: UIColor.main.steelGrey)
         let imageString = NSAttributedString(attachment: imageAttachment)
         
-        let attributedString = NSMutableAttributedString(string:Localizables.shared.strings.where_buy_beam)
-        attributedString.addAttributes([NSAttributedString.Key.paragraphStyle : titleParagraphStyle], range:  NSRange(location: 0, length: Localizables.shared.strings.where_buy_beam.count))
-        attributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.5)], range:  NSRange(location: 0, length:Localizables.shared.strings.where_buy_beam.count))
+        let attributedString = NSMutableAttributedString(string:Localizable.shared.strings.where_buy_beam)
+        attributedString.addAttributes([NSAttributedString.Key.paragraphStyle : titleParagraphStyle], range:  NSRange(location: 0, length: Localizable.shared.strings.where_buy_beam.count))
+        attributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.5)], range:  NSRange(location: 0, length:Localizable.shared.strings.where_buy_beam.count))
         attributedString.append(NSAttributedString(string: "  "))
         attributedString.append(imageString)
         
         let highlightedAttributedString = NSMutableAttributedString(attributedString: attributedString)
-        highlightedAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.2)], range:  NSRange(location: 0, length: Localizables.shared.strings.where_buy_beam.count))
+        highlightedAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.2)], range:  NSRange(location: 0, length: Localizable.shared.strings.where_buy_beam.count))
         
         buyButton = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height-50, width: UIScreen.main.bounds.size.width, height: 50))
         buyButton.setImage(IconBuyLogo(), for: .normal)
@@ -200,16 +200,16 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
             let navigationController = sideMenuController!.rootViewController as! UINavigationController
             
             switch items[indexPath.row].name {
-            case Localizables.shared.strings.wallet :
+            case Localizable.shared.strings.wallet :
                 navigationController.setViewControllers([WalletViewController()], animated: false)
-            case Localizables.shared.strings.utxo :
+            case Localizable.shared.strings.utxo :
                 navigationController.setViewControllers([UTXOViewController()], animated: false)
-            case Localizables.shared.strings.addresses :
+            case Localizable.shared.strings.addresses :
                 navigationController.setViewControllers([AddressesViewController()], animated: false)
-            case Localizables.shared.strings.settings :
+            case Localizable.shared.strings.settings :
                 navigationController.setViewControllers([SettingsViewController()], animated: false)
-            case Localizables.shared.strings.logout :
-                self.confirmAlert(title: Localizables.shared.strings.logout, message: Localizables.shared.strings.logout_text, cancelTitle: Localizables.shared.strings.cancel, confirmTitle: Localizables.shared.strings.yes, cancelHandler: { (_ ) in
+            case Localizable.shared.strings.logout :
+                self.confirmAlert(title: Localizable.shared.strings.logout, message: Localizable.shared.strings.logout_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.yes, cancelHandler: { (_ ) in
                     
                     var index = 0
                     for item in self.items {
@@ -249,7 +249,7 @@ extension LeftMenuViewController : SettingsModelDelegate {
     func onChangeLanguage() {
         addFooterView()
         
-        items = [MenuItem(name: Localizables.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizables.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizables.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizables.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
+        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
         
         tableView.reloadData()
     }

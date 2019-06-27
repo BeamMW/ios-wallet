@@ -475,7 +475,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                 if let rootVC = UIApplication.getTopMostViewController() {
                     
                     if rootVC is TransactionViewController {
-                        rootVC.navigationController?.popViewController(animated: false)
+                        rootVC.back(animated: false)
                     }
                     
                     if rootVC is QRViewController {

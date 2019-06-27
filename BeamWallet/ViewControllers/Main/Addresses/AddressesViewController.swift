@@ -36,7 +36,7 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = Localizables.shared.strings.addresses
+        title = Localizable.shared.strings.addresses
         
         headerView.delegate = self
         

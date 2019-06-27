@@ -28,7 +28,7 @@ class ReceiveAddressButtonsCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        infoLabel.text = Localizables.shared.strings.send_address_secure + "\n\n" + Localizables.shared.strings.receive_notice
+        infoLabel.text = Localizable.shared.strings.send_address_secure + "\n\n" + Localizable.shared.strings.receive_notice
 
         selectionStyle = .none
     }

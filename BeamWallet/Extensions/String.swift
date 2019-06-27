@@ -20,13 +20,12 @@
 import UIKit
 import Network
 
-protocol Localizable {
-    var localized: String { get }
-}
+//protocol Localizable {
+//    var localized: String { get }
+//}
 
-extension String: Localizable {
+extension String {
     var localized: String {
-        
         let lang = Settings.sharedManager().language
         
         let path = Bundle.main.path(forResource: lang, ofType: "lproj")

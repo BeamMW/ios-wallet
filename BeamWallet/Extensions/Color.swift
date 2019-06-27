@@ -87,6 +87,10 @@ extension UIColor {
             return .init(red: 3/255, green: 46/255, blue: 73/255, alpha: 1)
         }
         
+        static var marineThree: UIColor {
+            return .init(red: 4/255, green: 37/255, blue: 72/255, alpha: 1)
+        }
+        
         static var green: UIColor {
             return .init(red: 0, green: 246/255, blue: 210/255, alpha: 1)
         }
@@ -178,6 +182,11 @@ extension UIColor {
         static var warmBlue: UIColor {
             return .init(red: 88/255, green: 86/255, blue: 214/255, alpha: 1)
         }
+        
+        static var greyish: UIColor {
+            return .init(hexString: "#a4a4a4")
+        }
+        
     }
     
 }

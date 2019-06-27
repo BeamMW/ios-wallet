@@ -21,20 +21,6 @@ import UIKit
 
 class SettingsViewController: BaseTableViewController {
     
-    private lazy var versionView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
-        view.backgroundColor = UIColor.clear
-        
-        let label = UILabel(frame: view.bounds)
-        label.textAlignment = .center
-        label.font = RegularFont(size: 14)
-        label.textColor = UIColor.main.blueyGrey
-        label.text = UIApplication.version()
-        view.addSubview(label)
-        
-        return view
-    }()
-    
     private let viewModel = SettingsViewModel()
     
     override var tableStyle: UITableView.Style {
@@ -58,7 +44,7 @@ class SettingsViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = Localizables.shared.strings.settings
+        title = Localizable.shared.strings.settings
         
         viewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()
@@ -68,7 +54,7 @@ class SettingsViewController: BaseTableViewController {
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
         tableView.separatorStyle = .singleLine
         tableView.tableHeaderView = BMNetworkStatusView()
-        tableView.tableFooterView = versionView
+        tableView.tableFooterView = versionView()
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -83,6 +69,20 @@ class SettingsViewController: BaseTableViewController {
         if isMovingFromParent {
             Settings.sharedManager().removeDelegate(self)
         }
+    }
+    
+    private func versionView() -> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
+        view.backgroundColor = UIColor.clear
+        
+        let label = UILabel(frame: view.bounds)
+        label.textAlignment = .center
+        label.font = RegularFont(size: 14)
+        label.textColor = UIColor.main.blueyGrey
+        label.text = UIApplication.version()
+        view.addSubview(label)
+        
+        return view
     }
 }
 
@@ -151,10 +151,10 @@ extension SettingsViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if section == 0 {
-            return BMTableHeaderTitleView(title: Localizables.shared.strings.node.lowercased(), bold: false)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.node.lowercased(), bold: false)
         }
         else if section == 4 {
-            return BMTableHeaderTitleView(title: Localizables.shared.strings.categories.lowercased(), bold: false)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories.lowercased(), bold: false)
         }
         
         let view = UIView()
@@ -254,10 +254,10 @@ extension SettingsViewController : QRScannerViewControllerDelegate {
 }
 
 extension SettingsViewController : SettingsModelDelegate {
+    
     func onChangeLanguage() {
-        
-        title = Localizables.shared.strings.settings
-        tableView.tableHeaderView = nil
+        title = Localizable.shared.strings.settings
         tableView.tableHeaderView = BMNetworkStatusView()
+        tableView.tableFooterView = versionView()
     }
 }
