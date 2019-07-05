@@ -63,6 +63,8 @@ static NSMutableArray *phrases;
 
 +(NSArray<NSString*>*_Nonnull)mnemonicWordsForPrefix:(NSString*_Nonnull)prefix suggestions:(NSArray*_Nullable)suggestions {
     
+    BOOL isFullword = NO;
+
     if (prefix.length == 0)
     {
         return @[];
@@ -88,12 +90,23 @@ static NSMutableArray *phrases;
         NSMutableArray *result = [NSMutableArray array];
         
         for (NSString *phrase in phrases) {
-            if ([phrase hasPrefix:prefix]) {
+            if ([phrase isEqualToString:prefix])
+            {
+                isFullword = YES;
+                [result addObject:phrase];
+            }
+            else if ([phrase hasPrefix:prefix]) {
                 [result addObject:phrase];
             }
         }
         
-        return [NSArray arrayWithArray:result];
+        if (isFullword)
+        {
+            return [NSArray arrayWithObject:prefix];
+        }
+        else{
+            return [NSArray arrayWithArray:result];
+        }
     }
 }
 

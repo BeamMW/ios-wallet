@@ -32,7 +32,7 @@ class BMExpandCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        mainView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        mainView.backgroundColor = UIColor.main.marineThree
 
         nameLabel.highlightedTextColor = UIColor.main.steelGrey
         arrowIcon.highlightedImage = IconDownArrow()?.maskWithColor(color: UIColor.main.steelGrey)

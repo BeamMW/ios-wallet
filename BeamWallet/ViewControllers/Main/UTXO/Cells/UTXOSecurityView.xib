@@ -48,7 +48,7 @@ Turn it off to see your UTXO list. </string>
                     </constraints>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="Yf8-vz-6X6" firstAttribute="centerY" secondItem="e43-JB-qgs" secondAttribute="centerY" constant="-50" id="Bce-Ct-qzz"/>
                 <constraint firstItem="Yf8-vz-6X6" firstAttribute="centerX" secondItem="e43-JB-qgs" secondAttribute="centerX" id="EeK-9m-BIu"/>

@@ -1,6 +1,6 @@
 //
 // Settings.m
-// BeamTest
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -345,6 +345,11 @@ static NSString *languageKey = @"languageKey";
     es.enName = @"Español";
     es.localName = @"Spanish";
     
+    BMLanguage *sw = [BMLanguage new];
+    sw.code = @"sv-SE";
+    sw.enName = @"Swedish";
+    sw.localName = @"Svenska";
+    
     BMLanguage *ko = [BMLanguage new];
     ko.code = @"ko";
     ko.enName = @"한국어";
@@ -360,7 +365,7 @@ static NSString *languageKey = @"languageKey";
     ch.enName = @"中文";
     ch.localName = @"Chinese";
 
-    return @[en, ru, es, ko, vi, ch];
+    return @[en, ru, es, sw, ko, vi, ch];
 }
 
 -(NSString*_Nonnull)languageName{

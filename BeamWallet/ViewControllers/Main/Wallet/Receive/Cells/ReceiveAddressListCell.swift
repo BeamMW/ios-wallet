@@ -70,7 +70,7 @@ extension ReceiveAddressListCell: Configurable {
     
     func configure(with options: (row: Int, address:BMAddress)) {
         
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
         
         backgroundColor = mainView.backgroundColor
         

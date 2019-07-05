@@ -20,6 +20,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InputPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="bottomOffset" destination="nyt-pN-Gz1" id="3dZ-7M-KGl"/>
                 <outlet property="collectionView" destination="FRO-uv-0vF" id="caS-LR-4JX"/>
                 <outlet property="nextButton" destination="Ovc-qP-PXf" id="Xl5-vu-Bg4"/>
                 <outlet property="topOffset" destination="rQC-3u-6QY" id="9Wz-2B-Ury"/>
@@ -41,7 +42,7 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ovc-qP-PXf" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="61" y="459.5" width="253" height="44"/>
+                    <rect key="frame" x="61" y="573" width="253" height="44"/>
                     <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="F8Q-rW-Cet"/>
@@ -84,10 +85,10 @@
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Ovc-qP-PXf" firstAttribute="top" secondItem="FRO-uv-0vF" secondAttribute="bottom" constant="60" id="K3d-zF-fWJ"/>
                 <constraint firstItem="FRO-uv-0vF" firstAttribute="top" secondItem="1Bj-kk-5AT" secondAttribute="bottom" constant="30" id="LRM-It-IHS"/>
                 <constraint firstItem="355-Pt-DJD" firstAttribute="trailing" secondItem="1Bj-kk-5AT" secondAttribute="trailing" constant="30" id="mRf-8S-i3y"/>
                 <constraint firstItem="FRO-uv-0vF" firstAttribute="centerX" secondItem="Qs6-5K-P4C" secondAttribute="centerX" id="nRu-xC-hax"/>
+                <constraint firstItem="355-Pt-DJD" firstAttribute="bottom" secondItem="Ovc-qP-PXf" secondAttribute="bottom" constant="50" id="nyt-pN-Gz1"/>
                 <constraint firstItem="1Bj-kk-5AT" firstAttribute="top" secondItem="355-Pt-DJD" secondAttribute="top" constant="30" id="rQC-3u-6QY"/>
                 <constraint firstItem="1Bj-kk-5AT" firstAttribute="leading" secondItem="355-Pt-DJD" secondAttribute="leading" constant="30" id="sxU-yu-tz8"/>
                 <constraint firstItem="Ovc-qP-PXf" firstAttribute="centerX" secondItem="Qs6-5K-P4C" secondAttribute="centerX" id="xYX-tv-Bte"/>

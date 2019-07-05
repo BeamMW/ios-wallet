@@ -54,7 +54,7 @@ class BMCopyLabel: UILabel {
         ))
     }
     
-    override func copy(_ sender: Any?) {
+    @objc private func customCopy(_ sender: Any?) {
         UIPasteboard.general.string = (copyText != nil ) ? copyText : text
 
         UIMenuController.shared.setMenuVisible(false, animated: true)
@@ -71,6 +71,12 @@ class BMCopyLabel: UILabel {
         let menu = UIMenuController.shared
         if !menu.isMenuVisible {
             menu.setTargetRect(bounds, in: self)
+            menu.menuItems = [
+                UIMenuItem(
+                    title: Localizable.shared.strings.copy,
+                    action: #selector(customCopy(_:))
+                )
+            ]
             menu.setMenuVisible(true, animated: true)
             
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -79,7 +85,7 @@ class BMCopyLabel: UILabel {
     }
     
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return (action == #selector(copy(_:)))
+        return (action == #selector(customCopy(_:)))
     }
 
 }

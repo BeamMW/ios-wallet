@@ -61,7 +61,7 @@ class LocalizableStrings : NSObject {
     var fatalInitCoderError = "init(coder:) has not been implemented"
     var spent  = "spent".localized
     var total  = "total".localized
-    var restore_wallet_title  = "restore_wallet_title".localized
+    var restore_wallet_title  = "restore_wallet_title".localized.capitalizingFirstLetter()
     var restore_wallet_info  = "restore_wallet_info".localized
     var use  = "use".localized
     var face_id  = "face_id".localized
@@ -327,7 +327,23 @@ class LocalizableStrings : NSObject {
     var as_set = "as_set".localized.capitalizingFirstLetter()
     var invalid_address_title = "invalid_address_title".localized.capitalizingFirstLetter()
     var invalid_address_text = "invalid_address_text".localized.capitalizingFirstLetter()
+    var downloading = "downloading".localized
+    var sent_to_own = "sent_to_own".localized
+    var sending_to_own = "sending_to_own".localized
+    var def = "default".localized
+    var my_active = "my_active".localized
+    var my_expired = "my_expired".localized
+    var general_settings = "general_settings".localized
+    var unavailable = "unavailable".localized
+    var in_progress = "in_progress".localized
+    var never_expires = "never_expires".localized
+    var expires_in = "expires_in".localized
+    var h = "h".localized
+    var m = "m".localized
+    var send_qr_secure = "send_qr_secure".localized
 
+
+    
     public func minAmount(str:String) -> String {
         return "min_amount".localized + " " + str
     }

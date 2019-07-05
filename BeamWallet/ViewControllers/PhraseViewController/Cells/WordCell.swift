@@ -31,8 +31,8 @@ class WordCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        mainView.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
-        numberLabel.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+        mainView.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree.cgColor : UIColor.main.darkSlateBlue.cgColor
+        numberLabel.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
 
     }
 }

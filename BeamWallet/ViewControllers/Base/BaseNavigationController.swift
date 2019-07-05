@@ -21,6 +21,8 @@ import UIKit
 
 class BaseNavigationController: UINavigationController {
     
+    public var enableSwipeToDismiss = true
+    
     private lazy var sloppySwiping: NavigationSwiper = {
         return NavigationSwiper(navigationController: self)
     }()
@@ -39,39 +41,53 @@ class BaseNavigationController: UINavigationController {
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        delegate = sloppySwiping
+        if(AppDelegate.newFeaturesEnabled) {
+            delegate = sloppySwiping
+        }
+        
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        delegate = sloppySwiping
+        if(AppDelegate.newFeaturesEnabled) {
+            delegate = sloppySwiping
+        }
     }
     
     public override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {
         super.init(navigationBarClass: navigationBarClass, toolbarClass: toolbarClass)
-        delegate = sloppySwiping
+        if(AppDelegate.newFeaturesEnabled) {
+            delegate = sloppySwiping
+        }
     }
     
     public override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        delegate = sloppySwiping
+        if(AppDelegate.newFeaturesEnabled) {
+            delegate = sloppySwiping
+        }
     }
     
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
-//            interactivePopGestureRecognizer?.delegate = self
-//            delegate = self
-//        }
-//    }
-//
-//    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-//        if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
-//            interactivePopGestureRecognizer?.isEnabled = false
-//        }
-//        super.pushViewController(viewController, animated: animated)
-//    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if(!AppDelegate.newFeaturesEnabled) {
+            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+                interactivePopGestureRecognizer?.delegate = self
+                delegate = self
+            }
+        }
+      
+    }
+
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        if(!AppDelegate.newFeaturesEnabled) {
+            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+                interactivePopGestureRecognizer?.isEnabled = false
+            }
+        }
+        super.pushViewController(viewController, animated: animated)
+    }
 }
 
 extension BaseNavigationController: UINavigationControllerDelegate {
@@ -105,7 +121,7 @@ extension BaseNavigationController: UIGestureRecognizerDelegate {
             
         }
         
-        return true
+        return enableSwipeToDismiss
     }
 }
 
@@ -138,11 +154,23 @@ public final class NavigationSwiper: NSObject {
         guard let navigationController = navigationController else {return}
         guard recognizer == popRecognizer else {return}
         
+        let velocity = recognizer.velocity(in: self.navigationController?.view);
+        
+        if let base = navigationController as? BaseNavigationController {
+            if !base.enableSwipeToDismiss {
+                return
+            }
+        }
+        
         switch (recognizer.state) {
             
         case .began:
+            if velocity.x < 0 {
+                return
+            }
             if (navigationController.viewControllers.count > 1) {
                 isInteractivelyPopping = true
+                                
                 _ = self.navigationController?.popViewController(animated: true)
             }
         case .changed:

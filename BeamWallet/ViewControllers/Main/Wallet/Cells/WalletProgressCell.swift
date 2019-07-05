@@ -57,33 +57,45 @@ class WalletProgressCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        selectionStyle = .none
+
         currencyReceivingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyReceivingIcon.tintColor = receivingLabel.textColor
         
         currencySendingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencySendingIcon.tintColor = sentLabel.textColor
         
-        selectionStyle = .none
+        let touchDown = UILongPressGestureRecognizer(target:self, action: #selector(onTap))
+        touchDown.minimumPressDuration = 0
+        
+        mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        mainView.addGestureRecognizer(touchDown)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
-    @IBAction func onExpand(sender :UIButton) {
-        if receivingStack.alpha == 1 {
-            UIView.animate(withDuration: 0.3) {
-                self.mainStackView.alpha = 0
-                self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
-            }
+    @objc private func onTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .began {
+            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.03)
         }
-        else{
-            UIView.animate(withDuration: 0.3) {
-                self.mainStackView.alpha = 1
-                self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
+        else if sender.state == .ended {
+            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+            
+            if receivingStack.alpha == 1 {
+                UIView.animate(withDuration: 0.3) {
+                    self.mainStackView.alpha = 0
+                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
+                }
             }
+            else{
+                UIView.animate(withDuration: 0.3) {
+                    self.mainStackView.alpha = 1
+                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
+                }
+            }
+            self.delegate?.onExpandProgress()
         }
-        self.delegate?.onExpandProgress()
+        else if sender.state == .cancelled || sender.state == .failed  {
+            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        }
     }
 }
 

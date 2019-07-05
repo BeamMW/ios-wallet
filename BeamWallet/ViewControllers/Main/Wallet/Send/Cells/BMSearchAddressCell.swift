@@ -47,9 +47,9 @@ class BMSearchAddressCell: BaseCell {
         textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
         textField.allowsEditingTextAttributes = true
         textField.defaultOffset = 4
-        textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+        textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
         
-        contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        contentView.backgroundColor = UIColor.main.marineThree
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
@@ -96,7 +96,7 @@ class BMSearchAddressCell: BaseCell {
                 errorLabel.isHidden = false
             }
             else{
-                textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo : UIColor.main.darkSlateBlue
+                textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
                 textField.textColor = UIColor.white
                 errorLabel.text = nil
                 errorLabel.textColor = UIColor.main.red

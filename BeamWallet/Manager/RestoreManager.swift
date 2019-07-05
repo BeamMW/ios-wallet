@@ -56,17 +56,19 @@ class RestoreManager: NSObject {
     }
     
     public func startRestore(completion:@escaping ((Bool) -> Void), progress:@escaping ((Error?, Float?) -> Void)) {
+        
+        self.cancelRestore()
         self.completion = completion
         self.progress = progress
         
-        if FileManager.default.fileExists(atPath: filePath.path)
-        {
-            self.completion?(true)
+        var url:URL?
+        
+        if Settings.sharedManager().target == Testnet {
+            url = URL(string: "https://mobile-restore.beam.mw/testnet/testnet_recovery.bin")
         }
-        else{
-            let tempUrl = URL(string: "https://scholar.princeton.edu/sites/default/files/oversize_pdf_test_0.pdf")!
-            
-            BackgroundDownloader.shared.startDownloading(tempUrl, filePath)
+        
+        if let downloadUrl = url {
+            BackgroundDownloader.shared.startDownloading(downloadUrl, filePath)
             BackgroundDownloader.shared.onProgress = { (progress, error, filePath) in
                 if filePath != nil {
                     self.completion?(true)

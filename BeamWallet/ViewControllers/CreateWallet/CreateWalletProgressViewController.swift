@@ -61,7 +61,7 @@ class CreateWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
             restotingInfoLabel.isHidden = false
-            progressValueLabel.text = Localizable.shared.strings.restored + "0%"
+            progressValueLabel.text = Localizable.shared.strings.restored + " 0%"
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
         }
@@ -76,9 +76,9 @@ class CreateWalletProgressViewController: BaseViewController {
             logoYOffset.constant = 50
             stackYOffset.constant = 50
         }
-        else if Device.screenType == .iPhones_6 {
-        //    logoYOffset.constant = 50
-         //   stackYOffset.constant = 50
+
+        if let base = self.navigationController as? BaseNavigationController {
+            base.enableSwipeToDismiss = false
         }
         
         AppModel.sharedManager().addDelegate(self)
@@ -93,6 +93,11 @@ class CreateWalletProgressViewController: BaseViewController {
         
         if isMovingFromParent {
             AppModel.sharedManager().removeDelegate(self)
+        }
+        
+        if AppModel.sharedManager().isRestoreFlow {
+            RestoreManager.shared.cancelRestore()
+            AppModel.sharedManager().isRestoreFlow = false
         }
     }
     
@@ -124,6 +129,32 @@ class CreateWalletProgressViewController: BaseViewController {
         self.navigationController?.setViewControllers([sideMenuController], animated: true)
     }
 
+    private func downloadFile() {
+        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(0)%"
+        
+        RestoreManager.shared.startRestore(completion: { (completed) in
+            if completed {
+                DispatchQueue.main.async {
+                    self.restoreCompleted()
+                }
+            }
+        }) { (error, progress) in
+            DispatchQueue.main.async {
+                if let reason = error {
+                    self.alert(title: Localizable.shared.strings.error, message: reason.localizedDescription) { (_ ) in
+                        AppModel.sharedManager().isRestoreFlow = false
+                        RestoreManager.shared.cancelRestore()
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+                else if let percent = progress {
+                    self.progressView.progress = percent
+                    self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%"
+                }
+            }
+        }
+    }
+    
     private func startCreateWallet() {
         
         if !AppModel.sharedManager().isInternetAvailable {
@@ -153,26 +184,7 @@ class CreateWalletProgressViewController: BaseViewController {
                     }
                 }
                 else{
-                    RestoreManager.shared.startRestore(completion: { (completed) in
-                        if completed {
-                            DispatchQueue.main.async {
-                                self.restoreCompleted()
-                            }
-                        }
-                    }) { (error, progress) in
-                        DispatchQueue.main.async {
-                            if let reason = error {
-                                self.alert(title: Localizable.shared.strings.error, message: reason.localizedDescription) { (_ ) in
-                                    AppModel.sharedManager().isRestoreFlow = false
-                                    self.navigationController?.popToRootViewController(animated: true)
-                                }
-                            }
-                            else if let percent = progress {
-                                self.progressView.progress = percent
-                                self.progressValueLabel.text = Localizable.shared.strings.restored + "\(Int32(percent * 100))%"
-                            }
-                        }
-                    }
+                    self.downloadFile()
                 }
             }
             else if let phrase = phrase {
@@ -192,16 +204,16 @@ class CreateWalletProgressViewController: BaseViewController {
                 }
             }
             else{
-                let opened = AppModel.sharedManager().openWallet(password!)
-                if(!opened)
-                {
-                    self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_opened) { (_ ) in
-                        self.navigationController?.popToRootViewController(animated: true)
-                    }
+                if AppModel.sharedManager().isRestoreFlow {
+                    self.downloadFile()
                 }
                 else{
-                    UIView.animate(withDuration: 0.3) {
-                        self.progressView.progress = 0.2
+                    let opened = AppModel.sharedManager().openWallet(password!)
+                    if(!opened)
+                    {
+                        self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_opened) { (_ ) in
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
                     }
                 }
             }
@@ -209,17 +221,17 @@ class CreateWalletProgressViewController: BaseViewController {
     }
     
     private func restoreCompleted() {
-      //  DispatchQueue.global(qos: .background).async {
-        AppModel.sharedManager().restore()
-        AppModel.sharedManager().isRestoreFlow = false
-        self.startCreateWallet()
-       // }
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.progressView.progress = 0
+            strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(0)%"
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            AppModel.sharedManager().restore(RestoreManager.shared.filePath.path)
+        }
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     private func openNodeController() {
         let vc = EnterNodeAddressViewController()
         vc.completion = { [weak self]
@@ -271,26 +283,6 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
 
-            if AppModel.sharedManager().isRestoreFlow {
-                if total > 0 {
-                    let speed = Double(done) / Double((Date.timeIntervalSinceReferenceDate - strongSelf.start))
-                   
-                    if speed > 0 {
-                        let sizeLeft = Double(total-done)
-                        let timeLeft = sizeLeft / speed
-                        
-                        print("-----------")
-                        print(timeLeft.asTime(style: .abbreviated))
-                        print("-----------")
-                    }
-    
-                    let progress: Float = Float(done) / Float(total)
-                    let percent = Int32(progress * 100)
-                    
-                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + "\(percent)%"
-                }
-            }
-            
             if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
                 strongSelf.isPresented = true
                 strongSelf.progressView.progress = 1
@@ -298,6 +290,16 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
+                
+                if AppModel.sharedManager().isRestoreFlow {
+                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \( Int32(strongSelf.progressView.progress * 100))%"
+                    
+                    if done == total {
+                        AppModel.sharedManager().isRestoreFlow = false
+                        RestoreManager.shared.cancelRestore()
+                        strongSelf.startCreateWallet()
+                    }
+                }
             }
         }
     }
@@ -317,7 +319,6 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                 }
             }
             else if error.code == 1 {
-                
                 strongSelf.confirmAlert(title: Localizable.shared.strings.incompatible_node_title, message: Localizable.shared.strings.incompatible_node_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.change_settings, cancelHandler: { (_ ) in
                     
                     AppModel.sharedManager().resetWallet(false)

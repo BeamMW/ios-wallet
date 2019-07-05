@@ -19,6 +19,7 @@
 
 #import "BMTransaction.h"
 #import "StringLocalize.h"
+#import "Settings.h"
 
 @implementation BMTransaction
 
@@ -48,18 +49,24 @@
 }
 
 -(NSString*)shortDate {
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
+
     NSDateFormatter *f = [NSDateFormatter new];
     [f setDateFormat:@"dd MMM"];
-    
+    [f setLocale:locale];
+
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
     
     return [f stringFromDate:date];
 }
 
 -(NSString*)formattedDate {
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
+
     NSDateFormatter *f = [NSDateFormatter new];
     [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
-    
+    [f setLocale:locale];
+
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
     
     return [f stringFromDate:date];

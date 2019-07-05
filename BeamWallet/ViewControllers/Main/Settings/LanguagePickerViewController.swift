@@ -58,7 +58,7 @@ class LanguagePickerViewController: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
         tableView.register(CategoryPickerCell.self)
     }
@@ -110,7 +110,7 @@ extension LanguagePickerViewController : UITableViewDataSource {
         cell.detailTextLabel?.textColor = UIColor.main.blueyGrey
         cell.textLabel?.textColor = UIColor.white
         
-        cell.backgroundColor = UIColor.main.marineTwo
+        cell.backgroundColor = UIColor.main.marineThree
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)

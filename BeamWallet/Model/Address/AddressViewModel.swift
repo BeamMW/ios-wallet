@@ -38,6 +38,12 @@ class AddressViewModel: NSObject {
         }
     }
     
+    public var count:Int {
+        get{
+            return  selectedState == .contacts ? contacts.count : addresses.count
+        }
+    }
+    
     public var address:BMAddress?
     
     public var category:BMCategory?

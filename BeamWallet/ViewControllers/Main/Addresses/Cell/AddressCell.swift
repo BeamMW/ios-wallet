@@ -38,28 +38,30 @@ extension AddressCell: Configurable {
     
     func configure(with options: (row: Int, address:BMAddress, single:Bool, displayCategory:Bool)) {
 
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
-        
-        backgroundColor = mainView.backgroundColor
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
         
         arrowImage.isHidden = options.single
         
         idLabel.text = options.address.walletId
         
         if options.address.createTime == 0 {
-            expiredLabel.text = ""
-            
-            //categoryTopY.constant = 53
+            expiredLabel.text = String.empty()
         }
         else{
-            //categoryTopY.constant = 27
+            let expired:String = (options.address.isExpired()) ? options.address.formattedDate() : (options.address.duration == 0 ? Localizable.shared.strings.never_expires.lowercased() : (Localizable.shared.strings.expires_in.lowercased() + " " + options.address.agoDate().lowercased()))
             
-            if options.address.isExpired() {
-                expiredLabel.text =  (Localizable.shared.strings.addDots(value: Localizable.shared.strings.expired) + Localizable.shared.strings.space  + options.address.formattedDate()).lowercased()
-            }
-            else{
-                expiredLabel.text = (Localizable.shared.strings.addDots(value: Localizable.shared.strings.expires) + Localizable.shared.strings.space + options.address.formattedDate()).lowercased()
-            }
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = options.address.duration == 0 ? IconInfinity() : IconExpires()
+            imageAttachment.bounds = CGRect(x: 0, y: options.address.duration == 0 ? (-4) : (-3), width: 16, height: 16)
+            
+            let imageString = NSAttributedString(attachment: imageAttachment)
+            
+            let attributedString = NSMutableAttributedString()
+            attributedString.append(imageString)
+            attributedString.append(NSAttributedString(string: "   "))
+            attributedString.append(NSAttributedString(string: expired))
+            
+            expiredLabel.attributedText = attributedString
         }
         
         if options.address.label.isEmpty {

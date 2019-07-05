@@ -47,7 +47,7 @@ class ClearDataViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
-        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
     }
 

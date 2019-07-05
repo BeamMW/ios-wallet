@@ -79,6 +79,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="yio-1z-dxj" firstAttribute="top" secondItem="nlU-c7-klL" secondAttribute="top" id="0e8-Lp-7zG"/>
                     <constraint firstAttribute="trailing" secondItem="yio-1z-dxj" secondAttribute="trailing" id="1M5-ry-wJa"/>
@@ -86,6 +87,7 @@
                     <constraint firstItem="yio-1z-dxj" firstAttribute="leading" secondItem="nlU-c7-klL" secondAttribute="leading" id="a7m-Zk-ggc"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="7nM-t7-gc3"/>
             <connections>
                 <outlet property="amountLabel" destination="lnC-mH-Ze3" id="Sdx-49-1dQ"/>

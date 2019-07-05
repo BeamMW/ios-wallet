@@ -29,12 +29,8 @@ class UTXOCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
     }
 }
 
@@ -42,8 +38,7 @@ extension UTXOCell: Configurable {
     
     func configure(with options: (row: Int, utxo:BMUTXO)) {
     
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
-        backgroundColor = mainView.backgroundColor
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
         
         amountLabel.text = String.currency(value: options.utxo.realAmount)
         statusLabel.text = options.utxo.statusString

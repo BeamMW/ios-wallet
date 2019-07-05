@@ -29,7 +29,7 @@ protocol NotificationManagerDelegate: AnyObject {
 class NotificationManager : NSObject {
     
     weak var delegate: NotificationManagerDelegate?
-
+    
     static var disableApns = true
     
     //MARK: Notif Status
@@ -55,7 +55,7 @@ class NotificationManager : NSObject {
     
     private struct NotificationTransaction {
         static let id = "TRANSACTION_INVITATION"
-
+        
         struct Action {
             static let accept = "Accept"
             static let decline = "Decline"
@@ -73,7 +73,7 @@ class NotificationManager : NSObject {
         public var address = ""
         public var id = ""
         public var confirmed = false
-
+        
         static func fromUserInfo(data:[AnyHashable : Any]) -> TransactionData? {
             if let amount = data["amount"] as? String,
                 let toAddress = data["to"] as? String, let id = data["message_id"] as? String {
@@ -102,13 +102,13 @@ class NotificationManager : NSObject {
     
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     private var transaction:TransactionData?
-
+    
     static let sharedManager = NotificationManager()
     
     public var clickedTransaction = ""
-
+    
     public func fcmToken() -> String? {
-       return Messaging.messaging().fcmToken
+        return Messaging.messaging().fcmToken
     }
     
     //MARK: - Tasks
@@ -126,7 +126,7 @@ class NotificationManager : NSObject {
     }
     
     //MARK: - Registration
-
+    
     public func isApnsEnabled(completion: @escaping ((Bool) -> Void)) {
         let current = UNUserNotificationCenter.current()
         
@@ -148,8 +148,8 @@ class NotificationManager : NSObject {
             
             Messaging.messaging().delegate = self
         }
-      
-
+        
+        
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         
         let notificationCenter = UNUserNotificationCenter.current()
@@ -166,19 +166,19 @@ class NotificationManager : NSObject {
     }
     
     private func createActionCategories() {
-//        let acceptAction = UNNotificationAction(identifier: NotificationTransaction.Action.accept,
-//                                                title: NotificationTransaction.Action.accept,
-//                                                options: [])
-//        let declineAction = UNNotificationAction(identifier: NotificationTransaction.Action.decline,
-//                                                 title: NotificationTransaction.Action.decline,
-//                                                 options: [])
+        //        let acceptAction = UNNotificationAction(identifier: NotificationTransaction.Action.accept,
+        //                                                title: NotificationTransaction.Action.accept,
+        //                                                options: [])
+        //        let declineAction = UNNotificationAction(identifier: NotificationTransaction.Action.decline,
+        //                                                 title: NotificationTransaction.Action.decline,
+        //                                                 options: [])
         let сategory =
             UNNotificationCategory(identifier: NotificationTransaction.id,
                                    actions: [],
                                    intentIdentifiers: [],
                                    hiddenPreviewsBodyPlaceholder: "",
                                    options: .customDismissAction)
-
+        
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.setNotificationCategories([сategory])
     }
@@ -189,7 +189,7 @@ class NotificationManager : NSObject {
             Messaging.messaging().subscribe(toTopic: topic)
         }
     }
-
+    
     public func unSubscribeToTopic(topic:String){
         if !NotificationManager.disableApns {
             Messaging.messaging().unsubscribe(fromTopic: topic)
@@ -208,11 +208,11 @@ class NotificationManager : NSObject {
             }
         }
     }
-
+    
     
     public func clearNotifications() {
         UIApplication.shared.applicationIconBadgeNumber = 0
-
+        
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
@@ -225,9 +225,9 @@ class NotificationManager : NSObject {
         if transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending {
             NotificationManager.sharedManager.scheduleNotification(title: "Incoming transaction", body: "Click to receive Beam", id:transaction.id)
         }
-//        else if transaction.enumStatus == BMTransactionStatusCompleted || transaction.enumStatus == BMTransactionStatusFailed {
-//            NotificationManager.sharedManager.scheduleNotification(title: "Transaction status update", body: "Сlick to view details", id:transaction.id)
-//        }
+        //        else if transaction.enumStatus == BMTransactionStatusCompleted || transaction.enumStatus == BMTransactionStatusFailed {
+        //            NotificationManager.sharedManager.scheduleNotification(title: "Transaction status update", body: "Сlick to view details", id:transaction.id)
+        //        }
     }
     
     public func sendFirebaseNotification(topic:String) {
@@ -240,43 +240,43 @@ class NotificationManager : NSObject {
         }
         
         let key = "key=AAAAQDKSPzM:APA91bFitbu15xf3jeStYO3nMNPwdleBGqsGZ49Uy6SnspPh9yoQ9M6dAYXkjrZzh9tMAxK2wfqx-kzizSjCu-wyuVkPRNJKb2VHgj4dAJq4ZUMzXOWWgty1DQCVwFukbaAnqN5b_TTB"
-
+        
         //"content_available":true
         let notification: [String:Any] = ["title":"Incoming transaction","body":"Click to receive Beam","sound":"default"]
         let parameters: [String: Any] = ["to": "/topics/\(topic)", "priority":10,"notification": notification]
         
         let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
-
+        
         let session = URLSession.shared
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-
+        
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-
+            
         } catch let error {
             print(error.localizedDescription)
         }
-
+        
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue(key, forHTTPHeaderField: "Authorization")
-
+        
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
-
+            
             guard error == nil else {
                 return
             }
-
+            
             guard let data = data else {
                 return
             }
-
+            
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     print(json)
                 }
-
+                
             } catch let error {
                 print(error.localizedDescription)
             }
@@ -306,7 +306,7 @@ class NotificationManager : NSObject {
         }
     }
     
-
+    
     
     public func didReceiveNotification(id:String) {
         TGBotManager.updateNotificationStatus(id: id, status: .done, type: .push) { (_) in
@@ -359,19 +359,19 @@ class NotificationManager : NSObject {
             AppModel.sharedManager().addDelegate(self)
             
             self.delegate?.onTransactionStatus(succes: .sending, status: "Loading wallet")
-
-//            if(AppModel.sharedManager().isLoggedin) {
-//                AppModel.sharedManager().refreshAllInfo()
-//            }
-//            else{
-                AppModel.sharedManager().openWallet(password)
-           // }
+            
+            //            if(AppModel.sharedManager().isLoggedin) {
+            //                AppModel.sharedManager().refreshAllInfo()
+            //            }
+            //            else{
+            AppModel.sharedManager().openWallet(password)
+            // }
         }
     }
     
     public func displayConfirmAlert() {
         #if EXTENSION
-            print("ignore")
+        print("ignore")
         #else
         if let transaction = self.transaction, AppModel.sharedManager().isLoggedin == true {
             if let vc = UIApplication.getTopMostViewController() {
@@ -445,18 +445,18 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                 
                 break;
             default:
-//                if let transaction = self.transaction {
-//                    if UIApplication.shared.applicationState != .active {
-//                        registerBackgroundTask()
-//                    }
-//                    
-//                    didReceiveNotification(id: transaction.id)
-//
-//                    TGBotManager.updateTransactionStatus(id: transaction.id, status: .failed, type: .transaction, completion: { (_ ) in
-//                        
-//                    })
-//                }
-//                self.transaction = nil
+                //                if let transaction = self.transaction {
+                //                    if UIApplication.shared.applicationState != .active {
+                //                        registerBackgroundTask()
+                //                    }
+                //
+                //                    didReceiveNotification(id: transaction.id)
+                //
+                //                    TGBotManager.updateTransactionStatus(id: transaction.id, status: .failed, type: .transaction, completion: { (_ ) in
+                //
+                //                    })
+                //                }
+                //                self.transaction = nil
                 break
             }
         }
@@ -469,10 +469,11 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
             }
             
             #if EXTENSION
-                print("ignore")
+            print("ignore")
             #else
             if AppModel.sharedManager().isLoggedin {
                 if let rootVC = UIApplication.getTopMostViewController() {
+                    rootVC.sideMenuController?.hideLeftView()
                     
                     if rootVC is TransactionViewController {
                         rootVC.back(animated: false)
@@ -495,9 +496,8 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                     else{
                         if let transactions = AppModel.sharedManager().transactions as? [BMTransaction] {
                             if let transaction = transactions.first(where: { $0.id == response.notification.request.identifier }) {
-                               
+                                
                                 let vc = TransactionViewController(transaction: transaction)
-                                vc.hidesBottomBarWhenPushed = true
                                 
                                 if let topVC = UIApplication.getTopMostViewController() {
                                     topVC.pushViewController(vc: vc)
@@ -505,7 +505,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                             }
                         }
                     }
-             
+                    
                 }
             }
             #endif
@@ -555,9 +555,9 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
 
 extension NotificationManager : MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-
+        
     }
-
+    
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
     }
 }
@@ -573,7 +573,7 @@ extension NotificationManager : WalletModelDelegate {
                 if self.transaction?.confirmed ?? false {
                     if connected {
                         self.delegate?.onTransactionStatus(succes: .sending, status: "Preparing to send a transaction")
-
+                        
                         AppModel.sharedManager().getWalletStatus()
                     }
                 }
@@ -586,19 +586,19 @@ extension NotificationManager : WalletModelDelegate {
         }
     }
     
-//    func onReceivedTransactions(_ transactions: [BMTransaction]) {
-//
-//        for tr in transactions {
-//            if tr.enumStatus == 1 && tr.isIncome == false  {
-//                if tr.isNew() {
-//                    if self.sendedTransactions.contains(tr.id) == false {
-//                        self.sendedTransactions.append(tr.id)
-//                        self.sendFirebaseNotification(topic: tr.receiverAddress)
-//                    }
-//                }
-//            }
-//        }
-//    }
+    //    func onReceivedTransactions(_ transactions: [BMTransaction]) {
+    //
+    //        for tr in transactions {
+    //            if tr.enumStatus == 1 && tr.isIncome == false  {
+    //                if tr.isNew() {
+    //                    if self.sendedTransactions.contains(tr.id) == false {
+    //                        self.sendedTransactions.append(tr.id)
+    //                        self.sendFirebaseNotification(topic: tr.receiverAddress)
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
     
     func onWalletStatusChange(_ status: BMWalletStatus) {
         
@@ -607,18 +607,18 @@ extension NotificationManager : WalletModelDelegate {
             if let transaction = self.transaction {
                 
                 if transaction.confirmed {
-
+                    
                     if let error = AppModel.sharedManager().canSend(transaction.amount, fee: transaction.fee, to: transaction.address)
                     {
                         self.delegate?.onTransactionStatus(succes: .failed, status: error)
-
+                        
                         TGBotManager.updateTransactionStatus(id: transaction.id, status: .failed, type: .transaction, completion: { (_ ) in
                             
                         })
                     }
                     else{
                         self.delegate?.onTransactionStatus(succes: .sending, status: "Sending transaction")
-
+                        
                         AppModel.sharedManager().send(transaction.amount, fee: transaction.fee, to: transaction.address, comment: transaction.comment)
                         
                         TGBotManager.updateTransactionStatus(id: transaction.id, status: .sent, type: .transaction, completion: { (_ ) in
@@ -629,10 +629,10 @@ extension NotificationManager : WalletModelDelegate {
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                             self.sendFirebaseNotification(topic: address)
-
+                            
                             self.delegate?.onTransactionStatus(succes: .sent, status: "Transaction successfully sent")
                         }
-                   
+                        
                     }
                     
                     self.transaction = nil

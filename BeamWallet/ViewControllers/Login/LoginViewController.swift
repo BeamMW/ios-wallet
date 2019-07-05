@@ -22,9 +22,12 @@ import UIKit
 class LoginViewController: BaseViewController {
 
     @IBOutlet private weak var bgView: UIImageView!
+    @IBOutlet private weak var restoreButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        restoreButton.setTitle(Localizable.shared.strings.restore_wallet_title, for: .normal)
         
         switch Settings.sharedManager().target {
         case Testnet:
@@ -33,6 +36,10 @@ class LoginViewController: BaseViewController {
             bgView.image = BackgroundMasternet()
         default:
             return
+        }
+        
+        if AppDelegate.newFeaturesEnabled && Settings.sharedManager().target == Testnet {
+            restoreButton.isHidden = false
         }
     }
 

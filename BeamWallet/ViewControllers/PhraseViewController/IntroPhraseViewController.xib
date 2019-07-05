@@ -20,6 +20,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IntroPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="bottomOffset" destination="NfO-Mj-KRO" id="t5v-7y-S6A"/>
                 <outlet property="mainStack" destination="Cyl-sg-GXv" id="VNL-oV-U0Y"/>
                 <outlet property="stackWidth" destination="D6r-yd-Hcz" id="6Pb-lv-KT9"/>
                 <outlet property="topOffset" destination="Ahq-0O-Ez0" id="qXK-ZZ-ero"/>
@@ -32,7 +33,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Cyl-sg-GXv">
-                    <rect key="frame" x="30" y="75" width="315" height="430.5"/>
+                    <rect key="frame" x="30" y="75" width="315" height="330.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCo-Qh-eFv">
                             <rect key="frame" x="0.0" y="0.0" width="315" height="115"/>
@@ -116,50 +117,41 @@ Never type your seed phrase in keychains or password managers. Never save it in 
                                 </stackView>
                             </subviews>
                         </stackView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M1j-Jr-M7N">
-                            <rect key="frame" x="0.0" y="380.5" width="315" height="50"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lc2-JS-VP6" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="31" y="3" width="253" height="44"/>
-                                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="253" id="8ae-zr-Cx1"/>
-                                        <constraint firstAttribute="height" constant="44" id="Jug-9j-lxy"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="generate seed phrase" image="iconRecovery">
-                                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="generate_seed"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="pvF-SR-kwV"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstItem="lc2-JS-VP6" firstAttribute="centerX" secondItem="M1j-Jr-M7N" secondAttribute="centerX" id="3x4-1O-cgW"/>
-                                <constraint firstItem="lc2-JS-VP6" firstAttribute="top" secondItem="M1j-Jr-M7N" secondAttribute="top" constant="3" id="USz-a1-xTd"/>
-                                <constraint firstItem="lc2-JS-VP6" firstAttribute="centerY" secondItem="M1j-Jr-M7N" secondAttribute="centerY" id="v8c-S3-PCG"/>
-                            </constraints>
-                        </view>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="width" constant="315" id="D6r-yd-Hcz"/>
                     </constraints>
                 </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lc2-JS-VP6" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="61" y="573" width="253" height="44"/>
+                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="253" id="8ae-zr-Cx1"/>
+                        <constraint firstAttribute="height" constant="44" id="Jug-9j-lxy"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                    <state key="normal" title="generate seed phrase" image="iconRecovery">
+                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="22"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="generate_seed"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="pvF-SR-kwV"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Cyl-sg-GXv" firstAttribute="centerX" secondItem="8iw-Ag-QBa" secondAttribute="centerX" id="8wx-dD-FFb"/>
                 <constraint firstItem="Cyl-sg-GXv" firstAttribute="top" secondItem="NvB-WR-tc2" secondAttribute="top" constant="55" id="Ahq-0O-Ez0"/>
+                <constraint firstItem="NvB-WR-tc2" firstAttribute="bottom" secondItem="lc2-JS-VP6" secondAttribute="bottom" constant="50" id="NfO-Mj-KRO"/>
+                <constraint firstItem="lc2-JS-VP6" firstAttribute="centerX" secondItem="8iw-Ag-QBa" secondAttribute="centerX" id="T7g-cE-X6A"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="NvB-WR-tc2"/>
             <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>

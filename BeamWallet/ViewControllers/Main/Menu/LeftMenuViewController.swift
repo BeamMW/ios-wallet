@@ -48,11 +48,11 @@ class LeftMenuViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.main.navy
-        
         Settings.sharedManager().addDelegate(self)
         
-        tableView.backgroundColor = UIColor.main.navy
+        view.backgroundColor = UIColor.main.marine
+
+        tableView.backgroundColor = UIColor.main.marine
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 66))

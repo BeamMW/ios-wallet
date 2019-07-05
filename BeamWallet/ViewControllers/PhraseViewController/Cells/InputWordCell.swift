@@ -39,7 +39,7 @@ class InputWordCell: UICollectionViewCell, Delegating {
     }
     
     func startEditing() {
-        wordField.becomeFirstResponder()
+        _ = wordField.becomeFirstResponder()
     }
 }
 
@@ -51,7 +51,7 @@ extension InputWordCell: Configurable {
         
         if(word.value.isEmpty){
             numberLabel.backgroundColor = UIColor.clear
-            numberLabel.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo.cgColor : UIColor.main.darkSlateBlue.cgColor
+            numberLabel.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree.cgColor : UIColor.main.darkSlateBlue.cgColor
             numberLabel.textColor =  UIColor.white
             wordField.fState = BMWordField.FieldState.empty
         }

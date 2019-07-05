@@ -73,6 +73,7 @@ class BaseTableViewController: BaseViewController {
     
     @objc public func startSearch(){
         isSearching = true
+        isGradient = false
         
         if searchView == nil {
             searchView = BMSearchView()
@@ -91,14 +92,21 @@ class BaseTableViewController: BaseViewController {
         
         view.addSubview(searchView!)
         searchView?.show()
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.viewWithTag(10)?.alpha = 0
+        }) { (_) in
+        }
     }
     
     @objc public func stopSearch() {
         isSearching = false
+        isGradient = true
         searchView?.hide()
-        
+
         UIView.animate(withDuration: 0.2, animations: {
             self.viewDidLayoutSubviews()
+            self.view.viewWithTag(10)?.alpha = 1
         }) { (_) in
         }
     }

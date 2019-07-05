@@ -55,7 +55,7 @@ class DetailAddressViewModel: AddressViewModel {
         details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.address), detail: self.address!.walletId, failed: false, canCopy:true, color: UIColor.white))
         
         if !isContact {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.exp_date), detail: self.address!.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
+            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: (self.address!.isExpired() ? Localizable.shared.strings.expired : Localizable.shared.strings.exp_date)), detail: self.address!.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
         }
         
         if !self.address!.category.isEmpty {

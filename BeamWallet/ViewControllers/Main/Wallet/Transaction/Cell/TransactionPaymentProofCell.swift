@@ -36,8 +36,8 @@ class TransactionPaymentProofCell: BaseCell {
         
         selectionStyle = .none
         
-        buttonDetails.backgroundColor = UIColor.main.marineTwo;
-        buttonCopy.backgroundColor = UIColor.main.marineTwo;
+        buttonDetails.backgroundColor = UIColor.main.marineThree;
+        buttonCopy.backgroundColor = UIColor.main.marineThree;
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

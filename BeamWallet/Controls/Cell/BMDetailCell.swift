@@ -44,7 +44,7 @@ class BMDetailCell: BaseCell {
         selectedView.backgroundColor = contentView.backgroundColor
         selectedBackgroundView = selectedView
         
-        contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        contentView.backgroundColor = UIColor.main.marineThree
 
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)
     }

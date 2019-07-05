@@ -65,66 +65,43 @@ class SettingsViewModel : NSObject {
         var node = [SettingsItem]()
         node.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5))
         
-        var security = [SettingsItem]()
-        security.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3))
+        var general = [SettingsItem]()
+        general.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3))
         if BiometricAuthorization.shared.canAuthenticate() {
-            security.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
+            general.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
         }
+        general.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
+        general.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
+        general.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
+        general.append(SettingsItem(title: Localizable.shared.strings.change_wallet_password, detail: nil, isSwitch: nil, id: 1))
+        general.append(SettingsItem(title: Localizable.shared.strings.clear_data, detail: nil, isSwitch: nil, id: 6))
 
-        security.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
-
-        
-        var info = [SettingsItem]()
-        info.append(SettingsItem(title: Localizable.shared.strings.clear_data, detail: nil, isSwitch: nil, id: 6))
-        info.append(SettingsItem(title: Localizable.shared.strings.change_wallet_password, detail: nil, isSwitch: nil, id: 1))
-        
-        if Settings.sharedManager().target == Testnet {
-            info.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
-        }
-
-        var owner = [SettingsItem]()
-        owner.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
         
         var categories = [SettingsItem]()
-
         if AppModel.sharedManager().categories.count > 0 {
             for category in AppModel.sharedManager().categories as! [BMCategory] {
                 categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, id: Int(category.id), category: category))
             }
         }
-        else{
-            categories.append(SettingsItem(title: Localizable.shared.strings.create_new_category, detail: nil, isSwitch: nil, id: 10))
-        }
+        categories.append(SettingsItem(title: Localizable.shared.strings.create_new_category, detail: nil, isSwitch: nil, id: 10))
 
-        var report = [SettingsItem]()
-        report.append(SettingsItem(title: Localizable.shared.strings.report_problem, detail: nil, isSwitch: nil, id: 2))
-        
-        var rate = [SettingsItem]()
-        rate.append(SettingsItem(title: Localizable.shared.strings.rate_app, detail: nil, isSwitch: nil, id: 11))
+
+        var feedback = [SettingsItem]()
+        feedback.append(SettingsItem(title: Localizable.shared.strings.report_problem, detail: nil, isSwitch: nil, id: 2))
+        feedback.append(SettingsItem(title: Localizable.shared.strings.rate_app, detail: nil, isSwitch: nil, id: 11))
 
         items.append(node)
-        items.append(security)
-        items.append(info)
-        items.append(owner)
-
+        items.append(general)
         items.append(categories)
-
-        if AppModel.sharedManager().categories.count > 0 {
-            var categories = [SettingsItem]()
-            categories.append(SettingsItem(title: Localizable.shared.strings.create_new_category, detail: nil, isSwitch: nil, id: 10))
-            items.append(categories)
-        }
         
-        
-        items.append(report)
-        items.append(rate)
-
         if !NotificationManager.disableApns {
             var bots = [SettingsItem]()
             bots.append(SettingsItem(title: Localizable.shared.strings.open_tg_bot, detail: nil, isSwitch: nil, id: 8))
             bots.append(SettingsItem(title: Localizable.shared.strings.link_tg_bot, detail: nil, isSwitch: nil, id: 7))
             items.append(bots)
         }
+        
+        items.append(feedback)
     }
     
     public func getItem(indexPath:IndexPath) -> SettingsItem {

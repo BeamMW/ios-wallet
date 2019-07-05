@@ -78,7 +78,11 @@ class ReceiveViewController: BaseTableViewController {
         super.viewWillDisappear(animated)
         
         self.view.endEditing(true)
-
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
         if isMovingFromParent {
             viewModel.revertChanges()
         }
@@ -181,7 +185,7 @@ extension ReceiveViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
                 .configured(with: (hideLine: true, address: viewModel.address, title: title))
             cell.delegate = self
-            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            cell.contentView.backgroundColor = UIColor.main.marineThree
             return cell
         case 1:
             if indexPath.row == 0 {
@@ -196,7 +200,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                     .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
                 cell.delegate = self
-                cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
                 return cell
             }
             else if indexPath.row == 2 {
@@ -240,7 +244,7 @@ extension ReceiveViewController : UITableViewDataSource {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.request_amount, value: viewModel.amount))
                 cell.delegate = self
-                cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
                 return cell
             }
         case 4:
@@ -257,7 +261,7 @@ extension ReceiveViewController : UITableViewDataSource {
         let view = UIView()
         switch section {
         case 1, 3:
-            view.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            view.backgroundColor = UIColor.main.marineThree
         default:
             view.backgroundColor = UIColor.clear
         }
@@ -269,7 +273,7 @@ extension ReceiveViewController : UITableViewDataSource {
         let view = UIView()
         switch section {
         case 1, 3:
-            view.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            view.backgroundColor = UIColor.main.marineThree
         default:
             view.backgroundColor = UIColor.clear
         }
@@ -356,7 +360,5 @@ extension ReceiveViewController : BMCellProtocol {
         self.view.endEditing(true)
 
         viewModel.isShared = true
-        
-        back()
     }
 }

@@ -35,7 +35,7 @@ class EnterNodeAddressViewController: BaseViewController {
         
         hideKeyboardWhenTappedAround()
         
-        nodeAddressView.backgroundColor = UIColor.main.marineTwo
+        nodeAddressView.backgroundColor = UIColor.main.marineThree
 
         addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
@@ -45,10 +45,7 @@ class EnterNodeAddressViewController: BaseViewController {
         nodeAddressField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
+
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let address = nodeAddressField.text {
             

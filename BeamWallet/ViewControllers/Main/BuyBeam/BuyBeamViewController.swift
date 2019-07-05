@@ -98,6 +98,10 @@ class BuyBeamViewController: BaseTableViewController {
         super.viewWillDisappear(animated)
         
         self.view.endEditing(true)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
         if isMovingFromParent {
             viewModel.revertChanges()
@@ -212,7 +216,7 @@ extension BuyBeamViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = (section <= 1) ? UIColor.clear : UIColor.main.marineTwo.withAlphaComponent(0.35)
+        view.backgroundColor = (section <= 1) ? UIColor.clear : UIColor.main.marineThree
 
         return view
     }
@@ -324,7 +328,7 @@ extension BuyBeamViewController : UITableViewDataSource {
                 .configured(with: (name: name.uppercased() , value: viewModel.fromAddress, rightIcon:IconScanQr()))
             cell.delegate = self
             cell.error = viewModel.fromAddressError
-            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            cell.contentView.backgroundColor = UIColor.main.marineThree
             return cell
         case 3:
             var title = viewModel.pickedAddress == nil ? Localizable.shared.strings.beam_recepient_auto : Localizable.shared.strings.beam_recepient.uppercased()
@@ -337,7 +341,7 @@ extension BuyBeamViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
                 .configured(with: (hideLine: true, address: viewModel.address, title: title))
             cell.delegate = self
-            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            cell.contentView.backgroundColor = UIColor.main.marineThree
             return cell
         case 4:
             if indexPath.row == 0 {
@@ -352,7 +356,7 @@ extension BuyBeamViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                     .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address!.label, rightIcon:nil))
                 cell.delegate = self
-                cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20
                 return cell
             }

@@ -60,12 +60,20 @@ class CategoryDetailViewController: BaseTableViewController {
         addressViewModel.onDataDeleted = { [weak self]
             indexPath, address in
             
+            guard let strongSelf = self else { return }
+            
             if let path = indexPath {
-                self?.tableView.performUpdate({
-                    self?.tableView.deleteRows(at: [path], with: .left)
-                }, completion: {
+                if strongSelf.addressViewModel.addresses.count == 0 {
+                    strongSelf.tableView.reloadData()
                     AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
-                })
+                }
+                else{
+                    strongSelf.tableView.performUpdate({
+                        strongSelf.tableView.deleteRows(at: [path], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
+                    })
+                }
             }
         }
     }

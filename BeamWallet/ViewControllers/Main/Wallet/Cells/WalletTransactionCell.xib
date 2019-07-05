@@ -59,9 +59,9 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vw0-hE-BYk">
-                                        <rect key="frame" x="0.0" y="35.5" width="230.5" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="35.5" width="125" height="0.0"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="230.5" id="xXE-BX-s8N"/>
+                                            <constraint firstAttribute="width" constant="125" id="4gZ-Vg-dGy"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -145,6 +145,7 @@
                     <constraint firstAttribute="trailing" secondItem="fKt-Vb-Zkz" secondAttribute="trailing" id="gkQ-Uv-XzF"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="amountLabel" destination="aBt-ab-epn" id="1w6-GU-Uea"/>
@@ -155,7 +156,6 @@
                 <outlet property="dateLabel" destination="4ho-1u-9fd" id="G6S-NY-L8Y"/>
                 <outlet property="mainView" destination="fKt-Vb-Zkz" id="sq1-M0-hYG"/>
                 <outlet property="searchLabel" destination="vw0-hE-BYk" id="nhf-Mk-Arc"/>
-                <outlet property="searchLabelWidth" destination="xXE-BX-s8N" id="Tk6-wr-sXy"/>
                 <outlet property="statusLabel" destination="Jwt-9z-uRX" id="9tg-pS-q6I"/>
                 <outlet property="typeLabel" destination="cfi-41-SbP" id="Q8I-4B-jjr"/>
             </connections>

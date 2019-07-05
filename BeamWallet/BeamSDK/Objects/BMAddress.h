@@ -49,6 +49,7 @@
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;
 -(NSString*)formattedDate;
+-(NSString*)agoDate;
 
 //edit
 -(NSString*)nowDate;

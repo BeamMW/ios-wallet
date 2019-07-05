@@ -47,6 +47,21 @@ class BaseViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.view.endEditing(true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let navigation = navigationController {
+            self.sideMenuController?.isLeftViewSwipeGestureEnabled = (navigation.viewControllers.count == 1)
+        }
+    }
+    
+    
     private var _isUppercasedTitle = false
     var isUppercasedTitle: Bool{
         get{
@@ -65,24 +80,19 @@ class BaseViewController: UIViewController {
             attributedTitle = newValue?.uppercased()
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        if let navigation = navigationController {
-            self.sideMenuController?.isLeftViewSwipeGestureEnabled = (navigation.viewControllers.count == 1)
-        }
-    }
-    
     
     @objc private func onLeftMenu() {
         sideMenuController?.toggleLeftViewAnimated()
     }
     
-    public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true) {        
+    public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true, menu:Bool = false) {
+        view.viewWithTag(10)?.removeFromSuperview()
+        view.viewWithTag(11)?.removeFromSuperview()
+
         let height:CGFloat = Device.isXDevice ? 180 : 150
 
-        let colors = [mainColor, UIColor.main.marine.withAlphaComponent(0.1)]
+        let colors = [mainColor, UIColor.clear]
 
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = colors.map { $0?.cgColor ?? UIColor.white.cgColor }
@@ -92,20 +102,27 @@ class BaseViewController: UIViewController {
         backgroundImage.clipsToBounds = true
         backgroundImage.contentMode = .scaleToFill
         backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: height)
+        backgroundImage.tag = 10
         backgroundImage.layer.addSublayer(gradient)
         self.view.addSubview(backgroundImage)
         
-        if self.navigationController?.viewControllers.count ?? 0 > 1 {
-            self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+        if menu {
+            self.onAddMenuIcon()
         }
         else{
-            self.onAddMenuIcon()
+            if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+            }
+            else{
+                self.onAddMenuIcon()
+            }
         }
         
         if addedStatusView {
             self.isAddStatusView = true
             
             let statusView = BMNetworkStatusView()
+            statusView.tag = 11
             statusView.y = Device.isXDevice ? 110 : 80
             statusView.x = 0
             self.view.addSubview(statusView)
@@ -157,9 +174,12 @@ class BaseViewController: UIViewController {
 //MARK: - Navigation Buttons
     
     public func onAddMenuIcon() {
+        view.viewWithTag(12)?.removeFromSuperview()
+        
         let y:CGFloat = Device.isXDevice ? 60 : 35
 
         let menuButton = UIButton(type: .system)
+        menuButton.tag = 12
         menuButton.contentHorizontalAlignment = .left
         menuButton.tintColor = UIColor.white
         menuButton.setImage(IconLeftMenu(), for: .normal)
@@ -176,14 +196,14 @@ class BaseViewController: UIViewController {
     public func addCustomBackButton(target:Any?, selector:Selector) {
         let y:CGFloat = Device.isXDevice ? 60 : 35
 
-        self.view.viewWithTag(20192)?.removeFromSuperview()
+        self.view.viewWithTag(13)?.removeFromSuperview()
 
         let button = UIButton(type: .system)
         button.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
         button.contentHorizontalAlignment = .left
         button.tintColor = UIColor.white
         button.setImage(IconBack(), for: .normal)
-        button.tag = 20192
+        button.tag = 13
         button.addTarget(target, action: selector, for: .touchUpInside)
         self.view.addSubview(button)
     }
@@ -237,7 +257,7 @@ class BaseViewController: UIViewController {
     }
     
     public func removeLeftButton() {
-        self.view.viewWithTag(20192)?.removeFromSuperview()
+        self.view.viewWithTag(13)?.removeFromSuperview()
     }
 
 //MARK: - Feedback

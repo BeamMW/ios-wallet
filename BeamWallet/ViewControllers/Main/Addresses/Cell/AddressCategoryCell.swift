@@ -15,7 +15,7 @@ class AddressCategoryCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.backgroundColor = UIColor.main.marineTwo
+        self.backgroundColor = UIColor.main.marineThree
         
         selectionStyle = .default
         

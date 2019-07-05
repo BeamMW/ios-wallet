@@ -18,7 +18,8 @@
 //
 
 #import "BMAddress.h"
-
+#import "Settings.h"
+#import "StringLocalize.h"
 #include "wallet/wallet_client.h"
 
 @implementation BMAddress
@@ -72,10 +73,37 @@
     }
 
     NSDateFormatter *f = [self formatter];
+
     
     NSDate *date = [NSDate dateWithTimeIntervalSince1970: [self getExpirationTime]];
     
     return [f stringFromDate:date];
+}
+
+-(NSString*)agoDate {
+    if (_duration == 0)
+    {
+        return @"never";
+    }
+    
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970: [self getExpirationTime]];
+
+    int totalSeconds = date.timeIntervalSince1970 - [NSDate date].timeIntervalSince1970;
+    int m = (totalSeconds / 60) % 60;
+    int h = totalSeconds / 3600;
+    
+    if(h == 23 && m > 55) {
+        return [NSString stringWithFormat:@"%d %@", 24, [@"h" localized]];
+    }
+    else if (m <= 1 && h > 0) {
+        return [NSString stringWithFormat:@"%d %@", h, [@"h" localized]];
+    }
+    else if (h == 0) {
+        return [NSString stringWithFormat:@"%d %@", m, [@"m" localized]];
+    }
+    else{
+       return [NSString stringWithFormat:@"%d %@ %d %@", h, [@"h" localized], m, [@"m" localized]];
+    }
 }
 
 -(NSString*)nowDate {
@@ -122,6 +150,10 @@
         _formatter = [[NSDateFormatter alloc] init];
         [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
     }
+    
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
+    [_formatter setLocale:locale];
+    
     return _formatter;
 }
 

@@ -21,9 +21,9 @@ import UIKit
 
 class AddressesViewController: BaseTableViewController {
     
-    private let headerView: AddressesSegmentView = UIView.fromNib()
     private let viewModel = AddressViewModel(selected: .active)
-    
+    private let header = BMTableHeaderTitleView.init(segments: [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts])
+
     override var isUppercasedTitle: Bool {
         get{
             return true
@@ -36,13 +36,14 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = Localizable.shared.strings.addresses
+        isGradient = true
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
-        headerView.delegate = self
+        title = Localizable.shared.strings.addresses
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(AddressCell.self)
+        tableView.register([AddressCell.self, BMEmptyCell.self])
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -51,8 +52,20 @@ class AddressesViewController: BaseTableViewController {
             registerForPreviewing(with: self, sourceView: tableView)
         }
         
+        header.lineColor = UIColor.main.peacockBlue
+        header.selectedIndex = viewModel.selectedState.rawValue
+        header.delegate = self
+        view.insertSubview(header, at: 0)
+        
         subscribeToChages()
-        onAddMenuIcon()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+                
+        header.y = tableView.y - 5
+        tableView.y = header.y + header.h
+        tableView.h = self.view.h - tableView.y
     }
     
     private func subscribeToChages() {
@@ -63,11 +76,17 @@ class AddressesViewController: BaseTableViewController {
             indexPath, address in
             
             if let path = indexPath {
-                self?.tableView.performUpdate({
-                    self?.tableView.deleteRows(at: [path], with: .left)
-                }, completion: {
+                if self?.viewModel.count ?? 0 > 0 {
+                    self?.tableView.performUpdate({
+                        self?.tableView.deleteRows(at: [path], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
+                    })
+                }
+                else{
                     AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
-                })
+                    self?.tableView.reloadData()
+                }
             }
         }
     }
@@ -83,50 +102,57 @@ class AddressesViewController: BaseTableViewController {
 
 extension AddressesViewController : UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? AddressesSegmentView.height : 0
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return AddressCell.height()
+        return (viewModel.count == 0) ? AddressCell.height() : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-        
-        let vc = AddressViewController(address: address)
-        vc.hidesBottomBarWhenPushed = true
-        pushViewController(vc: vc)
+        if viewModel.count > 0 {
+            let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
+            
+            let vc = AddressViewController(address: address)
+            pushViewController(vc: vc)
+        }
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-    {
-       return viewModel.trailingSwipeActions(indexPath: indexPath)
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        if viewModel.count > 0 {
+            return viewModel.trailingSwipeActions(indexPath: indexPath)
+        }
+        else{
+            return nil
+        }
     }
 }
 
 extension AddressesViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let count = viewModel.selectedState == .contacts ? viewModel.contacts.count : viewModel.addresses.count
-        return count
+        let count = viewModel.count
+        return count == 0 ? 1 : count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-        
-        let cell =  tableView
-            .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-            .configured(with: (row: indexPath.row, address: address, single:false, displayCategory: true))
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return section == 0 ? headerView : nil
+        if viewModel.count == 0 {
+            let cell = tableView
+                .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
+                .configured(with: Localizable.shared.strings.not_found)
+            cell.backgroundView?.backgroundColor = UIColor.main.marineThree
+            return cell
+        }
+        else {
+            let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
+            
+            let cell =  tableView
+                .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                .configured(with: (row: indexPath.row, address: address, single:false, displayCategory: true))
+            
+            return cell
+        }
     }
 }
 
@@ -134,7 +160,7 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
-        if viewModel.selectedState != .contacts {
+        if viewModel.selectedState != .contacts && viewModel.count > 0 {
 
             guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
             
@@ -160,8 +186,8 @@ extension AddressesViewController : UIViewControllerPreviewingDelegate {
     }
 }
 
-extension AddressesViewController : AddressesSegmentViewDelegate {
-    func onFilterClicked(index: Int) {
+extension AddressesViewController : BMTableHeaderTitleViewDelegate {
+    func onDidSelectSegment(index: Int) {
         viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: index) ?? .active
     }
 }

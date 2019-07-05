@@ -42,7 +42,7 @@ extension ContactCell: Configurable {
     func configure(with options: (row: Int, contact:BMContact)) {
         let address = options.contact.address
         
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo.withAlphaComponent(0.35) : UIColor.main.marine
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
         
         backgroundColor = mainView.backgroundColor
         

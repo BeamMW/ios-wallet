@@ -27,7 +27,7 @@ class BMEmptyCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        contentView.backgroundColor = UIColor.main.marineTwo
+        contentView.backgroundColor = UIColor.main.marineThree
 
         selectionStyle = .none
     }
@@ -36,7 +36,7 @@ class BMEmptyCell: BaseCell {
 extension BMEmptyCell: Configurable {
     
     func configure(with text:String) {
-        titleLabel.text = text
+        titleLabel.text = text.capitalizingFirstLetter()
     }
 }
 

@@ -22,7 +22,8 @@ import UIKit
 class DisplayPhraseViewController: BaseWizardViewController {
     
     @IBOutlet private weak var collectionView: UICollectionView!
-    @IBOutlet private weak var copyButton: UIButton!
+    @IBOutlet private weak var testnetView: UIView!
+    @IBOutlet private weak var mainetView: UIView!
 
     var words = [String]()
     var phrase:String!
@@ -35,11 +36,21 @@ class DisplayPhraseViewController: BaseWizardViewController {
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         
         if Settings.sharedManager().target == Testnet || Settings.sharedManager().target == Masternet {
-            copyButton.isHidden = false
+            mainetView.isHidden = true
+            testnetView.isHidden = false
+        }
+        else{
+            mainetView.isHidden = false
+            testnetView.isHidden = true
         }
         
         if Device.isZoomed {
-            mainStack?.spacing = 10
+            if Device.screenType == .iPhones_Plus {
+                mainStack?.spacing = 30
+            }
+            else{
+                mainStack?.spacing = 10
+            }
         }
         else{
             switch Device.screenType {

@@ -44,6 +44,9 @@ class SettingsViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        isGradient = true
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
         title = Localizable.shared.strings.settings
         
         viewModel.onDataChanged = { [weak self] in
@@ -51,20 +54,26 @@ class SettingsViewController: BaseTableViewController {
         }
                 
         tableView.register(SettingsCell.self)
-        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
-        tableView.tableHeaderView = BMNetworkStatusView()
         tableView.tableFooterView = versionView()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.backgroundColor = UIColor.main.marine
         
-        Settings.sharedManager().addDelegate(self)
-        
-        onAddMenuIcon()
+        Settings.sharedManager().addDelegate(self)        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = CGRect(x: 0, y: tableView.y - 5, width: self.view.bounds.width, height: tableView.h + 10)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
         if isMovingFromParent {
             Settings.sharedManager().removeDelegate(self)
@@ -72,14 +81,22 @@ class SettingsViewController: BaseTableViewController {
     }
     
     private func versionView() -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 70))
         view.backgroundColor = UIColor.clear
         
-        let label = UILabel(frame: view.bounds)
+        let v = UIApplication.appVersion()
+        let string = Localizable.shared.strings.version + ": " + v
+        
+        let range = (string as NSString).range(of: String(v))
+
+        let attributedText = NSMutableAttributedString(string: string)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: range)
+
+        let label = UILabel(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.size.width, height: 20))
         label.textAlignment = .center
         label.font = RegularFont(size: 14)
         label.textColor = UIColor.main.blueyGrey
-        label.text = UIApplication.version()
+        label.attributedText = attributedText
         view.addSubview(label)
         
         return view
@@ -93,17 +110,7 @@ extension SettingsViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return BMTableHeaderTitleView.height
-        }
-        else if section == 4 {
-            return BMTableHeaderTitleView.height
-        }
-        else if section == 5 && AppModel.sharedManager().categories.count > 0 {
-            return 10
-        }
-        
-        return 20
+        return BMTableHeaderTitleView.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -149,26 +156,25 @@ extension SettingsViewController : UITableViewDelegate {
 extension SettingsViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        if section == 0 {
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.node.lowercased(), bold: false)
+        switch section {
+        case 0:
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.node, bold: false)
+        case 1:
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.general_settings, bold: false)
+        case 2:
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories, bold: false)
+        case 3:
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.feedback, bold: false)
+        default:
+            return nil
         }
-        else if section == 4 {
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories.lowercased(), bold: false)
-        }
-        
-        let view = UIView()
-        view.backgroundColor = UIColor.clear
-        return view
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         return viewModel.items.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return viewModel.items[section].count
     }
     
@@ -256,8 +262,8 @@ extension SettingsViewController : QRScannerViewControllerDelegate {
 extension SettingsViewController : SettingsModelDelegate {
     
     func onChangeLanguage() {
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: true)
         title = Localizable.shared.strings.settings
-        tableView.tableHeaderView = BMNetworkStatusView()
         tableView.tableFooterView = versionView()
     }
 }

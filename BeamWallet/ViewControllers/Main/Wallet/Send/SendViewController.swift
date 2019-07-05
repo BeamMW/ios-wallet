@@ -46,18 +46,9 @@ class SendViewController: BaseTableViewController {
     
     private lazy var footerView: UIView = {
         
-        let label = UILabel(frame: CGRect(x: defaultX, y: 30, width: defaultWidth, height: 0))
-        label.font = ItalicFont(size: 16)
-        label.textColor = UIColor.white
-        label.text = Localizable.shared.strings.send_notice
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.sizeToFit()
-        
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:0))
-        view.addSubview(label)
 
-        let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: label.frame.origin.y + label.frame.size.height + 30, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
+        let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
         button.setImage(IconNextPink(), for: .normal)
         button.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
         button.layer.borderWidth = 1
@@ -66,7 +57,7 @@ class SendViewController: BaseTableViewController {
         button.addTarget(self, action: #selector(onNext), for: .touchUpInside)
         view.addSubview(button)
         
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:button.frame.origin.y + button.frame.size.height + 30)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:button.frame.origin.y + button.frame.size.height + 40)
         
         return view
     }()
@@ -110,6 +101,10 @@ class SendViewController: BaseTableViewController {
         searchTableView.register([ContactCell.self, BMEmptyCell.self])
         searchTableView.keyboardDismissMode = .interactive        
         view.addSubview(searchTableView)
+        
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
     }
 
     
@@ -133,7 +128,11 @@ class SendViewController: BaseTableViewController {
         super.viewWillDisappear(animated)
         
         self.view.endEditing(true)
-
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
         Settings.sharedManager().removeDelegate(self)
         
         if isMovingFromParent {
@@ -181,14 +180,14 @@ extension SendViewController : UITableViewDelegate {
         }
         
         let view = UIView()
-        view.backgroundColor = (section == 5 || section == 6 || section == 7) ?  UIColor.main.marineTwo.withAlphaComponent(0.35) : UIColor.clear
+        view.backgroundColor = (section == 5 || section == 6 || section == 7) ?  UIColor.main.marineThree : UIColor.clear
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if tableView == searchTableView {
-            return BMTableHeaderTitleView.boldHeight
+            return BMTableHeaderTitleView.segmentHeight
         }
         
         switch section {
@@ -275,7 +274,7 @@ extension SendViewController : UITableViewDataSource {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
                     .configured(with: Localizable.shared.strings.not_found)
-                cell.backgroundView?.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                cell.backgroundView?.backgroundColor = UIColor.main.marineThree
                 return cell
             }
             else {
@@ -356,7 +355,7 @@ extension SendViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
                 .configured(with: (hideLine: true, address: viewModel.outgoindAdderss, title: title))
             cell.delegate = self
-            cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+            cell.contentView.backgroundColor = UIColor.main.marineThree
             return cell
         case 6:
             if indexPath.row == 0 {
@@ -391,7 +390,7 @@ extension SendViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                     .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label, rightIcon:nil))
                 cell.delegate = self
-                cell.contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20
                 return cell
             }
@@ -714,5 +713,44 @@ extension SendViewController : BMTableHeaderTitleViewDelegate {
         viewModel.selectedSearchIndex = index
         viewModel.searchForContacts()
         searchTableView.reloadData()
+    }
+}
+
+extension SendViewController : UIViewControllerPreviewingDelegate {
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
+        
+        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+        
+        if cell is FeeCell {
+            let modalViewController = InputFeePopover()
+            modalViewController.mainFee = viewModel.fee
+            modalViewController.hideBlur = true
+            modalViewController.completion = { [weak self]
+                (obj : String) -> Void in
+                
+                guard let strongSelf = self else { return }
+                
+                strongSelf.onDidChangeFee(value: Double(obj) ?? 0)
+                strongSelf.tableView.reloadData()
+            }
+                        
+            previewingContext.sourceRect = cell.frame
+            
+            return modalViewController
+        }
+        
+        return nil
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        
+        viewControllerToCommit.modalPresentationStyle = .overFullScreen
+        viewControllerToCommit.modalTransitionStyle = .crossDissolve
+        (viewControllerToCommit as! InputFeePopover).showBlur()
+        
+        present(viewControllerToCommit, animated: true, completion: nil)
     }
 }

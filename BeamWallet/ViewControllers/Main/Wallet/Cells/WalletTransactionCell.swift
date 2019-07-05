@@ -31,15 +31,16 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var amountOffset: NSLayoutConstraint!
     @IBOutlet weak private var balanceView: UIView!
     @IBOutlet weak private var searchLabel: UILabel!
-    @IBOutlet weak private var searchLabelWidth: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
+        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintAdjustmentMode = .normal
-        
-        searchLabelWidth.constant = UIScreen.main.bounds.size.width - 200
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
 }
 
@@ -47,10 +48,8 @@ extension WalletTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, single:Bool, searchString:String?)) {
      
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineTwo : UIColor.main.marine
-        
-        backgroundColor = mainView.backgroundColor
-        
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
+                
         arrowImage.isHidden = options.single
         
         switch options.transaction.isIncome {
@@ -67,7 +66,6 @@ extension WalletTransactionCell: Configurable {
             currencyIcon.tintColor = UIColor.main.heliotrope
             typeLabel.text = Localizable.shared.strings.send_beam
         }
-        
         
         
         if options.transaction.isSelf || options.transaction.isFailed() || options.transaction.isCancelled() {
@@ -104,19 +102,23 @@ extension WalletTransactionCell: Configurable {
             else if options.transaction.id.lowercased().starts(with: string.lowercased()) {
                 mainText = options.transaction.id
             }
-            else if options.transaction.receiverContactName.lowercased().starts(with: string.lowercased()) {
+            else if options.transaction.receiverContactName.lowercased().contains(string.lowercased()) {
                 mainText = options.transaction.receiverContactName
             }
-            else if options.transaction.senderContactName.lowercased().starts(with: string.lowercased()) {
+            else if options.transaction.senderContactName.lowercased().contains(string.lowercased()) {
                 mainText = options.transaction.senderContactName
             }
+            else if options.transaction.comment.lowercased().contains(string.lowercased()) {
+                mainText = options.transaction.comment
+            }
             
-            let range = (mainText as NSString).range(of: String(string))
+            let range = (mainText.lowercased() as NSString).range(of: String(string.lowercased()))
             
             let attributedString = NSMutableAttributedString(string:mainText)
             attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: range)
             searchLabel.attributedText = attributedString
         }
+
         
         if AppDelegate.newFeaturesEnabled {
             if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {

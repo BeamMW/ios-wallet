@@ -29,8 +29,8 @@ class CategoryPickerCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundColor = UIColor.main.marineTwo
-        mainView.backgroundColor = UIColor.main.marineTwo
+        backgroundColor = UIColor.main.marineThree
+        mainView.backgroundColor = UIColor.main.marineThree
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)

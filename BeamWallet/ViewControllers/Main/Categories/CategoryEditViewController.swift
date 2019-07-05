@@ -83,7 +83,7 @@ class CategoryEditViewController: BaseViewController {
         if isGradient {
             nameView.y = (Device.isXDevice ? 100 : 70) + 60
         }
-        nameView.backgroundColor = UIColor.main.marineTwo
+        nameView.backgroundColor = UIColor.main.marineThree
         view.addSubview(nameView)
         
         nameField = UITextField(frame: CGRect(x: defaultX, y: 0, width: defaultWidth, height: 49))
@@ -107,6 +107,10 @@ class CategoryEditViewController: BaseViewController {
         colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: nameView.frame.origin.y + nameView.frame.size.height + 20, width: colorsView.colorsWidht(), height: 50)
         colorsView.backgroundColor = UIColor.clear
         view.addSubview(colorsView)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)        
     }
     
     override func viewWillAppear(_ animated: Bool) {

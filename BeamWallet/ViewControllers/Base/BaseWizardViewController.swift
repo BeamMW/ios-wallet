@@ -24,7 +24,8 @@ class BaseWizardViewController: BaseViewController {
 
     @IBOutlet weak var stackWidth: NSLayoutConstraint?
     @IBOutlet weak var mainStack: UIStackView?
-    
+    @IBOutlet weak var bottomOffset: NSLayoutConstraint?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +43,10 @@ class BaseWizardViewController: BaseViewController {
         else if Device.screenType == .iPhone_XSMax {
             mainStack?.spacing = 120
             stackWidth?.constant = 340
+        }
+        
+        if Device.screenType == .iPhones_6 && Device.isZoomed {
+            bottomOffset?.constant = 30
         }
         
         hideKeyboardWhenTappedAround()

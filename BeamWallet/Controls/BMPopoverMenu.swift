@@ -265,7 +265,7 @@ private class BMPopOverMenuView: UIView {
     fileprivate func show(frame: CGRect, menuItems: [BMPopoverMenu.BMPopoverMenuItem]!, done: @escaping ((BMPopoverMenu.BMPopoverMenuItem) -> Void)) {
         
         self.frame = frame
-        self.backgroundColor = UIColor.main.marineTwo
+        self.backgroundColor = UIColor.main.marineThree
 
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)

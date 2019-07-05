@@ -56,7 +56,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
 // MARK: IBAction
     
     @objc private func onBack() {
-        if AppModel.sharedManager().isLoggedin {
+        if AppModel.sharedManager().isLoggedin || AppModel.sharedManager().isRestoreFlow {
             self.back()
         }
         else{
@@ -213,7 +213,7 @@ extension CreateWalletPasswordViewController : UITextFieldDelegate {
         if textField == confirmPassField && (Device.screenType == .iPhones_5 || Device.isZoomed) {
             UIView.animate(withDuration: 0.25) {
                 var frame = self.navigationController?.view.frame
-                frame?.origin.y = -105
+                frame?.origin.y = (Device.screenType == .iPhones_Plus) ? 0 : -105
                 self.navigationController?.view.frame = frame ?? CGRect.zero
             }
         }

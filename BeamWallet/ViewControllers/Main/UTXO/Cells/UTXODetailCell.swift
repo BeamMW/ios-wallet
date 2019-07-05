@@ -45,7 +45,7 @@ extension UTXODetailCell: Configurable {
     
     func configure(with options: (row: Int, utxo:BMUTXO)) {
         if options.row % 2 == 0 {
-            mainView.backgroundColor = UIColor.main.marineTwo
+            mainView.backgroundColor = UIColor.main.marineThree
         }
         else{
             mainView.backgroundColor = UIColor.main.marine

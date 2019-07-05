@@ -22,11 +22,14 @@ import Foundation
 class UTXOViewModel: NSObject {
     
     enum UTXOSelectedState: Int {
-        case active = 0
-        case all = 1
+        case all = 0
+        case available = 1
+        case spent = 2
+        case unavailable = 3
+        case progress = 4
     }
     
-    public var selectedState: UTXOSelectedState = .active {
+    public var selectedState: UTXOSelectedState = .all {
         didSet{
             self.filterUTXOS()
         }
@@ -61,10 +64,25 @@ class UTXOViewModel: NSObject {
             if let utox = AppModel.sharedManager().utxos {
                 self.utxos = utox as! [BMUTXO]
             }
-        case .active:
+        case .available:
             if let utxos = AppModel.sharedManager().utxos {
                 self.utxos = utxos as! [BMUTXO]
-                self.utxos = self.utxos.filter { $0.status == 1 || $0.status == 2 }
+                self.utxos = self.utxos.filter { $0.status == BMUTXOAvailable}
+            }
+        case .spent:
+            if let utxos = AppModel.sharedManager().utxos {
+                self.utxos = utxos as! [BMUTXO]
+                self.utxos = self.utxos.filter { $0.status == BMUTXOSpent}
+            }
+        case .unavailable:
+            if let utxos = AppModel.sharedManager().utxos {
+                self.utxos = utxos as! [BMUTXO]
+                self.utxos = self.utxos.filter { $0.status == BMUTXOUnavailable}
+            }
+        case .progress:
+            if let utxos = AppModel.sharedManager().utxos {
+                self.utxos = utxos as! [BMUTXO]
+                self.utxos = self.utxos.filter { $0.status == BMUTXOIncoming || $0.status == BMUTXOOutgoing}
             }
         }
         self.utxos = self.utxos.sorted(by: { $0.id < $1.id })

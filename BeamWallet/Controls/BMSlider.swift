@@ -24,7 +24,6 @@ class BMSlider: UISlider {
     private var maxSteps = 5
     private var height:CGFloat = 4
     
-    
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         var newBounds = super.trackRect(forBounds: bounds)
         newBounds.size.height = height
@@ -76,7 +75,7 @@ class BMSlider: UISlider {
     {
         let v = UIView(frame: CGRect(x: x, y: y, width: 2, height: height))
         v.tag = tag
-        v.backgroundColor = UIColor.lightGray
+        v.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         toView.insertSubview(v, at: 0)
     }
 

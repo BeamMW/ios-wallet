@@ -50,6 +50,7 @@
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eOW-a8-ams">
                                 <rect key="frame" x="256" y="9.5" width="51" height="31"/>
+                                <color key="tintColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="onTintColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="onSwitchWithSender:" destination="KGk-i7-Jjw" eventType="valueChanged" id="f1m-2Z-rWs"/>
@@ -79,6 +80,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="eLd-yJ-xMq" secondAttribute="trailing" id="6IK-NR-HEh"/>
                     <constraint firstItem="eLd-yJ-xMq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Mzt-A0-ZR5"/>
@@ -86,6 +88,7 @@
                     <constraint firstAttribute="bottom" secondItem="eLd-yJ-xMq" secondAttribute="bottom" id="YGz-0B-SaL"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="arrowView" destination="I27-EI-w1l" id="yw2-PF-EUC"/>

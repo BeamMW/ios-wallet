@@ -30,18 +30,6 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mdh-nY-eDo">
                         <rect key="frame" x="15" y="0.0" width="290" height="154.5"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6TW-8H-1uf" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="290" height="154.5"/>
-                                <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="testnetColor">
-                                        <color key="value" red="0.20392156859999999" green="0.18039215689999999" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onExpandWithSender:" destination="Rlt-U0-51n" eventType="touchUpInside" id="GWt-Nc-i33"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlK-Sl-djr">
                                 <rect key="frame" x="15" y="15" width="90.5" height="21"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
@@ -151,12 +139,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="TlK-Sl-djr" firstAttribute="leading" secondItem="Mdh-nY-eDo" secondAttribute="leading" constant="15" id="8mp-JE-9Dw"/>
-                            <constraint firstItem="6TW-8H-1uf" firstAttribute="leading" secondItem="Mdh-nY-eDo" secondAttribute="leading" id="Aan-4q-N7X"/>
-                            <constraint firstItem="6TW-8H-1uf" firstAttribute="top" secondItem="Mdh-nY-eDo" secondAttribute="top" id="P08-ld-WsA"/>
                             <constraint firstItem="LQy-uL-llp" firstAttribute="leading" secondItem="Mdh-nY-eDo" secondAttribute="leading" constant="15" id="Pd6-8Y-tEt"/>
                             <constraint firstItem="kO2-nM-Mbs" firstAttribute="top" secondItem="Mdh-nY-eDo" secondAttribute="top" constant="22" id="W2Q-9v-L3o"/>
-                            <constraint firstAttribute="trailing" secondItem="6TW-8H-1uf" secondAttribute="trailing" id="dKm-Gr-mhf"/>
-                            <constraint firstAttribute="bottom" secondItem="6TW-8H-1uf" secondAttribute="bottom" id="noW-EM-G8p"/>
                             <constraint firstItem="TlK-Sl-djr" firstAttribute="top" secondItem="Mdh-nY-eDo" secondAttribute="top" constant="15" id="o3J-Rp-4bu"/>
                             <constraint firstItem="LQy-uL-llp" firstAttribute="top" secondItem="TlK-Sl-djr" secondAttribute="bottom" constant="20" id="ojF-kf-DqR"/>
                             <constraint firstAttribute="trailing" secondItem="LQy-uL-llp" secondAttribute="trailing" constant="5" id="sRi-V2-Bni"/>

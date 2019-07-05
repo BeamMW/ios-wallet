@@ -20,13 +20,22 @@
 
 #import <Foundation/Foundation.h>
 
+enum {
+    BMUTXOUnavailable = 0,
+    BMUTXOAvailable = 1,
+    BMUTXOMaturing = 2,
+    BMUTXOOutgoing = 3,
+    BMUTXOIncoming = 4,
+    BMUTXOSpent = 5
+};
+typedef UInt64 BMUTXOStatus;
 
 @interface BMUTXO : NSObject
 
 @property (nonatomic,assign) UInt64 ID;
 @property (nonatomic,assign) UInt64 amount;
 @property (nonatomic,assign) double realAmount;
-@property (nonatomic,assign) int status;
+@property (nonatomic,assign) BMUTXOStatus status;
 @property (nonatomic,assign) UInt64 maturity;
 @property (nonatomic,assign) UInt64 confirmHeight;
 @property (nonatomic,strong) NSString * _Nonnull statusString;

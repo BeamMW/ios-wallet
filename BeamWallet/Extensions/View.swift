@@ -113,6 +113,18 @@ extension UIView {
 
 extension UIView {
     
+    
+    var h: CGFloat {
+        get {
+            return frame.size.height
+        }
+        set {
+            var f = frame
+            f.size.height = newValue
+            frame = f
+        }
+    }
+    
     var width: CGFloat {
         get {
             return frame.size.width

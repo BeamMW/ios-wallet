@@ -78,6 +78,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="Ndh-8Z-dyd" firstAttribute="leading" secondItem="tiW-dZ-Buv" secondAttribute="leading" id="7vF-HX-6sG"/>
                     <constraint firstAttribute="bottom" secondItem="Ndh-8Z-dyd" secondAttribute="bottom" id="EM0-6I-Jgg"/>
@@ -85,6 +86,7 @@
                     <constraint firstAttribute="trailing" secondItem="Ndh-8Z-dyd" secondAttribute="trailing" id="nzN-qf-x0W"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="fuT-Fr-scs"/>
             <connections>
                 <outlet property="amountLabel" destination="Zv6-bU-1Cg" id="Rxf-8P-vyx"/>

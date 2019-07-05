@@ -1,8 +1,7 @@
 //
-//  WalletModel.m
-//  BeamTest
+// WalletModel.m
+// BeamWallet
 //
-// 2/28/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,14 +30,14 @@
 
 #import "StringStd.h"
 
-//using namespace beam;
-//using namespace beam::io;
-//using namespace beam::wallet;
-//using namespace std;
-
 using namespace beam;
 using namespace beam::io;
+using namespace beam::wallet;
 using namespace std;
+
+//using namespace beam;
+//using namespace beam::io;
+//using namespace std;
 
 NSString *const AppErrorDomain = @"beam.mw";
 
@@ -86,7 +85,7 @@ void WalletModel::onStatus(const WalletStatus& status)
     }
 }
 
-void WalletModel::onTxStatus(beam::ChangeAction action, const std::vector<beam::TxDescription>& items)
+void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vector<beam::wallet::TxDescription>& items)
 {
     NSLog(@"onTxStatus");
     
@@ -239,7 +238,7 @@ void WalletModel::onChangeCalculated(beam::Amount change)
     NSLog(@"onChangeCalculated");
 }
 
-void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
+void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
 {
   //  NSLog(@"onAllUtxoChanged");
     
@@ -253,7 +252,7 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
             bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
             bmUTXO.amount = coin.m_ID.m_Value;
             bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
-            bmUTXO.status = coin.m_status;
+            bmUTXO.status = (UInt64)coin.m_status;
             bmUTXO.maturity = coin.m_maturity;
             bmUTXO.confirmHeight = coin.m_confirmHeight;
             bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
@@ -290,7 +289,7 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::Coin>& utxos)
 //    bmUtxos = nil;
 }
 
-void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& addrs)
+void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs)
 {
     NSLog(@"onAddresses");
     
@@ -306,11 +305,14 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
             address.createTime = walletAddr.m_createTime;
             address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+            if([address.label isEqualToString:@"Default"])
+            {
+                address.label = [@"default" localized];
+            }
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
             
             [addresses addObject:address];
         }
-        
         
         NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
         
@@ -381,7 +383,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::WalletAddress>& 
     }
 }
 
-void WalletModel::onGeneratedNewAddress(const beam::WalletAddress& walletAddr)
+void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walletAddr)
 {
     NSLog(@"onGeneratedNewAddress");
 
@@ -407,7 +409,7 @@ void WalletModel::onNewAddressFailed()
     [AppModel sharedManager].generatedNewAddressBlock(nil, nativeError);
 }
 
-void WalletModel::onChangeCurrentWalletIDs(beam::WalletID senderID, beam::WalletID receiverID)
+void WalletModel::onChangeCurrentWalletIDs(beam::wallet::WalletID senderID, beam::wallet::WalletID receiverID)
 {
     NSLog(@"onChangeCurrentWalletIDs");
 }
@@ -420,14 +422,29 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
         isNodeConnected = NO;
     }
     
-    [[AppModel sharedManager] setIsConnected:isNodeConnected];
-    
-    [[AppModel sharedManager] setIsConnecting:NO];
-    
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    if (!isNodeConnected && AppModel.sharedManager.isConnecting)
     {
-        if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
-            [delegate onNetwotkStatusChange:isNodeConnected];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[AppModel sharedManager] setIsConnecting:NO];
+            
+            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+            {
+                if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                    [delegate onNetwotkStatusChange:[AppModel sharedManager].isConnected];
+                }
+            }
+        });
+    }
+    else{
+        [[AppModel sharedManager] setIsConnected:isNodeConnected];
+        
+        [[AppModel sharedManager] setIsConnecting:NO];
+        
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                [delegate onNetwotkStatusChange:isNodeConnected];
+            }
         }
     }
 }
@@ -489,7 +506,7 @@ void WalletModel::onCantSendToExpired()
     NSLog(@"onCantSendToExpired");
 }
 
-void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::ByteBuffer& proof)
+void WalletModel::onPaymentProofExported(const beam::wallet::TxID& txID, const beam::ByteBuffer& proof)
 {
     NSLog(@"onPaymentProofExported");
     
@@ -511,7 +528,7 @@ void WalletModel::onPaymentProofExported(const beam::TxID& txID, const beam::Byt
     }
 }
 
-void WalletModel::onCoinsByTx(const std::vector<beam::Coin>& coins)
+void WalletModel::onCoinsByTx(const std::vector<beam::wallet::Coin>& coins)
 {
     
 }
@@ -553,16 +570,32 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
     switch (transaction.m_status)
     {        
         case TxStatus::Pending:
+        {
+            if (transaction.m_selfTx)
+            {
+                return [[@"sending_to_own" localized] lowercaseString];
+            }
             return [[@"pending" localized] lowercaseString];
-        case TxStatus::InProgress:
+        }
+        case TxStatus::InProgress:{
+            if (transaction.m_selfTx)
+            {
+                return [[@"sending_to_own" localized] lowercaseString];
+            }
             return isIncome ? [[@"waiting_for_sender" localized]lowercaseString] : [[@"waiting_for_receiver" localized]lowercaseString];
-        case TxStatus::Registering:
+        }
+        case TxStatus::Registering:{
+            if (transaction.m_selfTx)
+            {
+                return [[@"sending_to_own" localized] lowercaseString];
+            }
             return isIncome ? [[@"receiving" localized]lowercaseString] : [[@"sending" localized] lowercaseString];
+        }
         case TxStatus::Completed:
         {
             if (transaction.m_selfTx)
             {
-                return [[@"completed" localized] lowercaseString];
+                return [[@"sent_to_own" localized] lowercaseString];
             }
             return isIncome ? [[@"received" localized] lowercaseString] : [[@"sent" localized] lowercaseString];
         }
@@ -610,15 +643,15 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
         case Coin::Maturing:
             return [[@"maturing" localized] lowercaseString];
         case Coin::Unavailable:
-            return @"Unavailable";
+            return [[@"unavailable" localized] lowercaseString];
         case Coin::Outgoing:
-            return @"In progress\n(outgoing)";
+            return [[@"in_progress_out" localized] lowercaseString];
         case Coin::Incoming: {
             if (coin.m_ID.m_Type == Key::Type::Change)
             {
-                return @"In progress\n(change)";
+                return [[@"in_progress_change" localized] lowercaseString];
             }
-            return @"In progress\n(incoming)";
+            return [[@"in_progress_in" localized] lowercaseString];
         }
             
         case Coin::Spent:
@@ -630,7 +663,7 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
     return @"unknown";
 }
 
-NSString* WalletModel::GetUTXOTypeString(beam::Coin coin) {
+NSString* WalletModel::GetUTXOTypeString(beam::wallet::Coin coin) {
     switch (coin.m_ID.m_Type)
     {
         case Key::Type::Comission:

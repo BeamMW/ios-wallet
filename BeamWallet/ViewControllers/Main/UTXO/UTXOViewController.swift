@@ -21,9 +21,10 @@ import UIKit
 
 class UTXOViewController: BaseTableViewController {
     
-    private let viewModel = UTXOViewModel(selected: .active)
+    private let viewModel = UTXOViewModel(selected: .all)
     
-    private var headerView: UTXOSegmentView!
+    private let header = BMTableHeaderTitleView.init(segments: [Localizable.shared.strings.all, Localizable.shared.strings.available, Localizable.shared.strings.spent])
+    
     private let hideUTXOView = UTXOSecurityView().loadNib()
 
     override var isUppercasedTitle: Bool {
@@ -38,26 +39,29 @@ class UTXOViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        isGradient = true
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
         title = Localizable.shared.strings.utxo
                 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.tableHeaderView = BMNetworkStatusView()
-        tableView.register([UTXOCell.self, UTXOBlockCell.self])
+        tableView.register([UTXOCell.self, BMEmptyCell.self])
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
-
-        headerView = UTXOSegmentView { [weak self] (selected)  in
-            self?.viewModel.selectedState = UTXOViewModel.UTXOSelectedState(rawValue: selected) ?? .active
-        }
+        tableView.isHidden = Settings.sharedManager().isHideAmounts
+        header.isHidden = Settings.sharedManager().isHideAmounts
 
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
-        view.addSubview(hideUTXOView)
+        view.insertSubview(hideUTXOView, at: 0)
 
+        header.lineColor = UIColor.main.peacockBlue
+        header.selectedIndex = viewModel.selectedState.rawValue
+        header.delegate = self
+        view.insertSubview(header, at: 0)
+        
         Settings.sharedManager().addDelegate(self)
 
         rightButton()
-        onAddMenuIcon()
         
         subscribeUpdates()
     }
@@ -69,7 +73,11 @@ class UTXOViewController: BaseTableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        hideUTXOView.frame = CGRect(x: 0, y: tableView.frame.origin.y+30, width: tableView.frame.size.width, height: tableView.frame.size.height-30)
+        header.y = tableView.y - 5
+        tableView.y = header.y + header.h
+        tableView.h = self.view.h - tableView.y
+        
+        hideUTXOView.frame = CGRect(x: 0, y: header.y, width: tableView.frame.size.width, height: (UIScreen.main.bounds.size.height - (header.y)))
     }
     
     private func subscribeUpdates() {
@@ -82,15 +90,6 @@ class UTXOViewController: BaseTableViewController {
         
         viewModel.onStatusChanged = { [weak self] in
             self?.tableView.stopRefreshing()
-            
-            if let cell = self?.tableView.findCell(UTXOBlockCell.self) as? UTXOBlockCell {
-                cell.configure(with: AppModel.sharedManager().walletStatus)
-            }
-            else{
-                UIView.performWithoutAnimation {
-                    self?.tableView.reloadData()
-                }
-            }
         }
     }
     
@@ -106,32 +105,15 @@ class UTXOViewController: BaseTableViewController {
 
 extension UTXOViewController : UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 1:
-            return UTXOSegmentView.height
-        default:
-            return 0
-        }
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return UTXOBlockCell.mainHeight()
-        case 1:
-            return UTXOCell.height()
-        default:
-            return 0
-        }
+        return UTXOCell.height()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 1 {
+        if viewModel.utxos.count > 0 {
             let vc = UTXODetailViewController(utxo: viewModel.utxos[indexPath.row])
-            vc.hidesBottomBarWhenPushed = true
             self.pushViewController(vc: vc)
         }
     }
@@ -140,44 +122,27 @@ extension UTXOViewController : UITableViewDelegate {
 extension UTXOViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return viewModel.utxos.count
-        default:
-            return 0
-        }
+        return viewModel.utxos.count == 0 ? 1 : viewModel.utxos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        switch indexPath.section {
-        case 0:
+        if viewModel.utxos.count == 0 {
             let cell = tableView
-                .dequeueReusableCell(withType: UTXOBlockCell.self, for: indexPath)
-            cell.configure(with: AppModel.sharedManager().walletStatus)
+                .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
+                .configured(with: Localizable.shared.strings.not_found)
+            cell.backgroundView?.backgroundColor = UIColor.main.marineThree
             return cell
-        case 1:
+        }
+        else {
             let cell = tableView
                 .dequeueReusableCell(withType: UTXOCell.self, for: indexPath)
                 .configured(with: (row: indexPath.row, utxo: viewModel.utxos[indexPath.row]))
             return cell
-        default:
-            return BaseCell()
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 1:
-            return headerView
-        default:
-            return nil
         }
     }
 }
@@ -187,6 +152,13 @@ extension UTXOViewController : SettingsModelDelegate {
         rightButton()
         
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
-        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
+        tableView.isHidden = Settings.sharedManager().isHideAmounts
+        header.isHidden = Settings.sharedManager().isHideAmounts
+    }
+}
+
+extension UTXOViewController : BMTableHeaderTitleViewDelegate {
+    func onDidSelectSegment(index: Int) {
+        self.viewModel.selectedState = UTXOViewModel.UTXOSelectedState(rawValue: index) ?? .all
     }
 }

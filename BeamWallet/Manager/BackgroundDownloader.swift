@@ -70,7 +70,10 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let reason = error {
-            onProgress?(nil, reason, nil)
+            let code = (reason as NSError).code
+            if code != -999 {
+                onProgress?(nil, reason, nil)
+            }
         }
     }
 }

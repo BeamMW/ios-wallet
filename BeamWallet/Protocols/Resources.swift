@@ -193,4 +193,15 @@ func Tick() -> UIImage? {
     return UIImage(named: "tick")
 }
 
+func IconInfinity() -> UIImage? {
+    return UIImage(named: "iconInfinity")
+}
+
+func IconExpires() -> UIImage? {
+    return UIImage(named: "iconExpires")
+}
+
+func ClearIcon() -> UIImage? {
+    return UIImage(named: "clearIcon")
+}
 

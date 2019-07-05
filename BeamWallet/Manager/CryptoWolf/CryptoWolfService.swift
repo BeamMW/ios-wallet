@@ -95,7 +95,7 @@ class CryptoWolfService: NSObject  {
             
             switch result {
             case .success(let response):
-                print(String(data: response.data, encoding: .utf8) as Any)
+              //  print(String(data: response.data, encoding: .utf8) as Any)
                 if let resp = try? JSONDecoder().decode(OrderResponse.self, from: response.data) {
                     completion(resp,nil)
                 }
@@ -117,7 +117,7 @@ class CryptoWolfService: NSObject  {
             
             switch result {
             case .success(let response):
-                print(String(data: response.data, encoding: .utf8))
+               // print(String(data: response.data, encoding: .utf8))
                 
                 if let info = try? JSONDecoder().decode(TransactionInfo.self, from: response.data) {
                     completion(info,nil)

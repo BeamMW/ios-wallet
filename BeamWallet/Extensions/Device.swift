@@ -23,8 +23,15 @@ import UIKit
 class Device {
     
     static var isZoomed: Bool {
-        let zoomed =  UIScreen.main.nativeScale > UIScreen.main.scale
-        return zoomed
+        if (UIScreen.main.bounds.size.height == 667.0 && UIScreen.main.nativeScale < UIScreen.main.scale){
+            return true
+        }
+        else if (UIScreen.main.bounds.size.height == 568.0 && UIScreen.main.nativeScale > UIScreen.main.scale) {
+            return true
+        } else {
+            let zoomed =  UIScreen.main.nativeScale > UIScreen.main.scale
+            return zoomed
+        }
     }
     
     static var iPhoneX: Bool {

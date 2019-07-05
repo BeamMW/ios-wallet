@@ -59,15 +59,26 @@ class BMSearchView: UIView {
         iconView.tintColor = UIColor.main.steel
         
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 36))
+        leftView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onFocus(_:))))
         leftView.addSubview(iconView)
         
+        let clearButton = UIImageView(frame: CGRect(x: 10, y: 11, width: 14, height: 14))
+        clearButton.contentMode = .scaleAspectFit
+        clearButton.image = ClearIcon()?.withRenderingMode(.alwaysTemplate)
+        clearButton.tintColor = UIColor.main.steel
+        
+        let clearButtonView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 36))
+        clearButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onClear(_:))))
+        clearButtonView.addSubview(clearButton)
+
         searchField.frame = CGRect(x: defaultX, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 10, width:  (defaultWidth), height: 36)
         searchField.leftView = leftView
         searchField.leftViewMode = .always
-        searchField.clearButtonMode = .whileEditing
+        searchField.rightView = clearButtonView
+        searchField.rightViewMode = .never
         searchField.layer.cornerRadius = 10
         searchField.font = RegularFont(size: 16)
-        searchField.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.8)
+        searchField.backgroundColor = UIColor.main.marineThree
         searchField.placeholder = Localizable.shared.strings.search
         searchField.placeHolderColor = UIColor.main.steel
         searchField.tintColor = UIColor.white
@@ -76,13 +87,22 @@ class BMSearchView: UIView {
         searchField.spellCheckingType = .no
         searchField.delegate = self
         searchField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        searchField.clearButtonTintColor = UIColor.main.steel
         
         addSubview(searchField)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
+    
+    @objc private func onClear(_ sender: UITapGestureRecognizer) {
+        searchField.text = String.empty()
+        searchField.rightViewMode = .never
+        onSearchTextChanged?(String.empty())
+    }
+    
+    @objc private func onFocus(_ sender: UITapGestureRecognizer) {
+        searchField.becomeFirstResponder()
     }
     
     public func show() {
@@ -110,6 +130,7 @@ class BMSearchView: UIView {
     
     @objc private func textFieldDidChange(_ textField: BMField) {
         let text = textField.text ?? String.empty()
+        searchField.rightViewMode = (text.isEmpty) ? .never : .whileEditing
         onSearchTextChanged?(text)
     }
 }

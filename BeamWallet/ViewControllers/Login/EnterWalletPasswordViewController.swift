@@ -78,23 +78,23 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 biometricAuthorization()
             }
         }
-
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let password = KeychainManager.getPassword() {
-            self.passField.text = password
-            self.onLogin(sender: UIButton())
-        }
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//        if let password = KeychainManager.getPassword() {
+//            self.passField.text = password
+//            self.onLogin(sender: UIButton())
+//        }
+//    }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
+    
     
     @objc private func didBecomeActive() {
         if UIApplication.shared.applicationState == .active {
@@ -128,8 +128,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     @IBAction func onLogin(sender :UIButton) {
-
-        AppModel.sharedManager().isRestoreFlow = false;
 
         if passField.text?.isEmpty ?? true {
             passField.error = Localizable.shared.strings.empty_password

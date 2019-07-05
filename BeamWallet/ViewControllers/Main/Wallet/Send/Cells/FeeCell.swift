@@ -36,22 +36,22 @@ class FeeCell: BaseCell {
         
         titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(showPicker))
-        longPress.minimumPressDuration = 1
+        if traitCollection.forceTouchCapability != .available {
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(showPicker))
+            longPress.minimumPressDuration = 1
+            mainView.addGestureRecognizer(longPress)
+
+        }
         
-        //valueLabel.isUserInteractionEnabled = true
-        mainView.addGestureRecognizer(longPress)
-        
-        
-        feeSlider.maximumTrackTintColor = UIColor.main.marineTwo.withAlphaComponent(0.8)
+        feeSlider.maximumTrackTintColor = UIColor.main.marineThree
         feeSlider.isContinuous = true
         feeSlider.setThumbImage(SliderDot(), for: .normal)
         feeSlider.setThumbImage(SliderDot(), for: .highlighted)
-        feeSlider.maximumTrackTintColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineTwo.withAlphaComponent(0.8) : UIColor.main.darkSlateBlue.withAlphaComponent(0.8)
+        feeSlider.maximumTrackTintColor = UIColor.main.marineThree
 
         selectionStyle = .none
         
-        contentView.backgroundColor = UIColor.main.marineTwo.withAlphaComponent(0.35)
+        contentView.backgroundColor = UIColor.main.marineThree
     }
     
     override func layoutSubviews() {
@@ -125,12 +125,17 @@ class FeeCell: BaseCell {
 extension FeeCell: Configurable {
     
     func configure(with fee:Double) {
+        if fee > Double(feeSlider.maximumValue) {
+            feeSlider.maximumValue = Float(fee)
+            maxLabel.text = String(Int(fee)) + Localizable.shared.strings.groth
+        }
+        
         feeSlider.value = Float(fee)
         
         valueLabel.text = String(Int(fee)) + Localizable.shared.strings.groth
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: feeSlider)
-        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)    
     }
 }

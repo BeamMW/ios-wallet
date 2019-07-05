@@ -144,13 +144,13 @@ class BuyBeamOrderViewController: BaseViewController {
         scrollView.contentSize = CGSize(width: 0, height: mainView.frame.size.height + 15)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
         timer?.invalidate()
         timer = nil
         
-        viewModel.stopUpdates()        
+        viewModel.stopUpdates()
     }
     
     private func subscribeToChages() {

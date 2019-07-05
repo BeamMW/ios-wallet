@@ -36,6 +36,7 @@ class WalletViewController: BaseTableViewController {
         }
     }
     
+    
     override var isSearching: Bool{
         get{
             return super.isSearching
@@ -43,14 +44,16 @@ class WalletViewController: BaseTableViewController {
         set{
             super.isSearching = newValue
             viewModel.isSearch = newValue
-            tableView.tableHeaderView = newValue ? UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 20)) : BMNetworkStatusView()
             if newValue {
                 tableView.refreshControl?.endRefreshing()
                 tableView.refreshControl = nil
+                tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
             }
             else{
+                tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
                 tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
             }
+            tableView.reloadData()
         }
     }
     
@@ -70,14 +73,17 @@ class WalletViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-            
-        title = Localizable.shared.strings.wallet
         
+        isGradient = true
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+
+        title = Localizable.shared.strings.wallet
+                
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register([WalletStatusCell.self, WalletAvailableCell.self, WalletProgressCell.self, WalletTransactionCell.self, BMEmptyCell.self])
-        tableView.tableHeaderView = BMNetworkStatusView()
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         tableView.keyboardDismissMode = .interactive
         
         AppModel.sharedManager().isLoggedin = true
@@ -100,7 +106,6 @@ class WalletViewController: BaseTableViewController {
             NotificationManager.sharedManager.displayConfirmAlert()
         }
         
-        onAddMenuIcon()
         rightButton()
         
         subscribeToUpdates()
@@ -346,7 +351,7 @@ extension WalletViewController : UITableViewDataSource {
             else{
                 let cell = tableView
                     .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], single:false, searchString:searchingString))
+                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], single:false, searchString:(isSearching ? searchingString : String.empty())))
                 return cell
             }
         default:
@@ -403,4 +408,3 @@ extension WalletViewController : SettingsModelDelegate {
         tableView.reloadData()
     }
 }
-

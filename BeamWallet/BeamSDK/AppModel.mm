@@ -1,6 +1,6 @@
 //
 // AppModel.m
-// BeamTest
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -27,6 +27,7 @@
 #import "NodeModel.h"
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
+#import "RecoveryProgress.h"
 
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -37,7 +38,7 @@
 #include "wallet/wallet_client.h"
 #include "wallet/default_peers.h"
 
-//#include "core/block_rw.h"
+#include "core/block_rw.h"
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
@@ -59,6 +60,7 @@ using namespace std;
 static int proofSize = 330;
 static NSString *categoriesKey = @"categoriesKey";
 static NSString *transactionCommentsKey = @"transaction_comment";
+static NSString *restoreFlowKey = @"restoreFlowKey";
 
 
 @implementation AppModel  {
@@ -107,6 +109,8 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
     
+    _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
+    
     [self checkInternetConnection];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -139,6 +143,13 @@ static NSString *transactionCommentsKey = @"transaction_comment";
 //            last.isDefault = YES;
 //        }
 //    }
+}
+
+-(void)setIsRestoreFlow:(BOOL)isRestoreFlow {
+    _isRestoreFlow = isRestoreFlow;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_isRestoreFlow forKey:restoreFlowKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Inetrnet
@@ -301,7 +312,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     }
     
     // generate default address
-    auto address = wallet::createAddress(*walletDb);
+    auto address = beam::wallet::storage::createAddress(*walletDb);
     address.m_label = "Default";
     walletDb->saveAddress(address);
     
@@ -350,10 +361,15 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     }
 }
     
--(void)restore {
-//    string recoveryPath = [[NSBundle mainBundle] pathForResource:@"masternet_recovery" ofType:@"bin"].string;
-//    
-//    walletDb->ImportRecovery(recoveryPath);
+-(void)restore:(NSString*_Nonnull)path{
+    string recoveryPath = path.string;
+    
+    RecoveryProgress prog;
+    walletDb->ImportRecovery(recoveryPath, prog);
+}
+
+bool OnProgress(uint64_t done, uint64_t total) {
+    return true;
 }
 
 -(void)start {
@@ -399,8 +415,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
 
 -(void)changeNodeAddress {
     if (![Settings sharedManager].isLocalNode) {
-        [self setIsConnecting:YES];
-
+       // [self setIsConnecting:YES];
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
     }
@@ -440,23 +455,25 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     dispatch_async(queue, ^{
         auto pass = SecString(password.string);
         
-        Key::IKdf::Ptr pKey = self->walletDb->get_ChildKdf(0);
+       // auto pKey = self->walletDb->get_ChildKdf(0);
+
+        beam::Key::IKdf::Ptr pKey = self->walletDb->get_MasterKdf();
         
         const ECC::HKdf& kdf = static_cast<ECC::HKdf&>(*pKey);
-        
+
         KeyString ks;
         ks.SetPassword(Blob(pass.data(), static_cast<uint32_t>(pass.size())));
         ks.m_sMeta = std::to_string(0);
-        
+
         ECC::HKdfPub pkdf;
         pkdf.GenerateFrom(kdf);
-        
+
         ks.Export(pkdf);
-        
+
         NSString *exportedKey = [NSString stringWithUTF8String:ks.m_sRes.c_str()];
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            
+
             block(exportedKey);
         });
     });
@@ -477,7 +494,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     [internetReachableFoo startNotifier];
     
     if (wallet != nil) {
-        [self setIsConnecting:true];
+        [self setIsConnecting:YES];
         
         [self getNetworkStatus];
         
@@ -1271,7 +1288,7 @@ static NSString *transactionCommentsKey = @"transaction_comment";
     
     try{
         auto buffer = from_hex(code.string);
-        PaymentInfo m_paymentInfo = PaymentInfo::FromByteBuffer(buffer);
+        beam::wallet::storage::PaymentInfo m_paymentInfo = beam::wallet::storage::PaymentInfo::FromByteBuffer(buffer);
         
         if (m_paymentInfo.IsValid()) {
             auto kernelId = to_hex(m_paymentInfo.m_KernelID.m_pData, m_paymentInfo.m_KernelID.nBytes);

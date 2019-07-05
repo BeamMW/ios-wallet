@@ -225,7 +225,22 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                 }
             }
             else if scanType == .ethereum {
-                if(scannedValue.hasPrefix("0x"))
+                if(scannedValue.hasPrefix("ethereum:"))
+                {
+                    let split = scannedValue.split(separator: ":")
+                    if split.count >= 2 {
+                        var address = String(split[1])
+                        if address.contains("?") {
+                            address = String(address.split(separator: "?")[0])
+                        }
+                        back()
+                        delegate?.didScanQRCode(value:address , amount: nil)
+                    }
+                    else{
+                        self.showError()
+                    }
+                }
+                else if(scannedValue.hasPrefix("0x"))
                 {
                     delegate?.didScanQRCode(value: scannedValue, amount: nil)
                 }

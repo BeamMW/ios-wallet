@@ -66,7 +66,7 @@ class BuyBeamCurrencyPicker: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorColor = UIColor.white.withAlphaComponent(0.1)
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
         tableView.register(CategoryPickerCell.self)
         tableView.register(BMEmptyCell.self)

@@ -23,9 +23,11 @@ class InputFeePopover: BaseViewController {
 
     public var completion : ((String) -> Void)?
     public var mainFee:String!
-    
+    public var hideBlur = false
+
     @IBOutlet weak private var feeField: BMField!
     @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak private var visualView: UIVisualEffectView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,12 +36,22 @@ class InputFeePopover: BaseViewController {
 
         view.backgroundColor = UIColor.clear
         view.isOpaque = false
+       
+        if(hideBlur) {
+            visualView.isHidden = true
+        }
         
         feeField.text = mainFee
         
         addSwipeToDismiss()
         
         hideKeyboardWhenTappedAround()
+    }
+    
+    public func showBlur() {
+        visualView.isHidden = false
+        view.backgroundColor = UIColor.clear
+        view.isOpaque = false
     }
 
 

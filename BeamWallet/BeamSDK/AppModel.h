@@ -1,6 +1,6 @@
 //
 // AppModel.h
-// BeamTest
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
@@ -93,7 +93,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)createWallet:(NSString*_Nonnull)phrase pass:(NSString*_Nonnull)pass;
 -(BOOL)openWallet:(NSString*_Nonnull)pass;
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
--(void)restore;
+-(void)restore:(NSString*_Nonnull)path;
 -(void)resetWallet:(BOOL)removeDatabase;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;

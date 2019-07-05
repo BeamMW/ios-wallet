@@ -84,11 +84,11 @@ extension UIColor {
             else if Settings.sharedManager().target == Masternet{
                 return UIColor.main.blackTwo
             }
-            return .init(red: 3/255, green: 46/255, blue: 73/255, alpha: 1)
+            return .init(red: 13/255, green: 37/255, blue: 69/255, alpha: 1)
         }
         
         static var marineThree: UIColor {
-            return .init(red: 4/255, green: 37/255, blue: 72/255, alpha: 1)
+            return UIColor.white.withAlphaComponent(0.02)
         }
         
         static var green: UIColor {
@@ -133,15 +133,6 @@ extension UIColor {
             return .init(red: 141/255, green: 161/255, blue: 173/255, alpha: 1)
         }
         
-        static var marineTwo: UIColor {
-            if Settings.sharedManager().target == Testnet {
-                return UIColor.main.darkTwo
-            }
-            else if Settings.sharedManager().target == Masternet{
-                return UIColor.main.black
-            }
-            return .init(red: 10/255, green: 52/255, blue: 77/255, alpha: 1)
-        }
         
         static var heliotrope: UIColor {
             return .init(red: 218/255, green: 104/255, blue: 245/255, alpha: 1)
@@ -164,7 +155,7 @@ extension UIColor {
         }
         
         static var marineOriginal: UIColor {
-            return .init(hexString: "#032E49")
+            return .init(red: 13/255, green: 37/255, blue: 69/255, alpha: 1)
         }
         
         static var brightBlue: UIColor {
@@ -187,6 +178,16 @@ extension UIColor {
             return .init(hexString: "#a4a4a4")
         }
         
+        static var peacockBlue: UIColor {
+            if Settings.sharedManager().target == Testnet {
+                return .init(red: 52/255, green: 46/255, blue: 65/255, alpha: 1)
+            }
+            return .init(red: 3/255, green: 91/255, blue: 143/255, alpha: 1)
+        }
+        
+        static var darkIndigo: UIColor {
+            return .init(red: 9/255, green: 28/255, blue: 48/255, alpha: 1)
+        }
     }
     
 }

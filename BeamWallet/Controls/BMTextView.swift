@@ -55,7 +55,7 @@ class BMTextView: UITextViewPlacholder {
         super.awakeFromNib()
         
         if lineColor == nil {
-            line.backgroundColor = UIColor.main.darkSlateBlue
+            line.backgroundColor = UIColor.main.marineThree
         }
         
         addSubview(line)

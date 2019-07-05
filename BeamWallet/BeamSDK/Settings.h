@@ -1,6 +1,6 @@
 //
 // Settings.h
-// BeamTest
+// BeamWallet
 //
 // Copyright 2018 Beam Development
 //
