@@ -98,7 +98,7 @@ class SendViewController: BaseTableViewController {
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
         
-        searchTableView.register([ContactCell.self, BMEmptyCell.self])
+        searchTableView.register([AddressCell.self, BMEmptyCell.self])
         searchTableView.keyboardDismissMode = .interactive        
         view.addSubview(searchTableView)
         
@@ -173,7 +173,7 @@ extension SendViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if tableView == searchTableView {
-            let header = BMTableHeaderTitleView.init(segments: [Localizable.shared.strings.contacts, Localizable.shared.strings.my_addresses])
+            let header = BMSegmentView.init(segments: [Localizable.shared.strings.contacts, Localizable.shared.strings.my_active_addresses])
             header.selectedIndex = viewModel.selectedSearchIndex
             header.delegate = self
             return header
@@ -187,7 +187,7 @@ extension SendViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if tableView == searchTableView {
-            return BMTableHeaderTitleView.segmentHeight
+            return BMSegmentView.height
         }
         
         switch section {
@@ -201,8 +201,8 @@ extension SendViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == searchTableView && viewModel.contacts.count == 0 {
-            return ContactCell.height()
+        if tableView == searchTableView {
+            return UITableView.automaticDimension
         }
         else if indexPath.section == 6 {
             if indexPath.row == 2 || indexPath.row == 3 {
@@ -273,14 +273,14 @@ extension SendViewController : UITableViewDataSource {
             if viewModel.contacts.count == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: Localizable.shared.strings.not_found)
-                cell.backgroundView?.backgroundColor = UIColor.main.marineThree
+                    .configured(with: (text: (viewModel.selectedSearchIndex == 0 ? Localizable.shared.strings.contacts_empty : Localizable.shared.strings.addresses_empty), image: IconAddressbookEmpty()))
                 return cell
             }
             else {
                 let cell =  tableView
-                    .dequeueReusableCell(withType: ContactCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, contact: viewModel.contacts[indexPath.row]))
+                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                cell.configure(with: (row: indexPath.row, address: viewModel.contacts[indexPath.row].address, displayTransaction: true, displayCategory: true))
+
                 return cell
             }
         }
@@ -292,7 +292,7 @@ extension SendViewController : UITableViewDataSource {
             cell.delegate = self
             cell.error = viewModel.toAddressError
             cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizable.shared.strings.paste_enter_address, value: viewModel.toAddress, rightIcon:IconScanQr()))
+            cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon:IconScanQr()))
             cell.contact = viewModel.selectedContact
             return cell
         case 1:
@@ -333,7 +333,7 @@ extension SendViewController : UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.local_annotation_not_shared, value: viewModel.comment, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.comment, rightIcon:nil))
             cell.delegate = self
             return cell
         case 4:
@@ -372,17 +372,9 @@ extension SendViewController : UITableViewDataSource {
                 return cell
             }
             else if indexPath.row == 3 {
-                var name = Localizable.shared.strings.none
-                var color = UIColor.white
-                
-                if let category = AppModel.sharedManager().findCategory(byId: viewModel.outgoindAdderss!.category) {
-                    name = category.name
-                    color = UIColor.init(hexString: category.color)
-                }
-                
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: name, valueColor: color))
+                cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: viewModel.outgoindAdderss!.categoriesName()))
                 return cell
             }
             else{
@@ -677,21 +669,21 @@ extension SendViewController {
                 guard let strongSelf = self else { return }
                 
                 if let category = obj {
-                    strongSelf.didSelectCategory(category: category)
+                    strongSelf.didSelectCategory(categories: [String(category.id)])
                 }
             }
             vc.isGradient = true
             pushViewController(vc: vc)
         }
         else{
-            let vc = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: viewModel.outgoindAdderss!.category))
+            let vc = CategoryPickerViewController(categories: viewModel.outgoindAdderss!.categories as? [String])
             vc.completion = { [weak self]
                 obj in
                 
                 guard let strongSelf = self else { return }
 
-                if let category = obj {
-                    strongSelf.didSelectCategory(category: category)
+                if let categories = obj {
+                    strongSelf.didSelectCategory(categories: categories)
                 }
             }
             vc.isGradient = true
@@ -699,10 +691,10 @@ extension SendViewController {
         }
     }
     
-    private func didSelectCategory(category:BMCategory) {
-        viewModel.outgoindAdderss!.category = String(category.id)
+    private func didSelectCategory(categories:[String]) {
+        viewModel.outgoindAdderss!.categories = NSMutableArray(array: categories)
         
-        AppModel.sharedManager().setWalletCategory(viewModel.outgoindAdderss!.category, toAddress: viewModel.outgoindAdderss!.walletId)
+        AppModel.sharedManager().setWalletCategories(viewModel.outgoindAdderss!.categories, toAddress: viewModel.outgoindAdderss!.walletId)
         
         tableView.reloadRows(at: [IndexPath(row: 3, section: 6)], with: .fade)
     }

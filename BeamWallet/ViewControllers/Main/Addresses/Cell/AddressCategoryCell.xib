@@ -87,6 +87,7 @@
             <viewLayoutGuide key="safeArea" id="mfR-Aa-ReS"/>
             <connections>
                 <outlet property="categoryLabel" destination="Rrd-lC-4r7" id="kgx-ea-pNc"/>
+                <outlet property="titleLabel" destination="iqY-ey-69h" id="iKN-Y1-Hhi"/>
             </connections>
             <point key="canvasLocation" x="184" y="110"/>
         </tableViewCell>

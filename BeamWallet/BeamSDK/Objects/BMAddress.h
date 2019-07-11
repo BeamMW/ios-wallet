@@ -21,22 +21,21 @@
 
 @interface BMAddress : NSObject {
     NSDateFormatter *_formatter;
+    NSDateFormatter *_shortFormatter;
 }
 
-+(BMAddress*)fromAddress:(BMAddress*)address;
-+(BMAddress*)emptyAddress;
++(BMAddress*_Nonnull)fromAddress:(BMAddress*_Nonnull)address;
++(BMAddress*_Nonnull)emptyAddress;
 
-@property (nonatomic,strong) NSString *walletId;
-@property (nonatomic,strong) NSString *label;
-@property (nonatomic,strong) NSString *category;
+@property (nonatomic,strong) NSString * _Nonnull walletId;
+@property (nonatomic,strong) NSString * _Nonnull label;
+@property (nonatomic,strong) NSMutableArray<NSString*> * _Nonnull categories;
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
-@property (nonatomic,strong) NSString *categoryName;
 @property (nonatomic,assign) BOOL isDefault;
 
-    
-    
+
 //edit
 @property (nonatomic,assign) BOOL isNowExpired;
 @property (nonatomic,assign) BOOL isNowActive;
@@ -45,15 +44,17 @@
 @property (nonatomic,assign) BOOL isNeedRemoveTransactions;
 @property (nonatomic,assign) BOOL isContact;
 
+-(NSMutableAttributedString*_Nonnull)categoriesName;
 
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;
--(NSString*)formattedDate;
--(NSString*)agoDate;
+-(NSString* _Nonnull)formattedDate;
+-(NSString* _Nonnull)expiredFormattedDate;
+-(NSString* _Nonnull)agoDate;
 
 //edit
--(NSString*)nowDate;
--(NSString*)expireNowDate;
+-(NSString* _Nonnull)nowDate;
+-(NSString* _Nonnull)expireNowDate;
 -(int)isNowActiveDurationInHours;
 -(int)durationInHours;
 

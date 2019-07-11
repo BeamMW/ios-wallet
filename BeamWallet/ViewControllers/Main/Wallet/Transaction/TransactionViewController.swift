@@ -88,12 +88,14 @@ class TransactionViewController: BaseTableViewController {
                     self.viewModel.cancelTransation(indexPath: nil)
                 case .delete_transaction :
                     self.viewModel.deleteTransation(indexPath: nil)
+                case .share :
+                    self.viewModel.share()
                 default:
                     return
                 }
             }
         }, cancel: {
-            
+
         })
     }
 }

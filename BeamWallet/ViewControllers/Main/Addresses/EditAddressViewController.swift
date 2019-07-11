@@ -169,7 +169,6 @@ extension EditAddressViewController : UITableViewDataSource {
             let cell =  tableView
                 .dequeueReusableCell(withType: AddressCategoryCell.self, for: indexPath)
                 .configured(with: viewModel.newAddress)
-            
             return cell
         }
         else if indexPath.section == 4 {

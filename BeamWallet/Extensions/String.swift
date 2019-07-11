@@ -28,6 +28,14 @@ extension String {
     var localized: String {
         let lang = Settings.sharedManager().language
         
+        let remotePath = CrowdinManager.localizationPath.appendingPathComponent(lang)
+        
+        if FileManager.default.fileExists(atPath: remotePath.path) {
+            if let bundle = Bundle(path: remotePath.path) {
+                return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+            }
+        }
+
         let path = Bundle.main.path(forResource: lang, ofType: "lproj")
         let bundle = Bundle(path: path!)
         

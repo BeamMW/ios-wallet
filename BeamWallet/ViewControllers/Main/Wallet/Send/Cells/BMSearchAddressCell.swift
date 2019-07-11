@@ -74,9 +74,8 @@ class BMSearchAddressCell: BaseCell {
                     contactName.text = Localizable.shared.strings.no_name
                 }
                 
-                if let category = AppModel.sharedManager().findCategory(byId: contact?.address.category ?? String.empty()) {
-                    contactCategory.textColor = UIColor.init(hexString: category.color)
-                    contactCategory.text = category.name
+                if contact?.address.categories.count ?? 0 > 0 {
+                    contactCategory.attributedText = contact?.address.categoriesName()
                 }
                 else{
                     contactCategory.text = nil
@@ -164,7 +163,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         self.delegate?.textValueDidReturn?(self)
         
-        if nameLabel.text == Localizable.shared.strings.paste_enter_address {
+        if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = String.empty()
         }
     }
@@ -172,7 +171,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.delegate?.textValueDidBegin?(self)
         
-        if nameLabel.text == Localizable.shared.strings.paste_enter_address {
+        if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = Localizable.shared.strings.address_search
         }
     }

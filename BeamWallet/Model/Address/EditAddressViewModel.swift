@@ -31,7 +31,7 @@ class EditAddressViewModel: DetailAddressViewModel {
         self.newAddress = BMAddress()
         self.newAddress.walletId = address.walletId
         self.newAddress.label = address.label
-        self.newAddress.category = address.category
+        self.newAddress.categories = address.categories
         self.newAddress.createTime = address.createTime
         self.newAddress.duration = address.duration
         self.newAddress.ownerId = address.ownerId
@@ -53,7 +53,7 @@ class EditAddressViewModel: DetailAddressViewModel {
         else if newAddress.duration != address?.duration {
             return true
         }
-        else if newAddress.category != address?.category {
+        else if newAddress.categories != address?.categories {
             return true
         }
        
@@ -109,18 +109,18 @@ class EditAddressViewModel: DetailAddressViewModel {
                 vc.completion = { [weak self]
                     obj in
                     if let cat = obj {
-                        self?.newAddress.category = String(cat.id)
+                        self?.newAddress.categories = [String(cat.id)]
                         self?.onDataChanged?()
                     }
                 }
                 top.pushViewController(vc: vc)
             }
             else{
-                let vc = CategoryPickerViewController(category: self.newAddress.category == Localizable.shared.strings.zero ? BMCategory.none() : AppModel.sharedManager().findCategory(byId: self.newAddress.category))
+                let vc = CategoryPickerViewController(categories: self.newAddress?.categories as? [String])
                 vc.completion = { [weak self]
                     obj in
-                    if let cat = obj {
-                        self?.newAddress.category = String(cat.id)
+                    if let categories = obj {
+                        self?.newAddress.categories = NSMutableArray(array: categories)
                         self?.onDataChanged?()
                     }
                 }

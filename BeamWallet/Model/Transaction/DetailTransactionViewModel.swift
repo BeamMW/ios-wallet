@@ -92,6 +92,11 @@ class DetailTransactionViewModel: TransactionViewModel {
         let transaction = self.transaction!
 
         var items = [BMPopoverMenu.BMPopoverMenuItem]()
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_transaction, icon: nil, action: .share))
+
+        if !transaction.isIncome {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.rep, icon: nil, action: .repeat_transaction))
+        }
         
         if transaction.canCancel {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.cancel_transaction, icon: nil, action: .cancel_transaction))
@@ -101,11 +106,26 @@ class DetailTransactionViewModel: TransactionViewModel {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.delete_transaction, icon: nil, action: .delete_transaction))
         }
         
-        if !transaction.isIncome {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.rep, icon: nil, action: .repeat_transaction))
-        }
-        
         return items
+    }
+    
+    public func share() {
+        let shareView: TransactionShareView = UIView.fromNib()
+        shareView.transaction = transaction
+        shareView.layoutIfNeeded()
+        
+        if let top = UIApplication.getTopMostViewController() {
+            if let image = shareView.snapshot(scale: false) {
+                let activityItem: [AnyObject] = [image]
+                let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
+                vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                }
+                
+                vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+                
+                top.present(vc, animated: true)
+            }
+        }
     }
 }
 

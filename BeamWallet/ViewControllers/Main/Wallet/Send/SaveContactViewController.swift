@@ -88,7 +88,7 @@ class SaveContactViewController: BaseTableViewController {
     }
     
     @objc private func onSave() {
-        AppModel.sharedManager().addContact(address.walletId, name: address.label, category: address.category)
+        AppModel.sharedManager().addContact(address.walletId, name: address.label, categories: address.categories as! [Any])
         onBack()
     }
     
@@ -143,7 +143,7 @@ extension SaveContactViewController : UITableViewDelegate {
                     obj in
                     guard let strongSelf = self else { return }
                     if let category = obj {
-                        strongSelf.address.category = String(category.id)
+                        strongSelf.address.categories = [String(category.id)]
                         strongSelf.tableView.reloadData()
                     }
                 }
@@ -151,12 +151,12 @@ extension SaveContactViewController : UITableViewDelegate {
                 pushViewController(vc: vc)
             }
             else{
-                let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byAddress: self.address.walletId))
+                let vc = CategoryPickerViewController(categories: self.address.categories as? [String])
                 vc.completion = {[weak self]
                     obj in
                     guard let strongSelf = self else { return }
-                    if let category = obj {
-                        strongSelf.address.category = String(category.id)
+                    if let categories = obj {
+                        strongSelf.address.categories = NSMutableArray(array: categories)
                         strongSelf.tableView.reloadData()
                     }
                 }
@@ -193,10 +193,9 @@ extension SaveContactViewController : UITableViewDataSource {
             cell.delegate = self
             return cell
         case 2:
-            let category = AppModel.sharedManager().findCategory(byAddress: self.address.walletId)
             let cell = tableView
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: category?.name ?? String.empty(), valueColor: UIColor.init(hexString: category?.color ?? "#FFFFFF")))
+            cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: self.address.categoriesName()))
             cell.contentView.backgroundColor = UIColor.clear
             return cell
         default:

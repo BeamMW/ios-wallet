@@ -38,7 +38,7 @@ class LoginViewController: BaseViewController {
             return
         }
         
-        if AppDelegate.newFeaturesEnabled && Settings.sharedManager().target == Testnet {
+        if Settings.sharedManager().target == Testnet {
             restoreButton.isHidden = false
         }
     }
@@ -50,14 +50,15 @@ class LoginViewController: BaseViewController {
     //MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
+        AppModel.sharedManager().resetWallet(true)
+
         if AppModel.sharedManager().canRestoreWallet() {
             
             self.confirmAlert(title: Localizable.shared.strings.restore_wallet_title, message: Localizable.shared.strings.restore_wallet_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.restore_wallet_title, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
                 AppModel.sharedManager().isRestoreFlow = true;
-                
-                self.pushViewController(vc: InputPhraseViewController())
+                self.pushViewController(vc: RestoreOptionsViewController())
             }
         }
         else{
@@ -67,8 +68,9 @@ class LoginViewController: BaseViewController {
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {
+        AppModel.sharedManager().resetWallet(true)
         AppModel.sharedManager().isRestoreFlow = false;
-        
+
         pushViewController(vc: IntroPhraseViewController())
     }
 

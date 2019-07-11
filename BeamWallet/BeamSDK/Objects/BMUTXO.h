@@ -20,15 +20,18 @@
 
 #import <Foundation/Foundation.h>
 
+@class BMTransaction;
+
 enum {
     BMUTXOUnavailable = 0,
     BMUTXOAvailable = 1,
     BMUTXOMaturing = 2,
     BMUTXOOutgoing = 3,
     BMUTXOIncoming = 4,
-    BMUTXOSpent = 5
+    BMUTXOChangeV0 = 5,
+    BMUTXOSpent = 6
 };
-typedef UInt64 BMUTXOStatus;
+typedef int BMUTXOStatus;
 
 @interface BMUTXO : NSObject
 
@@ -43,8 +46,7 @@ typedef UInt64 BMUTXOStatus;
 @property (nonatomic,strong) NSString * _Nonnull typeString;
 @property (nonatomic,strong) NSString * _Nullable createTxId;
 @property (nonatomic,strong) NSString * _Nullable spentTxId;
-
--(BOOL)isActive;
+@property (nonatomic,strong) BMTransaction * _Nullable transaction;
 
 @end
 

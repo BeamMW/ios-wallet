@@ -31,6 +31,17 @@ class BackgroundDownloader: NSObject {
     private var task:URLSessionDownloadTask?
     
     public func startDownloading(_ url:URL, _ destinationUrl:URL) {
+        
+        if FileManager.default.fileExists(atPath: destinationUrl.path)
+        {
+            do {
+                try FileManager.default.removeItem(at: destinationUrl)
+            }
+            catch{
+                print(error)
+            }
+        }
+        
         self.destinationURLForFile =  destinationUrl
         
         let config = URLSessionConfiguration.background(withIdentifier: "com.beam.background")

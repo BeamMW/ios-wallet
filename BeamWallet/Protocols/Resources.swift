@@ -205,3 +205,31 @@ func ClearIcon() -> UIImage? {
     return UIImage(named: "clearIcon")
 }
 
+func IconExpired() -> UIImage? {
+    return UIImage(named: "iconExpired")
+}
+
+func IconUtxoEmpty() -> UIImage? {
+    return UIImage(named: "iconUtxoEmptyState")
+}
+
+func IconAddressbookEmpty() -> UIImage? {
+    return UIImage(named: "iconAddressbookEmptyState")
+}
+
+func IconWalletEmpty() -> UIImage? {
+    return UIImage(named: "iconWalletEmpty")
+}
+
+func IconCloud() -> UIImage? {
+    return UIImage(named: "icnCloud")
+}
+
+func IconManual() -> UIImage? {
+    return UIImage(named: "icnLaptop")
+}
+
+func IconNextBlue() -> UIImage? {
+    return UIImage(named: "iconNextBlue")
+}
+

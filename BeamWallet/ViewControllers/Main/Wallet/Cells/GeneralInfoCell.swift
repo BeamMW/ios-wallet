@@ -19,12 +19,21 @@
 
 import UIKit
 
-struct GeneralInfo {
+class GeneralInfo {
     var text:String!
     var detail:String!
     var failed:Bool!
     var canCopy:Bool!
     var color = UIColor.white
+    var attributedString:NSMutableAttributedString?
+
+    init(text:String!, detail:String!, failed:Bool!, canCopy:Bool!, color:UIColor) {
+        self.text = text
+        self.detail = detail
+        self.failed = failed
+        self.canCopy = canCopy
+        self.color = color
+    }
 }
 
 protocol GeneralInfoCellDelegate: AnyObject {
@@ -98,12 +107,12 @@ extension GeneralInfoCell: Configurable {
             detailLabel.textColor = info.color
         }
         
-        if info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_rec_address) ||  info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_send_address) || info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_address) || info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.contact) {
+        if let attributedString = info.attributedString {
+            detailLabel.attributedText = attributedString
+        }
+        else if info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_rec_address) ||  info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_send_address) || info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.my_address) || info.text == Localizable.shared.strings.addDots(value:Localizable.shared.strings.contact) {
             
             let address = AppModel.sharedManager().findAddress(byID: info.detail)
-            let category = AppModel.sharedManager().findCategory(byAddress: info.detail)
-
-            let categoryName = category?.name ?? String.empty()
             let addressName = address?.label ?? String.empty()
 
             detailLabel.copyText = info.detail
@@ -116,21 +125,13 @@ extension GeneralInfoCell: Configurable {
             
             strings.append(info.detail)
 
-            if !categoryName.isEmpty {
-                strings.append(categoryName)
-            }
             
             let text = (strings.count == 1 ? info.detail : strings.joined(separator: "\n"))!
 
-            let rangeCategory = (text as NSString).range(of: String(categoryName))
             let rangeName = (text as NSString).range(of: String(addressName))
            
             let attributedString = NSMutableAttributedString(string:text)
-           
-//            let style1 = NSMutableParagraphStyle()
-//            style1.lineSpacing = 5
-//            style1.lineBreakMode = .byCharWrapping
-//
+
             let style2 = NSMutableParagraphStyle()
             style2.lineSpacing = 5
             style2.lineBreakMode = .byCharWrapping
@@ -140,18 +141,19 @@ extension GeneralInfoCell: Configurable {
 
             attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: allStyle, range: NSMakeRange(0, text.count))
 
-            if !categoryName.isEmpty {
-           //     let rangeCategory2 = (text as NSString).range(of: String("\n" + categoryName))
-
-                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.init(hexString: category!.color) , range: rangeCategory)
-                attributedString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: rangeCategory)
-             //   attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style1, range: rangeCategory2)
-            }
-            
             if !addressName.isEmpty {
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: rangeName)
                 attributedString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeName)
                 attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: rangeName)
+            }
+            
+            if address?.categoriesName().string != Localizable.shared.strings.none {
+                if let attr = address?.categoriesName() {
+                    attr.addAttribute(NSAttributedString.Key.font, value: ItalicFont(size: 14) , range: NSMakeRange(0, attr.string.count))
+
+                    attributedString.append(NSAttributedString(string: "\n"))
+                    attributedString.append(attr)
+                }
             }
             
             detailLabel.attributedText = attributedString

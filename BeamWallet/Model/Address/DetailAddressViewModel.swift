@@ -58,10 +58,12 @@ class DetailAddressViewModel: AddressViewModel {
             details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: (self.address!.isExpired() ? Localizable.shared.strings.expired : Localizable.shared.strings.exp_date)), detail: self.address!.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
         }
         
-        if !self.address!.category.isEmpty {
-            if let category = AppModel.sharedManager().findCategory(byId: self.address!.category) {
-                details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.category), detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
-            }
+        if self.address?.categories.count ?? 0 > 0 {
+            let title = (self.address?.categories.count ?? 0 <= 1 ? Localizable.shared.strings.tag : Localizable.shared.strings.categories)
+
+            let info = GeneralInfo(text: Localizable.shared.strings.addDots(value: title), detail: self.address?.categoriesName().string, failed: false, canCopy:false, color: UIColor.red)
+            info.attributedString = self.address?.categoriesName()
+            details.append(info)
         }
         
         if !self.address!.label.isEmpty {

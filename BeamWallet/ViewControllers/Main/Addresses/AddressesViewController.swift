@@ -22,7 +22,7 @@ import UIKit
 class AddressesViewController: BaseTableViewController {
     
     private let viewModel = AddressViewModel(selected: .active)
-    private let header = BMTableHeaderTitleView.init(segments: [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts])
+    private let header = BMSegmentView.init(segments: [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts])
 
     override var isUppercasedTitle: Bool {
         get{
@@ -103,7 +103,7 @@ class AddressesViewController: BaseTableViewController {
 extension AddressesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (viewModel.count == 0) ? AddressCell.height() : UITableView.automaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -140,8 +140,7 @@ extension AddressesViewController : UITableViewDataSource {
         if viewModel.count == 0 {
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: Localizable.shared.strings.not_found)
-            cell.backgroundView?.backgroundColor = UIColor.main.marineThree
+                .configured(with: (text: (viewModel.selectedState == .contacts ? Localizable.shared.strings.contacts_empty : Localizable.shared.strings.addresses_empty), image: IconAddressbookEmpty()))
             return cell
         }
         else {
@@ -149,7 +148,7 @@ extension AddressesViewController : UITableViewDataSource {
             
             let cell =  tableView
                 .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, address: address, single:false, displayCategory: true))
+                .configured(with: (row: indexPath.row, address: address, displayTransaction: false, displayCategory: true))
             
             return cell
         }

@@ -121,10 +121,20 @@ extension BMFieldCell : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.delegate?.textValueDidReturn?(self)
+        
+        if nameLabel.text == Localizable.shared.strings.transaction_comment {
+            textField.placeholder = String.empty()
+            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.delegate?.textValueDidBegin?(self)
+        
+        if nameLabel.text == Localizable.shared.strings.transaction_comment {
+            textField.placeholder = Localizable.shared.strings.not_shared.capitalizingFirstLetter()
+            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

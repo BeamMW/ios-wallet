@@ -87,8 +87,8 @@ class SettingsViewModel : NSObject {
 
 
         var feedback = [SettingsItem]()
-        feedback.append(SettingsItem(title: Localizable.shared.strings.report_problem, detail: nil, isSwitch: nil, id: 2))
         feedback.append(SettingsItem(title: Localizable.shared.strings.rate_app, detail: nil, isSwitch: nil, id: 11))
+        feedback.append(SettingsItem(title: Localizable.shared.strings.report_problem, detail: nil, isSwitch: nil, id: 2))
 
         items.append(node)
         items.append(general)

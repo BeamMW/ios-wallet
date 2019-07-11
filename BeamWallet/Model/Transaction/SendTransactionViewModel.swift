@@ -54,7 +54,7 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
-    public var fee = "10" {
+    public var fee = String(0) {
         didSet{
             if sendAll {
                 amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
@@ -103,6 +103,9 @@ class SendTransactionViewModel: NSObject {
 
     override init() {
         super.init()
+        
+        fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+        
         
         generateOutgoindAddress()
     }
@@ -170,7 +173,7 @@ class SendTransactionViewModel: NSObject {
             if pickedAddress.walletId == startedAddress?.walletId {
                 AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
             }
-            else if pickedAddress.label != outgoindAdderss?.label || pickedAddress.category != outgoindAdderss?.category || pickedAddress.duration != outgoindAdderss?.duration {
+            else if pickedAddress.label != outgoindAdderss?.label || pickedAddress.categories != outgoindAdderss?.categories || pickedAddress.duration != outgoindAdderss?.duration {
                 
                 if pickedAddress.duration != outgoindAdderss?.duration {
                     if pickedAddress.duration > 0 {
@@ -198,20 +201,11 @@ class SendTransactionViewModel: NSObject {
                 self.contacts.append(contentsOf: contacts)
             }
             
-            for contact in contacts {
-                if let category = AppModel.sharedManager().findCategory(byId: contact.address.category) {
-                    contact.address.categoryName = category.name
-                }
-                else{
-                    contact.address.categoryName = String.empty()
-                }
-            }
-            
             if !toAddress.isEmpty {
                 let filterdObjects = contacts.filter {
                     $0.name.lowercased().contains(toAddress.lowercased()) ||
                         $0.address.label.lowercased().contains(toAddress.lowercased()) ||
-                        $0.address.categoryName.lowercased().contains(toAddress.lowercased()) ||
+                        $0.address.categoriesName().string.lowercased().contains(toAddress.lowercased()) ||
                         $0.address.walletId.lowercased().starts(with: toAddress.lowercased())
                 }
                 contacts.removeAll()
@@ -225,21 +219,12 @@ class SendTransactionViewModel: NSObject {
                 self.addresses = addresses as! [BMAddress]
             }
             
-            self.addresses = self.addresses.filter { $0.isExpired() == false}
+            self.addresses = self.addresses.filter { $0.isExpired() == false && $0.walletId != self.outgoindAdderss?.walletId}
             
             if !toAddress.isEmpty {
-                for address in self.addresses  {
-                    if let category = AppModel.sharedManager().findCategory(byId: address.category) {
-                        address.categoryName = category.name
-                    }
-                    else{
-                        address.categoryName = String.empty()
-                    }
-                }
-                
                 let filterdObjects = self.addresses.filter {
                         $0.label.lowercased().contains(toAddress.lowercased()) ||
-                        $0.categoryName.lowercased().contains(toAddress.lowercased()) ||
+                        $0.categoriesName().string.lowercased().contains(toAddress.lowercased()) ||
                         $0.walletId.lowercased().starts(with: toAddress.lowercased())
                 }
                 
@@ -266,7 +251,7 @@ class SendTransactionViewModel: NSObject {
         let totalString = String.currency(value: total) + Localizable.shared.strings.beam
         
         var items = [ConfirmItem]()
-        items.append(ConfirmItem(title: Localizable.shared.strings.send_to.uppercased(), detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        items.append(ConfirmItem(title: Localizable.shared.strings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
             items.append(ConfirmItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))

@@ -58,13 +58,14 @@ extension ConfirmCell: Configurable {
         
         nameLabel.adjustFontSize = true
         
-        if item.title == Localizable.shared.strings.send_to.uppercased() || item.title == Localizable.shared.strings.outgoing_address.uppercased() {
+        if item.title == Localizable.shared.strings.send_to || item.title == Localizable.shared.strings.outgoing_address.uppercased() {
             
-            if let category = AppModel.sharedManager().findCategory(byAddress: item.detail ?? String.empty())
+            let address = AppModel.sharedManager().findAddress(byID: item.detail ?? String.empty())
+            
+            if address?.categories.count ?? 0 > 0
             {
                 categoryLabel.isHidden = false
-                categoryLabel.textColor = UIColor.init(hexString: category.color)
-                categoryLabel.text = category.name
+                categoryLabel.attributedText = address?.categoriesName()
             }
             
             if let address = AppModel.sharedManager().findAddress(byID: item.detail ?? String.empty()) {

@@ -48,6 +48,13 @@ class BMDetailCell: BaseCell {
 
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)
     }
+    
+    func simpleConfigure(with options: (title:String, attributedValue:NSMutableAttributedString)) {
+        valueLabel.attributedText = options.attributedValue
+        
+        nameLabel.text = options.title
+        nameLabel.letterSpacing = 2
+    }
 }
 
 extension BMDetailCell: Configurable {

@@ -25,6 +25,18 @@
 -(NSString*)localized {
     NSString *lang = [Settings sharedManager].language;
     
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *remotePath = [[documentsDirectory stringByAppendingPathComponent:@"localization"] stringByAppendingPathComponent:lang];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:remotePath]) {
+        NSBundle *bundle = [NSBundle bundleWithPath:remotePath];
+        
+        if (bundle!=nil) {
+            return NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
+        }
+    }
+    
     NSString *path = [[NSBundle mainBundle] pathForResource:lang ofType:@"lproj"];
     NSBundle * bundle = [[NSBundle alloc] initWithPath:path];
     

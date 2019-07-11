@@ -252,7 +252,7 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
             bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
             bmUTXO.amount = coin.m_ID.m_Value;
             bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
-            bmUTXO.status = (UInt64)coin.m_status;
+            bmUTXO.status = (int)coin.m_status;
             bmUTXO.maturity = coin.m_maturity;
             bmUTXO.confirmHeight = coin.m_confirmHeight;
             bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
@@ -295,15 +295,25 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
     
     if (own)
     {
+        this->ownAddresses.clear();
+        
+        for (int i=0; i<addrs.size(); i++)
+            this->ownAddresses.push_back(addrs[i]);
+        
         NSMutableArray <BMAddress*> *addresses = [[NSMutableArray alloc] init];
         
         for (const auto& walletAddr : addrs)
         {
+            NSString *categories = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+            if ([categories isEqualToString:@"0"]) {
+                categories = @"";
+            }
+            
             BMAddress *address = [[BMAddress alloc] init];
             address.duration = walletAddr.m_duration;
             address.ownerId = walletAddr.m_OwnID;
             address.createTime = walletAddr.m_createTime;
-            address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+            address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             if([address.label isEqualToString:@"Default"])
             {
@@ -344,10 +354,15 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
 
         for (const auto& walletAddr : addrs)
         {
+            NSString *categories = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+            if ([categories isEqualToString:@"0"]) {
+                categories = @"";
+            }
+            
             BMAddress *address = [[BMAddress alloc] init];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+            address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
 
             BMContact *contact = [[BMContact alloc] init];
             contact.address = address;
@@ -387,11 +402,16 @@ void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walle
 {
     NSLog(@"onGeneratedNewAddress");
 
+    NSString *categories = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+    if ([categories isEqualToString:@"0"]) {
+        categories = @"";
+    }
+    
     BMAddress *address = [[BMAddress alloc] init];
     address.duration = walletAddr.m_duration;
     address.ownerId = walletAddr.m_OwnID;
     address.createTime = walletAddr.m_createTime;
-    address.category = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
+    address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
     address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
     address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
     

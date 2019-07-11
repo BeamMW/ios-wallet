@@ -62,6 +62,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, strong) NSString * _Nonnull language;
 
 -(BOOL)isChangedNode;
+-(void)resetWallet;
 
 -(NSString*_Nonnull)walletStoragePath;
 

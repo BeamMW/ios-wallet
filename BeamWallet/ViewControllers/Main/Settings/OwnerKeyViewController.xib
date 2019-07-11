@@ -23,8 +23,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OwnerKeyViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="detailLabelLeft" destination="KAz-wx-M01" id="DhZ-B5-4jn"/>
-                <outlet property="detailLabelRight" destination="nCI-eI-0X3" id="696-4s-Bmt"/>
+                <outlet property="copyNextView" destination="PbD-6l-1Ad" id="bzy-J6-HxG"/>
+                <outlet property="copyView" destination="SEX-lg-7i7" id="dyX-z8-2IV"/>
+                <outlet property="noticeLabel" destination="ov3-aD-402" id="7Tp-ad-B96"/>
                 <outlet property="ownerKeyLabel" destination="Fba-dd-bWj" id="ukm-ze-xbu"/>
                 <outlet property="ownerKeyTitleLabel" destination="25z-VT-NVW" id="DTH-97-u3M"/>
                 <outlet property="topOffset" destination="F9x-Ke-NtC" id="2Gl-3g-E3y"/>
@@ -72,7 +73,7 @@
                             <rect key="frame" x="0.0" y="116.5" width="374" height="97.5"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ov3-aD-402">
-                                    <rect key="frame" x="25" y="0.0" width="324" height="97.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="97.5"/>
                                     <string key="text">Please notice, that knowing your owner key allows to know all your funds (UTXO). Make sure that you deploy the key at the node you trust completely.</string>
                                     <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="16"/>
                                     <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -85,9 +86,9 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="ov3-aD-402" secondAttribute="trailing" constant="25" id="KAz-wx-M01"/>
+                                <constraint firstAttribute="trailing" secondItem="ov3-aD-402" secondAttribute="trailing" id="KAz-wx-M01"/>
                                 <constraint firstAttribute="bottom" secondItem="ov3-aD-402" secondAttribute="bottom" id="m1c-tt-N9R"/>
-                                <constraint firstItem="ov3-aD-402" firstAttribute="leading" secondItem="FuX-Kb-Pf1" secondAttribute="leading" constant="25" id="nCI-eI-0X3"/>
+                                <constraint firstItem="ov3-aD-402" firstAttribute="leading" secondItem="FuX-Kb-Pf1" secondAttribute="leading" id="nCI-eI-0X3"/>
                                 <constraint firstItem="ov3-aD-402" firstAttribute="top" secondItem="FuX-Kb-Pf1" secondAttribute="top" id="yhd-8V-ama"/>
                             </constraints>
                         </view>
@@ -125,6 +126,67 @@
                                 <constraint firstItem="gzx-IL-d5E" firstAttribute="centerX" secondItem="SEX-lg-7i7" secondAttribute="centerX" id="haT-BL-BK2"/>
                             </constraints>
                         </view>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PbD-6l-1Ad">
+                            <rect key="frame" x="0.0" y="334" width="374" height="50"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jqH-FU-O5i">
+                                    <rect key="frame" x="1.5" y="0.0" width="371" height="44"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uvQ-zm-AzI" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="180.5" height="44"/>
+                                            <color key="backgroundColor" red="0.10980392156862745" green="0.2627450980392157" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="Kug-EL-Yva"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                            <state key="normal" title="copy" image="iconCopyWhite">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="22"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="copy"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onCopyWithSender:" destination="-1" eventType="touchUpInside" id="F1Y-5Y-5eF"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ej-Sk-02o" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                            <rect key="frame" x="190.5" y="0.0" width="180.5" height="44"/>
+                                            <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="hJ6-k7-YXd"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                            <state key="normal" title="next" image="iconNextBlue">
+                                                <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="22"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="next"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="mfQ-df-W9C"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="jqH-FU-O5i" firstAttribute="leading" secondItem="PbD-6l-1Ad" secondAttribute="leading" constant="1.5" id="8cc-h1-uu2"/>
+                                <constraint firstAttribute="trailing" secondItem="jqH-FU-O5i" secondAttribute="trailing" constant="1.5" id="KNJ-fn-4o2"/>
+                                <constraint firstAttribute="bottom" secondItem="jqH-FU-O5i" secondAttribute="bottom" constant="6" id="Rgf-nS-qF7"/>
+                                <constraint firstItem="jqH-FU-O5i" firstAttribute="top" secondItem="PbD-6l-1Ad" secondAttribute="top" id="zkV-Lh-S2t"/>
+                            </constraints>
+                        </view>
                     </subviews>
                 </stackView>
             </subviews>
@@ -140,5 +202,7 @@
     </objects>
     <resources>
         <image name="iconCopyBlue" width="16" height="16"/>
+        <image name="iconCopyWhite" width="16" height="16"/>
+        <image name="iconNextBlue" width="16" height="16"/>
     </resources>
 </document>

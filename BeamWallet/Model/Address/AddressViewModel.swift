@@ -76,7 +76,7 @@ class AddressViewModel: NSObject {
         self.category = category
         
         if let cat = category {
-            addresses = AppModel.sharedManager().getAddressFrom(cat) as! [BMAddress]
+            addresses = AppModel.sharedManager().getAddressesFrom(cat) as! [BMAddress]
         }
         
         AppModel.sharedManager().addDelegate(self)
@@ -231,7 +231,7 @@ extension AddressViewModel : WalletModelDelegate {
                 }
             }
             else if self.category != nil{
-                self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
+                self.addresses = AppModel.sharedManager().getAddressesFrom(self.category!) as! [BMAddress]
                 self.onDataChanged?()
             }
             else{
@@ -249,7 +249,7 @@ extension AddressViewModel : WalletModelDelegate {
                 }
             }
             else if self.category != nil{
-                self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
+                self.addresses = AppModel.sharedManager().getAddressesFrom(self.category!) as! [BMAddress]
                 self.onDataChanged?()
             }
             else{
@@ -261,7 +261,7 @@ extension AddressViewModel : WalletModelDelegate {
     func onCategoriesChange() {
         DispatchQueue.main.async {
             if self.category != nil{
-                self.addresses = AppModel.sharedManager().getAddressFrom(self.category!) as! [BMAddress]
+                self.addresses = AppModel.sharedManager().getAddressesFrom(self.category!) as! [BMAddress]
                 self.onDataChanged?()
             }
             else if self.address == nil {

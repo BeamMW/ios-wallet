@@ -367,17 +367,9 @@ extension BuyBeamViewController : UITableViewDataSource {
                 return cell
             }
             else if indexPath.row == 3 {
-                var name = Localizable.shared.strings.none
-                var color = UIColor.main.steelGrey
-                
-                if let category = AppModel.sharedManager().findCategory(byId: viewModel.address!.category) {
-                    name = category.name
-                    color = UIColor.init(hexString: category.color)
-                }
-                
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: name, valueColor: color))
+                cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: viewModel.address!.categoriesName()))
                 return cell
             }
             else{

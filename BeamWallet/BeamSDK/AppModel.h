@@ -32,6 +32,12 @@
 #import "BMLanguage.h"
 #import "StringLocalize.h"
 
+enum {
+    BMRestoreManual = 0,
+    BMRestoreAutomatic = 1,
+};
+typedef int BMRestoreType;
+
 @protocol WalletModelDelegate <NSObject>
 @optional
 -(void)onSyncProgressUpdated:(int)done total:(int)total;
@@ -68,6 +74,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,assign) BOOL isConnecting;
 @property (nonatomic,assign) BOOL isLoggedin;
 @property (nonatomic,assign) BOOL isRestoreFlow;
+@property (nonatomic,assign) BMRestoreType restoreType;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
@@ -95,6 +102,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
 -(void)restore:(NSString*_Nonnull)path;
 -(void)resetWallet:(BOOL)removeDatabase;
+-(void)resetOnlyWallet;
+-(void)start;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
 -(void)changeNodeAddress;
@@ -115,7 +124,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)editBotAddress:(NSString*_Nonnull)address ;
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address;
--(void)setWalletCategory:(NSString*_Nonnull)category toAddress:(NSString*_Nonnull)address;
+-(void)setWalletCategories:(NSMutableArray<NSString*>*_Nonnull)categories toAddress:(NSString*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
 -(void)editAddress:(BMAddress*_Nonnull)address;
@@ -129,7 +138,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
--(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name category:(NSString*_Nonnull)category;
+-(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories;
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 
 // send
@@ -162,7 +171,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 // utxo
 -(void)getUTXO;
--(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOWithPadding:(BOOL)active page:(int)page perPage:(int)perPage;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromUTXO:(BMUTXO*_Nonnull)utox;
 
 //contacts
@@ -175,8 +183,12 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)addCategory:(BMCategory*_Nonnull)category;
 -(BOOL)isNameAlreadyExist:(NSString*_Nonnull)name id:(int)ID;
 -(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID;
--(BMCategory*_Nullable)findCategoryByAddress:(NSString*_Nullable)ID;
--(NSMutableArray<BMAddress*>*_Nonnull)getAddressFromCategory:(BMCategory*_Nonnull)category;
+-(NSMutableArray<BMAddress*>*_Nonnull)getAddressesFromCategory:(BMCategory*_Nonnull)category;
 
-    
+
+//fork
+-(BOOL)isFork;
+-(int)getDefaultFeeInGroth;
+-(int)getMinFeeInGroth;
+
 @end

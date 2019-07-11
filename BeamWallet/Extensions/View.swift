@@ -40,8 +40,8 @@ extension UIView {
 }
 
 extension UIView {
-    func snapshot() -> UIImage? { 
-        UIGraphicsBeginImageContextWithOptions(bounds.size, true, UIScreen.main.scale)
+    func snapshot(scale:Bool = true) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, true, (scale ? UIScreen.main.scale : 2))
         
         if let context = UIGraphicsGetCurrentContext() {
             self.layer.render(in: context)

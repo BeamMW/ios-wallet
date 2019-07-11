@@ -41,53 +41,44 @@ class BaseNavigationController: UINavigationController {
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        if(AppDelegate.newFeaturesEnabled) {
-            delegate = sloppySwiping
-        }
-        
+        delegate = sloppySwiping
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        if(AppDelegate.newFeaturesEnabled) {
-            delegate = sloppySwiping
-        }
+        delegate = sloppySwiping
     }
     
     public override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {
         super.init(navigationBarClass: navigationBarClass, toolbarClass: toolbarClass)
-        if(AppDelegate.newFeaturesEnabled) {
-            delegate = sloppySwiping
-        }
+        delegate = sloppySwiping
     }
     
     public override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        if(AppDelegate.newFeaturesEnabled) {
-            delegate = sloppySwiping
-        }
+        delegate = sloppySwiping
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        if(!AppDelegate.newFeaturesEnabled) {
-            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
-                interactivePopGestureRecognizer?.delegate = self
-                delegate = self
-            }
-        }
-      
-    }
-
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        if(!AppDelegate.newFeaturesEnabled) {
-            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
-                interactivePopGestureRecognizer?.isEnabled = false
-            }
-        }
-        super.pushViewController(viewController, animated: animated)
-    }
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//        if(!AppDelegate.newFeaturesEnabled) {
+//            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+//                interactivePopGestureRecognizer?.delegate = self
+//                delegate = self
+//            }
+//        }
+//      
+//    }
+//
+//    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+//        if(!AppDelegate.newFeaturesEnabled) {
+//            if responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+//                interactivePopGestureRecognizer?.isEnabled = false
+//            }
+//        }
+//        super.pushViewController(viewController, animated: animated)
+//    }
 }
 
 extension BaseNavigationController: UINavigationControllerDelegate {

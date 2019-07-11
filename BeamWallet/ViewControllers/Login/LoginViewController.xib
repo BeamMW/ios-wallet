@@ -46,8 +46,11 @@
                                         <constraint firstAttribute="width" constant="159" id="HG5-Od-VgI"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scalable confidential cryptocurrency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scalable confidential cryptocurrency" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
                                     <rect key="frame" x="0.0" y="162" width="264" height="19.5"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="264" id="z8M-cN-IIy"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="16"/>
                                     <color key="textColor" red="0.14509803921568626" green="0.75686274509803919" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -130,7 +133,7 @@
     </objects>
     <resources>
         <image name="iconAddBlue" width="16" height="16"/>
-        <image name="initial_background" width="1440" height="2368"/>
+        <image name="initial_background" width="1125" height="2001"/>
         <image name="logo" width="159" height="142"/>
     </resources>
 </document>

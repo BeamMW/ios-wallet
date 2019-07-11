@@ -48,6 +48,7 @@ class FeeCell: BaseCell {
         feeSlider.setThumbImage(SliderDot(), for: .normal)
         feeSlider.setThumbImage(SliderDot(), for: .highlighted)
         feeSlider.maximumTrackTintColor = UIColor.main.marineThree
+        feeSlider.minimumValue = Float(AppModel.sharedManager().getMinFeeInGroth())
 
         selectionStyle = .none
         

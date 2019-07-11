@@ -74,11 +74,10 @@ class QRViewController: BaseViewController {
         addressTitleLabel.text = Localizable.shared.strings.address.uppercased()
         addressLabel.text = address.walletId
         
-        if let category = AppModel.sharedManager().findCategory(byAddress: address.walletId)
+        if address.categories.count > 0
         {
             categoryLabel.isHidden = false
-            categoryLabel.text = category.name
-            categoryLabel.textColor = UIColor.init(hexString: category.color)
+            categoryLabel.attributedText = address.categoriesName()
         }
         else{
             categoryLabel.isHidden = true

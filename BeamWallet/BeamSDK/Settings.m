@@ -132,6 +132,10 @@ static NSString *languageKey = @"languageKey";
         else{
             _language = [[NSLocale currentLocale] languageCode];
             
+            if ([_language isEqualToString:@"zh"]) {
+                _language = @"zh-Hans";
+            }
+            
             if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
                 _language = @"en";
             }
@@ -141,9 +145,14 @@ static NSString *languageKey = @"languageKey";
         _language = @"en";
     }
 
-    
-    
     return self;
+}
+    
+-(void)resetWallet {
+    _nodeAddress = [AppModel chooseRandomNode];
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:nodeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)setIsHideAmounts:(BOOL)isHideAmounts {
@@ -240,10 +249,12 @@ static NSString *languageKey = @"languageKey";
     [[NSUserDefaults standardUserDefaults] setObject:_nodeAddress forKey:nodeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
-            [delegate onNetwotkStatusChange:NO];
+    if(![[AppModel sharedManager] isRestoreFlow]){
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                [delegate onNetwotkStatusChange:NO];
+            }
         }
     }
 }

@@ -31,6 +31,8 @@ public:
     WalletModel(beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
 
+    std::vector<beam::wallet::WalletAddress> ownAddresses;
+
 private:
     NSString *GetErrorString(beam::wallet::ErrorType type);
     NSString *GetTransactionStatusString(beam::wallet::TxDescription transaction);

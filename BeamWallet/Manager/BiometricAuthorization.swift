@@ -69,7 +69,7 @@ class BiometricAuthorization: NSObject {
     
     public func authenticateWithBioMetrics(success successBlock: @escaping AuthorizationSuccess, failure failureBlock: @escaping AuthorizationFailure, retry retryBlock: @escaping AuthorizationRetry, reasonText:String? = nil) {
         
-        let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? "Face ID" : "Touch ID"
+        let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.face_id : Localizable.shared.strings.touch_id
 
          var reason = ""
         
@@ -77,7 +77,7 @@ class BiometricAuthorization: NSObject {
             reason = value
         }
         else{
-            reason = faceIDAvailable() ? "Confirm your face to authenticate" : "Confirm your fingerprint to authenticate"
+            reason = faceIDAvailable() ? Localizable.shared.strings.auth_face_confirm : Localizable.shared.strings.auth_touch_confirm
         }
         
         let context = LAContext()
@@ -94,7 +94,8 @@ class BiometricAuthorization: NSObject {
                     {
                         let context : LAContext = LAContext();
                         
-                        let reason:String = "\(mechanism) has been locked out due to few fail attemp. Enter iPhone passcode to enable TouchID.";
+                        let reason:String = Localizable.shared.strings.auth_bio_failed.replacingOccurrences(of: "(Mechanism)", with: mechanism)
+                        
                         context.evaluatePolicy(LAPolicy.deviceOwnerAuthentication,
                                                localizedReason: reason,
                                                reply: { (success, error) in

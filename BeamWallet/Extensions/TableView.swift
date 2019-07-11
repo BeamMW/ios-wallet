@@ -143,3 +143,23 @@ extension UICollectionView {
         return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: type.reuseIdentifier, for: indexPath) as! T
     }
 }
+
+extension UITableView {
+    
+    func rowsHeight() -> CGFloat {
+        var cellsHeight:CGFloat = 0;
+        let sections = numberOfSections
+        for section in 0..<sections
+        {
+            
+            let rows = numberOfRows(inSection: section)
+            
+            for row in 0..<rows
+            {
+                let indexPath = IndexPath(item: row, section: section)
+                cellsHeight += self.delegate?.tableView?(self, heightForRowAt: indexPath) ?? 0
+            }
+        }
+        return cellsHeight;
+    }
+}

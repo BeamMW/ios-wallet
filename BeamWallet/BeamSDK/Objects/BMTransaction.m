@@ -141,4 +141,59 @@
     return NO;
 }
 
+
+-(UIImage*)statusIcon {
+    if (self.isCancelled)
+    {
+        return [UIImage imageNamed:@"icon-canceled"];
+    }
+    else if (self.isFailed)
+    {
+        return [UIImage imageNamed:@"icon-failed"];
+    }
+    else if(self.isExpired)
+    {
+        return [UIImage imageNamed:@"icon-failed"];
+    }
+    else if (_isSelf) {
+        switch (_enumStatus) {
+            case BMTransactionStatusPending:
+                return [UIImage imageNamed:@"icon-sending-own"];
+            case BMTransactionStatusInProgress:
+                return [UIImage imageNamed:@"icon-sending-own"];
+            case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-sent-own"];
+            default:
+                break;
+        }
+    }
+    else if(_isIncome) {
+        switch (_enumStatus) {
+            case BMTransactionStatusPending:
+                return [UIImage imageNamed:@"icon-receiving"];
+            case BMTransactionStatusInProgress:
+                return [UIImage imageNamed:@"icon-receiving"];
+            case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-received"];
+            default:
+                break;
+        }
+    }
+    else{
+        switch (_enumStatus) {
+            case BMTransactionStatusPending:
+                return [UIImage imageNamed:@"icon-icon-sending"];
+            case BMTransactionStatusInProgress:
+                return [UIImage imageNamed:@"icon-icon-sending"];
+            case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-sent"];
+            default:
+                break;
+        }
+    }
+    
+    
+    return [UIImage imageNamed:@"iconBeam"];
+}
+
 @end

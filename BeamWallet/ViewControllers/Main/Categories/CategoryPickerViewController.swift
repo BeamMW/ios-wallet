@@ -21,11 +21,11 @@ import UIKit
 
 class CategoryPickerViewController: BaseTableViewController {
     
-    public var completion : ((BMCategory?) -> Void)?
+    public var completion : (([String]?) -> Void)?
 
     private var categories:[BMCategory]!
-    private var selectedCategory:BMCategory?
-    private var currentCategory:BMCategory?
+    private var selectedCategories:[String]?
+    private var currentCategories:[String]?
 
     private lazy var footerView: UIView = {
         
@@ -46,17 +46,11 @@ class CategoryPickerViewController: BaseTableViewController {
         return view
     }()
     
-    init(category:BMCategory?) {
+    init(categories:[String]?) {
         super.init(nibName: nil, bundle: nil)
         
-        self.currentCategory = category
-        
-        if category == nil {
-            self.selectedCategory = BMCategory.none()
-        }
-        else{
-            self.selectedCategory = category
-        }
+        self.currentCategories = categories
+        self.selectedCategories = categories
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -106,7 +100,7 @@ class CategoryPickerViewController: BaseTableViewController {
     }
     
     @objc private func onSave(sender:UIBarButtonItem) {
-        self.completion?(selectedCategory)
+        self.completion?(selectedCategories)
         self.back()
     }
 }
@@ -120,15 +114,37 @@ extension CategoryPickerViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        selectedCategory = categories[indexPath.row]
-        
-        if currentCategory != nil {
-            enableRightButton(enabled: (currentCategory?.id == selectedCategory?.id) ? false : true)
+        if indexPath.row == 0 {
+            selectedCategories?.removeAll()
+            selectedCategories?.append("0")
         }
         else{
-            enableRightButton(enabled: true)
+            var selected = false
+            let category = categories[indexPath.row]
+            
+            var index:Int = 0
+            if let s = selectedCategories {
+                for c in s {
+                    if category.id == Int32(c) {
+                        selected = true
+                        break
+                    }
+                    index = index + 1
+                }
+            }
+            
+            selectedCategories?.removeAll(where: { $0 == "0" })
+            
+            if !selected {
+                selectedCategories?.append(String(category.id))
+            }
+            else{
+                selectedCategories?.remove(at: index)
+            }
         }
         
+        enableRightButton(enabled: true)
+
         tableView.reloadData()
     }
 }
@@ -141,9 +157,20 @@ extension CategoryPickerViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        var selected = false
+        let category = categories[indexPath.row]
+        
+        if let s = selectedCategories {
+            for c in s {
+                if category.id == Int32(c) {
+                    selected = true
+                }
+            }
+        }
+        
         let cell =  tableView
             .dequeueReusableCell(withType: CategoryPickerCell.self, for: indexPath)
-            .configured(with: (category: categories[indexPath.row], selected: categories[indexPath.row].id == selectedCategory?.id))
+            .configured(with: (category: categories[indexPath.row], selected: selected))
         return cell
     }
 }

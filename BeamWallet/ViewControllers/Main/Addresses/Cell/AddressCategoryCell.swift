@@ -11,7 +11,8 @@ import UIKit
 class AddressCategoryCell: UITableViewCell {
     
     @IBOutlet weak private var categoryLabel: UILabel!
-    
+    @IBOutlet weak private var titleLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -33,20 +34,8 @@ class AddressCategoryCell: UITableViewCell {
 extension AddressCategoryCell: Configurable {
     
     func configure(with address: BMAddress) {
-        if address.category == Localizable.shared.strings.zero {
-            categoryLabel.textColor = UIColor.main.steelGrey
-            categoryLabel.text = "None"
-        }
-        else{
-            if let category = AppModel.sharedManager().findCategory(byId: address.category) {
-                categoryLabel.text = category.name
-                categoryLabel.textColor = UIColor.init(hexString: category.color)
-            }
-            else{
-                categoryLabel.textColor = UIColor.main.steelGrey
-                categoryLabel.text = "None"
-            }
-        }
+        categoryLabel.attributedText = address.categoriesName()
+        titleLabel.text = (address.categories.count <= 1 ? Localizable.shared.strings.tag : Localizable.shared.strings.categories)
     }
 }
 

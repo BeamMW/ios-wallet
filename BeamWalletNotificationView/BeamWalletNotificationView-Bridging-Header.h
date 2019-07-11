@@ -3,3 +3,4 @@
 //
 
 #import "AppModel.h"
+#import <SSZipArchive/SSZipArchive.h>

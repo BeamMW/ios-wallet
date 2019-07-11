@@ -56,21 +56,15 @@ extension WalletTransactionCell: Configurable {
         case true:
             amountLabel.text = "+" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
-            statusLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
             typeLabel.text = Localizable.shared.strings.receive_beam
         case false:
             amountLabel.text = "-" + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
-            statusLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
             typeLabel.text = Localizable.shared.strings.send_beam
         }
         
-        
-        if options.transaction.isSelf || options.transaction.isFailed() || options.transaction.isCancelled() {
-            statusLabel.textColor = UIColor.white
-        }
         
         dateLabel.text = options.transaction.formattedDate()
         statusLabel.text = options.transaction.status
@@ -119,22 +113,19 @@ extension WalletTransactionCell: Configurable {
             searchLabel.attributedText = attributedString
         }
 
-        
-        if AppDelegate.newFeaturesEnabled {
-            if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
-                statusLabel.textColor = UIColor.main.greyish
-            }
-            else if options.transaction.isSelf {
-                statusLabel.textColor = UIColor.white
-            }
-            else if options.transaction.isIncome
-            {
-                statusLabel.textColor = UIColor.main.brightSkyBlue
-            }
-            else if !options.transaction.isIncome
-            {
-                statusLabel.textColor = UIColor.main.heliotrope
-            }
+        if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
+            statusLabel.textColor = UIColor.main.greyish
+        }
+        else if options.transaction.isSelf {
+            statusLabel.textColor = UIColor.white
+        }
+        else if options.transaction.isIncome
+        {
+            statusLabel.textColor = UIColor.main.brightSkyBlue
+        }
+        else if !options.transaction.isIncome
+        {
+            statusLabel.textColor = UIColor.main.heliotrope
         }
     }
 }

@@ -55,14 +55,17 @@ extension UTXODetailCell: Configurable {
         amountLabel.text = String.currency(value: options.utxo.realAmount)
         statusLabel.text = options.utxo.statusString
         
-        if options.utxo.statusString == Localizable.shared.strings.available.lowercased() {
+        if options.utxo.status == 1 || options.utxo.status == 2 {
             statusLabel.textColor = UIColor.white
         }
-        else if options.utxo.statusString == Localizable.shared.strings.spent.lowercased() {
+        else if options.utxo.status == 6 || options.utxo.status == 3 {
             statusLabel.textColor = UIColor.main.heliotrope
         }
+        else if options.utxo.status == 4 {
+            statusLabel.textColor = UIColor.main.brightSkyBlue
+        }
         else{
-            statusLabel.textColor = UIColor.white
+            statusLabel.textColor = UIColor.main.blueyGrey
         }
     }
 }

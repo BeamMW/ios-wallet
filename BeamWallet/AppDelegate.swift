@@ -27,8 +27,6 @@ import FirebaseMessaging
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    public static let newFeaturesEnabled = true
-
     private var scannedTGUserId = String.empty()
 
     var securityScreen = AutoSecurityScreen()
@@ -73,6 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         
+        
         return true
     }
     
@@ -92,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
     
-        if AppModel.sharedManager().isRestoreFlow {
+        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
             registerBackgroundTask()
         }
         
@@ -123,13 +122,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         
-        if AppModel.sharedManager().isRestoreFlow {
+        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
             endBackgroundTask()
         }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
 
+        CrowdinManager.updateLocalizations()
+        
         NotificationManager.sharedManager.clearNotifications()
                 
         if ShortcutManager.canHandle() {

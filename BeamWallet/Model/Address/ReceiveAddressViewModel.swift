@@ -72,7 +72,7 @@ class ReceiveAddressViewModel: NSObject {
                     deleted = true
                     AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
                 }
-                else if pickedAddress?.label != address?.label || pickedAddress?.category != address?.category {
+                else if pickedAddress?.label != address?.label || pickedAddress?.categories != address?.categories {
                     AppModel.sharedManager().edit(pickedAddress!)
                 }
             }
@@ -101,7 +101,7 @@ class ReceiveAddressViewModel: NSObject {
                 if pickedAddress?.walletId == startedAddress?.walletId {
                     return .new
                 }
-                else if pickedAddress?.label != address?.label || pickedAddress?.category != address?.category {
+                else if pickedAddress?.label != address?.label || pickedAddress?.categories != address?.categories {
                     return .edit
                 }
             }
@@ -140,9 +140,9 @@ class ReceiveAddressViewModel: NSObject {
                     guard let strongSelf = self else { return }
                     
                     if let category = obj {
-                        strongSelf.address?.category = String(category.id)
+                        strongSelf.address?.categories = [String(category.id)]
                         
-                        AppModel.sharedManager().setWalletCategory(strongSelf.address!.category, toAddress: strongSelf.address!.walletId)
+                        AppModel.sharedManager().setWalletCategories(strongSelf.address!.categories, toAddress: strongSelf.address!.walletId)
                         
                         self?.onDataChanged?()
                     }
@@ -151,15 +151,15 @@ class ReceiveAddressViewModel: NSObject {
                 top.pushViewController(vc: vc)
             }
             else{
-                let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: self.address!.category))
+                let vc  = CategoryPickerViewController(categories: self.address?.categories as? [String])
                 vc.completion = { [weak self]
                     obj in
                     guard let strongSelf = self else { return }
 
-                    if let category = obj {
-                        strongSelf.address?.category = String(category.id)
+                    if let categories = obj {
+                        strongSelf.address?.categories = NSMutableArray(array: categories)
                         
-                        AppModel.sharedManager().setWalletCategory(strongSelf.address!.category, toAddress: strongSelf.address!.walletId)
+                        AppModel.sharedManager().setWalletCategories(strongSelf.address!.categories, toAddress: strongSelf.address!.walletId)
                         
                         self?.onDataChanged?()
                     }
@@ -180,7 +180,7 @@ class ReceiveAddressViewModel: NSObject {
                 
                 self?.pickedAddress = BMAddress()
                 self?.pickedAddress?.label = obj.label
-                self?.pickedAddress?.category = obj.category
+                self?.pickedAddress?.categories = obj.categories
                 self?.pickedAddress?.walletId = obj.walletId
                 
                 self?.transactionComment = String.empty()
@@ -217,7 +217,7 @@ class ReceiveAddressViewModel: NSObject {
     
     public func onShare() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = UIActivityViewController(activityItems: [address.walletId ?? String.empty()], applicationActivities: [])
+            let vc = UIActivityViewController(activityItems: [address.walletId], applicationActivities: [])
             vc.completionWithItemsHandler = {[weak self] (activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
                 if completed {
                     self?.isShared = true

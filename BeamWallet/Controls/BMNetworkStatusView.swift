@@ -147,21 +147,17 @@ extension BMNetworkStatusView: WalletModelDelegate {
         DispatchQueue.main.async {
             if connecting {
                 //https://github.com/BeamMW/ios-wallet/issues/194
-                if AppDelegate.newFeaturesEnabled {
-                    self.onNetwotkStatusChange(true)
-                }
-                else{
-                    self.statusView.alpha = 0
-                    
-                    self.indicatorView.color = UIColor.main.orange
-                    self.indicatorView.startAnimating()
-                    
-                    self.statusLabel.x = self.fromNib ? 20 : 35
-                    self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
-                    self.statusView.backgroundColor = UIColor.main.orange
-                    self.statusLabel.textColor = UIColor.main.orange
+                self.onNetwotkStatusChange(true)
 
-                }
+//                self.statusView.alpha = 0
+//                
+//                self.indicatorView.color = UIColor.main.orange
+//                self.indicatorView.startAnimating()
+//                
+//                self.statusLabel.x = self.fromNib ? 20 : 35
+//                self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
+//                self.statusView.backgroundColor = UIColor.main.orange
+//                self.statusLabel.textColor = UIColor.main.orange
             }
         }
     }
