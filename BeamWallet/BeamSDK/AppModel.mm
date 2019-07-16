@@ -24,7 +24,6 @@
 #import "MnemonicModel.h"
 #import "WalletModel.h"
 #import "StringStd.h"
-#import "NodeModel.h"
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
 #import "RecoveryProgress.h"
@@ -76,7 +75,6 @@ const int kFeeInGroth_Fork1 = 100;
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
     Reactor::Ptr walletReactor;
-    NodeModel nodeModel;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
@@ -129,7 +127,12 @@ const int kFeeInGroth_Fork1 = 100;
 }
 
 -(void)loadRules{
+    if([Settings sharedManager].target == Masternet) {
+        Rules::get().pForks[1].m_Height = 199403;
+    }
+    
     Rules::get().UpdateChecksum();
+
     LOG_INFO() << "Rules signature";
 }
 
@@ -142,13 +145,6 @@ const int kFeeInGroth_Fork1 = 100;
 
 -(void)setWalletAddresses:(NSMutableArray<BMAddress *> *)walletAddresses {
     _walletAddresses = [NSMutableArray arrayWithArray:walletAddresses];
-//    
-//    BMAddress *last = walletAddresses.lastObject;
-//    if (last!=nil) {
-//        if ([last.label.lowercaseString isEqualToString:@"default"]) {
-//            last.isDefault = YES;
-//        }
-//    }
 }
 
 -(void)setIsRestoreFlow:(BOOL)isRestoreFlow {
@@ -394,10 +390,21 @@ const int kFeeInGroth_Fork1 = 100;
 }
     
 -(void)restore:(NSString*_Nonnull)path{
-    string recoveryPath = path.string;
-    
-    RecoveryProgress prog;
-    walletDb->ImportRecovery(recoveryPath, prog);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        string recoveryPath = path.string;
+        
+        RecoveryProgress prog;
+        
+        try{
+            walletDb->ImportRecovery(recoveryPath, prog);
+        }
+        catch (const std::exception& e) {
+            NSLog(@"ImportRecovery failed");
+        }
+        catch (...) {
+            NSLog(@"ImportRecovery failed");
+        }
+    }
 }
 
 bool OnProgress(uint64_t done, uint64_t total) {
@@ -512,11 +519,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
 #pragma mark - Updates
 
 -(void)getWalletStatus {
-    wallet->getAsync()->getWalletStatus();
+    if (wallet != nil)  {
+        wallet->getAsync()->getWalletStatus();
+    }
 }
 
 -(void)getNetworkStatus {
-    wallet->getAsync()->getNetworkStatus();
+    if (wallet != nil)  {
+        wallet->getAsync()->getNetworkStatus();
+    }
 }
 
 -(void)refreshAllInfo{
@@ -536,7 +547,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(void)didBecomeActiveNotification{
-    [self refreshAllInfo];
+    if([AppModel sharedManager].isLoggedin)
+    {
+        [self refreshAllInfo];
+    }
 }
 
 #pragma mark - Addresses
@@ -582,10 +596,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     {
         return NO;
     }
-    else if (address.length == 0)
+    else if (address.length < 60)
     {
         return NO;
     }
+        
     WalletID walletID(Zero);
     return walletID.FromHex(address.string);
 }
@@ -630,7 +645,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
             
             if ([wAddress isEqualToString:address])
             {
-                wallet->getAsync()->saveAddressChanges(walletID, addresses[i].m_label, (hours == 0 ? true : false), true, false);
+                
+                try{
+                    wallet->getAsync()->saveAddressChanges(walletID, addresses[i].m_label, (hours == 0 ? true : false), true, false);
+                }
+                catch (const std::exception& e) {
+                    NSLog(@"setExpires failed");
+                }
+                catch (...) {
+                    NSLog(@"setExpires failed");
+                }
                 
                 break;
             }
@@ -678,8 +702,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
             
             if ([wAddress isEqualToString:address])
             {
-                wallet->getAsync()->saveAddressChanges(walletID, comment.string, (addresses[i].m_duration == 0 ? true : false), true, false);
-
+                try{
+                    wallet->getAsync()->saveAddressChanges(walletID, comment.string, (addresses[i].m_duration == 0 ? true : false), true, false);
+                }
+                catch (const std::exception& e) {
+                    NSLog(@"setExpires failed");
+                }
+                catch (...) {
+                    NSLog(@"setExpires failed");
+                }
+                
                 break;
             }
         }
@@ -1036,8 +1068,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate {
     [_delegates compact];
-
-
     
     void * objPtr = (__bridge void *)delegate;
     [_delegates addPointer:objPtr];
@@ -1527,7 +1557,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(void)getUTXO {
-    wallet->getAsync()->getUtxosStatus();
+    if (wallet != nil)  {
+        wallet->getAsync()->getUtxosStatus();
+    }
 }
 
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromUTXO:(BMUTXO*_Nonnull)utox {
@@ -1703,7 +1735,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
 #pragma mark - Fork
 
 -(BOOL)isFork {
-    return walletDb->getCurrentHeight() >= Rules::get().pForks[1].m_Height;
+    BOOL isFork = walletDb->getCurrentHeight() >= Rules::get().pForks[1].m_Height;
+    return isFork;
 }
 
 -(int)getDefaultFeeInGroth {
@@ -1712,6 +1745,27 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(int)getMinFeeInGroth {
     return [self isFork] ? kFeeInGroth_Fork1 : 0;
+}
+
+-(BOOL)isNodeInSync {
+    Block::SystemState::Full sTip;
+    walletDb->get_History().get_Tip(sTip);
+    BOOL isSync =  IsValidTimeStamp(sTip.m_TimeStamp);
+    return isSync;
+}
+
+bool IsValidTimeStamp(Timestamp currentBlockTime_s)
+{
+    Timestamp currentTime_s = getTimestamp();
+    const Timestamp tolerance_s = 60 * 10; // 10 minutes tolerance.
+    currentBlockTime_s += tolerance_s;
+    
+    if (currentTime_s > currentBlockTime_s)
+    {
+        LOG_INFO() << "It seems that node is not up to date";
+        return false;
+    }
+    return true;
 }
 
 @end

@@ -71,7 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         
-        
+        CrowdinManager.updateLocalizations()
+
         return true
     }
     
@@ -128,8 +129,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-
-        CrowdinManager.updateLocalizations()
         
         NotificationManager.sharedManager.clearNotifications()
                 

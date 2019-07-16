@@ -132,5 +132,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Provide gallery access to select QR code</string>
 </dict>
 </plist>

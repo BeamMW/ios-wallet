@@ -85,7 +85,7 @@ extension UITableView {
         return nil
     }
     
-    public func reloadRow(_ row: AnyClass) {
+    public func reloadRow(_ row: AnyClass, animated:Bool = true) {
         
         for cell in visibleCells {
             
@@ -93,7 +93,7 @@ extension UITableView {
                 
                 if let path = indexPath(for: cell) {
                     
-                    reloadRows(at: [path], with: .fade)
+                    reloadRows(at: [path], with: (animated ? .fade : .none))
                     
                     return
                 }

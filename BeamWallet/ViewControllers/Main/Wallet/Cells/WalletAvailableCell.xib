@@ -30,6 +30,13 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ja7-ld-PUy">
                         <rect key="frame" x="15" y="15" width="290" height="144.5"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nd2-Bd-eXV">
+                                <rect key="frame" x="0.0" y="0.0" width="290" height="144.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="onExpandWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="YNI-BY-cfD"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofI-XE-xgr">
                                 <rect key="frame" x="15" y="15" width="72" height="21"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
@@ -96,7 +103,10 @@
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="zFZ-o9-rOz" secondAttribute="trailing" constant="15" id="1Su-YQ-hqR"/>
+                            <constraint firstItem="Nd2-Bd-eXV" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" id="6kk-xU-d7F"/>
                             <constraint firstItem="Waa-sj-vTH" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="8UV-2b-Ucw"/>
+                            <constraint firstAttribute="bottom" secondItem="Nd2-Bd-eXV" secondAttribute="bottom" id="9da-kH-70W"/>
+                            <constraint firstAttribute="trailing" secondItem="Nd2-Bd-eXV" secondAttribute="trailing" id="Abg-je-ysI"/>
                             <constraint firstItem="my0-E8-0Dz" firstAttribute="leading" secondItem="Waa-sj-vTH" secondAttribute="trailing" constant="10" id="DOn-lL-i72"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="top" secondItem="ofI-XE-xgr" secondAttribute="bottom" constant="16" id="Fb1-qc-d6d"/>
                             <constraint firstItem="ure-WQ-qNv" firstAttribute="leading" secondItem="my0-E8-0Dz" secondAttribute="trailing" constant="5" id="GDm-qu-tep"/>
@@ -114,6 +124,7 @@
                             <constraint firstItem="ure-WQ-qNv" firstAttribute="top" secondItem="rsW-sA-dfC" secondAttribute="bottom" constant="26" id="t1c-gb-NqG"/>
                             <constraint firstItem="rsW-sA-dfC" firstAttribute="leading" secondItem="kO1-i9-9f4" secondAttribute="trailing" constant="10" id="taI-Dc-fJe"/>
                             <constraint firstItem="W82-H2-7nu" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="59" id="tlV-0q-VQt"/>
+                            <constraint firstItem="Nd2-Bd-eXV" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" id="x7W-oC-5KP"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

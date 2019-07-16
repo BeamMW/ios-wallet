@@ -75,5 +75,6 @@ typedef enum Target : NSUInteger {
 
 -(NSString*_Nonnull)languageName;
 -(NSArray <BMLanguage*> * _Nonnull)languages;
+-(NSString*_Nonnull)shortLanguageName;
 
 @end

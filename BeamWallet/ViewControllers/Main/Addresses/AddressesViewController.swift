@@ -52,12 +52,14 @@ class AddressesViewController: BaseTableViewController {
             registerForPreviewing(with: self, sourceView: tableView)
         }
         
-        header.lineColor = UIColor.main.peacockBlue
+        header.lineColor = UIColor.main.brightTeal
         header.selectedIndex = viewModel.selectedState.rawValue
         header.delegate = self
         view.insertSubview(header, at: 0)
         
         subscribeToChages()
+        
+        addRightButton(image: IconAdd(), target: self, selector: #selector(onAddContact))
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,6 +68,12 @@ class AddressesViewController: BaseTableViewController {
         header.y = tableView.y - 5
         tableView.y = header.y + header.h
         tableView.h = self.view.h - tableView.y
+    }
+    
+    @objc private func onAddContact() {
+        let vc = SaveContactViewController(address: nil)
+        vc.isGradient = false
+        pushViewController(vc: vc)
     }
     
     private func subscribeToChages() {

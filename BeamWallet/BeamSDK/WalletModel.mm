@@ -240,7 +240,7 @@ void WalletModel::onChangeCalculated(beam::Amount change)
 
 void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
 {
-  //  NSLog(@"onAllUtxoChanged");
+    NSLog(@"onAllUtxoChanged");
     
     NSMutableArray *bmUtxos = [[NSMutableArray alloc] init];
     

@@ -30,6 +30,8 @@ class BackgroundDownloader: NSObject {
     private var destinationURLForFile:URL!
     private var task:URLSessionDownloadTask?
     
+    private var start = Date.timeIntervalSinceReferenceDate;
+
     public func startDownloading(_ url:URL, _ destinationUrl:URL) {
         
         if FileManager.default.fileExists(atPath: destinationUrl.path)
@@ -44,9 +46,11 @@ class BackgroundDownloader: NSObject {
         
         self.destinationURLForFile =  destinationUrl
         
-        let config = URLSessionConfiguration.background(withIdentifier: "com.beam.background")
+        let config = URLSessionConfiguration.background(withIdentifier: "com.beam.background" + url.lastPathComponent)
 
         let session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue())
+
+        start = Date.timeIntervalSinceReferenceDate
 
         task = session.downloadTask(with: url)
         task?.resume()
@@ -61,9 +65,21 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         if totalBytesExpectedToWrite > 0 {
+            
             let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-            print("Progress \(downloadTask) \(progress)")
+         //   print("Progress \(downloadTask) \(progress)")
             onProgress?(progress, nil, nil)
+            
+            let speed = Double(totalBytesWritten) / Double((Date.timeIntervalSinceReferenceDate - self.start))
+            
+            if speed > 0 {
+                let sizeLeft = Double(totalBytesExpectedToWrite-totalBytesWritten)
+                let timeLeft = sizeLeft / speed
+                
+                print("-----------")
+                print(timeLeft.asTime(style: .abbreviated))
+                print("-----------")
+            }
         }
     }
     

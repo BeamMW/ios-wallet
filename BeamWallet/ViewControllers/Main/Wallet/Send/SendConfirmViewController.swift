@@ -156,6 +156,7 @@ class SendConfirmViewController: BaseTableViewController {
                     controllers.removeLast()
                     
                     let vc = SaveContactViewController(address: strongSelf.viewModel.toAddress)
+                    vc.isGradient = true
                     controllers.append(vc)
                     strongSelf.navigationController?.setViewControllers(controllers, animated: true)
                 }

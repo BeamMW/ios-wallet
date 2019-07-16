@@ -68,9 +68,11 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="6RO-3T-iSb"/>
             <connections>
+                <outlet property="bottomOffset" destination="Hvv-hU-ja0" id="eBz-GZ-vB8"/>
                 <outlet property="iconView" destination="ia7-WP-GIR" id="uRS-yi-pLy"/>
                 <outlet property="mainView" destination="Sui-Fo-Yjq" id="Kvc-t1-3J9"/>
                 <outlet property="titleLabel" destination="XQI-Ol-7U0" id="sjb-4P-cOE"/>
+                <outlet property="topOffset" destination="Hyl-Fw-cn8" id="ahk-y2-cWH"/>
             </connections>
             <point key="canvasLocation" x="52.173913043478265" y="100.78125"/>
         </tableViewCell>

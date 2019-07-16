@@ -122,7 +122,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
         
         DispatchQueue.main.async {
-            if done != total {
+            if done != total  {
                 self.indicatorView.color = UIColor.main.green
                 self.indicatorView.startAnimating()
                 

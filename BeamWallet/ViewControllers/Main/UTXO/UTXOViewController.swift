@@ -53,7 +53,7 @@ class UTXOViewController: BaseTableViewController {
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
         view.addSubview(hideUTXOView)
 
-        header.lineColor = UIColor.main.peacockBlue
+        header.lineColor = UIColor.main.brightTeal
         header.selectedIndex = viewModel.selectedState.rawValue
         header.delegate = self
         

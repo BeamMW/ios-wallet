@@ -21,6 +21,8 @@ import UIKit
 
 class WalletViewController: BaseTableViewController {
 
+    private var isNeedUpdatingReload = true
+
     private var expandAvailable = true
     private var expandProgress = true
   
@@ -140,34 +142,29 @@ class WalletViewController: BaseTableViewController {
         viewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
 
-            if AppModel.sharedManager().isUpdating {
-                
-                if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
-                    cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus))
-                }
-                
-                if let cell = strongSelf.tableView.findCell(WalletProgressCell.self) as? WalletProgressCell {
-                    cell.configure(with: (expand: strongSelf.expandProgress, status: AppModel.sharedManager().walletStatus))
-                }
+            UIView.performWithoutAnimation {
+                strongSelf.tableView.stopRefreshing()
+                strongSelf.tableView.reloadData()
             }
-            else{
-                UIView.performWithoutAnimation {
-                    strongSelf.tableView.stopRefreshing()
-                    strongSelf.tableView.reloadData()
-                }
-            }
-
         }
         
         viewModel.onDataDeleted = { [weak self]
             indexPath, transaction in
             
-            if let path = indexPath {
-                self?.tableView.performUpdate({
-                    self?.tableView.deleteRows(at: [path], with: .left)
-                }, completion: {
-                    AppModel.sharedManager().prepareDeleteTransaction(transaction)
-                })
+            guard let strongSelf = self else { return }
+
+            if strongSelf.viewModel.transactions.count == 0 {
+                strongSelf.tableView.reloadData()
+                AppModel.sharedManager().prepareDeleteTransaction(transaction)
+            }
+            else{
+                if let path = indexPath {
+                    strongSelf.tableView.performUpdate({
+                        strongSelf.tableView.deleteRows(at: [path], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDeleteTransaction(transaction)
+                    })
+                }
             }
         }
         
@@ -184,11 +181,32 @@ class WalletViewController: BaseTableViewController {
         }
         
         statusViewModel.onDataChanged = { [weak self] in
-            self?.tableView.reloadData()
+            
+            guard let strongSelf = self else { return }
+
+            if AppModel.sharedManager().isUpdating {
+                
+                if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
+                    cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus))
+                }
+                
+                if let cell = strongSelf.tableView.findCell(WalletProgressCell.self) as? WalletProgressCell {
+                    cell.configure(with: (expand: strongSelf.expandProgress, status: AppModel.sharedManager().walletStatus))
+                }
+                
+                if strongSelf.isNeedUpdatingReload {
+                    strongSelf.isNeedUpdatingReload = false
+                    strongSelf.tableView.reloadData()
+                }
+            }
+            else{
+                UIView.performWithoutAnimation {
+                    strongSelf.tableView.stopRefreshing()
+                    strongSelf.tableView.reloadData()
+                }
+            }
         }
     }
-
-
     
     @objc private func refreshData(_ sender: Any) {
        AppModel.sharedManager().getWalletStatus()

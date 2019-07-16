@@ -115,7 +115,12 @@ static NSString *languageKey = @"languageKey";
         _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
     }
     else{
-        _nodeAddress = [AppModel chooseRandomNode];
+        if (self.target == Masternet) {
+            _nodeAddress = @"eu-node01.masternet.beam.mw:8100";
+        }
+        else{
+            _nodeAddress = [AppModel chooseRandomNode];
+        }
     }
     
     if (self.target == Testnet)
@@ -390,7 +395,15 @@ static NSString *languageKey = @"languageKey";
     return @"English";
 }
 
-
+-(NSString*_Nonnull)shortLanguageName {
+    for (BMLanguage *lang in [self languages]) {
+        if ([lang.code isEqualToString:_language]) {
+            return [[lang.localName substringToIndex:2] uppercaseString];
+        }
+    }
+    
+    return @"EN";
+}
 
 #pragma mark - Delegates
 

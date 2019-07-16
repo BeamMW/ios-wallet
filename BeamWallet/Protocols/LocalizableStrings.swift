@@ -357,7 +357,14 @@ class LocalizableStrings : NSObject {
     var paste_owner_key = "paste_owner_key".localized
     var after_paste_owner_key = "after_paste_owner_key".localized
     var owner_key = "owner_key".localized
-
+    var new_transaction = "new_transaction".localized
+    var click_to_receive = "click_to_receive".localized
+    var album = "album".localized
+    var beam_title = "beam_title".localized
+    var add_contact = "add_contact".localized
+    var address_already_exist_1 = "address_already_exist_1".localized
+    var address_already_exist_2 = "address_already_exist_2".localized
+    
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
 

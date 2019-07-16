@@ -386,5 +386,9 @@
 "enter_trusted_node" = "Enter trusted node address";
 "trusted_node_error" = "Node isn’t connectable. Try connect wallet to different node or use recommended restore.";
 "owner_key" = "Owner key";
-
-
+"new_transaction" = "Incoming transaction";
+"click_to_receive" = "Click to receive Beam";
+"album" = "Album";
+"add_contact" = "Add contact";
+"address_already_exist_1" = "This address already exists";
+"address_already_exist_2" = "You can't save your address.\nThis address already exists";

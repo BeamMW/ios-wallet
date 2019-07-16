@@ -25,6 +25,9 @@ class BMEmptyCell: BaseCell {
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var iconView: UIImageView!
 
+    @IBOutlet weak private var topOffset: NSLayoutConstraint!
+    @IBOutlet weak private var bottomOffset: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -34,6 +37,11 @@ class BMEmptyCell: BaseCell {
         selectionStyle = .none
         
         isUserInteractionEnabled = false
+        
+        if Device.isLarge {
+            topOffset.constant = 100
+            bottomOffset.constant = 50
+        }
     }
 }
 

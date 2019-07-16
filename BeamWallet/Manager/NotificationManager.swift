@@ -223,11 +223,8 @@ class NotificationManager : NSObject {
     
     public func scheduleNotification(transaction:BMTransaction){
         if transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending {
-            NotificationManager.sharedManager.scheduleNotification(title: "Incoming transaction", body: "Click to receive Beam", id:transaction.id)
+            NotificationManager.sharedManager.scheduleNotification(title: Localizable.shared.strings.new_transaction, body: Localizable.shared.strings.click_to_receive, id:transaction.id)
         }
-        //        else if transaction.enumStatus == BMTransactionStatusCompleted || transaction.enumStatus == BMTransactionStatusFailed {
-        //            NotificationManager.sharedManager.scheduleNotification(title: "Transaction status update", body: "Сlick to view details", id:transaction.id)
-        //        }
     }
     
     public func sendFirebaseNotification(topic:String) {

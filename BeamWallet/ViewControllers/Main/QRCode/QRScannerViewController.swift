@@ -38,48 +38,34 @@ class QRScannerViewController: BaseViewController {
     weak var delegate: QRScannerViewControllerDelegate?
     
     @IBOutlet private weak var scannerView: UIView!
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var titleLabelY: NSLayoutConstraint!
 
     private var captureSession: AVCaptureSession!
     private var previewLayer: AVCaptureVideoPreviewLayer!
 
-    private var offset:CGFloat = 140
+    private var offset:CGFloat = 120
     private var scannedValue:String = ""
     
     public var scanType = ScanType.beam
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isGradient {
-            titleLabelY.constant = 80
-            titleLabel.text = titleLabel.text?.uppercased()
-            titleLabel.letterSpacing = 1.5
-            
-            offset = 180
-            
-            setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
-        }
-        
-        switch scanType {
-        case .tg_bot:
-            title = Localizable.shared.strings.scan_tg_qr_code
-        case .bitcoin:
-            title = Localizable.shared.strings.scan_qr_code
-            titleLabel.text = Localizable.shared.strings.scan_btc_qr_code.uppercased()
-        case .litecoin:
-            title = Localizable.shared.strings.scan_qr_code
-            titleLabel.text = Localizable.shared.strings.scan_ltc_qr_code.uppercased()
-        case .ethereum:
-            title = Localizable.shared.strings.scan_qr_code
-            titleLabel.text = Localizable.shared.strings.scan_eth_qr_code.uppercased()
-        default:
-            title = Localizable.shared.strings.scan_qr_code
-            titleLabel.text = Localizable.shared.strings.scan_receiver_qr_code.uppercased()
-        }
+        isGradient = false
         
         scannerView.frame = CGRect(x: 0, y: offset, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-offset)
+        
+        title = Localizable.shared.strings.scan_qr_code
+        
+        addRightButton(title:Localizable.shared.strings.album, target: self, selector: #selector(onAlbum), enabled: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +80,15 @@ class QRScannerViewController: BaseViewController {
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
+    }
+    
+    @objc private func onAlbum() {
+        let pickerController = UIImagePickerController()
+        pickerController.delegate = self
+        pickerController.allowsEditing = false
+        pickerController.mediaTypes = ["public.image"]
+        pickerController.sourceType = .savedPhotosAlbum
+        present(pickerController, animated: true, completion: nil)
     }
     
     private func initSession() {
@@ -169,16 +164,17 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func showError() {
-        BMToast.show(text: Localizable.shared.strings.error_scan_qr_code)
+        BMToast.show(text: Localizable.shared.strings.error_scan_qr_code, shadow: false)
       
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.scannedValue = ""
         }
     }
     
+    
     private func getBarCodeData(code: String) {
         
-        if (scannedValue.isEmpty)
+        if (scannedValue.isEmpty && !code.isEmpty)
         {
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
 
@@ -326,6 +322,39 @@ extension QRScannerViewController {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: { (_ ) in
                 self.back()
             })
+        }
+    }
+}
+
+extension QRScannerViewController: UINavigationControllerDelegate {
+
+}
+
+extension QRScannerViewController: UIImagePickerControllerDelegate {
+    
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    public func imagePickerController(_ picker: UIImagePickerController,
+                                      didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        
+        picker.dismiss(animated: true) {
+            guard let image = info[.originalImage] as? UIImage else {
+                return;
+            }
+            
+            if let features = self.detectQRCode(image) {
+                if features.count != 1 {
+                    self.showError()
+                }
+                else {
+                    for case let row as CIQRCodeFeature in features {
+                        self.getBarCodeData(code: row.messageString ?? String.empty())
+                        break
+                    }
+                }
+            }
         }
     }
 }

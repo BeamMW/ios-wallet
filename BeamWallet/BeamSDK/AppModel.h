@@ -190,5 +190,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isFork;
 -(int)getDefaultFeeInGroth;
 -(int)getMinFeeInGroth;
+-(BOOL)isNodeInSync;
 
 @end

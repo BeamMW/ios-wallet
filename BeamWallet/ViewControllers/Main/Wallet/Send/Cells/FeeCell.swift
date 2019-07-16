@@ -22,6 +22,7 @@ import UIKit
 class FeeCell: BaseCell {
 
     @IBOutlet weak private var valueLabel: UILabel!
+    @IBOutlet weak private var minLabel: UILabel!
     @IBOutlet weak private var maxLabel: UILabel!
     @IBOutlet weak private var feeSlider: BMSlider!
     @IBOutlet weak private var mainView: UIView!
@@ -34,13 +35,10 @@ class FeeCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
-        
         if traitCollection.forceTouchCapability != .available {
             let longPress = UILongPressGestureRecognizer(target: self, action: #selector(showPicker))
             longPress.minimumPressDuration = 1
             mainView.addGestureRecognizer(longPress)
-
         }
         
         feeSlider.maximumTrackTintColor = UIColor.main.marineThree
@@ -49,6 +47,10 @@ class FeeCell: BaseCell {
         feeSlider.setThumbImage(SliderDot(), for: .highlighted)
         feeSlider.maximumTrackTintColor = UIColor.main.marineThree
         feeSlider.minimumValue = Float(AppModel.sharedManager().getMinFeeInGroth())
+
+        minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
+       
+        titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
 
         selectionStyle = .none
         

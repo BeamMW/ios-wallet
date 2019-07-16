@@ -44,6 +44,9 @@
                                         </constraints>
                                         <state key="normal" image="icnCheckmarkEmpty"/>
                                         <state key="selected" image="icnCheckmarkFull"/>
+                                        <connections>
+                                            <action selector="onCheckWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="lbY-vi-XF4"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UQh-vR-32J">
                                         <rect key="frame" x="37" y="0.0" width="250" height="77.5"/>

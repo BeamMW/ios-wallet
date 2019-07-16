@@ -233,3 +233,15 @@ func IconNextBlue() -> UIImage? {
     return UIImage(named: "iconNextBlue")
 }
 
+func IconCheckmarkEmpty() -> UIImage? {
+    return UIImage(named: "icnCheckmarkEmpty")
+}
+
+func IconCheckmarkFull() -> UIImage? {
+    return UIImage(named: "icnCheckmarkFull")
+}
+
+func IconAdd() -> UIImage? {
+    return UIImage(named: "icnAdd")
+}
+
