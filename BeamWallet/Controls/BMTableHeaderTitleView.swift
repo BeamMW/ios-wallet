@@ -25,9 +25,17 @@ class BMTableHeaderTitleView: UIView {
     static let height:CGFloat = 50
     static let boldHeight:CGFloat = 60
 
-    private var titleLabel:UILabel!
+    public var titleLabel:UILabel!
 
-        
+    public var isCenter = false {
+        didSet {
+            if isCenter {
+                titleLabel.y = 0
+                titleLabel.h = self.h
+            }
+        }
+    }
+    
     init(title:String, bold:Bool) {
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: bold ? BMTableHeaderTitleView.boldHeight : BMTableHeaderTitleView.height))
         

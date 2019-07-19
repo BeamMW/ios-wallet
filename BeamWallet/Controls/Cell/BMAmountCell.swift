@@ -27,22 +27,9 @@ class BMAmountCell: BaseCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var currencyLabel: UILabel!
    
-    //@IBOutlet weak private var infoLabel: UILabel?
-
     public var fee:Double = 0
     
     public var info:String?
-//    {
-//        didSet{
-//            if info == nil {
-//                infoLabel.isHidden = true
-//            }
-//            else{
-//                infoLabel.isHidden = false
-//                infoLabel.text = info
-//            }
-//        }
-//    }
     
     public var error:String?
     {
@@ -87,6 +74,8 @@ class BMAmountCell: BaseCell {
         super.awakeFromNib()
         
         selectionStyle = .none
+        
+        textField.statusDelegate = self
         
         currencyLabel.isUserInteractionEnabled = false
         currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCurrency(_:))))
@@ -160,14 +149,20 @@ extension BMAmountCell : UITextFieldDelegate {
             return false
         }
         
-        self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
-
         if string == String.coma() {
             textField.text = txtAfterUpdate
             return false
         }
         
+        self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
+
         return true
+    }
+}
+
+extension BMAmountCell : BMFieldStatusProtocol {
+    func didChangeStatus() {
+        self.delegate?.textValueDidChange?(self, textField.text ?? String.empty(), true)
     }
 }
 

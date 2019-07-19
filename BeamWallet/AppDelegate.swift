@@ -37,7 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var completionHandler: ((UIBackgroundFetchResult) -> Void)?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-            
+        
+//        let defaultClearButton = UIButton.appearance(whenContainedInInstancesOf: [UITextField.self])
+//        defaultClearButton.setBackgroundImage(ClearIcon(), for: .normal)
+//        defaultClearButton.setBackgroundImage(ClearIcon(), for: .highlighted)
+
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
 
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)

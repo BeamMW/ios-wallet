@@ -66,24 +66,23 @@ class CategoryPickerViewController: BaseTableViewController {
         }
     }
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isGradient {
-            var mainColor = UIColor.main.brightSkyBlue
-            
-            if let viewControllers = self.navigationController?.viewControllers{
-                for vc in viewControllers {
-                    if vc is SendViewController {
-                        mainColor = UIColor.main.heliotrope
-                    }
-                }
-            }
-            
-            setGradientTopBar(mainColor: mainColor, addedStatusView: false)
-        }
- 
-        title = Localizable.shared.strings.category
+        isGradient = true
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+
+        title = Localizable.shared.strings.categories
 
         addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
@@ -94,9 +93,16 @@ class CategoryPickerViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.register(CategoryPickerCell.self)
         tableView.register(BMEmptyCell.self)
         tableView.tableFooterView = footerView
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
     
     @objc private func onSave(sender:UIBarButtonItem) {

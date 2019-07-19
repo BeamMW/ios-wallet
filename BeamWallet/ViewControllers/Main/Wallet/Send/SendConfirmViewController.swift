@@ -24,7 +24,9 @@ class ConfirmItem {
     public var detail:String?
     public var detailFont:UIFont?
     public var detailColor:UIColor?
-
+    public var detailAttributedString:NSMutableAttributedString?
+    public var canCopy = false
+    
     required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
         self.title = title
         self.detail = detail
@@ -36,7 +38,7 @@ class ConfirmItem {
 class SendConfirmViewController: BaseTableViewController {
 
     private lazy var footerView: UIView = {
-        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 95))
+        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
         
         var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope)
         sendButton.setImage(IconSendBlue(), for: .normal)
@@ -51,8 +53,6 @@ class SendConfirmViewController: BaseTableViewController {
     }()
     
     private var items = [ConfirmItem]()
-    private var password:String?
-    private var passwordError:String?
     
     private var viewModel:SendTransactionViewModel!
     
@@ -93,47 +93,22 @@ class SendConfirmViewController: BaseTableViewController {
         tableView.tableFooterView = footerView
     }
     
-    @objc private func onTouchId() {
-        if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
-            
-            BiometricAuthorization.shared.authenticateWithBioMetrics(success: { [weak self] in
-                guard let strongSelf = self else { return }
-                if KeychainManager.getPassword() != nil {
-                    strongSelf.askForSaveContact()
-                }
-                
-            }, failure: {
-            }, retry: {
-            })
-        }
-    }
-     
+    
     @objc private func onNext() {
         view.endEditing(true)
         
         if Settings.sharedManager().isNeedaskPasswordForSend {
-            if let pass = password {
-                if pass.isEmpty {
-                    passwordError = Localizable.shared.strings.empty_password
-                    tableView.reloadData()
-                    tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
-                }
-                else if(AppModel.sharedManager().isValidPassword(pass) == false) {
-                    passwordError = Localizable.shared.strings.incorrect_password
-                    tableView.reloadData()
-                    tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
-                    return
-                }
+            let modalViewController = SendPasswordViewController()
+            modalViewController.completion = { [weak self] obj in
+                self?.askForSaveContact()
             }
-            else{
-                passwordError = Localizable.shared.strings.empty_password
-                tableView.reloadData()
-                tableView.scrollToRow(at: IndexPath(row: 0, section: items.count), at: .bottom, animated: true)
-                return
-            }
+            modalViewController.modalPresentationStyle = .overFullScreen
+            modalViewController.modalTransitionStyle = .crossDissolve
+            self.present(modalViewController, animated: true, completion: nil)
         }
-        
-        askForSaveContact()
+        else{
+            askForSaveContact()
+        }
     }
     
     private func askForSaveContact() {
@@ -215,7 +190,7 @@ extension SendConfirmViewController : UITableViewDelegate {
 extension SendConfirmViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return items.count + (Settings.sharedManager().isNeedaskPasswordForSend ? 1 : 0)
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -224,53 +199,11 @@ extension SendConfirmViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == items.count {
-            var icon = (BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric && Settings.sharedManager().isNeedaskPasswordForSend) ? IconTouchid() : nil
-            
-            if icon != nil {
-                if BiometricAuthorization.shared.faceIDAvailable()  {
-                    icon = IconFaceId()
-                }
-            }
-            
-            let cell = tableView
-                .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.enter_password_title.uppercased(), value: password ?? "", rightIcon:icon))
-            cell.delegate = self
-            cell.error = passwordError
-            cell.isSecure = true
-            
-            return cell
-        }
-        else{
-            let cell =  tableView
-                .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
-                .configured(with: items[indexPath.section])
-            
-            return cell
-        }
-    }
-}
-
-extension SendConfirmViewController : BMCellProtocol {
-    
-    func onRightButton(_ sender: UITableViewCell) {
-        self.onTouchId()
-    }
-    
-    func textValueDidBegin(_ sender: UITableViewCell) {
-        if let path = tableView.indexPath(for: sender)  {
-            tableView.scrollToRow(at: path, at: .middle, animated: true)
-        }
-    }
-    
-    func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
-        password = text
+        let cell =  tableView
+            .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
+            .configured(with: items[indexPath.section])
         
-        UIView.performWithoutAnimation {
-            tableView.beginUpdates()
-            tableView.endUpdates()
-        }
+        return cell
     }
 }
 

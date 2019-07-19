@@ -52,7 +52,13 @@
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
 
     NSDateFormatter *f = [NSDateFormatter new];
-    [f setDateFormat:@"dd MMM"];
+    
+    if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+        [f setDateFormat:@"MMM dd"];
+    }
+    else{
+        [f setDateFormat:@"dd MMM"];
+    }
     [f setLocale:locale];
 
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
@@ -64,7 +70,14 @@
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
 
     NSDateFormatter *f = [NSDateFormatter new];
-    [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+    
+    if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+        [f setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+    }
+    else{
+        [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+    }
+    
     [f setLocale:locale];
 
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];

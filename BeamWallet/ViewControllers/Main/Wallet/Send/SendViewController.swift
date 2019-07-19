@@ -19,28 +19,16 @@
 
 
 import UIKit
+import Parchment
 
 class SendViewController: BaseTableViewController {
 
-    private lazy var searchTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = UIColor.main.marine
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.isHidden = true
-        return tableView
-    }()
-    
     private var isSearch = false {
         didSet {
             tableView.isScrollEnabled = !isSearch
-            searchTableView.isHidden = !isSearch
+            pagingViewController.view.isHidden = !isSearch
             
-            let rect = self.tableView.rectForRow(at: IndexPath(row: 0, section: 0))
-            let y:CGFloat = navigationBarOffset + rect.size.height + 20
-            
-            searchTableView.frame = CGRect(x: 0, y: y, width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+            layoutSearchTableView()
         }
     }
     
@@ -76,37 +64,52 @@ class SendViewController: BaseTableViewController {
     
     private var showAdvanced = false
     private var showEdit = false
-        
+    
+    private let pagingViewController = BMPagingViewController()
+    private var titles = [Localizable.shared.strings.contacts, Localizable.shared.strings.my_active_addresses]
+    private var searchControlles = [SearchTableView(),SearchTableView()]
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let repeatTransaction = transaction {
             viewModel.transaction = repeatTransaction
         }
-                
-        isGradient = true
         
-        setGradientTopBar(mainColor: UIColor.main.heliotrope)
-        
-        title = Localizable.shared.strings.send.uppercased()
-        
-        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
-
         tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, AddressCell.self, BMPickedAddressCell.self])
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
         
-        searchTableView.register([AddressCell.self, BMEmptyCell.self])
-        searchTableView.keyboardDismissMode = .interactive        
-        view.addSubview(searchTableView)
-        
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: tableView)
-        }
-    }
+        let pagingView = pagingViewController.view as! PagingView
+        pagingView.options.indicatorColor = UIColor.main.heliotrope
+        pagingView.options.menuItemSpacing = 30
+        pagingView.options.menuInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
 
+        pagingViewController.view.backgroundColor = view.backgroundColor
+        pagingViewController.view.isHidden = true
+        addChild(pagingViewController)
+        view.addSubview(pagingViewController.view)
+        pagingViewController.didMove(toParent: self)
+        
+        pagingViewController.dataSource = self
+        pagingViewController.delegate = self
+        
+        isGradient = true
+        setGradientTopBar(mainColor: UIColor.main.heliotrope)
+        
+        title = Localizable.shared.strings.send.uppercased()
+        
+        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        layoutSearchTableView()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -140,6 +143,13 @@ class SendViewController: BaseTableViewController {
         }
     }
     
+    private func layoutSearchTableView () {
+        let rect = self.tableView.rectForRow(at: IndexPath(row: 0, section: 0))
+        let y:CGFloat = navigationBarOffset + rect.size.height + 20
+        
+        pagingViewController.view.frame = CGRect(x: 0, y: y, width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+    }
+    
     private func didSelectAddress(value:String) {
         isSearch = false
         
@@ -171,25 +181,12 @@ class SendViewController: BaseTableViewController {
 extension SendViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        if tableView == searchTableView {
-            let header = BMSegmentView.init(segments: [Localizable.shared.strings.contacts, Localizable.shared.strings.my_active_addresses])
-            header.selectedIndex = viewModel.selectedSearchIndex
-            header.delegate = self
-            return header
-        }
-        
         let view = UIView()
         view.backgroundColor = (section == 5 || section == 6 || section == 7) ?  UIColor.main.marineThree : UIColor.clear
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        if tableView == searchTableView {
-            return BMSegmentView.height
-        }
-        
         switch section {
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 30
@@ -201,10 +198,7 @@ extension SendViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == searchTableView {
-            return UITableView.automaticDimension
-        }
-        else if indexPath.section == 6 {
+        if indexPath.section == 6 {
             if indexPath.row == 2 || indexPath.row == 3 {
                 return 60
             }
@@ -218,11 +212,7 @@ extension SendViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if tableView == searchTableView && viewModel.contacts.count > 0 {
-            viewModel.selectedContact = viewModel.contacts[indexPath.row]
-            didSelectAddress(value: viewModel.contacts[indexPath.row].address.walletId)
-        }
-        else if indexPath.section == 6 {
+        if indexPath.section == 6 {
             switch indexPath.row {
             case 2:
                 self.onExpire()
@@ -239,20 +229,10 @@ extension SendViewController : UITableViewDelegate {
 extension SendViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        if tableView == searchTableView {
-            return 1
-        }
-        
         return (showAdvanced ? 8 : 5)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if tableView == searchTableView {
-            return viewModel.contacts.count == 0 ? 1 : viewModel.contacts.count
-        }
-        
         switch section {
         case 1:
             return (viewModel.sendAll ? 2 : 1)
@@ -268,23 +248,6 @@ extension SendViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if tableView == searchTableView {
-            if viewModel.contacts.count == 0 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: (text: (viewModel.selectedSearchIndex == 0 ? Localizable.shared.strings.contacts_empty : Localizable.shared.strings.addresses_empty), image: IconAddressbookEmpty()))
-                return cell
-            }
-            else {
-                let cell =  tableView
-                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-                cell.configure(with: (row: indexPath.row, address: viewModel.contacts[indexPath.row].address, displayTransaction: true, displayCategory: true))
-
-                return cell
-            }
-        }
-        
         switch indexPath.section {
         case 0:
             let cell = tableView
@@ -333,7 +296,7 @@ extension SendViewController : UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.comment, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.comment))
             cell.delegate = self
             return cell
         case 4:
@@ -380,7 +343,7 @@ extension SendViewController : UITableViewDataSource {
             else{
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20
@@ -406,8 +369,13 @@ extension SendViewController : BMCellProtocol {
             
             if path.section == 0 {
                 isSearch = true
-                viewModel.searchForContacts()
-                searchTableView.reloadData()
+           
+                searchControlles[0].contacts = viewModel.searchForContacts(searchIndex: 0)
+                searchControlles[1].contacts = viewModel.searchForContacts(searchIndex: 1)
+                
+                for vc in searchControlles {
+                    vc.reload()
+                }
             }
         }
     }
@@ -428,8 +396,13 @@ extension SendViewController : BMCellProtocol {
                 
                 if input {
                     isSearch = true
-                    viewModel.searchForContacts()
-                    searchTableView.reloadData()
+                    
+                    searchControlles[0].contacts = viewModel.searchForContacts(searchIndex: 0)
+                    searchControlles[1].contacts = viewModel.searchForContacts(searchIndex: 1)
+                    
+                    for vc in searchControlles {
+                        vc.reload()
+                    }
                 }
                 else{
                     isSearch = false
@@ -456,6 +429,9 @@ extension SendViewController : BMCellProtocol {
                 tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
             }
             tableView.endUpdates()
+            if isSearch {
+                layoutSearchTableView()
+            }
         }
     }
     
@@ -629,21 +605,6 @@ extension SendViewController : SettingsModelDelegate {
 
 extension SendViewController {
     
-    override func keyboardWillShow(_ notification: Notification) {
-        super.keyboardWillShow(notification)
-        
-        searchTableView.contentInset = tableView.contentInset
-    }
-    
-    override func keyboardWillHide(notification: NSNotification) {
-        super.keyboardWillHide(notification: notification)
-        
-        searchTableView.contentInset = tableView.contentInset
-    }
-}
-
-extension SendViewController {
-    
     private func onExpire() {
         let vc = AddressExpiresPickerViewController(duration: Int(viewModel.outgoindAdderss!.duration))
         vc.completion = { [weak self]
@@ -700,49 +661,42 @@ extension SendViewController {
     }
 }
 
-extension SendViewController : BMTableHeaderTitleViewDelegate {
-    func onDidSelectSegment(index: Int) {
-        viewModel.selectedSearchIndex = index
-        viewModel.searchForContacts()
-        searchTableView.reloadData()
+extension SendViewController: PagingViewControllerDelegate {
+    func pagingViewController<T>(
+        _ pagingViewController: PagingViewController<T>,
+        widthForPagingItem pagingItem: T,
+        isSelected: Bool) -> CGFloat? {
+        
+        let index = pagingItem as! PagingIndexItem
+        let title = index.title
+        let size = title.boundingWidth(with: BoldFont(size: 16))
+        return size + 20
     }
 }
 
-extension SendViewController : UIViewControllerPreviewingDelegate {
+extension SendViewController: PagingViewControllerDataSource {
     
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
         
-        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
-        
-        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
-        
-        if cell is FeeCell {
-            let modalViewController = InputFeePopover()
-            modalViewController.mainFee = viewModel.fee
-            modalViewController.hideBlur = true
-            modalViewController.completion = { [weak self]
-                (obj : String) -> Void in
-                
-                guard let strongSelf = self else { return }
-                
-                strongSelf.onDidChangeFee(value: Double(obj) ?? 0)
-                strongSelf.tableView.reloadData()
-            }
-                        
-            previewingContext.sourceRect = cell.frame
-            
-            return modalViewController
-        }
-        
-        return nil
+        searchControlles[index].view.backgroundColor = UIColor.clear
+        searchControlles[index].delegate = self
+        searchControlles[index].tableView.contentInset = tableView.contentInset
+
+        return searchControlles[index]
     }
     
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
-        viewControllerToCommit.modalPresentationStyle = .overFullScreen
-        viewControllerToCommit.modalTransitionStyle = .crossDissolve
-        (viewControllerToCommit as! InputFeePopover).showBlur()
-        
-        present(viewControllerToCommit, animated: true, completion: nil)
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, pagingItemForIndex index: Int) -> T {
+        return PagingIndexItem(index: index, title: titles[index].uppercased()) as! T
+    }
+    
+    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int{
+        return titles.count
+    }
+}
+
+extension SendViewController: SearchTableViewDelegate {
+    func didSelectContact(contact: BMContact) {
+        viewModel.selectedContact = contact
+        didSelectAddress(value: contact.address.walletId)
     }
 }

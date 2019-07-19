@@ -19,6 +19,7 @@
 
 import Foundation
 
-class UTXOSecurityView: UIView {
+class UTXOSecurityView: BaseView {
+    
     
 }

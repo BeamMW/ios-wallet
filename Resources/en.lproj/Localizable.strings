@@ -392,3 +392,8 @@
 "add_contact" = "Add contact";
 "address_already_exist_1" = "This address already exists";
 "address_already_exist_2" = "You can't save your address.\nThis address already exists";
+"confirm_transaction_1" = "Use Touch ID or enter your password to confirm transaction";
+"confirm_transaction_2" = "Use Face ID or enter your password to confirm transaction";
+"confirm_transaction_3" = "Enter your password to confirm transaction";
+"ok" = "OK";
+"transactions_list" = "Transactions list";

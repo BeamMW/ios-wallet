@@ -44,6 +44,17 @@ class AddressViewModel: NSObject {
         }
     }
     
+    public var allCount:Int {
+        get{
+            var count = 0
+            if let addresses = AppModel.sharedManager().walletAddresses {
+                count = count + addresses.count
+            }
+            count = count + AppModel.sharedManager().contacts.count
+            return count
+        }
+    }
+    
     public var address:BMAddress?
     
     public var category:BMCategory?
@@ -54,10 +65,6 @@ class AddressViewModel: NSObject {
     
     init(selected:AddressesSelectedState) {
         super.init()
-        
-        self.selectedState = selected
-        
-        self.filterAddresses()
         
         AppModel.sharedManager().addDelegate(self)
     }
@@ -87,22 +94,26 @@ class AddressViewModel: NSObject {
     }
         
     public func filterAddresses() {
-        switch selectedState {
-        case .active:
-            if let addresses = AppModel.sharedManager().walletAddresses {
-                self.addresses = addresses as! [BMAddress]
+        DispatchQueue.global(qos: .background).async {
+            switch self.selectedState {
+            case .active:
+                if let addresses = AppModel.sharedManager().walletAddresses {
+                    self.addresses = addresses as! [BMAddress]
+                }
+                self.addresses = self.addresses.filter { $0.isExpired() == false}
+            case .expired:
+                if let addresses = AppModel.sharedManager().walletAddresses {
+                    self.addresses = addresses as! [BMAddress]
+                }
+                self.addresses = self.addresses.filter { $0.isExpired() == true}
+            case .contacts:
+                self.contacts = AppModel.sharedManager().contacts as! [BMContact]
             }
-            self.addresses = self.addresses.filter { $0.isExpired() == false}
-        case .expired:
-            if let addresses = AppModel.sharedManager().walletAddresses {
-                self.addresses = addresses as! [BMAddress]
+            
+            DispatchQueue.main.async {
+                self.onDataChanged?()
             }
-            self.addresses = self.addresses.filter { $0.isExpired() == true}
-        case .contacts:
-            self.contacts = AppModel.sharedManager().contacts as! [BMContact]
         }
-        
-        self.onDataChanged?()
     }
     
     public func onDeleteAddress(address:BMAddress, indexPath:IndexPath?) {

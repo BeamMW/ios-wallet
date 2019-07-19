@@ -19,9 +19,9 @@ def shared_pods
     pod 'SSZipArchive'
     pod 'Firebase/Core'
     pod 'Firebase/Messaging'
-    pod 'LGSideMenuController'
     pod 'Moya'
     pod 'ReCaptcha'
+    pod 'Parchment'
 end
 
 def extension

@@ -1564,7 +1564,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromUTXO:(BMUTXO*_Nonnull)utox {
     NSMutableArray *result = [NSMutableArray array];
-    for (BMTransaction *tr in self.transactions)
+    for (BMTransaction *tr in self.transactions.reverseObjectEnumerator)
     {
         if (utox.createTxId!=nil)
         {

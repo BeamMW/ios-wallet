@@ -51,6 +51,8 @@ class PaymentProofDetailViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.payment_proof
         
+        codeInputField.placeholder = " ";
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -67,7 +69,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
         hideKeyboardWhenTappedAround()
         
         if paymentProof == nil {
-            codeInputField.becomeFirstResponder()
+            _ = codeInputField.becomeFirstResponder()
         }
     }
 

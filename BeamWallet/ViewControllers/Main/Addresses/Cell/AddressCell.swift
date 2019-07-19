@@ -99,9 +99,9 @@ extension AddressCell: Configurable {
                 
                 transactionCommentIconHeight.constant = 16
                 transactionCommentIconWidth.constant = 16
-                
+                transactionCommentIcon.image = IconComment()
+
                 if !last.comment.isEmpty {
-                    transactionCommentIcon.image = IconComment()
                     transactionCommentLabel.text =  "”" + last.comment + "”"
                 }
                 

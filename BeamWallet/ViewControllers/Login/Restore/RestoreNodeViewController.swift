@@ -149,6 +149,13 @@ extension RestoreNodeViewController : UITextFieldDelegate {
         
         return true
     }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        errorLabel.isHidden = true
+        timer.invalidate()
+        
+        return true
+    }
 }
 
 extension RestoreNodeViewController : WalletModelDelegate {

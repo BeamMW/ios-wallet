@@ -287,7 +287,7 @@ extension WalletViewController : UITableViewDelegate {
         case 1:
             if (viewModel.transactions.count == 0)
             {
-                return UITableView.automaticDimension
+                return 200
             }
             else{
                 return isSearching ? WalletTransactionCell.searchHeight() : WalletTransactionCell.height()

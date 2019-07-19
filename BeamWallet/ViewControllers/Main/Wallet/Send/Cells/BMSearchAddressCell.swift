@@ -53,12 +53,12 @@ class BMSearchAddressCell: BaseCell {
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
-        textField.becomeFirstResponder()
+        _ = textField.becomeFirstResponder()
     }
     
     public func beginEditing(text:String?){
         copyText = text
-        textField.becomeFirstResponder()
+        _ = textField.becomeFirstResponder()
     }
     
     public var contact:BMContact? {
@@ -188,7 +188,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
         }
         else if text == UIPasteboard.general.string {
             self.delegate?.textValueDidChange?(self, text, false)
-            self.textField.resignFirstResponder()
+            _ = self.textField.resignFirstResponder()
             self.checkAttributes(string: text)
             return false
         }

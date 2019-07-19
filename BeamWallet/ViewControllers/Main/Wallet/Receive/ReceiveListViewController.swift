@@ -129,6 +129,9 @@ extension ReceiveListViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if addresses.count == 0 {
+            return 300
+        }
         return UITableView.automaticDimension
     }
     
@@ -157,7 +160,7 @@ extension ReceiveListViewController : UITableViewDataSource {
         if addresses.count == 0 {
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: (text: Localizable.shared.strings.addresses_empty, image: IconAddressbookEmpty()))
+                .configured(with: (text: Localizable.shared.strings.not_found, image: IconAddressbookEmpty()))
             return cell
         }
         else{
@@ -202,6 +205,14 @@ extension ReceiveListViewController : UITextFieldDelegate {
         let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
         
         searchString = txtAfterUpdate
+        filterAddresses()
+        tableView.reloadData()
+        
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        searchString = String.empty()
         filterAddresses()
         tableView.reloadData()
         

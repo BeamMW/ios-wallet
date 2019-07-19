@@ -35,11 +35,8 @@ class SendTransactionViewModel: NSObject {
 
     public var saveContact = true
 
-    public var selectedSearchIndex = 0
-
     public var selectedContact:BMContact?
 
-    public var contacts = [BMContact]()
     private var addresses = [BMAddress]()
     
     public var toAddress = String.empty() {
@@ -193,12 +190,12 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
-    public func searchForContacts() {
-        if selectedSearchIndex == 0 {
-            self.contacts.removeAll()
+    public func searchForContacts(searchIndex:Int) -> [BMContact] {
+        if searchIndex == 0 {
+            var contacts = [BMContact]()
             
-            if let contacts = AppModel.sharedManager().contacts as? [BMContact] {
-                self.contacts.append(contentsOf: contacts)
+            if let _contacts = AppModel.sharedManager().contacts as? [BMContact] {
+                contacts.append(contentsOf: _contacts)
             }
             
             if !toAddress.isEmpty {
@@ -211,9 +208,11 @@ class SendTransactionViewModel: NSObject {
                 contacts.removeAll()
                 contacts.append(contentsOf: filterdObjects)
             }
+            
+            return contacts
         }
         else{
-            self.contacts.removeAll()
+            var contacts = [BMContact]()
 
             if let addresses = AppModel.sharedManager().walletAddresses {
                 self.addresses = addresses as! [BMAddress]
@@ -232,7 +231,7 @@ class SendTransactionViewModel: NSObject {
                     let contact = BMContact()
                     contact.name = address.label
                     contact.address = address
-                    self.contacts.append(contact)
+                    contacts.append(contact)
                 }
             }
             else{
@@ -240,9 +239,11 @@ class SendTransactionViewModel: NSObject {
                     let contact = BMContact()
                     contact.name = address.label
                     contact.address = address
-                    self.contacts.append(contact)
+                    contacts.append(contact)
                 }
             }
+            
+            return contacts
         }
     }
     

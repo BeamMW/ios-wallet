@@ -68,7 +68,7 @@
                                     <constraint firstItem="JaX-6H-ZEA" firstAttribute="leading" secondItem="Mgw-Jq-kgv" secondAttribute="trailing" constant="5" id="DuP-F1-jMT"/>
                                     <constraint firstAttribute="trailing" secondItem="JaX-6H-ZEA" secondAttribute="trailing" id="UdJ-77-GhZ"/>
                                     <constraint firstItem="JaX-6H-ZEA" firstAttribute="top" secondItem="o0K-uh-h6D" secondAttribute="top" constant="7" id="e9G-Wb-Y5P"/>
-                                    <constraint firstAttribute="height" constant="29" id="jaL-ru-aCv"/>
+                                    <constraint firstAttribute="bottom" secondItem="Mgw-Jq-kgv" secondAttribute="bottom" id="haC-hC-7hK"/>
                                     <constraint firstItem="Mgw-Jq-kgv" firstAttribute="leading" secondItem="o0K-uh-h6D" secondAttribute="leading" id="vlF-HZ-4UP"/>
                                     <constraint firstItem="Mgw-Jq-kgv" firstAttribute="top" secondItem="o0K-uh-h6D" secondAttribute="top" id="xq9-gy-yqG"/>
                                 </constraints>

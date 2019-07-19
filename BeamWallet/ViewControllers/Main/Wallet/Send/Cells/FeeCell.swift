@@ -35,12 +35,6 @@ class FeeCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        if traitCollection.forceTouchCapability != .available {
-            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(showPicker))
-            longPress.minimumPressDuration = 1
-            mainView.addGestureRecognizer(longPress)
-        }
-        
         feeSlider.maximumTrackTintColor = UIColor.main.marineThree
         feeSlider.isContinuous = true
         feeSlider.setThumbImage(SliderDot(), for: .normal)
@@ -61,36 +55,30 @@ class FeeCell: BaseCell {
         super.layoutSubviews()
 
         let point = setUISliderThumbValueWithLabel(slider: feeSlider)
-        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: 35, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
     }
     
-    @objc private func showPicker(sender:UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
+    @IBAction private func showPicker(_ sender: UIButton) {
+        let modalViewController = InputFeePopover()
+        modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: Localizable.shared.strings.groth, with: "")) ?? ""
+        modalViewController.modalPresentationStyle = .overFullScreen
+        modalViewController.modalTransitionStyle = .crossDissolve
+        modalViewController.completion = {
+            (obj : String) -> Void in
             
-            let modalViewController = InputFeePopover()
-            modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: Localizable.shared.strings.groth, with: "")) ?? ""
-            modalViewController.modalPresentationStyle = .overFullScreen
-            modalViewController.modalTransitionStyle = .crossDissolve
-            modalViewController.completion = {
-                (obj : String) -> Void in
-                
-                let nFee = Double(obj) ?? 0
-                
-                if nFee > Double(self.feeSlider.maximumValue) {
-                    self.feeSlider.maximumValue = Float(nFee)
-                    self.maxLabel.text = obj + Localizable.shared.strings.groth
-                }
-                
-                self.configure(with: nFee)
-                self.delegate?.onDidChangeFee?(value: nFee)
+            let nFee = Double(obj) ?? 0
+            
+            if nFee > Double(self.feeSlider.maximumValue) {
+                self.feeSlider.maximumValue = Float(nFee)
+                self.maxLabel.text = obj + Localizable.shared.strings.groth
             }
-            if let vc = UIApplication.getTopMostViewController() {
-                vc.present(modalViewController, animated: true, completion: nil)
-            }
+            
+            self.configure(with: nFee)
+            self.delegate?.onDidChangeFee?(value: nFee)
         }
- 
+        if let vc = UIApplication.getTopMostViewController() {
+            vc.present(modalViewController, animated: true, completion: nil)
+        }
     }
     
     @IBAction private func sliderValueChanged(_ sender: UISlider) {
@@ -101,7 +89,7 @@ class FeeCell: BaseCell {
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: sender)
-        valueLabel.frame = CGRect(x: point.x, y: 90, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: 35, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
         
         delegate?.onDidChangeFee?(value: Double(roundedStepValue))
     }

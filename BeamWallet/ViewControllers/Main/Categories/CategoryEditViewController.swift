@@ -24,7 +24,7 @@ class CategoryEditViewController: BaseViewController {
 
     public var completion : ((BMCategory?) -> Void)?
 
-    @IBOutlet private var nameField: UITextField!
+    @IBOutlet private var nameField: BMClearField!
     @IBOutlet private var nameView: UIView!
     
     @IBOutlet private var colorsView: BMCategoryColorsView!
@@ -86,7 +86,7 @@ class CategoryEditViewController: BaseViewController {
         nameView.backgroundColor = UIColor.main.marineThree
         view.addSubview(nameView)
         
-        nameField = UITextField(frame: CGRect(x: defaultX, y: 0, width: defaultWidth, height: 49))
+        nameField = BMClearField(frame: CGRect(x: defaultX, y: 0, width: defaultWidth, height: 49))
         nameField.placeholder = Localizable.shared.strings.category_name
         nameField.placeHolderColor = UIColor.main.steelGrey
         nameField.textColor = UIColor.white
@@ -98,6 +98,7 @@ class CategoryEditViewController: BaseViewController {
         nameField.autocorrectionType = .no
         nameField.spellCheckingType = .no
         nameField.text = category.name
+        nameField.clearButtonMode = .whileEditing
         nameView.addSubview(nameField)
         
         colorsView = BMCategoryColorsView()

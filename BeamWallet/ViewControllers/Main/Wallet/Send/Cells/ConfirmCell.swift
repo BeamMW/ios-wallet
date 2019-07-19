@@ -11,10 +11,22 @@ import UIKit
 class ConfirmCell: BaseCell {
 
     @IBOutlet weak private var nameLabel: UILabel!
-    @IBOutlet weak private var valueLabel: UILabel!
+    @IBOutlet weak private var valueLabel: BMCopyLabel!
     @IBOutlet weak private var categoryLabel: UILabel!
     @IBOutlet weak private var addressNameLabel: UILabel!
+    @IBOutlet weak private var stackView: UIStackView!
+    @IBOutlet weak private var topOffset: NSLayoutConstraint!
+    @IBOutlet weak private var botOffset: NSLayoutConstraint!
 
+    public var increaseSpace = false {
+        didSet {
+            if increaseSpace {
+                stackView.spacing = 10
+                topOffset.constant = 15
+                botOffset.constant = 15
+            }
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,9 +38,12 @@ class ConfirmCell: BaseCell {
 extension ConfirmCell: Configurable {
     
     func configure(with item:ConfirmItem) {
+        valueLabel.isUserInteractionEnabled = item.canCopy
+        
         categoryLabel.isHidden = true
         addressNameLabel.isHidden = true
-        
+        nameLabel.isHidden = false
+
         nameLabel.font = BoldFont(size: 14)
         nameLabel.textColor = UIColor.main.blueyGrey
         nameLabel.textAlignment = .left
@@ -36,8 +51,11 @@ extension ConfirmCell: Configurable {
         if item.detail == nil {
             nameLabel.text = item.title
         }
-        else{
+        else if item.title != nil {
             nameLabel.text = item.title.uppercased()
+        }
+        else if item.title == nil {
+            nameLabel.isHidden = true
         }
         
         nameLabel.letterSpacing = 2
@@ -88,6 +106,10 @@ extension ConfirmCell: Configurable {
             att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length-6, length: 6))
             
             valueLabel.attributedText = att
+        }
+        
+        if item.detailAttributedString != nil {
+            valueLabel.attributedText = item.detailAttributedString
         }
     }
 }

@@ -65,17 +65,56 @@ class BMTextView: UITextViewPlacholder {
         
         tintColor = UIColor.white
         tintColorDidChange()
+        
+        clearButton.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        clearButton.setImage(ClearIcon(), for: .normal)
+        clearButton.isHidden = true
+        clearButton.addTarget(self, action: #selector(onClear), for: .touchUpInside)
+        addSubview(clearButton)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         if self.frame.size.height <= 42 {
-            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - defaultOffset, width: self.frame.size.width, height: lineHeight)
+            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - defaultOffset + 4, width: self.frame.size.width, height: lineHeight)
         }
         else{
             line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - 4, width: self.frame.size.width, height: lineHeight)
         }
+        
+        clearButton.frame = CGRect(x: self.width - 25, y: 8, width: 20, height: 20)
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        isInput = true
+
+        if let text = self.attributedText, text.string.isEmpty == false {
+            clearButton.isHidden = false
+            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+        }
+        else if let text = self.text, text.isEmpty == false {
+            clearButton.isHidden = false
+            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+        }
+
+        return super.becomeFirstResponder()
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        isInput = false
+        
+        clearButton.isHidden = true
+        contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        return super.resignFirstResponder()
+    }
+    
+    @objc private func onClear() {
+        self.attributedText = nil
+        self.text = nil
+        _ = self.delegate?.textView?(self, shouldChangeTextIn: NSRange(location: 0, length: 0), replacementText: String.empty())
+        self.delegate?.textViewDidChange?(self)
     }
 }
 

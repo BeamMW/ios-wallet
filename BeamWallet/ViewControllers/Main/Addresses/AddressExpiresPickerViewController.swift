@@ -65,32 +65,33 @@ class AddressExpiresPickerViewController: BaseTableViewController {
             super.tableStyle = newValue
         }
     }
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isGradient {
-            var mainColor = UIColor.main.brightSkyBlue
-            
-            if let viewControllers = self.navigationController?.viewControllers{
-                for vc in viewControllers {
-                    if vc is SendViewController {
-                        mainColor = UIColor.main.heliotrope
-                    }
-                }
-            }
-            
-            setGradientTopBar(mainColor: mainColor, addedStatusView: false)
-        }
-        
-        title = Localizable.shared.strings.address_expires.uppercased()
+        isGradient = true
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
 
-        addRightButton(title: Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        title = Localizable.shared.strings.exp_date.uppercased()
+
+     //   addRightButton(title: Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.register(AddressDurationCell.self)
     }
     
@@ -117,9 +118,13 @@ extension AddressExpiresPickerViewController : UITableViewDelegate {
 
         selectedDuration = (indexPath.row == 1) ? 24 : 0
         
-        enableRightButton(enabled: (indexPath.row != 0))
+       // enableRightButton(enabled: (indexPath.row != 0))
        
         tableView.reloadData()
+        
+        self.completion?(selectedDuration)
+        
+        self.back()
     }
 }
 

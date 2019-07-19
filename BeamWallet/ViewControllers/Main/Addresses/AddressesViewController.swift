@@ -18,11 +18,14 @@
 //
 
 import UIKit
+import Parchment
 
 class AddressesViewController: BaseTableViewController {
     
-    private let viewModel = AddressViewModel(selected: .active)
-    private let header = BMSegmentView.init(segments: [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts])
+    private let pagingViewController = BMPagingViewController()
+    private let emptyView = AddressEmptyView().loadNib()
+
+    private let titles = [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts]
 
     override var isUppercasedTitle: Bool {
         get{
@@ -37,37 +40,58 @@ class AddressesViewController: BaseTableViewController {
         super.viewDidLoad()
         
         isGradient = true
+        
+        pagingViewController.options.menuItemSize = PagingMenuItemSize.fixed(width: UIScreen.main.bounds.width/3, height: 50)
+        
+        addChild(pagingViewController)
+        view.addSubview(pagingViewController.view)
+        pagingViewController.didMove(toParent: self)
+        
+        pagingViewController.dataSource = self
+        
+        emptyView.isHidden = true
+        emptyView.backgroundColor = UIColor.clear
+        view.addSubview(emptyView)
+        
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.addresses
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register([AddressCell.self, BMEmptyCell.self])
-        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-        
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: tableView)
-        }
-        
-        header.lineColor = UIColor.main.brightTeal
-        header.selectedIndex = viewModel.selectedState.rawValue
-        header.delegate = self
-        view.insertSubview(header, at: 0)
-        
-        subscribeToChages()
-        
         addRightButton(image: IconAdd(), target: self, selector: #selector(onAddContact))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        checkIsEmpty()
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().removeDelegate(self)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-                
-        header.y = tableView.y - 5
-        tableView.y = header.y + header.h
-        tableView.h = self.view.h - tableView.y
+        
+        pagingViewController.view.frame = tableView.frame
+        emptyView.frame = tableView.frame
+    }
+    
+    private func checkIsEmpty() {
+        let count = AppModel.sharedManager().walletAddresses?.count ?? 0 + AppModel.sharedManager().contacts.count
+        
+        if count == 0 {
+            pagingViewController.view.alpha = 0
+            emptyView.isHidden = false
+        }
+        else{
+            pagingViewController.view.alpha = 1
+            emptyView.isHidden = true
+        }
     }
     
     @objc private func onAddContact() {
@@ -75,126 +99,39 @@ class AddressesViewController: BaseTableViewController {
         vc.isGradient = false
         pushViewController(vc: vc)
     }
+}
+
+extension AddressesViewController: PagingViewControllerDataSource {
     
-    private func subscribeToChages() {
-        viewModel.onDataChanged = { [weak self] in
-            self?.tableView.reloadData()
-        }
-        viewModel.onDataDeleted = { [weak self]
-            indexPath, address in
-            
-            if let path = indexPath {
-                if self?.viewModel.count ?? 0 > 0 {
-                    self?.tableView.performUpdate({
-                        self?.tableView.deleteRows(at: [path], with: .left)
-                    }, completion: {
-                        AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
-                    })
-                }
-                else{
-                    AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
-                    self?.tableView.reloadData()
-                }
-            }
-        }
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
+       
+        let viewController = AddressTableView()
+        viewController.view.backgroundColor = UIColor.clear
+        viewController.selectedIndex = index
+        
+        return viewController
     }
     
-    @objc private func didBecomeActive() {
-        viewModel.filterAddresses()
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, pagingItemForIndex index: Int) -> T {
+        return PagingIndexItem(index: index, title: titles[index].uppercased()) as! T
     }
     
-    @objc private func refreshData(_ sender: Any) {
-        tableView.stopRefreshing()
+    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int{
+        return titles.count
     }
 }
 
-extension AddressesViewController : UITableViewDelegate {
+extension AddressesViewController : WalletModelDelegate {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        if viewModel.count > 0 {
-            let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-            
-            let vc = AddressViewController(address: address)
-            pushViewController(vc: vc)
+    func onWalletAddresses(_ walletAddresses: [BMAddress]) {
+        DispatchQueue.main.async {
+            self.checkIsEmpty()
         }
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        if viewModel.count > 0 {
-            return viewModel.trailingSwipeActions(indexPath: indexPath)
+    func onContactsChange(_ contacts: [BMContact]) {
+        DispatchQueue.main.async {
+            self.checkIsEmpty()
         }
-        else{
-            return nil
-        }
-    }
-}
-
-extension AddressesViewController : UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let count = viewModel.count
-        return count == 0 ? 1 : count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if viewModel.count == 0 {
-            let cell = tableView
-                .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: (text: (viewModel.selectedState == .contacts ? Localizable.shared.strings.contacts_empty : Localizable.shared.strings.addresses_empty), image: IconAddressbookEmpty()))
-            return cell
-        }
-        else {
-            let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-            
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, address: address, displayTransaction: false, displayCategory: true))
-            
-            return cell
-        }
-    }
-}
-
-extension AddressesViewController : UIViewControllerPreviewingDelegate {
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        
-        if viewModel.selectedState != .contacts && viewModel.count > 0 {
-
-            guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
-            
-            guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
-            
-            let detailVC = PreviewQRViewController(address: viewModel.addresses[indexPath.row])
-            detailVC.preferredContentSize = CGSize(width: 0.0, height: 340)
-            
-            previewingContext.sourceRect = cell.frame
-            
-            return detailVC
-        }
-        else{
-            return nil
-        }
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
-        show(viewControllerToCommit, sender: self)
-        
-        (viewControllerToCommit as! PreviewQRViewController).didShow()
-    }
-}
-
-extension AddressesViewController : BMTableHeaderTitleViewDelegate {
-    func onDidSelectSegment(index: Int) {
-        viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: index) ?? .active
     }
 }

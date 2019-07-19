@@ -19,7 +19,57 @@
 
 import UIKit
 
-class BMField: UITextField {
+@objc protocol BMFieldStatusProtocol: AnyObject {
+    @objc func didChangeStatus()
+}
+
+
+class BMClearField: UITextField {
+    
+    private var clearButton: UIButton? {
+        return value(forKey: "clearButton") as? UIButton
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        if !isSecureTextEntry && (keyboardType != .decimalPad && keyboardType != .numberPad) {
+            clearButtonMode = .whileEditing
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        if !isSecureTextEntry && (keyboardType != .decimalPad && keyboardType != .numberPad) {
+            clearButtonMode = .whileEditing
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        if !isSecureTextEntry && (keyboardType != .decimalPad && keyboardType != .numberPad) {
+            clearButtonMode = .whileEditing
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if let button = clearButton {
+            button.backgroundColor = UIColor.clear
+            button.setImage(ClearIcon(), for: .normal)
+            button.tintColor = UIColor.main.steel
+            button.frame = CGRect(x: button.x, y: button.y + 3, width: 14, height: 14)
+        }
+    }
+}
+
+
+class BMField: BMClearField {
+
+    public weak var statusDelegate: BMFieldStatusProtocol?
 
     enum Status {
         case normal
@@ -65,6 +115,8 @@ class BMField: UITextField {
                 self.textColor = UIColor.main.red
                 self.line.backgroundColor = UIColor.main.red
                 self.errorLabel.isHidden = false
+                self.layoutSubviews()
+                self.statusDelegate?.didChangeStatus()
             case .normal?:
                 self.heightConstraint.constant = defaultHeight
                 self.textColor = _oldColor
@@ -135,6 +187,10 @@ class BMField: UITextField {
                 self.heightConstraint.constant = _errorHeight
             }
             layoutSubviews()
+            
+            if status == .error {
+                self.statusDelegate?.didChangeStatus()
+            }
         }
     }
     
@@ -156,6 +212,8 @@ class BMField: UITextField {
             
             if strongSelf.status != .normal {
                 strongSelf.status = .normal
+                strongSelf.layoutSubviews()
+                strongSelf.statusDelegate?.didChangeStatus()
             }
         }
         
@@ -173,10 +231,9 @@ class BMField: UITextField {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        var w = self.frame.size.width
-        
+        let w = self.frame.size.width
+
         if let view = self.rightView {
-            w = w - view.frame.size.width - 10
             view.y = 0
         }
         
@@ -247,11 +304,12 @@ class BMField: UITextField {
             toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),item]
             self.inputAccessoryView = toolbar
         }
-        
+  
         return super.becomeFirstResponder()
     }
     
-    @objc private func onHide(){
-        self.resignFirstResponder()
+    
+    @objc private func onHide() {
+        _ = self.resignFirstResponder()
     }
 }

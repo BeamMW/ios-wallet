@@ -18,15 +18,28 @@
 //
 
 import UIKit
+import Parchment
 
 class UTXOViewController: BaseTableViewController {
     
-    private let viewModel = UTXOViewModel(selected: .available)
-    
-    private var header = BMSegmentView.init(segments: [Localizable.shared.strings.available, Localizable.shared.strings.in_progress, Localizable.shared.strings.spent, Localizable.shared.strings.unavailable, Localizable.shared.strings.maturing, Localizable.shared.strings.in_progress_out, Localizable.shared.strings.in_progress_in])
+    private let pagingViewController = BMPagingViewController()
+
+    private var titles = [Localizable.shared.strings.available, Localizable.shared.strings.in_progress, Localizable.shared.strings.spent, Localizable.shared.strings.unavailable, Localizable.shared.strings.maturing, Localizable.shared.strings.in_progress_out, Localizable.shared.strings.in_progress_in]
     
     private let hideUTXOView = UTXOSecurityView().loadNib()
+    private let emptyView = UTXOEmptyView().loadNib()
+    private let blockView: UTXOBlockView = UIView.fromNib()
 
+    private var _selectedIndex = 0
+    public var selectedIndex:Int {
+        get{
+            return _selectedIndex
+        }
+        set{
+           _selectedIndex = newValue
+        }
+    }
+    
     override var isUppercasedTitle: Bool {
         get{
             return true
@@ -40,50 +53,81 @@ class UTXOViewController: BaseTableViewController {
         super.viewDidLoad()
 
         isGradient = true
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
-        
-        title = Localizable.shared.strings.utxo
-                
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register([UTXOCell.self, BMEmptyCell.self, UTXOBlockCell.self])
-        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
-
-        hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
-        view.addSubview(hideUTXOView)
-
-        header.lineColor = UIColor.main.brightTeal
-        header.selectedIndex = viewModel.selectedState.rawValue
-        header.delegate = self
         
         Settings.sharedManager().addDelegate(self)
+        
+        blockView.configure(with: AppModel.sharedManager().walletStatus)
+        
+        let pagingView = pagingViewController.view as! PagingView
+        pagingView.options.menuItemSpacing = 20
+        pagingView.options.menuInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+
+        addChild(pagingViewController)
+        view.addSubview(pagingViewController.view)
+        pagingViewController.didMove(toParent: self)
+        
+        pagingViewController.dataSource = self
+        pagingViewController.delegate = self
+
+        emptyView.isHidden = true
+        emptyView.backgroundColor = view.backgroundColor
+        view.addSubview(emptyView)
+        
+        hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
+        hideUTXOView.backgroundColor = view.backgroundColor
+        view.addSubview(hideUTXOView)
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
+        view.insertSubview(blockView, belowSubview: pagingViewController.view)
+        
+        title = Localizable.shared.strings.utxo
 
         rightButton()
-        
-        subscribeUpdates()
     }
     
     deinit {
         Settings.sharedManager().removeDelegate(self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        checkIsEmpty()
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().removeDelegate(self)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        hideUTXOView.frame = CGRect(x: 0, y: tableView.y + 100, width: tableView.frame.size.width, height: (UIScreen.main.bounds.size.height - (tableView.y + 100)))
+        blockView.frame = CGRect(x: 15, y: tableView.y + 15, width: UIScreen.main.bounds.width - 30, height: 98)
+        
+        var frame = tableView.frame
+        frame.origin.y = frame.origin.y + 130
+        frame.size.height = frame.size.height - 130
+        
+        pagingViewController.view.frame = frame
+        emptyView.frame = frame
+        hideUTXOView.frame = frame
     }
     
-    private func subscribeUpdates() {
-        viewModel.onDataChanged = { [weak self] in
-            UIView.performWithoutAnimation {
-                self?.tableView.stopRefreshing()
-                self?.tableView.reloadData()
-            }
-        }
+    private func checkIsEmpty() {
+        let count = AppModel.sharedManager().utxos?.count ?? 0
         
-        viewModel.onStatusChanged = { [weak self] in
-            self?.tableView.stopRefreshing()
+        if count == 0 {
+            pagingViewController.view.alpha = 0
+            emptyView.isHidden = false
+        }
+        else{
+            pagingViewController.view.alpha = 1
+            emptyView.isHidden = true
         }
     }
     
@@ -91,68 +135,48 @@ class UTXOViewController: BaseTableViewController {
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
     }
     
-    @objc private func refreshData(_ sender: Any) {
-        AppModel.sharedManager().getWalletStatus()
-        AppModel.sharedManager().getUTXO()
+    private func menuOffset(for scrollView: UIScrollView) -> CGFloat {
+        return min(pagingViewController.options.menuHeight + blockView.h + blockView.y, max(0, scrollView.contentOffset.y))
     }
 }
 
-extension UTXOViewController : UITableViewDelegate {
+
+extension UTXOViewController: PagingViewControllerDataSource {
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == 0 ? 0 : BMSegmentView.height)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
         
-        if viewModel.utxos.count > 0 && indexPath.section == 1 {
-            let vc = UTXODetailViewController(utxo: viewModel.utxos[indexPath.row])
-            self.pushViewController(vc: vc)
-        }
+        let viewController = UTXOTableView()
+        viewController.view.backgroundColor = UIColor.clear
+        viewController.selectedIndex = index
+        
+        return viewController
+    }
+    
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, pagingItemForIndex index: Int) -> T {
+        return PagingIndexItem(index: index, title: titles[index].uppercased()) as! T
+    }
+    
+    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int{
+        return titles.count
     }
 }
 
-extension UTXOViewController : UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return (Settings.sharedManager().isHideAmounts ? 1 : 2)
+extension UTXOViewController : PagingViewControllerDelegate {
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, didScrollToItem pagingItem: T, startingViewController: UIViewController?, destinationViewController: UIViewController, transitionSuccessful: Bool) where T : PagingItem, T : Comparable, T : Hashable {
+
+        let index = pagingItem as! PagingIndexItem
+        selectedIndex = index.index
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (section == 0 ? 1 : (viewModel.utxos.count == 0 ? 1 : viewModel.utxos.count))
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return(section == 0 ? nil : header)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func pagingViewController<T>(
+        _ pagingViewController: PagingViewController<T>,
+        widthForPagingItem pagingItem: T,
+        isSelected: Bool) -> CGFloat? {
         
-        if indexPath.section == 0 {
-            let cell = tableView
-                .dequeueReusableCell(withType: UTXOBlockCell.self, for: indexPath)
-                .configured(with: AppModel.sharedManager().walletStatus)
-            return cell
-        }
-        else{
-            if viewModel.utxos.count == 0 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: (text: Localizable.shared.strings.utxo_empty, image: IconUtxoEmpty()))
-                return cell
-            }
-            else {
-                let cell = tableView
-                    .dequeueReusableCell(withType: UTXOCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, utxo: viewModel.utxos[indexPath.row]))
-                return cell
-            }
-        }
+        let index = pagingItem as! PagingIndexItem
+        let title = index.title
+        let size = title.boundingWidth(with: BoldFont(size: 16))
+        return size + 20
     }
 }
 
@@ -166,8 +190,18 @@ extension UTXOViewController : SettingsModelDelegate {
     }
 }
 
-extension UTXOViewController : BMTableHeaderTitleViewDelegate {
-    func onDidSelectSegment(index: Int) {
-        self.viewModel.selectedState = UTXOViewModel.UTXOSelectedState(rawValue: index) ?? .available
+extension UTXOViewController : WalletModelDelegate {
+    
+    func onWalletStatusChange(_ status: BMWalletStatus) {
+        DispatchQueue.main.async {
+            self.blockView.configure(with: AppModel.sharedManager().walletStatus)
+        }
+    }
+    
+    func onReceivedUTXOs(_ utxos: [BMUTXO]) {
+        DispatchQueue.main.async {
+            self.checkIsEmpty()
+        }
     }
 }
+

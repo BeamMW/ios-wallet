@@ -48,7 +48,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-Bh-1cM">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-Bh-1cM" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="22" width="290" height="17"/>
                                         <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
                                         <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -98,8 +98,11 @@
             <viewLayoutGuide key="safeArea" id="Roz-AP-ohd"/>
             <connections>
                 <outlet property="addressNameLabel" destination="LJw-Lu-G8l" id="axG-0u-Jgh"/>
+                <outlet property="botOffset" destination="xxq-cf-WuX" id="ixT-hs-3C3"/>
                 <outlet property="categoryLabel" destination="w6l-ps-aTh" id="T6x-YO-Cbd"/>
                 <outlet property="nameLabel" destination="hmE-6R-HFL" id="gry-3I-PYr"/>
+                <outlet property="stackView" destination="fR0-7Y-uoA" id="Ici-sM-jWY"/>
+                <outlet property="topOffset" destination="3rh-18-lrU" id="ddE-iq-0yo"/>
                 <outlet property="valueLabel" destination="1OB-Bh-1cM" id="hPR-GP-8Vv"/>
             </connections>
             <point key="canvasLocation" x="97.101449275362327" y="109.48660714285714"/>

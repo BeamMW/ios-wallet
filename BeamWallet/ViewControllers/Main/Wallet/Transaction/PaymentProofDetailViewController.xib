@@ -120,10 +120,10 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" priority="750" constant="40" id="whP-Bc-LIU"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="exu-Be-4YX"/>
                     </constraints>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
@@ -135,7 +135,7 @@
                     </connections>
                 </textView>
                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cannot decode a proof, illegal sequence" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LPh-ri-LzL">
-                    <rect key="frame" x="15" y="97" width="345" height="19.5"/>
+                    <rect key="frame" x="15" y="92" width="345" height="19.5"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                     <color key="textColor" red="1" green="0.38431372549999998" blue="0.36078431370000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
@@ -152,7 +152,7 @@
                 <constraint firstAttribute="trailing" secondItem="LPh-ri-LzL" secondAttribute="trailing" constant="15" id="Hu1-R7-CPd"/>
                 <constraint firstItem="PWr-9E-sR9" firstAttribute="top" secondItem="X2a-wK-gRe" secondAttribute="bottom" constant="12.5" id="KDR-4X-5Iz"/>
                 <constraint firstItem="fSQ-aG-5j3" firstAttribute="trailing" secondItem="PWr-9E-sR9" secondAttribute="trailing" constant="15" id="RIw-7x-Nvq"/>
-                <constraint firstItem="LPh-ri-LzL" firstAttribute="top" secondItem="PWr-9E-sR9" secondAttribute="bottom" constant="5" id="kVi-xF-A45"/>
+                <constraint firstItem="LPh-ri-LzL" firstAttribute="top" secondItem="PWr-9E-sR9" secondAttribute="bottom" id="kVi-xF-A45"/>
                 <constraint firstItem="LPh-ri-LzL" firstAttribute="leading" secondItem="fSQ-aG-5j3" secondAttribute="leading" constant="15" id="lvi-e8-QRd"/>
                 <constraint firstItem="PWr-9E-sR9" firstAttribute="leading" secondItem="fSQ-aG-5j3" secondAttribute="leading" constant="15" id="w3n-71-nZo"/>
                 <constraint firstItem="X2a-wK-gRe" firstAttribute="leading" secondItem="f7L-Hl-nDs" secondAttribute="leading" constant="20" id="xpd-tP-sph"/>

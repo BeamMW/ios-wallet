@@ -245,3 +245,10 @@ func IconAdd() -> UIImage? {
     return UIImage(named: "icnAdd")
 }
 
+func IconQR() -> UIImage? {
+    return UIImage(named: "iconQr")
+}
+
+func IconEdit() -> UIImage? {
+    return UIImage(named: "icnEdit")
+}

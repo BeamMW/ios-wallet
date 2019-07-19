@@ -32,7 +32,7 @@ class SaveContactViewController: BaseTableViewController {
         
         let mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-(Device.isLarge ? 320 : 300))/2, y: 60, width: (Device.isLarge ? 320 : 300), height: 44))
         
-        let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.darkSlateBlue)
+        let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.marineThree)
         buttonCancel.setImage(IconCancel(), for: .normal)
         buttonCancel.setTitle(Localizable.shared.strings.cancel.lowercased(), for: .normal)
         buttonCancel.setTitleColor(UIColor.white, for: .normal)
@@ -91,6 +91,15 @@ class SaveContactViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if isAddContact {
+            tableView.y = tableView.y + 25
+            tableView.h = tableView.h - 25
+        }
     }
     
     @objc private func onSave() {
@@ -230,7 +239,7 @@ extension SaveContactViewController : UITableViewDataSource {
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: self.address.label, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: self.address.label))
             cell.delegate = self
             return cell
         case 2:

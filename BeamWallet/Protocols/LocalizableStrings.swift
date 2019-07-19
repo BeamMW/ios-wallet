@@ -364,9 +364,14 @@ class LocalizableStrings : NSObject {
     var add_contact = "add_contact".localized
     var address_already_exist_1 = "address_already_exist_1".localized
     var address_already_exist_2 = "address_already_exist_2".localized
+    var confirm_transaction_1 = "confirm_transaction_1".localized
+    var confirm_transaction_2 = "confirm_transaction_2".localized
+    var confirm_transaction_3 = "confirm_transaction_3".localized
+    var transactions_list = "transactions_list".localized
+
     
-    var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
-    var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+    var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
+    var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 
     public func minAmount(str:String) -> String {
         return "min_amount".localized + " " + str

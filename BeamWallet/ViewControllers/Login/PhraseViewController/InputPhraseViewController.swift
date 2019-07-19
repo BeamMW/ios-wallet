@@ -35,23 +35,9 @@ class InputPhraseViewController: BaseWizardViewController {
         
         self.title = Localizable.shared.strings.seed_prhase
 
-        var w = ["voice","sniff","risk","gas","fever","soccer","fabric","when","twice","valid",
-                 "shuffle","detail"]
-
-        if Settings.sharedManager().target == Mainnet {
-            w = ["force", "rice", "tenant", "still", "mouse", "budget", "whale", "flat", "warm", "because", "virus", "fitness"]
-        }
-        
         for i in 0 ... 11 {
-            inputWords.append(BMWord(w[i], index: UInt(i), correct: true))
+            inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
         }
-        
-        nextButton.isEnabled = true
-        testNetNextButton.isEnabled = true
-
-//        for i in 0 ... 11 {
-//            inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
-//        }
         
         scrollView.keyboardDismissMode = .interactive
         collectionView.keyboardDismissMode = .interactive

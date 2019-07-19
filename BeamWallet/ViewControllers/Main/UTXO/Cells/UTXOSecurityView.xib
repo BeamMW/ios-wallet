@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Yf8-vz-6X6">
-                    <rect key="frame" x="57" y="346.5" width="300" height="103.5"/>
+                    <rect key="frame" x="57" y="344" width="300" height="108.5"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icEyeCrossedBig" translatesAutoresizingMaskIntoConstraints="NO" id="uwt-Zu-98P">
                             <rect key="frame" x="119.5" y="0.0" width="61" height="60"/>
@@ -31,10 +31,10 @@
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PFb-vs-LN1">
-                            <rect key="frame" x="52.5" y="70" width="195" height="33.5"/>
+                            <rect key="frame" x="38.5" y="70" width="223" height="38.5"/>
                             <string key="text">You’re currently in Security Mode.
 Turn it off to see your UTXO list. </string>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                             <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                             <userDefinedRuntimeAttributes>
@@ -48,7 +48,7 @@ Turn it off to see your UTXO list. </string>
                     </constraints>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="Yf8-vz-6X6" firstAttribute="centerY" secondItem="e43-JB-qgs" secondAttribute="centerY" constant="-50" id="Bce-Ct-qzz"/>
                 <constraint firstItem="Yf8-vz-6X6" firstAttribute="centerX" secondItem="e43-JB-qgs" secondAttribute="centerX" id="EeK-9m-BIu"/>

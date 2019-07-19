@@ -24,6 +24,8 @@ class UITextViewPlacholder : UITextView
     
     public var placholderFont:UIFont?
     public var placholderColor:UIColor?
+    public var clearButton = UIButton()
+    public var isInput = false
 
     
     override open var attributedText: NSAttributedString! {
@@ -73,11 +75,29 @@ class UITextViewPlacholder : UITextView
         if let placeholderLabel = self.viewWithTag(100) as? UILabel {
             placeholderLabel.isHidden = self.text.lengthOfBytes(using: .utf8) > 0
         }
+        
+        if let text = self.text, text.isEmpty == false, self.isInput {
+            clearButton.isHidden = false
+            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+        }
+        else{
+            clearButton.isHidden = true
+            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
     }
     
     @objc private func attibutedTextChanged() {
         if let placeholderLabel = self.viewWithTag(100) as? UILabel {
             placeholderLabel.isHidden = self.attributedText.string.lengthOfBytes(using: .utf8) > 0
+        }
+        
+        if let text = self.attributedText, text.string.isEmpty == false, self.isInput {
+            clearButton.isHidden = false
+            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+        }
+        else{
+            clearButton.isHidden = true
+            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
     }
     

@@ -325,7 +325,7 @@ extension BuyBeamViewController : UITableViewDataSource {
             
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: name.uppercased() , value: viewModel.fromAddress, rightIcon:IconScanQr()))
+                .configured(with: (name: name.uppercased() , value: viewModel.fromAddress))
             cell.delegate = self
             cell.error = viewModel.fromAddressError
             cell.contentView.backgroundColor = UIColor.main.marineThree
@@ -354,7 +354,7 @@ extension BuyBeamViewController : UITableViewDataSource {
             else if indexPath.row == 1 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address!.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address!.label))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20

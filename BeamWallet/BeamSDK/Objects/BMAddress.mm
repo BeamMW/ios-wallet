@@ -152,7 +152,13 @@
     if (!_formatter)
     {
         _formatter = [[NSDateFormatter alloc] init];
-        [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+       
+        if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+            [_formatter setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+        }
+        else{
+            [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+        }
     }
     
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
@@ -166,7 +172,13 @@
     if (!_shortFormatter)
     {
         _shortFormatter = [[NSDateFormatter alloc] init];
-        [_shortFormatter setDateFormat:@"dd MMM yyyy"];
+        
+        if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+            [_shortFormatter setDateFormat:@"yyyy MMM dd"];
+        }
+        else{
+            [_shortFormatter setDateFormat:@"dd MMM yyyy"];
+        }
     }
     
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];

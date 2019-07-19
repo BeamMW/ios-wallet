@@ -27,11 +27,15 @@ class BMDetailCell: BaseCell {
 
     @IBOutlet weak private var topSpace: NSLayoutConstraint!
     @IBOutlet weak private var botSpace: NSLayoutConstraint!
+    @IBOutlet weak private var titleTopSpace: NSLayoutConstraint!
+
+    @IBOutlet weak private var titleWidth: NSLayoutConstraint!
 
     public var space:CGFloat = 10 {
         didSet{
             topSpace.constant = space
             botSpace.constant = space
+            titleTopSpace.constant = space
         }
     }
     
@@ -47,6 +51,11 @@ class BMDetailCell: BaseCell {
         contentView.backgroundColor = UIColor.main.marineThree
 
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)
+   
+//        if Device.isLarge {
+//            titleWidth.constant = 200
+//        }
+        
     }
     
     func simpleConfigure(with options: (title:String, attributedValue:NSMutableAttributedString)) {

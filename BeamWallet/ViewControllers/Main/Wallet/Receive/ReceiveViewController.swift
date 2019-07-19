@@ -198,7 +198,7 @@ extension ReceiveViewController : UITableViewDataSource {
             else if indexPath.row == 1 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 return cell
@@ -220,7 +220,7 @@ extension ReceiveViewController : UITableViewDataSource {
         case 2:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.transactionComment, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.transactionComment))
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.clear
             return cell

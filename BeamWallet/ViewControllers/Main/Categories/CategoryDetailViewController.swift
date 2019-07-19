@@ -125,7 +125,7 @@ extension CategoryDetailViewController : UITableViewDelegate {
             return 80
         }
         else if indexPath.section == 1 && addressViewModel.addresses.count == 0 {
-            return UITableView.automaticDimension
+            return (UIScreen.main.bounds.size.height - (tableView.y + 300))
         }
         return 90
     }

@@ -386,6 +386,13 @@
 "enter_trusted_node" = "Введите адрес доверенного узла";
 "trusted_node_error" = "Узел не подключен. Попробуйте подключить кошелек к другому узлу или используйте другой тип восстановления.";
 "owner_key" = "Ключ владельца";
-"new_transaction" = "Incoming transaction";
-"click_to_receive" = "Click to receive Beam";
-"album" = "Album";
+"new_transaction" = "Входящая транзакция";
+"click_to_receive" = "Нажмите, чтобы получить BEAM";
+"album" = "Альбом";
+"add_contact" = "Добавить контакт";
+"address_already_exist_1" = "Такой адрес уже существует";
+"address_already_exist_2" = "Вы не можете сохранить свой адрес.\nТакой адрес уже существует";
+"confirm_transaction_1" = "Используйте Touch ID или введите пароль для подтверждения транзакции";
+"confirm_transaction_2" = "Используйте Face ID или введите пароль для подтверждения транзакции";
+"confirm_transaction_3" = "Введите пароль для подтверждения транзакции";
+"ok" = "ОК";

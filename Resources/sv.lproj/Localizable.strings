@@ -386,6 +386,13 @@
 "enter_trusted_node" = "Mata in pålitlig nod-adress";
 "trusted_node_error" = "Nod är ej kontaktbar. Försök att ansluta plånboken mot en annan nod eller använd rekommenderad återställning.";
 "owner_key" = "Ägar-nyckel";
-"new_transaction" = "Incoming transaction";
-"click_to_receive" = "Click to receive Beam";
+"new_transaction" = "Inkommande transaktion";
+"click_to_receive" = "Klicka för att ta emot Beam";
 "album" = "Album";
+"add_contact" = "Add contact";
+"address_already_exist_1" = "This address already exists";
+"address_already_exist_2" = "You can't save your address.\nThis address already exists";
+"confirm_transaction_1" = "Use Touch ID or enter your password to confirm transaction";
+"confirm_transaction_2" = "Use Face ID or enter your password to confirm transaction";
+"confirm_transaction_3" = "Enter your password to confirm transaction";
+"ok" = "OK";
