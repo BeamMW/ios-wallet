@@ -19,22 +19,6 @@
 
 import UIKit
 
-class ConfirmItem {
-    public var title:String!
-    public var detail:String?
-    public var detailFont:UIFont?
-    public var detailColor:UIColor?
-    public var detailAttributedString:NSMutableAttributedString?
-    public var canCopy = false
-    
-    required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
-        self.title = title
-        self.detail = detail
-        self.detailFont = detailFont
-        self.detailColor = detailColor
-    }
-}
-
 class SendConfirmViewController: BaseTableViewController {
 
     private lazy var footerView: UIView = {
@@ -52,7 +36,7 @@ class SendConfirmViewController: BaseTableViewController {
         return view
     }()
     
-    private var items = [ConfirmItem]()
+    private var items = [BMMultiLineItem]()
     
     private var viewModel:SendTransactionViewModel!
     
@@ -60,7 +44,7 @@ class SendConfirmViewController: BaseTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.viewModel = viewModel
-        self.items.append(contentsOf: self.viewModel.buildConfirmItems())
+        self.items.append(contentsOf: self.viewModel.buildBMMultiLineItems())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -78,14 +62,12 @@ class SendConfirmViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        isGradient = true
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
         title = Localizable.shared.strings.confirm.uppercased()
         
-        tableView.register([ConfirmCell.self, BMFieldCell.self])
+        tableView.register([BMMultiLinesCell.self, BMFieldCell.self])
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -131,7 +113,6 @@ class SendConfirmViewController: BaseTableViewController {
                     controllers.removeLast()
                     
                     let vc = SaveContactViewController(address: strongSelf.viewModel.toAddress)
-                    vc.isGradient = true
                     controllers.append(vc)
                     strongSelf.navigationController?.setViewControllers(controllers, animated: true)
                 }
@@ -200,7 +181,7 @@ extension SendConfirmViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell =  tableView
-            .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
+            .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
             .configured(with: items[indexPath.section])
         
         return cell

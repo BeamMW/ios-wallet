@@ -1,5 +1,5 @@
 //
-//  ConfirmCell.swift
+//  BMMultiLinesCell.swift
 //  BeamWallet
 //
 //  Created by Denis on 6/4/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConfirmCell: BaseCell {
+class BMMultiLinesCell: BaseCell {
 
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var valueLabel: BMCopyLabel!
@@ -35,9 +35,9 @@ class ConfirmCell: BaseCell {
     }
 }
 
-extension ConfirmCell: Configurable {
+extension BMMultiLinesCell: Configurable {
     
-    func configure(with item:ConfirmItem) {
+    func configure(with item:BMMultiLineItem) {
         valueLabel.isUserInteractionEnabled = item.canCopy
         
         categoryLabel.isHidden = true

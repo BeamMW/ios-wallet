@@ -1,5 +1,5 @@
 //
-// AutoSecurityScreen.swift
+// BMAutoSecurityScreen.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -20,7 +20,7 @@
 import Foundation
 import UIKit
 
-public class AutoSecurityScreen {
+public class BMAutoSecurityScreen {
     private lazy var blurView: UIView = UIView()
 
     public init() {
@@ -33,7 +33,7 @@ public class AutoSecurityScreen {
         blurView.addSubview(blurEffectView)
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(remoteBlur),
+                                               selector: #selector(removeBlur),
                                                name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
@@ -49,7 +49,7 @@ public class AutoSecurityScreen {
         }
     }
 
-    @objc private func remoteBlur() {
+    @objc private func removeBlur() {
         removeBlurEffect()
     }
 

@@ -33,7 +33,7 @@ class SearchTableView: UITableViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = .none
-        tableView.register([BMEmptyCell.self, AddressCell.self])
+        tableView.register([BMEmptyCell.self, BMAddressCell.self])
         tableView.keyboardDismissMode = .interactive
     }
     
@@ -87,7 +87,7 @@ class SearchTableView: UITableViewController {
         }
         else {
             let cell =  tableView
-                .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
             cell.configure(with: (row: indexPath.row, address: contacts[indexPath.row].address, displayTransaction: true, displayCategory: true))
             
             return cell

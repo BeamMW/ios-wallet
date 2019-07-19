@@ -132,6 +132,8 @@ class LocalizableStrings : NSObject {
     var delete_address_only = "delete_address_only".localized
     var category = "category".localized
     var in_24_hours = "in_24_hours".localized
+    var in_24_hours_now = "in_24_hours".localized
+    
     var never = "never".localized
     var address_expires = "address_expires".localized
     var save = "save".localized
@@ -368,6 +370,7 @@ class LocalizableStrings : NSObject {
     var confirm_transaction_2 = "confirm_transaction_2".localized
     var confirm_transaction_3 = "confirm_transaction_3".localized
     var transactions_list = "transactions_list".localized
+    var secutiry_utxo = "secutiry_utxo".localized
 
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

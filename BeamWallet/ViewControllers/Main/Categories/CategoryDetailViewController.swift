@@ -43,7 +43,7 @@ class CategoryDetailViewController: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(AddressCell.self)
+        tableView.register(BMAddressCell.self)
         tableView.register(CategoryNameCell.self)
         tableView.register(BMEmptyCell.self)
 
@@ -173,7 +173,7 @@ extension CategoryDetailViewController : UITableViewDataSource {
             }
             else{
                 let cell =  tableView
-                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                    .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
                     .configured(with: (row: indexPath.row, address: addressViewModel.addresses[indexPath.row], displayTransaction: false, displayCategory: false))
                 return cell
             }

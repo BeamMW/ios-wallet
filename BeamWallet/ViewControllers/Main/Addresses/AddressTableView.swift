@@ -34,7 +34,7 @@ class AddressTableView: UITableViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = .none
-        tableView.register([BMEmptyCell.self, AddressCell.self])
+        tableView.register([BMEmptyCell.self, BMAddressCell.self])
    
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
@@ -95,7 +95,7 @@ class AddressTableView: UITableViewController {
             let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
 
             let cell =  tableView
-                .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
                 .configured(with: (row: indexPath.row, address: address, displayTransaction: false, displayCategory: true))
             return cell
         }

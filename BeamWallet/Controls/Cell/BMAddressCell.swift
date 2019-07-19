@@ -1,5 +1,5 @@
 //
-// AddressCell.swift
+// BMAddressCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,7 +19,7 @@
 
 import UIKit
 
-class AddressCell: BaseCell {
+class BMAddressCell: BaseCell {
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var nameLabel: UILabel!
@@ -65,7 +65,7 @@ class AddressCell: BaseCell {
     }
 }
 
-extension AddressCell: Configurable {
+extension BMAddressCell: Configurable {
     
     func configure(with options: (row: Int, address:BMAddress, displayTransaction:Bool, displayCategory:Bool)) {
         

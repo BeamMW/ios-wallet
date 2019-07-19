@@ -1,5 +1,5 @@
 //
-// UTXOEmptyView.swift
+// BMMultiLineItem.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,7 +19,18 @@
 
 import Foundation
 
-class UTXOEmptyView: BaseView {
+class BMMultiLineItem {
+    public var title:String!
+    public var detail:String?
+    public var detailFont:UIFont?
+    public var detailColor:UIColor?
+    public var detailAttributedString:NSMutableAttributedString?
+    public var canCopy = false
     
-    
+    required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
+        self.title = title
+        self.detail = detail
+        self.detailFont = detailFont
+        self.detailColor = detailColor
+    }
 }

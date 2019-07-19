@@ -252,3 +252,7 @@ func IconQR() -> UIImage? {
 func IconEdit() -> UIImage? {
     return UIImage(named: "icnEdit")
 }
+
+func IconUTXOSecurity() -> UIImage? {
+    return UIImage(named: "icEyeCrossedBig")
+}

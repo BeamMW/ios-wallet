@@ -99,6 +99,8 @@ class BaseViewController: UIViewController {
     }
     
     public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true, menu:Bool = false) {
+        isGradient = true
+        
         view.viewWithTag(10)?.removeFromSuperview()
         view.viewWithTag(11)?.removeFromSuperview()
 

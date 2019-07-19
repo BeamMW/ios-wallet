@@ -247,21 +247,21 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
-    public func buildConfirmItems() -> [ConfirmItem]{
+    public func buildBMMultiLineItems() -> [BMMultiLineItem]{
         let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
         let totalString = String.currency(value: total) + Localizable.shared.strings.beam
         
-        var items = [ConfirmItem]()
-        items.append(ConfirmItem(title: Localizable.shared.strings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        var items = [BMMultiLineItem]()
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
-            items.append(ConfirmItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        items.append(ConfirmItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amount + Localizable.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
-        items.append(ConfirmItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amount + Localizable.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
         
         return items
     }

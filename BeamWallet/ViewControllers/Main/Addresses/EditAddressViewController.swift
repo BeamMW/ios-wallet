@@ -71,7 +71,6 @@ class EditAddressViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         viewModel.onDataChanged = { [weak self] in
@@ -85,7 +84,7 @@ class EditAddressViewController: BaseTableViewController {
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
         
-        tableView.register([AddressExpiresCell.self, ConfirmCell.self, BMFieldCell.self, BMDetailCell.self, BMGroupedCell.self])
+        tableView.register([AddressExpiresCell.self, BMMultiLinesCell.self, BMFieldCell.self, BMDetailCell.self, BMGroupedCell.self])
         
         viewModel.onDataDeleted = { [weak self]
             indexPath, address in
@@ -176,8 +175,8 @@ extension EditAddressViewController : UITableViewDataSource {
             switch (indexPath.row) {
             case 0:
                 let cell = tableView
-                    .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
-                    .configured(with: ConfirmItem(title: Localizable.shared.strings.address.uppercased(), detail:viewModel.address!.walletId , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+                    .configured(with: BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail:viewModel.address!.walletId , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
                 cell.increaseSpace = true
                 return cell
             case 1:

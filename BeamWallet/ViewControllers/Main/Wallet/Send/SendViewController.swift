@@ -77,7 +77,7 @@ class SendViewController: BaseTableViewController {
             viewModel.transaction = repeatTransaction
         }
         
-        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, AddressCell.self, BMPickedAddressCell.self])
+        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self])
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
@@ -97,7 +97,6 @@ class SendViewController: BaseTableViewController {
         pagingViewController.dataSource = self
         pagingViewController.delegate = self
         
-        isGradient = true
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
         title = Localizable.shared.strings.send.uppercased()
@@ -490,7 +489,6 @@ extension SendViewController : BMCellProtocol {
             if path.section == 0 {
                 let vc = QRScannerViewController()
                 vc.delegate = self
-                vc.isGradient = true
                 pushViewController(vc: vc)
             }
             else if path.section == 2 {
@@ -618,7 +616,6 @@ extension SendViewController {
             
             strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 6)], with: .fade)
         }
-        vc.isGradient = true
         pushViewController(vc: vc)
     }
     
@@ -633,7 +630,6 @@ extension SendViewController {
                     strongSelf.didSelectCategory(categories: [String(category.id)])
                 }
             }
-            vc.isGradient = true
             pushViewController(vc: vc)
         }
         else{
@@ -647,7 +643,6 @@ extension SendViewController {
                     strongSelf.didSelectCategory(categories: categories)
                 }
             }
-            vc.isGradient = true
             pushViewController(vc: vc)
         }
     }

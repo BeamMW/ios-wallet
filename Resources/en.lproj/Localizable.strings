@@ -373,8 +373,8 @@
 "add_all" = "Add all";
 "my_active_addresses" = "My active addresses";
 "tag" = "Tag";
-"contacts_empty" = "Your contacts list  is empty";
-"addresses_empty" = "Your addresses list  is empty";
+"contacts_empty" = "Your contacts list is empty";
+"addresses_empty" = "Your addresses list is empty";
 "utxo_empty" = "Your UTXO list is empty";
 "transactions_empty" = "Your transaction list is empty";
 "automatic_restore_title" = "Recommended restore";
@@ -397,3 +397,4 @@
 "confirm_transaction_3" = "Enter your password to confirm transaction";
 "ok" = "OK";
 "transactions_list" = "Transactions list";
+"in_24_hours_now" = "In 24 hours from now";

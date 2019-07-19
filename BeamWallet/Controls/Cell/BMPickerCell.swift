@@ -20,7 +20,7 @@
 import UIKit
 
 
-class AddressDurationCell: BaseCell {
+class BMPickerCell: BaseCell {
     
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet private weak var mainView: UIView!
@@ -36,22 +36,16 @@ class AddressDurationCell: BaseCell {
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
         
-        arrowView.image = UIImage.init(named: "tick")?.withRenderingMode(.alwaysTemplate)
+        arrowView.image = Tick()?.withRenderingMode(.alwaysTemplate)
         arrowView.tintColor = UIColor.main.brightTeal
     }
 }
 
-extension AddressDurationCell: Configurable {
+extension BMPickerCell: Configurable {
     
-    func configure(with options: (duration: BMDuration, selected:Bool)) {
+    func configure(with options: (text: String?, selected:Bool, color:UIColor?)) {
         arrowView.isHidden = !options.selected
-        nameLabel.text = options.duration.name
-    }
-}
-
-extension AddressDurationCell: DynamicContentHeight {
-    
-    static func height() -> CGFloat {
-        return 50
+        nameLabel.text = options.text
+        nameLabel.textColor = options.color
     }
 }

@@ -23,7 +23,7 @@ import Parchment
 class AddressesViewController: BaseTableViewController {
     
     private let pagingViewController = BMPagingViewController()
-    private let emptyView = AddressEmptyView().loadNib()
+    private let emptyView: BMEmptyView = UIView.fromNib()
 
     private let titles = [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts]
 
@@ -39,7 +39,8 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
+        emptyView.text = Localizable.shared.strings.addresses_empty
+        emptyView.image = IconAddressbookEmpty()
         
         pagingViewController.options.menuItemSize = PagingMenuItemSize.fixed(width: UIScreen.main.bounds.width/3, height: 50)
         

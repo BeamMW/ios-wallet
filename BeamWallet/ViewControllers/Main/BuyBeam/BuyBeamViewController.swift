@@ -75,9 +75,7 @@ class BuyBeamViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        isGradient = true
-        
+                
         setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
         
         title = Localizable.shared.strings.buy_beam.uppercased()

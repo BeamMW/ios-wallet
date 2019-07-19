@@ -197,7 +197,6 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         if let top = UIApplication.getTopMostViewController() {
             let vc = QRScannerViewController()
             vc.delegate = self
-            vc.isGradient = true
             if currency == "BTC" {
                 vc.scanType = .bitcoin
             }

@@ -19,7 +19,7 @@
 
 import UIKit
 
-class BMSnackBar: UIView, CountdownViewDelegate {
+class BMSnackBar: UIView, BMCountdownViewDelegate {
     
     enum SnackType {
         case transaction
@@ -41,7 +41,7 @@ class BMSnackBar: UIView, CountdownViewDelegate {
     private var data:SnackData!
     private var done : ((_ clickUndo : SnackData?) -> Void)!
     private var ended : ((_ clickUndo : SnackData?) -> Void)!
-    private var timer:CountdownView?
+    private var timer:BMCountdownView?
     
     fileprivate init(data:SnackData!, done: @escaping (SnackData?) -> Void, ended: @escaping (SnackData?) -> Void) {
         let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15
@@ -90,18 +90,18 @@ class BMSnackBar: UIView, CountdownViewDelegate {
         button.setTitle(Localizable.shared.strings.undo, for: .normal)
         button.contentHorizontalAlignment = .right
         button.isUserInteractionEnabled = false
-       // button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
+        button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
         addSubview(button)
         
-        timer = CountdownView(frame: CGRect(x: defaultX, y: 10, width: 28, height: 28))
+        timer = BMCountdownView(frame: CGRect(x: defaultX, y: 10, width: 28, height: 28))
         timer?.delegate = self
         timer?.start(beginingValue: 5)
         addSubview(timer ?? UIView())
         
-        let tapGesture = UITapGestureRecognizer(target: self,
-                                                action: #selector(onUndo))
-        tapGesture.cancelsTouchesInView = false
-        addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self,
+//                                                action: #selector(onUndo))
+//        tapGesture.cancelsTouchesInView = false
+//        addGestureRecognizer(tapGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {

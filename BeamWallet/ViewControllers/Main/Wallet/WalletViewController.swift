@@ -76,7 +76,6 @@ class WalletViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
 
         title = Localizable.shared.strings.wallet

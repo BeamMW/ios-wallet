@@ -90,8 +90,6 @@ class BuyBeamOrderViewController: BaseViewController {
         onTimer()
         
         timer = Timer.scheduledTimer(timeInterval: TimeInterval(1), target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
-
-        isGradient = true
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
         

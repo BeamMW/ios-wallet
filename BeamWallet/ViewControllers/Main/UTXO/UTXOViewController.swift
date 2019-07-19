@@ -26,9 +26,9 @@ class UTXOViewController: BaseTableViewController {
 
     private var titles = [Localizable.shared.strings.available, Localizable.shared.strings.in_progress, Localizable.shared.strings.spent, Localizable.shared.strings.unavailable, Localizable.shared.strings.maturing, Localizable.shared.strings.in_progress_out, Localizable.shared.strings.in_progress_in]
     
-    private let hideUTXOView = UTXOSecurityView().loadNib()
-    private let emptyView = UTXOEmptyView().loadNib()
+    private let emptyView: BMEmptyView = UIView.fromNib()
     private let blockView: UTXOBlockView = UIView.fromNib()
+    private let hideUTXOView: BMEmptyView = UIView.fromNib()
 
     private var _selectedIndex = 0
     public var selectedIndex:Int {
@@ -51,10 +51,14 @@ class UTXOViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        isGradient = true
         
         Settings.sharedManager().addDelegate(self)
+        
+        hideUTXOView.text = Localizable.shared.strings.secutiry_utxo
+        hideUTXOView.image = IconUTXOSecurity()
+        
+        emptyView.text = Localizable.shared.strings.utxo_empty
+        emptyView.image = IconUtxoEmpty()
         
         blockView.configure(with: AppModel.sharedManager().walletStatus)
         

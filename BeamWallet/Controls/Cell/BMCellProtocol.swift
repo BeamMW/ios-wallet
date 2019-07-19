@@ -29,7 +29,6 @@ import Foundation
     @objc optional func onClickSave()
     @objc optional func onClickCopy()
 
-    
     @objc optional func onRightButton(_ sender: UITableViewCell)
     
     @objc optional func onExpandCell(_ sender: UITableViewCell)

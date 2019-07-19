@@ -29,8 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private var scannedTGUserId = String.empty()
 
-    var securityScreen = AutoSecurityScreen()
-    var lockScreen = LockScreen()
+    var securityScreen = BMAutoSecurityScreen()
 
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
@@ -38,10 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//        let defaultClearButton = UIButton.appearance(whenContainedInInstancesOf: [UITextField.self])
-//        defaultClearButton.setBackgroundImage(ClearIcon(), for: .normal)
-//        defaultClearButton.setBackgroundImage(ClearIcon(), for: .highlighted)
-
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
 
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)

@@ -1,5 +1,5 @@
 //
-// CountdownView.swift
+// BMCountdownView.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,16 +19,16 @@
 
 import Foundation
 
-@objc public protocol CountdownViewDelegate: class {
+@objc public protocol BMCountdownViewDelegate: class {
     @objc optional func timerDidEnd()
 }
 
-public class CountdownView: UIView {
+public class BMCountdownView: UIView {
     private var lineWidth: CGFloat = 1.5
     private var lineColor: UIColor = UIColor.init(hexString: "#032E49")
     private var trailLineColor: UIColor = UIColor.main.steelGrey.withAlphaComponent(0.3)
     
-    public weak var delegate: CountdownViewDelegate?
+    public weak var delegate: BMCountdownViewDelegate?
     
     private var timer: Timer?
     private var beginingValue: Int = 1
@@ -115,7 +115,7 @@ public class CountdownView: UIView {
         currentCounterValue = beginingValue
         
         timer?.invalidate()
-        timer = Timer(timeInterval: fireInterval, target: self, selector: #selector(CountdownView.timerFired(_:)), userInfo: nil, repeats: true)
+        timer = Timer(timeInterval: fireInterval, target: self, selector: #selector(BMCountdownView.timerFired(_:)), userInfo: nil, repeats: true)
         
         RunLoop.main.add(timer!, forMode: .common)
     }

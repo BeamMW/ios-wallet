@@ -37,7 +37,7 @@ class AddressExpiresPickerViewController: BaseTableViewController {
         
         let h24 = BMDuration()
         h24.duration = 24
-        h24.name = Localizable.shared.strings.in_24_hours
+        h24.name = Localizable.shared.strings.in_24_hours_now
         h24.selected = false
 
         let never = BMDuration()
@@ -78,12 +78,9 @@ class AddressExpiresPickerViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
 
         title = Localizable.shared.strings.exp_date.uppercased()
-
-     //   addRightButton(title: Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -92,7 +89,7 @@ class AddressExpiresPickerViewController: BaseTableViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
-        tableView.register(AddressDurationCell.self)
+        tableView.register(BMPickerCell.self)
     }
     
     @objc private func onSave(sender:UIBarButtonItem) {
@@ -117,11 +114,7 @@ extension AddressExpiresPickerViewController : UITableViewDelegate {
         items[indexPath.row].selected = true
 
         selectedDuration = (indexPath.row == 1) ? 24 : 0
-        
-       // enableRightButton(enabled: (indexPath.row != 0))
-       
-        tableView.reloadData()
-        
+                
         self.completion?(selectedDuration)
         
         self.back()
@@ -139,8 +132,8 @@ extension AddressExpiresPickerViewController : UITableViewDataSource {
         let duration = items[indexPath.row]
         
         let cell =  tableView
-            .dequeueReusableCell(withType: AddressDurationCell.self, for: indexPath)
-            .configured(with: (duration:duration , selected: duration.selected))
+            .dequeueReusableCell(withType: BMPickerCell.self, for: indexPath)
+            .configured(with: (text: duration.name, selected: duration.selected, color: UIColor.white))
         
         return cell
     }

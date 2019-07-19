@@ -1,5 +1,5 @@
 //
-// UTXOSecurityView.swift
+// BMEmptyView.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,7 +19,20 @@
 
 import Foundation
 
-class UTXOSecurityView: BaseView {
+class BMEmptyView: UIView {
     
+    @IBOutlet weak private var textLabel: UILabel!
+    @IBOutlet weak private var imageView: UIImageView!
     
+    public var text:String? {
+        didSet{
+            textLabel.text = text
+        }
+    }
+    
+    public var image:UIImage? {
+        didSet{
+            imageView.image = image
+        }
+    }
 }

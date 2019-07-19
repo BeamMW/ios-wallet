@@ -85,7 +85,7 @@ class SaveContactViewController: BaseTableViewController {
 
         title = address.walletId.isEmpty ? Localizable.shared.strings.add_contact.uppercased() : Localizable.shared.strings.save_address_title.uppercased()
         
-        tableView.register([BMFieldCell.self, ConfirmCell.self, BMDetailCell.self, BMSearchAddressCell.self])
+        tableView.register([BMFieldCell.self, BMMultiLinesCell.self, BMDetailCell.self, BMSearchAddressCell.self])
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -184,7 +184,6 @@ extension SaveContactViewController : UITableViewDelegate {
                         strongSelf.tableView.reloadData()
                     }
                 }
-                vc.isGradient = true
                 pushViewController(vc: vc)
             }
             else{
@@ -197,7 +196,6 @@ extension SaveContactViewController : UITableViewDelegate {
                         strongSelf.tableView.reloadData()
                     }
                 }
-                vc.isGradient = true
                 pushViewController(vc: vc)
             }
         }
@@ -230,9 +228,9 @@ extension SaveContactViewController : UITableViewDataSource {
                 return cell
             }
             else{
-                let item = ConfirmItem(title: Localizable.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+                let item = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
                 let cell =  tableView
-                    .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
+                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
                     .configured(with: item)
                 return cell
             }

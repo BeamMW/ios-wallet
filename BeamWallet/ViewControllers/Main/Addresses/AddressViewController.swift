@@ -44,12 +44,11 @@ class AddressViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register([WalletTransactionCell.self, ConfirmCell.self])
+        tableView.register([WalletTransactionCell.self, BMMultiLinesCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         
         addRightButtons(image: [IconScanQr(), IconEdit()], target: self, selector: [#selector(onQRCode),#selector(onEdit)])
@@ -169,7 +168,7 @@ extension AddressViewController : UITableViewDataSource {
         
         if indexPath.section == 0 {
             let cell = tableView
-                .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
                 .configured(with: addressViewModel.details[indexPath.row])
             cell.increaseSpace = true
             return cell

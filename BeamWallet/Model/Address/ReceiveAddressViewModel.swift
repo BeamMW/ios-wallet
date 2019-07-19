@@ -126,7 +126,6 @@ class ReceiveAddressViewModel: NSObject {
                 
                 self?.onDataChanged?()
             }
-            vc.isGradient = true
             top.pushViewController(vc: vc)
         }
     }
@@ -147,7 +146,6 @@ class ReceiveAddressViewModel: NSObject {
                         self?.onDataChanged?()
                     }
                 }
-                vc.isGradient = true
                 top.pushViewController(vc: vc)
             }
             else{
@@ -164,7 +162,6 @@ class ReceiveAddressViewModel: NSObject {
                         self?.onDataChanged?()
                     }
                 }
-                vc.isGradient = true
                 top.pushViewController(vc: vc)
             }
         }
