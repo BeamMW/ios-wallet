@@ -291,6 +291,13 @@ class BMField: BMClearField {
         if let view = self.rightView {
             right = view.frame.size.width + 10
         }
+        else if clearButtonMode == .whileEditing {
+            if (self.text ?? String.empty()).isEmpty == false {
+                right = 25
+            }
+        }
+        
+        
         let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
         return bounds.inset(by: padding)
     }

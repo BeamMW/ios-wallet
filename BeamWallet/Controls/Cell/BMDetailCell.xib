@@ -31,9 +31,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="39.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EXPIRES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="UQr-Di-6Fb">
-                                <rect key="frame" x="15" y="10" width="140" height="17"/>
+                                <rect key="frame" x="15" y="11.5" width="80" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="140" id="KY0-Of-CBf"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="KY0-Of-CBf"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -45,8 +45,8 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Never" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QYn-Oi-ds3">
-                                <rect key="frame" x="185" y="10" width="97" height="19.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Never" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QYn-Oi-ds3">
+                                <rect key="frame" x="125" y="10" width="157" height="19.5"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -64,12 +64,12 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="UQr-Di-6Fb" firstAttribute="top" secondItem="wBd-Ow-gBN" secondAttribute="top" constant="10" id="3nU-uL-2Ck"/>
                             <constraint firstItem="QYn-Oi-ds3" firstAttribute="top" secondItem="wBd-Ow-gBN" secondAttribute="top" constant="10" id="4ZQ-Kr-B5r"/>
                             <constraint firstItem="UQr-Di-6Fb" firstAttribute="leading" secondItem="wBd-Ow-gBN" secondAttribute="leading" constant="15" id="PKF-Up-HMS"/>
                             <constraint firstItem="8th-kQ-Xoe" firstAttribute="centerY" secondItem="wBd-Ow-gBN" secondAttribute="centerY" id="VIf-UV-JUF"/>
                             <constraint firstItem="QYn-Oi-ds3" firstAttribute="leading" secondItem="UQr-Di-6Fb" secondAttribute="trailing" constant="30" id="a0V-LL-vBQ"/>
                             <constraint firstItem="8th-kQ-Xoe" firstAttribute="leading" secondItem="QYn-Oi-ds3" secondAttribute="trailing" constant="15" id="bzk-dh-QBY"/>
+                            <constraint firstItem="UQr-Di-6Fb" firstAttribute="centerY" secondItem="QYn-Oi-ds3" secondAttribute="centerY" id="sPI-TA-eu8"/>
                             <constraint firstAttribute="bottom" secondItem="QYn-Oi-ds3" secondAttribute="bottom" constant="10" id="vRd-rU-b53"/>
                             <constraint firstAttribute="trailing" secondItem="8th-kQ-Xoe" secondAttribute="trailing" constant="15" id="xO6-cP-wZ3"/>
                         </constraints>
@@ -88,7 +88,6 @@
                 <outlet property="arrowIcon" destination="8th-kQ-Xoe" id="XFv-EI-5dL"/>
                 <outlet property="botSpace" destination="vRd-rU-b53" id="ORb-PU-OXX"/>
                 <outlet property="nameLabel" destination="UQr-Di-6Fb" id="Oik-vb-oRb"/>
-                <outlet property="titleTopSpace" destination="3nU-uL-2Ck" id="NGu-Qx-5Gb"/>
                 <outlet property="topSpace" destination="4ZQ-Kr-B5r" id="daT-tw-JzP"/>
                 <outlet property="valueLabel" destination="QYn-Oi-ds3" id="FbQ-aY-MlT"/>
             </connections>

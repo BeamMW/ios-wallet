@@ -130,24 +130,19 @@ static NSString *languageKey = @"languageKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
-    if (self.target == Testnet) {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
-            _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
-        }
-        else{
-            _language = [[NSLocale currentLocale] languageCode];
-            
-            if ([_language isEqualToString:@"zh"]) {
-                _language = @"zh-Hans";
-            }
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
-                _language = @"en";
-            }
-        }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
     }
     else{
-        _language = @"en";
+        _language = [[NSLocale currentLocale] languageCode];
+        
+        if ([_language isEqualToString:@"zh"]) {
+            _language = @"zh-Hans";
+        }
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+            _language = @"en";
+        }
     }
 
     return self;
@@ -363,8 +358,8 @@ static NSString *languageKey = @"languageKey";
     
     BMLanguage *sw = [BMLanguage new];
     sw.code = @"sv-SE";
-    sw.enName = @"Swedish";
-    sw.localName = @"Svenska";
+    sw.enName = @"Svenska";
+    sw.localName = @"Swedish";
     
     BMLanguage *ko = [BMLanguage new];
     ko.code = @"ko";
@@ -380,8 +375,13 @@ static NSString *languageKey = @"languageKey";
     ch.code = @"zh-Hans";
     ch.enName = @"中文";
     ch.localName = @"Chinese";
+    
+    BMLanguage *tr = [BMLanguage new];
+    tr.code = @"tr";
+    tr.enName = @"Türk";
+    tr.localName = @"Turkish";
 
-    return @[en, ru, es, sw, ko, vi, ch];
+    return @[en, ru, es, sw, ko, vi, ch, tr];
 }
 
 -(NSString*_Nonnull)languageName{

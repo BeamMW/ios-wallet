@@ -391,8 +391,10 @@
 "album" = "Album";
 "add_contact" = "Añadir contacto";
 "address_already_exist_1" = "Esta dirección ya existe";
-"address_already_exist_2" = "You can't save your address.\nThis address already exists";
-"confirm_transaction_1" = "Use Touch ID or enter your password to confirm transaction";
-"confirm_transaction_2" = "Use Face ID or enter your password to confirm transaction";
-"confirm_transaction_3" = "Enter your password to confirm transaction";
+"address_already_exist_2" = "No puedes guardar tu dirección.\nEsta dirección ya existe";
+"confirm_transaction_1" = "Usa Touch ID o introduce tu contraseña para confirmar la transacción";
+"confirm_transaction_2" = "Usa Face ID o introduce tu contraseña para confirmar la transacción";
+"confirm_transaction_3" = "Introduce tu contraseña para confirmar la transacción";
 "ok" = "OK";
+"transactions_list" = "Listado de transacciones";
+"in_24_hours_now" = "En 24 horas a partir de ahora";

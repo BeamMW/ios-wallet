@@ -381,6 +381,8 @@ extension SendViewController : BMCellProtocol {
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
         var removeGrothNotice = false
+        var isNeedReload = true
+        
         if let path = tableView.indexPath(for: sender)  {
             if path.section == 0 {
                 viewModel.toAddress = text
@@ -415,21 +417,25 @@ extension SendViewController : BMCellProtocol {
                 viewModel.amount = text
             }
             else if path.section == 3 {
+                isNeedReload = false
                 viewModel.comment = text
             }
             else if path.section == 6 {
+                isNeedReload = false
                 viewModel.outgoindAdderss!.label = text
             }
         }
         
-        UIView.performWithoutAnimation {
-            tableView.beginUpdates()
-            if removeGrothNotice {
-                tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
-            }
-            tableView.endUpdates()
-            if isSearch {
-                layoutSearchTableView()
+        if isNeedReload {
+            UIView.performWithoutAnimation {
+                tableView.beginUpdates()
+                if removeGrothNotice {
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+                }
+                tableView.endUpdates()
+                if isSearch {
+                    layoutSearchTableView()
+                }
             }
         }
     }
@@ -664,7 +670,7 @@ extension SendViewController: PagingViewControllerDelegate {
         
         let index = pagingItem as! PagingIndexItem
         let title = index.title
-        let size = title.boundingWidth(with: BoldFont(size: 16))
+        let size = title.boundingWidth(with: pagingViewController.options.font, kern: 1.5)
         return size + 20
     }
 }

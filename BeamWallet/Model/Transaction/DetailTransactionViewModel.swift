@@ -21,9 +21,13 @@ import Foundation
 
 class DetailTransactionViewModel: TransactionViewModel {
 
-    public var details = [GeneralInfo]()
+    public var details = [BMMultiLineItem]()
     public var utxos = [BMUTXO]()
     public var paymentProof:BMPaymentProof?
+
+    public var detailsExpand = true
+    public var utxoExpand = true
+
     
     override var transaction: BMTransaction?{
         didSet{
@@ -43,23 +47,25 @@ class DetailTransactionViewModel: TransactionViewModel {
         
         details.removeAll()
 
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.date.uppercased(), detail: transaction.formattedDate(), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        
         if transaction.isSelf {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_send_address), detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_rec_address), detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_send_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_rec_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         else if transaction.isIncome {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.contact), detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_address), detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         else{
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.contact), detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_address), detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
-       
-        details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.transaction_fee), detail: String.currency(value: transaction.fee), failed: false, canCopy:true, color: UIColor.white))
-        details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.transaction_id), detail: transaction.id, failed: false, canCopy:true, color: UIColor.white))
-       
-        details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), detail: transaction.isExpired() ? "0000000000000000000000000000000000000000000000000000000000000000" :  transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
+        
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String.currency(value: transaction.fee) + " BEAM", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if transaction.isIncome {
             if let last = AppModel.sharedManager().getFirstTransactionId(forAddress: transaction.receiverAddress) {
@@ -73,10 +79,17 @@ class DetailTransactionViewModel: TransactionViewModel {
         }
         
         if !transaction.comment.isEmpty {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.comment), detail: transaction.comment, failed: false, canCopy:true, color: UIColor.white))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.comment.uppercased(), detail: transaction.comment, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
+        
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.isExpired() ? "0000000000000000000000000000000000000000000000000000000000000000" :  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+
+        
+     
         if transaction.isFailed() {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.failure_reason), detail: transaction.failureReason, failed: true, canCopy:true, color: UIColor.white))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.failure_reason.uppercased(), detail: transaction.failureReason, detailFont: RegularFont(size: 16), detailColor: UIColor.main.red, copy: true))
         }
         
         if let utxos = AppModel.sharedManager().getUTXOSFrom(transaction) as? [BMUTXO] {

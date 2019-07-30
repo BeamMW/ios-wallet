@@ -23,36 +23,20 @@
 		92090D0C223A684000A1CFBB /* bgTestnet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92090D0B223A684000A1CFBB /* bgTestnet.jpg */; };
 		92090D0D223A684000A1CFBB /* bgTestnet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92090D0B223A684000A1CFBB /* bgTestnet.jpg */; };
 		920CED3822D88D3000846283 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1422D88CDE00846283 /* libsecp256k1.a */; };
-		920CED3922D88D3000846283 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1422D88CDE00846283 /* libsecp256k1.a */; };
 		920CED3A22D88D3000846283 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1622D88CE700846283 /* libwallet.a */; };
-		920CED3B22D88D3000846283 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1622D88CE700846283 /* libwallet.a */; };
 		920CED3C22D88D3000846283 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1822D88CF000846283 /* libpow.a */; };
-		920CED3D22D88D3000846283 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1822D88CF000846283 /* libpow.a */; };
 		920CED3E22D88D3000846283 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1A22D88CF800846283 /* libexternal_pow.a */; };
-		920CED3F22D88D3000846283 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1A22D88CF800846283 /* libexternal_pow.a */; };
 		920CED4022D88D3000846283 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1C22D88D0100846283 /* libmnemonic.a */; };
-		920CED4122D88D3000846283 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED1C22D88D0100846283 /* libmnemonic.a */; };
 		920CED4222D88D3000846283 /* liblibbitcoin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED2E22D88D0A00846283 /* liblibbitcoin.a */; };
-		920CED4322D88D3000846283 /* liblibbitcoin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED2E22D88D0A00846283 /* liblibbitcoin.a */; };
 		920CED4422D88D3000846283 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED2F22D88D0E00846283 /* libsqlite.a */; };
-		920CED4522D88D3000846283 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED2F22D88D0E00846283 /* libsqlite.a */; };
 		920CED4622D88D3000846283 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3022D88D1200846283 /* libnode.a */; };
-		920CED4722D88D3000846283 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3022D88D1200846283 /* libnode.a */; };
 		920CED4822D88D3000846283 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3122D88D1600846283 /* libutility.a */; };
-		920CED4922D88D3000846283 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3122D88D1600846283 /* libutility.a */; };
 		920CED4A22D88D3000846283 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3222D88D1A00846283 /* libhttp.a */; };
-		920CED4B22D88D3000846283 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3222D88D1A00846283 /* libhttp.a */; };
 		920CED4C22D88D3000846283 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3322D88D1F00846283 /* libcli.a */; };
-		920CED4D22D88D3000846283 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3322D88D1F00846283 /* libcli.a */; };
 		920CED4E22D88D3000846283 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3422D88D2300846283 /* libp2p.a */; };
-		920CED4F22D88D3000846283 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3422D88D2300846283 /* libp2p.a */; };
 		920CED5022D88D3000846283 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3522D88D2700846283 /* libcore.a */; };
-		920CED5122D88D3000846283 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3522D88D2700846283 /* libcore.a */; };
 		920CED5222D88D3000846283 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3622D88D2C00846283 /* libuv_a.a */; };
-		920CED5322D88D3000846283 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3622D88D2C00846283 /* libuv_a.a */; };
 		920CED5422D88D3000846283 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3722D88D3000846283 /* libcrypto.a */; };
-		920CED5522D88D3000846283 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920CED3722D88D3000846283 /* libcrypto.a */; };
-		920CED5622D897EE00846283 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC933322538CE400555DE1 /* Double.swift */; };
 		920F460D223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		920F460E223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		9212DB9422E07ECA0053FC99 /* AddressTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DB9322E07ECA0053FC99 /* AddressTableView.swift */; };
@@ -82,7 +66,6 @@
 		9219595922823639007E9723 /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9219595822823639007E9723 /* LocalizableStrings.swift */; };
 		9219595A22823639007E9723 /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9219595822823639007E9723 /* LocalizableStrings.swift */; };
 		9219595B22823639007E9723 /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9219595822823639007E9723 /* LocalizableStrings.swift */; };
-		9219595C22823639007E9723 /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9219595822823639007E9723 /* LocalizableStrings.swift */; };
 		921AE99A229957F6008869EB /* ShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921AE999229957F6008869EB /* ShortcutManager.swift */; };
 		921AE99B229957F6008869EB /* ShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921AE999229957F6008869EB /* ShortcutManager.swift */; };
 		921AE99C229957F6008869EB /* ShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921AE999229957F6008869EB /* ShortcutManager.swift */; };
@@ -92,11 +75,9 @@
 		921FA630227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 921FA62F227C3BB6008E80A3 /* CurrencyFormatter.m */; };
 		921FA631227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 921FA62F227C3BB6008E80A3 /* CurrencyFormatter.m */; };
 		921FA632227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 921FA62F227C3BB6008E80A3 /* CurrencyFormatter.m */; };
-		921FA633227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 921FA62F227C3BB6008E80A3 /* CurrencyFormatter.m */; };
 		92227AF92281981E0070DC68 /* BMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92227AF82281981E0070DC68 /* BMCategory.m */; };
 		92227AFA2281981E0070DC68 /* BMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92227AF82281981E0070DC68 /* BMCategory.m */; };
 		92227AFB2281981E0070DC68 /* BMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92227AF82281981E0070DC68 /* BMCategory.m */; };
-		92227AFC2281981E0070DC68 /* BMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92227AF82281981E0070DC68 /* BMCategory.m */; };
 		92227B002281B1B00070DC68 /* CategoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92227AFE2281B1B00070DC68 /* CategoryEditViewController.swift */; };
 		92227B012281B1B00070DC68 /* CategoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92227AFE2281B1B00070DC68 /* CategoryEditViewController.swift */; };
 		92227B022281B1B00070DC68 /* CategoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92227AFE2281B1B00070DC68 /* CategoryEditViewController.swift */; };
@@ -148,10 +129,12 @@
 		9227AEEC2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
 		9227AEED2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
 		9227AEEE2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
-		9227AEEF2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
 		922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
+		922F689522E20A39005D3F33 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F689422E20A39005D3F33 /* boost.framework */; };
+		922F689622E20A39005D3F33 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F689422E20A39005D3F33 /* boost.framework */; };
+		922F689722E20A39005D3F33 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F689422E20A39005D3F33 /* boost.framework */; };
 		922FB15E22B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
 		922FB15F22B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
 		922FB16022B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
@@ -226,7 +209,6 @@
 		924C762522D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
 		924C762622D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
 		924C762722D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
-		924C762822D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
 		92538F61222B5F7E00792A25 /* CreateWalletProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92538F5F222B5F7E00792A25 /* CreateWalletProgressViewController.swift */; };
 		92538F62222B5F7E00792A25 /* CreateWalletProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */; };
 		92554D512289A34000FE6041 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D502289A34000FE6041 /* BaseTableViewController.swift */; };
@@ -235,13 +217,6 @@
 		92554D552289A77900FE6041 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D542289A77900FE6041 /* Image.swift */; };
 		92554D562289A77900FE6041 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D542289A77900FE6041 /* Image.swift */; };
 		92554D572289A77900FE6041 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D542289A77900FE6041 /* Image.swift */; };
-		92554D582289A82B00FE6041 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D542289A77900FE6041 /* Image.swift */; };
-		92554D5A2289B47A00FE6041 /* UTXOTransactionsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D592289B47A00FE6041 /* UTXOTransactionsHeaderView.swift */; };
-		92554D5B2289B47A00FE6041 /* UTXOTransactionsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D592289B47A00FE6041 /* UTXOTransactionsHeaderView.swift */; };
-		92554D5C2289B47A00FE6041 /* UTXOTransactionsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D592289B47A00FE6041 /* UTXOTransactionsHeaderView.swift */; };
-		92554D5E2289B49600FE6041 /* UTXOTransactionsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92554D5D2289B49600FE6041 /* UTXOTransactionsHeaderView.xib */; };
-		92554D5F2289B49600FE6041 /* UTXOTransactionsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92554D5D2289B49600FE6041 /* UTXOTransactionsHeaderView.xib */; };
-		92554D602289B49600FE6041 /* UTXOTransactionsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92554D5D2289B49600FE6041 /* UTXOTransactionsHeaderView.xib */; };
 		92592CA52245296D00050A13 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592CA42245296D00050A13 /* KeychainManager.swift */; };
 		92592CA62245296D00050A13 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592CA42245296D00050A13 /* KeychainManager.swift */; };
 		92592CA82245309B00050A13 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592CA72245309B00050A13 /* NotificationManager.swift */; };
@@ -343,19 +318,6 @@
 		92708DDC2272398300B30613 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
 		92708DDD2272398300B30613 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
 		92708DDE2272398300B30613 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
-		927367222277AB340060CB67 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927367212277AB330060CB67 /* UserNotifications.framework */; };
-		927367242277AB340060CB67 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927367232277AB340060CB67 /* UserNotificationsUI.framework */; };
-		927367272277AB340060CB67 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927367262277AB340060CB67 /* NotificationViewController.swift */; };
-		9273672A2277AB340060CB67 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927367282277AB340060CB67 /* MainInterface.storyboard */; };
-		9273674A2277BFE60060CB67 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592CA42245296D00050A13 /* KeychainManager.swift */; };
-		9273674C2277C4400060CB67 /* BiometricAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */; };
-		9273674D2277C4F40060CB67 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EA9D226DE5F500367928 /* Localizable.strings */; };
-		9273674E2277C4FD0060CB67 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A8571222EA16000A3B747 /* String.swift */; };
-		9273674F2277C55E0060CB67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 925AD5E22228254F00DDE66B /* Assets.xcassets */; };
-		9273676C2277D7320060CB67 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923544712254C6CE00889C74 /* openssl.framework */; };
-		9273676D2277D7320060CB67 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92790D91224CCDF600F79D64 /* boost.framework */; };
-		92790D92224CCDF600F79D64 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92790D91224CCDF600F79D64 /* boost.framework */; };
-		92790D93224CCDF600F79D64 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92790D91224CCDF600F79D64 /* boost.framework */; };
 		92790D96224CD8AE00F79D64 /* BMContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D95224CD8AE00F79D64 /* BMContact.m */; };
 		92790D97224CD8AE00F79D64 /* BMContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D95224CD8AE00F79D64 /* BMContact.m */; };
 		92790D9A224E41E800F79D64 /* BMPaymentProof.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D99224E41E800F79D64 /* BMPaymentProof.m */; };
@@ -384,9 +346,6 @@
 		927D2F8E22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8D22CF6E6700D4B439 /* CrowdinCredentials.swift */; };
 		927D2F8F22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8D22CF6E6700D4B439 /* CrowdinCredentials.swift */; };
 		927D2F9022CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8D22CF6E6700D4B439 /* CrowdinCredentials.swift */; };
-		927D2F9222CF74E000D4B439 /* CrowdinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8922CF6DDA00D4B439 /* CrowdinManager.swift */; };
-		927D2F9322CF74E000D4B439 /* CrowdinCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8D22CF6E6700D4B439 /* CrowdinCredentials.swift */; };
-		927D2F9422CF74F700D4B439 /* BackgroundDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C4F2DF22B2474E001391FB /* BackgroundDownloader.swift */; };
 		927EDE1B22A66033005D5CEA /* NonDisappearingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EDE1A22A66033005D5CEA /* NonDisappearingView.swift */; };
 		927EDE1C22A66033005D5CEA /* NonDisappearingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EDE1A22A66033005D5CEA /* NonDisappearingView.swift */; };
 		927EDE1D22A66033005D5CEA /* NonDisappearingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EDE1A22A66033005D5CEA /* NonDisappearingView.swift */; };
@@ -566,7 +525,6 @@
 		92B8374D22859210002B385B /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8374C22859210002B385B /* Resources.swift */; };
 		92B8374E22859210002B385B /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8374C22859210002B385B /* Resources.swift */; };
 		92B8374F22859210002B385B /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8374C22859210002B385B /* Resources.swift */; };
-		92B837502285C1C4002B385B /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
 		92B837522285D218002B385B /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B837512285D218002B385B /* Fonts.swift */; };
 		92B837532285D218002B385B /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B837512285D218002B385B /* Fonts.swift */; };
 		92B837542285D218002B385B /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B837512285D218002B385B /* Fonts.swift */; };
@@ -579,15 +537,12 @@
 		92BAC46422C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92BAC46322C6D7CD0076CC6F /* RecoveryProgress.mm */; };
 		92BAC46522C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92BAC46322C6D7CD0076CC6F /* RecoveryProgress.mm */; };
 		92BAC46622C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92BAC46322C6D7CD0076CC6F /* RecoveryProgress.mm */; };
-		92BAC46722C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92BAC46322C6D7CD0076CC6F /* RecoveryProgress.mm */; };
 		92BCEE7722C37E0F0062EE95 /* BMLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7622C37E0F0062EE95 /* BMLanguage.m */; };
 		92BCEE7822C37E0F0062EE95 /* BMLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7622C37E0F0062EE95 /* BMLanguage.m */; };
 		92BCEE7922C37E0F0062EE95 /* BMLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7622C37E0F0062EE95 /* BMLanguage.m */; };
-		92BCEE7A22C381840062EE95 /* BMLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7622C37E0F0062EE95 /* BMLanguage.m */; };
 		92BCEE7D22C382150062EE95 /* StringLocalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7C22C382150062EE95 /* StringLocalize.m */; };
 		92BCEE7E22C382150062EE95 /* StringLocalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7C22C382150062EE95 /* StringLocalize.m */; };
 		92BCEE7F22C382150062EE95 /* StringLocalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7C22C382150062EE95 /* StringLocalize.m */; };
-		92BCEE8022C382880062EE95 /* StringLocalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEE7C22C382150062EE95 /* StringLocalize.m */; };
 		92C00D1B22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C00D1922A009F100DDB579 /* OwnerKeyUnlockViewController.swift */; };
 		92C00D1C22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C00D1922A009F100DDB579 /* OwnerKeyUnlockViewController.swift */; };
 		92C00D1D22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C00D1922A009F100DDB579 /* OwnerKeyUnlockViewController.swift */; };
@@ -603,25 +558,6 @@
 		92C00D2E22A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 92C00D2D22A04C8300DDB579 /* SF-Pro-Display-Light.otf */; };
 		92C00D2F22A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 92C00D2D22A04C8300DDB579 /* SF-Pro-Display-Light.otf */; };
 		92C00D3022A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 92C00D2D22A04C8300DDB579 /* SF-Pro-Display-Light.otf */; };
-		92C4DBC5227879AE0073AEED /* BMWalletStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 92435242222DED3200A0EF37 /* BMWalletStatus.m */; };
-		92C4DBC6227879AE0073AEED /* BMAddress.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92435245222DF9AE00A0EF37 /* BMAddress.mm */; };
-		92C4DBC7227879AE0073AEED /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
-		92C4DBC8227879AE0073AEED /* BMPaymentProof.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D99224E41E800F79D64 /* BMPaymentProof.m */; };
-		92C4DBC9227879AE0073AEED /* BMContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D95224CD8AE00F79D64 /* BMContact.m */; };
-		92C4DBCA227879AE0073AEED /* BMTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A8578222EB7C600A3B747 /* BMTransaction.m */; };
-		92C4DBCB227879AE0073AEED /* StringStd.mm in Sources */ = {isa = PBXBuildFile; fileRef = 925D10DF224A3CF100C64876 /* StringStd.mm */; };
-		92C4DBCC227879AE0073AEED /* AppModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92365ACD222D3E79000D7064 /* AppModel.mm */; };
-		92C4DBCD227879AE0073AEED /* WalletModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92365ACF222D3E79000D7064 /* WalletModel.mm */; };
-		92C4DBCE227879AE0073AEED /* NodeModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92BA7EC6225238C7002D9367 /* NodeModel.mm */; };
-		92C4DBCF227879AE0073AEED /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 92365AD8222D3F5E000D7064 /* Settings.m */; };
-		92C4DBD0227879AE0073AEED /* MnemonicModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92365ADD222D3FAB000D7064 /* MnemonicModel.mm */; };
-		92C4DBD1227879AE0073AEED /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A857F222ECD7600A3B747 /* Reachability.m */; };
-		92C4DBD2227879AE0073AEED /* DiskStatusManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FC9330225371D400555DE1 /* DiskStatusManager.m */; };
-		92C4DBD322787AB80073AEED /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592CA72245309B00050A13 /* NotificationManager.swift */; };
-		92C4DBD422787ABC0073AEED /* TGBotManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DCE2271B2ED00B30613 /* TGBotManager.swift */; };
-		92C4DBD522788E430073AEED /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925AD6022228332A00DDE66B /* Button.swift */; };
-		92C4DBDA2278E2230073AEED /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC611422296F2700AEABC1 /* Color.swift */; };
-		92C4DBDC227906800073AEED /* BeamWalletNotificationViewTestNet.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 927367202277AB330060CB67 /* BeamWalletNotificationViewTestNet.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		92C4F2E022B2474E001391FB /* BackgroundDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C4F2DF22B2474E001391FB /* BackgroundDownloader.swift */; };
 		92C4F2E122B2474E001391FB /* BackgroundDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C4F2DF22B2474E001391FB /* BackgroundDownloader.swift */; };
 		92C4F2E222B2474E001391FB /* BackgroundDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C4F2DF22B2474E001391FB /* BackgroundDownloader.swift */; };
@@ -691,6 +627,12 @@
 		92D232B722BBF1C500663C0E /* BuyBeamOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */; };
 		92D3CBD12264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */; };
 		92D3CBD22264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */; };
+		92D577B322F038EE003B50B3 /* TransactionDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D577B122F038EC003B50B3 /* TransactionDetailCell.xib */; };
+		92D577B422F038EE003B50B3 /* TransactionDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D577B122F038EC003B50B3 /* TransactionDetailCell.xib */; };
+		92D577B522F038EE003B50B3 /* TransactionDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D577B122F038EC003B50B3 /* TransactionDetailCell.xib */; };
+		92D577B622F038EE003B50B3 /* TransactionDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D577B222F038EE003B50B3 /* TransactionDetailCell.swift */; };
+		92D577B722F038EE003B50B3 /* TransactionDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D577B222F038EE003B50B3 /* TransactionDetailCell.swift */; };
+		92D577B822F038EE003B50B3 /* TransactionDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D577B222F038EE003B50B3 /* TransactionDetailCell.swift */; };
 		92D6DB4422DF3B440086DFF7 /* SendPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6DB4222DF3B440086DFF7 /* SendPasswordViewController.swift */; };
 		92D6DB4522DF3B440086DFF7 /* SendPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6DB4222DF3B440086DFF7 /* SendPasswordViewController.swift */; };
 		92D6DB4622DF3B440086DFF7 /* SendPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6DB4222DF3B440086DFF7 /* SendPasswordViewController.swift */; };
@@ -722,7 +664,6 @@
 		92DEDD0C229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DEDD0B229EC81C00EA0226 /* BMPreparedTransaction.m */; };
 		92DEDD0D229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DEDD0B229EC81C00EA0226 /* BMPreparedTransaction.m */; };
 		92DEDD0E229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DEDD0B229EC81C00EA0226 /* BMPreparedTransaction.m */; };
-		92DEDD0F229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DEDD0B229EC81C00EA0226 /* BMPreparedTransaction.m */; };
 		92DF0CF122CAB38B0092CD4D /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DF0CE222CAB3610092CD4D /* libexternal_pow.a */; };
 		92DF0CF222CAB38B0092CD4D /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DF0CE322CAB3640092CD4D /* libsqlite.a */; };
 		92DF0CF322CAB38B0092CD4D /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DF0CE422CAB3670092CD4D /* libwallet.a */; };
@@ -822,7 +763,6 @@
 		92E2EB2D226F21C700367928 /* ShareLogActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB8326223BA921000ADE86 /* ShareLogActivity.swift */; };
 		92E2EB2E226F21C700367928 /* BMPopoverMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928B0AB122425329003CE9E7 /* BMPopoverMenu.swift */; };
 		92E2EB34226F21C700367928 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923544712254C6CE00889C74 /* openssl.framework */; };
-		92E2EB36226F21C700367928 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92790D91224CCDF600F79D64 /* boost.framework */; };
 		92E2EB42226F21C700367928 /* ConfirmPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */; };
 		92E2EB43226F21C700367928 /* WalletTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A857B222EC10C00A3B747 /* WalletTransactionCell.xib */; };
 		92E2EB46226F21C700367928 /* TransactionUTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790DA3224E59E800F79D64 /* TransactionUTXOCell.xib */; };
@@ -947,18 +887,7 @@
 		92FE264222A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		B204B190DA4B48994EBAD225 /* Pods_BeamWalletTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E96237C4102DE036679EDC41 /* Pods_BeamWalletTestNet.framework */; };
-		C9F9F4FF9D5CD63B8A908259 /* Pods_BeamWalletNotificationViewTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29895BC324085C75D90BBC9 /* Pods_BeamWalletNotificationViewTestNet.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		92C4DBDD227906800073AEED /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 925AD5D02228254E00DDE66B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9273671F2277AB330060CB67;
-			remoteInfo = BeamWalletNotificationViewTestNet;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		92365AE2222D4039000D7064 /* Embed Frameworks */ = {
@@ -989,7 +918,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				92C4DBDC227906800073AEED /* BeamWalletNotificationViewTestNet.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1098,6 +1026,7 @@
 		9227AEEA2282F6F800FB221F /* BMDuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMDuration.h; sourceTree = "<group>"; };
 		9227AEEB2282F6F800FB221F /* BMDuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDuration.m; sourceTree = "<group>"; };
 		922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMMultiLineItem.swift; sourceTree = "<group>"; };
+		922F689422E20A39005D3F33 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boost.framework; sourceTree = "<group>"; };
 		922FB15D22B3E134007AD689 /* BMSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSearchView.swift; sourceTree = "<group>"; };
 		9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-LightItalic.otf"; sourceTree = "<group>"; };
 		9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
@@ -1144,8 +1073,6 @@
 		92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateWalletProgressViewController.xib; sourceTree = "<group>"; };
 		92554D502289A34000FE6041 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		92554D542289A77900FE6041 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		92554D592289B47A00FE6041 /* UTXOTransactionsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOTransactionsHeaderView.swift; sourceTree = "<group>"; };
-		92554D5D2289B49600FE6041 /* UTXOTransactionsHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOTransactionsHeaderView.xib; sourceTree = "<group>"; };
 		92592CA42245296D00050A13 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		92592CA72245309B00050A13 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		925AD5D82228254E00DDE66B /* BeamWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1208,15 +1135,8 @@
 		92708DCE2271B2ED00B30613 /* TGBotManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGBotManager.swift; sourceTree = "<group>"; };
 		92708DD72271FA5100B30613 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		92708DDB2272398300B30613 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
-		927367202277AB330060CB67 /* BeamWalletNotificationViewTestNet.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BeamWalletNotificationViewTestNet.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		927367212277AB330060CB67 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		927367232277AB340060CB67 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
-		927367262277AB340060CB67 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
-		927367292277AB340060CB67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		9273672B2277AB340060CB67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9273674B2277C0E70060CB67 /* BeamWalletNotificationView.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BeamWalletNotificationView.entitlements; sourceTree = "<group>"; };
-		927367502277D4D80060CB67 /* BeamWalletNotificationView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BeamWalletNotificationView-Bridging-Header.h"; sourceTree = "<group>"; };
-		92790D91224CCDF600F79D64 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boost.framework; sourceTree = "<group>"; };
 		92790D94224CD8AE00F79D64 /* BMContact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMContact.h; sourceTree = "<group>"; };
 		92790D95224CD8AE00F79D64 /* BMContact.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMContact.m; sourceTree = "<group>"; };
 		92790D98224E41E800F79D64 /* BMPaymentProof.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMPaymentProof.h; sourceTree = "<group>"; };
@@ -1341,6 +1261,8 @@
 		92D232AD22BBCEF000663C0E /* BuyBeamOrderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyBeamOrderViewController.xib; sourceTree = "<group>"; };
 		92D232B422BBF1C500663C0E /* BuyBeamOrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyBeamOrderViewModel.swift; sourceTree = "<group>"; };
 		92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthorization.swift; sourceTree = "<group>"; };
+		92D577B122F038EC003B50B3 /* TransactionDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransactionDetailCell.xib; sourceTree = "<group>"; };
+		92D577B222F038EE003B50B3 /* TransactionDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionDetailCell.swift; sourceTree = "<group>"; };
 		92D6DB4222DF3B440086DFF7 /* SendPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPasswordViewController.swift; sourceTree = "<group>"; };
 		92D6DB4322DF3B440086DFF7 /* SendPasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SendPasswordViewController.xib; sourceTree = "<group>"; };
 		92D6DB4C22DF63B40086DFF7 /* CGRect+Center.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Center.swift"; sourceTree = "<group>"; };
@@ -1373,6 +1295,7 @@
 		92E2EB85226F21C700367928 /* BeamWalletMasterNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamWalletMasterNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E2EB88226F222800367928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenMasterNet.storyboard; sourceTree = "<group>"; };
 		92E2EB8B226F225700367928 /* bgMasternet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgMasternet.jpg; sourceTree = "<group>"; };
+		92E5E2FB22EEE0790098C699 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		92E884B7223F93FF0003D6BB /* BMUTXO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMUTXO.h; sourceTree = "<group>"; };
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
 		92E884C2223FADCD0003D6BB /* UTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOCell.swift; sourceTree = "<group>"; };
@@ -1429,9 +1352,9 @@
 				92DF0CF322CAB38B0092CD4D /* libwallet.a in Frameworks */,
 				923544792254CB1300889C74 /* openssl.framework in Frameworks */,
 				92DF0CF222CAB38B0092CD4D /* libsqlite.a in Frameworks */,
+				922F689522E20A39005D3F33 /* boost.framework in Frameworks */,
 				92DF0CFB22CAB38B0092CD4D /* libutility.a in Frameworks */,
 				92DF0CFC22CAB38B0092CD4D /* libuv_a.a in Frameworks */,
-				92790D92224CCDF600F79D64 /* boost.framework in Frameworks */,
 				575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */,
 				92DF0CFF22CAB38B0092CD4D /* libcrypto.a in Frameworks */,
 				92DF0CF122CAB38B0092CD4D /* libexternal_pow.a in Frameworks */,
@@ -1446,33 +1369,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9273671D2277AB330060CB67 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				927367242277AB340060CB67 /* UserNotificationsUI.framework in Frameworks */,
-				920CED4F22D88D3000846283 /* libp2p.a in Frameworks */,
-				920CED5122D88D3000846283 /* libcore.a in Frameworks */,
-				920CED3B22D88D3000846283 /* libwallet.a in Frameworks */,
-				920CED5322D88D3000846283 /* libuv_a.a in Frameworks */,
-				920CED4722D88D3000846283 /* libnode.a in Frameworks */,
-				920CED5522D88D3000846283 /* libcrypto.a in Frameworks */,
-				9273676C2277D7320060CB67 /* openssl.framework in Frameworks */,
-				920CED4922D88D3000846283 /* libutility.a in Frameworks */,
-				920CED4522D88D3000846283 /* libsqlite.a in Frameworks */,
-				920CED4D22D88D3000846283 /* libcli.a in Frameworks */,
-				920CED3F22D88D3000846283 /* libexternal_pow.a in Frameworks */,
-				920CED3922D88D3000846283 /* libsecp256k1.a in Frameworks */,
-				920CED4B22D88D3000846283 /* libhttp.a in Frameworks */,
-				920CED3D22D88D3000846283 /* libpow.a in Frameworks */,
-				927367222277AB340060CB67 /* UserNotifications.framework in Frameworks */,
-				9273676D2277D7320060CB67 /* boost.framework in Frameworks */,
-				C9F9F4FF9D5CD63B8A908259 /* Pods_BeamWalletNotificationViewTestNet.framework in Frameworks */,
-				920CED4122D88D3000846283 /* libmnemonic.a in Frameworks */,
-				920CED4322D88D3000846283 /* liblibbitcoin.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		9288DD61223A55410020C501 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1481,6 +1377,7 @@
 				920CED3822D88D3000846283 /* libsecp256k1.a in Frameworks */,
 				920CED5222D88D3000846283 /* libuv_a.a in Frameworks */,
 				920CED4E22D88D3000846283 /* libp2p.a in Frameworks */,
+				922F689622E20A39005D3F33 /* boost.framework in Frameworks */,
 				920CED4822D88D3000846283 /* libutility.a in Frameworks */,
 				920CED4422D88D3000846283 /* libsqlite.a in Frameworks */,
 				920CED4C22D88D3000846283 /* libcli.a in Frameworks */,
@@ -1492,7 +1389,6 @@
 				920CED4A22D88D3000846283 /* libhttp.a in Frameworks */,
 				920CED3A22D88D3000846283 /* libwallet.a in Frameworks */,
 				920CED4222D88D3000846283 /* liblibbitcoin.a in Frameworks */,
-				92790D93224CCDF600F79D64 /* boost.framework in Frameworks */,
 				920CED3E22D88D3000846283 /* libexternal_pow.a in Frameworks */,
 				B204B190DA4B48994EBAD225 /* Pods_BeamWalletTestNet.framework in Frameworks */,
 			);
@@ -1506,7 +1402,6 @@
 				92E2EB34226F21C700367928 /* openssl.framework in Frameworks */,
 				92C6CC5322D8AFA60011E033 /* libutility.a in Frameworks */,
 				92C6CC5722D8AFA60011E033 /* libsqlite.a in Frameworks */,
-				92E2EB36226F21C700367928 /* boost.framework in Frameworks */,
 				92C6CC5422D8AFA60011E033 /* libcore.a in Frameworks */,
 				92C6CC5022D8AFA60011E033 /* libnode.a in Frameworks */,
 				92C6CC5522D8AFA60011E033 /* libcrypto.a in Frameworks */,
@@ -1518,6 +1413,7 @@
 				92C6CC5822D8AFA60011E033 /* libexternal_pow.a in Frameworks */,
 				92C6CC5A22D8AFA60011E033 /* libwallet.a in Frameworks */,
 				92C6CC5922D8AFA60011E033 /* liblibbitcoin.a in Frameworks */,
+				922F689722E20A39005D3F33 /* boost.framework in Frameworks */,
 				92C6CC5222D8AFA60011E033 /* libp2p.a in Frameworks */,
 				92C6CC4F22D8AFA60011E033 /* libhttp.a in Frameworks */,
 				92C6CC5622D8AFA60011E033 /* libpow.a in Frameworks */,
@@ -1636,6 +1532,14 @@
 			path = Objects;
 			sourceTree = "<group>";
 		};
+		922F2E7422E20733005D3F33 /* boost */ = {
+			isa = PBXGroup;
+			children = (
+				922F689422E20A39005D3F33 /* boost.framework */,
+			);
+			path = boost;
+			sourceTree = "<group>";
+		};
 		9232EC972267382A00A12EEE /* FirebaseTestnet */ = {
 			isa = PBXGroup;
 			children = (
@@ -1673,11 +1577,11 @@
 		92365AC8222D3E16000D7064 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				922F2E7422E20733005D3F33 /* boost */,
 				92E2EB8D226F24C200367928 /* masternet */,
 				92D3CBF02264B56D007E3C55 /* testnet */,
 				92D3CBD32264B562007E3C55 /* mainnet */,
 				923544712254C6CE00889C74 /* openssl.framework */,
-				92790D91224CCDF600F79D64 /* boost.framework */,
 				60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */,
 				E96237C4102DE036679EDC41 /* Pods_BeamWalletTestNet.framework */,
 				927367212277AB330060CB67 /* UserNotifications.framework */,
@@ -1817,7 +1721,6 @@
 			children = (
 				925AD5DA2228254E00DDE66B /* BeamWallet */,
 				925AD5ED2228260C00DDE66B /* Resources */,
-				927367252277AB340060CB67 /* BeamWalletNotificationView */,
 				92365AC8222D3E16000D7064 /* Frameworks */,
 				925AD5D92228254E00DDE66B /* Products */,
 				22A30D11A4655B31D781F6DD /* Pods */,
@@ -1830,7 +1733,6 @@
 				925AD5D82228254E00DDE66B /* BeamWallet.app */,
 				9288DD9C223A55410020C501 /* BeamWalletTestNet.app */,
 				92E2EB85226F21C700367928 /* BeamWalletMasterNet.app */,
-				927367202277AB330060CB67 /* BeamWalletNotificationViewTestNet.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2029,18 +1931,6 @@
 			path = LGSideMenuController;
 			sourceTree = "<group>";
 		};
-		927367252277AB340060CB67 /* BeamWalletNotificationView */ = {
-			isa = PBXGroup;
-			children = (
-				9273674B2277C0E70060CB67 /* BeamWalletNotificationView.entitlements */,
-				927367262277AB340060CB67 /* NotificationViewController.swift */,
-				927367282277AB340060CB67 /* MainInterface.storyboard */,
-				9273672B2277AB340060CB67 /* Info.plist */,
-				927367502277D4D80060CB67 /* BeamWalletNotificationView-Bridging-Header.h */,
-			);
-			path = BeamWalletNotificationView;
-			sourceTree = "<group>";
-		};
 		927D2F9122CF6EC800D4B439 /* Crowdin */ = {
 			isa = PBXGroup;
 			children = (
@@ -2154,6 +2044,8 @@
 				92790D9D224E4A1500F79D64 /* TransactionPaymentProofCell.xib */,
 				92790DA2224E59E800F79D64 /* TransactionUTXOCell.swift */,
 				92790DA3224E59E800F79D64 /* TransactionUTXOCell.xib */,
+				92D577B222F038EE003B50B3 /* TransactionDetailCell.swift */,
+				92D577B122F038EC003B50B3 /* TransactionDetailCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -2273,8 +2165,6 @@
 				92F68C7D2244E77500197D4D /* UTXODetailCell.xib */,
 				92F68C8B2245070200197D4D /* UTXOTransactionCell.swift */,
 				92F68C8C2245070200197D4D /* UTXOTransactionCell.xib */,
-				92554D592289B47A00FE6041 /* UTXOTransactionsHeaderView.swift */,
-				92554D5D2289B49600FE6041 /* UTXOTransactionsHeaderView.xib */,
 				9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */,
 				9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */,
 			);
@@ -2437,24 +2327,6 @@
 			productReference = 925AD5D82228254E00DDE66B /* BeamWallet.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9273671F2277AB330060CB67 /* BeamWalletNotificationViewTestNet */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 927367312277AB340060CB67 /* Build configuration list for PBXNativeTarget "BeamWalletNotificationViewTestNet" */;
-			buildPhases = (
-				A73B06BE5BA7E84AEA7AA0D8 /* [CP] Check Pods Manifest.lock */,
-				9273671C2277AB330060CB67 /* Sources */,
-				9273671D2277AB330060CB67 /* Frameworks */,
-				9273671E2277AB330060CB67 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BeamWalletNotificationViewTestNet;
-			productName = BeamWalletNotificationView;
-			productReference = 927367202277AB330060CB67 /* BeamWalletNotificationViewTestNet.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		9288DD2A223A55410020C501 /* BeamWalletTestNet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9288DD99223A55410020C501 /* Build configuration list for PBXNativeTarget "BeamWalletTestNet" */;
@@ -2472,7 +2344,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				92C4DBDE227906800073AEED /* PBXTargetDependency */,
 			);
 			name = BeamWalletTestNet;
 			productName = BeamWallet;
@@ -2526,18 +2397,6 @@
 							};
 						};
 					};
-					9273671F2277AB330060CB67 = {
-						CreatedOnToolsVersion = 10.2.1;
-						LastSwiftMigration = 1020;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
-							};
-							com.apple.Keychain = {
-								enabled = 1;
-							};
-						};
-					};
 					9288DD2A223A55410020C501 = {
 						LastSwiftMigration = 1020;
 						SystemCapabilities = {
@@ -2583,6 +2442,7 @@
 				vi,
 				ru,
 				ko,
+				tr,
 			);
 			mainGroup = 925AD5CF2228254E00DDE66B;
 			productRefGroup = 925AD5D92228254E00DDE66B /* Products */;
@@ -2592,7 +2452,6 @@
 				925AD5D72228254E00DDE66B /* BeamWallet */,
 				9288DD2A223A55410020C501 /* BeamWalletTestNet */,
 				92E2EACD226F21C700367928 /* BeamWalletMasterNet */,
-				9273671F2277AB330060CB67 /* BeamWalletNotificationViewTestNet */,
 			);
 		};
 /* End PBXProject section */
@@ -2645,6 +2504,7 @@
 				92790DA0224E4A1500F79D64 /* TransactionPaymentProofCell.xib in Resources */,
 				9227AECB2282D43700FB221F /* CategoryPickerCell.xib in Resources */,
 				92790DAC224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */,
+				92D577B322F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				9207FF4922293FEB009D931B /* DisplayPhraseViewController.xib in Resources */,
 				92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */,
 				9225D53422941F940067B4EA /* SFProText-Regular.ttf in Resources */,
@@ -2670,7 +2530,6 @@
 				92FC611D22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib in Resources */,
 				925AD5F9222829A400DDE66B /* ProximaNova-Bold.ttf in Resources */,
 				92090D09223A67D400A1CFBB /* LaunchScreenTestNet.storyboard in Resources */,
-				92554D5E2289B49600FE6041 /* UTXOTransactionsHeaderView.xib in Resources */,
 				92F68C802244E77500197D4D /* UTXODetailCell.xib in Resources */,
 				92090D0C223A684000A1CFBB /* bgTestnet.jpg in Resources */,
 				9235448B2256019C00889C74 /* UnlockPasswordViewController.xib in Resources */,
@@ -2678,16 +2537,6 @@
 				92C00D2622A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
 				926F4B2C22E0CDB7007755D9 /* README.md in Resources */,
 				92D232B122BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9273671E2277AB330060CB67 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9273672A2277AB340060CB67 /* MainInterface.storyboard in Resources */,
-				9273674F2277C55E0060CB67 /* Assets.xcassets in Resources */,
-				9273674D2277C4F40060CB67 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2744,6 +2593,7 @@
 				9288DD87223A55410020C501 /* InputPhraseViewController.xib in Resources */,
 				92A0404C225813CE00C42081 /* SFProText-Semibold.otf in Resources */,
 				9288DD89223A55410020C501 /* WalletProgressCell.xib in Resources */,
+				92D577B422F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				92CC40EC22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				92C5EBB7229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */,
 				9261C269228BF55800D666E0 /* BMPickerCell.xib in Resources */,
@@ -2765,7 +2615,6 @@
 				92FE264222A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
 				92090D0A223A67D400A1CFBB /* LaunchScreenTestNet.storyboard in Resources */,
 				926F4B2A22E0CDB7007755D9 /* LICENSE in Resources */,
-				92554D5F2289B49600FE6041 /* UTXOTransactionsHeaderView.xib in Resources */,
 				92F68C812244E77500197D4D /* UTXODetailCell.xib in Resources */,
 				92090D0D223A684000A1CFBB /* bgTestnet.jpg in Resources */,
 				92C00D2722A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
@@ -2779,6 +2628,7 @@
 			files = (
 				92E2EB42226F21C700367928 /* ConfirmPhraseViewController.xib in Resources */,
 				92E2EB43226F21C700367928 /* WalletTransactionCell.xib in Resources */,
+				92D577B522F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				92C00D2822A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
 				9246F75F227C48830091FB0B /* BMEmptyCell.xib in Resources */,
 				92C00D3022A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */,
@@ -2824,7 +2674,6 @@
 				92E2EB61226F21C700367928 /* TransactionPaymentProofCell.xib in Resources */,
 				92E2EB63226F21C700367928 /* PaymentProofDetailViewController.xib in Resources */,
 				92E2EB8A226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */,
-				92554D602289B49600FE6041 /* UTXOTransactionsHeaderView.xib in Resources */,
 				92D232A722BA942400663C0E /* BuyGetCell.xib in Resources */,
 				92E2EB64226F21C700367928 /* DisplayPhraseViewController.xib in Resources */,
 				92F6B79722A558530055C3C3 /* FeeCell.xib in Resources */,
@@ -3078,28 +2927,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" a1b807ba21d77b7a801d4c9674b93d0e4f26b21d 2c256993692a8b7b4d88caf2930889f1e0721fa30c6fe73c85e6aaf11c9a9b66\n";
 		};
-		A73B06BE5BA7E84AEA7AA0D8 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BeamWalletNotificationViewTestNet-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		CBCB747DB827C9EAA1978C71 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3179,7 +3006,6 @@
 				9212DBB922E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
 				92F6B79222A558530055C3C3 /* FeeCell.swift in Sources */,
 				9243525A222E73FC00A0EF37 /* UTXOViewController.swift in Sources */,
-				92554D5A2289B47A00FE6041 /* UTXOTransactionsHeaderView.swift in Sources */,
 				92C00D2322A00E2A00DDB579 /* OwnerKeyViewController.swift in Sources */,
 				92C4F2E022B2474E001391FB /* BackgroundDownloader.swift in Sources */,
 				92435250222E73DC00A0EF37 /* WalletViewController.swift in Sources */,
@@ -3237,6 +3063,7 @@
 				92FC610922294F7D00AEABC1 /* ConfirmPhraseViewController.swift in Sources */,
 				92F6B79922A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D522AF0067001708E4 /* UTXOViewModel.swift in Sources */,
+				92D577B622F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				92FC6118222978C400AEABC1 /* PasswordManager.swift in Sources */,
 				92FC612322299A4E00AEABC1 /* Device.swift in Sources */,
 				9227AEEC2282F6F800FB221F /* BMDuration.m in Sources */,
@@ -3330,50 +3157,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9273671C2277AB330060CB67 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				920CED5622D897EE00846283 /* Double.swift in Sources */,
-				92C4DBD422787ABC0073AEED /* TGBotManager.swift in Sources */,
-				927D2F9322CF74E000D4B439 /* CrowdinCredentials.swift in Sources */,
-				9273674C2277C4400060CB67 /* BiometricAuthorization.swift in Sources */,
-				92BCEE7A22C381840062EE95 /* BMLanguage.m in Sources */,
-				92C4DBCE227879AE0073AEED /* NodeModel.mm in Sources */,
-				92C4DBCF227879AE0073AEED /* Settings.m in Sources */,
-				92C4DBCC227879AE0073AEED /* AppModel.mm in Sources */,
-				92C4DBCB227879AE0073AEED /* StringStd.mm in Sources */,
-				927367272277AB340060CB67 /* NotificationViewController.swift in Sources */,
-				92C4DBD522788E430073AEED /* Button.swift in Sources */,
-				92BCEE8022C382880062EE95 /* StringLocalize.m in Sources */,
-				9227AEEF2282F6F800FB221F /* BMDuration.m in Sources */,
-				9273674E2277C4FD0060CB67 /* String.swift in Sources */,
-				92C4DBCD227879AE0073AEED /* WalletModel.mm in Sources */,
-				927D2F9222CF74E000D4B439 /* CrowdinManager.swift in Sources */,
-				92B837502285C1C4002B385B /* URL.swift in Sources */,
-				9273674A2277BFE60060CB67 /* KeychainManager.swift in Sources */,
-				92C4DBC5227879AE0073AEED /* BMWalletStatus.m in Sources */,
-				92C4DBCA227879AE0073AEED /* BMTransaction.m in Sources */,
-				92BAC46722C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
-				92C4DBDA2278E2230073AEED /* Color.swift in Sources */,
-				924C762822D4CC5700625B7C /* Color.m in Sources */,
-				927D2F9422CF74F700D4B439 /* BackgroundDownloader.swift in Sources */,
-				92C4DBC7227879AE0073AEED /* BMUTXO.m in Sources */,
-				921FA633227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
-				92C4DBC8227879AE0073AEED /* BMPaymentProof.m in Sources */,
-				9219595C22823639007E9723 /* LocalizableStrings.swift in Sources */,
-				92C4DBC6227879AE0073AEED /* BMAddress.mm in Sources */,
-				92554D582289A82B00FE6041 /* Image.swift in Sources */,
-				92C4DBC9227879AE0073AEED /* BMContact.m in Sources */,
-				92C4DBD322787AB80073AEED /* NotificationManager.swift in Sources */,
-				92227AFC2281981E0070DC68 /* BMCategory.m in Sources */,
-				92C4DBD0227879AE0073AEED /* MnemonicModel.mm in Sources */,
-				92DEDD0F229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */,
-				92C4DBD2227879AE0073AEED /* DiskStatusManager.m in Sources */,
-				92C4DBD1227879AE0073AEED /* Reachability.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		9288DD2C223A55410020C501 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3428,7 +3211,6 @@
 				9212DBBA22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
 				92F6B79322A558530055C3C3 /* FeeCell.swift in Sources */,
 				9288DD3D223A55410020C501 /* UTXOViewController.swift in Sources */,
-				92554D5B2289B47A00FE6041 /* UTXOTransactionsHeaderView.swift in Sources */,
 				92C00D2422A00E2A00DDB579 /* OwnerKeyViewController.swift in Sources */,
 				92C4F2E122B2474E001391FB /* BackgroundDownloader.swift in Sources */,
 				9288DD3E223A55410020C501 /* WalletViewController.swift in Sources */,
@@ -3486,6 +3268,7 @@
 				9288DD4D223A55410020C501 /* ConfirmPhraseViewController.swift in Sources */,
 				92F6B79A22A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D622AF0067001708E4 /* UTXOViewModel.swift in Sources */,
+				92D577B722F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				9288DD4E223A55410020C501 /* PasswordManager.swift in Sources */,
 				9288DD4F223A55410020C501 /* Device.swift in Sources */,
 				9227AEED2282F6F800FB221F /* BMDuration.m in Sources */,
@@ -3633,7 +3416,6 @@
 				9212DBBB22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
 				92F6B79422A558530055C3C3 /* FeeCell.swift in Sources */,
 				92E2EAE8226F21C700367928 /* UTXOViewController.swift in Sources */,
-				92554D5C2289B47A00FE6041 /* UTXOTransactionsHeaderView.swift in Sources */,
 				92C00D2522A00E2A00DDB579 /* OwnerKeyViewController.swift in Sources */,
 				92C4F2E222B2474E001391FB /* BackgroundDownloader.swift in Sources */,
 				92E2EAE9226F21C700367928 /* WalletViewController.swift in Sources */,
@@ -3691,6 +3473,7 @@
 				92E2EB02226F21C700367928 /* ConfirmPhraseViewController.swift in Sources */,
 				92F6B79B22A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D722AF0067001708E4 /* UTXOViewModel.swift in Sources */,
+				92D577B822F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				92E2EB03226F21C700367928 /* PasswordManager.swift in Sources */,
 				92E2EB05226F21C700367928 /* Device.swift in Sources */,
 				9227AEEE2282F6F800FB221F /* BMDuration.m in Sources */,
@@ -3786,14 +3569,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		92C4DBDE227906800073AEED /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9273671F2277AB330060CB67 /* BeamWalletNotificationViewTestNet */;
-			targetProxy = 92C4DBDD227906800073AEED /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		92090D07223A67D400A1CFBB /* LaunchScreenTestNet.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -3811,14 +3586,6 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		927367282277AB340060CB67 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				927367292277AB340060CB67 /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
 		92E2EA9D226DE5F500367928 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3829,6 +3596,7 @@
 				92B066FA22CB89F30048BF6D /* vi */,
 				92B066FB22CB89FB0048BF6D /* ru */,
 				92B066FC22CB8A290048BF6D /* ko */,
+				92E5E2FB22EEE0790098C699 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3973,6 +3741,7 @@
 			baseConfigurationReference = 7BFB7F991044E9C6718DE261 /* Pods-BeamWallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMain;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
@@ -3984,6 +3753,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../beam-mainnet\"",
@@ -3992,6 +3762,7 @@
 					"\"$(SRCROOT)/../beam-mainnet/core\"",
 					"\"$(SRCROOT)/../beam-mainnet/utility\"",
 					"\"$(SRCROOT)/../beam-mainnet/wallet\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty/libbitcoin/include\"/**",
 					"\"$(SRCROOT)/../beam-mainnet/3rdparty/sqlite\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
@@ -4007,6 +3778,7 @@
 					"$(PROJECT_DIR)/Frameworks/mainnet",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
+					"$(PROJECT_DIR)/Frameworks/boost/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4046,6 +3818,7 @@
 			baseConfigurationReference = 3507D319FDB9B8876886EFE4 /* Pods-BeamWallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMain;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
@@ -4056,6 +3829,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../beam-mainnet\"",
@@ -4064,6 +3838,7 @@
 					"\"$(SRCROOT)/../beam-mainnet/core\"",
 					"\"$(SRCROOT)/../beam-mainnet/utility\"",
 					"\"$(SRCROOT)/../beam-mainnet/wallet\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty/libbitcoin/include\"/**",
 					"\"$(SRCROOT)/../beam-mainnet/3rdparty/sqlite\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
@@ -4079,6 +3854,7 @@
 					"$(PROJECT_DIR)/Frameworks/mainnet",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
+					"$(PROJECT_DIR)/Frameworks/boost/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4112,128 +3888,6 @@
 			};
 			name = Release;
 		};
-		9273672F2277AB340060CB67 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 50BD6E0647EEF6BBB5042F95 /* Pods-BeamWalletNotificationViewTestNet.debug.xcconfig */;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = BeamWalletNotificationView/BeamWalletNotificationView.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = KNU2R94BJK;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"$(inherited)",
-					"GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
-					"$(inherited)",
-					"PB_FIELD_32BIT=1",
-					"PB_NO_PACKED_STRUCTS=1",
-					"PB_ENABLE_MALLOC=1",
-				);
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../beam-testnet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../beam-testnet/core\"",
-					"\"$(SRCROOT)/../beam-testnet/utility\"",
-					"\"$(SRCROOT)/../beam-testnet/wallet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
-				);
-				INFOPLIST_FILE = BeamWalletNotificationView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/masternet",
-				);
-				OTHER_SWIFT_FLAGS = "-DEXTENSION";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mw.beam.beamwalletiOS.BeamWalletNotificationView;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "BeamWalletNotificationView/BeamWalletNotificationView-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		927367302277AB340060CB67 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A43E62DF067EE6B06B21FBF4 /* Pods-BeamWalletNotificationViewTestNet.release.xcconfig */;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = BeamWalletNotificationView/BeamWalletNotificationView.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KNU2R94BJK;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"$(inherited)",
-					"GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
-					"$(inherited)",
-					"PB_FIELD_32BIT=1",
-					"PB_NO_PACKED_STRUCTS=1",
-					"PB_ENABLE_MALLOC=1",
-				);
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../beam-testnet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../beam-testnet/core\"",
-					"\"$(SRCROOT)/../beam-testnet/utility\"",
-					"\"$(SRCROOT)/../beam-testnet/wallet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
-				);
-				INFOPLIST_FILE = BeamWalletNotificationView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/masternet",
-				);
-				OTHER_SWIFT_FLAGS = "-DEXTENSION";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mw.beam.beamwalletiOS.BeamWalletNotificationView;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "BeamWalletNotificationView/BeamWalletNotificationView-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		9288DD9A223A55410020C501 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 73E46FE834043C1C71A80847 /* Pods-BeamWalletTestNet.debug.xcconfig */;
@@ -4253,6 +3907,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../beam-testnet\"",
@@ -4276,6 +3931,7 @@
 					"$(PROJECT_DIR)/Frameworks/testnet",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
+					"$(PROJECT_DIR)/Frameworks/boost/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4349,6 +4005,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -4382,6 +4039,7 @@
 					"$(PROJECT_DIR)/Frameworks/testnet",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
+					"$(PROJECT_DIR)/Frameworks/boost/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4454,16 +4112,17 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../beam-masternet\"",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty\"",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty/libbitcoin/include\"/**",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../beam-masternet/core\"",
-					"\"$(SRCROOT)/../beam-masternet/utility\"",
-					"\"$(SRCROOT)/../beam-masternet/wallet\"",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../beam-testnet\"",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty\"",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty/libbitcoin/include\"/**",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/../beam-testnet/core\"",
+					"\"$(SRCROOT)/../beam-testnet/utility\"",
+					"\"$(SRCROOT)/../beam-testnet/wallet\"",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4478,6 +4137,7 @@
 					"$(PROJECT_DIR)/Frameworks/testnet",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks/boost/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4550,16 +4210,17 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../beam-masternet\"",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty\"",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty/libbitcoin/include\"/**",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../beam-masternet/core\"",
-					"\"$(SRCROOT)/../beam-masternet/utility\"",
-					"\"$(SRCROOT)/../beam-masternet/wallet\"",
-					"\"$(SRCROOT)/../beam-masternet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../beam-testnet\"",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty\"",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty/libbitcoin/include\"/**",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/../beam-testnet/core\"",
+					"\"$(SRCROOT)/../beam-testnet/utility\"",
+					"\"$(SRCROOT)/../beam-testnet/wallet\"",
+					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4574,6 +4235,7 @@
 					"$(PROJECT_DIR)/Frameworks/testnet",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks/boost/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4645,15 +4307,6 @@
 			buildConfigurations = (
 				925AD5EB2228254F00DDE66B /* Debug */,
 				925AD5EC2228254F00DDE66B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		927367312277AB340060CB67 /* Build configuration list for PBXNativeTarget "BeamWalletNotificationViewTestNet" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9273672F2277AB340060CB67 /* Debug */,
-				927367302277AB340060CB67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

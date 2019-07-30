@@ -18,6 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #include <string>
+#include <cstring>
 
 @interface NSString (Additions)
 

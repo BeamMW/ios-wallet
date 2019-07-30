@@ -10,6 +10,8 @@ import UIKit
 
 class BMMultiLinesCell: BaseCell {
 
+    weak var delegate: GeneralInfoCellDelegate?
+
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var valueLabel: BMCopyLabel!
     @IBOutlet weak private var categoryLabel: UILabel!
@@ -31,7 +33,32 @@ class BMMultiLinesCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        valueLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
+
         selectionStyle = .none
+    }
+    
+    @objc private func titleLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+        
+        if let text = self.valueLabel.attributedText {
+            let title = NSString(string: text.string)
+            
+            let tapRange = title.range(of: Localizable.shared.strings.open_in_explorer)
+            
+            if tapRange.location != NSNotFound {
+                let tapLocation = sender.location(in: self.valueLabel)
+                let tapIndex = self.valueLabel.indexOfAttributedTextCharacterAtPoint(point: tapLocation)
+                
+                if let ranges = self.valueLabel.attributedText?.rangesOf(subString: Localizable.shared.strings.open_in_explorer) {
+                    for range in ranges {
+                        if tapIndex > range.location && tapIndex < range.location + range.length {
+                            self.delegate?.onClickToCell(cell: self)
+                            return
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -93,9 +120,7 @@ extension BMMultiLinesCell: Configurable {
                 }
             }
         }
-        
-        
-        if item.title == Localizable.shared.strings.send_to {
+        else if item.title == Localizable.shared.strings.send_to {
             
             let text = (item.detail)!
             
@@ -107,8 +132,96 @@ extension BMMultiLinesCell: Configurable {
             
             valueLabel.attributedText = att
         }
-        
-        if item.detailAttributedString != nil {
+        else if item.title == Localizable.shared.strings.kernel_id.uppercased() {
+            
+            if !(item.detail?.contains("00000000"))! {
+                valueLabel.isUserInteractionEnabled = true
+                
+                let text = item.detail! + "\n" + Localizable.shared.strings.open_in_explorer
+                let range = (text as NSString).range(of: String(Localizable.shared.strings.open_in_explorer))
+                
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = ExternalLinkGreen()
+                let imageString = NSAttributedString(attachment: imageAttachment)
+                
+                let attributedString = NSMutableAttributedString(string:text)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightTeal , range: range)
+                attributedString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: range)
+
+                attributedString.append(NSAttributedString(string: " "))
+                attributedString.append(imageString)
+                
+                valueLabel.attributedText = attributedString
+            }
+        }
+        else if item.title == Localizable.shared.strings.my_send_address.uppercased() ||
+            item.title == Localizable.shared.strings.my_rec_address.uppercased() || item.title == Localizable.shared.strings.contact.uppercased() || item.title == Localizable.shared.strings.my_address.uppercased() {
+
+            var attributedString = NSMutableAttributedString(string:item.detail!)
+
+            if let address = AppModel.sharedManager().findAddress(byID: item.detail!) {
+                
+                var fontSizeOffset:CGFloat = 0
+                
+                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
+                    fontSizeOffset = 1.0
+                }
+                else if Device.screenType == .iPhones_5{
+                    fontSizeOffset = -1.5
+                }
+                
+                if !address.label.isEmpty {
+                    attributedString = NSMutableAttributedString(string:"")
+                    
+                    let style = NSMutableParagraphStyle()
+                    style.lineSpacing = 8
+                    style.lineBreakMode = .byCharWrapping
+                    
+                    let style2 = NSMutableParagraphStyle()
+                    style2.lineSpacing = 0
+                    style2.lineBreakMode = .byCharWrapping
+
+                    let imageAttachment = NSTextAttachment()
+                    imageAttachment.image = IconContact()
+                    imageAttachment.bounds = CGRect(x: 0, y: -2, width: 16, height: 16)
+
+                    let imageString = NSAttributedString(attachment: imageAttachment)
+                    
+                    let nameString = NSMutableAttributedString(string:address.label)
+                    nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSMakeRange(0, nameString.string.count))
+                    
+                    let detailString = NSMutableAttributedString(string:item.detail!)
+                    detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSMakeRange(0, detailString.string.count))
+
+                    attributedString.append(imageString)
+                    attributedString.append(NSAttributedString(string: "  "))
+                    attributedString.append(nameString)
+                    attributedString.append(NSAttributedString(string: "\n"))
+                    attributedString.append(detailString)
+                   
+                    attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
+                }
+                
+                if address.categories.count > 0 {
+                    let style = NSMutableParagraphStyle()
+                    style.lineSpacing = 3
+                    
+                    let categoriesString = address.categoriesName()
+                    categoriesString.addAttributes([NSAttributedString.Key.font : ItalicFont(size: 14 + fontSizeOffset)], range: NSMakeRange(0, categoriesString.string.count))
+
+                    let whiteString = NSMutableAttributedString(string: "\nwhite\n")
+                    whiteString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, whiteString.string.count))
+                    whiteString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: NSMakeRange(0, whiteString.string.count))
+                    whiteString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 1), range: NSMakeRange(0, whiteString.string.count))
+
+                    attributedString.append(whiteString)
+                    attributedString.append(categoriesString)
+                }
+            }
+            
+            valueLabel.attributedText = attributedString
+        }
+        else if item.detailAttributedString != nil {
             valueLabel.attributedText = item.detailAttributedString
         }
     }

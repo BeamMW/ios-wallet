@@ -131,7 +131,9 @@ class CreateWalletProgressViewController: BaseViewController {
 
     private func downloadFile() {
         self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(0)%"
-        
+        self.progressTitleLabel.text = Localizable.shared.strings.downloading_blockchain
+        self.restotingInfoLabel.isHidden = true
+
         RestoreManager.shared.startRestore(completion: { (completed) in
             if completed {
                 DispatchQueue.main.async {
@@ -223,6 +225,9 @@ class CreateWalletProgressViewController: BaseViewController {
     private func restoreCompleted() {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
+            strongSelf.progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
+            strongSelf.restotingInfoLabel.text = Localizable.shared.strings.restor_wallet_warning + "\n\n" + Localizable.shared.strings.restor_wallet_info
+            strongSelf.restotingInfoLabel.isHidden = false
             strongSelf.progressView.progress = 0
             strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(0)%"
         }

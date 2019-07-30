@@ -28,7 +28,7 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet weak private var errorLabel: UILabel!
     @IBOutlet weak private var rightButton: UIButton!
 
-    @IBOutlet weak private var contactView: UIView!
+    @IBOutlet weak private var contactView: UIStackView!
     @IBOutlet weak private var contactName: UILabel!
     @IBOutlet weak private var contactCategory: UILabel!
 
@@ -147,7 +147,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
                 (obj : String?) -> Void in
                 if let text = obj {
                     self.delegate?.textValueDidChange?(self, text, false)
-                    self.textField.resignFirstResponder()
+                    _ = self.textField.resignFirstResponder()
                     self.checkAttributes(string: text)
                 }
             }
@@ -166,6 +166,9 @@ extension BMSearchAddressCell : UITextViewDelegate {
         if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = String.empty()
         }
+        else{
+            textField.placeholder = "  "
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -173,6 +176,9 @@ extension BMSearchAddressCell : UITextViewDelegate {
         
         if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = Localizable.shared.strings.address_search
+        }
+        else{
+            textField.placeholder = "  "
         }
     }
     

@@ -21,6 +21,15 @@
 import Foundation
 import Parchment
 
+class PagingLargeTitleCell : PagingTitleCell {
+    
+    override func configureTitleLabel() {
+        super.configureTitleLabel()
+        
+        titleLabel.adjustFontSize = true
+        titleLabel.letterSpacing = 1.5
+    }
+}
 
 class BMPagingView: PagingView {
     
@@ -49,14 +58,24 @@ class BMPagingView: PagingView {
 class BMPagingViewController: PagingViewController<PagingIndexItem> {
     
     override func loadView() {
+        
+        var fontSize:CGFloat = 14
+        
+        if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
+            fontSize = fontSize + 1.0
+        }
+        else if Device.screenType == .iPhones_5{
+            fontSize = fontSize - 1.5
+        }
+        
         let custom =  PagingView(
             options: options,
             collectionView: collectionView,
             pageView: pageViewController.view
         )
         custom.options.indicatorColor = UIColor.main.brightTeal
-        custom.options.font = BoldFont(size: 16)
-        custom.options.selectedFont = BoldFont(size: 16)
+        custom.options.font = BoldFont(size: fontSize)
+        custom.options.selectedFont = BoldFont(size: fontSize)
         custom.options.textColor = UIColor.main.blueyGrey
         custom.options.selectedTextColor = UIColor.main.blueyGrey
         custom.options.menuBackgroundColor = UIColor.main.marine
@@ -66,7 +85,8 @@ class BMPagingViewController: PagingViewController<PagingIndexItem> {
         custom.backgroundColor = UIColor.clear
         
         contentInteraction = .none
-        
+        menuItemSource = .class(type: PagingLargeTitleCell.self)
+
         view = custom
         view.clipsToBounds = true
     }

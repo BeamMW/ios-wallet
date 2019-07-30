@@ -33,8 +33,15 @@ class InputPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = Localizable.shared.strings.seed_prhase
+        self.title = Localizable.shared.strings.restore_wallet_title
 
+//        let w = ["voice","sniff","risk","gas","fever","soccer","fabric","when","twice","valid",
+//                 "shuffle","detail"]
+//        for i in 0 ... 11 {
+//            inputWords.append(BMWord(w[i], index: UInt(i), correct: true))
+//        }
+//        nextButton.isEnabled = true
+        
         for i in 0 ... 11 {
             inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
         }

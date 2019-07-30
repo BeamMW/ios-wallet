@@ -37,6 +37,8 @@ class InputWordCell: UICollectionViewCell, Delegating {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        wordField.delegate = self
     }
     
     func startEditing() {
@@ -72,6 +74,10 @@ extension InputWordCell: Configurable {
 }
 
 extension InputWordCell: UITextFieldDelegate {
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        return true
+    }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.delegate?.textValueCellDidBeginEditing(self,textField.text ?? "")

@@ -33,4 +33,12 @@ class BMMultiLineItem {
         self.detailFont = detailFont
         self.detailColor = detailColor
     }
+    
+    required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?, copy:Bool) {
+        self.title = title
+        self.detail = detail
+        self.detailFont = detailFont
+        self.detailColor = detailColor
+        self.canCopy = copy
+    }
 }

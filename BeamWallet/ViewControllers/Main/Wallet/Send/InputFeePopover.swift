@@ -28,6 +28,7 @@ class InputFeePopover: BaseViewController {
     @IBOutlet weak private var feeField: BMField!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var visualView: UIVisualEffectView!
+    @IBOutlet weak private var grothTitleLabelY: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,9 +63,19 @@ class InputFeePopover: BaseViewController {
             mainFee = Localizable.shared.strings.zero
         }
         
-        completion?(mainFee)
+        let v = Int32(mainFee) ?? 0
         
-        dismiss(animated: true, completion:nil)
+        if v < AppModel.sharedManager().getMinFeeInGroth() {
+            grothTitleLabelY.constant = 5
+            
+            feeField.error = Localizable.shared.strings.min_fee_error.replacingOccurrences(of: ("(value)"), with: String(AppModel.sharedManager().getMinFeeInGroth()))
+            feeField.status = .error
+        }
+        else{
+            completion?(mainFee)
+            
+            dismiss(animated: true, completion:nil)
+        }
     }
     
     @IBAction func onClose(sender :UIButton) {
@@ -75,6 +86,8 @@ class InputFeePopover: BaseViewController {
 extension InputFeePopover : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        grothTitleLabelY.constant = 15
+
         let mainCount = 15
         
         let textFieldText: NSString = (textField.text ?? "") as NSString

@@ -27,7 +27,7 @@ class LanguagePickerViewController: BaseTableViewController {
     
     public var completion : ((String) -> Void)?
     
-    private var languages = Settings.sharedManager().languages()
+    private var languages = Settings.sharedManager().languages().sorted { $0.localName < $1.localName }
     private var selectedLanguage:String!
     private var currentLanguage:String!
     
@@ -42,7 +42,6 @@ class LanguagePickerViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         title = Localizable.shared.strings.language
         

@@ -174,10 +174,12 @@
                 return [UIImage imageNamed:@"icon-sending-own"];
             case BMTransactionStatusInProgress:
                 return [UIImage imageNamed:@"icon-sending-own"];
+            case BMTransactionStatusRegistering:
+                return [UIImage imageNamed:@"icon-sending-own"];
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-sent-own"];
             default:
-                break;
+                return [UIImage imageNamed:@"icon-sent-own"];
         }
     }
     else if(_isIncome) {
@@ -189,7 +191,7 @@
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-received"];
             default:
-                break;
+                return [UIImage imageNamed:@"icon-received"];
         }
     }
     else{
@@ -201,12 +203,12 @@
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-sent"];
             default:
-                break;
+                return [UIImage imageNamed:@"icon-sent"];
         }
     }
     
     
-    return [UIImage imageNamed:@"iconBeam"];
+    return [UIImage imageNamed:@"icon-sent"];
 }
 
 @end

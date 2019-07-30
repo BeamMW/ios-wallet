@@ -256,3 +256,22 @@ func IconEdit() -> UIImage? {
 func IconUTXOSecurity() -> UIImage? {
     return UIImage(named: "icEyeCrossedBig")
 }
+
+func IconSent() -> UIImage? {
+    return UIImage(named: "icon-sent")
+}
+
+func IconReceived() -> UIImage? {
+    return UIImage(named: "icon-received")
+}
+
+func ExternalLinkGreen() -> UIImage? {
+    return UIImage(named: "iconExternalLinkGreen")
+}
+
+func IconContact() -> UIImage? {
+    return UIImage(named: "iconContact")
+}
+
+
+

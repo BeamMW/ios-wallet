@@ -77,6 +77,8 @@ class TransactionShareView: UIView {
         senderValueLabel.text = transaction.senderAddress
         receiverValueLabel.text = transaction.receiverAddress
         
+        typeLabel.text = transaction.status.capitalizingFirstLetter()
+
         if transaction.isSelf {
             senderTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_send_address)
             
@@ -118,12 +120,10 @@ class TransactionShareView: UIView {
             amountLabel.text = "+" + String.currency(value: transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            typeLabel.text = Localizable.shared.strings.receive_beam.uppercased()
         case false:
             amountLabel.text = "-" + String.currency(value: transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
-            typeLabel.text = Localizable.shared.strings.send_beam.uppercased()
         }
         
         switch Settings.sharedManager().target {

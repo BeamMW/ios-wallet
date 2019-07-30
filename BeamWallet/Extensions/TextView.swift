@@ -78,11 +78,11 @@ class UITextViewPlacholder : UITextView
         
         if let text = self.text, text.isEmpty == false, self.isInput {
             clearButton.isHidden = false
-            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 30)
         }
         else{
             clearButton.isHidden = true
-            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
         }
     }
     
@@ -93,11 +93,11 @@ class UITextViewPlacholder : UITextView
         
         if let text = self.attributedText, text.string.isEmpty == false, self.isInput {
             clearButton.isHidden = false
-            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 30)
         }
         else{
             clearButton.isHidden = true
-            contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
         }
     }
     
@@ -142,5 +142,5 @@ class UITextViewPlacholder : UITextView
 
         self.addSubview(placeholderLabel)
         self.resizePlaceholder()
-    }
+    }    
 }

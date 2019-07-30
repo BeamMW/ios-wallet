@@ -126,11 +126,7 @@ const int kFeeInGroth_Fork1 = 100;
     return self;
 }
 
--(void)loadRules{
-    if([Settings sharedManager].target == Masternet) {
-        Rules::get().pForks[1].m_Height = 199403;
-    }
-    
+-(void)loadRules{    
     Rules::get().UpdateChecksum();
 
     LOG_INFO() << "Rules signature";
@@ -399,7 +395,7 @@ const int kFeeInGroth_Fork1 = 100;
             walletDb->ImportRecovery(recoveryPath, prog);
         }
         catch (const std::exception& e) {
-            NSLog(@"ImportRecovery failed");
+            NSLog(@"ImportRecovery failed %s",e.what());
         }
         catch (...) {
             NSLog(@"ImportRecovery failed");
@@ -1275,12 +1271,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     NSString *model = [NSString stringWithFormat:@"DEVICE TYPE: %@",[[UIDevice currentDevice] model]];
     NSString *modelID = [NSString stringWithFormat:@"DEVICE MODEL ID: %@",[self modelIdentifier]];
     NSString *appVersion = [NSString stringWithFormat:@"APP VERSION: %@ BUILD %@",version, build];
+    NSString *langCode = [NSString stringWithFormat:@"LANGUAGE CODE: %@",[[NSLocale currentLocale] languageCode]];
 
     LOG_INFO() << "Application has started";
     LOG_INFO() << ios.string;
     LOG_INFO() << model.string;
     LOG_INFO() << modelID.string;
     LOG_INFO() << appVersion.string;
+    LOG_INFO() << langCode.string;
+
 }
 
 - (NSString *)modelIdentifier {
@@ -1335,21 +1334,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             }
         }
     }
-    
-    if (result.count > 1)
-    {
-        BMUTXO *total = [[BMUTXO alloc] init];
-        total.statusString = [@"total" localized];
         
-        for(BMUTXO *utxo in result)
-        {
-            total.realAmount = total.realAmount + utxo.realAmount;
-            
-        }
-        
-        [result insertObject:total atIndex:0];
-    }
-    
     return result;
 }
 

@@ -24,7 +24,7 @@ class UTXOViewController: BaseTableViewController {
     
     private let pagingViewController = BMPagingViewController()
 
-    private var titles = [Localizable.shared.strings.available, Localizable.shared.strings.in_progress, Localizable.shared.strings.spent, Localizable.shared.strings.unavailable, Localizable.shared.strings.maturing, Localizable.shared.strings.in_progress_out, Localizable.shared.strings.in_progress_in]
+    private var titles = [Localizable.shared.strings.available, Localizable.shared.strings.in_progress, Localizable.shared.strings.spent, Localizable.shared.strings.unavailable]
     
     private let emptyView: BMEmptyView = UIView.fromNib()
     private let blockView: UTXOBlockView = UIView.fromNib()
@@ -179,7 +179,7 @@ extension UTXOViewController : PagingViewControllerDelegate {
         
         let index = pagingItem as! PagingIndexItem
         let title = index.title
-        let size = title.boundingWidth(with: BoldFont(size: 16))
+        let size = title.boundingWidth(with: pagingViewController.options.font, kern: 1.5)
         return size + 20
     }
 }

@@ -262,7 +262,7 @@ extension WalletViewController : UITableViewDelegate {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                return WalletStatusCell.height()
+                return UITableView.automaticDimension
             }
             else if indexPath.row == 1 {
                 if Settings.sharedManager().isHideAmounts || !expandAvailable {

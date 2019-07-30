@@ -89,7 +89,7 @@ class BMSnackBar: UIView, BMCountdownViewDelegate {
         button.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
         button.setTitle(Localizable.shared.strings.undo, for: .normal)
         button.contentHorizontalAlignment = .right
-        button.isUserInteractionEnabled = false
+       // button.isUserInteractionEnabled = false
         button.addTarget(self, action: #selector(onUndo), for: .touchUpInside)
         addSubview(button)
         

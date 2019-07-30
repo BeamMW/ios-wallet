@@ -88,7 +88,7 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         
         loadRates()
         
-        recaptcha?.forceVisibleChallenge = false
+       // recaptcha?.forceVisibleChallenge = false
         recaptcha?.configureWebView { [weak self] webview in
             SVProgressHUD.dismiss()
 

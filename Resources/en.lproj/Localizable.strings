@@ -50,7 +50,7 @@
 "no_internet" = "No internet connection";
 "wallet_not_created" = "Wallet not created";
 "wallet_not_opened" = "Wallet can not be opened";
-"restor_wallet_warning" = "Please wait for synchronization and do not close or minimize the application.";
+"restor_wallet_warning" = "Please wait for synchronization and do not close or minimize the application. Restoring the wallet may take a while.";
 "restor_wallet_info" = "Only the wallet balance (UTXO) can be restored,  transaction info is always private\nand never kept in the blockchain.";
 "receive" = "Receive";
 "send" = "Send";
@@ -350,7 +350,7 @@
 "invalid_address_title" = "Invalid address";
 "invalid_address_text" = "The provided node address is invalid.\n Please, check if the entered address is correct";
 "insufficient_funds" = "Insufficient funds: you would need (value) beams to complete the transaction";
-"downloading" = "Downloading";
+"downloading" = "Downloaded";
 "sent_to_own" = "Sent to own address";
 "sending_to_own" = "Sending to own address";
 "default" = "Default";
@@ -398,3 +398,7 @@
 "ok" = "OK";
 "transactions_list" = "Transactions list";
 "in_24_hours_now" = "In 24 hours from now";
+"transaction_history" = "Transaction history";
+"min_fee_error" = "The minimum fee is (value) GROTH"; //The minimum fee is 100 GROTH
+"date" = "Date";
+"downloading_blockchain" = "Downloading blockchain info";

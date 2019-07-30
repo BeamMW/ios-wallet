@@ -15,6 +15,9 @@
         <array key="SF-Pro-Display-RegularItalic.otf">
             <string>SFProDisplay-Italic</string>
         </array>
+        <array key="SF-Pro-Display-Semibold.otf">
+            <string>SFProDisplay-Semibold</string>
+        </array>
         <array key="SFProText-Medium.ttf">
             <string>SFProText-Medium</string>
         </array>
@@ -67,45 +70,50 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lXv-f9-A2A">
                             <rect key="frame" x="0.0" y="217.5" width="374" height="70"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-receiving" translatesAutoresizingMaskIntoConstraints="NO" id="yle-NJ-oIA">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconBeam" translatesAutoresizingMaskIntoConstraints="NO" id="yle-NJ-oIA">
                                     <rect key="frame" x="10" y="24" width="22" height="22"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="22" id="2jw-3o-2y1"/>
                                         <constraint firstAttribute="width" constant="22" id="YVm-L1-riZ"/>
                                     </constraints>
                                 </imageView>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NhW-G7-nhq">
-                                    <rect key="frame" x="288.5" y="20.5" width="75.5" height="29"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="eFv-yG-A7p">
+                                    <rect key="frame" x="285.5" y="20.5" width="78.5" height="29"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5iM-tX-TJG">
-                                            <rect key="frame" x="0.0" y="0.0" width="56.5" height="29"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NhW-G7-nhq">
+                                            <rect key="frame" x="0.0" y="0.0" width="78.5" height="29"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5iM-tX-TJG">
+                                                    <rect key="frame" x="0.0" y="0.0" width="59.5" height="29"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="29" id="d07-bD-xls"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="20"/>
+                                                    <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="4P8-9R-Vmc">
+                                                    <rect key="frame" x="64.5" y="6" width="14" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="Xcc-UK-BdM"/>
+                                                        <constraint firstAttribute="width" constant="14" id="cNz-UA-wjY"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="29" id="d07-bD-xls"/>
+                                                <constraint firstAttribute="trailing" secondItem="4P8-9R-Vmc" secondAttribute="trailing" id="3TF-UO-w3C"/>
+                                                <constraint firstItem="4P8-9R-Vmc" firstAttribute="leading" secondItem="5iM-tX-TJG" secondAttribute="trailing" constant="5" id="4pv-hf-aN1"/>
+                                                <constraint firstItem="5iM-tX-TJG" firstAttribute="leading" secondItem="NhW-G7-nhq" secondAttribute="leading" id="7GH-o8-zG1"/>
+                                                <constraint firstItem="4P8-9R-Vmc" firstAttribute="top" secondItem="NhW-G7-nhq" secondAttribute="top" constant="6" id="PUQ-d1-Aoc"/>
+                                                <constraint firstItem="5iM-tX-TJG" firstAttribute="top" secondItem="NhW-G7-nhq" secondAttribute="top" id="Uyc-r7-DFb"/>
+                                                <constraint firstAttribute="height" constant="29" id="rgq-ME-cP4"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="20"/>
-                                            <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="4P8-9R-Vmc">
-                                            <rect key="frame" x="61.5" y="6" width="14" height="21"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="21" id="Xcc-UK-BdM"/>
-                                                <constraint firstAttribute="width" constant="14" id="cNz-UA-wjY"/>
-                                            </constraints>
-                                        </imageView>
+                                        </view>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="4P8-9R-Vmc" secondAttribute="trailing" id="3TF-UO-w3C"/>
-                                        <constraint firstItem="4P8-9R-Vmc" firstAttribute="leading" secondItem="5iM-tX-TJG" secondAttribute="trailing" constant="5" id="4pv-hf-aN1"/>
-                                        <constraint firstItem="5iM-tX-TJG" firstAttribute="leading" secondItem="NhW-G7-nhq" secondAttribute="leading" id="7GH-o8-zG1"/>
-                                        <constraint firstItem="4P8-9R-Vmc" firstAttribute="top" secondItem="NhW-G7-nhq" secondAttribute="top" constant="6" id="PUQ-d1-Aoc"/>
-                                        <constraint firstItem="5iM-tX-TJG" firstAttribute="top" secondItem="NhW-G7-nhq" secondAttribute="top" id="Uyc-r7-DFb"/>
-                                        <constraint firstAttribute="height" constant="29" id="rgq-ME-cP4"/>
-                                    </constraints>
-                                </view>
+                                </stackView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RECEIVING BEAM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="eVK-Ws-tBD">
-                                    <rect key="frame" x="37" y="20.5" width="117" height="29"/>
+                                    <rect key="frame" x="40" y="20.5" width="117" height="29"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="29" id="r6H-P9-rPU"/>
                                     </constraints>
@@ -116,12 +124,12 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="0.025979238013698631" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="NhW-G7-nhq" firstAttribute="centerY" secondItem="lXv-f9-A2A" secondAttribute="centerY" id="GGn-kb-yQp"/>
-                                <constraint firstAttribute="trailing" secondItem="NhW-G7-nhq" secondAttribute="trailing" constant="10" id="Jia-PS-pU0"/>
+                                <constraint firstItem="eFv-yG-A7p" firstAttribute="centerY" secondItem="lXv-f9-A2A" secondAttribute="centerY" id="Kud-dn-u5m"/>
                                 <constraint firstItem="yle-NJ-oIA" firstAttribute="centerY" secondItem="lXv-f9-A2A" secondAttribute="centerY" id="aCw-Oy-vfm"/>
-                                <constraint firstItem="eVK-Ws-tBD" firstAttribute="leading" secondItem="yle-NJ-oIA" secondAttribute="trailing" constant="5" id="qEr-a8-sEn"/>
+                                <constraint firstItem="eVK-Ws-tBD" firstAttribute="leading" secondItem="yle-NJ-oIA" secondAttribute="trailing" constant="8" id="qEr-a8-sEn"/>
                                 <constraint firstAttribute="height" constant="70" id="qVI-bh-hla"/>
                                 <constraint firstItem="yle-NJ-oIA" firstAttribute="leading" secondItem="lXv-f9-A2A" secondAttribute="leading" constant="10" id="r0G-Uv-VZh"/>
+                                <constraint firstAttribute="trailing" secondItem="eFv-yG-A7p" secondAttribute="trailing" constant="10" id="tfe-NP-h9J"/>
                                 <constraint firstItem="eVK-Ws-tBD" firstAttribute="centerY" secondItem="lXv-f9-A2A" secondAttribute="centerY" id="wSP-z9-rZ4"/>
                             </constraints>
                         </view>
@@ -291,7 +299,7 @@
         </view>
     </objects>
     <resources>
-        <image name="icon-receiving" width="22" height="22"/>
+        <image name="iconBeam" width="22" height="22"/>
         <image name="iconSymbol" width="16" height="24.5"/>
         <image name="initial_background" width="1125" height="2001"/>
         <image name="logo" width="159" height="142"/>

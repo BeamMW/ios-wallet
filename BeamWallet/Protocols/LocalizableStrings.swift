@@ -64,6 +64,7 @@ class LocalizableStrings : NSObject {
     var restore_wallet_title  = "restore_wallet_title".localized.capitalizingFirstLetter()
     var restore_wallet_info  = "restore_wallet_info".localized
     var use  = "use".localized
+    var id  = "id".localized
     var face_id  = "face_id".localized
     var touch_id  = "touch_id".localized
     var empty_password  = "empty_password".localized
@@ -133,6 +134,11 @@ class LocalizableStrings : NSObject {
     var category = "category".localized
     var in_24_hours = "in_24_hours".localized
     var in_24_hours_now = "in_24_hours".localized
+    var transaction_history = "transaction_history".localized
+    var min_fee_error = "min_fee_error".localized
+
+    
+    
     
     var never = "never".localized
     var address_expires = "address_expires".localized
@@ -371,7 +377,11 @@ class LocalizableStrings : NSObject {
     var confirm_transaction_3 = "confirm_transaction_3".localized
     var transactions_list = "transactions_list".localized
     var secutiry_utxo = "secutiry_utxo".localized
-
+    var utxo_history = "utxo_history".localized
+    var date = "date".localized
+    var downloading_blockchain = "downloading_blockchain".localized
+    var restor_wallet_warning = "restor_wallet_warning".localized
+    var restor_wallet_info = "restor_wallet_info".localized
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

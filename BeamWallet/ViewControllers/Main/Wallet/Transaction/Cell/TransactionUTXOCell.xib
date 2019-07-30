@@ -10,8 +10,8 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-Pro-Display-Regular.otf">
-            <string>SFProDisplay-Regular</string>
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
         </array>
     </customFonts>
     <objects>
@@ -24,40 +24,31 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="39.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uYC-QI-Okv" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uYC-QI-Okv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="39.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxF-up-dIn">
                                 <rect key="frame" x="41" y="12" width="8" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconReceiveLightBlue" translatesAutoresizingMaskIntoConstraints="NO" id="vlh-wG-YpY">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconReceiveLightBlue" translatesAutoresizingMaskIntoConstraints="NO" id="vlh-wG-YpY">
                                 <rect key="frame" x="15" y="12" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="FXc-z8-SI4"/>
                                     <constraint firstAttribute="width" constant="16" id="GOO-Zg-Tn3"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="hQL-bV-MBD">
-                                <rect key="frame" x="54" y="15" width="10" height="15"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="15" id="Gxf-7q-BVH"/>
-                                    <constraint firstAttribute="width" constant="10" id="Rsl-b5-Rpu"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="vlh-wG-YpY" firstAttribute="leading" secondItem="uYC-QI-Okv" secondAttribute="leading" constant="15" id="1dB-jN-POn"/>
-                            <constraint firstItem="vlh-wG-YpY" firstAttribute="top" secondItem="uYC-QI-Okv" secondAttribute="top" constant="12" id="3N3-79-yHP"/>
-                            <constraint firstItem="hQL-bV-MBD" firstAttribute="top" secondItem="uYC-QI-Okv" secondAttribute="top" constant="15" id="CnF-aO-5FT"/>
+                            <constraint firstItem="vlh-wG-YpY" firstAttribute="centerY" secondItem="uYC-QI-Okv" secondAttribute="centerY" id="3Mh-x3-qdo"/>
                             <constraint firstAttribute="bottom" secondItem="DxF-up-dIn" secondAttribute="bottom" constant="10.5" id="FJC-3z-ddx"/>
-                            <constraint firstItem="hQL-bV-MBD" firstAttribute="leading" secondItem="DxF-up-dIn" secondAttribute="trailing" constant="5" id="UWg-3S-cKi"/>
                             <constraint firstItem="DxF-up-dIn" firstAttribute="top" secondItem="uYC-QI-Okv" secondAttribute="top" constant="12" id="pjF-ma-hSd"/>
                             <constraint firstItem="DxF-up-dIn" firstAttribute="leading" secondItem="vlh-wG-YpY" secondAttribute="trailing" constant="10" id="zqR-Aa-tDg"/>
                         </constraints>
@@ -73,7 +64,7 @@
             <viewLayoutGuide key="safeArea" id="dRQ-Ud-7m9"/>
             <connections>
                 <outlet property="amountLabel" destination="DxF-up-dIn" id="N2k-8J-IbX"/>
-                <outlet property="currencyIcon" destination="hQL-bV-MBD" id="OZF-WZ-vSw"/>
+                <outlet property="mainView" destination="uYC-QI-Okv" id="dKR-ic-DwC"/>
                 <outlet property="statusIcon" destination="vlh-wG-YpY" id="wi3-Pd-qrw"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="87.706146926536732"/>
@@ -81,6 +72,5 @@
     </objects>
     <resources>
         <image name="iconReceiveLightBlue" width="16" height="16"/>
-        <image name="iconSymbol" width="16" height="24.5"/>
     </resources>
 </document>

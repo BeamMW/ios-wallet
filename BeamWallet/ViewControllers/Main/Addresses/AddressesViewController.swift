@@ -97,7 +97,6 @@ class AddressesViewController: BaseTableViewController {
     
     @objc private func onAddContact() {
         let vc = SaveContactViewController(address: nil)
-        vc.isGradient = false
         pushViewController(vc: vc)
     }
 }

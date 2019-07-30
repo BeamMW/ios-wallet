@@ -22,15 +22,19 @@ import UIKit
 
 class UTXOTransactionCell: BaseCell {
 
-    @IBOutlet weak private var idLabel: BMCopyLabel!
-    @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var arrowImage: UIImageView!
+    @IBOutlet weak private var dateLabel: UILabel!
+    @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var commentLabel: UILabel!
+    @IBOutlet weak private var commentView: UIStackView!
+    @IBOutlet weak private var mainView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        selectionStyle = .none
+        let selectedView = UIView()
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        self.selectedBackgroundView = selectedView
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -40,18 +44,27 @@ class UTXOTransactionCell: BaseCell {
 
 extension UTXOTransactionCell: Configurable {
     
-    func configure(with transaction:BMTransaction) {
+    func configure(with options: (row: Int, transaction:BMTransaction)) {
      
-        dateLabel.text = transaction.formattedDate()
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marine : UIColor.main.marineThree
+
+        dateLabel.text = options.transaction.formattedDate()
         
-        if !transaction.isIncome {
-            arrowImage.image = UIImage.init(named: "iconSendPink")
+        if !options.transaction.isIncome {
+            arrowImage.image = IconSent()
+            typeLabel.text = Localizable.shared.strings.send_beam
         }
         else{
-            arrowImage.image = UIImage(named: "iconReceiveLightBlue")
+            arrowImage.image = IconReceived()
+            typeLabel.text = Localizable.shared.strings.receive_beam
         }
         
-        idLabel.text = transaction.id
-        commentLabel.text = transaction.comment
+        if options.transaction.comment.isEmpty {
+            commentView.isHidden = true
+        }
+        else{
+            commentLabel.text = "”" + options.transaction.comment + "”"
+            commentView.isHidden = false
+        }
     }
 }

@@ -21,8 +21,12 @@ import Foundation
 
 class DetailUTXOViewModel: UTXOViewModel {
     
-    public var details = [GeneralInfo]()
+    public var details = [BMMultiLineItem]()
     public var history = [BMTransaction]()
+    
+    public var detailsExpand = true
+    public var historyExpand = true
+
     
     public var utxo:BMUTXO! {
         didSet{
@@ -45,11 +49,13 @@ class DetailUTXOViewModel: UTXOViewModel {
     private func fillDetails() {
         details.removeAll()
         
-        if let kernel = history.first?.kernelId {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), detail: kernel, failed: false, canCopy:true, color: UIColor.white))
-        }
+//        if let kernel = history.first?.kernelId {
+//            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), detail: kernel, failed: false, canCopy:true, color: UIColor.white))
+//        }
         
-        details.append(GeneralInfo(text: Localizable.shared.strings.utxo_type, detail: utxo.typeString, failed: false, canCopy:false, color: UIColor.white))
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.id.uppercased(), detail:String(utxo.id), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.utxo_type.uppercased().replacingOccurrences(of: Localizable.shared.strings.utxo.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: ""), detail:utxo.typeString.capitalizingFirstLetter(), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         self.onDataChanged?()
     }

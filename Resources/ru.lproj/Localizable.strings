@@ -350,8 +350,8 @@
 "invalid_address_title" = "Неправильный адрес";
 "invalid_address_text" = "Введеный адрес узла не верный. Пожалуйста проверьте, что введенный адрес узда правильный";
 "insufficient_funds" = "Недостаточно средств: необходимо (value) beams для завершения транзакции";
-"downloading" = "Загрузка";
-"sent_to_own" = "Отправка на свой адрес";
+"downloading" = "Загружено";
+"sent_to_own" = "Отправлено на свой адрес";
 "sending_to_own" = "Отправлено на свой адрес";
 "default" = "Стандарт";
 "my_active" = "Активные"; // addresses
@@ -396,3 +396,9 @@
 "confirm_transaction_2" = "Используйте Face ID или введите пароль для подтверждения транзакции";
 "confirm_transaction_3" = "Введите пароль для подтверждения транзакции";
 "ok" = "ОК";
+"transactions_list" = "Список транзакций";
+"in_24_hours_now" = "24 часа от текущего момента";
+"transaction_history" = "История транзакций";
+"min_fee_error" = "Минимальная комиссия (value) GROTH"; // The minimum fee is 100 GROTH
+"date" = "Дата";
+"downloading_blockchain" = "Загрузка информации о блокчейне";

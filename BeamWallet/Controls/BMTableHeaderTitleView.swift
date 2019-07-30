@@ -61,6 +61,30 @@ class BMTableHeaderTitleView: UIView {
         self.addSubview(button)
     }
     
+    init(title:String, handler:Selector, target:Any, expand:Bool) {
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: BMTableHeaderTitleView.height))
+        
+        self.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        
+        addLabel(title: title, bold: true)
+        
+        titleLabel.h = 50
+        titleLabel.y = 0
+        titleLabel.font = BoldFont(size: 14)
+        titleLabel.letterSpacing = 1.5
+        
+        let button = UIButton(frame: CGRect(x: self.frame.size.width-50, y: 0, width: 40, height: 50))
+        button.setImage(expand ? IconDownArrow() : IconNextArrow(), for: .normal)
+        button.contentHorizontalAlignment = .right
+        button.isUserInteractionEnabled = false
+        self.addSubview(button)
+        
+        let mainButton = UIButton(frame: self.bounds)
+        mainButton.addTarget(target, action: handler, for: .touchUpInside)
+        mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.2)), for: .highlighted)
+        self.addSubview(mainButton)
+    }
+    
     private func addLabel(title:String, bold:Bool) {
         titleLabel = UILabel(frame: CGRect(x: defaultX, y: 25, width: defaultWidth, height: 15))
         titleLabel.adjustFontSize = true
