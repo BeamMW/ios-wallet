@@ -32,7 +32,7 @@ final class MaterialActivityIndicatorAnimator {
 extension MaterialActivityIndicatorAnimator {
     private func rotationAnimation() -> CABasicAnimation {
         let animation = CABasicAnimation(key: .rotationZ)
-        animation.duration = 4
+        animation.duration = 2
         animation.fromValue = 0
         animation.toValue = (2.0 * .pi)
         animation.repeatCount = .infinity

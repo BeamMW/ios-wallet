@@ -86,11 +86,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-   
+ 
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
     
+        if AppModel.sharedManager().connectionTimer != nil  {
+            AppModel.sharedManager().connectionTimer?.invalidate()
+            AppModel.sharedManager().connectionTimer = nil
+        }
+        
         if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
             registerBackgroundTask()
         }
@@ -117,7 +122,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        AppModel.sharedManager().isConnecting = true
+        if AppModel.sharedManager().isConnected {
+            AppModel.sharedManager().isConnecting = true
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

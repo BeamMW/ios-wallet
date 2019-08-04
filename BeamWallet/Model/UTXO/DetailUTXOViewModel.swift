@@ -27,6 +27,9 @@ class DetailUTXOViewModel: UTXOViewModel {
     public var detailsExpand = true
     public var historyExpand = true
 
+    deinit {
+        AppModel.sharedManager().removeDelegate(self)
+    }
     
     public var utxo:BMUTXO! {
         didSet{
@@ -39,7 +42,7 @@ class DetailUTXOViewModel: UTXOViewModel {
         
         self.utxo = utxo
         
-        self.history = AppModel.sharedManager().getTransactionsFrom(utxo) as! [BMTransaction]
+        self.history = (AppModel.sharedManager().getTransactionsFrom(utxo) as! [BMTransaction]).reversed()
         
         self.fillDetails()
         
@@ -65,7 +68,8 @@ extension DetailUTXOViewModel {
     
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
-            self.history = AppModel.sharedManager().getTransactionsFrom(self.utxo) as! [BMTransaction]
+            self.history = (AppModel.sharedManager().getTransactionsFrom(self.utxo) as! [BMTransaction])
+            self.history = self.history.reversed()
             self.onDataChanged?()
         }
     }

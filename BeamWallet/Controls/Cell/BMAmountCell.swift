@@ -26,20 +26,29 @@ class BMAmountCell: BaseCell {
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var currencyLabel: UILabel!
-   
+    @IBOutlet weak private var erorLabel: UILabel!
+
     public var fee:Double = 0
     
     public var info:String?
     
+    public var normalTextColor = UIColor.main.heliotrope
+    public var normalLineColor = UIColor.main.heliotrope
+
     public var error:String?
     {
         didSet{
             if error == nil {
-                textField.status = .normal
+                erorLabel.text = nil
+                erorLabel.isHidden = true
+                textField.textColor = normalTextColor
+                textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
             }
             else{
-                textField.error = error
-                textField.status = .error
+                erorLabel.text = error
+                erorLabel.isHidden = false
+                textField.textColor = UIColor.main.red
+                textField.lineColor = UIColor.main.red
             }
         }
     }
@@ -75,6 +84,10 @@ class BMAmountCell: BaseCell {
         
         selectionStyle = .none
         
+        erorLabel.textColor = UIColor.main.red
+        erorLabel.isHidden = true
+        erorLabel.text = nil
+        
         textField.statusDelegate = self
         
         currencyLabel.isUserInteractionEnabled = false
@@ -109,6 +122,9 @@ extension BMAmountCell: Configurable {
         
         nameLabel.text = options.name
         nameLabel.letterSpacing = 2
+        
+        normalLineColor = textField.lineColor ?? UIColor.main.marine
+        normalTextColor = textField.textColor ?? UIColor.main.heliotrope
 
         textField.text = options.value
     }
@@ -154,6 +170,8 @@ extension BMAmountCell : UITextFieldDelegate {
             return false
         }
         
+        self.error = nil
+        
         self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
 
         return true
@@ -162,7 +180,7 @@ extension BMAmountCell : UITextFieldDelegate {
 
 extension BMAmountCell : BMFieldStatusProtocol {
     func didChangeStatus() {
-        self.delegate?.textValueDidChange?(self, textField.text ?? String.empty(), true)
+      //  self.delegate?.textDidChangeStatus?(self)
     }
 }
 

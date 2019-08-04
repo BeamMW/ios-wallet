@@ -154,13 +154,24 @@
         _formatter = [[NSDateFormatter alloc] init];
        
         if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
-            [_formatter setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+            if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+                [_formatter setDateFormat:@"yyyy MMM dd  |  hh:mm a"];
+            }
+            else{
+                [_formatter setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+            }
         }
         else{
-            [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+            if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+                [_formatter setDateFormat:@"dd MMM yyyy  |  hh:mm a"];
+            }
+            else{
+                [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+            }
         }
     }
     
+
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
     [_formatter setLocale:locale];
     

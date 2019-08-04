@@ -107,15 +107,15 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     
-    if (_panGesture == gestureRecognizer) {
-        UINavigationController *navigation = (UINavigationController*)self.sideMenuController.rootViewController;
-        UIViewController *last = navigation.viewControllers.lastObject;
-        NSString *class = NSStringFromClass(last.class);
-        
-        if ([class rangeOfString:@"UTXOViewController"].location != NSNotFound || [class rangeOfString:@"AddressesViewController"].location != NSNotFound) {
-            return YES;
-        }
-    }    
+//    if (_panGesture == gestureRecognizer) {
+//        UINavigationController *navigation = (UINavigationController*)self.sideMenuController.rootViewController;
+//        UIViewController *last = navigation.viewControllers.lastObject;
+//        NSString *class = NSStringFromClass(last.class);
+//        
+//        if ([class rangeOfString:@"UTXOViewController"].location != NSNotFound || [class rangeOfString:@"AddressesViewController"].location != NSNotFound) {
+//            return YES;
+//        }
+//    }
     return NO;
 }
 

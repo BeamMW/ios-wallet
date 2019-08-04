@@ -54,58 +54,72 @@ class UTXOViewModel: NSObject {
     
     private func filterUTXOS() {
         
-        DispatchQueue.global(qos: .background).async {
-            switch self.selectedState {
+        DispatchQueue.main.async {
+            [weak self] in
+            
+            guard let strongSelf = self else { return }
+            
+            switch strongSelf.selectedState {
             case .available:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 1}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 1}
                 }
             case .spent:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 6}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 6}
                 }
             case .unavailable:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 0}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 0}
                 }
             case .progress:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 3 || $0.status == 4}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3 || $0.status == 4}
                 }
             case .incoming:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 4}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 4}
                 }
             case .outgoing:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 3}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3}
                 }
             case .maturing:
                 if let utxos = AppModel.sharedManager().utxos {
-                    self.utxos = utxos as! [BMUTXO]
-                    self.utxos = self.utxos.filter { $0.status == 2}
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 2}
                 }
             }
-            self.utxos = self.utxos.sorted(by: { $0.id < $1.id })
             
-            for utxo in self.utxos {
+            var sortByDate = false
+            
+            for utxo in strongSelf.utxos {
                 let history = AppModel.sharedManager().getTransactionsFrom(utxo) as! [BMTransaction]
                 if history.count > 0 {
                     utxo.transaction = history.last
+                    utxo.transactionDate = utxo.transaction?.createdTime ?? 0
+                    sortByDate = true
                 }
             }
-            DispatchQueue.main.async {
-                self.onDataChanged?()
+            
+            if sortByDate {
+                strongSelf.utxos = strongSelf.utxos.sorted(by: { $0.transactionDate > $1.transactionDate })
             }
+            else{
+                strongSelf.utxos = strongSelf.utxos.sorted(by: { $0.id < $1.id })
+            }
+            
+            strongSelf.onDataChanged?()
         }
     }
 }
+
 
 extension UTXOViewModel: WalletModelDelegate {
     

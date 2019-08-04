@@ -70,6 +70,10 @@ class BMNetworkStatusView: UIView {
         {
             onNetwotkStartConnecting(true)
         }
+        else if (AppModel.sharedManager().isNodeChanging)
+        {
+            onNodeStartChanging()
+        }
         else{
             onNetwotkStatusChange(AppModel.sharedManager().isConnected)
         }
@@ -86,6 +90,9 @@ extension BMNetworkStatusView: WalletModelDelegate {
     func onNetwotkStatusChange(_ connected: Bool) {
         
         DispatchQueue.main.async {
+            if AppModel.sharedManager().isNodeChanging {
+                return
+            }
             self.indicatorView.stopAnimating()
             self.statusView.alpha = 1
             self.statusView.layer.borderWidth = 0
@@ -142,7 +149,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
-                if AppModel .sharedManager().isConnecting {
+                if AppModel.sharedManager().isConnecting {
                     self.onNetwotkStartConnecting(true)
                 }
                 else{
@@ -153,21 +160,25 @@ extension BMNetworkStatusView: WalletModelDelegate {
         }
     }
     
+    func onNodeStartChanging() {
+        DispatchQueue.main.async {
+            self.statusView.alpha = 0
+            
+            self.indicatorView.color = UIColor.main.orange
+            self.indicatorView.startAnimating()
+            
+            self.statusLabel.x = self.fromNib ? 20 : 35
+            self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
+            self.statusView.backgroundColor = UIColor.main.orange
+            self.statusLabel.textColor = UIColor.main.orange
+        }
+    }
+    
     func onNetwotkStartConnecting(_ connecting: Bool) {
         DispatchQueue.main.async {
             if connecting {
                 //https://github.com/BeamMW/ios-wallet/issues/194
                 self.onNetwotkStatusChange(true)
-
-//                self.statusView.alpha = 0
-//                
-//                self.indicatorView.color = UIColor.main.orange
-//                self.indicatorView.startAnimating()
-//                
-//                self.statusLabel.x = self.fromNib ? 20 : 35
-//                self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
-//                self.statusView.backgroundColor = UIColor.main.orange
-//                self.statusLabel.textColor = UIColor.main.orange
             }
         }
     }

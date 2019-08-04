@@ -41,7 +41,8 @@ class SendPasswordViewController: BaseViewController {
         }
         else{
             if BiometricAuthorization.shared.faceIDAvailable() {
-                touchIdButton.setImage(IconFaceId(), for: .normal)
+                touchIdButton.isHidden = true
+                height.constant = 300
                 loginLabel.text = Localizable.shared.strings.confirm_transaction_2
             }
             else{
@@ -74,6 +75,10 @@ class SendPasswordViewController: BaseViewController {
                 
             }, failure: {
                 self.touchIdButton.tintColor = UIColor.main.red
+                if BiometricAuthorization.shared.faceIDAvailable() {
+                    self.loginLabel.text = Localizable.shared.strings.confirm_transaction_3
+                }
+                
             }, retry: {
                 self.touchIdButton.tintColor = UIColor.white
             })

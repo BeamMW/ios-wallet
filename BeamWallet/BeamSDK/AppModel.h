@@ -55,6 +55,8 @@ typedef int BMRestoreType;
 -(void)onReceivePaymentProof:(BMPaymentProof*_Nonnull)proof;
 -(void)onLocalNodeStarted;
 -(void)onCategoriesChange;
+-(void)onNoInternetConnection;
+-(void)onNodeStartChanging;
 -(void)onAddedPrepareTransaction:(BMPreparedTransaction*_Nonnull)transaction;
 -(void)onAddedDeleteAddress:(BMAddress*_Nonnull)address;
 -(void)onAddedDeleteTransaction:(BMTransaction*_Nonnull)transaction;
@@ -74,6 +76,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,assign) BOOL isConnecting;
 @property (nonatomic,assign) BOOL isLoggedin;
 @property (nonatomic,assign) BOOL isRestoreFlow;
+@property (nonatomic,assign) BOOL isNodeChanging;
 @property (nonatomic,assign) BMRestoreType restoreType;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
@@ -85,6 +88,10 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) NSMutableArray<BMPreparedTransaction*>*_Nonnull preparedTransactions;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
+
+@property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
+-(void)handleTimer;
+-(void)startConnectionTimer:(int)seconds;
 
 +(AppModel*_Nonnull)sharedManager;
 
@@ -103,6 +110,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)restore:(NSString*_Nonnull)path;
 -(void)resetWallet:(BOOL)removeDatabase;
 -(void)resetOnlyWallet;
+-(void)restartWallet;
 -(void)start;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
@@ -126,6 +134,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address;
 -(void)setWalletCategories:(NSMutableArray<NSString*>*_Nonnull)categories toAddress:(NSString*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
+-(NSMutableArray<BMTransaction*>*_Nonnull)getCompletedTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
 -(void)editAddress:(BMAddress*_Nonnull)address;
 -(void)deleteAddress:(NSString*_Nullable)address;
@@ -143,6 +152,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
+-(NSString*)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
 -(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact;
@@ -184,7 +194,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isNameAlreadyExist:(NSString*_Nonnull)name id:(int)ID;
 -(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID;
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressesFromCategory:(BMCategory*_Nonnull)category;
-
+-(void)fixCategories;
 
 //fork
 -(BOOL)isFork;

@@ -94,7 +94,18 @@ class TransactionShareView: UIView {
         }
         
         transactionFeeTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.transaction_fee)
-        transactionFeeValueLabel.text = String.currency(value: transaction.fee)
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = IconSymbolBeam()?.maskWithColor(color: UIColor.white)
+        imageAttachment.bounds = CGRect(x: 0, y: -3.5, width: 10, height: 15)
+        
+        let imageString = NSAttributedString(attachment: imageAttachment)
+        
+        let attributedString = NSMutableAttributedString(string:String.currency(value: transaction.fee))
+        attributedString.append(NSAttributedString(string: " "))
+        attributedString.append(imageString)
+        
+        transactionFeeValueLabel.attributedText = attributedString
         
         transactionIDTitleLabel.text  = Localizable.shared.strings.addDots(value: Localizable.shared.strings.transaction_id)
         transactionIDValueLabel.text = transaction.id

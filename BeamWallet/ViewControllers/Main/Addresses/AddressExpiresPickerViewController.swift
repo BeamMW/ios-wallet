@@ -107,17 +107,22 @@ extension AddressExpiresPickerViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        for item in items {
-            item.selected = false
+        if indexPath.row == 0 {
+            self.back()
         }
-        
-        items[indexPath.row].selected = true
-
-        selectedDuration = (indexPath.row == 1) ? 24 : 0
-                
-        self.completion?(selectedDuration)
-        
-        self.back()
+        else{
+            for item in items {
+                item.selected = false
+            }
+            
+            items[indexPath.row].selected = true
+            
+            selectedDuration = (indexPath.row == 1) ? 24 : 0
+            
+            self.completion?(selectedDuration)
+            
+            self.back()
+        }
     }
 }
 

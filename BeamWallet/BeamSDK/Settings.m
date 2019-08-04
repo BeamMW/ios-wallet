@@ -345,7 +345,7 @@ static NSString *languageKey = @"languageKey";
     en.code = @"en";
     en.enName = @"English";
     en.localName = @"English";
-    
+
     BMLanguage *ru = [BMLanguage new];
     ru.code = @"ru";
     ru.enName = @"Русский";
@@ -381,7 +381,12 @@ static NSString *languageKey = @"languageKey";
     tr.enName = @"Türk";
     tr.localName = @"Turkish";
 
-    return @[en, ru, es, sw, ko, vi, ch, tr];
+    BMLanguage *fr = [BMLanguage new];
+    fr.code = @"fr";
+    fr.enName = @"Français";
+    fr.localName = @"French";
+        
+    return @[en, ru, es, sw, ko, vi, ch, tr, fr];
 }
 
 -(NSString*_Nonnull)languageName{

@@ -50,7 +50,7 @@
 "no_internet" = "İnternet bağlantısı yok";
 "wallet_not_created" = "Cüzdan oluşturulmadı";
 "wallet_not_opened" = "Cüzdan açılamıyor";
-"restor_wallet_warning" = "Lütfen senkronizasyonu bekleyin ve uygulamayı kapatmayın veya simge durumuna almayın.";
+"restor_wallet_warning" = "Lütfen senkronizasyonu bekleyin ve uygulamayı kapatmayın veya simge durumuna küçültmeyin. Cüzdanın geri yüklenmesi biraz zaman alabilir.";
 "restor_wallet_info" = "Yalnızca cüzdan bakiyesi (UTXO) geri yüklenebilir, işlem bilgileri her zaman gizlidir ve hiçbir zaman blokzincirinde tutulmaz.";
 "receive" = "Al";
 "send" = "Gönder";
@@ -312,7 +312,7 @@
 "delete_all_text" = "Tüm (str) cüzdandan silmek istediğinize emin misiniz?";
 "delete_category_text" = "“(str)” etiketini silmek istediğinize emin misiniz?";
 "canot_connect_node" = "Nod'a bağlanamıyor";
-"buy_beam_value" = "İşlemi tamamlamak için yukarıdaki (isim) adrese gönderin (miktar)"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
+"buy_beam_value" = "İşlemi tamamlamak için yukarıdaki (value) adrese gönderin (name)"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
 "scan_receiver_qr_code" = "Alıcı QR kodunu tarayın";
 "owner_key_warning" = "Lütfen, sahiplik anahtarınızı bilmenin tüm paranızı (UTXO) bilmenizi sağladığını unutmayın. Anahtarı, güvendiğiniz düğümde tamamen dağıttığınızdan emin olun!";
 "key_code" = "Anahtar kodu";
@@ -349,8 +349,8 @@
 "optional" = "Opsiyonel";
 "invalid_address_title" = "Geçersiz adres";
 "invalid_address_text" = "Verilen nod adresi geçersiz.\nLütfen, girilen adresin doğru olup olmadığını kontrol edin";
-"insufficient_funds" = "Yetersiz miktar: işlemi tamamlamak için (değer) Beam gerekiyor";
-"downloading" = "Yükleniyor";
+"insufficient_funds" = "Yetersiz miktar: işlemi tamamlamak için (value) Beam gerekiyor";
+"downloading" = "İndirildi";
 "sent_to_own" = "Kendi adresinize gönderildi";
 "sending_to_own" = "Kendi adresinize gönderiliyor";
 "default" = "Varsayılan";
@@ -398,3 +398,15 @@
 "ok" = "Tamam";
 "transactions_list" = "İşlem listesi";
 "in_24_hours_now" = "Şu andan itibaren 24 saat içinde";
+"transaction_history" = "İşlem listesi";
+"min_fee_error" = "Minimum işlem ücreti (value) GROTH"; // The minimum fee is 100 GROTH
+"date" = "Tarih";
+"downloading_blockchain" = "Blokzincir bilgileri indiriliyor";
+"and" = "ve"; // example: addresses and contacts
+"auto_restore_warning" = "Please make sure that you have not done any transactions (from any device) in the past hour. If you did, please wait for at least one hour after the last transaction before proceeding with Restore. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"manual_restore_warning" = "Verify that your node is fully synchronised with the blockchain before starting the restore procedure. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"understand" = "I understand";
+"NSPhotoLibraryAddUsageDescription" = "Save transaction details and scan QR-codes from the photos";
+"NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
+"NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition";
+"NSCameraUsageDescription" = "The camera is needed to scan QR codes";

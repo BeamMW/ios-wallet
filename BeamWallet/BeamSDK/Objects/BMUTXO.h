@@ -47,6 +47,7 @@ typedef int BMUTXOStatus;
 @property (nonatomic,strong) NSString * _Nullable createTxId;
 @property (nonatomic,strong) NSString * _Nullable spentTxId;
 @property (nonatomic,strong) BMTransaction * _Nullable transaction;
+@property (nonatomic,assign) UInt64 transactionDate;
 
 @end
 

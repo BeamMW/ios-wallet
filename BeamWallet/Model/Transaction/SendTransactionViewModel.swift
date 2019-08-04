@@ -63,6 +63,14 @@ class SendTransactionViewModel: NSObject {
         didSet{
             if sendAll {
                 amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+//                if let f = Double(fee), let a = Double(amount) {
+//                    if f > 0 && a == 0 {
+//                        _ = checkAmountError()
+//                    }
+//                    else if a == 0 {
+//                       amountError = Localizable.shared.strings.amount_zero
+//                    }
+//                }
             }
         }
     }

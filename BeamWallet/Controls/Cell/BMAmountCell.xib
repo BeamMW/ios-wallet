@@ -16,6 +16,9 @@
         <array key="SF-Pro-Display-Light.otf">
             <string>SFProDisplay-Light</string>
         </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
         <array key="SF-Pro-Display-Semibold.otf">
             <string>SFProDisplay-Semibold</string>
         </array>
@@ -23,18 +26,18 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="iHJ-1a-5Pk" customClass="BMAmountCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="105" id="iHJ-1a-5Pk" customClass="BMAmountCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="108"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iHJ-1a-5Pk" id="hff-kr-dLo">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="107.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="50Q-8g-rXB">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="107.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="REQUEST AMOUNT (optional)" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ns-1p-pyG">
-                                <rect key="frame" x="15" y="10" width="290" height="13.5"/>
+                                <rect key="frame" x="15" y="10" width="290" height="17"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -46,7 +49,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BEAM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RSM-WO-QCM">
-                                <rect key="frame" x="245" y="40.5" width="60" height="19"/>
+                                <rect key="frame" x="245" y="44" width="60" height="19.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="Yj3-Lc-8L5"/>
                                 </constraints>
@@ -60,41 +63,58 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bcu-hn-VIp" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="33.5" width="225" height="36"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="30"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                        <color key="value" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
-                                        <real key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="defaultHeight">
-                                        <real key="value" value="37"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="delegate" destination="iHJ-1a-5Pk" id="7G1-Cu-2na"/>
-                                </connections>
-                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9Eh-Ex-Ul9">
+                                <rect key="frame" x="15" y="37" width="225" height="60.5"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bcu-hn-VIp" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="225" height="36"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="30"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                <color key="value" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="defaultHeight">
+                                                <real key="value" value="37"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="delegate" destination="iHJ-1a-5Pk" id="7G1-Cu-2na"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="test" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zPC-i6-2wx">
+                                        <rect key="frame" x="0.0" y="41" width="225" height="19.5"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                        <color key="textColor" red="1" green="0.38431372549999998" blue="0.36078431370000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="RSM-WO-QCM" firstAttribute="leading" secondItem="Bcu-hn-VIp" secondAttribute="trailing" constant="5" id="4Iz-kW-Bdp"/>
-                            <constraint firstItem="Bcu-hn-VIp" firstAttribute="top" secondItem="4ns-1p-pyG" secondAttribute="bottom" constant="10" id="ChQ-db-769"/>
+                            <constraint firstItem="RSM-WO-QCM" firstAttribute="leading" secondItem="9Eh-Ex-Ul9" secondAttribute="trailing" constant="5" id="1eb-sZ-lpw"/>
+                            <constraint firstItem="9Eh-Ex-Ul9" firstAttribute="top" secondItem="4ns-1p-pyG" secondAttribute="bottom" constant="10" id="DeM-Mo-79C"/>
                             <constraint firstItem="4ns-1p-pyG" firstAttribute="top" secondItem="50Q-8g-rXB" secondAttribute="top" constant="10" id="KnY-iI-f7g"/>
-                            <constraint firstAttribute="bottom" secondItem="Bcu-hn-VIp" secondAttribute="bottom" constant="10" id="LCZ-mu-occ"/>
                             <constraint firstAttribute="trailing" secondItem="RSM-WO-QCM" secondAttribute="trailing" constant="15" id="WC1-Ef-L3j"/>
-                            <constraint firstItem="Bcu-hn-VIp" firstAttribute="leading" secondItem="50Q-8g-rXB" secondAttribute="leading" constant="15" id="b93-pB-JfZ"/>
                             <constraint firstItem="4ns-1p-pyG" firstAttribute="leading" secondItem="50Q-8g-rXB" secondAttribute="leading" constant="15" id="hwu-oI-Rt1"/>
+                            <constraint firstAttribute="bottom" secondItem="9Eh-Ex-Ul9" secondAttribute="bottom" constant="10" id="j89-iR-Ay1"/>
                             <constraint firstItem="RSM-WO-QCM" firstAttribute="top" secondItem="4ns-1p-pyG" secondAttribute="bottom" constant="17" id="neF-Wa-b9x"/>
                             <constraint firstAttribute="trailing" secondItem="4ns-1p-pyG" secondAttribute="trailing" constant="15" id="rfj-vS-duJ"/>
+                            <constraint firstItem="9Eh-Ex-Ul9" firstAttribute="leading" secondItem="50Q-8g-rXB" secondAttribute="leading" constant="15" id="tyf-r8-44M"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -109,10 +129,11 @@
             <viewLayoutGuide key="safeArea" id="Q62-1k-ged"/>
             <connections>
                 <outlet property="currencyLabel" destination="RSM-WO-QCM" id="IRl-Wq-437"/>
+                <outlet property="erorLabel" destination="zPC-i6-2wx" id="Fs8-wV-RA2"/>
                 <outlet property="nameLabel" destination="4ns-1p-pyG" id="zwq-Ht-UTx"/>
                 <outlet property="textField" destination="Bcu-hn-VIp" id="k64-qq-RJi"/>
             </connections>
-            <point key="canvasLocation" x="208.69565217391306" y="110.49107142857143"/>
+            <point key="canvasLocation" x="208.69565217391306" y="118.19196428571428"/>
         </tableViewCell>
     </objects>
 </document>

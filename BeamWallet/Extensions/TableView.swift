@@ -182,3 +182,14 @@ extension UITableView {
         setContentOffset(newOffset, animated: false)
     }
 }
+
+extension UITableView {
+    
+    func reloadWithoutAnimation() {
+        let lastScrollOffset = contentOffset
+        beginUpdates()
+        endUpdates()
+        layer.removeAllAnimations()
+        setContentOffset(lastScrollOffset, animated: false)
+    }
+}

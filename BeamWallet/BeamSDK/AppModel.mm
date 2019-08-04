@@ -27,6 +27,7 @@
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
 #import "RecoveryProgress.h"
+#import <SVProgressHUD/SVProgressHUD.h>
 
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -68,6 +69,7 @@ const int kFeeInGroth_Fork1 = 100;
     BOOL isStarted;
     BOOL isRunning;
 
+    NSString *localPassword;
     NSTimer *utxoTimer;
     
     Reachability *internetReachableFoo;
@@ -178,6 +180,10 @@ const int kFeeInGroth_Fork1 = 100;
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:NO];
             }
+            
+            if ([delegate respondsToSelector:@selector(onNoInternetConnection)]) {
+                [delegate onNoInternetConnection];
+            }
         }
     };
     
@@ -199,6 +205,19 @@ const int kFeeInGroth_Fork1 = 100;
     {
         if ([delegate respondsToSelector:@selector(onNetwotkStartConnecting:)]) {
             [delegate onNetwotkStartConnecting:_isConnecting];
+        }
+    }
+}
+
+-(void)setIsNodeChanging:(BOOL)isNodeChanging {
+    _isNodeChanging = isNodeChanging;
+    
+    if (_isNodeChanging) {
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                [delegate onNodeStartChanging];
+            }
         }
     }
 }
@@ -233,6 +252,8 @@ const int kFeeInGroth_Fork1 = 100;
             return NO;
         }
     }
+    
+    localPassword = [NSString stringWithString:pass];
     
     [self onWalledOpened:SecString(pass.string)];
     
@@ -333,6 +354,36 @@ const int kFeeInGroth_Fork1 = 100;
     }
     wallet = nil;
 }
+    
+-(void)restartWallet {
+    LOG_INFO() << "restart wallet";
+
+    [SVProgressHUD show];
+    
+    isStarted = NO;
+    isRunning = NO;
+    
+    if (walletReactor!=nil){
+        walletReactor.reset();
+    }
+    if (walletDb!=nil){
+        walletDb.reset();
+    }
+    if (wallet!=nil){
+        wallet.reset();
+    }
+    
+    walletReactor = nil;
+    wallet = nil;
+    walletDb = nil;
+    
+   BOOL opened = [self canOpenWallet:localPassword];
+    if (opened) {
+        [self openWallet:@""];
+    }
+    
+    [SVProgressHUD dismiss];
+}
 
 -(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
@@ -396,9 +447,33 @@ const int kFeeInGroth_Fork1 = 100;
         }
         catch (const std::exception& e) {
             NSLog(@"ImportRecovery failed %s",e.what());
+            
+            NSString *erorString = [NSString stringWithUTF8String:e.what()];
+
+            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+            {
+                if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+                    NSError *nativeError = [NSError errorWithDomain:@"beam"
+                                                               code:NSUInteger(100)
+                                                           userInfo:@{ NSLocalizedDescriptionKey:erorString }];
+                    [delegate onWalletError:nativeError];
+                }
+            }
         }
         catch (...) {
             NSLog(@"ImportRecovery failed");
+            
+            NSString *erorString = @"Recovery failed";
+            
+            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+            {
+                if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+                    NSError *nativeError = [NSError errorWithDomain:@"beam"
+                                                               code:NSUInteger(100)
+                                                           userInfo:@{ NSLocalizedDescriptionKey:erorString }];
+                    [delegate onWalletError:nativeError];
+                }
+            }
         }
     }
 }
@@ -449,8 +524,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)changeNodeAddress {
     if (wallet != nil) {
-        string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-        wallet->getAsync()->setNodeAddress(nodeAddrStr);
+        self.isNodeChanging = YES;
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+            self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
+        });
     }
 }
 
@@ -531,7 +610,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     [internetReachableFoo startNotifier];
     
     if (wallet != nil) {
-        [self setIsConnecting:YES];
+        if (self.isConnected)
+        {
+            [self setIsConnecting:YES];
+        }
         
         [self getNetworkStatus];
         
@@ -552,9 +634,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 #pragma mark - Addresses
 
 -(void)refreshAddresses{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.walletAddresses = [self getWalletAddresses];
-    });
+    if (wallet != nil)  {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.walletAddresses = [self getWalletAddresses];
+        });
+    }
 }
 
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address {
@@ -686,6 +770,40 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
     
+-(void)setContactComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
+        WalletID walletID(Zero);
+        if (walletID.FromHex(address.string))
+        {
+            std::vector<WalletAddress> addresses = wallet->contacts;
+            
+            for (int i=0; i<addresses.size(); i++)
+            {
+                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+
+                if ([wAddress isEqualToString:address])
+                {
+                    WalletAddress _address;
+                    _address.m_label = comment.string;
+                    _address.m_category = addresses[i].m_category;
+                    _address.m_walletID = walletID;
+                    _address.m_createTime = NSDate.date.timeIntervalSince1970;
+                    
+                    try{
+                        wallet->getAsync()->saveAddress(_address, false);
+                    }
+                    catch (const std::exception& e) {
+                        NSLog(@"setExpires failed");
+                    }
+                    catch (...) {
+                        NSLog(@"setExpires failed");
+                    }
+                    
+                    break;
+                }
+            }
+        }
+}
+    
 -(void)setWalletComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
     WalletID walletID(Zero);
     if (walletID.FromHex(address.string))
@@ -775,7 +893,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     if (removeTransactions)
     {
-        NSMutableArray <BMTransaction*>*transactions = [[AppModel sharedManager] getTransactionsFromAddress:address];
+        NSMutableArray <BMTransaction*>*transactions = [[AppModel sharedManager] getCompletedTransactionsFromAddress:address];
 
         NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
         
@@ -878,11 +996,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {
-    if (self.walletAddresses.count != 0)
-    {
-        return self.walletAddresses;
-    }
-    
     std::vector<WalletAddress> addrs = walletDb->getAddresses(true);
     
     wallet->ownAddresses.clear();
@@ -906,7 +1019,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
         address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
         address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
         address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-        
+        if([address.label isEqualToString:@"Default"])
+        {
+            address.label = [@"default" localized];
+        }
         [addresses addObject:address];
     }
     
@@ -930,7 +1046,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address {
     
     NSMutableArray *result = [NSMutableArray array];
-    for (BMTransaction *tr in self.transactions)
+    for (BMTransaction *tr in self.transactions.reverseObjectEnumerator)
     {
         if ([tr.senderAddress isEqualToString:address.walletId]
             || [tr.receiverAddress isEqualToString:address.walletId]) {
@@ -940,6 +1056,25 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     return result;
 }
+    
+    
+-(NSMutableArray<BMTransaction*>*_Nonnull)getCompletedTransactionsFromAddress:(BMAddress*_Nonnull)address {
+    
+    NSMutableArray *result = [NSMutableArray array];
+    for (BMTransaction *tr in self.transactions.reverseObjectEnumerator)
+    {
+        if ([tr.senderAddress isEqualToString:address.walletId]
+            || [tr.receiverAddress isEqualToString:address.walletId]) {
+            if (tr.enumStatus == BMTransactionStatusCancelled || tr.enumStatus == BMTransactionStatusCompleted || tr.enumStatus == BMTransactionStatusFailed)
+            {
+                [result addObject:tr];
+            }
+        }
+    }
+    
+    return result;
+}
+
 
 -(void)editAddress:(BMAddress*_Nonnull)address {
     BMContact *contact = [self getContactFromId:address.walletId];
@@ -1129,6 +1264,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return nil;
 }
 
+-(NSString*)feeError:(double)fee {
+    double need = double(int64_t(fee)) / Rules::Coin;
+    
+    NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    
+    NSString *s = [@"insufficient_funds" localized];
+    return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
+}
+
 -(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
     
     Amount bAmount = round(amount * Rules::Coin);
@@ -1189,7 +1333,18 @@ bool OnProgress(uint64_t done, uint64_t total) {
         auto bAmount = round(amount * Rules::Coin);
         
         try{
+           __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
+            
             wallet->getAsync()->sendMoney(fromID, walletID, comment.string, bAmount, fee);
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if ([[AppModel sharedManager] isMyAddress:to]) {
+                    [[AppModel sharedManager] setWalletComment:address.label toAddress:address.walletId];
+                }
+                else if (address != nil){
+                    [[AppModel sharedManager] setContactComment:address.label toAddress:address.walletId];
+                }
+            });
         }
         catch(NSException *ex) {
             NSLog(@"%@",ex);
@@ -1634,6 +1789,17 @@ bool OnProgress(uint64_t done, uint64_t total) {
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+   NSMutableArray *addresses = [NSMutableArray arrayWithArray:[[AppModel sharedManager] getAddressesFromCategory:category]];
+    for (BMAddress *address in addresses) {
+        for (int i=0; i<address.categories.count; i++) {
+            if ([address.categories[i] intValue] == category.ID) {
+                [address.categories removeObjectAtIndex:i];
+                [[AppModel sharedManager] editAddress:address];
+                break;
+            }
+        }
+    }
+    
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
@@ -1717,9 +1883,57 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return addresses;
 }
 
+-(void)fixCategories {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"fix"] intValue]==1) {
+        return;
+    }
+    
+    NSMutableArray *walletAddresses = [NSMutableArray arrayWithArray:_walletAddresses];
+    
+    for (BMAddress *address in walletAddresses) {
+        NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+        
+        for (int i=0; i<address.categories.count; i++) {
+            
+            BMCategory *cat = [[AppModel sharedManager] findCategoryById:address.categories[i]];
+            if (cat==nil) {
+                [set addIndex:i];
+            }
+        }
+        
+        if (set.count>0) {
+            [address.categories removeObjectsAtIndexes:set];
+            [[AppModel sharedManager] editAddress:address];
+        }
+    }
+    
+    NSMutableArray *contacts = [NSMutableArray arrayWithArray:_contacts];
+
+    for (BMContact *contact in contacts) {
+        NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+        
+        for (int i=0; i<contact.address.categories.count; i++) {
+            
+            BMCategory *cat = [[AppModel sharedManager] findCategoryById:contact.address.categories[i]];
+            if (cat==nil) {
+                [set addIndex:i];
+            }
+        }
+        
+        if (set.count>0) {
+            [contact.address.categories removeObjectsAtIndexes:set];
+            [[AppModel sharedManager] editAddress:contact.address];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"fix"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 #pragma mark - Fork
 
 -(BOOL)isFork {
+    auto h = Rules::get().pForks[1].m_Height;
     BOOL isFork = walletDb->getCurrentHeight() >= Rules::get().pForks[1].m_Height;
     return isFork;
 }
@@ -1751,6 +1965,42 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         return false;
     }
     return true;
+}
+
+#pragma mark - Timer
+
+-(void)handleTimer {
+    [[AppModel sharedManager] setIsNodeChanging:NO];
+    
+    [[AppModel sharedManager].connectionTimer invalidate];
+    [AppModel sharedManager].connectionTimer = nil;
+    
+    [[AppModel sharedManager] setIsConnecting:NO];
+    [[AppModel sharedManager] setIsConnected: wallet->pre_connected_status];
+    [[AppModel sharedManager] getNetworkStatus];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+            [delegate onNetwotkStatusChange:[AppModel sharedManager].isConnected];
+        }
+    }
+}
+
+-(void)startConnectionTimer:(int)seconds {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([AppModel sharedManager].connectionTimer!=nil) {
+            [[AppModel sharedManager].connectionTimer invalidate];
+            [AppModel sharedManager].connectionTimer = nil;
+        }
+        
+        self.connectionTimer =  [NSTimer scheduledTimerWithTimeInterval:seconds
+                                                             target: self
+                                                           selector: @selector(handleTimer)
+                                                           userInfo: nil
+                                                            repeats: NO];
+        
+    });
 }
 
 @end

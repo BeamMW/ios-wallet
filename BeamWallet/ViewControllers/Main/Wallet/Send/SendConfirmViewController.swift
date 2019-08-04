@@ -94,30 +94,19 @@ class SendConfirmViewController: BaseTableViewController {
     }
     
     private func askForSaveContact() {
+        viewModel.saveContact = true
+
         if viewModel.isNeedSaveContact() {
-            self.confirmAlert(title: Localizable.shared.strings.save_address_title, message: Localizable.shared.strings.save_contact_text, cancelTitle: Localizable.shared.strings.not_save, confirmTitle: Localizable.shared.strings.save, cancelHandler: {[weak self] (_ ) in
+            if var controllers = self.navigationController?.viewControllers {
+                controllers.removeLast()
+                controllers.removeLast()
                 
-                guard let strongSelf = self else { return }
-                
-                strongSelf.viewModel.saveContact = false
-                
-                strongSelf.onSend(needBack: true)
-            }) { [weak self] (_ ) in
-                
-                guard let strongSelf = self else { return }
-                
-                strongSelf.viewModel.saveContact = true
-                
-                if var controllers = strongSelf.navigationController?.viewControllers {
-                    controllers.removeLast()
-                    controllers.removeLast()
-                    
-                    let vc = SaveContactViewController(address: strongSelf.viewModel.toAddress)
-                    controllers.append(vc)
-                    strongSelf.navigationController?.setViewControllers(controllers, animated: true)
-                }
-                strongSelf.onSend(needBack: false)
+                let vc = SaveContactViewController(address: self.viewModel.toAddress)
+                controllers.append(vc)
+                self.navigationController?.setViewControllers(controllers, animated: true)
             }
+            
+            self.onSend(needBack: false)
         }
         else{
             self.onSend(needBack: true)

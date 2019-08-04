@@ -65,7 +65,7 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String.currency(value: transaction.fee) + " BEAM", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String(transaction.realFee) + " GROTH", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if transaction.isIncome {
             if let last = AppModel.sharedManager().getFirstTransactionId(forAddress: transaction.receiverAddress) {
@@ -82,7 +82,7 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.comment.uppercased(), detail: transaction.comment, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
 
         details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.isExpired() ? "0000000000000000000000000000000000000000000000000000000000000000" :  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
 

@@ -34,6 +34,8 @@ class PaymentProofDetailViewController: BaseTableViewController {
     @IBOutlet private weak var codeInputLabel: UILabel!
     @IBOutlet private weak var footerRightOffset: NSLayoutConstraint!
     @IBOutlet private weak var footerLeftOffset: NSLayoutConstraint!
+    @IBOutlet private weak var inputFieldHeight: NSLayoutConstraint!
+    @IBOutlet private weak var headerdHeight: NSLayoutConstraint!
 
     init(transaction:BMTransaction?, paymentProof:BMPaymentProof?) {
         super.init(nibName: nil, bundle: nil)
@@ -135,11 +137,33 @@ class PaymentProofDetailViewController: BaseTableViewController {
             tableView.tableFooterView = nil
         }
     }
+    
+    private func resize() {
+        var size = codeInputField.sizeThatFits(CGSize(width: codeInputField.width, height: 9999))
+        if size.height < 40 {
+            size.height = 40
+        }
+        inputFieldHeight.constant = size.height
+        headerdHeight.constant = inputFieldHeight.constant + (codeInputLabel.alpha == 0 ? 65 : 90)  
+        
+        codeInputView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: headerdHeight.constant)
+        
+        tableView.beginUpdates()
+        tableView.tableHeaderView = codeInputView
+        tableView.tableHeaderView?.layoutIfNeeded()
+        tableView.tableHeaderView?.layoutSubviews()
+        tableView.endUpdates()
+    }
 }
 
 extension PaymentProofDetailViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            if tableView.tableHeaderView != nil {
+                return 0
+            }
+        }
         return section == 1 ? BMTableHeaderTitleView.boldHeight : 0
     }
     
@@ -176,6 +200,13 @@ extension PaymentProofDetailViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 0:
+            if section == 0 {
+                if tableView.tableHeaderView != nil {
+                    let view = UIView()
+                    view.backgroundColor = UIColor.clear
+                    return view
+                }
+            }
             return nil
         case 1:
             return BMTableHeaderTitleView(title: Localizable.shared.strings.details, bold: true)
@@ -188,6 +219,10 @@ extension PaymentProofDetailViewController : UITableViewDataSource {
 
 extension PaymentProofDetailViewController : UITextViewDelegate {
    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        resize()
+    }
+    
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         textView.inputAccessoryView = nil
         
@@ -230,6 +265,9 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
             codeInputField.textColor = UIColor.white
         }
         
+
+        resize()
+
         fillTransactionInfo()
         tableView.reloadData()
     }
@@ -274,6 +312,8 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
                 codeInputField.lineColor = UIColor.main.red
             }
         }
+        
+        resize()
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

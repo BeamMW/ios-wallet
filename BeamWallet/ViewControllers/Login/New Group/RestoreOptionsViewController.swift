@@ -80,11 +80,28 @@ class RestoreOptionsViewController: BaseTableViewController {
     }
     
     @objc private func onNext() {
-        Settings.sharedManager().resetWallet()
-        AppModel.sharedManager().resetWallet(true)
-        AppModel.sharedManager().isRestoreFlow = true
-        
-        self.pushViewController(vc: InputPhraseViewController())
+        if AppModel.sharedManager().restoreType == BMRestoreAutomatic {
+            self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.auto_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
+                Settings.sharedManager().resetWallet()
+                AppModel.sharedManager().resetWallet(true)
+                AppModel.sharedManager().isRestoreFlow = true
+                
+                self.pushViewController(vc: InputPhraseViewController())
+            }
+        }
+        else{
+            self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.manual_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
+                Settings.sharedManager().resetWallet()
+                AppModel.sharedManager().resetWallet(true)
+                AppModel.sharedManager().isRestoreFlow = true
+                
+                self.pushViewController(vc: InputPhraseViewController())
+            }
+        }
     }
 }
 

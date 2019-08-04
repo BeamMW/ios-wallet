@@ -84,8 +84,15 @@ class CategoryPickerViewController: BaseTableViewController {
 
         addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
 
+        let none = BMCategory.none()
+        none.name = none.name.capitalizingFirstLetter()
+        
         categories = (AppModel.sharedManager().categories as! [BMCategory])
-        categories.insert(BMCategory.none(), at: 0)
+        categories.insert(none, at: 0)
+        
+        if self.selectedCategories == nil || self.selectedCategories?.count == 0 {
+            self.selectedCategories?.append("0")
+        }
         
         tableView.delegate = self
         tableView.dataSource = self

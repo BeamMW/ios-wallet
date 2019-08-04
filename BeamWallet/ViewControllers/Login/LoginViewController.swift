@@ -85,7 +85,6 @@ class LoginViewController: BaseViewController {
         vc.completion = {[weak self] obj in
             self?.setTitles()
         }
-        vc.hidesBottomBarWhenPushed = true
         pushViewController(vc: vc)
     }
 }

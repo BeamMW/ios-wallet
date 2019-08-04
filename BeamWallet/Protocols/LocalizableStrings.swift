@@ -172,6 +172,7 @@ class LocalizableStrings : NSObject {
     var support_email_mailto = "mailto:support@beam.mw"
     var amount_empty = "amount_empty".localized
     var amount_zero = "amount_zero".localized
+    var insufficient_funds = "insufficient_funds".localized
     var next = "next".localized.lowercased()
     var where_buy_beam = "where_buy_beam".localized
     var logout = "logout".localized
@@ -382,7 +383,10 @@ class LocalizableStrings : NSObject {
     var downloading_blockchain = "downloading_blockchain".localized
     var restor_wallet_warning = "restor_wallet_warning".localized
     var restor_wallet_info = "restor_wallet_info".localized
-    
+    var auto_restore_warning = "auto_restore_warning".localized
+    var understand = "understand".localized
+    var manual_restore_warning = "manual_restore_warning".localized
+
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

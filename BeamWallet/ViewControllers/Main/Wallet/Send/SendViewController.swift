@@ -23,6 +23,9 @@ import Parchment
 
 class SendViewController: BaseTableViewController {
 
+    private var alreadyChanged = false
+    private var cellHeights: [IndexPath : CGFloat] = [:]
+
     private var isSearch = false {
         didSet {
             tableView.isScrollEnabled = !isSearch
@@ -59,6 +62,15 @@ class SendViewController: BaseTableViewController {
         }
     }
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
     public var transaction: BMTransaction?
     private let viewModel = SendTransactionViewModel()
     
@@ -82,6 +94,11 @@ class SendViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.sectionHeaderHeight = 0.0
+        tableView.sectionFooterHeight = 0.0
         
         let pagingView = pagingViewController.view as! PagingView
         pagingView.options.indicatorColor = UIColor.main.heliotrope
@@ -102,6 +119,8 @@ class SendViewController: BaseTableViewController {
         title = Localizable.shared.strings.send.uppercased()
         
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
+        
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -246,6 +265,14 @@ extension SendViewController : UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeights[indexPath] = cell.frame.size.height
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeights[indexPath] ?? UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
@@ -267,21 +294,23 @@ extension SendViewController : UITableViewDataSource {
                 return cell
             }
             else{
-                let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-                cell.textLabel?.textColor = UIColor.main.blueyGrey
-                cell.textLabel?.font = RegularFont(size: 14)
+                var cell = tableView.dequeueReusableCell(withIdentifier: "cell")
                 
-                if viewModel.fee != Localizable.shared.strings.zero {
-                    cell.textLabel?.text = "+ \(viewModel.fee) GROTH transaction fee"
+                if cell == nil {
+                    cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+                    
+                    cell?.textLabel?.textColor = UIColor.main.blueyGrey
+                    cell?.textLabel?.font = RegularFont(size: 14)
+                    
+                    cell?.backgroundColor = UIColor.clear
+                    cell?.selectionStyle = .none
+                    cell?.separatorInset = UIEdgeInsets.zero
+                    cell?.indentationLevel = 0
                 }
-                else{
-                    cell.textLabel?.text = "\(viewModel.fee) GROTH transaction fee"
-                }
-                cell.backgroundColor = UIColor.clear
-                cell.selectionStyle = .none
-                cell.separatorInset = UIEdgeInsets.zero
-                cell.indentationLevel = 0
-                return cell
+                
+                cell?.textLabel?.text = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+                
+                return cell!
             }
         case 2:
             var total = Localizable.shared.strings.zero
@@ -362,6 +391,21 @@ extension SendViewController : UITableViewDataSource {
 
 extension SendViewController : BMCellProtocol {
     
+    func textDidChangeStatus(_ sender: UITableViewCell) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//            if let path = self.tableView.indexPath(for: sender)  {
+//                UIView.performWithoutAnimation {
+//                    self.tableView.beginUpdates()
+//                    self.tableView.reloadRows(at: [path], with: .none)
+//                    self.tableView.endUpdates()
+//                }
+//            }
+//        }
+//        if !alreadyChanged {
+//            alreadyChanged = true//
+//        }
+    }
+    
     func textValueDidBegin(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender)  {
             tableView.scrollToRow(at: path, at: .middle, animated: true)
@@ -410,10 +454,12 @@ extension SendViewController : BMCellProtocol {
                 }
             }
             else if path.section == 1 {
-                if viewModel.sendAll {
-                    removeGrothNotice = true
+                if input {
+                    if viewModel.sendAll {
+                        removeGrothNotice = true
+                    }
+                    viewModel.sendAll = false
                 }
-                viewModel.sendAll = false
                 viewModel.amount = text
             }
             else if path.section == 3 {
@@ -515,6 +561,18 @@ extension SendViewController : BMCellProtocol {
                         tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: .none)
                         tableView.endUpdates()
                     }
+                    
+                    if let a = Double(viewModel.amount), let f = Double(viewModel.fee) {
+                        if a == 0 && f > 0  {
+                            viewModel.amount = AppModel.sharedManager().allAmount(0)
+                            viewModel.amountError = AppModel.sharedManager().feeError(f)
+                            tableView.reloadData()
+                        }
+                        else if a == 0 {
+                            viewModel.amountError = Localizable.shared.strings.amount_zero
+                            tableView.reloadData()
+                        }
+                    }
                 }
  
             }
@@ -565,19 +623,27 @@ extension SendViewController : BMCellProtocol {
     
     func onDidChangeFee(value: Double) {
         viewModel.fee = String(Int(value))
+        _ = viewModel.checkAmountError()
         
         if viewModel.sendAll {
-            if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
-                cell.configure(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
-                cell.error = viewModel.amountError
-                cell.fee = value
+            var error:String?
+            var amount = viewModel.amount
+            if let a = Double(viewModel.amount), let f = Double(viewModel.fee) {
+                if a == 0 && f > 0  {
+                    amount = AppModel.sharedManager().allAmount(0)
+                    error = AppModel.sharedManager().feeError(f)
+                }
+                else if a == 0 {
+                    error = Localizable.shared.strings.amount_zero
+                }
             }
             
-            tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+            viewModel.amount = amount
+            viewModel.amountError = error
         }
-        
-        _ = viewModel.checkAmountError()
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+        UIView.performWithoutAnimation {
+            tableView.reloadData()
+        }
     }
 }
 
@@ -587,10 +653,14 @@ extension SendViewController : QRScannerViewControllerDelegate
         viewModel.selectedContact = nil
         
         if let a = amount {
-            viewModel.amount = a
+            if Double(a) ?? 0 > 0 {
+                viewModel.amount = a
+                viewModel.sendAll = false
+            }
         }
         
         didSelectAddress(value: value)
+        
     }
 }
 

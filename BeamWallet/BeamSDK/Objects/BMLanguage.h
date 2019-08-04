@@ -24,6 +24,7 @@
 @property (nonatomic,strong) NSString * _Nonnull enName;
 @property (nonatomic,strong) NSString * _Nonnull code;
 @property (nonatomic,strong) NSString * _Nonnull localName;
+@property (nonatomic,assign) int ID;
 
 @end
 

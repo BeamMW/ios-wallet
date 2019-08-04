@@ -132,9 +132,6 @@
 		922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
-		922F689522E20A39005D3F33 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F689422E20A39005D3F33 /* boost.framework */; };
-		922F689622E20A39005D3F33 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F689422E20A39005D3F33 /* boost.framework */; };
-		922F689722E20A39005D3F33 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F689422E20A39005D3F33 /* boost.framework */; };
 		922FB15E22B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
 		922FB15F22B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
 		922FB16022B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
@@ -322,10 +319,6 @@
 		92790D97224CD8AE00F79D64 /* BMContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D95224CD8AE00F79D64 /* BMContact.m */; };
 		92790D9A224E41E800F79D64 /* BMPaymentProof.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D99224E41E800F79D64 /* BMPaymentProof.m */; };
 		92790D9B224E41E800F79D64 /* BMPaymentProof.m in Sources */ = {isa = PBXBuildFile; fileRef = 92790D99224E41E800F79D64 /* BMPaymentProof.m */; };
-		92790D9E224E4A1500F79D64 /* TransactionPaymentProofCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790D9C224E4A1500F79D64 /* TransactionPaymentProofCell.swift */; };
-		92790D9F224E4A1500F79D64 /* TransactionPaymentProofCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790D9C224E4A1500F79D64 /* TransactionPaymentProofCell.swift */; };
-		92790DA0224E4A1500F79D64 /* TransactionPaymentProofCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790D9D224E4A1500F79D64 /* TransactionPaymentProofCell.xib */; };
-		92790DA1224E4A1500F79D64 /* TransactionPaymentProofCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790D9D224E4A1500F79D64 /* TransactionPaymentProofCell.xib */; };
 		92790DA4224E59E800F79D64 /* TransactionUTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790DA2224E59E800F79D64 /* TransactionUTXOCell.swift */; };
 		92790DA5224E59E800F79D64 /* TransactionUTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790DA2224E59E800F79D64 /* TransactionUTXOCell.swift */; };
 		92790DA6224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790DA3224E59E800F79D64 /* TransactionUTXOCell.xib */; };
@@ -334,6 +327,9 @@
 		92790DAB224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790DA8224E6FDE00F79D64 /* PaymentProofDetailViewController.swift */; };
 		92790DAC224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790DA9224E6FDE00F79D64 /* PaymentProofDetailViewController.xib */; };
 		92790DAD224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790DA9224E6FDE00F79D64 /* PaymentProofDetailViewController.xib */; };
+		927993C422F424D300FF8ECC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 927993C822F424D300FF8ECC /* InfoPlist.strings */; };
+		927993C522F424D300FF8ECC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 927993C822F424D300FF8ECC /* InfoPlist.strings */; };
+		927993C622F424D300FF8ECC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 927993C822F424D300FF8ECC /* InfoPlist.strings */; };
 		927D2F8222CF4A7A00D4B439 /* TransactionShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8122CF4A7A00D4B439 /* TransactionShareView.swift */; };
 		927D2F8322CF4A7A00D4B439 /* TransactionShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8122CF4A7A00D4B439 /* TransactionShareView.swift */; };
 		927D2F8422CF4A7A00D4B439 /* TransactionShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927D2F8122CF4A7A00D4B439 /* TransactionShareView.swift */; };
@@ -468,6 +464,60 @@
 		92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB8326223BA921000ADE86 /* ShareLogActivity.swift */; };
 		92AB832E223BC5D4000ADE86 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */; };
 		92AB832F223BC5D4000ADE86 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */; };
+		92AC9E7D22F4CD80007C554E /* libboost_exception.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6D22F4CD3D007C554E /* libboost_exception.a */; };
+		92AC9E7E22F4CD80007C554E /* libboost_exception.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6D22F4CD3D007C554E /* libboost_exception.a */; };
+		92AC9E7F22F4CD80007C554E /* libboost_exception.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6D22F4CD3D007C554E /* libboost_exception.a */; };
+		92AC9E8022F4CD80007C554E /* libboost_atomic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6E22F4CD40007C554E /* libboost_atomic.a */; };
+		92AC9E8122F4CD80007C554E /* libboost_atomic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6E22F4CD40007C554E /* libboost_atomic.a */; };
+		92AC9E8222F4CD80007C554E /* libboost_atomic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6E22F4CD40007C554E /* libboost_atomic.a */; };
+		92AC9E8322F4CD80007C554E /* libboost_chrono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6F22F4CD44007C554E /* libboost_chrono.a */; };
+		92AC9E8422F4CD80007C554E /* libboost_chrono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6F22F4CD44007C554E /* libboost_chrono.a */; };
+		92AC9E8522F4CD80007C554E /* libboost_chrono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E6F22F4CD44007C554E /* libboost_chrono.a */; };
+		92AC9E8622F4CD80007C554E /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7022F4CD48007C554E /* libboost_filesystem.a */; };
+		92AC9E8722F4CD80007C554E /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7022F4CD48007C554E /* libboost_filesystem.a */; };
+		92AC9E8822F4CD80007C554E /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7022F4CD48007C554E /* libboost_filesystem.a */; };
+		92AC9E8922F4CD80007C554E /* libboost_regex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7122F4CD4D007C554E /* libboost_regex.a */; };
+		92AC9E8A22F4CD80007C554E /* libboost_regex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7122F4CD4D007C554E /* libboost_regex.a */; };
+		92AC9E8B22F4CD80007C554E /* libboost_regex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7122F4CD4D007C554E /* libboost_regex.a */; };
+		92AC9E8C22F4CD80007C554E /* libboost_test_exec_monitor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7222F4CD54007C554E /* libboost_test_exec_monitor.a */; };
+		92AC9E8D22F4CD80007C554E /* libboost_test_exec_monitor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7222F4CD54007C554E /* libboost_test_exec_monitor.a */; };
+		92AC9E8E22F4CD80007C554E /* libboost_test_exec_monitor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7222F4CD54007C554E /* libboost_test_exec_monitor.a */; };
+		92AC9E8F22F4CD80007C554E /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7322F4CD57007C554E /* libboost_thread.a */; };
+		92AC9E9022F4CD80007C554E /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7322F4CD57007C554E /* libboost_thread.a */; };
+		92AC9E9122F4CD80007C554E /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7322F4CD57007C554E /* libboost_thread.a */; };
+		92AC9E9222F4CD80007C554E /* libboost_random.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7422F4CD5A007C554E /* libboost_random.a */; };
+		92AC9E9322F4CD80007C554E /* libboost_random.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7422F4CD5A007C554E /* libboost_random.a */; };
+		92AC9E9422F4CD80007C554E /* libboost_random.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7422F4CD5A007C554E /* libboost_random.a */; };
+		92AC9E9522F4CD80007C554E /* libboost_prg_exec_monitor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7522F4CD5E007C554E /* libboost_prg_exec_monitor.a */; };
+		92AC9E9622F4CD80007C554E /* libboost_prg_exec_monitor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7522F4CD5E007C554E /* libboost_prg_exec_monitor.a */; };
+		92AC9E9722F4CD80007C554E /* libboost_prg_exec_monitor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7522F4CD5E007C554E /* libboost_prg_exec_monitor.a */; };
+		92AC9E9822F4CD80007C554E /* libboost_unit_test_framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7622F4CD63007C554E /* libboost_unit_test_framework.a */; };
+		92AC9E9922F4CD80007C554E /* libboost_unit_test_framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7622F4CD63007C554E /* libboost_unit_test_framework.a */; };
+		92AC9E9A22F4CD80007C554E /* libboost_unit_test_framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7622F4CD63007C554E /* libboost_unit_test_framework.a */; };
+		92AC9E9B22F4CD80007C554E /* libboost_log_setup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7722F4CD6A007C554E /* libboost_log_setup.a */; };
+		92AC9E9C22F4CD80007C554E /* libboost_log_setup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7722F4CD6A007C554E /* libboost_log_setup.a */; };
+		92AC9E9D22F4CD80007C554E /* libboost_log_setup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7722F4CD6A007C554E /* libboost_log_setup.a */; };
+		92AC9E9E22F4CD80007C554E /* libboost_log.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7822F4CD71007C554E /* libboost_log.a */; };
+		92AC9E9F22F4CD80007C554E /* libboost_log.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7822F4CD71007C554E /* libboost_log.a */; };
+		92AC9EA022F4CD80007C554E /* libboost_log.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7822F4CD71007C554E /* libboost_log.a */; };
+		92AC9EA122F4CD80007C554E /* libboost_program_options.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7922F4CD76007C554E /* libboost_program_options.a */; };
+		92AC9EA222F4CD80007C554E /* libboost_program_options.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7922F4CD76007C554E /* libboost_program_options.a */; };
+		92AC9EA322F4CD80007C554E /* libboost_program_options.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7922F4CD76007C554E /* libboost_program_options.a */; };
+		92AC9EA422F4CD80007C554E /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7A22F4CD79007C554E /* libboost_system.a */; };
+		92AC9EA522F4CD80007C554E /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7A22F4CD79007C554E /* libboost_system.a */; };
+		92AC9EA622F4CD80007C554E /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7A22F4CD79007C554E /* libboost_system.a */; };
+		92AC9EA722F4CD80007C554E /* libboost_date_time.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7B22F4CD7C007C554E /* libboost_date_time.a */; };
+		92AC9EA822F4CD80007C554E /* libboost_date_time.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7B22F4CD7C007C554E /* libboost_date_time.a */; };
+		92AC9EA922F4CD80007C554E /* libboost_date_time.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7B22F4CD7C007C554E /* libboost_date_time.a */; };
+		92AC9EAA22F4CD80007C554E /* libboost_timer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7C22F4CD80007C554E /* libboost_timer.a */; };
+		92AC9EAB22F4CD80007C554E /* libboost_timer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7C22F4CD80007C554E /* libboost_timer.a */; };
+		92AC9EAC22F4CD80007C554E /* libboost_timer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AC9E7C22F4CD80007C554E /* libboost_timer.a */; };
+		92AC9EB722F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AC9EB522F4E387007C554E /* TransactionPaymentProofCell.xib */; };
+		92AC9EB822F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AC9EB522F4E387007C554E /* TransactionPaymentProofCell.xib */; };
+		92AC9EB922F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AC9EB522F4E387007C554E /* TransactionPaymentProofCell.xib */; };
+		92AC9EBA22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC9EB622F4E389007C554E /* TransactionPaymentProofCell.swift */; };
+		92AC9EBB22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC9EB622F4E389007C554E /* TransactionPaymentProofCell.swift */; };
+		92AC9EBC22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC9EB622F4E389007C554E /* TransactionPaymentProofCell.swift */; };
 		92ADED812229F213001D0A38 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ADED802229F213001D0A38 /* ViewController.swift */; };
 		92AE366C22383D2300E0810B /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366A22383D2300E0810B /* QRScannerViewController.swift */; };
 		92AE366D22383D2300E0810B /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AE366B22383D2300E0810B /* QRScannerViewController.xib */; };
@@ -729,7 +779,6 @@
 		92E2EB06226F21C700367928 /* WalletStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A8567222E7FD900A3B747 /* WalletStatusCell.swift */; };
 		92E2EB07226F21C700367928 /* ClearDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E2EA9F226DFC3B00367928 /* ClearDataViewController.swift */; };
 		92E2EB08226F21C700367928 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC611422296F2700AEABC1 /* Color.swift */; };
-		92E2EB09226F21C700367928 /* TransactionPaymentProofCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790D9C224E4A1500F79D64 /* TransactionPaymentProofCell.swift */; };
 		92E2EB0B226F21C700367928 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592CA72245309B00050A13 /* NotificationManager.swift */; };
 		92E2EB0C226F21C700367928 /* UTXOTransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F68C8B2245070200197D4D /* UTXOTransactionCell.swift */; };
 		92E2EB0E226F21C700367928 /* BiometricAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */; };
@@ -783,7 +832,6 @@
 		92E2EB5B226F21C700367928 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 925AD60022282C8400DDE66B /* SF-Pro-Display-Bold.otf */; };
 		92E2EB5C226F21C700367928 /* IntroPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */; };
 		92E2EB60226F21C700367928 /* CreateWalletProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */; };
-		92E2EB61226F21C700367928 /* TransactionPaymentProofCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790D9D224E4A1500F79D64 /* TransactionPaymentProofCell.xib */; };
 		92E2EB63226F21C700367928 /* PaymentProofDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790DA9224E6FDE00F79D64 /* PaymentProofDetailViewController.xib */; };
 		92E2EB64226F21C700367928 /* DisplayPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF4722293FEB009D931B /* DisplayPhraseViewController.xib */; };
 		92E2EB66226F21C700367928 /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
@@ -1025,8 +1073,8 @@
 		9227AEDE2282EADA00FB221F /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		9227AEEA2282F6F800FB221F /* BMDuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMDuration.h; sourceTree = "<group>"; };
 		9227AEEB2282F6F800FB221F /* BMDuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDuration.m; sourceTree = "<group>"; };
+		922EE89222F18C5800BBFDEF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMMultiLineItem.swift; sourceTree = "<group>"; };
-		922F689422E20A39005D3F33 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boost.framework; sourceTree = "<group>"; };
 		922FB15D22B3E134007AD689 /* BMSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSearchView.swift; sourceTree = "<group>"; };
 		9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-LightItalic.otf"; sourceTree = "<group>"; };
 		9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
@@ -1141,12 +1189,19 @@
 		92790D95224CD8AE00F79D64 /* BMContact.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMContact.m; sourceTree = "<group>"; };
 		92790D98224E41E800F79D64 /* BMPaymentProof.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMPaymentProof.h; sourceTree = "<group>"; };
 		92790D99224E41E800F79D64 /* BMPaymentProof.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMPaymentProof.m; sourceTree = "<group>"; };
-		92790D9C224E4A1500F79D64 /* TransactionPaymentProofCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPaymentProofCell.swift; sourceTree = "<group>"; };
-		92790D9D224E4A1500F79D64 /* TransactionPaymentProofCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionPaymentProofCell.xib; sourceTree = "<group>"; };
 		92790DA2224E59E800F79D64 /* TransactionUTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUTXOCell.swift; sourceTree = "<group>"; };
 		92790DA3224E59E800F79D64 /* TransactionUTXOCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionUTXOCell.xib; sourceTree = "<group>"; };
 		92790DA8224E6FDE00F79D64 /* PaymentProofDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentProofDetailViewController.swift; sourceTree = "<group>"; };
 		92790DA9224E6FDE00F79D64 /* PaymentProofDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaymentProofDetailViewController.xib; sourceTree = "<group>"; };
+		927993C722F424D300FF8ECC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993C922F424D800FF8ECC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		927993CA22F424DC00FF8ECC /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993CB22F424E100FF8ECC /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993CC22F424E500FF8ECC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993CD22F424EA00FF8ECC /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993CE22F424F100FF8ECC /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993CF22F424F600FF8ECC /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927993D022F424FA00FF8ECC /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		927D2F8122CF4A7A00D4B439 /* TransactionShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionShareView.swift; sourceTree = "<group>"; };
 		927D2F8522CF4D5F00D4B439 /* TransactionShareView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionShareView.xib; sourceTree = "<group>"; };
 		927D2F8922CF6DDA00D4B439 /* CrowdinManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrowdinManager.swift; sourceTree = "<group>"; };
@@ -1177,6 +1232,24 @@
 		92A1BA0522369567008135B5 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		92AB8326223BA921000ADE86 /* ShareLogActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareLogActivity.swift; sourceTree = "<group>"; };
 		92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
+		92AC9E6D22F4CD3D007C554E /* libboost_exception.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_exception.a; sourceTree = "<group>"; };
+		92AC9E6E22F4CD40007C554E /* libboost_atomic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_atomic.a; sourceTree = "<group>"; };
+		92AC9E6F22F4CD44007C554E /* libboost_chrono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_chrono.a; sourceTree = "<group>"; };
+		92AC9E7022F4CD48007C554E /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_filesystem.a; sourceTree = "<group>"; };
+		92AC9E7122F4CD4D007C554E /* libboost_regex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_regex.a; sourceTree = "<group>"; };
+		92AC9E7222F4CD54007C554E /* libboost_test_exec_monitor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_test_exec_monitor.a; sourceTree = "<group>"; };
+		92AC9E7322F4CD57007C554E /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_thread.a; sourceTree = "<group>"; };
+		92AC9E7422F4CD5A007C554E /* libboost_random.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_random.a; sourceTree = "<group>"; };
+		92AC9E7522F4CD5E007C554E /* libboost_prg_exec_monitor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_prg_exec_monitor.a; sourceTree = "<group>"; };
+		92AC9E7622F4CD63007C554E /* libboost_unit_test_framework.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_unit_test_framework.a; sourceTree = "<group>"; };
+		92AC9E7722F4CD6A007C554E /* libboost_log_setup.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_log_setup.a; sourceTree = "<group>"; };
+		92AC9E7822F4CD71007C554E /* libboost_log.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_log.a; sourceTree = "<group>"; };
+		92AC9E7922F4CD76007C554E /* libboost_program_options.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_program_options.a; sourceTree = "<group>"; };
+		92AC9E7A22F4CD79007C554E /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_system.a; sourceTree = "<group>"; };
+		92AC9E7B22F4CD7C007C554E /* libboost_date_time.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_date_time.a; sourceTree = "<group>"; };
+		92AC9E7C22F4CD80007C554E /* libboost_timer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_timer.a; sourceTree = "<group>"; };
+		92AC9EB522F4E387007C554E /* TransactionPaymentProofCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransactionPaymentProofCell.xib; sourceTree = "<group>"; };
+		92AC9EB622F4E389007C554E /* TransactionPaymentProofCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionPaymentProofCell.swift; sourceTree = "<group>"; };
 		92ADED802229F213001D0A38 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		92AE366A22383D2300E0810B /* QRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerViewController.swift; sourceTree = "<group>"; };
 		92AE366B22383D2300E0810B /* QRScannerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRScannerViewController.xib; sourceTree = "<group>"; };
@@ -1350,22 +1423,37 @@
 			files = (
 				92DF0CF522CAB38B0092CD4D /* libsecp256k1.a in Frameworks */,
 				92DF0CF322CAB38B0092CD4D /* libwallet.a in Frameworks */,
+				92AC9E8322F4CD80007C554E /* libboost_chrono.a in Frameworks */,
 				923544792254CB1300889C74 /* openssl.framework in Frameworks */,
 				92DF0CF222CAB38B0092CD4D /* libsqlite.a in Frameworks */,
-				922F689522E20A39005D3F33 /* boost.framework in Frameworks */,
+				92AC9E8F22F4CD80007C554E /* libboost_thread.a in Frameworks */,
+				92AC9E9B22F4CD80007C554E /* libboost_log_setup.a in Frameworks */,
 				92DF0CFB22CAB38B0092CD4D /* libutility.a in Frameworks */,
+				92AC9E9222F4CD80007C554E /* libboost_random.a in Frameworks */,
 				92DF0CFC22CAB38B0092CD4D /* libuv_a.a in Frameworks */,
 				575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */,
+				92AC9EA122F4CD80007C554E /* libboost_program_options.a in Frameworks */,
+				92AC9EA722F4CD80007C554E /* libboost_date_time.a in Frameworks */,
 				92DF0CFF22CAB38B0092CD4D /* libcrypto.a in Frameworks */,
 				92DF0CF122CAB38B0092CD4D /* libexternal_pow.a in Frameworks */,
 				92DF0CFD22CAB38B0092CD4D /* libmnemonic.a in Frameworks */,
 				92DF0CFA22CAB38B0092CD4D /* libhttp.a in Frameworks */,
+				92AC9E8C22F4CD80007C554E /* libboost_test_exec_monitor.a in Frameworks */,
 				92DF0CF822CAB38B0092CD4D /* libcli.a in Frameworks */,
 				92DF0CFE22CAB38B0092CD4D /* libcore.a in Frameworks */,
+				92AC9E9E22F4CD80007C554E /* libboost_log.a in Frameworks */,
+				92AC9E8622F4CD80007C554E /* libboost_filesystem.a in Frameworks */,
+				92AC9EAA22F4CD80007C554E /* libboost_timer.a in Frameworks */,
+				92AC9E9822F4CD80007C554E /* libboost_unit_test_framework.a in Frameworks */,
+				92AC9E8922F4CD80007C554E /* libboost_regex.a in Frameworks */,
+				92AC9EA422F4CD80007C554E /* libboost_system.a in Frameworks */,
 				92DF0CF922CAB38B0092CD4D /* liblibbitcoin.a in Frameworks */,
 				92DF0CF722CAB38B0092CD4D /* libnode.a in Frameworks */,
+				92AC9E8022F4CD80007C554E /* libboost_atomic.a in Frameworks */,
+				92AC9E7D22F4CD80007C554E /* libboost_exception.a in Frameworks */,
 				92DF0CF422CAB38B0092CD4D /* libpow.a in Frameworks */,
 				92DF0CF622CAB38B0092CD4D /* libp2p.a in Frameworks */,
+				92AC9E9522F4CD80007C554E /* libboost_prg_exec_monitor.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1375,22 +1463,37 @@
 			files = (
 				920CED4622D88D3000846283 /* libnode.a in Frameworks */,
 				920CED3822D88D3000846283 /* libsecp256k1.a in Frameworks */,
+				92AC9E8422F4CD80007C554E /* libboost_chrono.a in Frameworks */,
 				920CED5222D88D3000846283 /* libuv_a.a in Frameworks */,
 				920CED4E22D88D3000846283 /* libp2p.a in Frameworks */,
-				922F689622E20A39005D3F33 /* boost.framework in Frameworks */,
+				92AC9E9022F4CD80007C554E /* libboost_thread.a in Frameworks */,
+				92AC9E9C22F4CD80007C554E /* libboost_log_setup.a in Frameworks */,
 				920CED4822D88D3000846283 /* libutility.a in Frameworks */,
+				92AC9E9322F4CD80007C554E /* libboost_random.a in Frameworks */,
 				920CED4422D88D3000846283 /* libsqlite.a in Frameworks */,
 				920CED4C22D88D3000846283 /* libcli.a in Frameworks */,
+				92AC9EA222F4CD80007C554E /* libboost_program_options.a in Frameworks */,
+				92AC9EA822F4CD80007C554E /* libboost_date_time.a in Frameworks */,
 				920CED4022D88D3000846283 /* libmnemonic.a in Frameworks */,
 				920CED5422D88D3000846283 /* libcrypto.a in Frameworks */,
 				923544732254C6CE00889C74 /* openssl.framework in Frameworks */,
 				920CED5022D88D3000846283 /* libcore.a in Frameworks */,
+				92AC9E8D22F4CD80007C554E /* libboost_test_exec_monitor.a in Frameworks */,
 				920CED3C22D88D3000846283 /* libpow.a in Frameworks */,
 				920CED4A22D88D3000846283 /* libhttp.a in Frameworks */,
+				92AC9E9F22F4CD80007C554E /* libboost_log.a in Frameworks */,
+				92AC9E8722F4CD80007C554E /* libboost_filesystem.a in Frameworks */,
+				92AC9EAB22F4CD80007C554E /* libboost_timer.a in Frameworks */,
+				92AC9E9922F4CD80007C554E /* libboost_unit_test_framework.a in Frameworks */,
+				92AC9E8A22F4CD80007C554E /* libboost_regex.a in Frameworks */,
+				92AC9EA522F4CD80007C554E /* libboost_system.a in Frameworks */,
 				920CED3A22D88D3000846283 /* libwallet.a in Frameworks */,
 				920CED4222D88D3000846283 /* liblibbitcoin.a in Frameworks */,
+				92AC9E8122F4CD80007C554E /* libboost_atomic.a in Frameworks */,
+				92AC9E7E22F4CD80007C554E /* libboost_exception.a in Frameworks */,
 				920CED3E22D88D3000846283 /* libexternal_pow.a in Frameworks */,
 				B204B190DA4B48994EBAD225 /* Pods_BeamWalletTestNet.framework in Frameworks */,
+				92AC9E9622F4CD80007C554E /* libboost_prg_exec_monitor.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1399,23 +1502,38 @@
 			buildActionMask = 2147483647;
 			files = (
 				92C6CC5122D8AFA60011E033 /* libsecp256k1.a in Frameworks */,
+				92AC9E8B22F4CD80007C554E /* libboost_regex.a in Frameworks */,
+				92AC9EA622F4CD80007C554E /* libboost_system.a in Frameworks */,
+				92AC9E9A22F4CD80007C554E /* libboost_unit_test_framework.a in Frameworks */,
 				92E2EB34226F21C700367928 /* openssl.framework in Frameworks */,
 				92C6CC5322D8AFA60011E033 /* libutility.a in Frameworks */,
+				92AC9E7F22F4CD80007C554E /* libboost_exception.a in Frameworks */,
 				92C6CC5722D8AFA60011E033 /* libsqlite.a in Frameworks */,
 				92C6CC5422D8AFA60011E033 /* libcore.a in Frameworks */,
+				92AC9EAC22F4CD80007C554E /* libboost_timer.a in Frameworks */,
 				92C6CC5022D8AFA60011E033 /* libnode.a in Frameworks */,
 				92C6CC5522D8AFA60011E033 /* libcrypto.a in Frameworks */,
+				92AC9E8522F4CD80007C554E /* libboost_chrono.a in Frameworks */,
+				92AC9EA922F4CD80007C554E /* libboost_date_time.a in Frameworks */,
 				92C6CC4D22D8AFA60011E033 /* libuv_a.a in Frameworks */,
 				92C6CC4B22D8AFA60011E033 /* libcli.a in Frameworks */,
 				4C58997BBD95511DB5847C74 /* Pods_BeamWalletMasterNet.framework in Frameworks */,
 				92C6CC4E22D8AFA60011E033 /* libwallet_api_proto.a in Frameworks */,
 				92C6CC4C22D8AFA60011E033 /* libmnemonic.a in Frameworks */,
+				92AC9E9122F4CD80007C554E /* libboost_thread.a in Frameworks */,
 				92C6CC5822D8AFA60011E033 /* libexternal_pow.a in Frameworks */,
 				92C6CC5A22D8AFA60011E033 /* libwallet.a in Frameworks */,
 				92C6CC5922D8AFA60011E033 /* liblibbitcoin.a in Frameworks */,
-				922F689722E20A39005D3F33 /* boost.framework in Frameworks */,
+				92AC9EA022F4CD80007C554E /* libboost_log.a in Frameworks */,
 				92C6CC5222D8AFA60011E033 /* libp2p.a in Frameworks */,
+				92AC9E8E22F4CD80007C554E /* libboost_test_exec_monitor.a in Frameworks */,
+				92AC9E9D22F4CD80007C554E /* libboost_log_setup.a in Frameworks */,
+				92AC9EA322F4CD80007C554E /* libboost_program_options.a in Frameworks */,
+				92AC9E9722F4CD80007C554E /* libboost_prg_exec_monitor.a in Frameworks */,
 				92C6CC4F22D8AFA60011E033 /* libhttp.a in Frameworks */,
+				92AC9E9422F4CD80007C554E /* libboost_random.a in Frameworks */,
+				92AC9E8222F4CD80007C554E /* libboost_atomic.a in Frameworks */,
+				92AC9E8822F4CD80007C554E /* libboost_filesystem.a in Frameworks */,
 				92C6CC5622D8AFA60011E033 /* libpow.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1535,7 +1653,22 @@
 		922F2E7422E20733005D3F33 /* boost */ = {
 			isa = PBXGroup;
 			children = (
-				922F689422E20A39005D3F33 /* boost.framework */,
+				92AC9E6E22F4CD40007C554E /* libboost_atomic.a */,
+				92AC9E6F22F4CD44007C554E /* libboost_chrono.a */,
+				92AC9E7B22F4CD7C007C554E /* libboost_date_time.a */,
+				92AC9E6D22F4CD3D007C554E /* libboost_exception.a */,
+				92AC9E7022F4CD48007C554E /* libboost_filesystem.a */,
+				92AC9E7722F4CD6A007C554E /* libboost_log_setup.a */,
+				92AC9E7822F4CD71007C554E /* libboost_log.a */,
+				92AC9E7522F4CD5E007C554E /* libboost_prg_exec_monitor.a */,
+				92AC9E7922F4CD76007C554E /* libboost_program_options.a */,
+				92AC9E7422F4CD5A007C554E /* libboost_random.a */,
+				92AC9E7122F4CD4D007C554E /* libboost_regex.a */,
+				92AC9E7A22F4CD79007C554E /* libboost_system.a */,
+				92AC9E7222F4CD54007C554E /* libboost_test_exec_monitor.a */,
+				92AC9E7322F4CD57007C554E /* libboost_thread.a */,
+				92AC9E7C22F4CD80007C554E /* libboost_timer.a */,
+				92AC9E7622F4CD63007C554E /* libboost_unit_test_framework.a */,
 			);
 			path = boost;
 			sourceTree = "<group>";
@@ -1770,6 +1903,7 @@
 				92B13273227B2CDC0099B86C /* BeamWallet.entitlements */,
 				92B13274227B2CE30099B86C /* BeamWalletMasterNet.entitlements */,
 				92B13275227B2CEA0099B86C /* BeamWalletTestNet.entitlements */,
+				927993C822F424D300FF8ECC /* InfoPlist.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2040,8 +2174,8 @@
 		92BE0E60223BD3FC002BF856 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				92790D9C224E4A1500F79D64 /* TransactionPaymentProofCell.swift */,
-				92790D9D224E4A1500F79D64 /* TransactionPaymentProofCell.xib */,
+				92AC9EB622F4E389007C554E /* TransactionPaymentProofCell.swift */,
+				92AC9EB522F4E387007C554E /* TransactionPaymentProofCell.xib */,
 				92790DA2224E59E800F79D64 /* TransactionUTXOCell.swift */,
 				92790DA3224E59E800F79D64 /* TransactionUTXOCell.xib */,
 				92D577B222F038EE003B50B3 /* TransactionDetailCell.swift */,
@@ -2443,6 +2577,7 @@
 				ru,
 				ko,
 				tr,
+				fr,
 			);
 			mainGroup = 925AD5CF2228254E00DDE66B;
 			productRefGroup = 925AD5D92228254E00DDE66B /* Products */;
@@ -2501,7 +2636,6 @@
 				92C5EBB6229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */,
 				92FE264122A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
 				927D2F8622CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
-				92790DA0224E4A1500F79D64 /* TransactionPaymentProofCell.xib in Resources */,
 				9227AECB2282D43700FB221F /* CategoryPickerCell.xib in Resources */,
 				92790DAC224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */,
 				92D577B322F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
@@ -2525,9 +2659,11 @@
 				925AD5F72228299500DDE66B /* ProximaNova-Regular.ttf in Resources */,
 				92D232A522BA942400663C0E /* BuyGetCell.xib in Resources */,
 				9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */,
+				927993C422F424D300FF8ECC /* InfoPlist.strings in Resources */,
 				925AD5F4222827A500DDE66B /* LoginViewController.xib in Resources */,
 				92E2EB89226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */,
 				92FC611D22297EEC00AEABC1 /* CreateWalletPasswordViewController.xib in Resources */,
+				92AC9EB722F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */,
 				925AD5F9222829A400DDE66B /* ProximaNova-Bold.ttf in Resources */,
 				92090D09223A67D400A1CFBB /* LaunchScreenTestNet.storyboard in Resources */,
 				92F68C802244E77500197D4D /* UTXODetailCell.xib in Resources */,
@@ -2555,6 +2691,7 @@
 				9288DD79223A55410020C501 /* EnterWalletPasswordViewController.xib in Resources */,
 				92B7DA3422D63EFB00D4F88B /* RestoreNodeViewController.xib in Resources */,
 				9231E3FC225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */,
+				92AC9EB822F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */,
 				92F6B79622A558530055C3C3 /* FeeCell.xib in Resources */,
 				927EDE4022A6B47C005D5CEA /* BMMultiLinesCell.xib in Resources */,
 				9243C2EB22970EF10018B52D /* BMAddressCell.xib in Resources */,
@@ -2573,6 +2710,7 @@
 				927EDE4C22A7F6BF005D5CEA /* InputFeePopover.xib in Resources */,
 				92D6DB4822DF3B440086DFF7 /* SendPasswordViewController.xib in Resources */,
 				9288DD81223A55410020C501 /* QRScannerViewController.xib in Resources */,
+				927993C522F424D300FF8ECC /* InfoPlist.strings in Resources */,
 				9288DD82223A55410020C501 /* SF-Pro-Display-Bold.otf in Resources */,
 				9288DD83223A55410020C501 /* IntroPhraseViewController.xib in Resources */,
 				92D232B222BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */,
@@ -2583,7 +2721,6 @@
 				92FE263C22A11E4E00102DB4 /* BMPickedAddressCell.xib in Resources */,
 				927D2F8722CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
 				9227AECC2282D43700FB221F /* CategoryPickerCell.xib in Resources */,
-				92790DA1224E4A1500F79D64 /* TransactionPaymentProofCell.xib in Resources */,
 				92790DAD224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */,
 				9288DD86223A55410020C501 /* DisplayPhraseViewController.xib in Resources */,
 				92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */,
@@ -2662,6 +2799,7 @@
 				9243C2EC22970EF10018B52D /* BMAddressCell.xib in Resources */,
 				9225D53622941F940067B4EA /* SFProText-Regular.ttf in Resources */,
 				9225D54D229449010067B4EA /* BMFieldCell.xib in Resources */,
+				92AC9EB922F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */,
 				927EDE2922A66A90005D5CEA /* BMSearchAddressCell.xib in Resources */,
 				92E2EB57226F21C700367928 /* WordCell.xib in Resources */,
 				92E2EB59226F21C700367928 /* UTXOTransactionCell.xib in Resources */,
@@ -2671,7 +2809,6 @@
 				92E2EB5C226F21C700367928 /* IntroPhraseViewController.xib in Resources */,
 				9261C282228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
 				92E2EB60226F21C700367928 /* CreateWalletProgressViewController.xib in Resources */,
-				92E2EB61226F21C700367928 /* TransactionPaymentProofCell.xib in Resources */,
 				92E2EB63226F21C700367928 /* PaymentProofDetailViewController.xib in Resources */,
 				92E2EB8A226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */,
 				92D232A722BA942400663C0E /* BuyGetCell.xib in Resources */,
@@ -2681,6 +2818,7 @@
 				92D232B322BBCEF000663C0E /* BuyBeamOrderViewController.xib in Resources */,
 				92E2EB66226F21C700367928 /* UTXOCell.xib in Resources */,
 				92E2EB67226F21C700367928 /* GeneralInfoCell.xib in Resources */,
+				927993C622F424D300FF8ECC /* InfoPlist.strings in Resources */,
 				92E2EB69226F21C700367928 /* InputPhraseViewController.xib in Resources */,
 				92F6B78E22A541040055C3C3 /* SendAllCell.xib in Resources */,
 				9212DB9E22E0990D0053FC99 /* BMEmptyView.xib in Resources */,
@@ -2988,6 +3126,7 @@
 				927D2F8E22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
 				92365ADB222D3F5E000D7064 /* Settings.m in Sources */,
 				927D2F8222CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
+				92AC9EBA22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
 				926A856F222E97DF00A3B747 /* WalletAvailableCell.swift in Sources */,
 				92FC611C22297EEC00AEABC1 /* CreateWalletPasswordViewController.swift in Sources */,
 				9261C295228BF55900D666E0 /* AddressesViewController.swift in Sources */,
@@ -3082,7 +3221,6 @@
 				92D2329C22BA68E500663C0E /* BuyBeamCurrencyPicker.swift in Sources */,
 				92708DDC2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CD22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
-				92790D9E224E4A1500F79D64 /* TransactionPaymentProofCell.swift in Sources */,
 				926F4B2F22E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837522285D218002B385B /* Fonts.swift in Sources */,
 				92D2329822BA647900663C0E /* BuyBeamViewModel.swift in Sources */,
@@ -3193,6 +3331,7 @@
 				927D2F8F22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
 				9288DD37223A55410020C501 /* Settings.m in Sources */,
 				927D2F8322CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
+				92AC9EBB22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
 				9288DD38223A55410020C501 /* WalletAvailableCell.swift in Sources */,
 				9288DD39223A55410020C501 /* CreateWalletPasswordViewController.swift in Sources */,
 				9261C296228BF55900D666E0 /* AddressesViewController.swift in Sources */,
@@ -3287,7 +3426,6 @@
 				92D2329D22BA68E500663C0E /* BuyBeamCurrencyPicker.swift in Sources */,
 				92708DDD2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CE22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
-				92790D9F224E4A1500F79D64 /* TransactionPaymentProofCell.swift in Sources */,
 				926F4B3022E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837532285D218002B385B /* Fonts.swift in Sources */,
 				92D2329922BA647900663C0E /* BuyBeamViewModel.swift in Sources */,
@@ -3398,6 +3536,7 @@
 				927D2F9022CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
 				92E2EADD226F21C700367928 /* Settings.m in Sources */,
 				927D2F8422CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
+				92AC9EBC22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
 				92E2EADE226F21C700367928 /* WalletAvailableCell.swift in Sources */,
 				92E2EADF226F21C700367928 /* CreateWalletPasswordViewController.swift in Sources */,
 				9261C297228BF55900D666E0 /* AddressesViewController.swift in Sources */,
@@ -3492,7 +3631,6 @@
 				92D2329E22BA68E500663C0E /* BuyBeamCurrencyPicker.swift in Sources */,
 				92708DDE2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CF22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
-				92E2EB09226F21C700367928 /* TransactionPaymentProofCell.swift in Sources */,
 				926F4B3122E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837542285D218002B385B /* Fonts.swift in Sources */,
 				92D2329A22BA647900663C0E /* BuyBeamViewModel.swift in Sources */,
@@ -3586,6 +3724,22 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		927993C822F424D300FF8ECC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				927993C722F424D300FF8ECC /* en */,
+				927993C922F424D800FF8ECC /* zh-Hans */,
+				927993CA22F424DC00FF8ECC /* es */,
+				927993CB22F424E100FF8ECC /* fr */,
+				927993CC22F424E500FF8ECC /* ru */,
+				927993CD22F424EA00FF8ECC /* sv */,
+				927993CE22F424F100FF8ECC /* vi */,
+				927993CF22F424F600FF8ECC /* ko */,
+				927993D022F424FA00FF8ECC /* tr */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		92E2EA9D226DE5F500367928 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3597,6 +3751,7 @@
 				92B066FB22CB89FB0048BF6D /* ru */,
 				92B066FC22CB8A290048BF6D /* ko */,
 				92E5E2FB22EEE0790098C699 /* tr */,
+				922EE89222F18C5800BBFDEF /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3762,8 +3917,8 @@
 					"\"$(SRCROOT)/../beam-mainnet/core\"",
 					"\"$(SRCROOT)/../beam-mainnet/utility\"",
 					"\"$(SRCROOT)/../beam-mainnet/wallet\"",
-					"\"$(SRCROOT)/../beam-mainnet/3rdparty/libbitcoin/include\"/**",
 					"\"$(SRCROOT)/../beam-mainnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../boost/include/boost\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -3779,6 +3934,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)/Frameworks/boost/lib",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -3838,8 +3994,8 @@
 					"\"$(SRCROOT)/../beam-mainnet/core\"",
 					"\"$(SRCROOT)/../beam-mainnet/utility\"",
 					"\"$(SRCROOT)/../beam-mainnet/wallet\"",
-					"\"$(SRCROOT)/../beam-mainnet/3rdparty/libbitcoin/include\"/**",
 					"\"$(SRCROOT)/../beam-mainnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../boost/include/boost\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -3855,6 +4011,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)/Frameworks/boost/lib",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -3917,6 +4074,7 @@
 					"\"$(SRCROOT)/../beam-testnet/utility\"",
 					"\"$(SRCROOT)/../beam-testnet/wallet\"",
 					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../boost/include/boost\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -3932,6 +4090,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)/Frameworks/boost/lib",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4025,6 +4184,7 @@
 					"\"$(SRCROOT)/../beam-testnet/utility\"",
 					"\"$(SRCROOT)/../beam-testnet/wallet\"",
 					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../boost/include/boost\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4040,6 +4200,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)/Frameworks/boost/lib",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4115,14 +4276,14 @@
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../beam-testnet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/libbitcoin/include\"/**",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../beam-testnet/core\"",
-					"\"$(SRCROOT)/../beam-testnet/utility\"",
-					"\"$(SRCROOT)/../beam-testnet/wallet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../beam-mainnet\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/../beam-mainnet/core\"",
+					"\"$(SRCROOT)/../beam-mainnet/utility\"",
+					"\"$(SRCROOT)/../beam-mainnet/wallet\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../boost/include/boost\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4138,6 +4299,7 @@
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost/lib",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4213,14 +4375,14 @@
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../beam-testnet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/libbitcoin/include\"/**",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../beam-testnet/core\"",
-					"\"$(SRCROOT)/../beam-testnet/utility\"",
-					"\"$(SRCROOT)/../beam-testnet/wallet\"",
-					"\"$(SRCROOT)/../beam-testnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../beam-mainnet\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/../beam-mainnet/core\"",
+					"\"$(SRCROOT)/../beam-mainnet/utility\"",
+					"\"$(SRCROOT)/../beam-mainnet/wallet\"",
+					"\"$(SRCROOT)/../beam-mainnet/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/../boost/include/boost\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4236,6 +4398,7 @@
 					"$(PROJECT_DIR)/Frameworks/masternet",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost/lib",
+					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

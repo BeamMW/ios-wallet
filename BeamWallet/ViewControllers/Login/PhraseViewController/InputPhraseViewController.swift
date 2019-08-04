@@ -35,17 +35,24 @@ class InputPhraseViewController: BaseWizardViewController {
         
         self.title = Localizable.shared.strings.restore_wallet_title
 
-//        let w = ["voice","sniff","risk","gas","fever","soccer","fabric","when","twice","valid",
-//                 "shuffle","detail"]
+////        let w = ["voice","sniff","risk","gas","fever","soccer","fabric","when","twice","valid",
+////                 "shuffle","detail"]
+//        let w = ["dance","cost","stamp","crazy","north","trade","rifle","hungry","wife","wood",
+//                 "discover","oven"]
+//        nextButton.isEnabled = true
+//        testNetNextButton.isEnabled = true
 //        for i in 0 ... 11 {
 //            inputWords.append(BMWord(w[i], index: UInt(i), correct: true))
 //        }
-//        nextButton.isEnabled = true
+//
         
+        nextButton.isEnabled = false
+        testNetNextButton.isEnabled = false
+
         for i in 0 ... 11 {
             inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
         }
-        
+
         scrollView.keyboardDismissMode = .interactive
         collectionView.keyboardDismissMode = .interactive
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)

@@ -50,7 +50,7 @@
 "no_internet" = "无网络连接";
 "wallet_not_created" = "未创建钱包";
 "wallet_not_opened" = "钱包无法打开";
-"restor_wallet_warning" = "请等待同步，不要关闭或最小化应用程序";
+"restor_wallet_warning" = "请等待同步，请勿关闭或最小化应用程序\n恢复钱包可能需要一段时间";
 "restor_wallet_info" = "仅可恢复钱包余额(UTXO)\n交易历史信息保存在本地，区块链上不保存交易历史";
 "receive" = "收款";
 "send" = "付款";
@@ -350,7 +350,7 @@
 "invalid_address_title" = "无效地址";
 "invalid_address_text" = "节点地址无效\n请检查输入的地址是否正确";
 "insufficient_funds" = "资金不足：您需要(value)Beam来完成交易";
-"downloading" = "正在下载";
+"downloading" = "已下载";
 "sent_to_own" = "已付款至自有地址";
 "sending_to_own" = "正在付款至自有地址";
 "default" = "默认";
@@ -398,3 +398,15 @@
 "ok" = "好";
 "transactions_list" = "交易列表";
 "in_24_hours_now" = "此后24小时";
+"transaction_history" = "交易历史";
+"min_fee_error" = "最小交易费为 (value) GROTH"; // The minimum fee is 100 GROTH
+"date" = "日期";
+"downloading_blockchain" = "正在下载区块链信息";
+"and" = "和"; // example: addresses and contacts
+"auto_restore_warning" = "请确保您在过去一小时内没有对本钱包进行任何交易(在任何设备上)\n如果有进行过交易，请在该交易完成后等待至少一小时再进行恢复钱包操作\n否则，您恢复的余额可能不正确，或需要执行额外的恢复操作";
+"manual_restore_warning" = "请在恢复操作执行前确保您的节点已同步到区块链最新高度\n否则，您恢复的余额可能不正确，或需要执行额外的恢复操作";
+"understand" = "我已知悉";
+"NSPhotoLibraryAddUsageDescription" = "保存交易详情并从照片库中扫描二维码";
+"NSPhotoLibraryUsageDescription" = "请允许访问照片库以选择二维码";
+"NSFaceIDUsageDescription" = "此APP需要获取面容ID权限，以使用面容识别验证身份";
+"NSCameraUsageDescription" = "需要访问摄像头以扫描二维码";

@@ -294,7 +294,12 @@ class BaseViewController: UIViewController {
         view.layer.cornerRadius = 8
         view.addSubview(logoView)
         
-        let showAlert = UIAlertController(title: Localizable.shared.strings.rate_title, message: Localizable.shared.strings.rate_text, preferredStyle: .alert)
+        var title = Localizable.shared.strings.rate_title
+        if !title.contains("\n") {
+            title = "\n\n\n" + title
+        }
+        
+        let showAlert = UIAlertController(title: title, message: Localizable.shared.strings.rate_text, preferredStyle: .alert)
         showAlert.view.addSubview(view)
         
         let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 285)

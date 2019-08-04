@@ -154,9 +154,9 @@
                         <constraint firstItem="QhX-9d-901" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="bottom" constant="50" id="UbR-Bt-bRC"/>
                         <constraint firstAttribute="trailing" secondItem="M0h-a5-hOs" secondAttribute="trailing" constant="3" id="cSe-2V-mrY"/>
                         <constraint firstItem="M0h-a5-hOs" firstAttribute="top" secondItem="tFf-TN-Dqo" secondAttribute="top" constant="3" id="ds0-Jd-wdd"/>
-                        <constraint firstAttribute="height" constant="270" id="mr1-Ae-ddd"/>
                         <constraint firstItem="pEB-ZD-CPb" firstAttribute="leading" secondItem="tFf-TN-Dqo" secondAttribute="leading" constant="15" id="nx6-gc-JKW"/>
                         <constraint firstItem="pEB-ZD-CPb" firstAttribute="top" secondItem="M0h-a5-hOs" secondAttribute="bottom" constant="20" id="oDx-vo-AjR"/>
+                        <constraint firstAttribute="bottom" secondItem="QhX-9d-901" secondAttribute="bottom" constant="30" id="rGt-La-erW"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

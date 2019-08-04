@@ -72,10 +72,20 @@
     NSDateFormatter *f = [NSDateFormatter new];
     
     if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
-        [f setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+        if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+            [f setDateFormat:@"yyyy MMM dd  |  hh:mm a"];
+        }
+        else{
+            [f setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+        }
     }
     else{
-        [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+        if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+            [f setDateFormat:@"dd MMM yyyy  |  hh:mm a"];
+        }
+        else{
+            [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+        }
     }
     
     [f setLocale:locale];

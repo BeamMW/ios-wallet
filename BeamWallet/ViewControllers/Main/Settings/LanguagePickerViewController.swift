@@ -71,6 +71,7 @@ class LanguagePickerViewController: BaseTableViewController {
 
         AppModel.sharedManager().getUTXO()
         AppModel.sharedManager().getWalletStatus()
+        AppModel.sharedManager().refreshAddresses()
         
         self.completion?(selectedLanguage)
 

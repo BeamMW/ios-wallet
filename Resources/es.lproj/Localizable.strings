@@ -50,7 +50,7 @@
 "no_internet" = "No hay conexión a internet";
 "wallet_not_created" = "El wallet no ha sido creado";
 "wallet_not_opened" = "El wallet no se puede abrir";
-"restor_wallet_warning" = "Por favor espere a la sincronización y no cierre ni minimice la aplicación.";
+"restor_wallet_warning" = "Por favor, espere a la sincronización y no cierre o minimice la aplicación. La restauración de la cartera puede tardar un tiempo.";
 "restor_wallet_info" = "Solo se puede restaurar el saldo del wallet (UTXO), la información de la transacción siempre es privada y nunca se mantiene en la cadena de bloques.";
 "receive" = "Recibe";
 "send" = "Enviar";
@@ -312,7 +312,7 @@
 "delete_all_text" = "¿Está seguro de que desea eliminar todo (str) de su wallet?";
 "delete_category_text" = "¿Está usted seguro de querer borrar “(str)” etiqueta?";
 "canot_connect_node" = "No se puede conectar al nodo";
-"buy_beam_value" = "Enviar (valor) a la dirección (nombre) anterior para completar la transacción"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
+"buy_beam_value" = "Enviar (value) a la dirección (name) anterior para completar la transacción"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
 "scan_receiver_qr_code" = "Escanear código QR del destinatario";
 "owner_key_warning" = "Por favor, tenga en cuenta que saber su clave de propietario le permite conocer todos sus fondos (UTXO). Asegúrese de implementar la clave en el nodo en el que confía por completo!";
 "key_code" = "Código clave";
@@ -349,8 +349,8 @@
 "optional" = "Opcional";
 "invalid_address_title" = "Dirección erronea";
 "invalid_address_text" = "La dirección de nodo proporcionada no es válida.\n  Por favor, compruebe si la dirección introducida es correcta";
-"insufficient_funds" = "Fondos insuficientes: usted necesitaría (valor) beams para completar la transacción";
-"downloading" = "Descargando";
+"insufficient_funds" = "Fondos insuficientes: usted necesitaría (value) beams para completar la transacción";
+"downloading" = "Descargado";
 "sent_to_own" = "Enviado a dirección propia";
 "sending_to_own" = "Enviando a dirección propia";
 "default" = "Defecto";
@@ -398,3 +398,15 @@
 "ok" = "OK";
 "transactions_list" = "Listado de transacciones";
 "in_24_hours_now" = "En 24 horas a partir de ahora";
+"transaction_history" = "Historial de la transacción";
+"min_fee_error" = "La tarifa mínima es (value) GROTH"; // The minimum fee is 100 GROTH
+"date" = "Fecha";
+"downloading_blockchain" = "Descargando información de blockchain";
+"and" = "y"; // example: addresses and contacts
+"auto_restore_warning" = "Please make sure that you have not done any transactions (from any device) in the past hour. If you did, please wait for at least one hour after the last transaction before proceeding with Restore. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"manual_restore_warning" = "Verify that your node is fully synchronised with the blockchain before starting the restore procedure. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"understand" = "I understand";
+"NSPhotoLibraryAddUsageDescription" = "Save transaction details and scan QR-codes from the photos";
+"NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
+"NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition";
+"NSCameraUsageDescription" = "The camera is needed to scan QR codes";

@@ -41,6 +41,7 @@ class FeeCell: BaseCell {
         feeSlider.setThumbImage(SliderDot(), for: .highlighted)
         feeSlider.maximumTrackTintColor = UIColor.main.marineThree
         feeSlider.minimumValue = Float(AppModel.sharedManager().getMinFeeInGroth())
+        feeSlider.addTarget(self, action: #selector(onSliderValChanged(sender:event:)), for: .valueChanged)
 
         minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
        
@@ -81,7 +82,7 @@ class FeeCell: BaseCell {
         }
     }
     
-    @IBAction private func sliderValueChanged(_ sender: UISlider) {
+    @objc func onSliderValChanged(sender: UISlider, event: UIEvent) {
         let roundedStepValue = round(sender.value / stepValue) * stepValue
         sender.value = roundedStepValue
 
@@ -91,7 +92,14 @@ class FeeCell: BaseCell {
         let point = setUISliderThumbValueWithLabel(slider: sender)
         valueLabel.frame = CGRect(x: point.x, y: 35, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
         
-        delegate?.onDidChangeFee?(value: Double(roundedStepValue))
+        if let touchEvent = event.allTouches?.first {
+            switch touchEvent.phase {
+            case .ended:
+                delegate?.onDidChangeFee?(value: Double(roundedStepValue))
+            default:
+                break
+            }
+        }
     }
     
     private func setUISliderThumbValueWithLabel(slider: UISlider) -> CGPoint {

@@ -94,7 +94,7 @@ class AddressViewModel: NSObject {
     }
         
     public func filterAddresses() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.main.async {
             switch self.selectedState {
             case .active:
                 if let addresses = AppModel.sharedManager().walletAddresses {
@@ -110,14 +110,12 @@ class AddressViewModel: NSObject {
                 self.contacts = AppModel.sharedManager().contacts as! [BMContact]
             }
             
-            DispatchQueue.main.async {
-                self.onDataChanged?()
-            }
+            self.onDataChanged?()
         }
     }
     
     public func onDeleteAddress(address:BMAddress, indexPath:IndexPath?) {
-        let transactions = (AppModel.sharedManager().getTransactionsFrom(address) as! [BMTransaction])
+        let transactions = (AppModel.sharedManager().getCompletedTransactions(from: address) as! [BMTransaction])
         
         if transactions.count > 0  {
             self.showDeleteAddressAndTransactions(indexPath: indexPath)

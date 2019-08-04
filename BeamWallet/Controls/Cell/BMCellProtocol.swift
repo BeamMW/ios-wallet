@@ -23,6 +23,7 @@ import Foundation
     @objc optional func textValueDidChange(_ sender: UITableViewCell, _ text:String, _ input:Bool)
     @objc optional func textValueDidReturn(_ sender: UITableViewCell)
     @objc optional func textValueDidBegin(_ sender: UITableViewCell)
+    @objc optional func textDidChangeStatus(_ sender: UITableViewCell)
 
     @objc optional func onClickQRCode()
     @objc optional func onClickShare()

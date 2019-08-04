@@ -1,0 +1,4 @@
+"NSPhotoLibraryAddUsageDescription" = "保存交易详情并从照片库中扫描二维码";
+"NSPhotoLibraryUsageDescription" = "请允许访问照片库以选择二维码";
+"NSFaceIDUsageDescription" = "此APP需要获取面容ID权限，以使用面容识别验证身份";
+"NSCameraUsageDescription" = "需要访问摄像头以扫描二维码";

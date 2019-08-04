@@ -28,6 +28,7 @@ class CreateWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var cancelButton: UIButton!
     @IBOutlet private weak var logoYOffset: NSLayoutConstraint!
     @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
+    @IBOutlet private weak var errorLabel: UILabel!
 
     private var timeoutTimer:Timer?
     
@@ -107,7 +108,8 @@ class CreateWalletProgressViewController: BaseViewController {
         AppModel.sharedManager().removeDelegate(self)
         
         AppModel.sharedManager().refreshAddresses()
-        
+        AppModel.sharedManager().getUTXO()
+
         let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
         let menuViewController = LeftMenuViewController()
         
@@ -137,6 +139,7 @@ class CreateWalletProgressViewController: BaseViewController {
         RestoreManager.shared.startRestore(completion: { (completed) in
             if completed {
                 DispatchQueue.main.async {
+                    self.errorLabel.isHidden = true
                     self.restoreCompleted()
                 }
             }
@@ -150,6 +153,7 @@ class CreateWalletProgressViewController: BaseViewController {
                     }
                 }
                 else if let percent = progress {
+                    self.errorLabel.isHidden = true
                     self.progressView.progress = percent
                     self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%"
                 }
@@ -160,12 +164,9 @@ class CreateWalletProgressViewController: BaseViewController {
     private func startCreateWallet() {
         
         if !AppModel.sharedManager().isInternetAvailable {
-            AppModel.sharedManager().resetWallet(false)
-
-            self.back()
-
             self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
-
+                AppModel.sharedManager().resetWallet(false)
+                self.back()
             }
         }
         else{
@@ -284,9 +285,22 @@ class CreateWalletProgressViewController: BaseViewController {
 
 extension CreateWalletProgressViewController : WalletModelDelegate {
     
+    func onNoInternetConnection() {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+
+            if AppModel.sharedManager().isRestoreFlow {
+                strongSelf.errorLabel.isHidden = false
+                strongSelf.errorLabel.text = Localizable.shared.strings.no_internet
+            }
+        }
+    }
+    
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
+
+            strongSelf.errorLabel.isHidden = true
 
             if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
                 strongSelf.isPresented = true
@@ -302,7 +316,18 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     if done == total {
                         AppModel.sharedManager().isRestoreFlow = false
                         RestoreManager.shared.cancelRestore()
-                        strongSelf.startCreateWallet()
+                       
+                        if !AppModel.sharedManager().isInternetAvailable {
+                            strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+                                
+                                AppModel.sharedManager().resetWallet(false)
+                                
+                                strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
+                            }
+                        }
+                        else{
+                            strongSelf.startCreateWallet()
+                        }
                     }
                 }
             }
@@ -347,8 +372,13 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     }
                 }
                 strongSelf.alert(title: Localizable.shared.strings.error, message: error.localizedDescription, handler: { (_ ) in
-                   // AppModel.sharedManager().resetWallet(false)
-                    strongSelf.back()
+                    if AppModel.sharedManager().isRestoreFlow {
+                        AppModel.sharedManager().resetWallet(true)
+                        strongSelf.navigationController?.popToRootViewController(animated: true)
+                    }
+                    else{
+                        strongSelf.back()
+                    }
                 })
             }
         }

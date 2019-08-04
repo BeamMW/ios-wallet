@@ -50,7 +50,7 @@
 "no_internet" = "인터넷 연결이 안되어있습니다.";
 "wallet_not_created" = "지갑이 생성되지 않았습니다.";
 "wallet_not_opened" = "지갑이 열릴 수 없습니다. ";
-"restor_wallet_warning" = "동기화가 될 때까지 어플리케이션을 닫거나 최소화하지 마시오";
+"restor_wallet_warning" = "Please wait for synchronization and do not close or minimize the application. Restoring the wallet may take a while.";
 "restor_wallet_info" = "오직 지갑 잔고(UTXO)만 복구됩니다, 거래 내용은 항상 비공개이고 블록체인 상에 절대 저장되지 않습니다.";
 "receive" = "받기";
 "send" = "보내기";
@@ -350,8 +350,8 @@
 "invalid_address_title" = "유효하지 않은 주소";
 "invalid_address_text" = "제공된 노드 주소는 유효하지 않습니다. \n입력하신 주소가 옳은지 확인해주십시오.";
 "insufficient_funds" = "자금이 부족합니다 : 거래를 완료하려면 (값) 만큼의 beam이 필요합니다.";
-"downloading" = "다운로드 중";
-"sent_to_own" = "내 주소로 보냄";
+"downloading" = "Downloaded";
+"sent_to_own" = "Sent to own address";
 "sending_to_own" = "내 주소로 보내는 중";
 "default" = "기본값";
 "my_active" = "활성화 상태 주소"; // addresses
@@ -398,3 +398,15 @@
 "ok" = "확인";
 "transactions_list" = "거래내역";
 "in_24_hours_now" = "24시간 이내";
+"transaction_history" = "Transaction history";
+"min_fee_error" = "The minimum fee is (value) GROTH"; // The minimum fee is 100 GROTH
+"date" = "Date";
+"downloading_blockchain" = "Downloading blockchain info";
+"and" = "and"; // example: addresses and contacts
+"auto_restore_warning" = "Please make sure that you have not done any transactions (from any device) in the past hour. If you did, please wait for at least one hour after the last transaction before proceeding with Restore. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"manual_restore_warning" = "Verify that your node is fully synchronised with the blockchain before starting the restore procedure. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"understand" = "I understand";
+"NSPhotoLibraryAddUsageDescription" = "Save transaction details and scan QR-codes from the photos";
+"NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
+"NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition";
+"NSCameraUsageDescription" = "The camera is needed to scan QR codes";

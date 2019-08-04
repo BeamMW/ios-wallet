@@ -34,7 +34,7 @@ class SaveContactViewController: BaseTableViewController {
         
         let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.marineThree)
         buttonCancel.setImage(IconCancel(), for: .normal)
-        buttonCancel.setTitle(Localizable.shared.strings.cancel.lowercased(), for: .normal)
+        buttonCancel.setTitle((isAddContact ? Localizable.shared.strings.cancel.lowercased() : Localizable.shared.strings.not_save.lowercased()), for: .normal)
         buttonCancel.setTitleColor(UIColor.white, for: .normal)
         buttonCancel.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .highlighted)
         buttonCancel.addTarget(self, action: #selector(onBack), for: .touchUpInside)
@@ -87,6 +87,8 @@ class SaveContactViewController: BaseTableViewController {
         
         tableView.register([BMFieldCell.self, BMMultiLinesCell.self, BMDetailCell.self, BMSearchAddressCell.self])
         
+        addCustomBackButton(target: self, selector: #selector(onBack))
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
@@ -126,10 +128,21 @@ class SaveContactViewController: BaseTableViewController {
         
         AppModel.sharedManager().addContact(address.walletId, name: address.label, categories: address.categories as! [Any])
         
-        onBack()
+        goBack()
     }
     
     @objc private func onBack() {
+        if self.isAddContact == false {
+            for tr in AppModel.sharedManager().preparedTransactions as! [BMPreparedTransaction] {
+                tr.saveContact = false
+            }
+            AppModel.sharedManager().deleteAddress(address.walletId)
+        }
+        
+        goBack()
+    }
+    
+    @objc private func goBack() {
         if let viewControllers = self.navigationController?.viewControllers{
             for vc in viewControllers {
                 if vc is WalletViewController {

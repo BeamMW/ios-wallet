@@ -35,6 +35,15 @@ class ReceiveViewController: BaseTableViewController {
         }
     }
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +53,11 @@ class ReceiveViewController: BaseTableViewController {
         
         tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMPickedAddressCell.self, BMDetailCell.self])
         tableView.keyboardDismissMode = .interactive
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.sectionHeaderHeight = 0.0
+        tableView.sectionFooterHeight = 0.0
         
         viewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()

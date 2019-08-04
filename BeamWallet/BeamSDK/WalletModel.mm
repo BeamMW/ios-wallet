@@ -40,12 +40,13 @@ using namespace std;
 //using namespace std;
 
 NSString *const AppErrorDomain = @"beam.mw";
+NSTimer *timer;
 
 
 WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
 : WalletClient(walletDB, nodeAddr, reactor)
 {
-    
+    pre_connected_status = true;
 }
 
 WalletModel::~WalletModel()
@@ -350,6 +351,11 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         }
     }
     else{
+        this->contacts.clear();
+        
+        for (int i=0; i<addrs.size(); i++)
+            this->contacts.push_back(addrs[i]);
+        
         NSMutableArray <BMContact*>*contacts = [[NSMutableArray alloc] init];
 
         for (const auto& walletAddr : addrs)
@@ -438,22 +444,31 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 {
     NSLog(@"onNodeConnectionChanged %d",isNodeConnected);
     
+    if ([AppModel sharedManager].connectionTimer!=nil) {
+        [[AppModel sharedManager].connectionTimer invalidate];
+        [AppModel sharedManager].connectionTimer = nil;
+    }
+    
     if (![[AppModel sharedManager] isInternetAvailable] && isNodeConnected) {
         isNodeConnected = NO;
     }
     
+    pre_connected_status = isNodeConnected;
+    
+    if (isNodeConnected)
+    {
+        [AppModel sharedManager].isNodeChanging = NO;
+    }
+    
     if (!isNodeConnected && AppModel.sharedManager.isConnecting)
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[AppModel sharedManager] setIsConnecting:NO];
-            
-            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-            {
-                if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
-                    [delegate onNetwotkStatusChange:[AppModel sharedManager].isConnected];
-                }
-            }
-        });
+        [[AppModel sharedManager] setIsConnected:YES];
+
+        [[AppModel sharedManager] startConnectionTimer:6];
+    }
+    else if (!isNodeConnected && [AppModel sharedManager].isNodeChanging)
+    {
+        [[AppModel sharedManager] startConnectionTimer:3];
     }
     else{
         [[AppModel sharedManager] setIsConnected:isNodeConnected];
@@ -489,13 +504,20 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
 
 void WalletModel::FailedToStartWallet()
 {
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
-                                                       code:NSUInteger(12)
-                                                   userInfo:@{ NSLocalizedDescriptionKey:@"Failed to start wallet" }];
-            [delegate onWalletError:nativeError];
+    if([AppModel sharedManager].isLoggedin) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[AppModel sharedManager] restartWallet];
+        });
+    }
+    else{
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+                NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
+                                                           code:NSUInteger(12)
+                                                       userInfo:@{ NSLocalizedDescriptionKey:@"Failed to start wallet" }];
+                [delegate onWalletError:nativeError];
+            }
         }
     }
 

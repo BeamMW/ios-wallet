@@ -50,9 +50,9 @@
 "no_internet" = "Internetåtkomst saknas";
 "wallet_not_created" = "Plånbok ej skapad";
 "wallet_not_opened" = "Plånbok kan ej öppnas";
-"restor_wallet_warning" = "Vänligen vänta på att synkroniseringen ska bli klar och stäng inte eller minimera applikationen.";
+"restor_wallet_warning" = "Vänligen vänta på att synkroniseringen ska bli klar, stäng eller minimera inte applikationen. Återställningen av plånboken kan ta en stund.";
 "restor_wallet_info" = "Endast plånbokens balans (UTXO) kan återställas, transaktionsinformation är alltid privata och lagras aldrig i block-kedjan.";
-"receive" = "Erhåll";
+"receive" = "Ta emot";
 "send" = "Skicka";
 "available" = "Tillgänglig";
 "in_progress" = "Pågående";
@@ -312,7 +312,7 @@
 "delete_all_text" = "Är du säker på att du vill ta bort all (str) från din plånbok?";
 "delete_category_text" = "Är du säker på att du vill ta bort \"(str)\" tag?";
 "canot_connect_node" = "Kan inte ansluta till nod";
-"buy_beam_value" = "Skicka (värde) till ovan (namn) adress för att slutföra transaktionen"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
+"buy_beam_value" = "Skicka (value) till ovan (name) adress för att slutföra transaktionen"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
 "scan_receiver_qr_code" = "Scanna mottagarens QR-kod";
 "owner_key_warning" = "Vänligen notera, om du avslöjar ägar-nyckeln så har du vetskap om alla tillgångar (UTXO). Var helt säker på att du litar fullt ut på noden där nyckeln används!";
 "key_code" = "Nyckel-kod";
@@ -349,8 +349,8 @@
 "optional" = "Valfritt";
 "invalid_address_title" = "Ogiltig adress";
 "invalid_address_text" = "Den ifyllda nod-adressen är ogiltig. Vänligen kontrollera att angiven adress är korrekt";
-"insufficient_funds" = "Otillräckliga medel: du behöver (värde) beams för att slutföra transaktionen";
-"downloading" = "Laddar ner";
+"insufficient_funds" = "Otillräckliga medel: du behöver (value) beams för att slutföra transaktionen";
+"downloading" = "Nerladdad";
 "sent_to_own" = "Skickat till egen adress";
 "sending_to_own" = "Skickat till egen adress";
 "default" = "Standard";
@@ -398,3 +398,15 @@
 "ok" = "OK";
 "transactions_list" = "Transaktionslista";
 "in_24_hours_now" = "Inom 24 timmar från och med nu";
+"transaction_history" = "Transaktionshistorik";
+"min_fee_error" = "Minsta möjliga avgift är (value) GROTH"; // The minimum fee is 100 GROTH
+"date" = "Datum";
+"downloading_blockchain" = "Laddar ner blockkedje-info";
+"and" = "och"; // example: addresses and contacts
+"auto_restore_warning" = "Vänligen se till att inga transaktioner (från någon enhet) gjorts under den senaste timmen. Om du har det, vänta i åtminstone en timme efter den senaste transaktionen innan du fortsätter med Återställning. Annars kan din återställda balans vara felaktig och ytterligare återställningsprocedurer kommer att krävas.";
+"manual_restore_warning" = "Verify that your node is fully synchronised with the blockchain before starting the restore procedure. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"understand" = "Jag förstår";
+"NSPhotoLibraryAddUsageDescription" = "Save transaction details and scan QR-codes from the photos";
+"NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
+"NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition";
+"NSCameraUsageDescription" = "The camera is needed to scan QR codes";

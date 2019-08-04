@@ -110,6 +110,9 @@ class WalletViewController: BaseTableViewController {
         rightButton()
         
         subscribeToUpdates()
+        
+        //
+        AppModel.sharedManager().fixCategories();
     }
     
     override func viewDidAppear(_ animated: Bool) {
