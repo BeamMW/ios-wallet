@@ -25,51 +25,35 @@ class UTXODetailCell: UITableViewCell {
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var statusLabel: UILabel!
-    @IBOutlet weak private var idLabel: BMCopyLabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
-        
+        mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+
         selectionStyle = .none
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
     }
 }
 
 extension UTXODetailCell: Configurable {
     
-    func configure(with options: (row: Int, utxo:BMUTXO)) {
-        if options.row % 2 == 0 {
-            mainView.backgroundColor = UIColor.main.marineThree
-        }
-        else{
-            mainView.backgroundColor = UIColor.main.marine
-        }
+    func configure(with utxo:BMUTXO) {
+        amountLabel.text = String.currency(value: utxo.realAmount)
+        statusLabel.text = utxo.statusString.replacingOccurrences(of: "\n", with: " ")
         
-        idLabel.text = options.utxo.stringID
-        amountLabel.text = String.currency(value: options.utxo.realAmount)
-        statusLabel.text = options.utxo.statusString
-        
-        if options.utxo.statusString == Localizable.shared.strings.available.lowercased() {
+        if utxo.status == 1 || utxo.status == 2 {
             statusLabel.textColor = UIColor.white
         }
-        else if options.utxo.statusString == Localizable.shared.strings.spent.lowercased() {
+        else if utxo.status == 6 || utxo.status == 3 {
             statusLabel.textColor = UIColor.main.heliotrope
         }
-        else{
-            statusLabel.textColor = UIColor.white
+        else if utxo.status == 4 {
+            statusLabel.textColor = UIColor.main.brightSkyBlue
         }
-    }
-}
-
-extension UTXODetailCell: DynamicContentHeight {
-    
-    static func height() -> CGFloat {
-        return 80
+        else{
+            statusLabel.textColor = UIColor.main.blueyGrey
+        }
     }
 }

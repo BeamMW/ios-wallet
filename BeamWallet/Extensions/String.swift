@@ -28,6 +28,14 @@ extension String {
     var localized: String {
         let lang = Settings.sharedManager().language
         
+        let remotePath = CrowdinManager.localizationPath.appendingPathComponent(lang)
+        
+        if FileManager.default.fileExists(atPath: remotePath.path) {
+            if let bundle = Bundle(path: remotePath.path) {
+                return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+            }
+        }
+
         let path = Bundle.main.path(forResource: lang, ofType: "lproj")
         let bundle = Bundle(path: path!)
         
@@ -229,9 +237,9 @@ extension String {
 }
 
 extension String {
-    func boundingWidth(with font: UIFont) -> CGFloat {
+    func boundingWidth(with font: UIFont, kern:CGFloat = 0.1) -> CGFloat {
         let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: font.lineHeight)
-        let preferredRect = (self as NSString).boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
+        let preferredRect = (self as NSString).boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font, NSAttributedString.Key.kern: kern], context: nil)
         return ceil(preferredRect.width)
     }
 }

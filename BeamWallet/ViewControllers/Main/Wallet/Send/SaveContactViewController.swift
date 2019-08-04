@@ -22,22 +22,25 @@ import UIKit
 
 class SaveContactViewController: BaseTableViewController {
 
+    private var addressError:String?
+    
     private var address:BMAddress!
-
+    private var isAddContact = false
+    
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 110))
         
-        let mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-300)/2, y: 60, width: 300, height: 44))
+        let mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-(Device.isLarge ? 320 : 300))/2, y: 60, width: (Device.isLarge ? 320 : 300), height: 44))
         
-        let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.darkSlateBlue)
+        let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.marineThree)
         buttonCancel.setImage(IconCancel(), for: .normal)
-        buttonCancel.setTitle(Localizable.shared.strings.cancel.lowercased(), for: .normal)
+        buttonCancel.setTitle((isAddContact ? Localizable.shared.strings.cancel.lowercased() : Localizable.shared.strings.not_save.lowercased()), for: .normal)
         buttonCancel.setTitleColor(UIColor.white, for: .normal)
         buttonCancel.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .highlighted)
         buttonCancel.addTarget(self, action: #selector(onBack), for: .touchUpInside)
         mainView.addSubview(buttonCancel)
         
-        let buttonSave = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: UIColor.main.heliotrope)
+        let buttonSave = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: (self.isAddContact ? UIColor.main.brightTeal : UIColor.main.heliotrope))
         buttonSave.setImage(IconDoneBlue(), for: .normal)
         buttonSave.setTitle(Localizable.shared.strings.save.lowercased(), for: .normal)
         buttonSave.setTitleColor(UIColor.main.marineOriginal, for: .normal)
@@ -50,11 +53,16 @@ class SaveContactViewController: BaseTableViewController {
         return view
     }()
     
-    init(address:String) {
+    init(address:String?) {
         super.init(nibName: nil, bundle: nil)
         
         self.address = BMAddress.empty()
-        self.address.walletId = address
+        if address != nil {
+            self.address.walletId = address!
+        }
+        else{
+            self.isAddContact = true
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -73,26 +81,68 @@ class SaveContactViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
+        setGradientTopBar(mainColor: isGradient ? UIColor.main.heliotrope : UIColor.main.peacockBlue, addedStatusView: isAddContact)
+
+        title = address.walletId.isEmpty ? Localizable.shared.strings.add_contact.uppercased() : Localizable.shared.strings.save_address_title.uppercased()
         
-        setGradientTopBar(mainColor: UIColor.main.heliotrope)
+        tableView.register([BMFieldCell.self, BMMultiLinesCell.self, BMDetailCell.self, BMSearchAddressCell.self])
         
-        title = Localizable.shared.strings.save_address_title.uppercased()
-        
-        tableView.register([BMFieldCell.self, ConfirmCell.self, BMDetailCell.self])
-        
+        addCustomBackButton(target: self, selector: #selector(onBack))
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView        
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if isAddContact {
+            tableView.y = tableView.y + 25
+            tableView.h = tableView.h - 25
+        }
+    }
+    
     @objc private func onSave() {
-        AppModel.sharedManager().addContact(address.walletId, name: address.label, category: address.category)
-        onBack()
+        if isAddContact {
+            if !AppModel.sharedManager().isValidAddress(address.walletId) {
+                addressError = Localizable.shared.strings.incorrect_address
+                tableView.reloadData()
+                return
+            }
+            
+            let isContactFound = (AppModel.sharedManager().getContactFromId(address.walletId) != nil)
+            let isMyAddress = AppModel.sharedManager().isMyAddress(address.walletId)
+            
+            if isContactFound {
+                alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.address_already_exist_1, handler: nil)
+                return;
+            }
+            
+            if isMyAddress {
+                alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.address_already_exist_2, handler: nil)
+                return;
+            }
+        }
+        
+        AppModel.sharedManager().addContact(address.walletId, name: address.label, categories: address.categories as! [Any])
+        
+        goBack()
     }
     
     @objc private func onBack() {
+        if self.isAddContact == false {
+            for tr in AppModel.sharedManager().preparedTransactions as! [BMPreparedTransaction] {
+                tr.saveContact = false
+            }
+            AppModel.sharedManager().deleteAddress(address.walletId)
+        }
+        
+        goBack()
+    }
+    
+    @objc private func goBack() {
         if let viewControllers = self.navigationController?.viewControllers{
             for vc in viewControllers {
                 if vc is WalletViewController {
@@ -143,24 +193,22 @@ extension SaveContactViewController : UITableViewDelegate {
                     obj in
                     guard let strongSelf = self else { return }
                     if let category = obj {
-                        strongSelf.address.category = String(category.id)
+                        strongSelf.address.categories = [String(category.id)]
                         strongSelf.tableView.reloadData()
                     }
                 }
-                vc.isGradient = true
                 pushViewController(vc: vc)
             }
             else{
-                let vc  = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byAddress: self.address.walletId))
+                let vc = CategoryPickerViewController(categories: self.address.categories as? [String])
                 vc.completion = {[weak self]
                     obj in
                     guard let strongSelf = self else { return }
-                    if let category = obj {
-                        strongSelf.address.category = String(category.id)
+                    if let categories = obj {
+                        strongSelf.address.categories = NSMutableArray(array: categories)
                         strongSelf.tableView.reloadData()
                     }
                 }
-                vc.isGradient = true
                 pushViewController(vc: vc)
             }
         }
@@ -181,22 +229,34 @@ extension SaveContactViewController : UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            let item = ConfirmItem(title: Localizable.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
-            let cell =  tableView
-                .dequeueReusableCell(withType: ConfirmCell.self, for: indexPath)
-                .configured(with: item)
-            return cell
+            if isAddContact {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
+                cell.delegate = self
+                cell.error = addressError
+                cell.contact = nil
+                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: address.walletId, rightIcon: nil))
+                cell.backgroundColor = UIColor.clear
+                cell.contentView.backgroundColor = UIColor.clear
+                return cell
+            }
+            else{
+                let item = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+                let cell =  tableView
+                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+                    .configured(with: item)
+                return cell
+            }
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: self.address.label, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: self.address.label))
             cell.delegate = self
             return cell
         case 2:
-            let category = AppModel.sharedManager().findCategory(byAddress: self.address.walletId)
             let cell = tableView
                 .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: category?.name ?? String.empty(), valueColor: UIColor.init(hexString: category?.color ?? "#FFFFFF")))
+            cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: self.address.categoriesName()))
             cell.contentView.backgroundColor = UIColor.clear
             return cell
         default:
@@ -207,6 +267,20 @@ extension SaveContactViewController : UITableViewDataSource {
 
 extension SaveContactViewController : BMCellProtocol {
     
+    func textValueDidReturn(_ sender: UITableViewCell) {
+        if let path = tableView.indexPath(for: sender)  {
+            if path.section == 0 {
+                if !address.walletId.isEmpty {
+                    if !AppModel.sharedManager().isValidAddress(address.walletId) {
+                        addressError = Localizable.shared.strings.incorrect_address
+                    }
+                }
+                
+                tableView.reloadRows(at: [path], with: .none)
+            }
+        }
+    }
+    
     func textValueDidBegin(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender)  {
             tableView.scrollToRow(at: path, at: .middle, animated: true)
@@ -214,11 +288,40 @@ extension SaveContactViewController : BMCellProtocol {
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
-        self.address.label = text
+        
+        if let path = tableView.indexPath(for: sender)  {
+            if path.section == 0 {
+                self.addressError = nil
+                
+                self.address.walletId = text
+            }
+            else{
+                self.address.label = text
+            }
+        }
         
         UIView.performWithoutAnimation {
             tableView.beginUpdates()
             tableView.endUpdates()
         }
+    }
+    
+    func onRightButton(_ sender: UITableViewCell) {
+        if let path = tableView.indexPath(for: sender) {
+            if path.section == 0 {
+                let vc = QRScannerViewController()
+                vc.delegate = self
+                pushViewController(vc: vc)
+            }
+        }
+    }
+}
+
+extension SaveContactViewController : QRScannerViewControllerDelegate
+{
+    func didScanQRCode(value:String, amount:String?) {
+        addressError = nil
+        address.walletId = value
+        tableView.reloadData()
     }
 }

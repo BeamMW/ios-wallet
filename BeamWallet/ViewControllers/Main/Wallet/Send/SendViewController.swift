@@ -19,28 +19,19 @@
 
 
 import UIKit
+import Parchment
 
 class SendViewController: BaseTableViewController {
 
-    private lazy var searchTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = UIColor.main.marine
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.isHidden = true
-        return tableView
-    }()
-    
+    private var alreadyChanged = false
+    private var cellHeights: [IndexPath : CGFloat] = [:]
+
     private var isSearch = false {
         didSet {
             tableView.isScrollEnabled = !isSearch
-            searchTableView.isHidden = !isSearch
+            pagingViewController.view.isHidden = !isSearch
             
-            let rect = self.tableView.rectForRow(at: IndexPath(row: 0, section: 0))
-            let y:CGFloat = navigationBarOffset + rect.size.height + 20
-            
-            searchTableView.frame = CGRect(x: 0, y: y, width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+            layoutSearchTableView()
         }
     }
     
@@ -71,42 +62,72 @@ class SendViewController: BaseTableViewController {
         }
     }
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
     public var transaction: BMTransaction?
     private let viewModel = SendTransactionViewModel()
     
     private var showAdvanced = false
     private var showEdit = false
-        
+    
+    private let pagingViewController = BMPagingViewController()
+    private var titles = [Localizable.shared.strings.contacts, Localizable.shared.strings.my_active_addresses]
+    private var searchControlles = [SearchTableView(),SearchTableView()]
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let repeatTransaction = transaction {
             viewModel.transaction = repeatTransaction
         }
-                
-        isGradient = true
+        
+        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self])
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.keyboardDismissMode = .interactive
+        tableView.tableFooterView = footerView
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.sectionHeaderHeight = 0.0
+        tableView.sectionFooterHeight = 0.0
+        
+        let pagingView = pagingViewController.view as! PagingView
+        pagingView.options.indicatorColor = UIColor.main.heliotrope
+        pagingView.options.menuItemSpacing = 30
+        pagingView.options.menuInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+
+        pagingViewController.view.backgroundColor = view.backgroundColor
+        pagingViewController.view.isHidden = true
+        addChild(pagingViewController)
+        view.addSubview(pagingViewController.view)
+        pagingViewController.didMove(toParent: self)
+        
+        pagingViewController.dataSource = self
+        pagingViewController.delegate = self
         
         setGradientTopBar(mainColor: UIColor.main.heliotrope)
         
         title = Localizable.shared.strings.send.uppercased()
         
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
-
-        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, AddressCell.self, BMPickedAddressCell.self])
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.keyboardDismissMode = .interactive
-        tableView.tableFooterView = footerView
         
-        searchTableView.register([ContactCell.self, BMEmptyCell.self])
-        searchTableView.keyboardDismissMode = .interactive        
-        view.addSubview(searchTableView)
         
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: tableView)
-        }
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        layoutSearchTableView()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -140,6 +161,13 @@ class SendViewController: BaseTableViewController {
         }
     }
     
+    private func layoutSearchTableView () {
+        let rect = self.tableView.rectForRow(at: IndexPath(row: 0, section: 0))
+        let y:CGFloat = navigationBarOffset + rect.size.height + 20
+        
+        pagingViewController.view.frame = CGRect(x: 0, y: y, width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+    }
+    
     private func didSelectAddress(value:String) {
         isSearch = false
         
@@ -171,25 +199,12 @@ class SendViewController: BaseTableViewController {
 extension SendViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        if tableView == searchTableView {
-            let header = BMTableHeaderTitleView.init(segments: [Localizable.shared.strings.contacts, Localizable.shared.strings.my_addresses])
-            header.selectedIndex = viewModel.selectedSearchIndex
-            header.delegate = self
-            return header
-        }
-        
         let view = UIView()
         view.backgroundColor = (section == 5 || section == 6 || section == 7) ?  UIColor.main.marineThree : UIColor.clear
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        if tableView == searchTableView {
-            return BMTableHeaderTitleView.segmentHeight
-        }
-        
         switch section {
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 30
@@ -201,10 +216,7 @@ extension SendViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == searchTableView && viewModel.contacts.count == 0 {
-            return ContactCell.height()
-        }
-        else if indexPath.section == 6 {
+        if indexPath.section == 6 {
             if indexPath.row == 2 || indexPath.row == 3 {
                 return 60
             }
@@ -218,11 +230,7 @@ extension SendViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if tableView == searchTableView && viewModel.contacts.count > 0 {
-            viewModel.selectedContact = viewModel.contacts[indexPath.row]
-            didSelectAddress(value: viewModel.contacts[indexPath.row].address.walletId)
-        }
-        else if indexPath.section == 6 {
+        if indexPath.section == 6 {
             switch indexPath.row {
             case 2:
                 self.onExpire()
@@ -239,20 +247,10 @@ extension SendViewController : UITableViewDelegate {
 extension SendViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        if tableView == searchTableView {
-            return 1
-        }
-        
         return (showAdvanced ? 8 : 5)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if tableView == searchTableView {
-            return viewModel.contacts.count == 0 ? 1 : viewModel.contacts.count
-        }
-        
         switch section {
         case 1:
             return (viewModel.sendAll ? 2 : 1)
@@ -267,24 +265,15 @@ extension SendViewController : UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeights[indexPath] = cell.frame.size.height
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeights[indexPath] ?? UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if tableView == searchTableView {
-            if viewModel.contacts.count == 0 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: Localizable.shared.strings.not_found)
-                cell.backgroundView?.backgroundColor = UIColor.main.marineThree
-                return cell
-            }
-            else {
-                let cell =  tableView
-                    .dequeueReusableCell(withType: ContactCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, contact: viewModel.contacts[indexPath.row]))
-                return cell
-            }
-        }
-        
         switch indexPath.section {
         case 0:
             let cell = tableView
@@ -292,7 +281,7 @@ extension SendViewController : UITableViewDataSource {
             cell.delegate = self
             cell.error = viewModel.toAddressError
             cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizable.shared.strings.paste_enter_address, value: viewModel.toAddress, rightIcon:IconScanQr()))
+            cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon:IconScanQr()))
             cell.contact = viewModel.selectedContact
             return cell
         case 1:
@@ -305,21 +294,23 @@ extension SendViewController : UITableViewDataSource {
                 return cell
             }
             else{
-                let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-                cell.textLabel?.textColor = UIColor.main.blueyGrey
-                cell.textLabel?.font = RegularFont(size: 14)
+                var cell = tableView.dequeueReusableCell(withIdentifier: "cell")
                 
-                if viewModel.fee != Localizable.shared.strings.zero {
-                    cell.textLabel?.text = "+ \(viewModel.fee) GROTH transaction fee"
+                if cell == nil {
+                    cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+                    
+                    cell?.textLabel?.textColor = UIColor.main.blueyGrey
+                    cell?.textLabel?.font = RegularFont(size: 14)
+                    
+                    cell?.backgroundColor = UIColor.clear
+                    cell?.selectionStyle = .none
+                    cell?.separatorInset = UIEdgeInsets.zero
+                    cell?.indentationLevel = 0
                 }
-                else{
-                    cell.textLabel?.text = "\(viewModel.fee) GROTH transaction fee"
-                }
-                cell.backgroundColor = UIColor.clear
-                cell.selectionStyle = .none
-                cell.separatorInset = UIEdgeInsets.zero
-                cell.indentationLevel = 0
-                return cell
+                
+                cell?.textLabel?.text = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+                
+                return cell!
             }
         case 2:
             var total = Localizable.shared.strings.zero
@@ -333,7 +324,7 @@ extension SendViewController : UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.local_annotation_not_shared, value: viewModel.comment, rightIcon:nil))
+                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.comment))
             cell.delegate = self
             return cell
         case 4:
@@ -372,23 +363,15 @@ extension SendViewController : UITableViewDataSource {
                 return cell
             }
             else if indexPath.row == 3 {
-                var name = Localizable.shared.strings.none
-                var color = UIColor.white
-                
-                if let category = AppModel.sharedManager().findCategory(byId: viewModel.outgoindAdderss!.category) {
-                    name = category.name
-                    color = UIColor.init(hexString: category.color)
-                }
-                
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: name, valueColor: color))
+                cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: viewModel.outgoindAdderss!.categoriesName()))
                 return cell
             }
             else{
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20
@@ -408,20 +391,42 @@ extension SendViewController : UITableViewDataSource {
 
 extension SendViewController : BMCellProtocol {
     
+    func textDidChangeStatus(_ sender: UITableViewCell) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//            if let path = self.tableView.indexPath(for: sender)  {
+//                UIView.performWithoutAnimation {
+//                    self.tableView.beginUpdates()
+//                    self.tableView.reloadRows(at: [path], with: .none)
+//                    self.tableView.endUpdates()
+//                }
+//            }
+//        }
+//        if !alreadyChanged {
+//            alreadyChanged = true//
+//        }
+    }
+    
     func textValueDidBegin(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender)  {
             tableView.scrollToRow(at: path, at: .middle, animated: true)
             
             if path.section == 0 {
                 isSearch = true
-                viewModel.searchForContacts()
-                searchTableView.reloadData()
+           
+                searchControlles[0].contacts = viewModel.searchForContacts(searchIndex: 0)
+                searchControlles[1].contacts = viewModel.searchForContacts(searchIndex: 1)
+                
+                for vc in searchControlles {
+                    vc.reload()
+                }
             }
         }
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
         var removeGrothNotice = false
+        var isNeedReload = true
+        
         if let path = tableView.indexPath(for: sender)  {
             if path.section == 0 {
                 viewModel.toAddress = text
@@ -436,34 +441,48 @@ extension SendViewController : BMCellProtocol {
                 
                 if input {
                     isSearch = true
-                    viewModel.searchForContacts()
-                    searchTableView.reloadData()
+                    
+                    searchControlles[0].contacts = viewModel.searchForContacts(searchIndex: 0)
+                    searchControlles[1].contacts = viewModel.searchForContacts(searchIndex: 1)
+                    
+                    for vc in searchControlles {
+                        vc.reload()
+                    }
                 }
                 else{
                     isSearch = false
                 }
             }
             else if path.section == 1 {
-                if viewModel.sendAll {
-                    removeGrothNotice = true
+                if input {
+                    if viewModel.sendAll {
+                        removeGrothNotice = true
+                    }
+                    viewModel.sendAll = false
                 }
-                viewModel.sendAll = false
                 viewModel.amount = text
             }
             else if path.section == 3 {
+                isNeedReload = false
                 viewModel.comment = text
             }
             else if path.section == 6 {
+                isNeedReload = false
                 viewModel.outgoindAdderss!.label = text
             }
         }
         
-        UIView.performWithoutAnimation {
-            tableView.beginUpdates()
-            if removeGrothNotice {
-                tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+        if isNeedReload {
+            UIView.performWithoutAnimation {
+                tableView.beginUpdates()
+                if removeGrothNotice {
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+                }
+                tableView.endUpdates()
+                if isSearch {
+                    layoutSearchTableView()
+                }
             }
-            tableView.endUpdates()
         }
     }
     
@@ -522,7 +541,6 @@ extension SendViewController : BMCellProtocol {
             if path.section == 0 {
                 let vc = QRScannerViewController()
                 vc.delegate = self
-                vc.isGradient = true
                 pushViewController(vc: vc)
             }
             else if path.section == 2 {
@@ -542,6 +560,18 @@ extension SendViewController : BMCellProtocol {
                         tableView.beginUpdates()
                         tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: .none)
                         tableView.endUpdates()
+                    }
+                    
+                    if let a = Double(viewModel.amount), let f = Double(viewModel.fee) {
+                        if a == 0 && f > 0  {
+                            viewModel.amount = AppModel.sharedManager().allAmount(0)
+                            viewModel.amountError = AppModel.sharedManager().feeError(f)
+                            tableView.reloadData()
+                        }
+                        else if a == 0 {
+                            viewModel.amountError = Localizable.shared.strings.amount_zero
+                            tableView.reloadData()
+                        }
                     }
                 }
  
@@ -593,19 +623,27 @@ extension SendViewController : BMCellProtocol {
     
     func onDidChangeFee(value: Double) {
         viewModel.fee = String(Int(value))
+        _ = viewModel.checkAmountError()
         
         if viewModel.sendAll {
-            if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
-                cell.configure(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
-                cell.error = viewModel.amountError
-                cell.fee = value
+            var error:String?
+            var amount = viewModel.amount
+            if let a = Double(viewModel.amount), let f = Double(viewModel.fee) {
+                if a == 0 && f > 0  {
+                    amount = AppModel.sharedManager().allAmount(0)
+                    error = AppModel.sharedManager().feeError(f)
+                }
+                else if a == 0 {
+                    error = Localizable.shared.strings.amount_zero
+                }
             }
             
-            tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+            viewModel.amount = amount
+            viewModel.amountError = error
         }
-        
-        _ = viewModel.checkAmountError()
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+        UIView.performWithoutAnimation {
+            tableView.reloadData()
+        }
     }
 }
 
@@ -615,10 +653,14 @@ extension SendViewController : QRScannerViewControllerDelegate
         viewModel.selectedContact = nil
         
         if let a = amount {
-            viewModel.amount = a
+            if Double(a) ?? 0 > 0 {
+                viewModel.amount = a
+                viewModel.sendAll = false
+            }
         }
         
         didSelectAddress(value: value)
+        
     }
 }
 
@@ -637,21 +679,6 @@ extension SendViewController : SettingsModelDelegate {
 
 extension SendViewController {
     
-    override func keyboardWillShow(_ notification: Notification) {
-        super.keyboardWillShow(notification)
-        
-        searchTableView.contentInset = tableView.contentInset
-    }
-    
-    override func keyboardWillHide(notification: NSNotification) {
-        super.keyboardWillHide(notification: notification)
-        
-        searchTableView.contentInset = tableView.contentInset
-    }
-}
-
-extension SendViewController {
-    
     private func onExpire() {
         let vc = AddressExpiresPickerViewController(duration: Int(viewModel.outgoindAdderss!.duration))
         vc.completion = { [weak self]
@@ -665,7 +692,6 @@ extension SendViewController {
             
             strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 6)], with: .fade)
         }
-        vc.isGradient = true
         pushViewController(vc: vc)
     }
     
@@ -677,80 +703,71 @@ extension SendViewController {
                 guard let strongSelf = self else { return }
                 
                 if let category = obj {
-                    strongSelf.didSelectCategory(category: category)
+                    strongSelf.didSelectCategory(categories: [String(category.id)])
                 }
             }
-            vc.isGradient = true
             pushViewController(vc: vc)
         }
         else{
-            let vc = CategoryPickerViewController(category: AppModel.sharedManager().findCategory(byId: viewModel.outgoindAdderss!.category))
+            let vc = CategoryPickerViewController(categories: viewModel.outgoindAdderss!.categories as? [String])
             vc.completion = { [weak self]
                 obj in
                 
                 guard let strongSelf = self else { return }
 
-                if let category = obj {
-                    strongSelf.didSelectCategory(category: category)
+                if let categories = obj {
+                    strongSelf.didSelectCategory(categories: categories)
                 }
             }
-            vc.isGradient = true
             pushViewController(vc: vc)
         }
     }
     
-    private func didSelectCategory(category:BMCategory) {
-        viewModel.outgoindAdderss!.category = String(category.id)
+    private func didSelectCategory(categories:[String]) {
+        viewModel.outgoindAdderss!.categories = NSMutableArray(array: categories)
         
-        AppModel.sharedManager().setWalletCategory(viewModel.outgoindAdderss!.category, toAddress: viewModel.outgoindAdderss!.walletId)
+        AppModel.sharedManager().setWalletCategories(viewModel.outgoindAdderss!.categories, toAddress: viewModel.outgoindAdderss!.walletId)
         
         tableView.reloadRows(at: [IndexPath(row: 3, section: 6)], with: .fade)
     }
 }
 
-extension SendViewController : BMTableHeaderTitleViewDelegate {
-    func onDidSelectSegment(index: Int) {
-        viewModel.selectedSearchIndex = index
-        viewModel.searchForContacts()
-        searchTableView.reloadData()
+extension SendViewController: PagingViewControllerDelegate {
+    func pagingViewController<T>(
+        _ pagingViewController: PagingViewController<T>,
+        widthForPagingItem pagingItem: T,
+        isSelected: Bool) -> CGFloat? {
+        
+        let index = pagingItem as! PagingIndexItem
+        let title = index.title
+        let size = title.boundingWidth(with: pagingViewController.options.font, kern: 1.5)
+        return size + 20
     }
 }
 
-extension SendViewController : UIViewControllerPreviewingDelegate {
+extension SendViewController: PagingViewControllerDataSource {
     
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
         
-        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
-        
-        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
-        
-        if cell is FeeCell {
-            let modalViewController = InputFeePopover()
-            modalViewController.mainFee = viewModel.fee
-            modalViewController.hideBlur = true
-            modalViewController.completion = { [weak self]
-                (obj : String) -> Void in
-                
-                guard let strongSelf = self else { return }
-                
-                strongSelf.onDidChangeFee(value: Double(obj) ?? 0)
-                strongSelf.tableView.reloadData()
-            }
-                        
-            previewingContext.sourceRect = cell.frame
-            
-            return modalViewController
-        }
-        
-        return nil
+        searchControlles[index].view.backgroundColor = UIColor.clear
+        searchControlles[index].delegate = self
+        searchControlles[index].tableView.contentInset = tableView.contentInset
+
+        return searchControlles[index]
     }
     
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
-        viewControllerToCommit.modalPresentationStyle = .overFullScreen
-        viewControllerToCommit.modalTransitionStyle = .crossDissolve
-        (viewControllerToCommit as! InputFeePopover).showBlur()
-        
-        present(viewControllerToCommit, animated: true, completion: nil)
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, pagingItemForIndex index: Int) -> T {
+        return PagingIndexItem(index: index, title: titles[index].uppercased()) as! T
+    }
+    
+    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int{
+        return titles.count
+    }
+}
+
+extension SendViewController: SearchTableViewDelegate {
+    func didSelectContact(contact: BMContact) {
+        viewModel.selectedContact = contact
+        didSelectAddress(value: contact.address.walletId)
     }
 }

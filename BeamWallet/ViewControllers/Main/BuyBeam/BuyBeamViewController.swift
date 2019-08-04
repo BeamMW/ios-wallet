@@ -75,9 +75,7 @@ class BuyBeamViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        isGradient = true
-        
+                
         setGradientTopBar(mainColor: UIColor.main.heliotrope, addedStatusView: false)
         
         title = Localizable.shared.strings.buy_beam.uppercased()
@@ -325,7 +323,7 @@ extension BuyBeamViewController : UITableViewDataSource {
             
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: name.uppercased() , value: viewModel.fromAddress, rightIcon:IconScanQr()))
+                .configured(with: (name: name.uppercased() , value: viewModel.fromAddress))
             cell.delegate = self
             cell.error = viewModel.fromAddressError
             cell.contentView.backgroundColor = UIColor.main.marineThree
@@ -354,7 +352,7 @@ extension BuyBeamViewController : UITableViewDataSource {
             else if indexPath.row == 1 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address!.label, rightIcon:nil))
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address!.label))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20
@@ -367,17 +365,9 @@ extension BuyBeamViewController : UITableViewDataSource {
                 return cell
             }
             else if indexPath.row == 3 {
-                var name = Localizable.shared.strings.none
-                var color = UIColor.main.steelGrey
-                
-                if let category = AppModel.sharedManager().findCategory(byId: viewModel.address!.category) {
-                    name = category.name
-                    color = UIColor.init(hexString: category.color)
-                }
-                
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.category.uppercased(), value: name, valueColor: color))
+                cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: viewModel.address!.categoriesName()))
                 return cell
             }
             else{

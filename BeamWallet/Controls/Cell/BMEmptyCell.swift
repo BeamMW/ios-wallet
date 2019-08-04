@@ -23,26 +23,26 @@ class BMEmptyCell: BaseCell {
 
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var mainView: UIView!
+    @IBOutlet weak private var iconView: UIImageView!
+
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        contentView.backgroundColor = UIColor.main.marineThree
+        contentView.backgroundColor = UIColor.clear
+        backgroundColor = UIColor.clear
 
         selectionStyle = .none
+        
+        isUserInteractionEnabled = false
     }
 }
 
 extension BMEmptyCell: Configurable {
     
-    func configure(with text:String) {
-        titleLabel.text = text.capitalizingFirstLetter()
-    }
-}
-
-extension BMEmptyCell: DynamicContentHeight {
-    
-    static func height() -> CGFloat {
-        return 60
+    func configure(with options: (text:String, image:UIImage?)) {
+        titleLabel.text = options.text
+        iconView.isHidden = (options.image == nil)
+        iconView.image = options.image
     }
 }

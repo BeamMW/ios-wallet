@@ -22,7 +22,7 @@ import UIKit
 class DetailAddressViewModel: AddressViewModel {
 
     public var isContact = false
-    public var details = [GeneralInfo]()
+    public var details = [BMMultiLineItem]()
     public var transactionViewModel:TransactionViewModel!
     public var transactions:[BMTransaction] {
         get{
@@ -52,20 +52,22 @@ class DetailAddressViewModel: AddressViewModel {
     public func fillDetails() {
         details.removeAll()
         
-        details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.address), detail: self.address!.walletId, failed: false, canCopy:true, color: UIColor.white))
+        details.append(BMMultiLineItem(title: nil, detail:(self.address!.label.isEmpty ? Localizable.shared.strings.no_name : self.address!.label) , detailFont: BoldFont(size: 30), detailColor: UIColor.white))
+
+        let idItem = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail:self.address!.walletId , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+        idItem.canCopy = true
+        details.append(idItem)
         
         if !isContact {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: (self.address!.isExpired() ? Localizable.shared.strings.expired : Localizable.shared.strings.exp_date)), detail: self.address!.formattedDate(), failed: false, canCopy:false, color: UIColor.white))
+            details.append(BMMultiLineItem(title: (self.address!.isExpired() ? Localizable.shared.strings.expired : Localizable.shared.strings.exp_date), detail:self.address!.formattedDate() , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        if !self.address!.category.isEmpty {
-            if let category = AppModel.sharedManager().findCategory(byId: self.address!.category) {
-                details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.category), detail: category.name, failed: false, canCopy:false, color: UIColor.init(hexString: category.color)))
-            }
-        }
-        
-        if !self.address!.label.isEmpty {
-            details.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.name), detail: self.address!.label, failed: false, canCopy:false, color: UIColor.white))
+        if self.address?.categories.count ?? 0 > 0 {
+            let title = (self.address?.categories.count ?? 0 <= 1 ? Localizable.shared.strings.tag : Localizable.shared.strings.categories)
+            let categories = self.address?.categoriesName()
+            let item = BMMultiLineItem(title: title, detail:categories?.string , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+            item.detailAttributedString = categories
+            details.append(item)
         }
     }
     

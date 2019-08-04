@@ -178,6 +178,10 @@ extension UIColor {
             return .init(hexString: "#a4a4a4")
         }
         
+        static var cyan: UIColor {
+            return .init(red: 0/255, green: 240/255, blue: 255/255, alpha: 1)
+        }
+                
         static var peacockBlue: UIColor {
             if Settings.sharedManager().target == Testnet {
                 return .init(red: 52/255, green: 46/255, blue: 65/255, alpha: 1)

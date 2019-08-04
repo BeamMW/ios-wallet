@@ -88,7 +88,7 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         
         loadRates()
         
-        recaptcha?.forceVisibleChallenge = false
+       // recaptcha?.forceVisibleChallenge = false
         recaptcha?.configureWebView { [weak self] webview in
             SVProgressHUD.dismiss()
 
@@ -197,7 +197,6 @@ class BuyBeamViewModel: ReceiveAddressViewModel {
         if let top = UIApplication.getTopMostViewController() {
             let vc = QRScannerViewController()
             vc.delegate = self
-            vc.isGradient = true
             if currency == "BTC" {
                 vc.scanType = .bitcoin
             }

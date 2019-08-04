@@ -16,12 +16,18 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
+        <array key="SFProText-Medium.ttf">
+            <string>SFProText-Medium</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="bgView" destination="iAW-fu-nfK" id="y8n-q0-XUE"/>
+                <outlet property="createButton" destination="1Iu-PO-y9I" id="7Bp-tq-CWe"/>
+                <outlet property="languageButton" destination="gaV-vA-BtB" id="oez-V6-oTs"/>
                 <outlet property="restoreButton" destination="dil-6y-9Wr" id="p3C-q4-F1i"/>
+                <outlet property="titleLabel" destination="PCl-BH-n39" id="Wsl-bn-pSu"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -46,8 +52,11 @@
                                         <constraint firstAttribute="width" constant="159" id="HG5-Od-VgI"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scalable confidential cryptocurrency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scalable confidential cryptocurrency" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
                                     <rect key="frame" x="0.0" y="162" width="264" height="19.5"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="264" id="z8M-cN-IIy"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="16"/>
                                     <color key="textColor" red="0.14509803921568626" green="0.75686274509803919" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -84,9 +93,9 @@
                     </connections>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="qyg-x7-z6S">
-                    <rect key="frame" x="187.5" y="617" width="0.0" height="0.0"/>
+                    <rect key="frame" x="61" y="573" width="253" height="44"/>
                     <subviews>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dil-6y-9Wr">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dil-6y-9Wr">
                             <rect key="frame" x="0.0" y="0.0" width="253" height="44"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -111,11 +120,39 @@
                         </button>
                     </subviews>
                 </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gaV-vA-BtB">
+                    <rect key="frame" x="302" y="35" width="58" height="32"/>
+                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="LD5-bn-Nbh"/>
+                        <constraint firstAttribute="width" constant="58" id="PQn-aY-Xe5"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
+                    <state key="normal" title="EN">
+                        <color key="titleColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onLanguageWithSender:" destination="-1" eventType="touchUpInside" id="ZfO-RK-a29"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.011764705882352941" green="0.1803921568627451" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="1Iu-PO-y9I" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="0vW-zl-pBm"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="gaV-vA-BtB" secondAttribute="trailing" constant="15" id="7wk-ZQ-wjO"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="qyg-x7-z6S" secondAttribute="bottom" constant="50" id="CAb-kE-BzJ"/>
+                <constraint firstItem="gaV-vA-BtB" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="15" id="MR4-dj-w6N"/>
                 <constraint firstItem="Prf-e9-uhW" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Nug-Hr-cfS"/>
                 <constraint firstItem="qyg-x7-z6S" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UNc-wS-U9l"/>
                 <constraint firstItem="1Iu-PO-y9I" firstAttribute="top" secondItem="Prf-e9-uhW" secondAttribute="bottom" constant="115" id="ZHy-b5-s6H"/>
@@ -130,7 +167,7 @@
     </objects>
     <resources>
         <image name="iconAddBlue" width="16" height="16"/>
-        <image name="initial_background" width="1440" height="2368"/>
+        <image name="initial_background" width="1125" height="2001"/>
         <image name="logo" width="159" height="142"/>
     </resources>
 </document>

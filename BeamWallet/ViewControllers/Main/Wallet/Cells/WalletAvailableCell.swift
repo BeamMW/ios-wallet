@@ -38,7 +38,6 @@ class WalletAvailableCell: BaseCell {
     @IBOutlet weak private var maturingIcon: UIImageView!
     @IBOutlet weak private var maturingCurrencyIcon: UIImageView!
     @IBOutlet weak private var maturingDescriptionLabel: UILabel!
-
     
     public static func hideHeight() -> CGFloat {
         return 80
@@ -57,62 +56,97 @@ class WalletAvailableCell: BaseCell {
         
         selectionStyle = .none
         
+        maturingDescriptionLabel.text = "(" + Localizable.shared.strings.maturing.lowercased() + ")"
         currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
         
         maturingCurrencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         maturingCurrencyIcon.tintColor = UIColor.white
         
-        let touchDown = UILongPressGestureRecognizer(target:self, action: #selector(onTap))
-        touchDown.minimumPressDuration = 0
-        
+//        let touchDown = UILongPressGestureRecognizer(target:self, action: #selector(onTap))
+//        touchDown.minimumPressDuration = 0
+//        touchDown.cancelsTouchesInView = true
+//
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-        mainView.addGestureRecognizer(touchDown)
+//        mainView.addGestureRecognizer(touchDown)
     }
     
-    @objc private func onTap(_ sender: UITapGestureRecognizer) {
-        
-        if sender.state == .began {
-            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.03)
-        }
-        else if sender.state == .ended {
-            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-
-            if balanceIcon.alpha == 1 {
-                UIView.animate(withDuration: 0.3) {
-                    self.maturingLabel.alpha = 0
-                    self.maturingIcon.alpha = 0
-                    self.maturingCurrencyIcon.alpha = 0
-                    self.maturingDescriptionLabel.alpha = 0
-                    
-                    self.balanceIcon.alpha = 0
-                    self.balanceLabel.alpha = 0
-                    self.currencyIcon.alpha = 0
-                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
-                }
+    @IBAction func onExpand(sender :UIButton) {
+        if balanceIcon.alpha == 1 {
+            UIView.animate(withDuration: 0.3) {
+                self.maturingLabel.alpha = 0
+                self.maturingIcon.alpha = 0
+                self.maturingCurrencyIcon.alpha = 0
+                self.maturingDescriptionLabel.alpha = 0
+                
+                self.balanceIcon.alpha = 0
+                self.balanceLabel.alpha = 0
+                self.currencyIcon.alpha = 0
+                self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
             }
-            else{
-                UIView.animate(withDuration: 0.3) {
-                    if self.maturingLabel.text != "" {
-                        self.maturingLabel.alpha = 1
-                        self.maturingIcon.alpha = 1
-                        self.maturingCurrencyIcon.alpha = 1
-                        self.maturingDescriptionLabel.alpha = 1
-                    }
-                    
-                    
-                    self.balanceIcon.alpha = 1
-                    self.balanceLabel.alpha = 1
-                    self.currencyIcon.alpha = 1
-                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
+        }
+        else{
+            UIView.animate(withDuration: 0.3) {
+                if self.maturingLabel.text != "" {
+                    self.maturingLabel.alpha = 1
+                    self.maturingIcon.alpha = 1
+                    self.maturingCurrencyIcon.alpha = 1
+                    self.maturingDescriptionLabel.alpha = 1
                 }
+                
+                
+                self.balanceIcon.alpha = 1
+                self.balanceLabel.alpha = 1
+                self.currencyIcon.alpha = 1
+                self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
             }
-            self.delegate?.onExpandAvailable()
         }
-        else if sender.state == .cancelled || sender.state == .failed  {
-            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-        }
+        self.delegate?.onExpandAvailable()
     }
+    
+//    @objc private func onTap(_ sender: UITapGestureRecognizer) {
+//
+//        if sender.state == .began {
+//            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.03)
+//        }
+//        else if sender.state == .ended {
+//            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+//
+//            if balanceIcon.alpha == 1 {
+//                UIView.animate(withDuration: 0.3) {
+//                    self.maturingLabel.alpha = 0
+//                    self.maturingIcon.alpha = 0
+//                    self.maturingCurrencyIcon.alpha = 0
+//                    self.maturingDescriptionLabel.alpha = 0
+//
+//                    self.balanceIcon.alpha = 0
+//                    self.balanceLabel.alpha = 0
+//                    self.currencyIcon.alpha = 0
+//                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
+//                }
+//            }
+//            else{
+//                UIView.animate(withDuration: 0.3) {
+//                    if self.maturingLabel.text != "" {
+//                        self.maturingLabel.alpha = 1
+//                        self.maturingIcon.alpha = 1
+//                        self.maturingCurrencyIcon.alpha = 1
+//                        self.maturingDescriptionLabel.alpha = 1
+//                    }
+//
+//
+//                    self.balanceIcon.alpha = 1
+//                    self.balanceLabel.alpha = 1
+//                    self.currencyIcon.alpha = 1
+//                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
+//                }
+//            }
+//            self.delegate?.onExpandAvailable()
+//        }
+//        else if sender.state == .cancelled || sender.state == .failed  {
+//            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+//        }
+//    }
 }
 
 extension WalletAvailableCell: Configurable {

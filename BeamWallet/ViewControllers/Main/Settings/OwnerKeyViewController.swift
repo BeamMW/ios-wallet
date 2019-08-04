@@ -25,24 +25,34 @@ class OwnerKeyViewController: BaseViewController {
     
     @IBOutlet private weak var ownerKeyLabel: UILabel!
     @IBOutlet private weak var ownerKeyTitleLabel: UILabel!
-    @IBOutlet private weak var detailLabelRight: NSLayoutConstraint!
-    @IBOutlet private weak var detailLabelLeft: NSLayoutConstraint!
+    @IBOutlet private weak var noticeLabel: UILabel!
 
+    @IBOutlet private weak var copyView: UIView!
+    @IBOutlet private weak var copyNextView: UIView!
+    @IBOutlet private weak var copyRestoreButton: UIButton!
+
+    //
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         topOffset?.constant = topOffset?.constant ?? 0 + 30
 
-        if Device.screenType == .iPhones_5 {
-            detailLabelRight.constant = 0
-            detailLabelLeft.constant = 0
-        }
-        
-        title = Localizable.shared.strings.show_owner_key
-        
         ownerKeyLabel.text = ownerKey
         ownerKeyTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.key_code.uppercased())
         ownerKeyTitleLabel.letterSpacing = 1.5
+        
+        if AppModel.sharedManager().isRestoreFlow {            
+            title = Localizable.shared.strings.owner_key
+
+            copyView.isHidden = true
+            copyNextView.isHidden = false
+            
+            noticeLabel.text = Localizable.shared.strings.paste_owner_key + "\n\n" + Localizable.shared.strings.after_paste_owner_key
+        }
+        else{
+            title = Localizable.shared.strings.show_owner_key
+        }
     }
     
     @IBAction func onCopy(sender :UIButton) {
@@ -50,6 +60,13 @@ class OwnerKeyViewController: BaseViewController {
         
         ShowCopied(text: Localizable.shared.strings.ownerkey_copied)
         
-        back()
+        if !AppModel.sharedManager().isRestoreFlow {
+            back()
+        }
+    }
+    
+    @IBAction func onNext(sender :UIButton) {
+        let vc = RestoreNodeViewController()
+        pushViewController(vc: vc);
     }
 }

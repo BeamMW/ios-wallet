@@ -18,11 +18,8 @@
 //
 
 #import "BMUTXO.h"
+#import "BMTransaction.h"
 
 @implementation BMUTXO
-
--(BOOL)isActive{
-    return (self.status == 1 || self.status == 2);
-}
 
 @end

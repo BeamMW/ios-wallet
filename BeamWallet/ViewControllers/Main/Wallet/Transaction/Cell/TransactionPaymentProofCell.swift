@@ -30,11 +30,15 @@ class TransactionPaymentProofCell: BaseCell {
 
     @IBOutlet weak private var buttonDetails: UIButton!
     @IBOutlet weak private var buttonCopy: UIButton!
+    @IBOutlet weak private var titleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         selectionStyle = .none
+        
+        titleLabel.text = Localizable.shared.strings.payment_proof.uppercased()
+        titleLabel.letterSpacing = 1.5
         
         buttonDetails.backgroundColor = UIColor.main.marineThree;
         buttonCopy.backgroundColor = UIColor.main.marineThree;

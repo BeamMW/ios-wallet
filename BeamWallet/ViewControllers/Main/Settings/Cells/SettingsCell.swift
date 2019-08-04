@@ -38,8 +38,8 @@ class SettingsCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        switchView.tintColor = UIColor.main.marine
-        switchView.backgroundColor = UIColor.main.marine
+        switchView.tintColor = Settings.sharedManager().target == Testnet ? UIColor.init(hexString: "#0F0D17") : UIColor.main.marine
+        switchView.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.init(hexString: "#0F0D17") : UIColor.main.marine
         
         backgroundColor = UIColor.main.marineThree
         mainView.backgroundColor = UIColor.main.marineThree

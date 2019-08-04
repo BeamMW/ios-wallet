@@ -70,11 +70,11 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if (self.presentedViewController as? UIAlertController) == nil {
             if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
                 isRequestedAuthorization = true
-                
+
                 biometricAuthorization()
             }
         }

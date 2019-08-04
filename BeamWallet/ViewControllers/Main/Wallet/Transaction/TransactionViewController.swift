@@ -23,6 +23,24 @@ class TransactionViewController: BaseTableViewController {
     
     private var viewModel:DetailTransactionViewModel!
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
     init(transaction:BMTransaction) {
         super.init(nibName: nil, bundle: nil)
 
@@ -36,17 +54,19 @@ class TransactionViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Localizable.shared.strings.transaction_details
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         tableView.delegate = self
         tableView.dataSource = self
-        
-        tableView.register(GeneralInfoCell.self)
-        tableView.register(WalletTransactionCell.self)
-        tableView.register(TransactionPaymentProofCell.self)
-        tableView.register(TransactionUTXOCell.self)
+        tableView.register([BMMultiLinesCell.self, TransactionUTXOCell.self, TransactionDetailCell.self, TransactionPaymentProofCell.self])
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.backgroundColor = UIColor.main.marine
         
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+
+        title = Localizable.shared.strings.transaction_id.uppercased().replacingOccurrences(of: Localizable.shared.strings.id.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: String.empty())
 
         addRightButton(image: MoreIcon(), target: self, selector: #selector(self.onMore))
 
@@ -88,13 +108,25 @@ class TransactionViewController: BaseTableViewController {
                     self.viewModel.cancelTransation(indexPath: nil)
                 case .delete_transaction :
                     self.viewModel.deleteTransation(indexPath: nil)
+                case .share :
+                    self.viewModel.share()
                 default:
                     return
                 }
             }
         }, cancel: {
-            
+
         })
+    }
+    
+    @objc private func onMoreDetails() {
+        viewModel.detailsExpand = !viewModel.detailsExpand
+        tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
+    }
+    
+    @objc private func onMoreUtxo() {
+        viewModel.utxoExpand = !viewModel.utxoExpand
+        tableView.reloadSections(IndexSet(arrayLiteral: 3), with: .fade)
     }
 }
 
@@ -103,18 +135,16 @@ extension TransactionViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 1:
-            return BMTableHeaderTitleView.boldHeight
-        case 2:
-            return (viewModel.paymentProof != nil) ? BMTableHeaderTitleView.boldHeight : 0
+            return BMTableHeaderTitleView.height
         case 3:
-            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? 60 : 0
+            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView.height : 0
         default:
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (indexPath.section == 0) ? WalletTransactionCell.height() : UITableView.automaticDimension
+        return UITableView.automaticDimension
     }
 }
 
@@ -129,11 +159,11 @@ extension TransactionViewController : UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return viewModel.details.count
+            return (viewModel.detailsExpand ? viewModel.details.count : 0)
         case 2:
             return (viewModel.paymentProof != nil) ? 1 : 0
         case 3:
-            return (Settings.sharedManager().isHideAmounts) ? 0 : viewModel.utxos.count
+            return (Settings.sharedManager().isHideAmounts) ? 0 : (viewModel.utxoExpand ? viewModel.utxos.count : 0)
         default:
             return 0
         }
@@ -144,14 +174,16 @@ extension TransactionViewController : UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView
-                .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: self.viewModel.transaction!, single:true, searchString:nil))
+                .dequeueReusableCell(withType: TransactionDetailCell.self, for: indexPath)
+                .configured(with: self.viewModel.transaction!)
             return cell
         case 1:
             let cell = tableView
-                .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
                 .configured(with: viewModel.details[indexPath.row])
+            cell.increaseSpace = true
             cell.delegate = self
+            cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
             return cell
         case 2:
             let cell = tableView
@@ -173,11 +205,9 @@ extension TransactionViewController : UITableViewDataSource {
         case 0:
             return nil
         case 1:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.general_info, bold: true)
-        case 2:
-            return (viewModel.paymentProof != nil) ? BMTableHeaderTitleView(title: Localizable.shared.strings.payment_proof, bold: true) : nil
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.details.uppercased(), handler: #selector(onMoreDetails), target: self, expand: viewModel.detailsExpand)
         case 3:
-            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: Localizable.shared.strings.utxo_list, bold: true) : nil
+            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: Localizable.shared.strings.utxo_list.uppercased(), handler: #selector(onMoreUtxo), target: self, expand: viewModel.utxoExpand) : nil
         default:
             return nil
         }
@@ -203,10 +233,10 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
 }
 
 extension TransactionViewController : GeneralInfoCellDelegate {
-    
+
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell) {
-            if viewModel.details[path.row].text == Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id) {
+            if viewModel.details[path.row].title == Localizable.shared.strings.kernel_id.uppercased() {
                 let kernelId = self.viewModel.transaction!.kernelId!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {

@@ -22,14 +22,16 @@ import Foundation
 class UTXOViewModel: NSObject {
     
     enum UTXOSelectedState: Int {
-        case all = 0
-        case available = 1
+        case available = 0
+        case progress = 1
         case spent = 2
         case unavailable = 3
-        case progress = 4
+        case maturing = 4
+        case outgoing = 5
+        case incoming = 6
     }
     
-    public var selectedState: UTXOSelectedState = .all {
+    public var selectedState: UTXOSelectedState = .available {
         didSet{
             self.filterUTXOS()
         }
@@ -39,17 +41,9 @@ class UTXOViewModel: NSObject {
     public var onStatusChanged : (() -> Void)?
 
     public var utxos = [BMUTXO]()
-
+    
     override init() {
         super.init()
-    }
-    
-    init(selected:UTXOSelectedState) {
-        super.init()
-        
-        self.selectedState = selected
-        
-        self.filterUTXOS()
         
         AppModel.sharedManager().addDelegate(self)
     }
@@ -59,37 +53,73 @@ class UTXOViewModel: NSObject {
     }
     
     private func filterUTXOS() {
-        switch selectedState {
-        case .all:
-            if let utox = AppModel.sharedManager().utxos {
-                self.utxos = utox as! [BMUTXO]
-            }
-        case .available:
-            if let utxos = AppModel.sharedManager().utxos {
-                self.utxos = utxos as! [BMUTXO]
-                self.utxos = self.utxos.filter { $0.status == BMUTXOAvailable}
-            }
-        case .spent:
-            if let utxos = AppModel.sharedManager().utxos {
-                self.utxos = utxos as! [BMUTXO]
-                self.utxos = self.utxos.filter { $0.status == BMUTXOSpent}
-            }
-        case .unavailable:
-            if let utxos = AppModel.sharedManager().utxos {
-                self.utxos = utxos as! [BMUTXO]
-                self.utxos = self.utxos.filter { $0.status == BMUTXOUnavailable}
-            }
-        case .progress:
-            if let utxos = AppModel.sharedManager().utxos {
-                self.utxos = utxos as! [BMUTXO]
-                self.utxos = self.utxos.filter { $0.status == BMUTXOIncoming || $0.status == BMUTXOOutgoing}
-            }
-        }
-        self.utxos = self.utxos.sorted(by: { $0.id < $1.id })
         
-        self.onDataChanged?()
+        DispatchQueue.main.async {
+            [weak self] in
+            
+            guard let strongSelf = self else { return }
+            
+            switch strongSelf.selectedState {
+            case .available:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 1}
+                }
+            case .spent:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 6}
+                }
+            case .unavailable:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 0}
+                }
+            case .progress:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3 || $0.status == 4}
+                }
+            case .incoming:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 4}
+                }
+            case .outgoing:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3}
+                }
+            case .maturing:
+                if let utxos = AppModel.sharedManager().utxos {
+                    strongSelf.utxos = utxos as! [BMUTXO]
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 2}
+                }
+            }
+            
+            var sortByDate = false
+            
+            for utxo in strongSelf.utxos {
+                let history = AppModel.sharedManager().getTransactionsFrom(utxo) as! [BMTransaction]
+                if history.count > 0 {
+                    utxo.transaction = history.last
+                    utxo.transactionDate = utxo.transaction?.createdTime ?? 0
+                    sortByDate = true
+                }
+            }
+            
+            if sortByDate {
+                strongSelf.utxos = strongSelf.utxos.sorted(by: { $0.transactionDate > $1.transactionDate })
+            }
+            else{
+                strongSelf.utxos = strongSelf.utxos.sorted(by: { $0.id < $1.id })
+            }
+            
+            strongSelf.onDataChanged?()
+        }
     }
 }
+
 
 extension UTXOViewModel: WalletModelDelegate {
     

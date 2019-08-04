@@ -85,7 +85,7 @@ extension UITableView {
         return nil
     }
     
-    public func reloadRow(_ row: AnyClass) {
+    public func reloadRow(_ row: AnyClass, animated:Bool = true) {
         
         for cell in visibleCells {
             
@@ -93,7 +93,7 @@ extension UITableView {
                 
                 if let path = indexPath(for: cell) {
                     
-                    reloadRows(at: [path], with: .fade)
+                    reloadRows(at: [path], with: (animated ? .fade : .none))
                     
                     return
                 }
@@ -141,5 +141,55 @@ extension UICollectionView {
     
     func dequeueReusableSupplementaryView<T>(ofKind elementKind: String, withType type: T.Type, for indexPath: IndexPath) -> T where T: Reusable {
         return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: type.reuseIdentifier, for: indexPath) as! T
+    }
+}
+
+extension UITableView {
+    
+    func rowsHeight() -> CGFloat {
+        var cellsHeight:CGFloat = 0;
+        let sections = numberOfSections
+        for section in 0..<sections
+        {
+            
+            let rows = numberOfRows(inSection: section)
+            
+            for row in 0..<rows
+            {
+                let indexPath = IndexPath(item: row, section: section)
+                cellsHeight += self.delegate?.tableView?(self, heightForRowAt: indexPath) ?? 0
+            }
+        }
+        return cellsHeight;
+    }
+}
+
+extension UITableView {
+    public func reloadDataAndKeepOffset() {
+        // stop scrolling
+        setContentOffset(contentOffset, animated: false)
+        
+        // calculate the offset and reloadData
+        let beforeContentSize = contentSize
+        reloadData()
+        layoutIfNeeded()
+        let afterContentSize = contentSize
+        
+        // reset the contentOffset after data is updated
+        let newOffset = CGPoint(
+            x: contentOffset.x + (afterContentSize.width - beforeContentSize.width),
+            y: contentOffset.y + (afterContentSize.height - beforeContentSize.height))
+        setContentOffset(newOffset, animated: false)
+    }
+}
+
+extension UITableView {
+    
+    func reloadWithoutAnimation() {
+        let lastScrollOffset = contentOffset
+        beginUpdates()
+        endUpdates()
+        layer.removeAllAnimations()
+        setContentOffset(lastScrollOffset, animated: false)
     }
 }

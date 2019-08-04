@@ -30,6 +30,13 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mdh-nY-eDo">
                         <rect key="frame" x="15" y="0.0" width="290" height="154.5"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NHf-s5-cUd">
+                                <rect key="frame" x="0.0" y="0.0" width="290" height="154.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="onExpandWithSender:" destination="Rlt-U0-51n" eventType="touchUpInside" id="FqY-Xq-pMk"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlK-Sl-djr">
                                 <rect key="frame" x="15" y="15" width="90.5" height="21"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
@@ -139,8 +146,12 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="TlK-Sl-djr" firstAttribute="leading" secondItem="Mdh-nY-eDo" secondAttribute="leading" constant="15" id="8mp-JE-9Dw"/>
+                            <constraint firstAttribute="bottom" secondItem="NHf-s5-cUd" secondAttribute="bottom" id="K4O-v7-89H"/>
+                            <constraint firstItem="NHf-s5-cUd" firstAttribute="top" secondItem="Mdh-nY-eDo" secondAttribute="top" id="Meh-zI-oUa"/>
                             <constraint firstItem="LQy-uL-llp" firstAttribute="leading" secondItem="Mdh-nY-eDo" secondAttribute="leading" constant="15" id="Pd6-8Y-tEt"/>
+                            <constraint firstAttribute="trailing" secondItem="NHf-s5-cUd" secondAttribute="trailing" id="UNv-Wj-Wg5"/>
                             <constraint firstItem="kO2-nM-Mbs" firstAttribute="top" secondItem="Mdh-nY-eDo" secondAttribute="top" constant="22" id="W2Q-9v-L3o"/>
+                            <constraint firstItem="NHf-s5-cUd" firstAttribute="leading" secondItem="Mdh-nY-eDo" secondAttribute="leading" id="XNG-cN-swO"/>
                             <constraint firstItem="TlK-Sl-djr" firstAttribute="top" secondItem="Mdh-nY-eDo" secondAttribute="top" constant="15" id="o3J-Rp-4bu"/>
                             <constraint firstItem="LQy-uL-llp" firstAttribute="top" secondItem="TlK-Sl-djr" secondAttribute="bottom" constant="20" id="ojF-kf-DqR"/>
                             <constraint firstAttribute="trailing" secondItem="LQy-uL-llp" secondAttribute="trailing" constant="5" id="sRi-V2-Bni"/>

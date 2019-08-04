@@ -24,6 +24,8 @@ class UITextViewPlacholder : UITextView
     
     public var placholderFont:UIFont?
     public var placholderColor:UIColor?
+    public var clearButton = UIButton()
+    public var isInput = false
 
     
     override open var attributedText: NSAttributedString! {
@@ -73,11 +75,29 @@ class UITextViewPlacholder : UITextView
         if let placeholderLabel = self.viewWithTag(100) as? UILabel {
             placeholderLabel.isHidden = self.text.lengthOfBytes(using: .utf8) > 0
         }
+        
+        if let text = self.text, text.isEmpty == false, self.isInput {
+            clearButton.isHidden = false
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 30)
+        }
+        else{
+            clearButton.isHidden = true
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
+        }
     }
     
     @objc private func attibutedTextChanged() {
         if let placeholderLabel = self.viewWithTag(100) as? UILabel {
             placeholderLabel.isHidden = self.attributedText.string.lengthOfBytes(using: .utf8) > 0
+        }
+        
+        if let text = self.attributedText, text.string.isEmpty == false, self.isInput {
+            clearButton.isHidden = false
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 30)
+        }
+        else{
+            clearButton.isHidden = true
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
         }
     }
     
@@ -122,5 +142,5 @@ class UITextViewPlacholder : UITextView
 
         self.addSubview(placeholderLabel)
         self.resizePlaceholder()
-    }
+    }    
 }

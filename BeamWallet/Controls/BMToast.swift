@@ -25,7 +25,7 @@ class BMToast: UIView {
     private static var toast: BMToast!
     private static var timer:Timer!
     
-    init(text:String) {
+    init(text:String, shadow:Bool = true) {
         let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15
 
         super.init(frame: CGRect(x: 20, y: UIScreen.main.bounds.size.height - 44 - offset, width: UIScreen.main.bounds.size.width - 40, height: 44))
@@ -34,11 +34,14 @@ class BMToast: UIView {
         
         layer.cornerRadius = 8
         layer.masksToBounds = false
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 1)
-        layer.shadowOpacity = 0.45
-        layer.shadowPath = UIBezierPath(rect: bounds).cgPath
-        layer.shadowRadius = 1.0
+   
+        if shadow {
+            layer.shadowColor = UIColor.black.cgColor
+            layer.shadowOffset = CGSize(width: 0, height: 1)
+            layer.shadowOpacity = 0.45
+            layer.shadowPath = UIBezierPath(rect: bounds).cgPath
+            layer.shadowRadius = 1.0
+        }
         
         let label = UILabel(frame: CGRect(x: 20, y: 5, width: frame.size.width - 30, height: 34))
         label.font = RegularFont(size: 14)
@@ -52,7 +55,7 @@ class BMToast: UIView {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    public static func show(text:String) {
+    public static func show(text:String, shadow:Bool = true) {
         
         if timer != nil {
             timer.invalidate()
@@ -69,7 +72,7 @@ class BMToast: UIView {
         
         let app = UIApplication.shared.delegate as! AppDelegate
         
-        toast = BMToast(text: text)
+        toast = BMToast(text: text, shadow: shadow)
     
         app.window?.addSubview(toast)
     

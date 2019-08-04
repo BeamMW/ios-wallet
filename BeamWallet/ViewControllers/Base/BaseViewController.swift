@@ -47,6 +47,18 @@ class BaseViewController: UIViewController {
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if let rightButton = view.viewWithTag(20191), let titleLabel = view.viewWithTag(987) {
+            let offset = rightButton.frame.size.width + 25
+            var frame = titleLabel.frame
+            frame.origin.x = offset
+            frame.size.width = view.bounds.width - (offset * 2)
+            titleLabel.frame = frame
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -87,6 +99,8 @@ class BaseViewController: UIViewController {
     }
     
     public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true, menu:Bool = false) {
+        isGradient = true
+        
         view.viewWithTag(10)?.removeFromSuperview()
         view.viewWithTag(11)?.removeFromSuperview()
 
@@ -145,26 +159,14 @@ class BaseViewController: UIViewController {
                 let y:CGFloat = Device.isXDevice ? 55 : 30
                 
                 let titleLabel = UILabel()
-                titleLabel.frame = CGRect(x: 0, y: y, width: 0, height: 50)
+                titleLabel.frame = CGRect(x: 60, y: y, width: w - 120, height: 50)
                 titleLabel.font = isUppercasedTitle ? ProMediumFont(size: 20) : SemiboldFont(size: 17)
                 titleLabel.numberOfLines = 1
                 titleLabel.attributedText = attributedString
                 titleLabel.textColor = UIColor.white
                 titleLabel.textAlignment = .center
-                titleLabel.sizeToFit()
                 titleLabel.tag = 987
-                
-                if titleLabel.frame.size.width > (UIScreen.main.bounds.size.width - 100)
-                {
-                    let labelMaxW = (UIScreen.main.bounds.size.width - 100)
-                    titleLabel.frame = CGRect(x: (w - labelMaxW)/2, y: y, width: labelMaxW, height: 50)
-                }
-                else{
-                    titleLabel.frame = CGRect(x: (w - titleLabel.frame.size.width)/2, y: y, width: titleLabel.frame.size.width, height: 50)
-                }
-                
-                titleLabel.adjustsFontSizeToFitWidth = true
-                titleLabel.minimumScaleFactor = 0.7
+                titleLabel.lineBreakMode = .byTruncatingMiddle
                 
                 view.addSubview(titleLabel)
             }
@@ -237,7 +239,7 @@ class BaseViewController: UIViewController {
         rightButton.tag = 20191
         rightButton.titleLabel?.font = RegularFont(size: 16)
         rightButton.contentHorizontalAlignment = .right
-        rightButton.tintColor = isGradient ? UIColor.white : UIColor.main.brightTeal
+        rightButton.tintColor = UIColor.main.brightTeal
         rightButton.setTitle(title, for: .normal)
         rightButton.addTarget(target, action: selector!, for: .touchUpInside)
         rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-w-15, y: y, width: w, height: 40)
@@ -246,20 +248,41 @@ class BaseViewController: UIViewController {
         self.view.addSubview(rightButton)
     }
     
+    public func addRightButtons(image:[UIImage?], target:Any?, selector:[Selector?]) {
+        let y:CGFloat = Device.isXDevice ? 60 : 35
+        
+        self.view.viewWithTag(20194)?.removeFromSuperview()
+        
+        let stackView = UIView()
+        var x:CGFloat = 0
+        
+        for i in 0...image.count - 1 {
+            let rightButton = UIButton(type: .system)
+            rightButton.tintColor = UIColor.white
+            rightButton.setImage(image[i], for: .normal)
+            rightButton.contentHorizontalAlignment = .right
+            rightButton.addTarget(target, action: selector[i]!, for: .touchUpInside)
+            rightButton.frame = CGRect(x: x, y: 0, width: 40, height: 40)
+            stackView.addSubview(rightButton)
+            
+            x = x + 45
+        }
+
+        stackView.frame = CGRect(x: UIScreen.main.bounds.size.width-x-15, y: y, width: x, height: 40)
+
+        self.view.addSubview(stackView)
+    }
+    
     public func enableRightButton(enabled:Bool) {
         if let button = view.viewWithTag(20191) as? UIButton {
             button.isEnabled = enabled
         }
     }
     
-    public func removeRightButton() {
-        self.view.viewWithTag(20191)?.removeFromSuperview()
-    }
-    
     public func removeLeftButton() {
         self.view.viewWithTag(13)?.removeFromSuperview()
     }
-
+    
 //MARK: - Feedback
         
     public func showRateDialog() {
@@ -271,7 +294,12 @@ class BaseViewController: UIViewController {
         view.layer.cornerRadius = 8
         view.addSubview(logoView)
         
-        let showAlert = UIAlertController(title: Localizable.shared.strings.rate_title, message: Localizable.shared.strings.rate_text, preferredStyle: .alert)
+        var title = Localizable.shared.strings.rate_title
+        if !title.contains("\n") {
+            title = "\n\n\n" + title
+        }
+        
+        let showAlert = UIAlertController(title: title, message: Localizable.shared.strings.rate_text, preferredStyle: .alert)
         showAlert.view.addSubview(view)
         
         let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 285)

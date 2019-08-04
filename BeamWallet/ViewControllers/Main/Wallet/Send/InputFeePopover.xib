@@ -24,6 +24,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InputFeePopover" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="feeField" destination="YOk-TX-DM6" id="TeB-k6-DB2"/>
+                <outlet property="grothTitleLabelY" destination="bbC-sr-h4m" id="IWv-w4-KcU"/>
                 <outlet property="titleLabel" destination="6VT-6U-Hnp" id="yNc-wz-gBf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="visualView" destination="HKO-EM-dzb" id="DWn-9K-j80"/>
@@ -72,7 +73,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GROTH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-v9-g43">
-                                    <rect key="frame" x="259" y="44" width="70" height="21"/>
+                                    <rect key="frame" x="259" y="47" width="70" height="19.5"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="70" id="csr-gL-HN4"/>
                                     </constraints>
@@ -111,16 +112,15 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="bottom" secondItem="Ieq-v9-g43" secondAttribute="bottom" constant="18" id="1J0-hs-byy"/>
                                 <constraint firstAttribute="trailing" secondItem="Ieq-v9-g43" secondAttribute="trailing" constant="15" id="2ON-pO-hDf"/>
                                 <constraint firstAttribute="bottom" secondItem="YOk-TX-DM6" secondAttribute="bottom" constant="10" id="IRG-Bx-xy1"/>
                                 <constraint firstItem="YOk-TX-DM6" firstAttribute="top" secondItem="6VT-6U-Hnp" secondAttribute="bottom" constant="10" id="OJe-hk-sWz"/>
+                                <constraint firstItem="Ieq-v9-g43" firstAttribute="centerY" secondItem="pEB-ZD-CPb" secondAttribute="centerY" constant="15" id="bbC-sr-h4m"/>
                                 <constraint firstAttribute="trailing" secondItem="6VT-6U-Hnp" secondAttribute="trailing" constant="15" id="dZ8-3v-mYF"/>
                                 <constraint firstItem="6VT-6U-Hnp" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="ev2-iZ-eCA"/>
                                 <constraint firstItem="YOk-TX-DM6" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="fug-Gi-r9f"/>
                                 <constraint firstItem="6VT-6U-Hnp" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="top" constant="10" id="jGX-zS-LgC"/>
                                 <constraint firstItem="Ieq-v9-g43" firstAttribute="leading" secondItem="YOk-TX-DM6" secondAttribute="trailing" constant="5" id="r1A-pU-o32"/>
-                                <constraint firstItem="Ieq-v9-g43" firstAttribute="top" secondItem="6VT-6U-Hnp" secondAttribute="bottom" constant="17" id="tOq-Ur-coI"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QhX-9d-901" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
@@ -154,9 +154,9 @@
                         <constraint firstItem="QhX-9d-901" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="bottom" constant="50" id="UbR-Bt-bRC"/>
                         <constraint firstAttribute="trailing" secondItem="M0h-a5-hOs" secondAttribute="trailing" constant="3" id="cSe-2V-mrY"/>
                         <constraint firstItem="M0h-a5-hOs" firstAttribute="top" secondItem="tFf-TN-Dqo" secondAttribute="top" constant="3" id="ds0-Jd-wdd"/>
-                        <constraint firstAttribute="height" constant="270" id="mr1-Ae-ddd"/>
                         <constraint firstItem="pEB-ZD-CPb" firstAttribute="leading" secondItem="tFf-TN-Dqo" secondAttribute="leading" constant="15" id="nx6-gc-JKW"/>
                         <constraint firstItem="pEB-ZD-CPb" firstAttribute="top" secondItem="M0h-a5-hOs" secondAttribute="bottom" constant="20" id="oDx-vo-AjR"/>
+                        <constraint firstAttribute="bottom" secondItem="QhX-9d-901" secondAttribute="bottom" constant="30" id="rGt-La-erW"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

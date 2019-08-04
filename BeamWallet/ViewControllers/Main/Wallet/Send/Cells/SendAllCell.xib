@@ -75,7 +75,7 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="send_all"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="add_all"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onSendAllWithSender:" destination="nnP-fG-aiP" eventType="touchUpInside" id="CNA-I2-cEZ"/>

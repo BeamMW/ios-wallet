@@ -42,6 +42,7 @@ class BMFieldCell: BaseCell {
         
         mainStack.isUserInteractionEnabled = true
         mainStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
+        
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
@@ -111,7 +112,7 @@ extension BMFieldCell : UITextFieldDelegate {
                 if let text = obj {
                     self.textField.text = text
                     self.delegate?.textValueDidChange?(self, text, false)
-                    self.textField.resignFirstResponder()
+                    _ = self.textField.resignFirstResponder()
                 }
             }
             textField.inputAccessoryView = inputBar
@@ -121,10 +122,20 @@ extension BMFieldCell : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.delegate?.textValueDidReturn?(self)
+        
+        if nameLabel.text == Localizable.shared.strings.transaction_comment {
+            textField.placeholder = String.empty()
+            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.delegate?.textValueDidBegin?(self)
+        
+        if nameLabel.text == Localizable.shared.strings.transaction_comment {
+            textField.placeholder = Localizable.shared.strings.not_shared.capitalizingFirstLetter()
+            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -137,27 +148,21 @@ extension BMFieldCell : UITextFieldDelegate {
         
         return true
     }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.textField.status = .normal
+        self.delegate?.textValueDidChange?(self, String.empty(), true)
+        
+        return true
+    }
 }
 
 extension BMFieldCell: Configurable {
     
-    func configure(with options: (name: String, value:String, rightIcon:UIImage? )) {
+    func configure(with options: (name: String, value:String)) {
         textField.text = options.value
         nameLabel.text = options.name
         nameLabel.letterSpacing = 2
-        
-        if let icon = options.rightIcon {
-            mainStack.spacing = 10
-            
-            let button = UIButton(type: .system)
-            button.tintColor = UIColor.white
-            button.frame = CGRect(x: 0, y: 0, width: 50, height: 32)
-            button.setImage(icon, for: .normal)
-            button.contentHorizontalAlignment = .right
-            button.addTarget(self, action: #selector(onRightButton), for: .touchUpInside)
-            textField.rightView = button
-            textField.rightViewMode = .always
-        }
         
         if options.name == Localizable.shared.strings.name.uppercased() {
             textField.placeholder = Localizable.shared.strings.no_name

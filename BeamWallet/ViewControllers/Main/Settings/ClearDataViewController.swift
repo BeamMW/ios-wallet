@@ -65,7 +65,7 @@ class ClearDataViewController: BaseTableViewController {
             str = deleted.joined(separator: String.empty())
         }
         else if deleted.count == 2 {
-            str = deleted.joined(separator: Localizable.shared.strings.and)
+            str = deleted.joined(separator: " \(Localizable.shared.strings.and) ")
         }
         else if deleted.count == 3 {
             str = deleted.joined(separator: ", ")

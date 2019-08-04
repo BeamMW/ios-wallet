@@ -18,6 +18,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 enum {
     BMTransactionStatusPending = 0,
@@ -51,6 +52,7 @@ typedef UInt64 BMTransactionStatus;
 @property (nonatomic,strong) NSString *senderContactName;
 @property (nonatomic,strong) NSString *receiverContactName;
 
+-(UIImage*)statusIcon;
     
 -(NSString*)formattedDate;
 -(NSString*)shortDate;

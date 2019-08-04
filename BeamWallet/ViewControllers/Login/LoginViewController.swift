@@ -23,11 +23,14 @@ class LoginViewController: BaseViewController {
 
     @IBOutlet private weak var bgView: UIImageView!
     @IBOutlet private weak var restoreButton: UIButton!
+    @IBOutlet private weak var languageButton: UIButton!
+    @IBOutlet private weak var createButton: UIButton!
+    @IBOutlet private weak var titleLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        restoreButton.setTitle(Localizable.shared.strings.restore_wallet_title, for: .normal)
+        setTitles()
         
         switch Settings.sharedManager().target {
         case Testnet:
@@ -35,29 +38,33 @@ class LoginViewController: BaseViewController {
         case Masternet:
             bgView.image = BackgroundMasternet()
         default:
-            return
-        }
-        
-        if AppDelegate.newFeaturesEnabled && Settings.sharedManager().target == Testnet {
-            restoreButton.isHidden = false
+            break
         }
     }
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    private func setTitles() {
+        titleLabel.text = Localizable.shared.strings.beam_title
+        createButton.setTitle(Localizable.shared.strings.create_new_wallet.lowercased(), for: .normal)
+        restoreButton.setTitle(Localizable.shared.strings.restore_wallet_title, for: .normal)
+        languageButton.setTitle(Settings.sharedManager().shortLanguageName(), for: .normal)
     }
     
     //MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
+        AppModel.sharedManager().resetWallet(true)
+
         if AppModel.sharedManager().canRestoreWallet() {
             
             self.confirmAlert(title: Localizable.shared.strings.restore_wallet_title, message: Localizable.shared.strings.restore_wallet_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.restore_wallet_title, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
                 AppModel.sharedManager().isRestoreFlow = true;
-                
-                self.pushViewController(vc: InputPhraseViewController())
+                self.pushViewController(vc: RestoreOptionsViewController())
             }
         }
         else{
@@ -67,9 +74,17 @@ class LoginViewController: BaseViewController {
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {
+        AppModel.sharedManager().resetWallet(true)
         AppModel.sharedManager().isRestoreFlow = false;
-        
+
         pushViewController(vc: IntroPhraseViewController())
     }
 
+    @IBAction func onLanguage(sender :UIButton) {
+        let vc = LanguagePickerViewController()
+        vc.completion = {[weak self] obj in
+            self?.setTitles()
+        }
+        pushViewController(vc: vc)
+    }
 }

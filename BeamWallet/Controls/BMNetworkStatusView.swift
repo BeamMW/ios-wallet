@@ -23,7 +23,7 @@ class BMNetworkStatusView: UIView {
 
     private var statusLabel: UILabel!
     private var statusView: UIView!
-    private var indicatorView:UIActivityIndicatorView!
+    private var indicatorView:MaterialActivityIndicatorView!
     private var fromNib = false
     
     init() {
@@ -48,7 +48,6 @@ class BMNetworkStatusView: UIView {
         
         statusView = UIView(frame: CGRect(x: !fromNib ? 15 : 0, y: !fromNib ? 17 : 2, width: 12, height: 12))
         statusView.layer.cornerRadius = 6
-        statusView.layer.masksToBounds = true
         addSubview(statusView)
         
         statusLabel = UILabel(frame: CGRect(x: !fromNib ? 33 : 18, y: !fromNib ? 13 : -2, width: UIScreen.main.bounds.size.width-50, height: 18))
@@ -58,8 +57,8 @@ class BMNetworkStatusView: UIView {
         statusLabel.adjustFontSize = true
         addSubview(statusLabel)
         
-        indicatorView = UIActivityIndicatorView(frame: statusView.frame)
-        indicatorView.hidesWhenStopped = true
+        indicatorView = MaterialActivityIndicatorView(frame: statusView.frame)
+        indicatorView.color = UIColor.main.green
         addSubview(indicatorView)
         
         
@@ -70,6 +69,10 @@ class BMNetworkStatusView: UIView {
         else if (AppModel.sharedManager().isConnecting)
         {
             onNetwotkStartConnecting(true)
+        }
+        else if (AppModel.sharedManager().isNodeChanging)
+        {
+            onNodeStartChanging()
         }
         else{
             onNetwotkStatusChange(AppModel.sharedManager().isConnected)
@@ -87,13 +90,18 @@ extension BMNetworkStatusView: WalletModelDelegate {
     func onNetwotkStatusChange(_ connected: Bool) {
         
         DispatchQueue.main.async {
+            if AppModel.sharedManager().isNodeChanging {
+                return
+            }
             self.indicatorView.stopAnimating()
             self.statusView.alpha = 1
-            
+            self.statusView.layer.borderWidth = 0
+
             self.statusLabel.x = self.fromNib ? 18 : 33
             
              if connected {
                 self.statusView.backgroundColor = UIColor.main.green
+                self.statusView.glow()
                 
                 self.statusLabel.text = Localizable.shared.strings.online.lowercased()
 
@@ -101,7 +109,8 @@ extension BMNetworkStatusView: WalletModelDelegate {
             }
             else{
                 self.statusView.backgroundColor = UIColor.main.red
-          
+                self.statusView.glow()
+
                 if AppModel.sharedManager().isInternetAvailable == false {
                     self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
                 }
@@ -115,6 +124,14 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 }
                 
                 self.statusLabel.textColor = UIColor.main.red
+                
+                if self.statusLabel.text == Localizable.shared.strings.offline.lowercased() {
+                    self.statusLabel.textColor = UIColor.main.blueyGrey
+                    self.statusView.backgroundColor = UIColor.clear
+                    self.statusView.layer.borderWidth = 1
+                    self.statusView.layer.borderColor = UIColor.main.blueyGrey.cgColor
+                    self.statusView.glow()
+                }
             }
         }
     }
@@ -122,7 +139,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
         
         DispatchQueue.main.async {
-            if done != total {
+            if done != total  {
                 self.indicatorView.color = UIColor.main.green
                 self.indicatorView.startAnimating()
                 
@@ -132,7 +149,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
-                if AppModel .sharedManager().isConnecting {
+                if AppModel.sharedManager().isConnecting {
                     self.onNetwotkStartConnecting(true)
                 }
                 else{
@@ -143,25 +160,25 @@ extension BMNetworkStatusView: WalletModelDelegate {
         }
     }
     
+    func onNodeStartChanging() {
+        DispatchQueue.main.async {
+            self.statusView.alpha = 0
+            
+            self.indicatorView.color = UIColor.main.orange
+            self.indicatorView.startAnimating()
+            
+            self.statusLabel.x = self.fromNib ? 20 : 35
+            self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
+            self.statusView.backgroundColor = UIColor.main.orange
+            self.statusLabel.textColor = UIColor.main.orange
+        }
+    }
+    
     func onNetwotkStartConnecting(_ connecting: Bool) {
         DispatchQueue.main.async {
             if connecting {
                 //https://github.com/BeamMW/ios-wallet/issues/194
-                if AppDelegate.newFeaturesEnabled {
-                    self.onNetwotkStatusChange(true)
-                }
-                else{
-                    self.statusView.alpha = 0
-                    
-                    self.indicatorView.color = UIColor.main.orange
-                    self.indicatorView.startAnimating()
-                    
-                    self.statusLabel.x = self.fromNib ? 20 : 35
-                    self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
-                    self.statusView.backgroundColor = UIColor.main.orange
-                    self.statusLabel.textColor = UIColor.main.orange
-
-                }
+                self.onNetwotkStatusChange(true)
             }
         }
     }

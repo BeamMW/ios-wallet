@@ -66,6 +66,12 @@ class RestoreManager: NSObject {
         if Settings.sharedManager().target == Testnet {
             url = URL(string: "https://mobile-restore.beam.mw/testnet/testnet_recovery.bin")
         }
+        else if Settings.sharedManager().target == Mainnet {
+            url = URL(string: "https://mobile-restore.beam.mw/mainnet/mainnet_recovery.bin")
+        }
+        else{
+            url = URL(string: "https://mobile-restore.beam.mw/masternet/masternet_recovery.bin")
+        }
         
         if let downloadUrl = url {
             BackgroundDownloader.shared.startDownloading(downloadUrl, filePath)

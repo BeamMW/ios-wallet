@@ -52,7 +52,13 @@
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
 
     NSDateFormatter *f = [NSDateFormatter new];
-    [f setDateFormat:@"dd MMM"];
+    
+    if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+        [f setDateFormat:@"MMM dd"];
+    }
+    else{
+        [f setDateFormat:@"dd MMM"];
+    }
     [f setLocale:locale];
 
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
@@ -64,7 +70,24 @@
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
 
     NSDateFormatter *f = [NSDateFormatter new];
-    [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+    
+    if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+        if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+            [f setDateFormat:@"yyyy MMM dd  |  hh:mm a"];
+        }
+        else{
+            [f setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+        }
+    }
+    else{
+        if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+            [f setDateFormat:@"dd MMM yyyy  |  hh:mm a"];
+        }
+        else{
+            [f setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+        }
+    }
+    
     [f setLocale:locale];
 
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
@@ -139,6 +162,63 @@
     }
     
     return NO;
+}
+
+
+-(UIImage*)statusIcon {
+    if (self.isCancelled)
+    {
+        return [UIImage imageNamed:@"icon-canceled"];
+    }
+    else if (self.isFailed)
+    {
+        return [UIImage imageNamed:@"icon-failed"];
+    }
+    else if(self.isExpired)
+    {
+        return [UIImage imageNamed:@"icon-failed"];
+    }
+    else if (_isSelf) {
+        switch (_enumStatus) {
+            case BMTransactionStatusPending:
+                return [UIImage imageNamed:@"icon-sending-own"];
+            case BMTransactionStatusInProgress:
+                return [UIImage imageNamed:@"icon-sending-own"];
+            case BMTransactionStatusRegistering:
+                return [UIImage imageNamed:@"icon-sending-own"];
+            case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-sent-own"];
+            default:
+                return [UIImage imageNamed:@"icon-sent-own"];
+        }
+    }
+    else if(_isIncome) {
+        switch (_enumStatus) {
+            case BMTransactionStatusPending:
+                return [UIImage imageNamed:@"icon-receiving"];
+            case BMTransactionStatusInProgress:
+                return [UIImage imageNamed:@"icon-receiving"];
+            case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-received"];
+            default:
+                return [UIImage imageNamed:@"icon-received"];
+        }
+    }
+    else{
+        switch (_enumStatus) {
+            case BMTransactionStatusPending:
+                return [UIImage imageNamed:@"icon-icon-sending"];
+            case BMTransactionStatusInProgress:
+                return [UIImage imageNamed:@"icon-icon-sending"];
+            case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-sent"];
+            default:
+                return [UIImage imageNamed:@"icon-sent"];
+        }
+    }
+    
+    
+    return [UIImage imageNamed:@"icon-sent"];
 }
 
 @end

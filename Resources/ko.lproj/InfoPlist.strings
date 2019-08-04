@@ -1,0 +1,4 @@
+"NSPhotoLibraryAddUsageDescription" = "Save transaction details and scan QR-codes from the photos";
+"NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
+"NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition";
+"NSCameraUsageDescription" = "The camera is needed to scan QR codes";

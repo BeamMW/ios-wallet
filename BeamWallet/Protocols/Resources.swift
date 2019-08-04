@@ -205,3 +205,73 @@ func ClearIcon() -> UIImage? {
     return UIImage(named: "clearIcon")
 }
 
+func IconExpired() -> UIImage? {
+    return UIImage(named: "iconExpired")
+}
+
+func IconUtxoEmpty() -> UIImage? {
+    return UIImage(named: "iconUtxoEmptyState")
+}
+
+func IconAddressbookEmpty() -> UIImage? {
+    return UIImage(named: "iconAddressbookEmptyState")
+}
+
+func IconWalletEmpty() -> UIImage? {
+    return UIImage(named: "iconWalletEmpty")
+}
+
+func IconCloud() -> UIImage? {
+    return UIImage(named: "icnCloud")
+}
+
+func IconManual() -> UIImage? {
+    return UIImage(named: "icnLaptop")
+}
+
+func IconNextBlue() -> UIImage? {
+    return UIImage(named: "iconNextBlue")
+}
+
+func IconCheckmarkEmpty() -> UIImage? {
+    return UIImage(named: "icnCheckmarkEmpty")
+}
+
+func IconCheckmarkFull() -> UIImage? {
+    return UIImage(named: "icnCheckmarkFull")
+}
+
+func IconAdd() -> UIImage? {
+    return UIImage(named: "icnAdd")
+}
+
+func IconQR() -> UIImage? {
+    return UIImage(named: "iconQr")
+}
+
+func IconEdit() -> UIImage? {
+    return UIImage(named: "icnEdit")
+}
+
+func IconUTXOSecurity() -> UIImage? {
+    return UIImage(named: "icEyeCrossedBig")
+}
+
+func IconSent() -> UIImage? {
+    return UIImage(named: "icon-sent")
+}
+
+func IconReceived() -> UIImage? {
+    return UIImage(named: "icon-received")
+}
+
+func ExternalLinkGreen() -> UIImage? {
+    return UIImage(named: "iconExternalLinkGreen")
+}
+
+func IconContact() -> UIImage? {
+    return UIImage(named: "iconContact")
+}
+
+
+

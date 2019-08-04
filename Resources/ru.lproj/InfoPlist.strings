@@ -1,0 +1,4 @@
+"NSPhotoLibraryAddUsageDescription" = "Сохранить детали транзакции и сканировать QR-коды из фотографий";
+"NSPhotoLibraryUsageDescription" = "Предоставьте доступ к галерее для выбора QR-кода";
+"NSFaceIDUsageDescription" = "Это приложение требует разрешения Face ID для аутентификации с помощью распознавания лица";
+"NSCameraUsageDescription" = "Камера необходима для сканирования QR-кодов";

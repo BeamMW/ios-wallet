@@ -27,19 +27,16 @@ import FirebaseMessaging
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    public static let newFeaturesEnabled = true
-
     private var scannedTGUserId = String.empty()
 
-    var securityScreen = AutoSecurityScreen()
-    var lockScreen = LockScreen()
+    var securityScreen = BMAutoSecurityScreen()
 
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     var completionHandler: ((UIBackgroundFetchResult) -> Void)?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-            
+        
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
 
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
@@ -73,6 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         
+        CrowdinManager.updateLocalizations()
+
         return true
     }
     
@@ -87,12 +86,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-   
+ 
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
     
-        if AppModel.sharedManager().isRestoreFlow {
+        if AppModel.sharedManager().connectionTimer != nil  {
+            AppModel.sharedManager().connectionTimer?.invalidate()
+            AppModel.sharedManager().connectionTimer = nil
+        }
+        
+        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
             registerBackgroundTask()
         }
         
@@ -118,18 +122,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        AppModel.sharedManager().isConnecting = true
+        if AppModel.sharedManager().isConnected {
+            AppModel.sharedManager().isConnecting = true
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         
-        if AppModel.sharedManager().isRestoreFlow {
+        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
             endBackgroundTask()
         }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-
+        
         NotificationManager.sharedManager.clearNotifications()
                 
         if ShortcutManager.canHandle() {

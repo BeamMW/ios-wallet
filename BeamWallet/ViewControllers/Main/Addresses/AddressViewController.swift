@@ -23,6 +23,15 @@ class AddressViewController: BaseTableViewController {
 
     private var addressViewModel:DetailAddressViewModel!
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
         self.addressViewModel = DetailAddressViewModel(address: address)
@@ -35,14 +44,16 @@ class AddressViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register([GeneralInfoCell.self, WalletTransactionCell.self])
+        tableView.register([WalletTransactionCell.self, BMMultiLinesCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         
-        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
-
-        title = (addressViewModel.isContact ? Localizable.shared.strings.contact : Localizable.shared.strings.address)
+        addRightButtons(image: [IconScanQr(), IconEdit()], target: self, selector: [#selector(onQRCode),#selector(onEdit)])
+        
+        title = Localizable.shared.strings.details
         
         subscribeToUpdates()
     }
@@ -84,26 +95,13 @@ class AddressViewController: BaseTableViewController {
             }
         }
     }
-
-    @objc private func onMore(sender:UIBarButtonItem) {
-        BMPopoverMenu.show(menuArray: addressViewModel.actionItems(), done: { (selectedItem) in
-            if let item = selectedItem {
-                switch (item.action) {
-                case .show_qr_code:
-                    self.addressViewModel.onQRCodeAddress(address: self.addressViewModel.address!)
-                case .copy_address :
-                    self.addressViewModel.onCopyAddress(address: self.addressViewModel.address!)
-                case .edit_address :
-                    self.addressViewModel.onEditAddress(address: self.addressViewModel.address!)
-                case .delete_address :
-                    self.addressViewModel.onDeleteAddress(address: self.addressViewModel.address!, indexPath: nil)
-                default:
-                    return
-                }
-            }
-        }, cancel: {
-
-        })
+    
+    @objc private func onQRCode(sender:UIButton) {
+        self.addressViewModel.onQRCodeAddress(address: self.addressViewModel.address!)
+    }
+    
+    @objc private func onEdit(sender:UIButton) {
+        self.addressViewModel.onEditAddress(address: self.addressViewModel.address!)
     }
 }
 
@@ -120,6 +118,14 @@ extension AddressViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 && addressViewModel.transactions.count > 0 {
             return BMTableHeaderTitleView.boldHeight
+        }
+        
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 30
         }
         
         return 0
@@ -162,14 +168,15 @@ extension AddressViewController : UITableViewDataSource {
         
         if indexPath.section == 0 {
             let cell = tableView
-                .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
+                .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
                 .configured(with: addressViewModel.details[indexPath.row])
+            cell.increaseSpace = true
             return cell
         }
         else{
             let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: addressViewModel.transactions[indexPath.row], single:false, searchString:nil))
+                .configured(with: (row: indexPath.row+1, transaction: addressViewModel.transactions[indexPath.row], single:false, searchString:nil))
             return cell
         }
         
@@ -177,7 +184,22 @@ extension AddressViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 && addressViewModel.transactions.count > 0 {
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.transactions, bold: true)
+            let header =  BMTableHeaderTitleView(title: Localizable.shared.strings.transactions_list.uppercased(), bold: true)
+            header.backgroundColor = UIColor.main.marineThree
+            header.letterSpacing = 1.5
+            header.titleLabel.textColor = UIColor.white
+            header.isCenter = true
+            return header
+        }
+        
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 {
+            let header = UIView()
+            header.backgroundColor = UIColor.clear
+            return header
         }
         
         return nil

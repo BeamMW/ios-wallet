@@ -18,6 +18,7 @@
 //
 
 #import "BMCategory.h"
+#import "StringLocalize.h"
 
 @implementation BMCategory
 
@@ -42,7 +43,7 @@
 
 +(BMCategory*_Nonnull)noneCategory {
     BMCategory *category = [[BMCategory alloc] init];
-    category.name = @"None";
+    category.name = [@"none" localized];
     category.ID = 0;
     category.color = @"FFFFFF";
     return category;

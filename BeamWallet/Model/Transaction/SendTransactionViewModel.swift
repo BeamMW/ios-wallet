@@ -35,11 +35,8 @@ class SendTransactionViewModel: NSObject {
 
     public var saveContact = true
 
-    public var selectedSearchIndex = 0
-
     public var selectedContact:BMContact?
 
-    public var contacts = [BMContact]()
     private var addresses = [BMAddress]()
     
     public var toAddress = String.empty() {
@@ -54,7 +51,7 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
-    public var fee = "10" {
+    public var fee = String(0) {
         didSet{
             if sendAll {
                 amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
@@ -66,6 +63,14 @@ class SendTransactionViewModel: NSObject {
         didSet{
             if sendAll {
                 amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+//                if let f = Double(fee), let a = Double(amount) {
+//                    if f > 0 && a == 0 {
+//                        _ = checkAmountError()
+//                    }
+//                    else if a == 0 {
+//                       amountError = Localizable.shared.strings.amount_zero
+//                    }
+//                }
             }
         }
     }
@@ -103,6 +108,9 @@ class SendTransactionViewModel: NSObject {
 
     override init() {
         super.init()
+        
+        fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+        
         
         generateOutgoindAddress()
     }
@@ -170,7 +178,7 @@ class SendTransactionViewModel: NSObject {
             if pickedAddress.walletId == startedAddress?.walletId {
                 AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
             }
-            else if pickedAddress.label != outgoindAdderss?.label || pickedAddress.category != outgoindAdderss?.category || pickedAddress.duration != outgoindAdderss?.duration {
+            else if pickedAddress.label != outgoindAdderss?.label || pickedAddress.categories != outgoindAdderss?.categories || pickedAddress.duration != outgoindAdderss?.duration {
                 
                 if pickedAddress.duration != outgoindAdderss?.duration {
                     if pickedAddress.duration > 0 {
@@ -190,56 +198,40 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
-    public func searchForContacts() {
-        if selectedSearchIndex == 0 {
-            self.contacts.removeAll()
+    public func searchForContacts(searchIndex:Int) -> [BMContact] {
+        if searchIndex == 0 {
+            var contacts = [BMContact]()
             
-            if let contacts = AppModel.sharedManager().contacts as? [BMContact] {
-                self.contacts.append(contentsOf: contacts)
-            }
-            
-            for contact in contacts {
-                if let category = AppModel.sharedManager().findCategory(byId: contact.address.category) {
-                    contact.address.categoryName = category.name
-                }
-                else{
-                    contact.address.categoryName = String.empty()
-                }
+            if let _contacts = AppModel.sharedManager().contacts as? [BMContact] {
+                contacts.append(contentsOf: _contacts)
             }
             
             if !toAddress.isEmpty {
                 let filterdObjects = contacts.filter {
                     $0.name.lowercased().contains(toAddress.lowercased()) ||
                         $0.address.label.lowercased().contains(toAddress.lowercased()) ||
-                        $0.address.categoryName.lowercased().contains(toAddress.lowercased()) ||
+                        $0.address.categoriesName().string.lowercased().contains(toAddress.lowercased()) ||
                         $0.address.walletId.lowercased().starts(with: toAddress.lowercased())
                 }
                 contacts.removeAll()
                 contacts.append(contentsOf: filterdObjects)
             }
+            
+            return contacts
         }
         else{
-            self.contacts.removeAll()
+            var contacts = [BMContact]()
 
             if let addresses = AppModel.sharedManager().walletAddresses {
                 self.addresses = addresses as! [BMAddress]
             }
             
-            self.addresses = self.addresses.filter { $0.isExpired() == false}
+            self.addresses = self.addresses.filter { $0.isExpired() == false && $0.walletId != self.outgoindAdderss?.walletId}
             
             if !toAddress.isEmpty {
-                for address in self.addresses  {
-                    if let category = AppModel.sharedManager().findCategory(byId: address.category) {
-                        address.categoryName = category.name
-                    }
-                    else{
-                        address.categoryName = String.empty()
-                    }
-                }
-                
                 let filterdObjects = self.addresses.filter {
                         $0.label.lowercased().contains(toAddress.lowercased()) ||
-                        $0.categoryName.lowercased().contains(toAddress.lowercased()) ||
+                        $0.categoriesName().string.lowercased().contains(toAddress.lowercased()) ||
                         $0.walletId.lowercased().starts(with: toAddress.lowercased())
                 }
                 
@@ -247,7 +239,7 @@ class SendTransactionViewModel: NSObject {
                     let contact = BMContact()
                     contact.name = address.label
                     contact.address = address
-                    self.contacts.append(contact)
+                    contacts.append(contact)
                 }
             }
             else{
@@ -255,27 +247,29 @@ class SendTransactionViewModel: NSObject {
                     let contact = BMContact()
                     contact.name = address.label
                     contact.address = address
-                    self.contacts.append(contact)
+                    contacts.append(contact)
                 }
             }
+            
+            return contacts
         }
     }
     
-    public func buildConfirmItems() -> [ConfirmItem]{
+    public func buildBMMultiLineItems() -> [BMMultiLineItem]{
         let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
         let totalString = String.currency(value: total) + Localizable.shared.strings.beam
         
-        var items = [ConfirmItem]()
-        items.append(ConfirmItem(title: Localizable.shared.strings.send_to.uppercased(), detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        var items = [BMMultiLineItem]()
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
-            items.append(ConfirmItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        items.append(ConfirmItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amount + Localizable.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
-        items.append(ConfirmItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
-        items.append(ConfirmItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amount + Localizable.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
         
         return items
     }

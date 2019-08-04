@@ -35,13 +35,10 @@ class CategoryPickerCell: BaseCell {
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
-        
-        arrowView.image = UIImage.init(named: "tick")?.withRenderingMode(.alwaysTemplate)
-        arrowView.tintColor = UIColor.main.brightTeal
     }
     
     func simpleConfigure(with options: (name: String, selected:Bool)) {
-        arrowView.isHidden = !options.selected
+        arrowView.image = (options.selected ? CheckboxFull() : CheckboxEmpty())
         nameLabel.text = options.name
         nameLabel.textColor = UIColor.white
     }
@@ -50,7 +47,7 @@ class CategoryPickerCell: BaseCell {
 extension CategoryPickerCell: Configurable {
     
     func configure(with options: (category: BMCategory, selected:Bool)) {
-        arrowView.isHidden = !options.selected
+        arrowView.image = (options.selected ? IconCheckmarkFull() : IconCheckmarkEmpty())
         nameLabel.text = options.category.name
         nameLabel.textColor = UIColor.init(hexString: options.category.color)
     }

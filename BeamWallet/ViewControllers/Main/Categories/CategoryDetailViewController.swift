@@ -43,7 +43,7 @@ class CategoryDetailViewController: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(AddressCell.self)
+        tableView.register(BMAddressCell.self)
         tableView.register(CategoryNameCell.self)
         tableView.register(BMEmptyCell.self)
 
@@ -124,6 +124,9 @@ extension CategoryDetailViewController : UITableViewDelegate {
         if indexPath.section == 0 {
             return 80
         }
+        else if indexPath.section == 1 && addressViewModel.addresses.count == 0 {
+            return (UIScreen.main.bounds.size.height - (tableView.y + 300))
+        }
         return 90
     }
     
@@ -165,16 +168,15 @@ extension CategoryDetailViewController : UITableViewDataSource {
             if addressViewModel.addresses.count == 0 {
                 let cell =  tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: Localizable.shared.strings.no_category_addresses.lowercased())
+                    .configured(with: (text: Localizable.shared.strings.no_category_addresses.capitalizingFirstLetter(), image: IconAddressbookEmpty()))
                 return cell
             }
             else{
                 let cell =  tableView
-                    .dequeueReusableCell(withType: AddressCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, address: addressViewModel.addresses[indexPath.row], single:false, displayCategory:false))
+                    .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, address: addressViewModel.addresses[indexPath.row], displayTransaction: false, displayCategory: false))
                 return cell
             }
-
         }
         else{
             let cell =  tableView

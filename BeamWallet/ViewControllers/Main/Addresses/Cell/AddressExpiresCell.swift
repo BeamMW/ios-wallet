@@ -23,36 +23,39 @@ class AddressExpiresCell: BaseCell {
 
     @IBOutlet weak private var expireLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var mainView: UIView!
+    @IBOutlet weak private var titleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        dateLabel.textColor = UIColor.main.blueyGrey
+        
         selectionStyle = .default
         
         backgroundColor = UIColor.clear
-       
-        mainView.backgroundColor = UIColor.main.marineThree
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
 }
 
 extension AddressExpiresCell: Configurable {
     
     func configure(with address: BMAddress) {
 
+        titleLabel.text = (address.isNowExpired || address.isExpired()) ? Localizable.shared.strings.expired.uppercased() : Localizable.shared.strings.expires.uppercased()
+        
+        if address.isNowActive {
+            titleLabel.text = Localizable.shared.strings.expires.uppercased()
+        }
+        
+        titleLabel.letterSpacing = 1.5
+        
         if address.isExpired() || address.isNowActive {
             if(address.isNowActiveDuration == 0)
             {
-                expireLabel.text = Localizable.shared.strings.never.lowercased()
+                expireLabel.text = Localizable.shared.strings.never.capitalizingFirstLetter()
                 dateLabel.isHidden = true
             }
             else{
@@ -70,7 +73,7 @@ extension AddressExpiresCell: Configurable {
             else{
                 if(address.duration == 0)
                 {
-                    expireLabel.text = Localizable.shared.strings.never.lowercased()
+                    expireLabel.text = Localizable.shared.strings.never.capitalizingFirstLetter()
                     dateLabel.isHidden = true
                 }
                 else{
@@ -80,12 +83,5 @@ extension AddressExpiresCell: Configurable {
                 }
             }
         }
-    }
-}
-
-extension AddressExpiresCell: DynamicContentHeight {
-    
-    static func height() -> CGFloat {
-        return 80
     }
 }

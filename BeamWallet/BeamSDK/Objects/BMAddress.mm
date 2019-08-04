@@ -18,35 +18,31 @@
 //
 
 #import "BMAddress.h"
+#import "BMCategory.h"
 #import "Settings.h"
 #import "StringLocalize.h"
+#import "AppModel.h"
+#import "Color.h"
 #include "wallet/wallet_client.h"
 
 @implementation BMAddress
 
 
-+(BMAddress*)emptyAddress{
++(BMAddress*_Nonnull)emptyAddress{
     BMAddress *empty = [BMAddress new];
-    empty.category = @"";
+    empty.categories = [NSMutableArray new];
     empty.label = @"";
     return empty;
 }
 
-+(BMAddress*)fromAddress:(BMAddress*)address{
++(BMAddress*_Nonnull)fromAddress:(BMAddress*_Nonnull)address{
     BMAddress *copied = [BMAddress new];
     copied.walletId = [NSString stringWithString:address.walletId];
-    copied.category = [NSString stringWithString:address.category];
+    copied.categories = [NSMutableArray arrayWithArray:address.categories];
     copied.label = [NSString stringWithString:address.label];
     copied.duration = address.duration;
     copied.createTime = address.createTime;
     return copied;
-}
-
--(NSString*)categoryName{
-    if (_categoryName == nil){
-        return @"";
-    }
-    return _categoryName;
 }
 
 -(BOOL)isExpired {
@@ -66,7 +62,15 @@
     return _createTime + _duration;
 }
 
--(NSString*)formattedDate {
+-(NSString*_Nonnull)expiredFormattedDate{
+    NSDateFormatter *f = [self shortFormatter];
+    
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970: [self getExpirationTime]];
+    
+    return [f stringFromDate:date];
+}
+
+-(NSString*_Nonnull)formattedDate {
     if (_duration == 0)
     {
         return @"never";
@@ -80,7 +84,7 @@
     return [f stringFromDate:date];
 }
 
--(NSString*)agoDate {
+-(NSString*_Nonnull)agoDate {
     if (_duration == 0)
     {
         return @"never";
@@ -106,7 +110,7 @@
     }
 }
 
--(NSString*)nowDate {
+-(NSString*_Nonnull)nowDate {
     NSDateFormatter *f = [self formatter];
 
     NSDate *date = [NSDate date];
@@ -148,13 +152,85 @@
     if (!_formatter)
     {
         _formatter = [[NSDateFormatter alloc] init];
-        [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+       
+        if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+            if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+                [_formatter setDateFormat:@"yyyy MMM dd  |  hh:mm a"];
+            }
+            else{
+                [_formatter setDateFormat:@"yyyy MMM dd  |  HH:mm"];
+            }
+        }
+        else{
+            if ([[NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]] rangeOfString:@"a"].location!=NSNotFound) {
+                [_formatter setDateFormat:@"dd MMM yyyy  |  hh:mm a"];
+            }
+            else{
+                [_formatter setDateFormat:@"dd MMM yyyy  |  HH:mm"];
+            }
+        }
     }
     
+
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
     [_formatter setLocale:locale];
     
     return _formatter;
+}
+
+- (NSDateFormatter *)shortFormatter
+{
+    if (!_shortFormatter)
+    {
+        _shortFormatter = [[NSDateFormatter alloc] init];
+        
+        if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
+            [_shortFormatter setDateFormat:@"yyyy MMM dd"];
+        }
+        else{
+            [_shortFormatter setDateFormat:@"dd MMM yyyy"];
+        }
+    }
+    
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
+    [_shortFormatter setLocale:locale];
+    
+    return _shortFormatter;
+}
+
+-(NSMutableAttributedString*_Nonnull)categoriesName {
+    NSMutableArray <BMCategory*> * result = [NSMutableArray array];
+    
+    for (NSString *s in _categories) {
+        BMCategory *c = [[AppModel sharedManager] findCategoryById:s];
+        if (c!=nil) {
+            [result addObject:c];
+        }
+    }
+        
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@""];
+    
+    if(result.count > 0) {
+        for (BMCategory *category in result) {
+            NSMutableAttributedString *categoryString = [[NSMutableAttributedString alloc] initWithString:category.name];
+            [categoryString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:category.color] range:NSMakeRange(0, category.name.length)];
+            [attrString appendAttributedString:categoryString];
+            if (result.count > 1 && ![category.name isEqualToString:result.lastObject.name])
+            {
+                NSMutableAttributedString *coma = [[NSMutableAttributedString alloc] initWithString:@", "];
+                [coma addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, 1)];
+
+                [attrString appendAttributedString:coma];
+            }
+        }
+    }
+    else{
+        NSMutableAttributedString *categoryString = [[NSMutableAttributedString alloc] initWithString:[@"none" localized]];
+        [categoryString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, categoryString.string.length)];
+        [attrString appendAttributedString:categoryString];
+    }
+
+    return attrString;
 }
 
 @end

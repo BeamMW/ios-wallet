@@ -21,6 +21,8 @@ import UIKit
 
 class WalletViewController: BaseTableViewController {
 
+    private var isNeedUpdatingReload = true
+
     private var expandAvailable = true
     private var expandProgress = true
   
@@ -74,7 +76,6 @@ class WalletViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        isGradient = true
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
 
         title = Localizable.shared.strings.wallet
@@ -109,6 +110,9 @@ class WalletViewController: BaseTableViewController {
         rightButton()
         
         subscribeToUpdates()
+        
+        //
+        AppModel.sharedManager().fixCategories();
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -138,21 +142,31 @@ class WalletViewController: BaseTableViewController {
     
     private func subscribeToUpdates() {
         viewModel.onDataChanged = { [weak self] in
+            guard let strongSelf = self else { return }
+
             UIView.performWithoutAnimation {
-                self?.tableView.stopRefreshing()
-                self?.tableView.reloadData()
+                strongSelf.tableView.stopRefreshing()
+                strongSelf.tableView.reloadData()
             }
         }
         
         viewModel.onDataDeleted = { [weak self]
             indexPath, transaction in
             
-            if let path = indexPath {
-                self?.tableView.performUpdate({
-                    self?.tableView.deleteRows(at: [path], with: .left)
-                }, completion: {
-                    AppModel.sharedManager().prepareDeleteTransaction(transaction)
-                })
+            guard let strongSelf = self else { return }
+
+            if strongSelf.viewModel.transactions.count == 0 {
+                strongSelf.tableView.reloadData()
+                AppModel.sharedManager().prepareDeleteTransaction(transaction)
+            }
+            else{
+                if let path = indexPath {
+                    strongSelf.tableView.performUpdate({
+                        strongSelf.tableView.deleteRows(at: [path], with: .left)
+                    }, completion: {
+                        AppModel.sharedManager().prepareDeleteTransaction(transaction)
+                    })
+                }
             }
         }
         
@@ -169,11 +183,32 @@ class WalletViewController: BaseTableViewController {
         }
         
         statusViewModel.onDataChanged = { [weak self] in
-            self?.tableView.reloadData()
+            
+            guard let strongSelf = self else { return }
+
+            if AppModel.sharedManager().isUpdating {
+                
+                if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
+                    cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus))
+                }
+                
+                if let cell = strongSelf.tableView.findCell(WalletProgressCell.self) as? WalletProgressCell {
+                    cell.configure(with: (expand: strongSelf.expandProgress, status: AppModel.sharedManager().walletStatus))
+                }
+                
+                if strongSelf.isNeedUpdatingReload {
+                    strongSelf.isNeedUpdatingReload = false
+                    strongSelf.tableView.reloadData()
+                }
+            }
+            else{
+                UIView.performWithoutAnimation {
+                    strongSelf.tableView.stopRefreshing()
+                    strongSelf.tableView.reloadData()
+                }
+            }
         }
     }
-
-
     
     @objc private func refreshData(_ sender: Any) {
        AppModel.sharedManager().getWalletStatus()
@@ -185,9 +220,7 @@ class WalletViewController: BaseTableViewController {
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.payment_proof, icon: nil, action: .payment_proof))
         
         if viewModel.transactions.count > 0 {
-            if AppDelegate.newFeaturesEnabled {
-                items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.search, icon: nil, action: .search), at: 0)
-            }
+            items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.search, icon: nil, action: .search), at: 0)
             items.insert(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.export, icon: nil, action: .export_transactions), at: 0)
         }
         
@@ -232,7 +265,7 @@ extension WalletViewController : UITableViewDelegate {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                return WalletStatusCell.height()
+                return UITableView.automaticDimension
             }
             else if indexPath.row == 1 {
                 if Settings.sharedManager().isHideAmounts || !expandAvailable {
@@ -254,7 +287,13 @@ extension WalletViewController : UITableViewDelegate {
                 return 0
             }
         case 1:
-            return isSearching ? WalletTransactionCell.searchHeight() : WalletTransactionCell.height()
+            if (viewModel.transactions.count == 0)
+            {
+                return 200
+            }
+            else{
+                return isSearching ? WalletTransactionCell.searchHeight() : WalletTransactionCell.height()
+            }
         default:
             return 0
         }
@@ -345,7 +384,7 @@ extension WalletViewController : UITableViewDataSource {
             if viewModel.transactions.count == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: Localizable.shared.strings.empty_transactions_list)
+                    .configured(with: (text: Localizable.shared.strings.transactions_empty, image: IconWalletEmpty()))
                 return cell
             }
             else{

@@ -27,12 +27,15 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-Vv-Ysb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aBo-4q-aqi">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aBo-4q-aqi">
                                 <rect key="frame" x="15" y="5" width="290" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-cW-9tn" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
                                         <color key="backgroundColor" red="0.043137254901960784" green="0.80000000000000004" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="XNE-eZ-mUm"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
                                         <state key="normal" title="receive" image="iconReceiveBlue">
@@ -52,6 +55,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XG1-kg-id9" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                         <rect key="frame" x="150" y="0.0" width="140" height="44"/>
                                         <color key="backgroundColor" red="0.85490196078431369" green="0.40784313725490196" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="dCW-0t-6HT"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
                                         <state key="normal" title="send" image="iconSendBlue">
@@ -69,17 +75,14 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="ePg-d8-sxa"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="aBo-4q-aqi" firstAttribute="leading" secondItem="eF7-Vv-Ysb" secondAttribute="leading" constant="15" id="0iX-LX-lgb"/>
                             <constraint firstAttribute="trailing" secondItem="aBo-4q-aqi" secondAttribute="trailing" constant="15" id="N3o-cj-E9T"/>
-                            <constraint firstAttribute="bottom" secondItem="aBo-4q-aqi" secondAttribute="bottom" constant="16.5" id="Seh-su-cRa"/>
                             <constraint firstItem="aBo-4q-aqi" firstAttribute="top" secondItem="eF7-Vv-Ysb" secondAttribute="top" constant="5" id="pcx-Hk-17g"/>
+                            <constraint firstAttribute="bottom" secondItem="aBo-4q-aqi" secondAttribute="bottom" constant="16.5" id="xOn-tT-3xy"/>
                         </constraints>
                     </view>
                 </subviews>

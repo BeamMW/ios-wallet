@@ -37,7 +37,7 @@ class AddressExpiresPickerViewController: BaseTableViewController {
         
         let h24 = BMDuration()
         h24.duration = 24
-        h24.name = Localizable.shared.strings.in_24_hours
+        h24.name = Localizable.shared.strings.in_24_hours_now
         h24.selected = false
 
         let never = BMDuration()
@@ -65,33 +65,31 @@ class AddressExpiresPickerViewController: BaseTableViewController {
             super.tableStyle = newValue
         }
     }
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isGradient {
-            var mainColor = UIColor.main.brightSkyBlue
-            
-            if let viewControllers = self.navigationController?.viewControllers{
-                for vc in viewControllers {
-                    if vc is SendViewController {
-                        mainColor = UIColor.main.heliotrope
-                    }
-                }
-            }
-            
-            setGradientTopBar(mainColor: mainColor, addedStatusView: false)
-        }
-        
-        title = Localizable.shared.strings.address_expires.uppercased()
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
 
-        addRightButton(title: Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        title = Localizable.shared.strings.exp_date.uppercased()
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
-        tableView.register(AddressDurationCell.self)
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.register(BMPickerCell.self)
     }
     
     @objc private func onSave(sender:UIBarButtonItem) {
@@ -109,17 +107,22 @@ extension AddressExpiresPickerViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        for item in items {
-            item.selected = false
+        if indexPath.row == 0 {
+            self.back()
         }
-        
-        items[indexPath.row].selected = true
-
-        selectedDuration = (indexPath.row == 1) ? 24 : 0
-        
-        enableRightButton(enabled: (indexPath.row != 0))
-       
-        tableView.reloadData()
+        else{
+            for item in items {
+                item.selected = false
+            }
+            
+            items[indexPath.row].selected = true
+            
+            selectedDuration = (indexPath.row == 1) ? 24 : 0
+            
+            self.completion?(selectedDuration)
+            
+            self.back()
+        }
     }
 }
 
@@ -134,8 +137,8 @@ extension AddressExpiresPickerViewController : UITableViewDataSource {
         let duration = items[indexPath.row]
         
         let cell =  tableView
-            .dequeueReusableCell(withType: AddressDurationCell.self, for: indexPath)
-            .configured(with: (duration:duration , selected: duration.selected))
+            .dequeueReusableCell(withType: BMPickerCell.self, for: indexPath)
+            .configured(with: (text: duration.name, selected: duration.selected, color: UIColor.white))
         
         return cell
     }

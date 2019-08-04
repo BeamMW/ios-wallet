@@ -47,6 +47,18 @@ class BMDetailCell: BaseCell {
         contentView.backgroundColor = UIColor.main.marineThree
 
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)
+   
+//        if Device.isLarge {
+//            titleWidth.constant = 200
+//        }
+        
+    }
+    
+    func simpleConfigure(with options: (title:String, attributedValue:NSMutableAttributedString)) {
+        valueLabel.attributedText = options.attributedValue
+        
+        nameLabel.text = options.title
+        nameLabel.letterSpacing = 2
     }
 }
 

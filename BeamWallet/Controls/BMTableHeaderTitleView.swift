@@ -16,99 +16,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+
+
 import Foundation
-
-protocol BMTableHeaderTitleViewDelegate: AnyObject {
-    func onDidSelectSegment(index:Int)
-}
-
 
 class BMTableHeaderTitleView: UIView {
    
-    weak var delegate: BMTableHeaderTitleViewDelegate?
-
     static let height:CGFloat = 50
     static let boldHeight:CGFloat = 60
-    static let segmentHeight:CGFloat = 50
 
-    private var titleLabel:UILabel!
-    private var segmentLine:UIView!
-    private var lineOffset:CGFloat = 3
-    
-    public var selectedIndex:Int = 0 {
-        didSet{
-            if let button = self.viewWithTag(selectedIndex+1) as? UIButton {
-                UIView.animate(withDuration: 0.15) {
-                    self.segmentLine.frame = CGRect(x: button.x - self.lineOffset, y: self.frame.size.height - 3, width: button.width + (self.lineOffset * 2), height: 3)
-                }
-            }
-        }
-    }
-    
-    public var lineColor:UIColor = UIColor.main.heliotrope {
+    public var titleLabel:UILabel!
+
+    public var isCenter = false {
         didSet {
-            segmentLine.backgroundColor = lineColor
-        }
-    }
-    
-    init(segments:[String]) {
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: BMTableHeaderTitleView.segmentHeight))
-
-        if segments.count == 3 {
-            lineOffset = 0
-        }
-        
-        self.backgroundColor = UIColor.main.marine
-
-        segmentLine = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 3))
-        segmentLine.backgroundColor = lineColor
-
-        var x:CGFloat = (segments.count == 3) ? 0 : 15
-        var tag:Int = 1
-        
-        var fontSize:CGFloat = 16
-
-        if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
-            fontSize = fontSize + 1.0
-        }
-        else if Device.screenType == .iPhones_5{
-            fontSize = fontSize - 1.5
-        }
-        
-        for title in segments {
-            let attributedString = NSMutableAttributedString(string: title.uppercased())
-            attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: title.uppercased().count))
-            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey, range: NSRange(location: 0, length: title.uppercased().count))
-            attributedString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: fontSize), range: NSRange(location: 0, length: title.uppercased().count))
-
-            let highlightedAttributedString = NSMutableAttributedString(attributedString: attributedString)
-            highlightedAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey.withAlphaComponent(0.4), range: NSRange(location: 0, length: title.uppercased().count))
-            
-            let stringSize = attributedString.boundingRect(with: CGSize(width: 9999, height: 15), options: .usesLineFragmentOrigin, context: nil)
-            let rectNeeded = CGSize(width: stringSize.width + 4, height: 40)
-            
-            let titleLabel = UIButton(frame: CGRect(x: x, y: 0, width: (segments.count == 3) ? (self.width / 3) : rectNeeded.width, height: 40))
-            titleLabel.titleEdgeInsets = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
-            titleLabel.tag = tag
-            titleLabel.addTarget(self, action: #selector(onSegmentItem), for: .touchUpInside)
-            titleLabel.setAttributedTitle(attributedString, for: .normal)
-            titleLabel.setAttributedTitle(highlightedAttributedString, for: .highlighted)
-            
-            if segments.count == 3 {
-                x = x + (self.width / 3)
+            if isCenter {
+                titleLabel.y = 0
+                titleLabel.h = self.h
             }
-            else{
-                x = x + rectNeeded.width + 30
-            }
-            tag = tag + 1
-            
-            self.addSubview(titleLabel)
-        }
-        
-        self.addSubview(segmentLine)
-        
-        if let button = self.viewWithTag(selectedIndex+1) as? UIButton {
-            self.segmentLine.frame = CGRect(x: button.x-lineOffset, y: self.frame.size.height - 3, width: button.width+(lineOffset*2), height: 3)
         }
     }
     
@@ -137,10 +61,28 @@ class BMTableHeaderTitleView: UIView {
         self.addSubview(button)
     }
     
-    @objc private func onSegmentItem(sender:UIButton) {
-        selectedIndex = sender.tag - 1
+    init(title:String, handler:Selector, target:Any, expand:Bool) {
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: BMTableHeaderTitleView.height))
         
-        self.delegate?.onDidSelectSegment(index: selectedIndex)
+        self.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        
+        addLabel(title: title, bold: true)
+        
+        titleLabel.h = 50
+        titleLabel.y = 0
+        titleLabel.font = BoldFont(size: 14)
+        titleLabel.letterSpacing = 1.5
+        
+        let button = UIButton(frame: CGRect(x: self.frame.size.width-50, y: 0, width: 40, height: 50))
+        button.setImage(expand ? IconDownArrow() : IconNextArrow(), for: .normal)
+        button.contentHorizontalAlignment = .right
+        button.isUserInteractionEnabled = false
+        self.addSubview(button)
+        
+        let mainButton = UIButton(frame: self.bounds)
+        mainButton.addTarget(target, action: handler, for: .touchUpInside)
+        mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.2)), for: .highlighted)
+        self.addSubview(mainButton)
     }
     
     private func addLabel(title:String, bold:Bool) {

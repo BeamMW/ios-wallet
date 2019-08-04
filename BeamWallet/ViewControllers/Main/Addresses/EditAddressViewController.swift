@@ -23,6 +23,41 @@ class EditAddressViewController: BaseTableViewController {
     
     private var viewModel:EditAddressViewModel!
     
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 110))
+        
+        let mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-(Device.isLarge ? 320 : 300))/2, y: 60, width: (Device.isLarge ? 320 : 300), height: 44))
+        
+        let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.marineThree)
+        buttonCancel.setImage(IconCancel(), for: .normal)
+        buttonCancel.setTitle(Localizable.shared.strings.cancel.lowercased(), for: .normal)
+        buttonCancel.setTitleColor(UIColor.white, for: .normal)
+        buttonCancel.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .highlighted)
+        buttonCancel.addTarget(self, action: #selector(onBack), for: .touchUpInside)
+        mainView.addSubview(buttonCancel)
+        
+        let buttonSave = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: UIColor.main.brightTeal)
+        buttonSave.setImage(IconDoneBlue(), for: .normal)
+        buttonSave.setTitle(Localizable.shared.strings.save.lowercased(), for: .normal)
+        buttonSave.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+        buttonSave.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+        buttonSave.addTarget(self, action: #selector(onSave), for: .touchUpInside)
+        mainView.addSubview(buttonSave)
+        
+        view.addSubview(mainView)
+        
+        return view
+    }()
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
         
@@ -32,12 +67,13 @@ class EditAddressViewController: BaseTableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
         viewModel.onDataChanged = { [weak self] in
-            self?.checkIsChanges()
             self?.tableView.reloadData()
         }
         
@@ -46,71 +82,73 @@ class EditAddressViewController: BaseTableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
-    
-        tableView.register([AddressSwitchCell.self, AddressExpiresCell.self,AddressExpiredCell.self, 
-            AddressCommentCell.self, AddressCategoryCell.self])
-
-        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
+        tableView.tableFooterView = footerView
+        
+        tableView.register([AddressExpiresCell.self, BMMultiLinesCell.self, BMFieldCell.self, BMDetailCell.self, BMGroupedCell.self])
+        
+        viewModel.onDataDeleted = { [weak self]
+            indexPath, address in
+            
+            AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
+            
+            self?.navigationController?.popViewControllers(viewsToPop: 2)
+        }
     }
     
-    @IBAction func onSave(sender : UIBarButtonItem) {
-        viewModel.saveChages()
-        
+    @objc private func onBack() {
         back()
     }
     
-    private func checkIsChanges(){
-        enableRightButton(enabled: viewModel.checkIsChanges())
+    @objc private func onSave() {
+        viewModel.saveChages()
+        
+        back()
     }
 }
 
 extension EditAddressViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        if viewModel.isContact {
-            if section < 3 {
-                return 0
-            }
-        }
-        
-        if section == 2 && viewModel.newAddress.isNowActive && viewModel.newAddress.isExpired() {
-            return 30
-        }
-        else if section == 2 {
-            return 0
-        }
-        
-        return 30
+        return (section == 2 ? 30 : 0)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        switch indexPath.section {
-        case 0:
-            return viewModel.newAddress.isExpired() ? AddressExpiredCell.height() : AddressExpiresCell.height()
-        case 1:
-            return AddressSwitchCell.height()
-        case 2:
-            return (viewModel.newAddress.isNowActive && viewModel.newAddress.isExpired()) ? AddressExpiresCell.height() : 0
-        case 3:
-            return AddressCategoryCell.height()
-        case 4:
-            return AddressCommentCell.height()
-        default:
-            return 0
-        }
+        return UITableView.automaticDimension
     }
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if (indexPath.section == 0) || (indexPath.section == 2 && viewModel.newAddress.isNowActive && viewModel.newAddress.isExpired()) {
-                viewModel.pickExpire()
+        if (indexPath.section == 0 && indexPath.row == 2) {
+            viewModel.pickExpire()
         }
-        else if indexPath.section == 3 {
+        else if indexPath.section == 1 {
             viewModel.pickCategory()
+        }
+        else if indexPath.section == 2 {
+            if viewModel.isContact {
+                viewModel.onDeleteAddress(address: viewModel.address!, indexPath: nil)
+            }
+            else{
+                switch indexPath.row {
+                case 0:
+                    if viewModel.newAddress.isExpired() {
+                        viewModel.newAddress.isNowActive = !viewModel.newAddress.isNowActive
+                        viewModel.newAddress.isNowExpired = false
+                    }
+                    else {
+                        viewModel.newAddress.isNowExpired = !viewModel.newAddress.isNowExpired
+                        viewModel.newAddress.isNowActive = false
+                    }
+                    
+                    tableView.reloadData()
+                case 1:
+                    viewModel.onDeleteAddress(address: viewModel.address!, indexPath: nil)
+                    break
+                default:
+                    break
+                }
+            }
         }
     }
 }
@@ -118,14 +156,15 @@ extension EditAddressViewController : UITableViewDelegate {
 extension EditAddressViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.isContact {
-            if section < 3 {
-                return 0
-            }
+        if section == 0 {
+            return (viewModel.isContact ? 2 : 3)
+        }
+        else if section == 2 {
+            return (viewModel.isContact ? 1 : 2)
         }
         return 1
     }
@@ -133,93 +172,86 @@ extension EditAddressViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            if viewModel.newAddress.isExpired() {
+            switch (indexPath.row) {
+            case 0:
                 let cell = tableView
-                    .dequeueReusableCell(withType: AddressExpiredCell.self, for: indexPath)
-                    .configured(with: viewModel.newAddress)
+                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+                    .configured(with: BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail:viewModel.address!.walletId , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                cell.increaseSpace = true
                 return cell
-            }
-            else{
+            case 1:
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.newAddress!.label))
+                cell.delegate = self
+                cell.topOffset?.constant = 20
+                return cell
+            case 2:
                 let cell = tableView
                     .dequeueReusableCell(withType: AddressExpiresCell.self, for: indexPath)
                     .configured(with: viewModel.newAddress)
                 return cell
+            default:
+                return BaseCell()
             }
         }
         else if indexPath.section == 1 {
-            
-            let text = viewModel.newAddress.isExpired() ? Localizable.shared.strings.active_address : Localizable.shared.strings.expire_now
-            
-            let selected = (viewModel.newAddress.isExpired()) ? viewModel.newAddress.isNowActive : viewModel.newAddress.isNowExpired
-            
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressSwitchCell.self, for: indexPath)
-                .configured(with: (text: text, selected: selected))
-            cell.delegate = self
-            
-            return cell
-        }
-        else if indexPath.section == 2 && viewModel.newAddress.isNowActive && viewModel.newAddress.isExpired() {
             let cell = tableView
-                .dequeueReusableCell(withType: AddressExpiresCell.self, for: indexPath)
-                .configured(with: viewModel.newAddress)
+                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
+            cell.simpleConfigure(with: (title: (viewModel.newAddress.categories.count > 1 ? Localizable.shared.strings.categories.uppercased() : Localizable.shared.strings.category.uppercased()), attributedValue: viewModel.newAddress!.categoriesName()))
+            cell.backgroundColor = UIColor.clear
+            cell.contentView.backgroundColor = UIColor.clear
+            cell.selectedBackgroundView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+            cell.space = 15
             return cell
         }
-        else if indexPath.section == 3 {
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressCategoryCell.self, for: indexPath)
-                .configured(with: viewModel.newAddress)
-            
-            return cell
+        else if indexPath.section == 2 {
+            if viewModel.isContact {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
+                    .configured(with: (text: Localizable.shared.strings.delete_contact, position: BMGroupedCell.BMGroupedCellPosition.one))
+                return cell
+            }
+            else{
+                switch indexPath.row {
+                case 0:
+                    var title = Localizable.shared.strings.expire_now
+                    
+                    if viewModel.newAddress.isNowExpired {
+                        title = Localizable.shared.strings.active_address
+                    }
+                    else if viewModel.newAddress.isExpired() && !viewModel.newAddress.isNowActive {
+                        title = Localizable.shared.strings.active_address
+                    }
+                    
+                    let cell = tableView
+                        .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
+                        .configured(with: (text:title , position: BMGroupedCell.BMGroupedCellPosition.top))
+                    return cell
+                case 1:
+                    let cell = tableView
+                        .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
+                        .configured(with: (text: Localizable.shared.strings.delete_address, position: BMGroupedCell.BMGroupedCellPosition.bottom))
+                    return cell
+                default:
+                    return BaseCell()
+                }
+            }
         }
-        else if indexPath.section == 4 {
-            let cell =  tableView
-                .dequeueReusableCell(withType: AddressCommentCell.self, for: indexPath)
-                .configured(with: viewModel.newAddress.label)
-            cell.delegate = self
-            
-            return cell
-        }
-
         
         let cell = BaseCell()
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
+        return (section == 2 ? UIView() : nil)
     }
 }
 
-extension EditAddressViewController : AddressSwitchCellDelegate {
-    func onSwitch(value:Bool) {
-        if viewModel.newAddress.isExpired() {
-            viewModel.newAddress.isNowActive = !viewModel.newAddress.isNowActive
-            viewModel.newAddress.isNowExpired = false
-        }
-        else {
-            viewModel.newAddress.isNowExpired = !viewModel.newAddress.isNowExpired
-            viewModel.newAddress.isNowActive = false
-        }
-        
-        checkIsChanges()
-        
-        tableView.reloadData()
+extension EditAddressViewController : BMCellProtocol {
+    func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input: Bool) {
+        viewModel.newAddress.label = text
     }
 }
 
-extension EditAddressViewController : AddressCommentCellDelegate {
-    func onChangeComment(value: String) {
-        viewModel.newAddress.label = value
-        checkIsChanges()
-    }
-}
-
-extension EditAddressViewController {
-    @objc override func keyboardWillShow(_ notification: Notification) {
-        super.keyboardWillShow(notification)
-        
-        tableView.scrollToRow(at: IndexPath(row: 0, section: 4), at: .top, animated: false)
-    }
-}
 

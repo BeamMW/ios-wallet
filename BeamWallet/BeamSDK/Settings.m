@@ -115,7 +115,12 @@ static NSString *languageKey = @"languageKey";
         _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
     }
     else{
-        _nodeAddress = [AppModel chooseRandomNode];
+        if (self.target == Masternet) {
+            _nodeAddress = @"eu-node01.masternet.beam.mw:8100";
+        }
+        else{
+            _nodeAddress = [AppModel chooseRandomNode];
+        }
     }
     
     if (self.target == Testnet)
@@ -125,25 +130,29 @@ static NSString *languageKey = @"languageKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
-    if (self.target == Testnet) {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
-            _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
-        }
-        else{
-            _language = [[NSLocale currentLocale] languageCode];
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
-                _language = @"en";
-            }
-        }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
     }
     else{
-        _language = @"en";
+        _language = [[NSLocale currentLocale] languageCode];
+        
+        if ([_language isEqualToString:@"zh"]) {
+            _language = @"zh-Hans";
+        }
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+            _language = @"en";
+        }
     }
 
-    
-    
     return self;
+}
+    
+-(void)resetWallet {
+    _nodeAddress = [AppModel chooseRandomNode];
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:nodeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)setIsHideAmounts:(BOOL)isHideAmounts {
@@ -240,10 +249,12 @@ static NSString *languageKey = @"languageKey";
     [[NSUserDefaults standardUserDefaults] setObject:_nodeAddress forKey:nodeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
-            [delegate onNetwotkStatusChange:NO];
+    if(![[AppModel sharedManager] isRestoreFlow]){
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                [delegate onNetwotkStatusChange:NO];
+            }
         }
     }
 }
@@ -334,7 +345,7 @@ static NSString *languageKey = @"languageKey";
     en.code = @"en";
     en.enName = @"English";
     en.localName = @"English";
-    
+
     BMLanguage *ru = [BMLanguage new];
     ru.code = @"ru";
     ru.enName = @"Русский";
@@ -347,8 +358,8 @@ static NSString *languageKey = @"languageKey";
     
     BMLanguage *sw = [BMLanguage new];
     sw.code = @"sv-SE";
-    sw.enName = @"Swedish";
-    sw.localName = @"Svenska";
+    sw.enName = @"Svenska";
+    sw.localName = @"Swedish";
     
     BMLanguage *ko = [BMLanguage new];
     ko.code = @"ko";
@@ -364,8 +375,18 @@ static NSString *languageKey = @"languageKey";
     ch.code = @"zh-Hans";
     ch.enName = @"中文";
     ch.localName = @"Chinese";
+    
+    BMLanguage *tr = [BMLanguage new];
+    tr.code = @"tr";
+    tr.enName = @"Türk";
+    tr.localName = @"Turkish";
 
-    return @[en, ru, es, sw, ko, vi, ch];
+    BMLanguage *fr = [BMLanguage new];
+    fr.code = @"fr";
+    fr.enName = @"Français";
+    fr.localName = @"French";
+        
+    return @[en, ru, es, sw, ko, vi, ch, tr, fr];
 }
 
 -(NSString*_Nonnull)languageName{
@@ -379,7 +400,15 @@ static NSString *languageKey = @"languageKey";
     return @"English";
 }
 
-
+-(NSString*_Nonnull)shortLanguageName {
+    for (BMLanguage *lang in [self languages]) {
+        if ([lang.code isEqualToString:_language]) {
+            return [[lang.localName substringToIndex:2] uppercaseString];
+        }
+    }
+    
+    return @"EN";
+}
 
 #pragma mark - Delegates
 

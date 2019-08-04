@@ -84,6 +84,33 @@ extension UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    func confirmAndSkipAlert(title: String, message: String, cancelTitle:String, confirmTitle:String, cancelHandler: @escaping ((UIAlertAction) -> Void) , confirmHandler: @escaping ((UIAlertAction) -> Void)) {
+        
+        if (self.presentedViewController as? UIAlertController) != nil {
+            return
+        }
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: confirmTitle, style: .default) { (action) in
+            confirmHandler(action)
+        }
+        alertController.addAction(confirmAction)
+        
+        let cancelAction = UIAlertAction(title: cancelTitle, style: .default) { (action) in
+            cancelHandler(action)
+        }
+        alertController.addAction(cancelAction)
+        
+        let skipAction = UIAlertAction(title: Localizable.shared.strings.cancel, style: .default) { (action) in
+        }
+        alertController.addAction(skipAction)
+        
+        alertController.preferredAction = confirmAction
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func confirmAlert(title: String, message: String, cancelTitle:String, confirmTitle:String, cancelHandler: @escaping ((UIAlertAction) -> Void) , confirmHandler: @escaping ((UIAlertAction) -> Void)) {
         
         if (self.presentedViewController as? UIAlertController) != nil {
@@ -112,7 +139,7 @@ extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(hideKeyboard))
-        tapGesture.cancelsTouchesInView = false
+        tapGesture.cancelsTouchesInView = true
         view.addGestureRecognizer(tapGesture)
     }
     
