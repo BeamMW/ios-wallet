@@ -36,6 +36,38 @@ class BMTableHeaderTitleView: UIView {
         }
     }
     
+    public var textColor:UIColor? {
+        didSet{
+            titleLabel.textColor = textColor
+        }
+    }
+    
+    public var textFont:UIFont? {
+        didSet{
+            titleLabel.font = textFont
+            titleLabel.adjustFontSize = true
+        }
+    }
+    
+    public var buttonImage:UIImage?{
+        didSet{
+            if let button = viewWithTag(10) as? UIButton {
+                button.setImage(buttonImage, for: .normal)
+            }
+        }
+    }
+    
+    public var buttonFrame:CGRect? {
+        didSet{
+            if let button = viewWithTag(10) as? UIButton, let frame = buttonFrame{
+                button.frame = frame
+                button.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.3)), for: .highlighted)
+                button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15)
+                titleLabel.frame = CGRect(x: 15, y: 0, width: frame.size.width, height: frame.size.height)
+            }
+        }
+    }
+    
     init(title:String, bold:Bool) {
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: bold ? BMTableHeaderTitleView.boldHeight : BMTableHeaderTitleView.height))
         
@@ -56,6 +88,7 @@ class BMTableHeaderTitleView: UIView {
         
         let button = UIButton(frame: CGRect(x: self.frame.size.width-45, y: 10, width: 40, height: 40))
         button.setImage(MoreIcon(), for: .normal)
+        button.tag = 10
         button.contentHorizontalAlignment = .right
         button.addTarget(target, action: handler, for: .touchUpInside)
         self.addSubview(button)

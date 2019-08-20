@@ -95,6 +95,17 @@ extension SettingsCell: Configurable {
                 arrowView.isHidden = true
                 titleXOffset.constant = 15
             }
-        }                
+        }
+        
+        if item.id == 5 && Settings.sharedManager().connectToRandomNode {
+            isUserInteractionEnabled = false
+            mainView.alpha = 0.8
+            arrowView.isHidden = true
+            titleXOffset.constant = 15
+        }
+        else{
+            isUserInteractionEnabled = true
+            mainView.alpha = 1
+        }
     }
 }

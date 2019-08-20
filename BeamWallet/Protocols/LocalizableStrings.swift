@@ -152,6 +152,7 @@ class LocalizableStrings : NSObject {
     var scan_qr_code = "scan_qr_code".localized
     var scan_tg_qr_code = "scan_tg_qr_code".localized
     var receive = "receive".localized
+    var received = "received".localized
     var hours_24 = "hours_24".localized
     var delete_all_addresses = "delete_all_addresses".localized
     var delete_all_contacts = "delete_all_contacts".localized
@@ -386,7 +387,16 @@ class LocalizableStrings : NSObject {
     var auto_restore_warning = "auto_restore_warning".localized
     var understand = "understand".localized
     var manual_restore_warning = "manual_restore_warning".localized
+    var search_transactions = "search_transactions".localized
+    var random_node = "random_node".localized
+    
+    var restore_create_title = "restore_create_title".localized
+    var restore_create_text = "restore_create_text".localized
+    var proceed = "proceed".localized
 
+    var info_restore_title = "info_restore_title".localized
+    var info_restore_text = "info_restore_text".localized
+    
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

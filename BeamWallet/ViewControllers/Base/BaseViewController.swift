@@ -19,6 +19,7 @@
 
 import Foundation
 import MessageUI
+import SwipeTransition
 
 class BaseViewController: UIViewController {
 
@@ -44,7 +45,7 @@ class BaseViewController: UIViewController {
         
         if self.navigationController?.viewControllers.count ?? 0 > 1 {
             self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
-        }
+        }        
     }
     
     override func viewDidLayoutSubviews() {
@@ -281,6 +282,10 @@ class BaseViewController: UIViewController {
     
     public func removeLeftButton() {
         self.view.viewWithTag(13)?.removeFromSuperview()
+    }
+    
+    public func removeRightButton() {
+        self.view.viewWithTag(20191)?.removeFromSuperview()
     }
     
 //MARK: - Feedback

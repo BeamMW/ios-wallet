@@ -200,8 +200,8 @@ class BMField: BMClearField {
         _oldColor = self.textColor
 
         if lineColor == nil {
-            line.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
-            lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
+            line.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+            lineColor = UIColor.white.withAlphaComponent(0.1)
         }
         
         addSubview(line)

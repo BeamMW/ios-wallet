@@ -61,6 +61,7 @@ static int proofSize = 330;
 static NSString *categoriesKey = @"categoriesKey";
 static NSString *transactionCommentsKey = @"transaction_comment";
 static NSString *restoreFlowKey = @"restoreFlowKey";
+static NSString *changeFlowKey = @"changeFlowKey";
 
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
@@ -112,9 +113,14 @@ const int kFeeInGroth_Fork1 = 100;
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
     
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
-    
-    if (_isRestoreFlow) {
+    _isChangeWallet = [[NSUserDefaults standardUserDefaults] boolForKey:changeFlowKey];
+
+    if (_isRestoreFlow && !_isChangeWallet) {
         [self resetWallet:YES];
+    }
+    else if (_isChangeWallet)
+    {
+        [self resetChangeWallet];
     }
     
     [self checkInternetConnection];
@@ -136,9 +142,19 @@ const int kFeeInGroth_Fork1 = 100;
 
 +(NSString*_Nonnull)chooseRandomNode {
     auto peers = getDefaultPeers();
-    srand(0);
-    auto node =  peers[rand() % peers.size()].c_str();
-    return [NSString stringWithUTF8String:node];
+    
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (const auto& item : peers)
+    {
+        [array addObject:[NSString stringWithUTF8String:item.c_str()]];
+    }
+    
+    srand([[NSDate date]  timeIntervalSince1970]);
+    
+    int inx =rand()%[array count];
+
+    return [array objectAtIndex:inx];
 }
 
 -(void)setWalletAddresses:(NSMutableArray<BMAddress *> *)walletAddresses {
@@ -149,6 +165,30 @@ const int kFeeInGroth_Fork1 = 100;
     _isRestoreFlow = isRestoreFlow;
     
     [[NSUserDefaults standardUserDefaults] setBool:_isRestoreFlow forKey:restoreFlowKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+    
+-(void)setIsChangeWallet:(BOOL)isChangeWallet {
+    _isChangeWallet = isChangeWallet;
+    
+    NSString *oldPath = [Settings sharedManager].walletStoragePath;
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+ 
+    if (_isChangeWallet) {
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+        }
+        
+        NSError *error;
+        [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:recoverPath error:&error];
+        
+        if (error == nil) {
+            [self resetWallet:YES];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_isChangeWallet forKey:changeFlowKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -385,6 +425,22 @@ const int kFeeInGroth_Fork1 = 100;
     [SVProgressHUD dismiss];
 }
 
+-(void)resetChangeWallet{
+    self.isChangeWallet = NO;
+
+    NSString *oldPath = [Settings sharedManager].walletStoragePath;
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
+    }
+    
+    NSError *error;
+    [[NSFileManager defaultManager] copyItemAtPath:recoverPath toPath:oldPath error:&error];
+    
+    NSLog(@"%@",error);
+}
+    
 -(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
@@ -1171,13 +1227,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID {
-    for (BMAddress *add in _walletAddresses) {
+    for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
         if ([add.walletId isEqualToString:ID]) {
             return add;
         }
     }
     
-    for (BMContact *contact in _contacts) {
+    for (BMContact *contact in _contacts.reverseObjectEnumerator) {
         if ([contact.address.walletId isEqualToString:ID]) {
             return contact.address;
         }
@@ -1264,7 +1320,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return nil;
 }
 
--(NSString*)feeError:(double)fee {
+-(NSString*_Nullable)feeError:(double)fee {
     double need = double(int64_t(fee)) / Rules::Coin;
     
     NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
@@ -1640,7 +1696,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return txID;
 }
 
--(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback {
+-(NSURL*_Nonnull)exportTransactionsToCSV:(NSArray<BMTransaction*>*_Nonnull)transactions {
+    
     NSTimeInterval date = [[NSDate date] timeIntervalSince1970];
     
     NSString *fileName = [NSString stringWithFormat:@"transactions_%d.csv",(int)date];
@@ -1648,14 +1705,14 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",Status,Sending address,Receiving address,\"Transaction fee, BEAM\",Transaction ID,Kernel ID\n";
 
-    for (BMTransaction *tr in _transactions) {
+    for (BMTransaction *tr in transactions) {
         NSString *newLine = [tr csvLine];
         csvText = [csvText stringByAppendingString:newLine];
     }
     
     [csvText writeToURL:url atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
-    callback(url);
+    return url;
 }
 
 -(void)clearAllTransactions{
@@ -1933,7 +1990,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
 #pragma mark - Fork
 
 -(BOOL)isFork {
-    auto h = Rules::get().pForks[1].m_Height;
     BOOL isFork = walletDb->getCurrentHeight() >= Rules::get().pForks[1].m_Height;
     return isFork;
 }

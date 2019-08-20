@@ -243,6 +243,19 @@ extension SettingsViewController : SettingsCellDelegate {
             else if item.id == 9 {
                 Settings.sharedManager().isAllowOpenLink = value
             }
+            else if item.id == 14 {
+                Settings.sharedManager().connectToRandomNode = value
+                
+                if(value)
+                {
+                    Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+                    AppModel.sharedManager().changeNodeAddress()
+                    
+                    viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
+                }
+                
+                tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+            }
         }
     }
 }

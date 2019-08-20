@@ -26,7 +26,6 @@ class CreateWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var progressValueLabel: UILabel!
     @IBOutlet private weak var restotingInfoLabel: UILabel!
     @IBOutlet private weak var cancelButton: UIButton!
-    @IBOutlet private weak var logoYOffset: NSLayoutConstraint!
     @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
     @IBOutlet private weak var errorLabel: UILabel!
 
@@ -74,7 +73,6 @@ class CreateWalletProgressViewController: BaseViewController {
         }
         
         if Device.screenType == .iPhones_5 {
-            logoYOffset.constant = 50
             stackYOffset.constant = 50
         }
 
@@ -99,6 +97,7 @@ class CreateWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             RestoreManager.shared.cancelRestore()
             AppModel.sharedManager().isRestoreFlow = false
+            AppModel.sharedManager().isChangeWallet = false
         }
     }
     
@@ -148,6 +147,7 @@ class CreateWalletProgressViewController: BaseViewController {
                 if let reason = error {
                     self.alert(title: Localizable.shared.strings.error, message: reason.localizedDescription) { (_ ) in
                         AppModel.sharedManager().isRestoreFlow = false
+                        AppModel.sharedManager().isChangeWallet = false
                         RestoreManager.shared.cancelRestore()
                         self.navigationController?.popToRootViewController(animated: true)
                     }
@@ -264,6 +264,7 @@ class CreateWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             RestoreManager.shared.cancelRestore()
             AppModel.sharedManager().isRestoreFlow = false
+            AppModel.sharedManager().isChangeWallet = false
         }
         
         let appModel = AppModel.sharedManager()
@@ -285,6 +286,21 @@ class CreateWalletProgressViewController: BaseViewController {
 
 extension CreateWalletProgressViewController : WalletModelDelegate {
     
+    func onNetwotkStatusChange(_ connected: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            if connected && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
+                strongSelf.isPresented = true
+                strongSelf.progressView.progress = 1
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    strongSelf.openMainPage()
+                }
+            }
+        }
+    }
+    
     func onNoInternetConnection() {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
@@ -303,9 +319,9 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
             strongSelf.errorLabel.isHidden = true
 
             if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
-                strongSelf.isPresented = true
-                strongSelf.progressView.progress = 1
-                strongSelf.openMainPage()
+//                strongSelf.isPresented = true
+//                strongSelf.progressView.progress = 1
+//                strongSelf.openMainPage()
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
@@ -315,6 +331,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                     
                     if done == total {
                         AppModel.sharedManager().isRestoreFlow = false
+                        AppModel.sharedManager().isChangeWallet = false
                         RestoreManager.shared.cancelRestore()
                        
                         if !AppModel.sharedManager().isInternetAvailable {

@@ -60,9 +60,7 @@ std::string txIDToString(const TxID& txId)
 }
 
 void WalletModel::onStatus(const WalletStatus& status)
-{
-   // NSLog(@"onStatus");
-    
+{    
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
     walletStatus.available = status.available;
     walletStatus.receiving = status.receiving;
@@ -579,6 +577,11 @@ void WalletModel::onAddressChecked(const std::string& addr, bool isValid)
 {
     
 }
+
+//void WalletModel::onImportRecoveryProgress(uint64_t done, uint64_t total)
+//{
+//    
+//}
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
 {

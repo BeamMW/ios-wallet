@@ -1,0 +1,4 @@
+"NSPhotoLibraryAddUsageDescription" = "Sla transactie details op en scan QR codes vanuit foto's";
+"NSPhotoLibraryUsageDescription" = "Geef toegang tot fotogalerij om QR code te selecteren";
+"NSFaceIDUsageDescription" = "Deze app vereist Face ID toestemming om te verifiëren met gezichtsherkenning";
+"NSCameraUsageDescription" = "De camera is nodig om QR codes te scannen";

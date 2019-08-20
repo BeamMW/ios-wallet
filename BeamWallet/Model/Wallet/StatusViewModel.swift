@@ -21,8 +21,14 @@ import Foundation
 
 class StatusViewModel: NSObject {
 
+    enum SelectedState: Int {
+        case available = 0
+        case maturing = 1
+    }
+    
     public var onDataChanged : (() -> Void)?
-
+    public var selectedState = SelectedState.available
+    
     override init() {
         super.init()
         
@@ -31,6 +37,14 @@ class StatusViewModel: NSObject {
     
     deinit {
         AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    public func isAvaiableMautring() -> Bool {
+        if AppModel.sharedManager().walletStatus?.maturing ?? 0 > 0 {
+            return true
+        }
+        
+        return false
     }
     
     public func onReceive() {

@@ -29,6 +29,7 @@ public:
     using Ptr = std::shared_ptr<WalletModel>;
     
     WalletModel(beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
+    
     ~WalletModel() override;
 
     bool pre_connected_status;
@@ -60,4 +61,5 @@ private:
     void onPaymentProofExported(const beam::wallet::TxID& txID, const beam::ByteBuffer& proof) override;
     void onCoinsByTx(const std::vector<beam::wallet::Coin>& coins) override;
     void onAddressChecked(const std::string& addr, bool isValid) override;
+  //  void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
 };

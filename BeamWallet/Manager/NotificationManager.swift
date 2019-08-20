@@ -20,7 +20,7 @@
 
 import Foundation
 import UserNotifications
-import FirebaseMessaging
+//import FirebaseMessaging
 
 protocol NotificationManagerDelegate: AnyObject {
     func onTransactionStatus(succes:NotificationManager.TransactionStatus, status:String)
@@ -108,7 +108,7 @@ class NotificationManager : NSObject {
     public var clickedTransaction = ""
     
     public func fcmToken() -> String? {
-        return Messaging.messaging().fcmToken
+        return nil //Messaging.messaging().fcmToken
     }
     
     //MARK: - Tasks
@@ -146,7 +146,7 @@ class NotificationManager : NSObject {
             
             AppModel.sharedManager().addDelegate(self)
             
-            Messaging.messaging().delegate = self
+            //Messaging.messaging().delegate = self
         }
         
         
@@ -186,13 +186,13 @@ class NotificationManager : NSObject {
     
     public func subscribeToTopic(topic:String){
         if !NotificationManager.disableApns {
-            Messaging.messaging().subscribe(toTopic: topic)
+            //Messaging.messaging().subscribe(toTopic: topic)
         }
     }
     
     public func unSubscribeToTopic(topic:String){
         if !NotificationManager.disableApns {
-            Messaging.messaging().unsubscribe(fromTopic: topic)
+            // Messaging.messaging().unsubscribe(fromTopic: topic)
         }
     }
     
@@ -550,14 +550,14 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
 
 //MARK: - FCM Delegate
 
-extension NotificationManager : MessagingDelegate {
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        
-    }
-    
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-    }
-}
+//extension NotificationManager : MessagingDelegate {
+//    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+//        
+//    }
+//    
+//    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+//    }
+//}
 
 //MARK: - Wallet Delegate
 

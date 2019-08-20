@@ -42,7 +42,7 @@ class BMAmountCell: BaseCell {
                 erorLabel.text = nil
                 erorLabel.isHidden = true
                 textField.textColor = normalTextColor
-                textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
+                textField.lineColor = UIColor.white.withAlphaComponent(0.1)
             }
             else{
                 erorLabel.text = error

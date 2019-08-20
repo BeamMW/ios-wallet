@@ -63,6 +63,7 @@ class SettingsViewModel : NSObject {
     
     private func initItems() {
         var node = [SettingsItem]()
+        node.append(SettingsItem(title: Localizable.shared.strings.random_node, detail: nil, isSwitch: Settings.sharedManager().connectToRandomNode, id: 14))
         node.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5))
         
         var general = [SettingsItem]()
@@ -180,7 +181,7 @@ extension SettingsViewModel {
                 obj in
                 
                 if obj == true {
-                    self?.items[0][0].detail = Settings.sharedManager().nodeAddress
+                    self?.items[0][1].detail = Settings.sharedManager().nodeAddress
                 }
                 
                 completion(obj)

@@ -87,7 +87,8 @@ class RestoreNodeViewController: BaseViewController {
     private func openMainPage() {
         AppModel.sharedManager().removeDelegate(self)
         AppModel.sharedManager().isRestoreFlow = false
-        
+        AppModel.sharedManager().isChangeWallet = false
+
         AppModel.sharedManager().refreshAddresses()
         
         let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())

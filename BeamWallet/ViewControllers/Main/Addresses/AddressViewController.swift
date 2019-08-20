@@ -132,7 +132,7 @@ extension AddressViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 1 ? WalletTransactionCell.height() : UITableView.automaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -176,7 +176,7 @@ extension AddressViewController : UITableViewDataSource {
         else{
             let cell = tableView
                 .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row+1, transaction: addressViewModel.transactions[indexPath.row], single:false, searchString:nil))
+                .configured(with: (row: indexPath.row+1, transaction: addressViewModel.transactions[indexPath.row], additionalInfo:false))
             return cell
         }
         

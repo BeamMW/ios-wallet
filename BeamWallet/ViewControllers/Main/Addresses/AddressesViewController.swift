@@ -101,6 +101,20 @@ class AddressesViewController: BaseTableViewController {
     }
 }
 
+extension AddressesViewController: PagingViewControllerDelegate {
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, didScrollToItem pagingItem: T, startingViewController: UIViewController?, destinationViewController: UIViewController, transitionSuccessful: Bool) where T : PagingItem, T : Comparable, T : Hashable {
+        
+        let index = (pagingItem as! PagingIndexItem).index
+        
+        if index == 2 {
+            addRightButton(image: IconAdd(), target: self, selector: #selector(onAddContact))
+        }
+        else{
+            removeRightButton()
+        }
+    }
+}
+
 extension AddressesViewController: PagingViewControllerDataSource {
     
     func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {

@@ -30,6 +30,7 @@ static NSString *nodeKey = @"nodeKey";
 static NSString *askHideAmountsKey = @"askHideAmountsKey";
 static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 static NSString *languageKey = @"languageKey";
+static NSString *randomNodeKey = @"randomNodeKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -65,6 +66,16 @@ static NSString *languageKey = @"languageKey";
     else{
         _isNeedaskPasswordForSend = NO;
     }
+    
+    _connectToRandomNode = YES;
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:randomNodeKey]) {
+        _connectToRandomNode = [[[NSUserDefaults standardUserDefaults] objectForKey:randomNodeKey] boolValue];
+    }
+    else if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+        _connectToRandomNode = NO;
+    }
+
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:lockScreen]) {
         _lockScreenSeconds = [[[NSUserDefaults standardUserDefaults] objectForKey:lockScreen] intValue];
@@ -111,16 +122,11 @@ static NSString *languageKey = @"languageKey";
         _explorerAddress = @"https://explorer.beam.mw/block?kernel_id=";
     }
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey] && _connectToRandomNode == NO) {
         _nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
     }
     else{
-        if (self.target == Masternet) {
-            _nodeAddress = @"eu-node01.masternet.beam.mw:8100";
-        }
-        else{
-            _nodeAddress = [AppModel chooseRandomNode];
-        }
+        _nodeAddress = [AppModel chooseRandomNode];
     }
     
     if (self.target == Testnet)
@@ -183,6 +189,13 @@ static NSString *languageKey = @"languageKey";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+-(void)setConnectToRandomNode:(BOOL)connectToRandomNode {
+    _connectToRandomNode = connectToRandomNode;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_connectToRandomNode forKey:randomNodeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 -(void)setIsNeedaskPasswordForSend:(BOOL)isNeedaskPasswordForSend {
     _isNeedaskPasswordForSend = isNeedaskPasswordForSend;
     
@@ -218,8 +231,6 @@ static NSString *languageKey = @"languageKey";
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
         return oldPath;
-        
-      //  return [self groupDBPath];
     }
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -345,6 +356,7 @@ static NSString *languageKey = @"languageKey";
     en.code = @"en";
     en.enName = @"English";
     en.localName = @"English";
+    en.ID = 1;
 
     BMLanguage *ru = [BMLanguage new];
     ru.code = @"ru";
@@ -385,8 +397,30 @@ static NSString *languageKey = @"languageKey";
     fr.code = @"fr";
     fr.enName = @"Français";
     fr.localName = @"French";
-        
-    return @[en, ru, es, sw, ko, vi, ch, tr, fr];
+    
+    BMLanguage *jp = [BMLanguage new];
+    jp.code = @"ja";
+    jp.enName = @"日本語";
+    jp.localName = @"Japanese";
+    
+    BMLanguage *th = [BMLanguage new];
+    th.code = @"th";
+    th.enName = @"ภาษาไทย";
+    th.localName = @"Thai";
+    
+    BMLanguage *dutch = [BMLanguage new];
+    dutch.code = @"nl";
+    dutch.enName = @"Nederlands";
+    dutch.localName = @"Dutch";
+    
+    BMLanguage *fin = [BMLanguage new];
+    fin.code = @"fi";
+    fin.enName = @"Suomi";
+    fin.localName = @"Finnish";
+    
+    NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin];
+    
+    return [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
 }
 
 -(NSString*_Nonnull)languageName{

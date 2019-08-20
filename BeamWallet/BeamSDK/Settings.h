@@ -55,6 +55,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL isAskForHideAmounts;
 @property (nonatomic, assign) int lockScreenSeconds;
 @property (nonatomic, assign) BOOL isAllowOpenLink;
+@property (nonatomic, assign) BOOL connectToRandomNode;
 
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;

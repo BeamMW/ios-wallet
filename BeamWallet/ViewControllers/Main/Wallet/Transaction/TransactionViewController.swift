@@ -103,7 +103,7 @@ class TransactionViewController: BaseTableViewController {
             if let item = selectedItem {
                 switch (item.action) {
                 case .repeat_transaction:
-                    self.viewModel.onRepeat(transaction: self.viewModel.transaction!)
+                    self.viewModel.repeatTransation(transaction: self.viewModel.transaction!)
                 case .cancel_transaction :
                     self.viewModel.cancelTransation(indexPath: nil)
                 case .delete_transaction :

@@ -28,31 +28,10 @@ class BMSearchView: UIView {
     public var onCancelSearch : (() -> Void)?
 
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 154))
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 46))
         
-        backgroundColor = UIColor.main.marine
-        alpha = 0
-        
-        let y:CGFloat = Device.isXDevice ? 60 : 35
-
-        let backButton = UIButton(type: .system)
-        backButton.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
-        backButton.contentHorizontalAlignment = .left
-        backButton.tintColor = UIColor.white
-        backButton.setImage(IconBack(), for: .normal)
-        backButton.tag = 20192
-        backButton.addTarget(self, action: #selector(stopSearch), for: .touchUpInside)
-        addSubview(backButton)
-        
-        let titleLabel = UILabel()
-        titleLabel.frame = CGRect(x: 40, y: y, width: (UIScreen.main.bounds.size.width-80), height: 40)
-        titleLabel.font = SemiboldFont(size: 17)
-        titleLabel.numberOfLines = 1
-        titleLabel.text = Localizable.shared.strings.transaction_search
-        titleLabel.textColor = UIColor.white
-        titleLabel.textAlignment = .center
-        addSubview(titleLabel)
-        
+        backgroundColor = UIColor.clear
+                
         let iconView = UIImageView(frame: CGRect(x: 10, y: 11, width: 14, height: 14))
         iconView.contentMode = .scaleAspectFit
         iconView.image = IconSearchSmall()?.withRenderingMode(.alwaysTemplate)
@@ -71,7 +50,7 @@ class BMSearchView: UIView {
         clearButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onClear(_:))))
         clearButtonView.addSubview(clearButton)
 
-        searchField.frame = CGRect(x: defaultX, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 10, width:  (defaultWidth), height: 36)
+        searchField.frame = CGRect(x: defaultX, y: 5, width:  (defaultWidth), height: 36)
         searchField.leftView = leftView
         searchField.leftViewMode = .always
         searchField.rightView = clearButtonView
@@ -79,8 +58,8 @@ class BMSearchView: UIView {
         searchField.layer.cornerRadius = 10
         searchField.font = RegularFont(size: 16)
         searchField.backgroundColor = UIColor.main.marineThree
-        searchField.placeholder = Localizable.shared.strings.search
-        searchField.placeHolderColor = UIColor.main.steel
+        searchField.placeholder = Localizable.shared.strings.search_transactions
+        searchField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         searchField.tintColor = UIColor.white
         searchField.textColor = UIColor.white
         searchField.autocorrectionType = .no
@@ -106,26 +85,12 @@ class BMSearchView: UIView {
     }
     
     public func show() {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.alpha = 1
-        }) { (_ ) in
-            self.searchField.becomeFirstResponder()
-        }
+        alpha = 1
     }
     
     public func hide(){
         searchField.resignFirstResponder()
-        
-        UIView.animate(withDuration: 0.2, animations: {
-            self.alpha = 0
-        }) { (_) in
-            self.removeFromSuperview()
-        }
-    }
-    
-    @objc private func stopSearch() {
-        searchField.text = String.empty()
-        onCancelSearch?()
+        alpha = 0
     }
     
     @objc private func textFieldDidChange(_ textField: BMField) {

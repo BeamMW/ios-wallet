@@ -23,8 +23,16 @@ class BMGroupedCell: BaseCell {
     @IBOutlet weak private var botView: UIView!
     @IBOutlet weak private var bottomOffset: NSLayoutConstraint!
     
+    public var titleColor:UIColor = UIColor.white {
+        didSet{
+            titleLabel.textColor = titleColor
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        titleLabel.textColor = titleColor
         
         topView.backgroundColor = UIColor.white.withAlphaComponent(0.13)
         botView.backgroundColor = UIColor.white.withAlphaComponent(0.13)

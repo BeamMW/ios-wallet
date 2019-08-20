@@ -20,9 +20,6 @@
 import UIKit
 import Fabric
 import Crashlytics
-import FirebaseCore
-import FirebaseMessaging
-
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -43,13 +40,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.shared.isIdleTimerDisabled = false
 
-        FirebaseConfiguration.shared.setLoggerLevel(.min)
-        FirebaseApp.configure()
+//        FirebaseConfiguration.shared.setLoggerLevel(.min)
+//        FirebaseApp.configure()
 
         Crashlytics().debugMode = true
         Fabric.with([Crashlytics.self()])
         
         Settings.sharedManager()
+        
+        KeyboardListener.shared.start()
         
         NotificationManager.sharedManager.requestPermissions()
         
@@ -65,10 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
     
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
-        
-        CryptoWolfManager.sharedManager.loadData {
-            
-        }
         
         CrowdinManager.updateLocalizations()
 
@@ -200,7 +195,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        Messaging.messaging().apnsToken = deviceToken
+       // Messaging.messaging().apnsToken = deviceToken
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

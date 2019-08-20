@@ -26,11 +26,17 @@ class LoginViewController: BaseViewController {
     @IBOutlet private weak var languageButton: UIButton!
     @IBOutlet private weak var createButton: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var versionLabel: UILabel!
+    @IBOutlet private weak var versionOffset: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setTitles()
+        
+//        if Device.isXDevice {
+//            versionOffset.constant = 30
+//        }
         
         switch Settings.sharedManager().target {
         case Testnet:
@@ -48,6 +54,9 @@ class LoginViewController: BaseViewController {
     
     private func setTitles() {
         titleLabel.text = Localizable.shared.strings.beam_title
+        
+        versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+
         createButton.setTitle(Localizable.shared.strings.create_new_wallet.lowercased(), for: .normal)
         restoreButton.setTitle(Localizable.shared.strings.restore_wallet_title, for: .normal)
         languageButton.setTitle(Settings.sharedManager().shortLanguageName(), for: .normal)
@@ -59,13 +68,8 @@ class LoginViewController: BaseViewController {
         AppModel.sharedManager().resetWallet(true)
 
         if AppModel.sharedManager().canRestoreWallet() {
-            
-            self.confirmAlert(title: Localizable.shared.strings.restore_wallet_title, message: Localizable.shared.strings.restore_wallet_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.restore_wallet_title, cancelHandler: { (_ ) in
-                
-            }) { (_ ) in
-                AppModel.sharedManager().isRestoreFlow = true;
-                self.pushViewController(vc: RestoreOptionsViewController())
-            }
+            AppModel.sharedManager().isRestoreFlow = true;
+            self.pushViewController(vc: RestoreOptionsViewController())
         }
         else{
             self.alert(title: Localizable.shared.strings.no_space_title, message: Localizable.shared.strings.no_space_info) { (_ ) in
@@ -76,6 +80,7 @@ class LoginViewController: BaseViewController {
     @IBAction func onCreateWallet(sender :UIButton) {
         AppModel.sharedManager().resetWallet(true)
         AppModel.sharedManager().isRestoreFlow = false;
+        AppModel.sharedManager().isChangeWallet = false
 
         pushViewController(vc: IntroPhraseViewController())
     }
