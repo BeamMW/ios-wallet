@@ -1,6 +1,6 @@
 # How to build BEAM libraries
 
-#####Before building the BEAM libraries you should build boost and openssl libraries
+Before building the BEAM libraries you should build boost and openssl libraries
 
 ###### Boost
 
