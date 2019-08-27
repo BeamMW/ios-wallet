@@ -25,8 +25,6 @@ Things that make BEAM special include:
 # Current status
 - First Testnet development started
 
-# Known limitations and workarounds:
-- Restore flow is not implemented on mobile, yet the funds can be restored from the desktop wallet using the same seed the mobile wallet was created with
 
 # How to build
 - https://github.com/BeamMW/ios-wallet/blob/master/BUILD.md
