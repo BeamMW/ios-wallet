@@ -55,6 +55,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL isAskForHideAmounts;
 @property (nonatomic, assign) int lockScreenSeconds;
 @property (nonatomic, assign) BOOL isAllowOpenLink;
+@property (nonatomic, assign) BOOL connectToRandomNode;
 
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
@@ -65,7 +66,6 @@ typedef enum Target : NSUInteger {
 -(void)resetWallet;
 
 -(NSString*_Nonnull)walletStoragePath;
-
 -(NSString*_Nonnull)logPath;
 
 -(int)nodePort;
@@ -76,5 +76,7 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)languageName;
 -(NSArray <BMLanguage*> * _Nonnull)languages;
 -(NSString*_Nonnull)shortLanguageName;
+
+-(NSString*_Nonnull)customNode;
 
 @end

@@ -210,6 +210,7 @@ extension EditAddressViewController : UITableViewDataSource {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
                     .configured(with: (text: Localizable.shared.strings.delete_contact, position: BMGroupedCell.BMGroupedCellPosition.one))
+                cell.titleColor = UIColor.main.red
                 return cell
             }
             else{
@@ -232,6 +233,7 @@ extension EditAddressViewController : UITableViewDataSource {
                     let cell = tableView
                         .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
                         .configured(with: (text: Localizable.shared.strings.delete_address, position: BMGroupedCell.BMGroupedCellPosition.bottom))
+                    cell.titleColor = UIColor.main.red
                     return cell
                 default:
                     return BaseCell()

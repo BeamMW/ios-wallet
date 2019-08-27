@@ -34,17 +34,6 @@ class InputPhraseViewController: BaseWizardViewController {
         super.viewDidLoad()
         
         self.title = Localizable.shared.strings.restore_wallet_title
-
-////        let w = ["voice","sniff","risk","gas","fever","soccer","fabric","when","twice","valid",
-////                 "shuffle","detail"]
-//        let w = ["dance","cost","stamp","crazy","north","trade","rifle","hungry","wife","wood",
-//                 "discover","oven"]
-//        nextButton.isEnabled = true
-//        testNetNextButton.isEnabled = true
-//        for i in 0 ... 11 {
-//            inputWords.append(BMWord(w[i], index: UInt(i), correct: true))
-//        }
-//
         
         nextButton.isEnabled = false
         testNetNextButton.isEnabled = false
@@ -87,7 +76,18 @@ class InputPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: Localizable.shared.strings.seed_capture_warning)
+        var showAlert = false
+        
+        for word in inputWords  {
+            if !word.value.isEmpty && word.correct  {
+                showAlert = true
+                break
+            }
+        }
+        
+        if showAlert {
+            self.alert(message: Localizable.shared.strings.seed_capture_warning)
+        }
     }
     
     // MARK: IBAction
@@ -138,15 +138,19 @@ class InputPhraseViewController: BaseWizardViewController {
     }
     
     @IBAction func onNext(sender :UIButton) {
-        var words = [String]()
-        
-        for w in inputWords {
-            words.append(w.value)
+        self.alert(title: Localizable.shared.strings.info_restore_title, message: Localizable.shared.strings.info_restore_text, button: Localizable.shared.strings.understand) {[weak self] (_ ) in
+            guard let strongSelf = self else { return }
+            
+            var words = [String]()
+            
+            for w in strongSelf.inputWords {
+                words.append(w.value)
+            }
+            
+            let vc = CreateWalletPasswordViewController()
+                .withPhrase(phrase: words.joined(separator: ";"))
+            strongSelf.pushViewController(vc: vc)
         }
-        
-        let vc = CreateWalletPasswordViewController()
-            .withPhrase(phrase: words.joined(separator: ";"))
-        pushViewController(vc: vc)
     }
 }
 

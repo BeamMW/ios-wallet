@@ -168,7 +168,12 @@
 -(UIImage*)statusIcon {
     if (self.isCancelled)
     {
-        return [UIImage imageNamed:@"icon-canceled"];
+        if(_isIncome) {
+            return [UIImage imageNamed:@"icnReceiveCanceled"];
+        }
+        else{
+            return [UIImage imageNamed:@"icnSendCanceled"];
+        }
     }
     else if (self.isFailed)
     {

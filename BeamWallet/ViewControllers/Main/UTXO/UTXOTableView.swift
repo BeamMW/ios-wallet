@@ -86,7 +86,7 @@ class UTXOTableView: UITableViewController {
         if viewModel.utxos.count == 0 {
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: (text: Localizable.shared.strings.utxo_empty, image: IconUtxoEmpty()))
+                .configured(with: (text: selectedIndex == 1 ? Localizable.shared.strings.utxo_empty_progress : Localizable.shared.strings.utxo_empty, image: IconUtxoEmpty()))
             return cell
         }
         else{

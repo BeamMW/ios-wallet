@@ -47,7 +47,7 @@ class BMSearchAddressCell: BaseCell {
         textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
         textField.allowsEditingTextAttributes = true
         textField.defaultOffset = 4
-        textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
+        textField.lineColor = UIColor.white.withAlphaComponent(0.1)
         
         contentView.backgroundColor = UIColor.main.marineThree
     }
@@ -95,7 +95,7 @@ class BMSearchAddressCell: BaseCell {
                 errorLabel.isHidden = false
             }
             else{
-                textField.lineColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
+                textField.lineColor = UIColor.white.withAlphaComponent(0.1)
                 textField.textColor = UIColor.white
                 errorLabel.text = nil
                 errorLabel.textColor = UIColor.main.red

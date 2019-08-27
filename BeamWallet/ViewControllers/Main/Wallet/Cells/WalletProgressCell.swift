@@ -30,6 +30,8 @@ class WalletProgressCell: BaseCell {
     
     @IBOutlet weak private var mainView: UIView!
 
+    @IBOutlet weak private var titleLabel: UILabel!
+
     @IBOutlet weak private var receivingLabel: UILabel!
     @IBOutlet weak private var sentLabel: UILabel!
 
@@ -42,8 +44,10 @@ class WalletProgressCell: BaseCell {
     @IBOutlet weak private var currencyReceivingIcon: UIImageView!
     @IBOutlet weak private var currencySendingIcon: UIImageView!
 
+    @IBOutlet weak private var mainButton: UIButton!
+
     public static func hideHeight() -> CGFloat {
-        return 65
+        return 63
     }
     
     public static func mainHeight() -> CGFloat {
@@ -59,18 +63,20 @@ class WalletProgressCell: BaseCell {
         
         selectionStyle = .none
 
+        mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.3)), for: .highlighted)
+
         currencyReceivingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyReceivingIcon.tintColor = receivingLabel.textColor
-        
+        currencyReceivingIcon.tintAdjustmentMode = .normal
+
         currencySendingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencySendingIcon.tintColor = sentLabel.textColor
-        
-//        let touchDown = UILongPressGestureRecognizer(target:self, action: #selector(onTap))
-//        touchDown.minimumPressDuration = 0
-//        touchDown.cancelsTouchesInView = true
-//
+        currencySendingIcon.tintAdjustmentMode = .normal
+
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-//        mainView.addGestureRecognizer(touchDown)
+        
+        titleLabel.text = Localizable.shared.strings.in_progress.uppercased()
+        titleLabel.letterSpacing = 1.5
     }
     
     @IBAction func onExpand(sender :UIButton) {
@@ -88,40 +94,14 @@ class WalletProgressCell: BaseCell {
         }
         self.delegate?.onExpandProgress()
     }
-    
-//    @objc private func onTap(_ sender: UITapGestureRecognizer) {
-//        if sender.state == .began {
-//            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.03)
-//        }
-//        else if sender.state == .ended {
-//            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-//            
-//            if receivingStack.alpha == 1 {
-//                UIView.animate(withDuration: 0.3) {
-//                    self.mainStackView.alpha = 0
-//                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(-90 * Double.pi/180))
-//                }
-//            }
-//            else{
-//                UIView.animate(withDuration: 0.3) {
-//                    self.mainStackView.alpha = 1
-//                    self.arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(0 * Double.pi/180))
-//                }
-//            }
-//            self.delegate?.onExpandProgress()
-//        }
-//        else if sender.state == .cancelled || sender.state == .failed  {
-//            mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-//        }
-//    }
 }
 
 extension WalletProgressCell: Configurable {
     
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
-            receivingLabel.text = "+" + String.currency(value: status.realReceiving)
-            sentLabel.text = "-" + String.currency(value: status.realSending)
+            receivingLabel.text = "+ " + String.currency(value: status.realReceiving)
+            sentLabel.text = "- " + String.currency(value: status.realSending)
             
             sentStack.isHidden = status.realSending == 0 ? true : false
             receivingStack.isHidden = status.realReceiving == 0 ? true : false

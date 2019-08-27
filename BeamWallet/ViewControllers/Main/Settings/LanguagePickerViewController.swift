@@ -27,7 +27,7 @@ class LanguagePickerViewController: BaseTableViewController {
     
     public var completion : ((String) -> Void)?
     
-    private var languages = Settings.sharedManager().languages().sorted { $0.localName < $1.localName }
+    private var languages = Settings.sharedManager().languages().sorted { $0.id > $1.id }
     private var selectedLanguage:String!
     private var currentLanguage:String!
     
@@ -45,8 +45,7 @@ class LanguagePickerViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.language
         
-        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
-        
+        //addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
     
         for lang in languages {
             if lang.code == Settings.sharedManager().language {
@@ -62,7 +61,7 @@ class LanguagePickerViewController: BaseTableViewController {
         tableView.register(CategoryPickerCell.self)
     }
     
-    @objc private func onSave(sender:UIBarButtonItem) {
+    private func onSave() {
         Settings.sharedManager().language = selectedLanguage
         
         Localizable.shared.reset()
@@ -93,6 +92,8 @@ extension LanguagePickerViewController : UITableViewDelegate {
         enableRightButton(enabled: (currentLanguage == selectedLanguage) ? false : true)
 
         tableView.reloadData()
+        
+        onSave()
     }
 }
 

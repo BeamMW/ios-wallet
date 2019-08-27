@@ -26,6 +26,7 @@ class SaveContactViewController: BaseTableViewController {
     
     private var address:BMAddress!
     private var isAddContact = false
+    private var copyAddress:String?
     
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 110))
@@ -93,6 +94,22 @@ class SaveContactViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if isAddContact {
+            if let address = UIPasteboard.general.string {
+                if AppModel.sharedManager().isValidAddress(address)
+                {
+                    if let cell = tableView.findCell(BMSearchAddressCell.self) as? BMSearchAddressCell {
+                        copyAddress = address
+                        cell.beginEditing(text: copyAddress)
+                    }
+                }
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -238,6 +255,7 @@ extension SaveContactViewController : UITableViewDataSource {
                 cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: address.walletId, rightIcon: nil))
                 cell.backgroundColor = UIColor.clear
                 cell.contentView.backgroundColor = UIColor.clear
+                cell.copyText = copyAddress
                 return cell
             }
             else{

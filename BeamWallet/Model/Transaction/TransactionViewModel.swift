@@ -21,45 +21,40 @@
 import UIKit
 
 class TransactionViewModel: NSObject {
-
+    enum TransactionSelectedState: Int {
+        case all = 0
+        case sent = 1
+        case received = 2
+        case in_progress = 3
+    }
+    
+    
     public var onDataChanged : (() -> Void)?
     public var onDataDeleted : ((IndexPath?, BMTransaction) -> Void)?
     public var onDataUpdated : ((IndexPath?, BMTransaction) -> Void)?
 
     public var transactions = [BMTransaction]()
-
     public var address:BMAddress?
-
     public var transaction:BMTransaction?
     
+    public var isSegment = false
     public var isSearch = false {
         didSet{
             if !isSearch {
                 searchString = String.empty()
-                transactions.removeAll()
-                transactions.append(contentsOf: (AppModel.sharedManager().transactions as! [BMTransaction]))
-                onDataChanged?()
-            }
-            else{
-                search()
-                onDataChanged?()
             }
         }
     }
     
-    public var searchString = String.empty() {
-        didSet{
-            search()
-            onDataChanged?()
-        }
-    }
+    public var selectedState: TransactionSelectedState = .all
+    public var searchString = String.empty()
 
     init(transaction:BMTransaction) {
         super.init()
         
-        AppModel.sharedManager().addDelegate(self)
-        
         self.transaction = transaction
+
+        AppModel.sharedManager().addDelegate(self)
     }
     
     init(address:BMAddress) {
@@ -68,6 +63,17 @@ class TransactionViewModel: NSObject {
         self.address = address
         
         self.transactions = (AppModel.sharedManager().getTransactionsFrom(self.address!) as! [BMTransaction])
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    init(state:TransactionSelectedState) {
+        super.init()
+        
+        self.isSegment = true
+        self.selectedState = state
+        
+        self.search()
         
         AppModel.sharedManager().addDelegate(self)
     }
@@ -86,6 +92,8 @@ class TransactionViewModel: NSObject {
         AppModel.sharedManager().removeDelegate(self)
     }
     
+//MARK: - Actions
+
     public func cancelTransation(indexPath:IndexPath?) {
         let transaction:BMTransaction = (indexPath == nil ? self.transaction! : transactions[indexPath!.row])
 
@@ -114,7 +122,7 @@ class TransactionViewModel: NSObject {
         }
     }
     
-    public func onRepeat(transaction:BMTransaction) {
+    public func repeatTransation(transaction:BMTransaction) {
         if let top = UIApplication.getTopMostViewController() {
             let vc = SendViewController()
             vc.transaction = transaction
@@ -134,7 +142,7 @@ class TransactionViewModel: NSObject {
         
         let rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
             handler(true)
-           self.onRepeat(transaction: transaction)
+            self.repeatTransation(transaction: transaction)
         }
         rep.image = IconRowRepeat()
         rep.backgroundColor = UIColor.main.brightBlue
@@ -164,39 +172,15 @@ class TransactionViewModel: NSObject {
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
     }
-    
-    private func search() {
-        transactions.removeAll()
-
-        if !searchString.isEmpty {
-            let all = AppModel.sharedManager().transactions as! [BMTransaction]
-            
-            for tr in all {
-                let receiverName = AppModel.sharedManager().findAddress(byID: tr.receiverAddress)?.label
-                let senderName = AppModel.sharedManager().findAddress(byID: tr.senderAddress)?.label
-
-                tr.senderContactName = senderName == nil ? String.empty() : senderName!
-                tr.receiverContactName = receiverName == nil ? String.empty() : receiverName!
-            }
-            
-            let filterdObjects = all.filter {
-                $0.receiverAddress.lowercased().starts(with: searchString.lowercased()) ||
-                    $0.senderAddress.lowercased().starts(with: searchString.lowercased()) ||
-                    $0.id.lowercased().starts(with: searchString.lowercased()) ||
-                    $0.comment.lowercased().contains(searchString.lowercased()) ||
-                    $0.senderContactName.lowercased().contains(searchString.lowercased()) ||
-                    $0.receiverContactName.lowercased().contains(searchString.lowercased())
-            }
-            
-            transactions.append(contentsOf: filterdObjects)
-        }
-    }
 }
 
+//MARK: - Delegate
+
 extension TransactionViewModel : WalletModelDelegate {
+    
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
-            if self.isSearch {
+            if self.isSegment {
                 self.search()
             }
             else{
@@ -211,9 +195,60 @@ extension TransactionViewModel : WalletModelDelegate {
                 else{
                     self.transactions = transactions
                 }
+                self.onDataChanged?()
             }
-     
-            self.onDataChanged?()
+        }
+    }
+    
+    public func search() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            var allTransactions = [BMTransaction]()
+            if let transactions = AppModel.sharedManager().transactions as? [BMTransaction] {
+                allTransactions.append(contentsOf: transactions)
+            }
+            
+            switch strongSelf.selectedState {
+            case .all:
+                break
+            case .sent:
+                allTransactions = allTransactions.filter { $0.isIncome == false}
+            case .received:
+                allTransactions = allTransactions.filter { $0.isIncome == true}
+            case .in_progress:
+                allTransactions = allTransactions.filter { $0.enumStatus == BMTransactionStatusPending || $0.enumStatus == BMTransactionStatusInProgress || $0.enumStatus == BMTransactionStatusRegistering}
+            }
+            
+            if !strongSelf.searchString.isEmpty {
+                for tr in allTransactions {
+                    let receiverName = AppModel.sharedManager().findAddress(byID: tr.receiverAddress)?.label
+                    let senderName = AppModel.sharedManager().findAddress(byID: tr.senderAddress)?.label
+                    
+                    tr.senderContactName = senderName == nil ? String.empty() : senderName!
+                    tr.receiverContactName = receiverName == nil ? String.empty() : receiverName!
+                }
+                
+                let filterdObjects = allTransactions.filter {
+                    $0.receiverAddress.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
+                        $0.senderAddress.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
+                        $0.id.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
+                        $0.comment.lowercased().contains(strongSelf.searchString.lowercased()) ||
+                        $0.senderContactName.lowercased().contains(strongSelf.searchString.lowercased()) ||
+                        $0.receiverContactName.lowercased().contains(strongSelf.searchString.lowercased())
+                }
+                
+                strongSelf.transactions.removeAll()
+                strongSelf.transactions.append(contentsOf: filterdObjects)
+            }
+            else{
+                strongSelf.transactions.removeAll()
+                strongSelf.transactions.append(contentsOf: allTransactions)
+            }
+            
+            DispatchQueue.main.async {
+                strongSelf.onDataChanged?()
+            }
         }
     }
 }

@@ -31,30 +31,6 @@ class PagingLargeTitleCell : PagingTitleCell {
     }
 }
 
-class BMPagingView: PagingView {
-    
-    var menuTopConstraint: NSLayoutConstraint?
-    
-    override func setupConstraints() {
-        pageView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        menuTopConstraint = collectionView.topAnchor.constraint(equalTo: topAnchor)
-        menuTopConstraint?.isActive = true
-        
-        NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: options.menuHeight),
-            
-            pageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            pageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            pageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            pageView.topAnchor.constraint(equalTo: topAnchor)
-            ])
-    }
-}
-
 class BMPagingViewController: PagingViewController<PagingIndexItem> {
     
     override func loadView() {
@@ -83,7 +59,6 @@ class BMPagingViewController: PagingViewController<PagingIndexItem> {
         custom.options.borderColor = UIColor.clear
         custom.options.menuItemSpacing = 0
         custom.backgroundColor = UIColor.clear
-        
         contentInteraction = .none
         menuItemSource = .class(type: PagingLargeTitleCell.self)
 

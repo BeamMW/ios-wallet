@@ -22,6 +22,8 @@ import UIKit
 
 class RestoreOptionsViewController: BaseTableViewController {
 
+    private var didSet = false
+    
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 150))
         view.backgroundColor = UIColor.clear
@@ -56,6 +58,9 @@ class RestoreOptionsViewController: BaseTableViewController {
         tableView.tableFooterView = footerView
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 10))
         
+        let tapper = UITapGestureRecognizer(target: self, action: #selector(onTable))
+        tableView.gestureRecognizers = [tapper]
+        
         AppModel.sharedManager().restoreType = BMRestoreType(BMRestoreAutomatic)
     }
     
@@ -63,19 +68,33 @@ class RestoreOptionsViewController: BaseTableViewController {
         super.viewDidLayoutSubviews()
         
         if (Device.isXDevice || Device.isLarge) && !Device.isZoomed {
-            guard let footerView = tableView.tableFooterView else
-            {
-                return
+            if !didSet {
+                guard let footerView = tableView.tableFooterView else
+                {
+                    return
+                }
+                
+                didSet = true
+                
+                let cellsHeight:CGFloat = (tableView.tableHeaderView?.frame.height ?? 0) + tableView.rowHeight
+                
+                var frame = footerView.frame
+                
+                frame.size.height = tableView.contentSize.height - cellsHeight - 50;
+                frame.origin.y = cellsHeight
+                
+                footerView.frame = frame
+                
+                tableView.tableFooterView = footerView
             }
-            
-            let cellsHeight:CGFloat = (tableView.tableHeaderView?.frame.height ?? 0) + tableView.rowHeight
-            
-            var frame = footerView.frame
-            
-            frame.size.height = tableView.contentSize.height - cellsHeight - 50;
-            frame.origin.y = cellsHeight
-            
-            footerView.frame = frame
+        }
+    }
+    
+    @objc private func onTable(sender:UITapGestureRecognizer)    {
+        let touch = sender.location(in: tableView)
+        if let indexPath = tableView.indexPathForRow(at: touch) {
+            AppModel.sharedManager().restoreType = (indexPath.section == 0 ? BMRestoreType(BMRestoreAutomatic) : BMRestoreType(BMRestoreManual))
+            tableView.reloadData()
         }
     }
     

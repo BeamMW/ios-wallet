@@ -71,7 +71,7 @@ class ReceiveListViewController: BaseTableViewController {
         
         if let viewControllers = self.navigationController?.viewControllers{
             for vc in viewControllers {
-                if vc is SendViewController || vc is BuyBeamViewController {
+                if vc is SendViewController  {
                     mainColor = UIColor.main.heliotrope
                 }
             }

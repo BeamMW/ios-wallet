@@ -49,7 +49,8 @@ class AddressesViewController: BaseTableViewController {
         pagingViewController.didMove(toParent: self)
         
         pagingViewController.dataSource = self
-        
+        pagingViewController.delegate = self
+
         emptyView.isHidden = true
         emptyView.backgroundColor = UIColor.clear
         view.addSubview(emptyView)
@@ -57,8 +58,6 @@ class AddressesViewController: BaseTableViewController {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.addresses
-        
-        addRightButton(image: IconAdd(), target: self, selector: #selector(onAddContact))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +97,20 @@ class AddressesViewController: BaseTableViewController {
     @objc private func onAddContact() {
         let vc = SaveContactViewController(address: nil)
         pushViewController(vc: vc)
+    }
+}
+
+extension AddressesViewController: PagingViewControllerDelegate {
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, didScrollToItem pagingItem: T, startingViewController: UIViewController?, destinationViewController: UIViewController, transitionSuccessful: Bool) where T : PagingItem, T : Comparable, T : Hashable {
+        
+        let index = (pagingItem as! PagingIndexItem).index
+        
+        if index == 2 {
+            addRightButton(image: IconAdd(), target: self, selector: #selector(onAddContact))
+        }
+        else{
+            removeRightButton()
+        }
     }
 }
 

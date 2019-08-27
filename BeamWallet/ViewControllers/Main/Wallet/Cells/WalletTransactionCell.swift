@@ -27,116 +27,71 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var currencyIcon: UIImageView!
-    @IBOutlet weak private var arrowImage: UIImageView!
-    @IBOutlet weak private var amountOffset: NSLayoutConstraint!
     @IBOutlet weak private var balanceView: UIView!
-    @IBOutlet weak private var searchLabel: UILabel!
+    @IBOutlet weak private var statusIcon: UIImageView!
+
+    @IBOutlet weak private var commentView: UIStackView!
+    @IBOutlet weak private var commentLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintAdjustmentMode = .normal
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
+        
+        let selectedView = UIView()
+        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        self.selectedBackgroundView = selectedView
     }
 }
 
 extension WalletTransactionCell: Configurable {
     
-    func configure(with options: (row: Int, transaction:BMTransaction, single:Bool, searchString:String?)) {
+    func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
      
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
                 
-        arrowImage.isHidden = options.single
+        statusIcon.image = options.transaction.statusIcon()
         
         switch options.transaction.isIncome {
         case true:
-            amountLabel.text = "+" + String.currency(value: options.transaction.realAmount)
+            amountLabel.text = "+ " + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            typeLabel.text = Localizable.shared.strings.receive_beam
+            typeLabel.text = Localizable.shared.strings.receive
         case false:
-            amountLabel.text = "-" + String.currency(value: options.transaction.realAmount)
+            amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
-            typeLabel.text = Localizable.shared.strings.send_beam
+            typeLabel.text = Localizable.shared.strings.send
         }
         
         
         dateLabel.text = options.transaction.formattedDate()
+        dateLabel.isHidden = !options.additionalInfo
         statusLabel.text = options.transaction.status
         
-        if options.single {
-            amountOffset.constant = 0
-            self.selectionStyle = .none
+        balanceView.isHidden = Settings.sharedManager().isHideAmounts
+        
+        if options.additionalInfo && !options.transaction.comment.isEmpty {
+            commentView.isHidden = false
+            commentLabel.text = "”" + options.transaction.comment + "”"
         }
         else{
-            let selectedView = UIView()
-            selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-            self.selectedBackgroundView = selectedView
+            commentView.isHidden = true
         }
         
-        balanceView.isHidden = Settings.sharedManager().isHideAmounts
-        searchLabel.isHidden = true
-        
-        if let string = options.searchString, string.isEmpty == false {
-            searchLabel.isHidden = false
-            
-            var mainText = String.empty()
-            
-            if options.transaction.receiverAddress.lowercased().starts(with: string.lowercased()) {
-                mainText = options.transaction.receiverAddress
-            }
-            else if options.transaction.senderAddress.lowercased().starts(with: string.lowercased()) {
-                mainText = options.transaction.senderAddress
-            }
-            else if options.transaction.id.lowercased().starts(with: string.lowercased()) {
-                mainText = options.transaction.id
-            }
-            else if options.transaction.receiverContactName.lowercased().contains(string.lowercased()) {
-                mainText = options.transaction.receiverContactName
-            }
-            else if options.transaction.senderContactName.lowercased().contains(string.lowercased()) {
-                mainText = options.transaction.senderContactName
-            }
-            else if options.transaction.comment.lowercased().contains(string.lowercased()) {
-                mainText = options.transaction.comment
-            }
-            
-            let range = (mainText.lowercased() as NSString).range(of: String(string.lowercased()))
-            
-            let attributedString = NSMutableAttributedString(string:mainText)
-            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white , range: range)
-            searchLabel.attributedText = attributedString
-        }
-
         if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
             statusLabel.textColor = UIColor.main.greyish
         }
         else if options.transaction.isSelf {
             statusLabel.textColor = UIColor.white
         }
-        else if options.transaction.isIncome
-        {
+        else if options.transaction.isIncome {
             statusLabel.textColor = UIColor.main.brightSkyBlue
         }
-        else if !options.transaction.isIncome
-        {
+        else if !options.transaction.isIncome {
             statusLabel.textColor = UIColor.main.heliotrope
         }
-    }
-}
-
-extension WalletTransactionCell: DynamicContentHeight {
-    
-    static func height() -> CGFloat {
-        return 86
-    }
-    
-    static func searchHeight() -> CGFloat {
-        return 96
     }
 }

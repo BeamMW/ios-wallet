@@ -69,6 +69,21 @@ extension UIViewController {
         }
     }
     
+    func alert(title: String = "", message: String, button:String, handler: ((UIAlertAction) -> Void)? = nil) {
+        if (self.presentedViewController as? UIAlertController) != nil {
+            return
+        }
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: button, style: .default) { (action) in
+            if handler != nil {
+                handler!(action)
+            }
+        }
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func alert(title: String = "", message: String, handler: ((UIAlertAction) -> Void)? = nil) {
         if (self.presentedViewController as? UIAlertController) != nil {
             return

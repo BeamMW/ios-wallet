@@ -17,20 +17,17 @@ def shared_pods
     pod 'Crashlytics'
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
-    pod 'Firebase/Core'
-    pod 'Firebase/Messaging'
-    pod 'Moya'
-    pod 'ReCaptcha'
     pod 'Parchment'
+    pod 'SwipeTransition'
 end
 
-def extension
-    use_frameworks!
-    
-    pod 'SSZipArchive'
-    pod 'Firebase/Core'
-    pod 'Firebase/Messaging'
-end
+#def extension
+#    use_frameworks!
+#    
+#    pod 'SSZipArchive'
+#    pod 'Firebase/Core'
+#    pod 'Firebase/Messaging'
+#end
 
 target 'BeamWallet' do
     shared_pods
@@ -44,6 +41,6 @@ target 'BeamWalletMasterNet' do
     shared_pods
 end
 
-target 'BeamWalletNotificationViewTestNet' do
-    extension
-end
+#target 'BeamWalletNotificationViewTestNet' do
+#    extension
+#end

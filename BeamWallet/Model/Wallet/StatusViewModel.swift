@@ -21,8 +21,14 @@ import Foundation
 
 class StatusViewModel: NSObject {
 
+    enum SelectedState: Int {
+        case available = 0
+        case maturing = 1
+    }
+    
     public var onDataChanged : (() -> Void)?
-
+    public var selectedState = SelectedState.available
+    
     override init() {
         super.init()
         
@@ -33,15 +39,33 @@ class StatusViewModel: NSObject {
         AppModel.sharedManager().removeDelegate(self)
     }
     
+    public func isAvaiableMautring() -> Bool {
+        if AppModel.sharedManager().walletStatus?.maturing ?? 0 > 0 {
+            return true
+        }
+        
+        return false
+    }
+    
     public func onReceive() {
-        let vc = ReceiveViewController()
-        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        if AppModel.sharedManager().isWalletRunning() {
+            let vc = ReceiveViewController()
+            UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        }
+        else{
+            UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
+        }
+      
     }
     
     public func onSend() {
-        let vc = SendViewController()
-        vc.hidesBottomBarWhenPushed = true
-        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        if AppModel.sharedManager().isWalletRunning() {
+            let vc = SendViewController()
+            UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        }
+        else{
+            UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
+        }
     }
 }
 

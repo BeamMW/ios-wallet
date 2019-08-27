@@ -25,8 +25,10 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var touchIdButton: UIButton!
-    @IBOutlet private weak var passViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var loginLabel: UILabel!
+    @IBOutlet private weak var restoreButton: UIButton!
+    @IBOutlet private weak var stackView: UIStackView!
+    @IBOutlet private weak var topSpace: NSLayoutConstraint!
 
     init(isNeedRequestedAuthorization:Bool = true) {
         super.init(nibName: nil, bundle: nil)
@@ -41,18 +43,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Device.isZoomed {
-            mainStack?.spacing = 40
-            passViewHeight.constant = 50
+        if Device.isLarge {
+            stackView.spacing = 60
         }
-        else if Device.screenType == .iPhones_5 {
-            mainStack?.spacing = 60
-            passViewHeight.constant = 70
+        else if Device.isXDevice {
+            stackView.spacing = 40
+            topSpace.constant = -50
         }
-        else if Device.screenType == .iPhones_6 {
-            passViewHeight.constant = 70
-        }
-        
+  
         if !BiometricAuthorization.shared.canAuthenticate() || !Settings.sharedManager().isEnableBiometric {
             touchIdButton.isHidden = true
         }
@@ -66,10 +64,20 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        restoreButton.titleLabel?.numberOfLines = 2
+        restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
+        restoreButton.titleLabel?.textAlignment = .center
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        AppModel.sharedManager().isRestoreFlow = false;
+        
+        if AppModel.sharedManager().isChangeWallet {
+            AppModel.sharedManager().resetChangeWallet()
+        }
 
         if (self.presentedViewController as? UIAlertController) == nil {
             if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
@@ -150,8 +158,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     @IBAction func onChangeWallet(sender :UIButton) {
-        let vc = LoginViewController()
-        pushViewController(vc: vc)
+        self.confirmAlert(title: Localizable.shared.strings.restore_create_title, message: Localizable.shared.strings.restore_create_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.proceed, cancelHandler: { (_ ) in
+            
+        }) { (_ ) in
+            AppModel.sharedManager().isRestoreFlow = true;
+            AppModel.sharedManager().isChangeWallet = true;
+            
+            self.pushViewController(vc: RestoreOptionsViewController())
+        }
     }
 }
 

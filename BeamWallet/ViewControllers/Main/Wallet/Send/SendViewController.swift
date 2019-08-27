@@ -492,7 +492,8 @@ extension SendViewController : BMCellProtocol {
                 AppModel.sharedManager().setWalletComment(viewModel.outgoindAdderss!.label, toAddress: viewModel.outgoindAdderss!.walletId)
             }
             else if path.section == 1 {
-                if viewModel.checkAmountError() != nil {
+                viewModel.checkAmountError()
+                if  viewModel.amountError != nil {
                     tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
                 }
             }
@@ -544,37 +545,10 @@ extension SendViewController : BMCellProtocol {
                 pushViewController(vc: vc)
             }
             else if path.section == 2 {
-                if !viewModel.sendAll {
-                    viewModel.sendAll = true
-                    
-                    if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
-                        cell.configure(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
-                        cell.error = viewModel.amountError
-                        cell.fee = Double(viewModel.fee) ?? 0
-                    }
-                    else{
-                        tableView.reloadData()
-                    }
-                    
-                    UIView.performWithoutAnimation {
-                        tableView.beginUpdates()
-                        tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: .none)
-                        tableView.endUpdates()
-                    }
-                    
-                    if let a = Double(viewModel.amount), let f = Double(viewModel.fee) {
-                        if a == 0 && f > 0  {
-                            viewModel.amount = AppModel.sharedManager().allAmount(0)
-                            viewModel.amountError = AppModel.sharedManager().feeError(f)
-                            tableView.reloadData()
-                        }
-                        else if a == 0 {
-                            viewModel.amountError = Localizable.shared.strings.amount_zero
-                            tableView.reloadData()
-                        }
-                    }
-                }
- 
+                view.endEditing(true)
+                viewModel.sendAll = true
+                viewModel.checkFeeError()
+                tableView.reloadData()
             }
             else if path.section == 5 {
                 let vc = ReceiveListViewController()
@@ -623,24 +597,9 @@ extension SendViewController : BMCellProtocol {
     
     func onDidChangeFee(value: Double) {
         viewModel.fee = String(Int(value))
-        _ = viewModel.checkAmountError()
+        viewModel.checkAmountError()
+        viewModel.checkFeeError()
         
-        if viewModel.sendAll {
-            var error:String?
-            var amount = viewModel.amount
-            if let a = Double(viewModel.amount), let f = Double(viewModel.fee) {
-                if a == 0 && f > 0  {
-                    amount = AppModel.sharedManager().allAmount(0)
-                    error = AppModel.sharedManager().feeError(f)
-                }
-                else if a == 0 {
-                    error = Localizable.shared.strings.amount_zero
-                }
-            }
-            
-            viewModel.amount = amount
-            viewModel.amountError = error
-        }
         UIView.performWithoutAnimation {
             tableView.reloadData()
         }
@@ -749,6 +708,7 @@ extension SendViewController: PagingViewControllerDataSource {
     
     func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
         
+        searchControlles[index].tableView.contentInsetAdjustmentBehavior = .never
         searchControlles[index].view.backgroundColor = UIColor.clear
         searchControlles[index].delegate = self
         searchControlles[index].tableView.contentInset = tableView.contentInset

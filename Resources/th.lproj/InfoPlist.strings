@@ -1,0 +1,4 @@
+"NSPhotoLibraryAddUsageDescription" = "บันทึกรายละเอียดธุรกรรมและสแกน QR Code จากรูปภาพ";
+"NSPhotoLibraryUsageDescription" = "อนุญาตให้เข้าถึงแกลอรี่เพื่อเลือก QR Code";
+"NSFaceIDUsageDescription" = "แอปนี้จำเป็นจะต้องใช้การอนุญาตการใช้งาน Face ID สำหรับการใช้งานสแกนใบหน้า";
+"NSCameraUsageDescription" = "จำเป็นจะต้องมีกล้องสำหรับการสแกน QR Code";

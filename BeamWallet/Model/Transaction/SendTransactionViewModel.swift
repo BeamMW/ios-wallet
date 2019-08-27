@@ -63,14 +63,6 @@ class SendTransactionViewModel: NSObject {
         didSet{
             if sendAll {
                 amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
-//                if let f = Double(fee), let a = Double(amount) {
-//                    if f > 0 && a == 0 {
-//                        _ = checkAmountError()
-//                    }
-//                    else if a == 0 {
-//                       amountError = Localizable.shared.strings.amount_zero
-//                    }
-//                }
             }
         }
     }
@@ -121,7 +113,7 @@ class SendTransactionViewModel: NSObject {
         AppStoreReviewManager.incrementAppTransactions()
     }
     
-    public func checkAmountError() -> String? {
+    public func checkAmountError() {
         let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
        
         if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
@@ -130,8 +122,20 @@ class SendTransactionViewModel: NSObject {
         else{
             amountError = nil
         }
-        
-        return amountError
+    }
+    
+    public func checkFeeError() {
+        if sendAll {
+            if let a = Double(amount), let f = Double(fee) {
+                if a == 0 && f > 0  {
+                    amount = AppModel.sharedManager().allAmount(0)
+                    amountError = AppModel.sharedManager().feeError(f)
+                }
+                else if a == 0 {
+                    amountError = Localizable.shared.strings.amount_zero
+                }
+            }
+        }
     }
     
     public func canSend() -> Bool {

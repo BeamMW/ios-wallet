@@ -77,6 +77,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,assign) BOOL isLoggedin;
 @property (nonatomic,assign) BOOL isRestoreFlow;
 @property (nonatomic,assign) BOOL isNodeChanging;
+@property (nonatomic,assign) BOOL isChangeWallet;
 @property (nonatomic,assign) BMRestoreType restoreType;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
@@ -111,14 +112,17 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)resetWallet:(BOOL)removeDatabase;
 -(void)resetOnlyWallet;
 -(void)restartWallet;
+-(void)resetChangeWallet;
 -(void)start;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
 -(void)changeNodeAddress;
 -(BOOL)isValidNodeAddress:(NSString*_Nonnull)string;
 -(BOOL)isWalletInitialized;
+-(BOOL)isWalletRunning;
 -(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block;
 
+    
 // updates
 -(void)getWalletStatus;
 -(void)getNetworkStatus;
@@ -152,7 +156,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
--(NSString*)feeError:(double)fee;
+-(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
 -(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact;
@@ -174,7 +178,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)cancelTransactionByID:(NSString*_Nonnull)transaction;
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction;
--(void)exportTransactionsToCSV:(void(^_Nonnull)(NSURL*_Nonnull))callback;
+-(NSURL*_Nonnull)exportTransactionsToCSV:(NSArray<BMTransaction*>*_Nonnull)transactions;
 -(void)clearAllTransactions;
 -(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID;
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
