@@ -161,6 +161,13 @@ static NSString *randomNodeKey = @"randomNodeKey";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+-(NSString*_Nonnull)customNode {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeKey]) {
+        return [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
+    }
+    return @"";
+}
+
 -(void)setIsHideAmounts:(BOOL)isHideAmounts {
     _isHideAmounts = isHideAmounts;
     
@@ -257,8 +264,10 @@ static NSString *randomNodeKey = @"randomNodeKey";
 -(void)setNodeAddress:(NSString *_Nonnull)nodeAddress {
     _nodeAddress = nodeAddress;
     
-    [[NSUserDefaults standardUserDefaults] setObject:_nodeAddress forKey:nodeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (!_connectToRandomNode) {
+        [[NSUserDefaults standardUserDefaults] setObject:_nodeAddress forKey:nodeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     if(![[AppModel sharedManager] isRestoreFlow]){
         for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)

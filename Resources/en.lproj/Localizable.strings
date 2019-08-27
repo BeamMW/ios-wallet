@@ -375,8 +375,12 @@
 "tag" = "Tag";
 "contacts_empty" = "Your contacts list is empty";
 "addresses_empty" = "Your addresses list is empty";
+"addresses_empty_active" = "You have no active addresses";
+"addresses_empty_expired" = "You have no expired addresses";
 "utxo_empty" = "Your UTXO list is empty";
+"utxo_empty_progress" = "You have no active UTXO";
 "transactions_empty" = "Your transaction list is empty";
+"transactions_empty_progress" = "You have no active transactions";
 "automatic_restore_title" = "Recommended restore";
 "automatic_restore_text" = "Beam Wallet will download the blockchain snapshot from the cloud.";
 "manual_restore_title" = "Restore with trusted node";

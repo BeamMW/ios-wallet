@@ -86,9 +86,31 @@ class AddressTableView: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
   
         if viewModel.count == 0 {
+            var text = String.empty()
+            
+            if selectedIndex == 0 {
+                if AppModel.sharedManager().walletAddresses?.count == 0 {
+                    text = Localizable.shared.strings.addresses_empty
+                }
+                else{
+                    text = Localizable.shared.strings.addresses_empty_active
+                }
+            }
+            else if selectedIndex == 1 {
+                if AppModel.sharedManager().walletAddresses?.count == 0 {
+                    text = Localizable.shared.strings.addresses_empty
+                }
+                else{
+                    text = Localizable.shared.strings.addresses_empty_expired
+                }
+            }
+            else{
+                text = Localizable.shared.strings.contacts_empty
+            }
+            
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: (text: (selectedIndex == 2 ? Localizable.shared.strings.contacts_empty : Localizable.shared.strings.addresses_empty), image: IconAddressbookEmpty()))
+                .configured(with: (text: text, image: IconAddressbookEmpty()))
             return cell
         }
         else {

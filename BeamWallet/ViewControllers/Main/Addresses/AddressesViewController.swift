@@ -49,7 +49,8 @@ class AddressesViewController: BaseTableViewController {
         pagingViewController.didMove(toParent: self)
         
         pagingViewController.dataSource = self
-        
+        pagingViewController.delegate = self
+
         emptyView.isHidden = true
         emptyView.backgroundColor = UIColor.clear
         view.addSubview(emptyView)
@@ -57,8 +58,6 @@ class AddressesViewController: BaseTableViewController {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.addresses
-        
-        addRightButton(image: IconAdd(), target: self, selector: #selector(onAddContact))
     }
     
     override func viewWillAppear(_ animated: Bool) {

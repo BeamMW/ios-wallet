@@ -20,7 +20,7 @@
 import UIKit
 
 class BMMultiLinesCell: BaseCell {
-
+    
     weak var delegate: GeneralInfoCellDelegate?
 
     @IBOutlet weak private var nameLabel: UILabel!

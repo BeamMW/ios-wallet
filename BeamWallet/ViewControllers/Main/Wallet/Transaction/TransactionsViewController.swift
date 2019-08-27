@@ -143,7 +143,8 @@ extension TransactionsViewController: PagingViewControllerDataSource {
             let viewController = TransactionsTableView()
             viewController.viewModel = viewModels[index]
             viewController.view.backgroundColor = UIColor.clear
-            
+            viewController.index = index
+
             controllers[index] = viewController
             
             return viewController

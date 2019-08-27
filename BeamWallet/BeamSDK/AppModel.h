@@ -119,8 +119,10 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)changeNodeAddress;
 -(BOOL)isValidNodeAddress:(NSString*_Nonnull)string;
 -(BOOL)isWalletInitialized;
+-(BOOL)isWalletRunning;
 -(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block;
 
+    
 // updates
 -(void)getWalletStatus;
 -(void)getNetworkStatus;

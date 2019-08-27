@@ -394,6 +394,11 @@ class LocalizableStrings : NSObject {
     var restore_create_text = "restore_create_text".localized
     var proceed = "proceed".localized
 
+    var addresses_empty_expired = "addresses_empty_expired".localized
+    var addresses_empty_active = "addresses_empty_active".localized
+    var utxo_empty_progress = "utxo_empty_progress".localized
+    var transactions_empty_progress = "transactions_empty_progress".localized
+
     var info_restore_title = "info_restore_title".localized
     var info_restore_text = "info_restore_text".localized
     

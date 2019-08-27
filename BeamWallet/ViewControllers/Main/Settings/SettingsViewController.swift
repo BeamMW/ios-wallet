@@ -253,6 +253,12 @@ extension SettingsViewController : SettingsCellDelegate {
                     
                     viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
                 }
+                else if Settings.sharedManager().customNode().isEmpty == false {
+                    Settings.sharedManager().nodeAddress = Settings.sharedManager().customNode();
+                    AppModel.sharedManager().changeNodeAddress()
+                    
+                    viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
+                }
                 
                 tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
             }

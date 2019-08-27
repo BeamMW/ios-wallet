@@ -163,7 +163,7 @@ class CreateWalletProgressViewController: BaseViewController {
     
     private func startCreateWallet() {
         
-        if !AppModel.sharedManager().isInternetAvailable {
+        if !AppModel.sharedManager().isInternetAvailable && AppModel.sharedManager().isRestoreFlow {
             self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
                 AppModel.sharedManager().resetWallet(false)
                 self.back()
@@ -217,6 +217,10 @@ class CreateWalletProgressViewController: BaseViewController {
                         self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_opened) { (_ ) in
                             self.navigationController?.popToRootViewController(animated: true)
                         }
+                    }
+                    else if (!AppModel.sharedManager().isInternetAvailable)
+                    {
+                        self.openMainPage()
                     }
                 }
             }

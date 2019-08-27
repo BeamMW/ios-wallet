@@ -66,7 +66,6 @@ typedef enum Target : NSUInteger {
 -(void)resetWallet;
 
 -(NSString*_Nonnull)walletStoragePath;
-
 -(NSString*_Nonnull)logPath;
 
 -(int)nodePort;
@@ -77,5 +76,7 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)languageName;
 -(NSArray <BMLanguage*> * _Nonnull)languages;
 -(NSString*_Nonnull)shortLanguageName;
+
+-(NSString*_Nonnull)customNode;
 
 @end

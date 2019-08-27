@@ -48,14 +48,24 @@ class StatusViewModel: NSObject {
     }
     
     public func onReceive() {
-        let vc = ReceiveViewController()
-        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        if AppModel.sharedManager().isWalletRunning() {
+            let vc = ReceiveViewController()
+            UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        }
+        else{
+            UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
+        }
+      
     }
     
     public func onSend() {
-        let vc = SendViewController()
-        vc.hidesBottomBarWhenPushed = true
-        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        if AppModel.sharedManager().isWalletRunning() {
+            let vc = SendViewController()
+            UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
+        }
+        else{
+            UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
+        }
     }
 }
 

@@ -21,6 +21,8 @@ import UIKit
 
 class TransactionsTableView: UITableViewController {
     
+    public var index = 0
+    
     public var viewModel:TransactionViewModel!
 
     public var isSearching = false {
@@ -139,9 +141,18 @@ class TransactionsTableView: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if viewModel.transactions.count == 0 {
+            var text = String.empty()
+            
+            if AppModel.sharedManager().transactions?.count == 0 {
+                text = Localizable.shared.strings.transactions_empty
+            }
+            else{
+               text = index == 3 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
+            }
+            
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: (text: Localizable.shared.strings.transactions_empty, image: IconWalletEmpty()))
+                .configured(with: (text:text , image: IconWalletEmpty()))
             return cell
         }
         else {

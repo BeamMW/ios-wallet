@@ -195,10 +195,17 @@ const int kFeeInGroth_Fork1 = 100;
 #pragma mark - Inetrnet
 
 -(void)checkInternetConnection{
+    __weak typeof(self) weakSelf = self;
+
     internetReachableFoo = [Reachability reachabilityWithHostName:@"www.google.com"];
     
     internetReachableFoo.reachableBlock = ^(Reachability*reach)
     {
+        if (self->isRunning == NO && weakSelf.isLoggedin == YES) {
+            self->isRunning = YES;
+            self->wallet->start();
+        }
+        
         if (![[AppModel sharedManager] isInternetAvailable]) {
             [[AppModel sharedManager] refreshAllInfo];
         }
@@ -478,6 +485,10 @@ const int kFeeInGroth_Fork1 = 100;
     }
     
     return NO;
+}
+    
+-(BOOL)isWalletRunning {
+    return isRunning;
 }
 
 -(void)onWalledOpened:(const SecString&) pass {
@@ -1042,13 +1053,17 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     
 -(void)generateNewWalletAddress {
-    wallet->getAsync()->generateNewAddress();
+    if (wallet!=nil) {
+        wallet->getAsync()->generateNewAddress();
+    }
 }
     
 -(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block{
     self.generatedNewAddressBlock = block;
     
-    wallet->getAsync()->generateNewAddress();
+    if (wallet!=nil) {
+        wallet->getAsync()->generateNewAddress();
+    }
 }
 
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {

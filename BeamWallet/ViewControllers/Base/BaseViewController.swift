@@ -300,14 +300,26 @@ class BaseViewController: UIViewController {
         view.addSubview(logoView)
         
         var title = Localizable.shared.strings.rate_title
-        if !title.contains("\n") {
-            title = "\n\n\n" + title
+        title = title.replacingOccurrences(of: "\n", with: "")
+        title = "\n\n\n" + title
+
+        let text = Localizable.shared.strings.rate_text
+        
+        var h:CGFloat = 285
+        if Settings.sharedManager().language == "vi"
+        {
+            view.frame = CGRect(x: 95, y: 10, width: 60, height: 60)
+            h = 300
+        }
+        else if (Settings.sharedManager().language == "ko" || Settings.sharedManager().language == "fi") {
+            title = "\n" + title
+            h = 300
         }
         
-        let showAlert = UIAlertController(title: title, message: Localizable.shared.strings.rate_text, preferredStyle: .alert)
+        let showAlert = UIAlertController(title: title, message: text, preferredStyle: .alert)
         showAlert.view.addSubview(view)
         
-        let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 285)
+        let height = NSLayoutConstraint(item: showAlert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: h)
         let width = NSLayoutConstraint(item: showAlert.view!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 250)
         showAlert.view.addConstraint(height)
         showAlert.view.addConstraint(width)

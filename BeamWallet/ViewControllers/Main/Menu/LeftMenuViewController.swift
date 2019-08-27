@@ -79,13 +79,13 @@ class LeftMenuViewController: BaseTableViewController {
         let imageString = NSAttributedString(attachment: imageAttachment)
         
         let attributedString = NSMutableAttributedString(string:Localizable.shared.strings.where_buy_beam)
-        attributedString.addAttributes([NSAttributedString.Key.paragraphStyle : titleParagraphStyle], range:  NSRange(location: 0, length: Localizable.shared.strings.where_buy_beam.count))
-        attributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.5)], range:  NSRange(location: 0, length:Localizable.shared.strings.where_buy_beam.count))
+        attributedString.addAttributes([NSAttributedString.Key.paragraphStyle : titleParagraphStyle], range:  NSRange(location: 0, length: attributedString.string.unicodeScalars.count))
+        attributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.5)], range:  NSRange(location: 0, length:attributedString.string.unicodeScalars.count))
         attributedString.append(NSAttributedString(string: "  "))
         attributedString.append(imageString)
         
         let highlightedAttributedString = NSMutableAttributedString(attributedString: attributedString)
-        highlightedAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.2)], range:  NSRange(location: 0, length: Localizable.shared.strings.where_buy_beam.count))
+        highlightedAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.main.brightTeal.withAlphaComponent(0.2)], range:  NSRange(location: 0, length: attributedString.string.unicodeScalars.count))
         
         buyButton = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height-50, width: UIScreen.main.bounds.size.width, height: 50))
         buyButton.setImage(IconBuyLogo(), for: .normal)
