@@ -22,13 +22,22 @@ import Fabric
 import Crashlytics
 import CrashEye
 
-@UIApplicationMain
+
+private let g_secs = 5.0
+
+class BeamApplication: UIApplication{
+    override func sendEvent(_ event: UIEvent) {
+        super.sendEvent(event)
+        BMLockScreen.shared.onTapEvent()
+    }
+}
+
+//@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private var scannedTGUserId = String.empty()
 
     var securityScreen = BMAutoSecurityScreen()
-    var lockScreen = LockScreen()
 
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid

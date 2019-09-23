@@ -31,6 +31,7 @@
 #import "BMWord.h"
 #import "BMLanguage.h"
 #import "StringLocalize.h"
+#import "BMLockScreenValue.h"
 
 enum {
     BMRestoreManual = 0,

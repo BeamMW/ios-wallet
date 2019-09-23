@@ -51,9 +51,9 @@
 		92103F652339013E009EA34C /* EnterNodeAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92103F642339013E009EA34C /* EnterNodeAddressViewController.xib */; };
 		92103F662339013E009EA34C /* EnterNodeAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92103F642339013E009EA34C /* EnterNodeAddressViewController.xib */; };
 		92103F672339013E009EA34C /* EnterNodeAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92103F642339013E009EA34C /* EnterNodeAddressViewController.xib */; };
-		92103F692339117B009EA34C /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* LockScreen.swift */; };
-		92103F6A2339117B009EA34C /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* LockScreen.swift */; };
-		92103F6B2339117B009EA34C /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* LockScreen.swift */; };
+		92103F692339117B009EA34C /* BMLockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* BMLockScreen.swift */; };
+		92103F6A2339117B009EA34C /* BMLockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* BMLockScreen.swift */; };
+		92103F6B2339117B009EA34C /* BMLockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* BMLockScreen.swift */; };
 		9212DB9422E07ECA0053FC99 /* AddressTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DB9322E07ECA0053FC99 /* AddressTableView.swift */; };
 		9212DB9522E07ECA0053FC99 /* AddressTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DB9322E07ECA0053FC99 /* AddressTableView.swift */; };
 		9212DB9622E07ECA0053FC99 /* AddressTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DB9322E07ECA0053FC99 /* AddressTableView.swift */; };
@@ -482,6 +482,12 @@
 		92A1BA032236920C008135B5 /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA012236920C008135B5 /* QRViewController.swift */; };
 		92A1BA042236920C008135B5 /* QRViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1BA022236920C008135B5 /* QRViewController.xib */; };
 		92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A1BA0522369567008135B5 /* QRCodeView.swift */; };
+		92A2C5F8233918BC00766EA7 /* BMLockScreenValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A2C5F7233918BC00766EA7 /* BMLockScreenValue.m */; };
+		92A2C5F9233918BC00766EA7 /* BMLockScreenValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A2C5F7233918BC00766EA7 /* BMLockScreenValue.m */; };
+		92A2C5FA233918BC00766EA7 /* BMLockScreenValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A2C5F7233918BC00766EA7 /* BMLockScreenValue.m */; };
+		92A2C5FC23391DC500766EA7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2C5FB23391DC500766EA7 /* main.swift */; };
+		92A2C5FD23391DC500766EA7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2C5FB23391DC500766EA7 /* main.swift */; };
+		92A2C5FE23391DC500766EA7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2C5FB23391DC500766EA7 /* main.swift */; };
 		92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB8326223BA921000ADE86 /* ShareLogActivity.swift */; };
 		92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB8326223BA921000ADE86 /* ShareLogActivity.swift */; };
 		92AB832E223BC5D4000ADE86 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */; };
@@ -990,7 +996,7 @@
 		92103F5C2338FC5E009EA34C /* ClearCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCell.swift; sourceTree = "<group>"; };
 		92103F5D2338FC5E009EA34C /* ClearCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ClearCell.xib; sourceTree = "<group>"; };
 		92103F642339013E009EA34C /* EnterNodeAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EnterNodeAddressViewController.xib; sourceTree = "<group>"; };
-		92103F682339117B009EA34C /* LockScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockScreen.swift; sourceTree = "<group>"; };
+		92103F682339117B009EA34C /* BMLockScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMLockScreen.swift; sourceTree = "<group>"; };
 		9212DB9322E07ECA0053FC99 /* AddressTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressTableView.swift; sourceTree = "<group>"; };
 		9212DB9722E0990D0053FC99 /* BMEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BMEmptyView.swift; path = BeamWallet/Controls/BMEmptyView.swift; sourceTree = SOURCE_ROOT; };
 		9212DB9822E0990D0053FC99 /* BMEmptyView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BMEmptyView.xib; path = BeamWallet/Controls/BMEmptyView.xib; sourceTree = SOURCE_ROOT; };
@@ -1189,6 +1195,9 @@
 		92A1BA012236920C008135B5 /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
 		92A1BA022236920C008135B5 /* QRViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRViewController.xib; sourceTree = "<group>"; };
 		92A1BA0522369567008135B5 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		92A2C5F6233918BC00766EA7 /* BMLockScreenValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMLockScreenValue.h; sourceTree = "<group>"; };
+		92A2C5F7233918BC00766EA7 /* BMLockScreenValue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMLockScreenValue.m; sourceTree = "<group>"; };
+		92A2C5FB23391DC500766EA7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		92AB8326223BA921000ADE86 /* ShareLogActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareLogActivity.swift; sourceTree = "<group>"; };
 		92AB832C223BC5D4000ADE86 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
 		92AC9EB522F4E387007C554E /* TransactionPaymentProofCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransactionPaymentProofCell.xib; sourceTree = "<group>"; };
@@ -1641,6 +1650,8 @@
 				92B7E4E122AFBF95001708E4 /* BMWord.m */,
 				92BCEE7522C37E0F0062EE95 /* BMLanguage.h */,
 				92BCEE7622C37E0F0062EE95 /* BMLanguage.m */,
+				92A2C5F6233918BC00766EA7 /* BMLockScreenValue.h */,
+				92A2C5F7233918BC00766EA7 /* BMLockScreenValue.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -1756,6 +1767,7 @@
 				925AD5EE2228275E00DDE66B /* ViewControllers */,
 				925AD5DB2228254E00DDE66B /* AppDelegate.swift */,
 				92F82512222C33F6000D34F7 /* BeamWallet-Bridging-Header.h */,
+				92A2C5FB23391DC500766EA7 /* main.swift */,
 			);
 			path = BeamWallet;
 			sourceTree = "<group>";
@@ -1815,7 +1827,7 @@
 			children = (
 				9212DBC622E0CD720053FC99 /* ThirdParty */,
 				92F6B78622A52CC40055C3C3 /* Cell */,
-				92103F682339117B009EA34C /* LockScreen.swift */,
+				92103F682339117B009EA34C /* BMLockScreen.swift */,
 				923544742254C9A700889C74 /* BMAutoSecurityScreen.swift */,
 				925AD5FB22282A7F00DDE66B /* BMButton.swift */,
 				92FC610F22295DC100AEABC1 /* BMWordField.swift */,
@@ -2960,7 +2972,7 @@
 				929AE4D822BCDCB8006BE960 /* Frames.swift in Sources */,
 				92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */,
 				9288DD9F223A55DF0020C501 /* BaseViewController.swift in Sources */,
-				92103F692339117B009EA34C /* LockScreen.swift in Sources */,
+				92103F692339117B009EA34C /* BMLockScreen.swift in Sources */,
 				921FA630227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
 				92790DAA224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78222A5278A0055C3C3 /* SendViewController.swift in Sources */,
@@ -3053,6 +3065,7 @@
 				9261C289228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92B7E4C522AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
 				92D3CBD12264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */,
+				92A2C5F8233918BC00766EA7 /* BMLockScreenValue.m in Sources */,
 				92435246222DF9AE00A0EF37 /* BMAddress.mm in Sources */,
 				92C00D1B22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */,
 				922FB15E22B3E134007AD689 /* BMSearchView.swift in Sources */,
@@ -3082,6 +3095,7 @@
 				926A857C222EC10C00A3B747 /* WalletTransactionSearchCell.swift in Sources */,
 				928848022243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
 				92FC933422538CE400555DE1 /* Double.swift in Sources */,
+				92A2C5FC23391DC500766EA7 /* main.swift in Sources */,
 				92B7E4D922AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				9246C95A2268AC9F00646484 /* EnterNodeAddressViewController.swift in Sources */,
 				92ADED812229F213001D0A38 /* ViewController.swift in Sources */,
@@ -3162,7 +3176,7 @@
 				929AE4D922BCDCB8006BE960 /* Frames.swift in Sources */,
 				9288DD3B223A55410020C501 /* InputWordCell.swift in Sources */,
 				9288DDA0223A56920020C501 /* BaseViewController.swift in Sources */,
-				92103F6A2339117B009EA34C /* LockScreen.swift in Sources */,
+				92103F6A2339117B009EA34C /* BMLockScreen.swift in Sources */,
 				921FA631227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
 				92790DAB224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78322A5278A0055C3C3 /* SendViewController.swift in Sources */,
@@ -3255,6 +3269,7 @@
 				9261C28A228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92B7E4C622AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
 				92D3CBD22264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */,
+				92A2C5F9233918BC00766EA7 /* BMLockScreenValue.m in Sources */,
 				9288DD52223A55410020C501 /* BMAddress.mm in Sources */,
 				92C00D1C22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */,
 				922FB15F22B3E134007AD689 /* BMSearchView.swift in Sources */,
@@ -3284,6 +3299,7 @@
 				9288DD59223A55410020C501 /* WalletTransactionSearchCell.swift in Sources */,
 				928848032243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
 				92FC933522538CE400555DE1 /* Double.swift in Sources */,
+				92A2C5FD23391DC500766EA7 /* main.swift in Sources */,
 				92B7E4DA22AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				9246C95B2268AC9F00646484 /* EnterNodeAddressViewController.swift in Sources */,
 				9288DD5A223A55410020C501 /* ViewController.swift in Sources */,
@@ -3364,7 +3380,7 @@
 				929AE4DA22BCDCB8006BE960 /* Frames.swift in Sources */,
 				92E2EAE4226F21C700367928 /* InputWordCell.swift in Sources */,
 				92E2EAE5226F21C700367928 /* BaseViewController.swift in Sources */,
-				92103F6B2339117B009EA34C /* LockScreen.swift in Sources */,
+				92103F6B2339117B009EA34C /* BMLockScreen.swift in Sources */,
 				921FA632227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
 				92E2EAE7226F21C700367928 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78422A5278A0055C3C3 /* SendViewController.swift in Sources */,
@@ -3457,6 +3473,7 @@
 				9261C28B228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92B7E4C722AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
 				92E2EB0E226F21C700367928 /* BiometricAuthorization.swift in Sources */,
+				92A2C5FA233918BC00766EA7 /* BMLockScreenValue.m in Sources */,
 				92E2EB0F226F21C700367928 /* BMAddress.mm in Sources */,
 				92C00D1D22A009F100DDB579 /* OwnerKeyUnlockViewController.swift in Sources */,
 				922FB16022B3E134007AD689 /* BMSearchView.swift in Sources */,
@@ -3486,6 +3503,7 @@
 				92E2EB1F226F21C700367928 /* WalletTransactionSearchCell.swift in Sources */,
 				92E2EB20226F21C700367928 /* BMCopyLabel.swift in Sources */,
 				92E2EB21226F21C700367928 /* Double.swift in Sources */,
+				92A2C5FE23391DC500766EA7 /* main.swift in Sources */,
 				92B7E4DB22AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				92E2EB22226F21C700367928 /* EnterNodeAddressViewController.swift in Sources */,
 				92E2EB23226F21C700367928 /* ViewController.swift in Sources */,

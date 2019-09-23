@@ -421,7 +421,6 @@
 "proceed" = "Proceed";
 "info_restore_title" = "Do not simultaneously run two wallets initiated from the same seed phrase";
 "info_restore_text" = "The balance and transaction history won't be synchronised across device and transactions might fail.";
-
 "crash_title" = "Beam Wallet crashed unexpectedly";
 "crash_message" = "Would you agree to report your limited amount of information to us? Collecting crash information would allow us to discover and fix bugs much faster. This is only a single crash-related report, we won't keep collecting any of your data later.";
 "crash_negative" = "No, thanks";
@@ -429,3 +428,7 @@
 "estimted_time" = "Estimated time";
 "node_address" = "Node address";
 "create_new_password_short" = "Create new password";
+"a_15" = "After 15 seconds"; //lock screen after 15 seconds
+"a_30" = "After 30 seconds"; //lock screen after 30 seconds
+"a_60" = "After 1 minute"; //lock screen after 1 minute
+

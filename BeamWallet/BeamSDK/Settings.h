@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 
 @class BMLanguage;
+@class BMLockScreenValue;
 
 static double MAX_AMOUNT = 262800000;
 
@@ -78,5 +79,8 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)shortLanguageName;
 
 -(NSString*_Nonnull)customNode;
+
+-(NSArray <BMLockScreenValue*> * _Nonnull)lockScreenValues;
+
 
 @end

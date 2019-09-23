@@ -20,29 +20,42 @@
 import Foundation
 import UIKit
 
-public class LockScreen {
+public class BMLockScreen {
     
-    private var inactiveDate: TimeInterval = 0
-    
+    static let shared = BMLockScreen()
+
+    private var timer: Timer?
+    private var seconds = 0
+
     public init() {
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationActive),
-                                               name: UIApplication.willEnterForegroundNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationInactive),
-                                               name: UIApplication.willResignActiveNotification,
-                                               object: nil)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self as Any, selector: #selector(applicationActive), userInfo: nil, repeats: true)
+    }
+    
+    func onTapEvent() {
+        seconds = 0
     }
     
     @objc private func applicationActive() {
-        if Settings.sharedManager().lockScreenSeconds > 0 {
-            let currentTime = Date.timeIntervalSinceReferenceDate
-            let diff = currentTime - inactiveDate
-            if Int32(diff) >= Settings.sharedManager().lockScreenSeconds {
+        seconds = seconds + 1
+        
+        if Settings.sharedManager().lockScreenSeconds > 0 && AppModel.sharedManager().isLoggedin {
+            if seconds >= Settings.sharedManager().lockScreenSeconds {
                 if let topVc = UIApplication.getTopMostViewController() {
-                    let vc = UINavigationController(rootViewController: UnlockPasswordViewController(event: .unlock))
+                    
+                    timer?.invalidate()
+                    timer = nil
+                    seconds = 0
+                    
+                    let unlock = UnlockPasswordViewController(event: .unlock)
+                    unlock.completion = { [weak self]
+                        obj in
+                        
+                        guard let strongSelf = self else { return }
+
+                        strongSelf.timer = Timer.scheduledTimer(timeInterval: 1, target: strongSelf, selector: #selector(strongSelf.applicationActive), userInfo: nil, repeats: true)
+                    }
+                    
+                    let vc = UINavigationController(rootViewController: unlock)
                     vc.navigationBar.setBackgroundImage(UIImage(), for: .default)
                     vc.navigationBar.shadowImage = UIImage()
                     vc.navigationBar.isTranslucent = true
@@ -54,11 +67,5 @@ public class LockScreen {
                 }
             }
         }
-        
-        inactiveDate = 0
-    }
-    
-    @objc private func applicationInactive() {
-        inactiveDate = Date.timeIntervalSinceReferenceDate
     }
 }
