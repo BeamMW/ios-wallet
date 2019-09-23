@@ -19,15 +19,9 @@ def shared_pods
     pod 'SSZipArchive'
     pod 'Parchment'
     pod 'SwipeTransition'
+
 end
 
-#def extension
-#    use_frameworks!
-#    
-#    pod 'SSZipArchive'
-#    pod 'Firebase/Core'
-#    pod 'Firebase/Messaging'
-#end
 
 target 'BeamWallet' do
     shared_pods
