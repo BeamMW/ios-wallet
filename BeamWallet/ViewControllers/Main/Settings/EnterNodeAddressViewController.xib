@@ -10,6 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
@@ -17,74 +20,88 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EnterNodeAddressViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="nodeAddressField" destination="AKB-1E-OQ8" id="Fer-4U-Hhu"/>
-                <outlet property="nodeAddressView" destination="GDO-Hv-JeU" id="mRd-cq-eRc"/>
-                <outlet property="topOffset" destination="cII-sv-Sh1" id="N57-sd-z5U"/>
-                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="nodeAddressField" destination="fb8-NQ-1j3" id="cYu-M1-dap"/>
+                <outlet property="view" destination="1GK-hU-cGb" id="fIn-eL-fRv"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="1GK-hU-cGb">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GDO-Hv-JeU">
-                    <rect key="frame" x="0.0" y="64" width="414" height="49.5"/>
-                    <subviews>
-                        <view alpha="0.10000000149011612" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JmE-Bj-dDb">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="y51-71-rOc"/>
-                            </constraints>
-                        </view>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ip:port" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AKB-1E-OQ8" customClass="BMClearField" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="20" y="1" width="374" height="48.5"/>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" textContentType="url"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                    <color key="value" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <outlet property="delegate" destination="-1" id="aH8-2p-7Wt"/>
-                            </connections>
-                        </textField>
-                        <view alpha="0.10000000149011612" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="imq-mz-aE3">
-                            <rect key="frame" x="0.0" y="48.5" width="414" height="1"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="W4h-L7-fP2"/>
-                            </constraints>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter trusted node address" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egy-pL-YyA">
+                    <rect key="frame" x="20" y="180" width="374" height="19.5"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="enter_trusted_node"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ip_port" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fb8-NQ-1j3" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="20" y="249.5" width="374" height="22"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" textContentType="url"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                            <color key="value" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                            <color key="value" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
+                            <real key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="ip_port"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="FNE-Qb-dtE"/>
+                    </connections>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wia-Cz-R1C" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                    <rect key="frame" x="80.5" y="768" width="253" height="44"/>
+                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="imq-mz-aE3" firstAttribute="leading" secondItem="GDO-Hv-JeU" secondAttribute="leading" id="0Kk-Z1-Z6h"/>
-                        <constraint firstAttribute="trailing" secondItem="AKB-1E-OQ8" secondAttribute="trailing" constant="20" id="2r7-Bi-oze"/>
-                        <constraint firstItem="JmE-Bj-dDb" firstAttribute="top" secondItem="GDO-Hv-JeU" secondAttribute="top" id="7id-0d-AhF"/>
-                        <constraint firstItem="JmE-Bj-dDb" firstAttribute="leading" secondItem="GDO-Hv-JeU" secondAttribute="leading" id="86P-2A-7PI"/>
-                        <constraint firstAttribute="bottom" secondItem="AKB-1E-OQ8" secondAttribute="bottom" id="I9D-N6-goK"/>
-                        <constraint firstAttribute="height" constant="49.5" id="M6N-f9-Tg8"/>
-                        <constraint firstItem="AKB-1E-OQ8" firstAttribute="top" secondItem="JmE-Bj-dDb" secondAttribute="bottom" id="aC3-To-ajV"/>
-                        <constraint firstAttribute="trailing" secondItem="imq-mz-aE3" secondAttribute="trailing" id="fbF-mt-yyZ"/>
-                        <constraint firstAttribute="bottom" secondItem="imq-mz-aE3" secondAttribute="bottom" id="n96-Yk-k8y"/>
-                        <constraint firstItem="AKB-1E-OQ8" firstAttribute="leading" secondItem="GDO-Hv-JeU" secondAttribute="leading" constant="20" id="rtA-iW-1Am"/>
-                        <constraint firstAttribute="trailing" secondItem="JmE-Bj-dDb" secondAttribute="trailing" id="zsC-IE-PmS"/>
+                        <constraint firstAttribute="height" constant="44" id="9zc-87-OIu"/>
+                        <constraint firstAttribute="width" constant="253" id="yII-vd-knT"/>
                     </constraints>
-                </view>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                    <state key="normal" title="save" image="iconDoneBlue">
+                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="22"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="save"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onSaveClickedWithSender:" destination="-1" eventType="touchUpInside" id="Ge9-tz-4d3"/>
+                    </connections>
+                </button>
             </subviews>
-            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="GDO-Hv-JeU" secondAttribute="trailing" id="C9C-L5-d4K"/>
-                <constraint firstItem="GDO-Hv-JeU" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="OEO-mF-kPH"/>
-                <constraint firstItem="GDO-Hv-JeU" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="cII-sv-Sh1"/>
+                <constraint firstItem="UJa-1b-6rF" firstAttribute="trailing" secondItem="egy-pL-YyA" secondAttribute="trailing" constant="20" id="7v9-Eg-bSM"/>
+                <constraint firstItem="egy-pL-YyA" firstAttribute="top" secondItem="1GK-hU-cGb" secondAttribute="top" constant="180" id="GxV-X7-nCh"/>
+                <constraint firstItem="UJa-1b-6rF" firstAttribute="trailing" secondItem="fb8-NQ-1j3" secondAttribute="trailing" constant="20" id="JbL-qk-fs9"/>
+                <constraint firstItem="fb8-NQ-1j3" firstAttribute="leading" secondItem="UJa-1b-6rF" secondAttribute="leading" constant="20" id="Kgk-Fg-PMZ"/>
+                <constraint firstItem="fb8-NQ-1j3" firstAttribute="top" secondItem="egy-pL-YyA" secondAttribute="bottom" constant="50" id="Rcs-SK-xg8"/>
+                <constraint firstItem="UJa-1b-6rF" firstAttribute="bottom" secondItem="wia-Cz-R1C" secondAttribute="bottom" constant="50" id="pAn-Te-6fT"/>
+                <constraint firstItem="wia-Cz-R1C" firstAttribute="centerX" secondItem="1GK-hU-cGb" secondAttribute="centerX" id="ptk-QH-PZ0"/>
+                <constraint firstItem="egy-pL-YyA" firstAttribute="leading" secondItem="UJa-1b-6rF" secondAttribute="leading" constant="20" id="zbT-Lv-tUB"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <viewLayoutGuide key="safeArea" id="UJa-1b-6rF"/>
+            <point key="canvasLocation" x="53.600000000000001" y="70.614692653673174"/>
         </view>
     </objects>
+    <resources>
+        <image name="iconDoneBlue" width="16" height="16"/>
+    </resources>
 </document>

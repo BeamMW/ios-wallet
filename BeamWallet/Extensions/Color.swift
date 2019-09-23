@@ -192,6 +192,18 @@ extension UIColor {
         static var darkIndigo: UIColor {
             return .init(red: 9/255, green: 28/255, blue: 48/255, alpha: 1)
         }
+        
+        static var cerulean: UIColor {
+            return .init(red: 0/255, green: 119/255, blue: 191/255, alpha: 1)
+        }
+        
+        static var deepSeaBlue: UIColor {
+            return .init(red: 3/255, green: 85/255, blue: 135/255, alpha: 1)
+        }
+        
+        static var coral: UIColor {
+            return .init(red: 242/255, green: 95/255, blue: 91/255, alpha: 1)
+        }
     }
     
 }

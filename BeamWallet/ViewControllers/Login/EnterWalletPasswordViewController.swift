@@ -80,7 +80,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         }
 
         if (self.presentedViewController as? UIAlertController) == nil {
-            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active {
+            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active && AppDelegate.isCrashed() == false {
+                
                 isRequestedAuthorization = true
 
                 biometricAuthorization()

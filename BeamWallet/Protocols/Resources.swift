@@ -273,5 +273,8 @@ func IconContact() -> UIImage? {
     return UIImage(named: "iconContact")
 }
 
+func IconSaveDone() -> UIImage? {
+    return UIImage(named: "iconDoneBlue")
+}
 
 

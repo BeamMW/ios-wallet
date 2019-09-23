@@ -24,14 +24,34 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var confirmPassField: BMField!
     @IBOutlet private weak var passProgressView: BMStepView!
+    @IBOutlet private weak var saveButton: UIButton!
     @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var subTitleLabel: UILabel!
 
     private var phrase:String!
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return AppModel.sharedManager().isLoggedin
+        }
+        set{
+            super.isUppercasedTitle = AppModel.sharedManager().isLoggedin
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.change_password : Localizable.shared.strings.password
+        if AppModel.sharedManager().isLoggedin {
+            subTitleLabel.text = Localizable.shared.strings.create_new_password_short
+            
+            saveButton.setTitle(Localizable.shared.strings.save, for: .normal)
+            saveButton.setImage(IconSaveDone(), for: .normal)
+            
+            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        }
+        
+        title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.change_password : Localizable.shared.strings.password
                 
         passField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         confirmPassField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)

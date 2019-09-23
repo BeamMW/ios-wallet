@@ -21,6 +21,7 @@
 #import "AppModel.h"
 
 #include <boost/regex.hpp>
+#include <boost/optional.hpp>
 
 #include "utility/logger.h"
 #include "utility/bridge.h"

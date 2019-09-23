@@ -41,6 +41,7 @@ typedef int BMRestoreType;
 @protocol WalletModelDelegate <NSObject>
 @optional
 -(void)onSyncProgressUpdated:(int)done total:(int)total;
+-(void)onRecoveryProgressUpdated:(int)done total:(int)total time:(int)time;
 -(void)onWalletError:(NSError*_Nonnull)error;
 -(void)onWalletStatusChange:(BMWalletStatus*_Nonnull)status;
 -(void)onNetwotkStatusChange:(BOOL)connected;

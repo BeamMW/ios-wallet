@@ -348,7 +348,7 @@
 "language" = "Language";
 "optional" = "Optional";
 "invalid_address_title" = "Invalid address";
-"invalid_address_text" = "The provided node address is invalid.\n Please, check if the entered address is correct";
+"invalid_address_text" = "The provided node address is invalid. Please, check if the entered address is correct";
 "insufficient_funds" = "Insufficient funds: you would need (value) beams to complete the transaction";
 "downloading" = "Downloaded";
 "sent_to_own" = "Sent to own address";
@@ -414,10 +414,18 @@
 "NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
 "NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition";
 "NSCameraUsageDescription" = "The camera is needed to scan QR codes";
-"search_transactions" = "Search by ID, comment, address or contact";
+"search_transactions" = "Search by transaction or kernel ID, comment, address or contact";
 "random_node" = "Connect to random node";
 "restore_create_title" = "Restore wallet or create new one";
 "restore_create_text" = "If you'll restore a wallet all transaction history and addresses will be lost.";
 "proceed" = "Proceed";
 "info_restore_title" = "Do not simultaneously run two wallets initiated from the same seed phrase";
 "info_restore_text" = "The balance and transaction history won't be synchronised across device and transactions might fail.";
+
+"crash_title" = "Beam Wallet crashed unexpectedly";
+"crash_message" = "Would you agree to report your limited amount of information to us? Collecting crash information would allow us to discover and fix bugs much faster. This is only a single crash-related report, we won't keep collecting any of your data later.";
+"crash_negative" = "No, thanks";
+"crash_positive" = "Send report";
+"estimted_time" = "Estimated time";
+"node_address" = "Node address";
+"create_new_password_short" = "Create new password";

@@ -19,7 +19,7 @@
 
 import UIKit
 
-class UnlockPasswordViewController: BaseWizardViewController {
+class UnlockPasswordViewController: BaseViewController {
 
     enum UnlockEvent {
         case unlock
@@ -28,7 +28,6 @@ class UnlockPasswordViewController: BaseWizardViewController {
     
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private var heightConstraint: NSLayoutConstraint!
 
     private var event:UnlockEvent!
     private var isUnlocked = false
@@ -45,23 +44,26 @@ class UnlockPasswordViewController: BaseWizardViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         hideKeyboardWhenTappedAround()
         
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        
         title = event == .unlock ? Localizable.shared.strings.your_password : Localizable.shared.strings.change_password
         
         if event == .unlock {
             titleLabel.text = Localizable.shared.strings.unlock_password
-        }
-        
-        if Device.isZoomed {
-            heightConstraint.constant = 250
-        }
-        
-        if Device.screenType == .iPhones_5 {
-            mainStack?.spacing = 50
         }
     }
     

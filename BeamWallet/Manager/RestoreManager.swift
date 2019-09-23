@@ -24,7 +24,7 @@ class RestoreManager: NSObject {
     static var shared = RestoreManager()
 
     private var completion : ((Bool) -> Void)?
-    private var progress : ((Error?, Float?) -> Void)?
+    private var progress : ((Error?, Float?, String?) -> Void)?
 
     var filePath:URL {
         get{
@@ -55,7 +55,7 @@ class RestoreManager: NSObject {
         }
     }
     
-    public func startRestore(completion:@escaping ((Bool) -> Void), progress:@escaping ((Error?, Float?) -> Void)) {
+    public func startRestore(completion:@escaping ((Bool) -> Void), progress:@escaping ((Error?, Float?, String?) -> Void)) {
         
         self.cancelRestore()
         self.completion = completion
@@ -75,12 +75,12 @@ class RestoreManager: NSObject {
         
         if let downloadUrl = url {
             BackgroundDownloader.shared.startDownloading(downloadUrl, filePath)
-            BackgroundDownloader.shared.onProgress = { (progress, error, filePath) in
+            BackgroundDownloader.shared.onProgress = { (progress, error, filePath, time) in
                 if filePath != nil {
                     self.completion?(true)
                 }
                 else{
-                    self.progress?(error, progress)
+                    self.progress?(error, progress, time)
                 }
             }
         }

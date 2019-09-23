@@ -365,7 +365,7 @@ static NSString *randomNodeKey = @"randomNodeKey";
     en.code = @"en";
     en.enName = @"English";
     en.localName = @"English";
-    en.ID = 1;
+    en.ID = 2;
 
     BMLanguage *ru = [BMLanguage new];
     ru.code = @"ru";
@@ -428,6 +428,14 @@ static NSString *randomNodeKey = @"randomNodeKey";
     fin.localName = @"Finnish";
     
     NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin];
+    
+    NSLocale *locale = [NSLocale currentLocale];
+    
+    for (BMLanguage *lang in array) {
+        if (lang.code == locale.languageCode) {
+            lang.ID = 1;
+        }
+    }
     
     return [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
 }

@@ -208,21 +208,21 @@ class AddressViewModel: NSObject {
            self.onDeleteAddress(address: address, indexPath: indexPath)
         }
         delete.image = IconRowDelete()
-        delete.backgroundColor = UIColor.main.orangeRed
+        delete.backgroundColor = UIColor.main.coral
         
         let copy = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
             handler(true)
             self.onCopyAddress(address: address)
         }
         copy.image = IconRowCopy()
-        copy.backgroundColor = UIColor.main.warmBlue
+        copy.backgroundColor = UIColor.main.deepSeaBlue
         
         let edit = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
             handler(true)
             self.onEditAddress(address: address)
         }
         edit.image = IconRowEdit()
-        edit.backgroundColor = UIColor.main.steel
+        edit.backgroundColor = UIColor.main.cerulean
         
         let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
         configuration.performsFirstActionWithFullSwipe = false

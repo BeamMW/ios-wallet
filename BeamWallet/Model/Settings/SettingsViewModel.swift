@@ -176,7 +176,6 @@ extension SettingsViewModel {
     func onChangeNode(completion: @escaping ((Bool) -> Void)){
         if let top = UIApplication.getTopMostViewController() {
             let vc = EnterNodeAddressViewController()
-            vc.hidesBottomBarWhenPushed = true
             vc.completion = { [weak self]
                 obj in
                 

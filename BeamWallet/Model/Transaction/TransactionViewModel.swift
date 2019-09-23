@@ -138,21 +138,21 @@ class TransactionViewModel: NSObject {
             self.cancelTransation(indexPath: indexPath)
         }
         cancel.image = IconRowCancel()
-        cancel.backgroundColor = UIColor.main.steel
+        cancel.backgroundColor = UIColor.main.cerulean
         
         let rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
             handler(true)
             self.repeatTransation(transaction: transaction)
         }
         rep.image = IconRowRepeat()
-        rep.backgroundColor = UIColor.main.brightBlue
+        rep.backgroundColor = UIColor.main.deepSeaBlue
         
         let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
             handler(true)
             self.deleteTransation(indexPath: indexPath)
         }
         delete.image = IconRowDelete()
-        delete.backgroundColor = UIColor.main.orangeRed
+        delete.backgroundColor = UIColor.main.coral
         
         var actions = [UIContextualAction]()
         
@@ -233,9 +233,8 @@ extension TransactionViewModel : WalletModelDelegate {
                     $0.receiverAddress.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
                         $0.senderAddress.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
                         $0.id.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
-                        $0.comment.lowercased().contains(strongSelf.searchString.lowercased()) ||
-                        $0.senderContactName.lowercased().contains(strongSelf.searchString.lowercased()) ||
-                        $0.receiverContactName.lowercased().contains(strongSelf.searchString.lowercased())
+                        $0.kernelId.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
+                        $0.comment.lowercased().contains(strongSelf.searchString.lowercased()) || $0.senderContactName.lowercased().contains(strongSelf.searchString.lowercased()) || $0.receiverContactName.lowercased().contains(strongSelf.searchString.lowercased())
                 }
                 
                 strongSelf.transactions.removeAll()

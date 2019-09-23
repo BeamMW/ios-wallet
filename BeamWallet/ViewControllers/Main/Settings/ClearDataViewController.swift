@@ -35,20 +35,44 @@ class ClearDataViewController: BaseTableViewController {
         }
     }
     
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     private var items = [ClearItem(title: Localizable.shared.strings.delete_all_addresses, isSelected: false, id: 1, name: Localizable.shared.strings.addresses.lowercased()), ClearItem(title: Localizable.shared.strings.delete_all_contacts, isSelected: false, id: 2, name: Localizable.shared.strings.contacts.lowercased()), ClearItem(title: Localizable.shared.strings.delete_all_transactions, isSelected: false, id: 3, name: Localizable.shared.strings.transactions.lowercased())]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+
         title = Localizable.shared.strings.clear_data
         
-        addRightButton(title:Localizable.shared.strings.clear, target: self, selector: #selector(onClear), enabled: false)
+        addRightButton(title:Localizable.shared.strings.done, target: self, selector: #selector(onClear), enabled: false)
 
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.tableFooterView = UIView()
+        tableView.register(ClearCell.self)
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.backgroundColor = UIColor.main.marine
     }
 
     @objc private func onClear() {
@@ -124,7 +148,7 @@ class ClearDataViewController: BaseTableViewController {
 
 extension ClearDataViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return ClearCell.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -147,23 +171,11 @@ extension ClearDataViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = UITableViewCell(style: .default, reuseIdentifier: String(describing: UITableViewCell.self))
-        cell.textLabel?.text = items[indexPath.row].title
-        cell.textLabel?.font = RegularFont(size: 16)
-        cell.backgroundColor = UIColor.clear
-        cell.selectionStyle = .none
-        cell.textLabel?.textColor = UIColor.white
-        cell.textLabel?.adjustFontSize = true
-        
-        let selectedButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        selectedButton.setImage(CheckboxEmpty(), for: .normal)
-        selectedButton.setImage(CheckboxFull(), for: .selected)
-        selectedButton.isSelected = items[indexPath.row].isSelected
-        selectedButton.tag = indexPath.row
-        selectedButton.addTarget(self, action: #selector(onCheckBox), for: .touchUpInside)
-        selectedButton.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.right;
-        cell.accessoryView = selectedButton
+        let cell = tableView
+            .dequeueReusableCell(withType: ClearCell.self, for: indexPath)
+        cell.configure(with: items[indexPath.row])
         
         return cell
     }
 }
+

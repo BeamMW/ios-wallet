@@ -333,7 +333,7 @@ class LocalizableStrings : NSObject {
     var language = "language".localized
     var as_set = "as_set".localized.capitalizingFirstLetter()
     var invalid_address_title = "invalid_address_title".localized.capitalizingFirstLetter()
-    var invalid_address_text = "invalid_address_text".localized.capitalizingFirstLetter()
+    var invalid_address_text = "invalid_address_text".localized
     var downloading = "downloading".localized
     var sent_to_own = "sent_to_own".localized
     var sending_to_own = "sending_to_own".localized
@@ -401,6 +401,16 @@ class LocalizableStrings : NSObject {
 
     var info_restore_title = "info_restore_title".localized
     var info_restore_text = "info_restore_text".localized
+    
+    var crash_title = "crash_title".localized
+    var crash_message = "crash_message".localized
+    var crash_negative = "crash_negative".localized
+    var crash_positive = "crash_positive".localized
+
+    var estimted_time = "estimted_time".localized.lowercased()
+    var node_address = "node_address".localized.lowercased()
+    var create_new_password_short = "create_new_password_short".localized
+
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

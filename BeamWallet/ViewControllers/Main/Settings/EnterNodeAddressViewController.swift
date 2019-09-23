@@ -21,48 +21,39 @@ import UIKit
 import SVProgressHUD
 
 class EnterNodeAddressViewController: BaseViewController {
-
+    
     public var completion : ((Bool) -> Void)?
     private var oldAddress :String!
     
-    @IBOutlet private weak var nodeAddressField: UITextField!
-    @IBOutlet private weak var nodeAddressView: UIView!
+    @IBOutlet private weak var nodeAddressField: BMField!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        title = Localizable.shared.strings.ip_port
-        
-        hideKeyboardWhenTappedAround()
-        
-        nodeAddressView.backgroundColor = UIColor.main.marineThree
-
-        addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
-
-        oldAddress = Settings.sharedManager().nodeAddress
-        nodeAddressField.text = oldAddress
-        
-        nodeAddressField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-    }
-    
-
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if let address = nodeAddressField.text {
-            
-            if address.isEmpty {
-                enableRightButton(enabled: false)
-            }
-            else{
-                enableRightButton(enabled: (address != oldAddress ) ? true : false )
-            }
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
         }
     }
     
-    @objc private func onSave() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        hideKeyboardWhenTappedAround()
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        title = Localizable.shared.strings.node_address
+
+        oldAddress = Settings.sharedManager().nodeAddress
+        nodeAddressField.text = oldAddress
+    }
+    
+    @IBAction func onSaveClicked(sender :UIButton) {
         view.endEditing(true)
         
+        
         if let fullAddress = nodeAddressField.text {
-     
+            
             if AppModel.sharedManager().isValidNodeAddress(fullAddress) {
                 
                 if fullAddress != oldAddress {
@@ -81,7 +72,8 @@ class EnterNodeAddressViewController: BaseViewController {
                 }
             }
             else{
-               self.alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.invalid_address_text, handler: nil)
+                nodeAddressField.error = Localizable.shared.strings.invalid_address_text
+                nodeAddressField.status = BMField.Status.error
             }
         }
     }

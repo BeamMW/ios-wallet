@@ -30,30 +30,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aBo-4q-aqi">
                                 <rect key="frame" x="15" y="5" width="290" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-cW-9tn" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
-                                        <color key="backgroundColor" red="0.043137254901960784" green="0.80000000000000004" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="XNE-eZ-mUm"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                        <state key="normal" title="receive" image="iconReceiveBlue">
-                                            <color key="titleColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="22"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="receive"/>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onReceivedWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4Jk-zA-lYf"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XG1-kg-id9" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                        <rect key="frame" x="150" y="0.0" width="140" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
                                         <color key="backgroundColor" red="0.85490196078431369" green="0.40784313725490196" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="dCW-0t-6HT"/>
@@ -72,6 +50,28 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="onSendWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3YR-wQ-et0"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-cW-9tn" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                        <rect key="frame" x="150" y="0.0" width="140" height="44"/>
+                                        <color key="backgroundColor" red="0.043137254901960784" green="0.80000000000000004" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="XNE-eZ-mUm"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                        <state key="normal" title="receive" image="iconReceiveBlue">
+                                            <color key="titleColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="22"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="receive"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onReceivedWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4Jk-zA-lYf"/>
                                         </connections>
                                     </button>
                                 </subviews>

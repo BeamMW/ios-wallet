@@ -47,7 +47,7 @@ class TransactionsTableView: UITableViewController {
         
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.separatorStyle = .none
-        tableView.register([BMEmptyCell.self, WalletTransactionCell.self])
+        tableView.register([BMEmptyCell.self, WalletTransactionCell.self, WalletTransactionSearchCell.self])
         tableView.keyboardDismissMode = .interactive
         
         subscribeToChages()
@@ -156,10 +156,19 @@ class TransactionsTableView: UITableViewController {
             return cell
         }
         else {
-            let cell = tableView
-                .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo:true))
-            return cell
+            if(viewModel.isSearch && !viewModel.searchString.isEmpty) {
+                let cell = tableView
+                    .dequeueReusableCell(withType: WalletTransactionSearchCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo:true))
+                cell.setSearch(searchString: viewModel.searchString, transaction: viewModel.transactions[indexPath.row])
+                return cell
+            }
+            else{
+                let cell = tableView
+                    .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo:true))
+                return cell
+            }
         }
     }
     
