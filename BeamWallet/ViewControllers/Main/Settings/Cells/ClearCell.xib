@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ClearCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="imS-Ip-DCE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="P1P-Yb-1zc">
+                                <rect key="frame" x="51" y="15" width="254" height="19.5"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jzz-LE-vvJ">
+                                <rect key="frame" x="0.0" y="3" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="1qr-sF-EI6"/>
+                                    <constraint firstAttribute="height" constant="44" id="CPX-VY-MKs"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" image="icnCheckmarkEmpty-1"/>
+                                <state key="selected" image="icnCheckmarkFull-1"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="P1P-Yb-1zc" secondAttribute="trailing" constant="15" id="1tC-kO-jnv"/>
+                            <constraint firstItem="P1P-Yb-1zc" firstAttribute="top" secondItem="imS-Ip-DCE" secondAttribute="top" constant="15" id="7DL-ZZ-2PO"/>
+                            <constraint firstItem="Jzz-LE-vvJ" firstAttribute="centerY" secondItem="imS-Ip-DCE" secondAttribute="centerY" id="EJV-Up-3Jf"/>
+                            <constraint firstAttribute="bottom" secondItem="P1P-Yb-1zc" secondAttribute="bottom" constant="15" id="Hvy-BZ-BGD"/>
+                            <constraint firstItem="Jzz-LE-vvJ" firstAttribute="leading" secondItem="imS-Ip-DCE" secondAttribute="leading" id="XeU-s1-P7H"/>
+                            <constraint firstItem="P1P-Yb-1zc" firstAttribute="leading" secondItem="Jzz-LE-vvJ" secondAttribute="trailing" constant="7" id="rlb-86-r1P"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="imS-Ip-DCE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="QWd-1l-MrX"/>
+                    <constraint firstAttribute="bottom" secondItem="imS-Ip-DCE" secondAttribute="bottom" id="SWK-Xv-Ezw"/>
+                    <constraint firstItem="imS-Ip-DCE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="qxW-Fk-1V4"/>
+                    <constraint firstAttribute="trailing" secondItem="imS-Ip-DCE" secondAttribute="trailing" id="sIs-H6-Id9"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="checkButton" destination="Jzz-LE-vvJ" id="DZP-GI-Hvn"/>
+                <outlet property="mainView" destination="imS-Ip-DCE" id="TN6-Zw-g2p"/>
+                <outlet property="nameLabel" destination="P1P-Yb-1zc" id="Ue0-Ez-c6W"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icnCheckmarkEmpty-1" width="22" height="22"/>
+        <image name="icnCheckmarkFull-1" width="22" height="22"/>
+    </resources>
+</document>
