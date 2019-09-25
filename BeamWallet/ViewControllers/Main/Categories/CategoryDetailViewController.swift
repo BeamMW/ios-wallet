@@ -17,181 +17,191 @@
 // limitations under the License.
 //
 
-
 import UIKit
+import Parchment
 
 class CategoryDetailViewController: BaseTableViewController {
+    
+    private let pagingViewController = BMPagingViewController()
+    private let emptyView: BMEmptyView = UIView.fromNib()
+
+    private let titles = [Localizable.shared.strings.addresses, Localizable.shared.strings.contacts]
 
     private var category:BMCategory!
-    private var addressViewModel:AddressViewModel!
+    private var nameLabel:UILabel!
     
     init(category:BMCategory?) {
         super.init(nibName: nil, bundle: nil)
-        
+         
         self.category = category
-        self.addressViewModel = AddressViewModel(category: self.category)
     }
-    
+     
     required init?(coder aDecoder: NSCoder) {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        emptyView.text = Localizable.shared.strings.no_category_addresses.capitalizingFirstLetter()
+        emptyView.image = IconAddressbookEmpty()
+        
+        pagingViewController.options.menuItemSize = PagingMenuItemSize.fixed(width: UIScreen.main.bounds.width/3, height: 50)
+        
+        addChild(pagingViewController)
+        view.addSubview(pagingViewController.view)
+        pagingViewController.didMove(toParent: self)
+        
+        pagingViewController.dataSource = self
+        pagingViewController.delegate = self
+
+        emptyView.isHidden = true
+        emptyView.backgroundColor = UIColor.clear
+        view.addSubview(emptyView)
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
         title = Localizable.shared.strings.category
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(BMAddressCell.self)
-        tableView.register(CategoryNameCell.self)
-        tableView.register(BMEmptyCell.self)
-
-        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
+        nameLabel = UILabel()
+        nameLabel.font = SemiboldFont(size: 30)
+        nameLabel.text = category.name
+        nameLabel.textColor = UIColor.init(hexString: category.color)
+        view.addSubview(nameLabel)
         
-        subscribeToUpdates()
+        pagingViewController.indicatorColor = UIColor.init(hexString: category.color)
+        
+        addRightButtons(image: [IconEdit(), IconRowDelete()], target: self, selector: [#selector(onEdit),#selector(onDelete)])
     }
     
-    private func subscribeToUpdates() {
-        addressViewModel.onDataChanged = {[weak self] in
-            self?.tableView.reloadData()
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        addressViewModel.onDataDeleted = { [weak self]
-            indexPath, address in
-            
+        checkIsEmpty()
+        
+        AppModel.sharedManager().addDelegate(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        nameLabel.frame = CGRect(x: 15, y: tableView.y + 15, width: UIScreen.main.bounds.width - 30, height: 40)
+        
+        var frame = tableView.frame
+        frame.origin.y = frame.origin.y + 60
+        frame.size.height = frame.size.height - 60
+        
+        pagingViewController.view.frame = frame
+        emptyView.frame = frame
+    }
+    
+    @objc private func onEdit() {
+        let vc = CategoryEditViewController(category: self.category)
+        vc.completion = { [weak self] obj in
             guard let strongSelf = self else { return }
-            
-            if let path = indexPath {
-                if strongSelf.addressViewModel.addresses.count == 0 {
-                    strongSelf.tableView.reloadData()
-                    AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
-                }
-                else{
-                    strongSelf.tableView.performUpdate({
-                        strongSelf.tableView.deleteRows(at: [path], with: .left)
-                    }, completion: {
-                        AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
-                    })
-                }
-            }
+            strongSelf.onCategoriesChange()
         }
+        vc.hidesBottomBarWhenPushed = true
+        self.pushViewController(vc: vc)
     }
     
-
-    @objc private func onMore(sender:UIBarButtonItem) {        
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.edit, icon: nil, action:.edit_category), BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.delete, icon: nil, action:.delete_category)]
+    @objc private func onDelete() {
+          self.confirmAlert(title: Localizable.shared.strings.delete_category, message:Localizable.shared.strings.delete_category_text(str:self.category.name) , cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.delete, cancelHandler: { (_ ) in
+              
+          }, confirmHandler: { (_ ) in
+              AppModel.sharedManager().deleteCategory(self.category)
+              self.back()
+          })
+    }
+    
+    private func checkIsEmpty() {
+        let count = AppModel.sharedManager().getAddressesFrom(category).count
         
-        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
-            if let item = selectedItem {
-                switch (item.action) {
-                case .edit_category:
-                    let vc = CategoryEditViewController(category: self.category)
-                    vc.hidesBottomBarWhenPushed = true
-                    self.pushViewController(vc: vc)
-                case .delete_category :
-                    self.confirmAlert(title: Localizable.shared.strings.delete_category, message:Localizable.shared.strings.delete_category_text(str:self.category.name) , cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.delete, cancelHandler: { (_ ) in
-                        
-                    }, confirmHandler: { (_ ) in
-                        AppModel.sharedManager().deleteCategory(self.category)
-                        self.back()
-                    })
-                default:
-                    return
-                }
-            }
-        }, cancel: {
-            
-        })
-    }
-}
-
-extension CategoryDetailViewController : UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return ((addressViewModel.addresses.count > 0) && indexPath.section == 1)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return BMTableHeaderTitleView.boldHeight
-        }
-        
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 80
-        }
-        else if indexPath.section == 1 && addressViewModel.addresses.count == 0 {
-            return (UIScreen.main.bounds.size.height - (tableView.y + 300))
-        }
-        return 90
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        if indexPath.section == 1 && addressViewModel.addresses.count > 0 {
-            let vc = AddressViewController(address: addressViewModel.addresses[indexPath.row])
-            vc.hidesBottomBarWhenPushed = true
-            pushViewController(vc: vc)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-    {
-        return addressViewModel.trailingSwipeActions(indexPath: indexPath)
-    }
-}
-
-extension CategoryDetailViewController : UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            if addressViewModel.addresses.count == 0 {
-                return 1
-            }
-            return addressViewModel.addresses.count
-        }
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 1 {
-            if addressViewModel.addresses.count == 0 {
-                let cell =  tableView
-                    .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                    .configured(with: (text: Localizable.shared.strings.no_category_addresses.capitalizingFirstLetter(), image: IconAddressbookEmpty()))
-                return cell
-            }
-            else{
-                let cell =  tableView
-                    .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, address: addressViewModel.addresses[indexPath.row], displayTransaction: false, displayCategory: false))
-                return cell
-            }
+        if count == 0 {
+            pagingViewController.view.alpha = 0
+            emptyView.isHidden = false
         }
         else{
-            let cell =  tableView
-                .dequeueReusableCell(withType: CategoryNameCell.self, for: indexPath)
-                .configured(with: self.category)
-            return cell
+            pagingViewController.view.alpha = 1
+            emptyView.isHidden = true
         }
-        
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1 {
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.addresses, bold: true)
+    @objc private func onAddContact() {
+        let vc = SaveContactViewController(address: nil)
+        pushViewController(vc: vc)
+    }
+}
+
+extension CategoryDetailViewController: PagingViewControllerDelegate {
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, didScrollToItem pagingItem: T, startingViewController: UIViewController?, destinationViewController: UIViewController, transitionSuccessful: Bool) where T : PagingItem, T : Comparable, T : Hashable {
+    }
+}
+
+extension CategoryDetailViewController: PagingViewControllerDataSource {
+    
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
+       
+        let viewController = AddressTableView()
+        viewController.category = self.category
+        viewController.selectedIndex = index
+        viewController.view.backgroundColor = UIColor.clear
+
+        return viewController
+    }
+    
+    func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, pagingItemForIndex index: Int) -> T {
+        return PagingIndexItem(index: index, title: titles[index].uppercased()) as! T
+    }
+    
+    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int{
+        return titles.count
+    }
+}
+
+extension CategoryDetailViewController : WalletModelDelegate {
+    
+    func onWalletAddresses(_ walletAddresses: [BMAddress]) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.checkIsEmpty()
         }
-        
-        return nil
+    }
+    
+    func onContactsChange(_ contacts: [BMContact]) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.checkIsEmpty()
+        }
+    }
+    
+    func onCategoriesChange() {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+
+            if let cat = AppModel.sharedManager().findCategory(byId: String(strongSelf.category.id)) {
+                strongSelf.category = cat
+                
+                strongSelf.nameLabel.text = strongSelf.category.name
+                strongSelf.nameLabel.textColor = UIColor.init(hexString: strongSelf.category.color)
+                
+                strongSelf.pagingViewController.indicatorColor = UIColor.init(hexString: strongSelf.category.color)
+            }
+        }
     }
 }

@@ -20,12 +20,32 @@
 import UIKit
 
 class AddressTableView: UITableViewController {
-    
     public var viewModel = AddressViewModel(selected: .active)
-
+    
+    public var placholder: String?
+    
+    public var category: BMCategory? {
+        didSet {
+            viewModel = AddressViewModel(category: category)
+        }
+    }
+    
     public var selectedIndex = 0 {
-        didSet{
-            viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: selectedIndex) ?? .active
+        didSet {
+            if self.category != nil {
+                if selectedIndex == 0 {
+                    viewModel.selectedState = .active
+                    placholder = Localizable.shared.strings.no_category_addresses
+                }
+                else {
+                    viewModel.selectedState = .contacts
+                    placholder = Localizable.shared.strings.no_category_contacts
+                }
+            }
+            else {
+                viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: selectedIndex) ?? .active
+            }
+            
             tableView.tag = selectedIndex
         }
     }
@@ -35,11 +55,11 @@ class AddressTableView: UITableViewController {
         
         tableView.separatorStyle = .none
         tableView.register([BMEmptyCell.self, BMAddressCell.self])
-   
+        
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
-            
+        
         subscribeToChages()
     }
     
@@ -62,7 +82,7 @@ class AddressTableView: UITableViewController {
                         AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
                     })
                 }
-                else{
+                else {
                     AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
                     
                     strongSelf.tableView.reloadData()
@@ -84,28 +104,32 @@ class AddressTableView: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-  
         if viewModel.count == 0 {
             var text = String.empty()
             
-            if selectedIndex == 0 {
-                if AppModel.sharedManager().walletAddresses?.count == 0 {
-                    text = Localizable.shared.strings.addresses_empty
-                }
-                else{
-                    text = Localizable.shared.strings.addresses_empty_active
-                }
+            if let placholder = self.placholder {
+                text = placholder
             }
-            else if selectedIndex == 1 {
-                if AppModel.sharedManager().walletAddresses?.count == 0 {
-                    text = Localizable.shared.strings.addresses_empty
+            else {
+                if selectedIndex == 0 {
+                    if AppModel.sharedManager().walletAddresses?.count == 0 {
+                        text = Localizable.shared.strings.addresses_empty
+                    }
+                    else {
+                        text = Localizable.shared.strings.addresses_empty_active
+                    }
                 }
-                else{
-                    text = Localizable.shared.strings.addresses_empty_expired
+                else if selectedIndex == 1 {
+                    if AppModel.sharedManager().walletAddresses?.count == 0 {
+                        text = Localizable.shared.strings.addresses_empty
+                    }
+                    else {
+                        text = Localizable.shared.strings.addresses_empty_expired
+                    }
                 }
-            }
-            else{
-                text = Localizable.shared.strings.contacts_empty
+                else {
+                    text = Localizable.shared.strings.contacts_empty
+                }
             }
             
             let cell = tableView
@@ -114,9 +138,9 @@ class AddressTableView: UITableViewController {
             return cell
         }
         else {
-            let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-
-            let cell =  tableView
+            let address = (viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row])
+            
+            let cell = tableView
                 .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
                 .configured(with: (row: indexPath.row, address: address, displayTransaction: false, displayCategory: true))
             return cell
@@ -127,24 +151,23 @@ class AddressTableView: UITableViewController {
         if viewModel.count > 0 {
             return true
         }
-        else{
+        else {
             return false
         }
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
         if viewModel.count > 0 {
             return viewModel.trailingSwipeActions(indexPath: indexPath)
         }
-        else{
+        else {
             return nil
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
+        
         if viewModel.count > 0 {
             let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
             
@@ -154,12 +177,9 @@ class AddressTableView: UITableViewController {
     }
 }
 
-extension AddressTableView : UIViewControllerPreviewingDelegate {
-    
+extension AddressTableView: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-                
-        if viewModel.selectedState != .contacts && viewModel.count > 0 {
-            
+        if viewModel.selectedState != .contacts, viewModel.count > 0 {
             guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
             
             guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
@@ -171,13 +191,12 @@ extension AddressTableView : UIViewControllerPreviewingDelegate {
             
             return detailVC
         }
-        else{
+        else {
             return nil
         }
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
         show(viewControllerToCommit, sender: self)
         
         (viewControllerToCommit as! PreviewQRViewController).didShow()

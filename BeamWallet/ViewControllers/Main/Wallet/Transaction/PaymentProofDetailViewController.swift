@@ -20,24 +20,40 @@
 import UIKit
 
 class PaymentProofDetailViewController: BaseTableViewController {
-
     private var transaction: BMTransaction?
     private var paymentProof: BMPaymentProof?
-
-    private var details = [[GeneralInfo]]()
-
+    
+    private var details = [[BMMultiLineItem]]()
+    
+    private var detailsExpand = true
+    
     @IBOutlet private var footerView: UIView!
-    @IBOutlet private weak var buttonDetails: UIButton!
-    @IBOutlet private weak var buttonCode: UIButton!
-    @IBOutlet private weak var codeInputView: UIView!
-    @IBOutlet private weak var codeInputField: BMTextView!
-    @IBOutlet private weak var codeInputLabel: UILabel!
-    @IBOutlet private weak var footerRightOffset: NSLayoutConstraint!
-    @IBOutlet private weak var footerLeftOffset: NSLayoutConstraint!
-    @IBOutlet private weak var inputFieldHeight: NSLayoutConstraint!
-    @IBOutlet private weak var headerdHeight: NSLayoutConstraint!
-
-    init(transaction:BMTransaction?, paymentProof:BMPaymentProof?) {
+    @IBOutlet private var codeInputView: UIView!
+    @IBOutlet private var codeInputField: BMTextView!
+    @IBOutlet private var codeInputLabel: UILabel!
+    @IBOutlet private var inputFieldHeight: NSLayoutConstraint!
+    @IBOutlet private var headerdHeight: NSLayoutConstraint!
+    @IBOutlet private var keyKodeTitle: UILabel!
+    
+    override var isUppercasedTitle: Bool {
+        get {
+            return true
+        }
+        set {
+            super.isUppercasedTitle = true
+        }
+    }
+    
+    override var tableStyle: UITableView.Style {
+        get {
+            return .grouped
+        }
+        set {
+            super.tableStyle = newValue
+        }
+    }
+    
+    init(transaction: BMTransaction?, paymentProof: BMPaymentProof?) {
         super.init(nibName: nil, bundle: nil)
         
         self.transaction = transaction
@@ -51,32 +67,36 @@ class PaymentProofDetailViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
         title = Localizable.shared.strings.payment_proof
         
-        codeInputField.placeholder = " ";
+        keyKodeTitle.text = Localizable.shared.strings.key_code.uppercased()
+        keyKodeTitle.letterSpacing = 1.5
         
+        codeInputField.placholderFont = ItalicFont(size: 16)
+        codeInputField.placeholder = Localizable.shared.strings.paste_payment_proof
+        
+        tableView.register(BMMultiLinesCell.self)
+        tableView.tableHeaderView = paymentProof == nil ? codeInputView : UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+         tableView.keyboardDismissMode = .interactive
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.register(GeneralInfoCell.self)
-        
         fillTransactionInfo()
-        
-        buttonDetails.backgroundColor = UIColor.main.marineThree;
-        buttonDetails.awakeFromNib()
-        
-        tableView.tableHeaderView = paymentProof == nil ? codeInputView : nil
-        tableView.keyboardDismissMode = .interactive
-        
+         
         hideKeyboardWhenTappedAround()
         
         if paymentProof == nil {
             _ = codeInputField.becomeFirstResponder()
         }
     }
-
     
-    @IBAction func onCopyCodeDetails(sender :UIButton) {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
+    @IBAction func onCopyCodeDetails(sender: UIButton) {
         if let transactionDetail = transaction?.details() {
             UIPasteboard.general.string = transactionDetail
             
@@ -84,7 +104,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
         }
     }
     
-    @IBAction func onCopyCode(sender :UIButton) {
+    @IBAction func onCopyCode(sender: UIButton) {
         if let code = paymentProof?.code {
             UIPasteboard.general.string = code
             
@@ -92,48 +112,36 @@ class PaymentProofDetailViewController: BaseTableViewController {
         }
     }
     
+    @objc private func onMoreDetails() {
+        detailsExpand = !detailsExpand
+        tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
+    }
+    
     private func fillTransactionInfo() {
         details.removeAll()
-
+        
         if let paymentProof = self.paymentProof {
+            var section_1 = [BMMultiLineItem]()
+            section_1.append(BMMultiLineItem(title: Localizable.shared.strings.key_code.uppercased(), detail: paymentProof.code, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             
-            var section_1 = [GeneralInfo]()
-            section_1.append(GeneralInfo(text: Localizable.shared.strings.code, detail: paymentProof.code, failed: false, canCopy:true, color: UIColor.white))
-
             details.append(section_1)
             
             tableView.tableFooterView = footerView
         }
         
         if let transaction = self.transaction {
-            
-            var section_2 = [GeneralInfo]()
-            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.sender), detail: transaction.senderAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.receiver), detail: transaction.receiverAddress, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.amount), detail: String.currency(value: transaction.realAmount) + Localizable.shared.strings.beam, failed: false, canCopy:true, color: UIColor.white))
-            section_2.append(GeneralInfo(text: Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), detail: transaction.kernelId, failed: false, canCopy:true, color: UIColor.white))
+            var section_2 = [BMMultiLineItem]()
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.sender.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.receiver.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: String.currency(value: transaction.realAmount) + Localizable.shared.strings.beam, detailFont: RegularFont(size: 16), detailColor: UIColor.main.heliotrope))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             
             details.append(section_2)
             
-            if self.paymentProof == nil {
-                buttonCode.isHidden = true
-                
-                buttonDetails.backgroundColor = UIColor.main.brightTeal
-                buttonDetails.tintColor = UIColor.main.marine
-                buttonDetails.setTitleColor(UIColor.main.marine, for: .normal)
-                buttonDetails.setImage(IconCopyBlue(), for: .normal)
-                buttonDetails.awakeFromNib()
-                
-                let w: CGFloat = (UIScreen.main.bounds.size.width - 180)/2
-                footerRightOffset.constant = w
-                footerLeftOffset.constant = w
-                
-                tableView.tableFooterView = footerView
-            }
+            tableView.tableFooterView = footerView
         }
-       
-        if self.transaction == nil && self.paymentProof == nil {
-            
+        
+        if transaction == nil, paymentProof == nil {
             tableView.tableFooterView = nil
         }
     }
@@ -144,7 +152,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
             size.height = 40
         }
         inputFieldHeight.constant = size.height
-        headerdHeight.constant = inputFieldHeight.constant + (codeInputLabel.alpha == 0 ? 65 : 90)  
+        headerdHeight.constant = inputFieldHeight.constant + (codeInputLabel.alpha == 0 ? 65 : 90)
         
         codeInputView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: headerdHeight.constant)
         
@@ -156,43 +164,44 @@ class PaymentProofDetailViewController: BaseTableViewController {
     }
 }
 
-extension PaymentProofDetailViewController : UITableViewDelegate {
-    
+extension PaymentProofDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            if tableView.tableHeaderView != nil {
-                return 0
-            }
-        }
-        return section == 1 ? BMTableHeaderTitleView.boldHeight : 0
+        return section == 1 ? BMTableHeaderTitleView.height : 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-extension PaymentProofDetailViewController : UITableViewDataSource {
-    
+extension PaymentProofDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return details.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 1, !detailsExpand {
+            return 0
+        }
         return details[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView
-            .dequeueReusableCell(withType: GeneralInfoCell.self, for: indexPath)
+            .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
             .configured(with: details[indexPath.section][indexPath.row])
         cell.delegate = self
+        
+        if indexPath.section == 1 {
+            cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        }
+        else {
+            cell.contentView.backgroundColor = UIColor.clear
+        }
         
         return cell
     }
@@ -200,25 +209,18 @@ extension PaymentProofDetailViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            if section == 0 {
-                if tableView.tableHeaderView != nil {
-                    let view = UIView()
-                    view.backgroundColor = UIColor.clear
-                    return view
-                }
-            }
-            return nil
+            let view = UIView()
+            view.backgroundColor = UIColor.clear
+            return view
         case 1:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.details, bold: true)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.details.uppercased(), handler: #selector(onMoreDetails), target: self, expand: detailsExpand)
         default:
             return nil
         }
     }
 }
 
-
-extension PaymentProofDetailViewController : UITextViewDelegate {
-   
+extension PaymentProofDetailViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         resize()
     }
@@ -227,11 +229,10 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
         textView.inputAccessoryView = nil
         
         if let text = UIPasteboard.general.string {
-            if text.lengthOfBytes(using: .utf8) >= 330
-            {
-                let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44), copy:text)
+            if text.lengthOfBytes(using: .utf8) >= 330 {
+                let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44), copy: text)
                 inputBar.completion = {
-                    (obj : String?) -> Void in
+                    (obj: String?) -> Void in
                     if let text = obj {
                         self.codeInputField.text = text
                         self.textViewDidChange(self.codeInputField)
@@ -248,7 +249,7 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         let tr = AppModel.sharedManager().validatePaymentProof(textView.text)
-
+        
         if tr == nil {
             transaction = nil
             
@@ -257,7 +258,7 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
             codeInputField.textColor = UIColor.main.red
             codeInputField.lineColor = UIColor.main.red
         }
-        else{
+        else {
             transaction = tr
             
             codeInputLabel.alpha = 0
@@ -265,9 +266,8 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
             codeInputField.textColor = UIColor.white
         }
         
-
         resize()
-
+        
         fillTransactionInfo()
         tableView.reloadData()
     }
@@ -280,7 +280,7 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
         if tr != nil {
             textView.resignFirstResponder()
         }
-        else if transaction != nil && tr == nil {
+        else if transaction != nil, tr == nil {
             transaction = nil
             
             if textView.text.isEmpty {
@@ -288,7 +288,7 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
                 codeInputField.lineColor = UIColor.white.withAlphaComponent(0.1)
                 codeInputField.textColor = UIColor.white
             }
-            else{
+            else {
                 codeInputLabel.alpha = 1
                 codeInputLabel.textColor = UIColor.main.red
                 codeInputField.textColor = UIColor.main.red
@@ -305,7 +305,7 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
                 codeInputField.lineColor = UIColor.white.withAlphaComponent(0.1)
                 codeInputField.textColor = UIColor.white
             }
-            else{
+            else {
                 codeInputLabel.alpha = 1
                 codeInputLabel.textColor = UIColor.main.red
                 codeInputField.textColor = UIColor.main.red
@@ -325,11 +325,11 @@ extension PaymentProofDetailViewController : UITextViewDelegate {
     }
 }
 
-extension PaymentProofDetailViewController : GeneralInfoCellDelegate {
+extension PaymentProofDetailViewController: GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
-        if let path = tableView.indexPath(for: cell)
-        {
-            if details[path.section][path.row].text == Localizable.shared.strings.addDots(value: Localizable.shared.strings.kernel_id), let transaction = self.transaction {
+        if let path = tableView.indexPath(for: cell) {
+            if details[path.section][path.row].title == Localizable.shared.strings.kernel_id.uppercased(),
+                let transaction = self.transaction {
                 let kernelId = transaction.kernelId!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {

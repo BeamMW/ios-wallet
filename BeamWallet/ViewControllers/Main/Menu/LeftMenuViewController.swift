@@ -36,10 +36,9 @@ class MenuItem {
 
 class LeftMenuViewController: BaseTableViewController {
     
-    private var topView:UIView!
-
     private var buyButton:UIButton!
-    
+    private var logoView:UIImageView!
+
     private var items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
     //MenuItem(name: Localizable.shared.strings.logout, icon: IconLogout(), selected: false, type: AnyClass.self)
     
@@ -48,20 +47,41 @@ class LeftMenuViewController: BaseTableViewController {
         
         Settings.sharedManager().addDelegate(self)
         
-        view.backgroundColor = UIColor.main.marine
+        let colors = [UIColor.main.twilightBlue, UIColor.main.twilightBlue2]
 
-        tableView.backgroundColor = UIColor.main.marine
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.colors = colors.map { $0.cgColor }
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        
+        let backgroundImage = UIImageView()
+        backgroundImage.clipsToBounds = true
+        backgroundImage.contentMode = .scaleToFill
+        backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        backgroundImage.tag = 10
+        backgroundImage.layer.addSublayer(gradient)
+        
+        tableView.backgroundView = backgroundImage
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 66))
         
-        topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20))
-        topView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        
-        if Device.screenType == .iPhones_5 || Device.screenType == .iPhones_6 || Device.screenType == .iPhones_Plus {
-            tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 33))
+        var height:CGFloat = 180
+        var offset:CGFloat = 20
+        if Device.screenType == .iPhones_5 || Device.screenType == .iPhones_6  {
+            height = 140
         }
-        
+        else if Device.isXDevice {
+            height = 200
+            offset = 35
+        }
+   
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: height))
+        logoView = UIImageView(frame: CGRect(x: 0, y: height-80-offset, width: UIScreen.main.bounds.size.width, height: 80))
+        logoView.image = UIImage(named: "logo")
+        logoView.contentMode = .scaleAspectFit
+        header.addSubview(logoView)
+
+        tableView.tableHeaderView = header
+
         addFooterView()
     }
     
@@ -102,14 +122,13 @@ class LeftMenuViewController: BaseTableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
        
+        logoView.width = self.view.bounds.width
         tableView.frame = self.view.bounds
         
-        topView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 20)
-
-        let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15
+        let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 30
+        
         buyButton.frame = CGRect(x: 0, y: self.view.bounds.size.height-50-offset, width: self.view.bounds.size.width, height: 50)
         
-
         for item in self.items {
             item.selected = false
         }

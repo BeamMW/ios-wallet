@@ -33,6 +33,7 @@ class PagingLargeTitleCell : PagingTitleCell {
 
 class BMPagingViewController: PagingViewController<PagingIndexItem> {
     
+    
     override func loadView() {
         
         var fontSize:CGFloat = 14

@@ -72,6 +72,7 @@ class SettingsViewModel : NSObject {
             general.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
         }
         general.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
+        general.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, id: 15))
         general.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
         general.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
         general.append(SettingsItem(title: Localizable.shared.strings.change_wallet_password, detail: nil, isSwitch: nil, id: 1))
@@ -218,6 +219,19 @@ extension SettingsViewModel {
         if let top = UIApplication.getTopMostViewController() {
             let vc = LanguagePickerViewController()
             vc.completion = {[weak self] obj in
+                self?.items.removeAll()
+                self?.initItems()
+                self?.onDataChanged?()
+            }
+            vc.hidesBottomBarWhenPushed = true
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onLockScreen() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = LockPickerViewController()
+            vc.completion = {[weak self]  in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()

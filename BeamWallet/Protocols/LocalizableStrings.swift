@@ -411,6 +411,11 @@ class LocalizableStrings : NSObject {
     var node_address = "node_address".localized.lowercased()
     var create_new_password_short = "create_new_password_short".localized
 
+    var lock_screen = "lock_screen".localized
+    var paste_payment_proof = "paste_payment_proof".localized
+    var colour = "colour".localized
+    var no_category_contacts = "no_category_contacts".localized
+
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

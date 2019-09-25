@@ -22,6 +22,7 @@
 @interface BMLockScreenValue : NSObject
 
 @property (nonatomic,strong) NSString * _Nonnull name;
+@property (nonatomic,strong) NSString * _Nonnull shortName;
 @property (nonatomic,assign) int seconds;
 
 @end

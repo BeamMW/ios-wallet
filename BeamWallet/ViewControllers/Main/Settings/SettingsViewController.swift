@@ -144,6 +144,8 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.showOwnerKey()
             case 13:
                 self.viewModel.onLanguage()
+            case 15:
+                self.viewModel.onLockScreen()
             default:
                 return
             }

@@ -477,21 +477,35 @@ static NSString *randomNodeKey = @"randomNodeKey";
 -(NSArray <BMLockScreenValue*> * _Nonnull)lockScreenValues {
     BMLockScreenValue *never = [BMLockScreenValue new];
     never.name = [@"never" localized];
+    never.shortName = [@"never" localized];
     never.seconds = 0;
 
     BMLockScreenValue *a_15 = [BMLockScreenValue new];
     a_15.name = [@"a_15" localized];
+    a_15.shortName = [@"a_15_1" localized];
     a_15.seconds = 15;
     
     BMLockScreenValue *a_30 = [BMLockScreenValue new];
     a_30.name = [@"a_30" localized];
+    a_30.shortName = [@"a_30_1" localized];
     a_30.seconds = 30;
     
     BMLockScreenValue *a_60 = [BMLockScreenValue new];
     a_60.name = [@"a_60" localized];
+    a_60.shortName = [@"a_60_1" localized];
     a_60.seconds = 60;
     
     return @[never,a_15,a_30,a_60];
+}
+
+-(BMLockScreenValue*_Nonnull)currentLocedValue {
+    for (BMLockScreenValue *v in [self lockScreenValues]) {
+        if (v.seconds == _lockScreenSeconds) {
+            return v;
+        }
+    }
+    
+    return nil;
 }
 
 @end

@@ -167,7 +167,8 @@
 "category_exist" = "This tag already exists";
 "edit" = "Edit";
 "delete" = "Delete";
-"no_category_addresses" = "there are no addresses associated with this tag";
+"no_category_addresses" = "There are no addresses associated with this tag";
+"no_category_contacts" = "There are no contacts associated with this tag";
 "delete_category" = "Delete tag";
 "beams_send" = "Beams sent";
 "undo" = "Undo";
@@ -431,4 +432,8 @@
 "a_15" = "After 15 seconds"; //lock screen after 15 seconds
 "a_30" = "After 30 seconds"; //lock screen after 30 seconds
 "a_60" = "After 1 minute"; //lock screen after 1 minute
-
+"a_15_1" = "15 seconds"; 
+"a_30_1" = "30 seconds";
+"a_60_1" = "1 minute";
+"lock_screen" = "Lock screen";
+"colour" = "Colour";

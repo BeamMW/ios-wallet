@@ -200,6 +200,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isNameAlreadyExist:(NSString*_Nonnull)name id:(int)ID;
 -(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID;
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressesFromCategory:(BMCategory*_Nonnull)category;
+-(NSMutableArray<BMAddress*>*_Nonnull)getOnlyAddressesFromCategory:(BMCategory*_Nonnull)category;
+-(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category;
 -(void)fixCategories;
 
 //fork

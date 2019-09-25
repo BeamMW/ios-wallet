@@ -81,6 +81,7 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)customNode;
 
 -(NSArray <BMLockScreenValue*> * _Nonnull)lockScreenValues;
+-(BMLockScreenValue*_Nonnull)currentLocedValue;
 
 
 @end

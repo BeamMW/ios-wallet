@@ -1929,6 +1929,39 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return NO;
 }
 
+-(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category {
+    NSMutableArray *addresses = [NSMutableArray array];
+    
+    NSMutableArray *contacts = [NSMutableArray arrayWithArray:_contacts];
+    
+    for (BMContact *contact in contacts) {
+        for (NSString *c in contact.address.categories) {
+            if (c.intValue == category.ID) {
+                [addresses addObject:contact];
+            }
+        }
+    }
+    
+    return addresses;
+}
+
+-(NSMutableArray<BMAddress*>*_Nonnull)getOnlyAddressesFromCategory:(BMCategory*_Nonnull)category {
+    NSMutableArray *addresses = [NSMutableArray array];
+    
+    NSMutableArray *walletAddresses = [NSMutableArray arrayWithArray:_walletAddresses];
+    
+    for (BMAddress *address in walletAddresses) {
+        for (NSString *c in address.categories) {
+            if (c.intValue == category.ID) {
+                [addresses addObject:address];
+            }
+        }
+    }
+    
+    
+    return addresses;
+}
+
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressesFromCategory:(BMCategory*_Nonnull)category {
     NSMutableArray *addresses = [NSMutableArray array];
     

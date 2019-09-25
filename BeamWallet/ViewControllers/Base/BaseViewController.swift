@@ -34,6 +34,8 @@ class BaseViewController: UIViewController {
 
     public var isAddStatusView = false
     
+    public var disableMenu = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -128,7 +130,7 @@ class BaseViewController: UIViewController {
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
             }
-            else{
+            else if !disableMenu {
                 self.onAddMenuIcon()
             }
         }

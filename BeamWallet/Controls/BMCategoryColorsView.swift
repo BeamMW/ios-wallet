@@ -107,7 +107,7 @@ class BMCategoryColorsView: UIView {
     private func fillBMColorView() {
         
         let size:CGFloat = 50
-        let space:CGFloat = 10
+        let space:CGFloat = (Device.iPhone) ? 5 : 10
         var x:CGFloat = 0
         
         for color in colors {
