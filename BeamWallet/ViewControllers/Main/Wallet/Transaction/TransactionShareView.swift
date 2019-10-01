@@ -130,7 +130,7 @@ class TransactionShareView: UIView {
         }
         
         transactionKernelValueLabel.text = transaction.kernelId
-        if transaction.kernelId.contains("000000") || transaction.isExpired() {
+        if transaction.kernelId.contains("000000") || transaction.isExpired() || transaction.isFailed() {
             kernelStackView.isHidden = true
         }
         
