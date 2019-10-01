@@ -315,7 +315,7 @@
 "canot_connect_node" = "Cannot connect to node";
 "buy_beam_value" = "Send (value) to the above (name) address to complete the transaction"; //example Send 1 BTC to the above BITCOIN address to complete the transaction
 "scan_receiver_qr_code" = "Scan receiver QR code";
-"owner_key_warning" = "Please notice, that revealing your owner key allows to know all your funds (UTXO). Make sure that you deploy the key at the node you trust completely!";
+"owner_key_warning" = "Deploying the owner key at a trusted node will allow the node to monitor all UTXO sent to any wallet generated from the same seed phrase.\n\nDon't share your Owner Key with others - it allows inspection and monitoring of your funds."; // \n\n - new line. please don't remove this symbols.
 "key_code" = "Key code";
 "or" = "Or";
 "pick_address" = "Change"; // change address
@@ -437,3 +437,9 @@
 "a_60_1" = "1 minute";
 "lock_screen" = "Lock screen";
 "colour" = "Colour";
+"show_owner_key_auth_1" = "Deploying the Owner Key at a trusted node will allow the node to monitor all UTXOs sent to this wallet and any wallet generated from your seed phrase. You must enter your password to see Owner Key.";
+"show_owner_key_auth_2" = "Deploying the Owner Key at a trusted node will allow the node to monitor all UTXOs sent to this wallet and any wallet generated from your seed phrase. You must pass 2-step verification (submit a password and use Touch ID) to see your Owner Key.";
+"show_owner_key_auth_3" = "Deploying the Owner Key at a trusted node will allow the node to monitor all UTXOs sent to this wallet and any wallet generated from your seed phrase. You must pass 2-step verification (submit a password and use Face ID) to see your Owner Key.";
+"use_touch_id" = "Use your Touch ID";
+"use_face_id" = "Use your Face ID";
+"enter_your_password" = "Enter your password";

@@ -121,7 +121,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 }
 
             }, failure: {
-                 self.touchIdButton.tintColor = UIColor.main.red
+                 self.touchIdButton.tintColor = UIColor.white
             }, retry: {
                 self.touchIdButton.tintColor = UIColor.white
             })

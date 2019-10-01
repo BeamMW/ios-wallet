@@ -635,7 +635,7 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-            return isIncome ? [[@"receiving" localized]lowercaseString] : [[@"sending" localized] lowercaseString];
+            return isIncome ? [[@"in_progress" localized]lowercaseString] : [[@"in_progress" localized] lowercaseString];
         }
         case TxStatus::Completed:
         {

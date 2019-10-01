@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
-        </array>
-        <array key="SF-Pro-Display-LightItalic.otf">
-            <string>SFProDisplay-LightItalic</string>
         </array>
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
@@ -23,12 +18,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OwnerKeyUnlockViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="confirmLabel" destination="N4e-oF-XKR" id="Ikg-CW-clu"/>
                 <outlet property="mainStack" destination="dF7-SV-PnC" id="8Bt-Yp-PfX"/>
+                <outlet property="nextButtonView" destination="AB7-ts-VYb" id="YDd-I8-Dbf"/>
                 <outlet property="passField" destination="wpy-QC-RxL" id="DQ6-cb-2By"/>
-                <outlet property="subTitleLabel" destination="z35-nF-MGS" id="1jS-0f-hNr"/>
                 <outlet property="titleLabel" destination="PsH-3s-Vby" id="afS-hR-Vel"/>
                 <outlet property="topOffset" destination="5tx-ZJ-SNZ" id="RaH-xL-qzq"/>
+                <outlet property="touchIdButton" destination="kUU-h6-lIa" id="AoE-go-Iq3"/>
                 <outlet property="view" destination="OOM-GL-5e9" id="f0o-IU-67D"/>
             </connections>
         </placeholder>
@@ -38,7 +33,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="dF7-SV-PnC">
-                    <rect key="frame" x="20" y="94" width="374" height="378"/>
+                    <rect key="frame" x="20" y="94" width="374" height="250.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PsH-3s-Vby">
                             <rect key="frame" x="0.0" y="0.0" width="374" height="38.5"/>
@@ -74,17 +69,18 @@ to access the wallet</string>
                                 <outlet property="delegate" destination="-1" id="Yov-iJ-AWn"/>
                             </connections>
                         </textField>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see the owner key you must pass this 2-step verification (submit a password and use Touch ID / Face ID)to access the wallet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z35-nF-MGS">
-                            <rect key="frame" x="0.0" y="200.5" width="374" height="57.5"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="16"/>
-                            <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                            <nil key="highlightedColor"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                            </userDefinedRuntimeAttributes>
-                        </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUU-h6-lIa">
+                            <rect key="frame" x="0.0" y="165.5" width="374" height="0.0"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" image="iconTouchid">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="onBioWithSender:" destination="-1" eventType="touchUpInside" id="bYn-aW-zQZ"/>
+                            </connections>
+                        </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AB7-ts-VYb">
-                            <rect key="frame" x="0.0" y="328" width="374" height="50"/>
+                            <rect key="frame" x="0.0" y="200.5" width="374" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hHU-2Y-hjL" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                     <rect key="frame" x="60.5" y="3" width="253" height="44"/>
@@ -117,15 +113,6 @@ to access the wallet</string>
                                 <constraint firstItem="hHU-2Y-hjL" firstAttribute="centerX" secondItem="AB7-ts-VYb" secondAttribute="centerX" id="MPa-ro-o3f"/>
                             </constraints>
                         </view>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please use Face ID to finish verification" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N4e-oF-XKR">
-                            <rect key="frame" x="0.0" y="378" width="374" height="0.0"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="16"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                            </userDefinedRuntimeAttributes>
-                        </label>
                     </subviews>
                 </stackView>
             </subviews>
@@ -141,5 +128,6 @@ to access the wallet</string>
     </objects>
     <resources>
         <image name="iconNextBlue" width="16" height="16"/>
+        <image name="iconTouchid" width="45" height="45"/>
     </resources>
 </document>

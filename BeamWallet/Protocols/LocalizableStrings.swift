@@ -416,7 +416,13 @@ class LocalizableStrings : NSObject {
     var colour = "colour".localized
     var no_category_contacts = "no_category_contacts".localized
 
-    
+    var show_owner_key_auth_1 = "show_owner_key_auth_1".localized
+    var show_owner_key_auth_2 = "show_owner_key_auth_2".localized
+    var show_owner_key_auth_3 = "show_owner_key_auth_3".localized
+    var use_touch_id = "use_touch_id".localized
+    var use_face_id = "use_face_id".localized
+    var enter_your_password = "enter_your_password".localized
+
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

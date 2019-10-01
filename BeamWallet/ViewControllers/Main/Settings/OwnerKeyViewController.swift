@@ -31,11 +31,22 @@ class OwnerKeyViewController: BaseViewController {
     @IBOutlet private weak var copyNextView: UIView!
     @IBOutlet private weak var copyRestoreButton: UIButton!
 
-    //
+    override var isUppercasedTitle: Bool {
+        get {
+            return !AppModel.sharedManager().isRestoreFlow
+        }
+        set {
+            super.isUppercasedTitle = !AppModel.sharedManager().isRestoreFlow
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if !AppModel.sharedManager().isRestoreFlow {
+            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        }
+        
         topOffset?.constant = topOffset?.constant ?? 0 + 30
 
         ownerKeyLabel.text = ownerKey

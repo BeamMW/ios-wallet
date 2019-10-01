@@ -19,28 +19,26 @@
 
 import Foundation
 
-class SettingsViewModel : NSObject {
-    
+class SettingsViewModel: NSObject {
     public var items = [[SettingsItem]]()
     
-    public var onDataChanged : (() -> Void)?
-
+    public var onDataChanged: (() -> Void)?
+    
     class SettingsItem {
-
-        public var title:String?
-        public var detail:String?
-        public var isSwitch:Bool?
-        public var id:Int!
-        public var category:BMCategory?
-
-        init(title: String?, detail: String?, isSwitch: Bool?, id:Int) {
+        public var title: String?
+        public var detail: String?
+        public var isSwitch: Bool?
+        public var id: Int!
+        public var category: BMCategory?
+        
+        init(title: String?, detail: String?, isSwitch: Bool?, id: Int) {
             self.title = title
             self.detail = detail
             self.isSwitch = isSwitch
             self.id = id
         }
         
-        init(title: String?, detail: String?, isSwitch: Bool?, id:Int, category:BMCategory?) {
+        init(title: String?, detail: String?, isSwitch: Bool?, id: Int, category: BMCategory?) {
             self.title = title
             self.detail = detail
             self.isSwitch = isSwitch
@@ -77,7 +75,6 @@ class SettingsViewModel : NSObject {
         general.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
         general.append(SettingsItem(title: Localizable.shared.strings.change_wallet_password, detail: nil, isSwitch: nil, id: 1))
         general.append(SettingsItem(title: Localizable.shared.strings.clear_data, detail: nil, isSwitch: nil, id: 6))
-
         
         var categories = [SettingsItem]()
         if AppModel.sharedManager().categories.count > 0 {
@@ -86,12 +83,11 @@ class SettingsViewModel : NSObject {
             }
         }
         categories.append(SettingsItem(title: Localizable.shared.strings.create_new_category, detail: nil, isSwitch: nil, id: 10))
-
-
+        
         var feedback = [SettingsItem]()
         feedback.append(SettingsItem(title: Localizable.shared.strings.rate_app, detail: nil, isSwitch: nil, id: 11))
         feedback.append(SettingsItem(title: Localizable.shared.strings.report_problem, detail: nil, isSwitch: nil, id: 2))
-
+        
         items.append(node)
         items.append(general)
         items.append(categories)
@@ -106,31 +102,45 @@ class SettingsViewModel : NSObject {
         items.append(feedback)
     }
     
-    public func getItem(indexPath:IndexPath) -> SettingsItem {
+    public func getItem(indexPath: IndexPath) -> SettingsItem {
         return items[indexPath.section][indexPath.row]
     }
 }
 
-extension SettingsViewModel : WalletModelDelegate {
-    
+extension SettingsViewModel: WalletModelDelegate {
     func onCategoriesChange() {
-        self.items.removeAll()
-        self.initItems()
-        self.onDataChanged?()
+        items.removeAll()
+        initItems()
+        onDataChanged?()
     }
 }
 
 extension SettingsViewModel {
-    
     func showOwnerKey() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = OwnerKeyUnlockViewController()
-            vc.hidesBottomBarWhenPushed = true
-            top.pushViewController(vc: vc)
+            var text: String = ""
+            
+            if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
+                if BiometricAuthorization.shared.faceIDAvailable() {
+                    text = Localizable.shared.strings.show_owner_key_auth_3
+                }
+                else {
+                    text = Localizable.shared.strings.show_owner_key_auth_2
+                }
+            }
+            else {
+                text = Localizable.shared.strings.show_owner_key_auth_1
+            }
+            
+            top.alert(title: Localizable.shared.strings.owner_key, message: text) { _ in
+                let vc = OwnerKeyUnlockViewController()
+                vc.hidesBottomBarWhenPushed = true
+                top.pushViewController(vc: vc)
+            }
         }
     }
     
-    func openQRScanner(delegate:QRScannerViewControllerDelegate) {
+    func openQRScanner(delegate: QRScannerViewControllerDelegate) {
         if let top = UIApplication.getTopMostViewController() {
             let vc = QRScannerViewController()
             vc.delegate = delegate
@@ -140,14 +150,14 @@ extension SettingsViewModel {
         }
     }
     
-    func openCategory(category:BMCategory?) {
+    func openCategory(category: BMCategory?) {
         if let top = UIApplication.getTopMostViewController() {
             if category == nil {
                 let vc = CategoryEditViewController(category: category)
                 vc.hidesBottomBarWhenPushed = true
                 top.pushViewController(vc: vc)
             }
-            else{
+            else {
                 let vc = CategoryDetailViewController(category: category!)
                 vc.hidesBottomBarWhenPushed = true
                 top.pushViewController(vc: vc)
@@ -156,13 +166,13 @@ extension SettingsViewModel {
     }
     
     func onOpenTgBot() {
-        let botURL = URL.init(string: "tg://resolve?domain=anywhere_testnet_bot")
+        let botURL = URL(string: "tg://resolve?domain=anywhere_testnet_bot")
         
         if UIApplication.shared.canOpenURL(botURL!) {
-            UIApplication.shared.open(botURL!, options: [:]) { (success) in }
+            UIApplication.shared.open(botURL!, options: [:]) { _ in }
         }
         else {
-            UIApplication.shared.open(URL(string: "https://itunes.apple.com/us/app/telegram-messenger/id686449807?mt=8")!, options: [:]) { (_ ) in }
+            UIApplication.shared.open(URL(string: "https://itunes.apple.com/us/app/telegram-messenger/id686449807?mt=8")!, options: [:]) { _ in }
         }
     }
     
@@ -174,7 +184,7 @@ extension SettingsViewModel {
         }
     }
     
-    func onChangeNode(completion: @escaping ((Bool) -> Void)){
+    func onChangeNode(completion: @escaping ((Bool) -> Void)) {
         if let top = UIApplication.getTopMostViewController() {
             let vc = EnterNodeAddressViewController()
             vc.completion = { [weak self]
@@ -190,7 +200,7 @@ extension SettingsViewModel {
         }
     }
     
-    func onChangePassword(controller:UIViewController) {
+    func onChangePassword(controller: UIViewController) {
         if let top = UIApplication.getTopMostViewController() {
             let vc = UnlockPasswordViewController(event: .changePassword)
             vc.hidesBottomBarWhenPushed = true
@@ -208,8 +218,8 @@ extension SettingsViewModel {
             
             let vc = UIActivityViewController(activityItems: [url], applicationActivities: [act])
             vc.setValue("beam wallet logs", forKey: "subject")
-
-            vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+            
+            vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
             
             top.present(vc, animated: true)
         }
@@ -218,7 +228,7 @@ extension SettingsViewModel {
     func onLanguage() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = LanguagePickerViewController()
-            vc.completion = {[weak self] obj in
+            vc.completion = { [weak self] _ in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()
@@ -231,7 +241,7 @@ extension SettingsViewModel {
     func onLockScreen() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = LockPickerViewController()
-            vc.completion = {[weak self]  in
+            vc.completion = { [weak self] in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()

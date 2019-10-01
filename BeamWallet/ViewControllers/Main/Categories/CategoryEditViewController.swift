@@ -109,7 +109,8 @@ class CategoryEditViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: titleColourLabel.y + titleColourLabel.h , width: colorsView.colorsWidht(), height: 50)
+        let offset:CGFloat = Device.isLarge ? 7 : 0
+        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: titleColourLabel.y + titleColourLabel.h + offset , width: colorsView.colorsWidht(), height: 50)
     }
     
     private func canSave(name:String, color:String) -> Bool {

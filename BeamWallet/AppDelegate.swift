@@ -47,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         CrashEye.add(delegate: self)
 
-        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
 
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
@@ -78,6 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if(Settings.sharedManager().target != Mainnet) {
             CrowdinManager.updateLocalizations()
         }
+        
         
         if let crash = UserDefaults.standard.string(forKey: "crash") {
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_negative, confirmTitle: Localizable.shared.strings.crash_positive, cancelHandler: { (_ ) in
@@ -158,6 +158,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        
+        if #available(iOS 12.0, *) {
+            if self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark {
+                UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.white
+            }
+            else{
+                UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+            }
+        } else {
+            UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+        }
         
         NotificationManager.sharedManager.clearNotifications()
                 

@@ -74,7 +74,7 @@ class SendPasswordViewController: BaseViewController {
                 }
                 
             }, failure: {
-                self.touchIdButton.tintColor = UIColor.main.red
+                self.touchIdButton.tintColor = UIColor.white
                 if BiometricAuthorization.shared.faceIDAvailable() {
                     self.loginLabel.text = Localizable.shared.strings.confirm_transaction_3
                 }
