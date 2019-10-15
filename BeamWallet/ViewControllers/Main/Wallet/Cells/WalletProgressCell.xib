@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,14 +22,14 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="170"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Rlt-U0-51n" id="ZgH-Gh-iT8">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="169.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="170"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mdh-nY-eDo">
-                        <rect key="frame" x="15" y="0.0" width="290" height="154.5"/>
+                        <rect key="frame" x="15" y="0.0" width="290" height="155"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NHf-s5-cUd">
-                                <rect key="frame" x="0.0" y="0.0" width="290" height="154.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="290" height="155"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="onExpandWithSender:" destination="Rlt-U0-51n" eventType="touchUpInside" id="FqY-Xq-pMk"/>
@@ -51,19 +49,19 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="LQy-uL-llp">
-                                <rect key="frame" x="15" y="51.5" width="270" height="75"/>
+                                <rect key="frame" x="15" y="51.5" width="270" height="103"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="lgf-Cy-nCD">
-                                        <rect key="frame" x="0.0" y="0.0" width="270" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="270" height="44"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="TOv-eS-3XZ">
-                                                <rect key="frame" x="0.0" y="0.0" width="84.5" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="112.5" height="44"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-sent" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GvM-NG-yIc">
-                                                        <rect key="frame" x="0.0" y="7" width="16" height="16"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                     </imageView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nZD-ff-GLJ">
-                                                        <rect key="frame" x="26" y="0.0" width="58.5" height="30"/>
+                                                        <rect key="frame" x="54" y="7" width="58.5" height="30"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Mp8-tI-hcy">
                                                                 <rect key="frame" x="0.0" y="0.0" width="28" height="30"/>
@@ -96,16 +94,16 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="UfE-Yf-jhq">
-                                        <rect key="frame" x="0.0" y="45" width="270" height="30"/>
+                                        <rect key="frame" x="0.0" y="59" width="270" height="44"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="XZJ-rK-ClF">
-                                                <rect key="frame" x="0.0" y="0.0" width="84" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="112" height="44"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-received" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10J-v4-i3g">
-                                                        <rect key="frame" x="0.0" y="7" width="16" height="16"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                     </imageView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bTF-FJ-04L">
-                                                        <rect key="frame" x="26" y="0.0" width="58" height="30"/>
+                                                        <rect key="frame" x="54" y="7" width="58" height="30"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cmw-df-ShN">
                                                                 <rect key="frame" x="0.0" y="0.0" width="28" height="30"/>

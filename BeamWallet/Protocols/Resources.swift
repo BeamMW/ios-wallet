@@ -277,4 +277,8 @@ func IconSaveDone() -> UIImage? {
     return UIImage(named: "iconDoneBlue")
 }
 
+func IconSeedPhrase() -> UIImage? {
+    return UIImage(named: "iconSeedPhrase")
+}
+
 

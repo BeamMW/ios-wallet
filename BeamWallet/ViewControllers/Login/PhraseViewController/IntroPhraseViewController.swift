@@ -21,10 +21,34 @@ import UIKit
 
 class IntroPhraseViewController: BaseWizardViewController {
     
+    @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet private weak var nextButton: UIButton!
+
+    public var increaseSecutirty = false
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return increaseSecutirty
+        }
+        set{
+            super.isUppercasedTitle = increaseSecutirty
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = Localizable.shared.strings.create_new_wallet
+        if increaseSecutirty {
+             setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+         }
+        
+        title = !increaseSecutirty ? Localizable.shared.strings.create_new_wallet : Localizable.shared.strings.increase_security
+ 
+        if increaseSecutirty {
+            textLabel.text = Localizable.shared.strings.increase_security_text
+            nextButton.setTitle(Localizable.shared.strings.understand, for: .normal)
+            nextButton.setImage(IconDoneBlue(), for: .normal)
+        }
         
         switch Device.screenType {
         case .iPhones_5:
@@ -37,6 +61,7 @@ class IntroPhraseViewController: BaseWizardViewController {
 // MARK: IBAction
     @IBAction func onNext(sender :UIButton) {
         let vc = DisplayPhraseViewController()
+        vc.increaseSecutirty = increaseSecutirty
         pushViewController(vc: vc)
     }
 }

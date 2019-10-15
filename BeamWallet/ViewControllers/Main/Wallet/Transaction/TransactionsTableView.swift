@@ -54,6 +54,10 @@ class TransactionsTableView: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -214,5 +218,31 @@ extension TransactionsTableView {
         if viewModel.transactions.count == 0 {
             tableView.reloadData()
         }
+    }
+}
+
+extension TransactionsTableView: UIViewControllerPreviewingDelegate {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if  viewModel.transactions.count > 0 {
+            guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
+            
+            guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+            
+            let detailVC = TransactionViewController(transaction: viewModel.transactions[indexPath.row], preview: true)
+            detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
+            
+            previewingContext.sourceRect = cell.frame
+            
+            return detailVC
+        }
+        else {
+            return nil
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+        
+        (viewControllerToCommit as! TransactionViewController).didShow()
     }
 }

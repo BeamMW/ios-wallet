@@ -216,6 +216,7 @@
 "total_utxo" = "Total UTXO value";
 "send_notice" = "For the transaction to complete, the recipient must get online within the next 12 hours and you should get online within 2 hours afterwards";
 "save_address_title" = "Save address";
+"save_contact_title" = "Save contact";
 "save_contact_text" = "Would you like to save recipient address for futher transactions?";
 "save_address_text" = "Would you like to save created address and use it later?";
 "not_save" = "Don’t save";
@@ -383,9 +384,9 @@
 "transactions_empty" = "Your transaction list is empty";
 "transactions_empty_progress" = "You have no active transactions";
 "automatic_restore_title" = "Recommended restore";
-"automatic_restore_text" = "Beam Wallet will download the blockchain snapshot from the cloud.";
+"automatic_restore_text" = "Beam Wallet will download a snapshot of the blockchain and restore your funds on the device";
 "manual_restore_title" = "Restore with trusted node";
-"manual_restore_text" = "Beam Wallet will will connect to specific node and node will find all your funds in a blockchain.";
+"manual_restore_text" = "Beam Wallet will connect to specific trusted node (configured with your owner key) and the node will restore your funds";
 "paste_owner_key" = "Paste this code in Beam Wallet on your desktop to proceed restore from the node.";
 "after_paste_owner_key" = "Once you’ll paste the code, run your node on desktop and click next on mobile app.";
 "enter_trusted_node" = "Enter trusted node address";
@@ -443,3 +444,20 @@
 "use_touch_id" = "Use your Touch ID";
 "use_face_id" = "Use your Face ID";
 "enter_your_password" = "Enter your password";
+"share_details" = "Share details";
+
+
+"faucet_title" = "Start using the wallet";
+"faucet_text" = "Would you like to see the wallet in action? Get a very small amount of Beams from the community faucet.";
+"faucet_ok" = "Yes, please";
+"faucet_no" = "No, I'm fine";
+"show_seed_phrase" = "Show seed phrase";
+"increase_security" = "Increase security";
+"increase_security_text" = "If you ever lose your device, you will need this phrase to recover your wallet!\nNever type your seed phrase in keychains or password managers.\nNever save it in your local or remote folders in any form.";
+"seed_phrase_text" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"all_set" = "You are all set";
+"wallet_is_secure" = "Your wallet is secure now! Be calm in it’s feature use.";
+"make_wallet_secure_title" = "Make your wallet secure";
+"make_wallet_secure_text" = "Please increase wallet security by saving your seed phrase so you won’t loose your funds.";
+"complete_verification" = "Complete verification";
+"yes_please" = "yes, please";

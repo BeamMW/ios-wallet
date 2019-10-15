@@ -349,6 +349,7 @@ class LocalizableStrings : NSObject {
     var m = "m".localized
     var send_qr_secure = "send_qr_secure".localized
     var share_transaction = "share_transaction".localized
+    var share_details = "share_details".localized
     var maturing = "maturing".localized
     var auth_face_confirm = "auth_face_confirm".localized
     var auth_touch_confirm = "auth_touch_confirm".localized
@@ -422,7 +423,21 @@ class LocalizableStrings : NSObject {
     var use_touch_id = "use_touch_id".localized
     var use_face_id = "use_face_id".localized
     var enter_your_password = "enter_your_password".localized
+    var save_contact_title = "save_contact_title".localized
 
+    var faucet_title = "faucet_title".localized.uppercased()
+    var show_seed_phrase = "show_seed_phrase".localized
+    var increase_security = "increase_security".localized
+    var increase_security_text = "increase_security_text".localized
+    var seed_phrase_text = "seed_phrase_text".localized
+    var all_set = "seed_phrase_text".localized
+    var wallet_is_secure = "seed_phrase_text".localized
+    var make_wallet_secure_title = "make_wallet_secure".localized
+    var make_wallet_secure_text = "make_wallet_secure_text".localized
+    var complete_verification = "complete_verification".localized
+    var yes_please = "yes_please".localized
+    
+    
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

@@ -24,14 +24,31 @@ class DisplayPhraseViewController: BaseWizardViewController {
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var testnetView: UIView!
     @IBOutlet private weak var mainetView: UIView!
+    @IBOutlet private weak var textLabel: UILabel!
 
     var words = [String]()
     var phrase:String!
+    
+    public var increaseSecutirty = false
+    
+    override var isUppercasedTitle: Bool {
+        get{
+            return increaseSecutirty
+        }
+        set{
+            super.isUppercasedTitle = increaseSecutirty
+        }
+    }
         
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = Localizable.shared.strings.seed_prhase
+        if increaseSecutirty {
+            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+            textLabel.text = Localizable.shared.strings.seed_phrase_text
+        }
+        
+        title = Localizable.shared.strings.seed_prhase
         
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         
@@ -69,9 +86,14 @@ class DisplayPhraseViewController: BaseWizardViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        phrase = MnemonicModel.generatePhrase()
-        
-        words = phrase.components(separatedBy: ";")
+        if !increaseSecutirty {
+            phrase = MnemonicModel.generatePhrase()
+            words = phrase.components(separatedBy: ";")
+        }
+        else if let savedPhrase = OnboardManager.shared.getSeed() {
+            phrase = savedPhrase
+            words = phrase.components(separatedBy: ";")
+        }
         
         self.collectionView.reloadData()
         
@@ -112,9 +134,10 @@ class DisplayPhraseViewController: BaseWizardViewController {
     @IBAction func onNext(sender :UIButton) {
         self.confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { (_ ) in
             
-        }) { (_ ) in
+        }) { (_ ) in            
             let vc = ConfirmPhraseViewController()
                 .withWords(words: self.words)
+            vc.increaseSecutirty = self.increaseSecutirty
             self.pushViewController(vc: vc)
         }
     }

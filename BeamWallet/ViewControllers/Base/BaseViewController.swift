@@ -284,6 +284,7 @@ class BaseViewController: UIViewController {
     
     public func removeLeftButton() {
         self.view.viewWithTag(13)?.removeFromSuperview()
+        self.view.viewWithTag(12)?.removeFromSuperview()
     }
     
     public func removeRightButton() {

@@ -142,6 +142,23 @@ class DetailTransactionViewModel: TransactionViewModel {
             }
         }
     }
+    
+    public func saveContact() {
+        if let top = UIApplication.getTopMostViewController() {
+            let transaction = self.transaction!
+            var address:String? = nil
+            
+            if transaction.isIncome {
+                address = transaction.senderAddress
+            }
+            else{
+                address = transaction.receiverAddress
+            }
+            
+            let vc = SaveContactViewController(address: address)
+            top.pushViewController(vc: vc)
+        }
+    }
 }
 
 extension DetailTransactionViewModel {

@@ -20,14 +20,67 @@
 import UIKit
 
 class TransactionViewController: BaseTableViewController {
+    private var viewModel: DetailTransactionViewModel!
+    private var isPreview = false
     
-    private var viewModel:DetailTransactionViewModel!
+    override var previewActionItems: [UIPreviewActionItem] {
+        let transaction = viewModel.transaction!
+        
+        var array = [UIPreviewAction]()
+        
+        if transaction.canSaveContact() {
+            let action1 = UIPreviewAction(title: Localizable.shared.strings.save_contact_title,
+                                             style: .default,
+                                             handler: { _, _ in
+                                                 self.viewModel.saveContact()
+               })
+               
+               array.append(action1)
+        }
+        
+        let action1 = UIPreviewAction(title: Localizable.shared.strings.share_details,
+                                      style: .default,
+                                      handler: { _, _ in
+                                          self.viewModel.share()
+        })
+        
+        array.append(action1)
+        
+        if !transaction.isIncome {
+            let action2 = UIPreviewAction(title: Localizable.shared.strings.repeat_transaction,
+                                          style: .default,
+                                          handler: { _, _ in
+                                              self.viewModel.repeatTransation(transaction: self.viewModel.transaction!)
+            })
+            array.append(action2)
+        }
+        
+        if transaction.canCancel {
+            let action3 = UIPreviewAction(title: Localizable.shared.strings.cancel_transaction,
+                                          style: .default,
+                                          handler: { _, _ in
+                                              self.viewModel.cancelTransation(indexPath: nil)
+            })
+            array.append(action3)
+        }
+        
+        if transaction.canDelete {
+            let action4 = UIPreviewAction(title: Localizable.shared.strings.delete_transaction,
+                                          style: .destructive,
+                                          handler: { _, _ in
+                                              self.viewModel.deleteTransation(indexPath: nil)
+            })
+            array.append(action4)
+        }
+        
+        return array
+    }
     
     override var isUppercasedTitle: Bool {
-        get{
+        get {
             return true
         }
-        set{
+        set {
             super.isUppercasedTitle = true
         }
     }
@@ -41,9 +94,10 @@ class TransactionViewController: BaseTableViewController {
         }
     }
     
-    init(transaction:BMTransaction) {
+    init(transaction: BMTransaction, preview: Bool = false) {
         super.init(nibName: nil, bundle: nil)
-
+        
+        isPreview = preview
         viewModel = DetailTransactionViewModel(transaction: transaction)
     }
     
@@ -53,8 +107,6 @@ class TransactionViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -65,12 +117,42 @@ class TransactionViewController: BaseTableViewController {
         tableView.backgroundColor = UIColor.main.marine
         
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-
-        title = Localizable.shared.strings.transaction_id.uppercased().replacingOccurrences(of: Localizable.shared.strings.id.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: String.empty())
-
-        addRightButton(image: MoreIcon(), target: self, selector: #selector(self.onMore))
-
+        
+        if !isPreview {
+            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+            
+            title = Localizable.shared.strings.transaction_id.uppercased().replacingOccurrences(of: Localizable.shared.strings.id.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: String.empty())
+            
+            addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
+        }
+        else {
+            removeLeftButton()
+        }
+        
         subscribeToUpdates()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if isPreview {
+            tableView.y = 0
+            tableView.h = 450
+        }
+    }
+    
+    public func didShow() {
+        isPreview = false
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
+        title = Localizable.shared.strings.transaction_id.uppercased().replacingOccurrences(of: Localizable.shared.strings.id.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: String.empty())
+        
+        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
+        
+        addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+        
+        viewDidLayoutSubviews()
     }
     
     private func subscribeToUpdates() {
@@ -82,13 +164,13 @@ class TransactionViewController: BaseTableViewController {
         }
         
         viewModel.onDataUpdated = { [weak self]
-            indexPath, transaction in
+            _, transaction in
             AppModel.sharedManager().cancelTransaction(transaction)
             self?.back()
         }
         
         viewModel.onDataDeleted = { [weak self]
-            indexPath, transaction in
+            _, transaction in
             AppModel.sharedManager().prepareDeleteTransaction(transaction)
             self?.back()
         }
@@ -98,25 +180,23 @@ class TransactionViewController: BaseTableViewController {
         AppModel.sharedManager().getWalletStatus()
     }
     
-    @objc private func onMore(sender:UIBarButtonItem) {        
-        BMPopoverMenu.show(menuArray: viewModel.actionItems(), done: { (selectedItem) in
+    @objc private func onMore(sender: UIBarButtonItem) {
+        BMPopoverMenu.show(menuArray: viewModel.actionItems(), done: { selectedItem in
             if let item = selectedItem {
-                switch (item.action) {
+                switch item.action {
                 case .repeat_transaction:
                     self.viewModel.repeatTransation(transaction: self.viewModel.transaction!)
-                case .cancel_transaction :
+                case .cancel_transaction:
                     self.viewModel.cancelTransation(indexPath: nil)
-                case .delete_transaction :
+                case .delete_transaction:
                     self.viewModel.deleteTransation(indexPath: nil)
-                case .share :
+                case .share:
                     self.viewModel.share()
                 default:
                     return
                 }
             }
-        }, cancel: {
-
-        })
+        }, cancel: {})
     }
     
     @objc private func onMoreDetails() {
@@ -130,8 +210,7 @@ class TransactionViewController: BaseTableViewController {
     }
 }
 
-extension TransactionViewController : UITableViewDelegate {
-    
+extension TransactionViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 1:
@@ -148,8 +227,7 @@ extension TransactionViewController : UITableViewDelegate {
     }
 }
 
-extension TransactionViewController : UITableViewDataSource {
-    
+extension TransactionViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
@@ -170,12 +248,11 @@ extension TransactionViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         switch indexPath.section {
         case 0:
             let cell = tableView
                 .dequeueReusableCell(withType: TransactionDetailCell.self, for: indexPath)
-                .configured(with: self.viewModel.transaction!)
+                .configured(with: viewModel.transaction!)
             return cell
         case 1:
             let cell = tableView
@@ -212,14 +289,12 @@ extension TransactionViewController : UITableViewDataSource {
             return nil
         }
     }
-    
 }
 
 extension TransactionViewController: TransactionPaymentProofCellDelegate {
-    
     func onPaymentProofDetails() {
         if let proof = viewModel.paymentProof {
-            let vc = PaymentProofDetailViewController(transaction: self.viewModel.transaction!, paymentProof: proof)
+            let vc = PaymentProofDetailViewController(transaction: viewModel.transaction!, paymentProof: proof)
             pushViewController(vc: vc)
         }
     }
@@ -232,12 +307,11 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
     }
 }
 
-extension TransactionViewController : GeneralInfoCellDelegate {
-
+extension TransactionViewController: GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell) {
             if viewModel.details[path.row].title == Localizable.shared.strings.kernel_id.uppercased() {
-                let kernelId = self.viewModel.transaction!.kernelId!
+                let kernelId = viewModel.transaction!.kernelId!
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {
                     openUrl(url: url)

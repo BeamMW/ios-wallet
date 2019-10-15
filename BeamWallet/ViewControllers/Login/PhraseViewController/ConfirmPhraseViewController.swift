@@ -26,6 +26,17 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var stackHeight: NSLayoutConstraint!
 
+    public var increaseSecutirty = false
+
+    override var isUppercasedTitle: Bool {
+        get{
+            return increaseSecutirty
+        }
+        set{
+            super.isUppercasedTitle = increaseSecutirty
+        }
+    }
+    
     private var inputWords = [BMWord]()
     private var maxWords = 6
     
@@ -54,7 +65,11 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = Localizable.shared.strings.confirm_seed
+        if increaseSecutirty {
+            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        }
+        
+        title = Localizable.shared.strings.confirm_seed
         
         if Device.isZoomed {
             if Device.screenType == .iPhones_Plus {
@@ -94,17 +109,35 @@ class ConfirmPhraseViewController: BaseWizardViewController {
     
 // MARK: IBAction
     @objc private func onBack() {
-        self.confirmAlert(title: Localizable.shared.strings.seed_back_title, message: Localizable.shared.strings.seed_back_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.generate, cancelHandler: { (_ ) in
-            
-        }) { (_ ) in
+        if !increaseSecutirty {
+            self.confirmAlert(title: Localizable.shared.strings.seed_back_title, message: Localizable.shared.strings.seed_back_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.generate, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
+                self.back()
+            }
+        }
+        else{
             self.back()
         }
     }
     
     @IBAction func onNext(sender :UIButton) {
-        let vc = CreateWalletPasswordViewController()
-            .withPhrase(phrase: words.joined(separator: ";"))
-        pushViewController(vc: vc)
+        if increaseSecutirty {
+            OnboardManager.shared.makeSecure()
+            
+            if let viewControllers = self.navigationController?.viewControllers {
+                for vc in viewControllers {
+                    if vc is WalletViewController {
+                        navigationController?.popToViewController(vc, animated: true)
+                    }
+                }
+            }
+        }
+        else{
+            let vc = CreateWalletPasswordViewController()
+                       .withPhrase(phrase: words.joined(separator: ";"))
+            pushViewController(vc: vc)
+        }
     }
 }
 
@@ -175,7 +208,7 @@ extension ConfirmPhraseViewController : InputWordCellCellDelegate {
                 }
             }
             
-            nextButton.isEnabled = corretPhrase
+            nextButton.isEnabled = true
         }
     }
 }

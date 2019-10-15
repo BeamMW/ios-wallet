@@ -103,6 +103,10 @@ class CreateWalletProgressViewController: BaseViewController {
     }
     
     private func openMainPage() {
+        if phrase != nil && !AppModel.sharedManager().isRestoreFlow {
+            OnboardManager.shared.saveSeed(seed: phrase!)
+        }
+
         timeoutTimer?.invalidate()
         
         AppModel.sharedManager().removeDelegate(self)

@@ -21,6 +21,8 @@
 #import "StringLocalize.h"
 #import "Settings.h"
 #import "Color.h"
+#import "BMAddress.h"
+#import "AppModel.h"
 
 @implementation BMTransaction
 
@@ -406,6 +408,18 @@
     }
     
     return attributedString;
+}
+
+-(BOOL)canSaveContact {
+    if (self.isIncome) {
+        BMAddress *address = [[AppModel sharedManager] findAddressByID:_senderAddress];
+        return address == nil;
+    }
+    else{
+        BMAddress *address = [[AppModel sharedManager] findAddressByID:_receiverAddress];
+        return address == nil;
+    }
+    return NO;
 }
 
 @end

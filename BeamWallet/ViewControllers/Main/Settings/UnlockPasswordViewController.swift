@@ -24,6 +24,7 @@ class UnlockPasswordViewController: BaseViewController {
     enum UnlockEvent {
         case unlock
         case changePassword
+        case seedPhrase
     }
     
     @IBOutlet private weak var passField: BMField!
@@ -60,10 +61,15 @@ class UnlockPasswordViewController: BaseViewController {
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
         
-        title = event == .unlock ? Localizable.shared.strings.your_password : Localizable.shared.strings.change_password
-        
-        if event == .unlock {
+        switch event {
+        case .unlock:
+            title = Localizable.shared.strings.your_password
             titleLabel.text = Localizable.shared.strings.unlock_password
+        case .changePassword:
+            title = Localizable.shared.strings.change_password
+        default:
+            title = Localizable.shared.strings.show_seed_phrase
+            titleLabel.text = Localizable.shared.strings.enter_your_password
         }
     }
     
@@ -93,7 +99,15 @@ class UnlockPasswordViewController: BaseViewController {
             else{
                 isUnlocked = true
                 
-                if event == .unlock {
+                if event == .seedPhrase {
+                   let vc = IntroPhraseViewController()
+                   vc.increaseSecutirty = true
+                   if var viewControllers = self.navigationController?.viewControllers {
+                       viewControllers[viewControllers.count - 1] = vc
+                       navigationController?.setViewControllers(viewControllers, animated: true)
+                   }
+                }
+                else if event == .unlock {
                     if navigationController?.viewControllers.count == 1 {
                         dismiss(animated: true) {
                             
@@ -105,7 +119,6 @@ class UnlockPasswordViewController: BaseViewController {
                 }
                 else{
                     let vc = CreateWalletPasswordViewController()
-                    vc.hidesBottomBarWhenPushed = true
                     if var viewControllers = self.navigationController?.viewControllers {
                         viewControllers[viewControllers.count-1] = vc
                         self.navigationController?.setViewControllers(viewControllers, animated: true)
