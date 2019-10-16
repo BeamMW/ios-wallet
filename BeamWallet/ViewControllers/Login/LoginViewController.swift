@@ -86,8 +86,8 @@ class LoginViewController: BaseViewController {
     }
 
     @IBAction func onLanguage(sender :UIButton) {
-        let vc = LanguagePickerViewController()
-        vc.completion = {[weak self] obj in
+        let vc = BMDataPickerViewController(type: .language)
+        vc.completion = {[weak self] _ in
             self?.setTitles()
         }
         pushViewController(vc: vc)

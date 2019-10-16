@@ -32,6 +32,7 @@
 #import "BMLanguage.h"
 #import "StringLocalize.h"
 #import "BMLockScreenValue.h"
+#import "BMLogValue.h"
 
 enum {
     BMRestoreManual = 0,
@@ -62,6 +63,7 @@ typedef int BMRestoreType;
 -(void)onAddedPrepareTransaction:(BMPreparedTransaction*_Nonnull)transaction;
 -(void)onAddedDeleteAddress:(BMAddress*_Nonnull)address;
 -(void)onAddedDeleteTransaction:(BMTransaction*_Nonnull)transaction;
+-(void)onWalletCompleteVerefication;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -155,6 +157,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
 -(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories;
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
+-(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
@@ -168,6 +171,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
+-(void)clearLogs;
 
 // transactions
 -(BMTransaction*_Nullable)validatePaymentProof:(NSString*_Nullable)code;
@@ -209,5 +213,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(int)getDefaultFeeInGroth;
 -(int)getMinFeeInGroth;
 -(BOOL)isNodeInSync;
+
+-(void)completeWalletVerification;
 
 @end

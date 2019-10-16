@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +18,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ConfirmPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="bottomOffset" destination="wB7-Wl-KVE" id="Lva-Jd-Kch"/>
                 <outlet property="collectionView" destination="y0S-AP-q9n" id="abe-Wp-jOr"/>
                 <outlet property="mainStack" destination="SY7-Yz-blR" id="h1A-Fi-2dN"/>
                 <outlet property="nextButton" destination="EZh-RJ-DHb" id="1j0-Cv-7nK"/>
@@ -37,7 +34,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="SY7-Yz-blR">
-                    <rect key="frame" x="32.5" y="75" width="310" height="388.5"/>
+                    <rect key="frame" x="32.5" y="55" width="310" height="388.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To ensure the seed phrase is written down correctly, please fill in the specific words below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p1T-xu-CLB">
                             <rect key="frame" x="0.0" y="0.0" width="310" height="38.5"/>
@@ -74,7 +71,7 @@
                     </constraints>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZh-RJ-DHb" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="61" y="573" width="253" height="44"/>
+                    <rect key="frame" x="61" y="443.5" width="253" height="44"/>
                     <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="253" id="02n-Mz-rTW"/>
@@ -101,7 +98,7 @@
             <constraints>
                 <constraint firstItem="SY7-Yz-blR" firstAttribute="top" secondItem="iSK-KN-rbH" secondAttribute="top" constant="55" id="3oE-a9-erR"/>
                 <constraint firstItem="EZh-RJ-DHb" firstAttribute="centerX" secondItem="1Fc-IQ-u2K" secondAttribute="centerX" id="CtV-Ge-RaA"/>
-                <constraint firstItem="iSK-KN-rbH" firstAttribute="bottom" secondItem="EZh-RJ-DHb" secondAttribute="bottom" constant="50" id="wB7-Wl-KVE"/>
+                <constraint firstItem="EZh-RJ-DHb" firstAttribute="top" secondItem="SY7-Yz-blR" secondAttribute="bottom" id="IfV-G2-mLP"/>
                 <constraint firstItem="SY7-Yz-blR" firstAttribute="centerX" secondItem="1Fc-IQ-u2K" secondAttribute="centerX" id="wHg-Ie-Mih"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="iSK-KN-rbH"/>

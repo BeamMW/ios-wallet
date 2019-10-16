@@ -62,19 +62,15 @@ class EditAddressViewModel: DetailAddressViewModel {
     
     public func pickExpire() {
         if let top = UIApplication.getTopMostViewController() {
-            var duration = Int(self.newAddress!.duration)
-            
-            if self.newAddress.isNowActive {
-                duration = Int(self.newAddress.isNowActiveDuration)
-            }
-            
-            let vc = AddressExpiresPickerViewController(duration: duration)
+            let vc = BMDataPickerViewController(type: .address_expire)
             vc.completion = {
                 obj in
                 
+                let selected = obj as! Int32
+                
                 self.newAddress.isChangedDate = true
                 
-                if obj == 24 {
+                if selected == 24 {
                     self.newAddress.isNowActive = true
                     self.newAddress.isNowActiveDuration = self.hours_24
                     

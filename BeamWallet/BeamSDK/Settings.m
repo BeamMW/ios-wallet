@@ -31,6 +31,7 @@ static NSString *askHideAmountsKey = @"askHideAmountsKey";
 static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 static NSString *languageKey = @"languageKey";
 static NSString *randomNodeKey = @"randomNodeKey";
+static NSString *logsKey = @"logsKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -76,6 +77,12 @@ static NSString *randomNodeKey = @"randomNodeKey";
         _connectToRandomNode = NO;
     }
 
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:logsKey]) {
+        _logDays = [[[NSUserDefaults standardUserDefaults] objectForKey:logsKey] intValue];
+    }
+    else{
+        _logDays = 5;
+    }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:lockScreen]) {
         _lockScreenSeconds = [[[NSUserDefaults standardUserDefaults] objectForKey:lockScreen] intValue];
@@ -153,12 +160,19 @@ static NSString *randomNodeKey = @"randomNodeKey";
 
     return self;
 }
-    
--(void)resetWallet {
-    _nodeAddress = [AppModel chooseRandomNode];
 
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:nodeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+-(void)resetNode{
+    _nodeAddress = [AppModel chooseRandomNode];
+}
+    
+-(void)resetSettings {
+    self.nodeAddress = [AppModel chooseRandomNode];
+    self.logDays = 5;
+    self.lockScreenSeconds = 0;
+    self.connectToRandomNode = YES;
+    self.isAllowOpenLink = NO;
+    self.isAskForHideAmounts = YES;
+    self.isHideAmounts = NO;
 }
 
 -(NSString*_Nonnull)customNode {
@@ -194,6 +208,15 @@ static NSString *randomNodeKey = @"randomNodeKey";
     
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_lockScreenSeconds] forKey:lockScreen];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setLogDays:(int)logDays {
+    _logDays = logDays;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_logDays] forKey:logsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[AppModel sharedManager] clearLogs];
 }
 
 -(void)setConnectToRandomNode:(BOOL)connectToRandomNode {
@@ -501,6 +524,36 @@ static NSString *randomNodeKey = @"randomNodeKey";
 -(BMLockScreenValue*_Nonnull)currentLocedValue {
     for (BMLockScreenValue *v in [self lockScreenValues]) {
         if (v.seconds == _lockScreenSeconds) {
+            return v;
+        }
+    }
+    
+    return nil;
+}
+
+-(NSArray <BMLogValue*> * _Nonnull)logValues {
+    BMLogValue *never = [BMLogValue new];
+    never.name = [@"all_time" localized];
+    never.days = 0;
+
+    BMLogValue *d_5 = [BMLogValue new];
+    d_5.name = [@"last_5_days" localized];
+    d_5.days = 5;
+    
+    BMLogValue *d_15 = [BMLogValue new];
+    d_15.name = [@"last_15_days" localized];
+    d_15.days = 15;
+    
+    BMLogValue *d_30 = [BMLogValue new];
+    d_30.name = [@"last_30_days" localized];
+    d_30.days = 30;
+    
+    return @[never,d_5,d_15,d_30];
+}
+
+-(BMLogValue*_Nonnull)currentLogValue {
+    for (BMLogValue *v in [self logValues]) {
+        if (v.days == _logDays) {
             return v;
         }
     }

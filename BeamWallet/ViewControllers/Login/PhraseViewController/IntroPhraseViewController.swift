@@ -26,29 +26,22 @@ class IntroPhraseViewController: BaseWizardViewController {
 
     public var increaseSecutirty = false
     
+    
     override var isUppercasedTitle: Bool {
         get{
-            return increaseSecutirty
+            return true
         }
         set{
-            super.isUppercasedTitle = increaseSecutirty
+            super.isUppercasedTitle = true
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if increaseSecutirty {
-             setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
-         }
-        
-        title = !increaseSecutirty ? Localizable.shared.strings.create_new_wallet : Localizable.shared.strings.increase_security
- 
-        if increaseSecutirty {
-            textLabel.text = Localizable.shared.strings.increase_security_text
-            nextButton.setTitle(Localizable.shared.strings.understand, for: .normal)
-            nextButton.setImage(IconDoneBlue(), for: .normal)
-        }
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+
+        title = Localizable.shared.strings.seed_prhase
         
         switch Device.screenType {
         case .iPhones_5:

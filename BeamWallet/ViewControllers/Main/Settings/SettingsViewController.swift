@@ -109,7 +109,7 @@ extension SettingsViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return BMTableHeaderTitleView.height
+        return section == 5 ? 10 : BMTableHeaderTitleView.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -146,6 +146,16 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.onLanguage()
             case 15:
                 self.viewModel.onLockScreen()
+            case 16:
+                self.viewModel.showSeed()
+            case 17:
+                self.viewModel.onLogScreen()
+            case 18:
+                self.viewModel.receiveFaucet()
+            case 19:
+                self.viewModel.makeSecure()
+            case 20:
+                self.viewModel.onClearWallet()
             default:
                 return
             }
@@ -163,8 +173,10 @@ extension SettingsViewController : UITableViewDataSource {
         case 1:
             return BMTableHeaderTitleView(title: Localizable.shared.strings.general_settings, bold: false)
         case 2:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories, bold: false)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.privacy, bold: false)
         case 3:
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories, bold: false)
+        case 4:
             return BMTableHeaderTitleView(title: Localizable.shared.strings.feedback, bold: false)
         default:
             return nil
@@ -201,8 +213,7 @@ extension SettingsViewController : SettingsCellDelegate {
             viewModel.items[indexPath.section][indexPath.row] = item
 
             if value == false && item.id == 3 {
-                let vc = UnlockPasswordViewController(event: .unlock)
-                vc.hidesBottomBarWhenPushed = true
+                let vc = UnlockPasswordPopover(event: .settings)
                 vc.completion = { [weak self]
                     obj in
                     
@@ -216,14 +227,15 @@ extension SettingsViewController : SettingsCellDelegate {
                         Settings.sharedManager().isNeedaskPasswordForSend = false
                     }
                 }
-                pushViewController(vc: vc)
+                vc.modalPresentationStyle = .overFullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                present(vc, animated: true, completion: nil)
             }
             else if value == true && item.id == 3 {
                 Settings.sharedManager().isNeedaskPasswordForSend = true
             }
             else if value == false && item.id == 4 {
-                let vc = UnlockPasswordViewController(event: .unlock)
-                vc.hidesBottomBarWhenPushed = true
+                let vc = UnlockPasswordPopover(event: .settings, allowBiometric: false)
                 vc.completion = {
                     obj in
                     
@@ -237,7 +249,9 @@ extension SettingsViewController : SettingsCellDelegate {
                         Settings.sharedManager().isEnableBiometric = false
                     }
                 }
-                pushViewController(vc: vc)
+                vc.modalPresentationStyle = .overFullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                present(vc, animated: true, completion: nil)
             }
             else if value == true && item.id == 4 {
                 Settings.sharedManager().isEnableBiometric = true

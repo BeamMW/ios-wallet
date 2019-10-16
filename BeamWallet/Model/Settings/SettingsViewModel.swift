@@ -65,16 +65,29 @@ class SettingsViewModel: NSObject {
         node.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, id: 5))
         
         var general = [SettingsItem]()
-        general.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3))
-        if BiometricAuthorization.shared.canAuthenticate() {
-            general.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
-        }
         general.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
         general.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, id: 15))
+        general.append(SettingsItem(title: Localizable.shared.strings.save_wallet_logs, detail: Settings.sharedManager().currentLogValue().name, isSwitch: nil, id: 17))
         general.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
-        general.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
-        general.append(SettingsItem(title: Localizable.shared.strings.change_wallet_password, detail: nil, isSwitch: nil, id: 1))
-        general.append(SettingsItem(title: Localizable.shared.strings.clear_data, detail: nil, isSwitch: nil, id: 6))
+        general.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, id: 18))
+        if OnboardManager.shared.isSkipedSeed() == true {
+            general.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, id: 19))
+        }
+        general.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, id: 6))
+        
+        var security = [SettingsItem]()
+        security.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3))
+        if BiometricAuthorization.shared.canAuthenticate() {
+            security.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, id: 4))
+        }
+        security.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, id: 15))
+        security.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
+        
+        if OnboardManager.shared.getSeed() != nil {
+            security.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, id: 16))
+        }
+        
+        security.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, id: 1))
         
         var categories = [SettingsItem]()
         if AppModel.sharedManager().categories.count > 0 {
@@ -88,8 +101,12 @@ class SettingsViewModel: NSObject {
         feedback.append(SettingsItem(title: Localizable.shared.strings.rate_app, detail: nil, isSwitch: nil, id: 11))
         feedback.append(SettingsItem(title: Localizable.shared.strings.report_problem, detail: nil, isSwitch: nil, id: 2))
         
+        var clear = [SettingsItem]()
+        clear.append(SettingsItem(title: Localizable.shared.strings.clear_wallet, detail: nil, isSwitch: nil, id: 20))
+        
         items.append(node)
         items.append(general)
+        items.append(security)
         items.append(categories)
         
         if !NotificationManager.disableApns {
@@ -100,6 +117,7 @@ class SettingsViewModel: NSObject {
         }
         
         items.append(feedback)
+        items.append(clear)
     }
     
     public func getItem(indexPath: IndexPath) -> SettingsItem {
@@ -109,6 +127,12 @@ class SettingsViewModel: NSObject {
 
 extension SettingsViewModel: WalletModelDelegate {
     func onCategoriesChange() {
+        items.removeAll()
+        initItems()
+        onDataChanged?()
+    }
+    
+    func onWalletCompleteVerefication() {
         items.removeAll()
         initItems()
         onDataChanged?()
@@ -186,17 +210,23 @@ extension SettingsViewModel {
     
     func onChangeNode(completion: @escaping ((Bool) -> Void)) {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = EnterNodeAddressViewController()
-            vc.completion = { [weak self]
-                obj in
-                
-                if obj == true {
-                    self?.items[0][1].detail = Settings.sharedManager().nodeAddress
+            let modalViewController = UnlockPasswordPopover(event: .node)
+            modalViewController.completion = { [weak self] obj in
+                let vc = EnterNodeAddressViewController()
+                vc.completion = { [weak self]
+                    obj in
+                    
+                    if obj == true {
+                        self?.items[0][1].detail = Settings.sharedManager().nodeAddress
+                    }
+                    
+                    completion(obj)
                 }
-                
-                completion(obj)
+                top.pushViewController(vc: vc)
             }
-            top.pushViewController(vc: vc)
+            modalViewController.modalPresentationStyle = .overFullScreen
+            modalViewController.modalTransitionStyle = .crossDissolve
+            top.present(modalViewController, animated: true, completion: nil)
         }
     }
     
@@ -227,27 +257,81 @@ extension SettingsViewModel {
     
     func onLanguage() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = LanguagePickerViewController()
+            let vc = BMDataPickerViewController(type: .language)
             vc.completion = { [weak self] _ in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()
             }
-            vc.hidesBottomBarWhenPushed = true
             top.pushViewController(vc: vc)
         }
     }
     
     func onLockScreen() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = LockPickerViewController()
-            vc.completion = { [weak self] in
+            let vc = BMDataPickerViewController(type: .lock)
+            vc.completion = { [weak self] _ in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()
             }
-            vc.hidesBottomBarWhenPushed = true
             top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onLogScreen() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = BMDataPickerViewController(type: .log)
+            vc.completion = { [weak self] _ in
+                self?.items.removeAll()
+                self?.initItems()
+                self?.onDataChanged?()
+            }
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func showSeed() {
+        if let _ = OnboardManager.shared.getSeed(), let top = UIApplication.getTopMostViewController() {
+            let vc = UnlockPasswordViewController(event: .seedPhrase)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func makeSecure() {
+        if let _ = OnboardManager.shared.getSeed(), let top = UIApplication.getTopMostViewController() {
+            let vc = UnlockPasswordViewController(event: .seedPhrase)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func receiveFaucet() {
+        if let top = UIApplication.getTopMostViewController() {
+            OnboardManager.shared.receiveFaucet { link, error in
+                if let reason = error?.localizedDescription {
+                    top.alert(message: reason)
+                }
+                else if let result = link {
+                    top.openUrl(url: result)
+                }
+            }
+        }
+    }
+    
+    func onClearWallet() {
+        if let top = UIApplication.getTopMostViewController() {
+            top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.clear_wallet, cancelHandler: { (_ ) in
+                
+            }) { (_ ) in
+                let modalViewController = UnlockPasswordPopover(event: .settings)
+                modalViewController.completion = { obj in
+                    let app = UIApplication.shared.delegate as! AppDelegate
+                    app.logout()
+                }
+                modalViewController.modalPresentationStyle = .overFullScreen
+                modalViewController.modalTransitionStyle = .crossDissolve
+                top.present(modalViewController, animated: true, completion: nil)
+            }
         }
     }
 }

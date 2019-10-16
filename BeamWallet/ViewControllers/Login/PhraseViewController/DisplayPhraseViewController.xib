@@ -18,170 +18,154 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisplayPhraseViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="bottomOffset" destination="1aP-fE-19x" id="RHf-nD-3g0"/>
-                <outlet property="collectionView" destination="hro-fw-1ip" id="fHh-Pj-zTI"/>
-                <outlet property="mainStack" destination="ieK-AA-2FA" id="ZeP-qs-6g3"/>
-                <outlet property="mainetView" destination="BAl-Rc-aG4" id="QTJ-Dq-LYQ"/>
-                <outlet property="stackWidth" destination="bWB-tf-HeN" id="fm9-qU-iiQ"/>
-                <outlet property="testnetView" destination="sM9-AZ-bbZ" id="L4t-Mm-7P3"/>
-                <outlet property="textLabel" destination="fZw-1Z-LcP" id="OMD-cm-kma"/>
-                <outlet property="topOffset" destination="iVY-Qp-wuw" id="P2d-c7-OkW"/>
-                <outlet property="view" destination="1rJ-7R-t7c" id="VKf-OH-GVu"/>
+                <outlet property="collectionView" destination="Ybj-Po-YcX" id="lUL-qA-fIN"/>
+                <outlet property="laterButton" destination="ZXr-s0-dYE" id="e5K-7l-PYk"/>
+                <outlet property="nextButton" destination="GRH-b1-sMV" id="sv1-eP-7pl"/>
+                <outlet property="scrollView" destination="9Pj-Is-px8" id="R4L-dt-FtF"/>
+                <outlet property="topOffset" destination="gcW-BX-bK8" id="uvf-vR-YCc"/>
+                <outlet property="view" destination="bnH-aF-0Tl" id="xE3-Ye-jfL"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="1rJ-7R-t7c">
+        <view contentMode="scaleToFill" id="bnH-aF-0Tl">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="ieK-AA-2FA">
-                    <rect key="frame" x="30" y="55" width="315" height="445.5"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Pj-Is-px8">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZw-1Z-LcP">
-                            <rect key="frame" x="0.0" y="0.0" width="315" height="95.5"/>
-                            <string key="text">Your seed phrase is the access key to all the funds in your wallet. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.</string>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="display_seed"/>
-                            </userDefinedRuntimeAttributes>
-                        </label>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="hro-fw-1ip">
-                            <rect key="frame" x="0.0" y="145.5" width="315" height="300"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9QY-VT-wR2">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="685"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zh4-31-Hkf">
+                                    <rect key="frame" x="15" y="40" width="345" height="115"/>
+                                    <string key="text">Your seed phrase is the access key to all the funds in your wallet. 
+From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.</string>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="display_seed"/>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Ybj-Po-YcX">
+                                    <rect key="frame" x="37.5" y="195" width="300" height="300"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="300" id="GEq-Sw-1Xa"/>
+                                        <constraint firstAttribute="width" constant="300" id="Wyx-uA-sP6"/>
+                                    </constraints>
+                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="20" id="zte-sI-nk2">
+                                        <size key="itemSize" width="140" height="38"/>
+                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </collectionViewFlowLayout>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-1" id="Y7e-QY-bfS"/>
+                                        <outlet property="delegate" destination="-1" id="cAa-8u-Geb"/>
+                                    </connections>
+                                </collectionView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ryQ-SO-HIa">
+                                    <rect key="frame" x="15" y="535" width="345" height="135"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRH-b1-sMV" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                            <rect key="frame" x="46" y="0.0" width="253" height="44"/>
+                                            <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="253" id="8TM-Pf-6xM"/>
+                                                <constraint firstAttribute="height" constant="44" id="QOW-hg-kjK"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                            <state key="normal" title="complete verification" image="iconRecovery">
+                                                <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="22"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="complete_verification"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="iuC-5g-pS5"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZXr-s0-dYE" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                                            <rect key="frame" x="46" y="59" width="253" height="44"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="253" id="PRn-rR-Glf"/>
+                                                <constraint firstAttribute="height" constant="44" id="pGV-Pl-0im"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                            <state key="normal" title="i will do it later" image="iconNextWhite">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="22"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="i_will_later"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onLaterWithSender:" destination="-1" eventType="touchUpInside" id="q1L-MK-92K"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="ZXr-s0-dYE" firstAttribute="centerX" secondItem="ryQ-SO-HIa" secondAttribute="centerX" id="4Do-b6-mic"/>
+                                        <constraint firstAttribute="height" constant="135" id="T0T-yB-P4B"/>
+                                        <constraint firstItem="ZXr-s0-dYE" firstAttribute="top" secondItem="GRH-b1-sMV" secondAttribute="bottom" constant="15" id="erN-b6-lR6"/>
+                                        <constraint firstItem="GRH-b1-sMV" firstAttribute="centerX" secondItem="ryQ-SO-HIa" secondAttribute="centerX" id="o4b-oe-UkH"/>
+                                        <constraint firstItem="GRH-b1-sMV" firstAttribute="top" secondItem="aYr-GN-h4T" secondAttribute="top" id="us6-uv-FcD"/>
+                                    </constraints>
+                                    <viewLayoutGuide key="safeArea" id="aYr-GN-h4T"/>
+                                </view>
+                            </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="300" id="awf-7b-AhV"/>
+                                <constraint firstItem="Zh4-31-Hkf" firstAttribute="leading" secondItem="9QY-VT-wR2" secondAttribute="leading" constant="15" id="7Eh-3V-wrr"/>
+                                <constraint firstItem="ryQ-SO-HIa" firstAttribute="top" secondItem="Ybj-Po-YcX" secondAttribute="bottom" constant="40" id="KbK-lL-7dP"/>
+                                <constraint firstAttribute="trailing" secondItem="ryQ-SO-HIa" secondAttribute="trailing" constant="15" id="Kxx-cQ-WbD"/>
+                                <constraint firstItem="Ybj-Po-YcX" firstAttribute="centerX" secondItem="9QY-VT-wR2" secondAttribute="centerX" id="N9q-vO-Yia"/>
+                                <constraint firstItem="Ybj-Po-YcX" firstAttribute="top" secondItem="Zh4-31-Hkf" secondAttribute="bottom" constant="40" id="ODM-ED-sq4"/>
+                                <constraint firstItem="Zh4-31-Hkf" firstAttribute="top" secondItem="9QY-VT-wR2" secondAttribute="top" constant="40" id="PUa-Se-ZH3"/>
+                                <constraint firstAttribute="trailing" secondItem="Zh4-31-Hkf" secondAttribute="trailing" constant="15" id="X8F-NM-tpW"/>
+                                <constraint firstAttribute="bottom" secondItem="ryQ-SO-HIa" secondAttribute="bottom" constant="15" id="cgh-mT-rca"/>
+                                <constraint firstItem="ryQ-SO-HIa" firstAttribute="leading" secondItem="9QY-VT-wR2" secondAttribute="leading" constant="15" id="j9E-3c-nlz"/>
                             </constraints>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SJk-Sm-oCl">
-                                <size key="itemSize" width="140" height="38"/>
-                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            </collectionViewFlowLayout>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="cJr-lG-0qB"/>
-                                <outlet property="delegate" destination="-1" id="IKb-zi-LUP"/>
-                            </connections>
-                        </collectionView>
-                    </subviews>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="315" id="bWB-tf-HeN"/>
-                    </constraints>
-                </stackView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sM9-AZ-bbZ">
-                    <rect key="frame" x="30" y="567" width="315" height="50"/>
-                    <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="O7o-B6-g7f">
-                            <rect key="frame" x="1.5" y="0.0" width="312" height="44"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EOZ-6T-qlN" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="151" height="44"/>
-                                    <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="44" id="rgY-I6-YJ9"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="copy" image="iconCopyWhite">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onCopyWithSender:" destination="-1" eventType="touchUpInside" id="7mC-VD-5cg"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hiA-fN-9Ys" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="161" y="0.0" width="151" height="44"/>
-                                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="44" id="T3M-IN-yC5"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="next" image="iconNextBlue">
-                                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="next"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="RJ6-p5-NRI"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </stackView>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="O7o-B6-g7f" secondAttribute="trailing" constant="1.5" id="7iz-G4-o6s"/>
-                        <constraint firstItem="O7o-B6-g7f" firstAttribute="leading" secondItem="sM9-AZ-bbZ" secondAttribute="leading" constant="1.5" id="D7w-cI-vCs"/>
-                        <constraint firstAttribute="bottom" secondItem="O7o-B6-g7f" secondAttribute="bottom" constant="6" id="InF-b5-wI3"/>
-                        <constraint firstItem="O7o-B6-g7f" firstAttribute="top" secondItem="sM9-AZ-bbZ" secondAttribute="top" id="REb-Pl-jnI"/>
+                        <constraint firstAttribute="trailing" secondItem="9QY-VT-wR2" secondAttribute="trailing" id="5zP-kF-PDr"/>
+                        <constraint firstAttribute="bottom" secondItem="9QY-VT-wR2" secondAttribute="bottom" id="CEK-wz-KOX"/>
+                        <constraint firstItem="9QY-VT-wR2" firstAttribute="top" secondItem="9Pj-Is-px8" secondAttribute="top" id="RYf-zZ-s6g"/>
+                        <constraint firstItem="9QY-VT-wR2" firstAttribute="leading" secondItem="9Pj-Is-px8" secondAttribute="leading" id="tiD-q5-3my"/>
                     </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BAl-Rc-aG4">
-                    <rect key="frame" x="0.0" y="573" width="375" height="44"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4EW-xm-MyV" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="61" y="0.0" width="253" height="44"/>
-                            <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="253" id="5ug-zo-FYD"/>
-                                <constraint firstAttribute="height" constant="44" id="Vt0-hh-04h"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                            <state key="normal" title="next" image="iconNextBlue">
-                                <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                    <real key="value" value="22"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="next"/>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="E2O-FF-n8c"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="4EW-xm-MyV" firstAttribute="centerX" secondItem="BAl-Rc-aG4" secondAttribute="centerX" id="Lxd-Sn-RJq"/>
-                        <constraint firstAttribute="height" constant="44" id="jjE-7q-74A"/>
-                        <constraint firstItem="4EW-xm-MyV" firstAttribute="centerY" secondItem="BAl-Rc-aG4" secondAttribute="centerY" id="wQz-Fi-FnT"/>
-                    </constraints>
-                </view>
+                </scrollView>
             </subviews>
-            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.011764705882352941" green="0.1803921568627451" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Jxy-6m-WNM" firstAttribute="bottom" secondItem="BAl-Rc-aG4" secondAttribute="bottom" constant="50" id="1aP-fE-19x"/>
-                <constraint firstItem="sM9-AZ-bbZ" firstAttribute="leading" secondItem="Jxy-6m-WNM" secondAttribute="leading" constant="30" id="4ug-nQ-aUW"/>
-                <constraint firstItem="BAl-Rc-aG4" firstAttribute="leading" secondItem="Jxy-6m-WNM" secondAttribute="leading" id="MxJ-qR-d1b"/>
-                <constraint firstItem="ieK-AA-2FA" firstAttribute="top" secondItem="Jxy-6m-WNM" secondAttribute="top" constant="55" id="iVY-Qp-wuw"/>
-                <constraint firstItem="ieK-AA-2FA" firstAttribute="centerX" secondItem="1rJ-7R-t7c" secondAttribute="centerX" id="jj0-Wi-LUf"/>
-                <constraint firstItem="Jxy-6m-WNM" firstAttribute="trailing" secondItem="sM9-AZ-bbZ" secondAttribute="trailing" constant="30" id="k3q-rH-gtU"/>
-                <constraint firstItem="Jxy-6m-WNM" firstAttribute="bottom" secondItem="sM9-AZ-bbZ" secondAttribute="bottom" constant="50" id="udL-bl-DhS"/>
-                <constraint firstItem="Jxy-6m-WNM" firstAttribute="trailing" secondItem="BAl-Rc-aG4" secondAttribute="trailing" id="z4K-bL-uns"/>
+                <constraint firstItem="9QY-VT-wR2" firstAttribute="height" secondItem="bnH-aF-0Tl" secondAttribute="height" priority="250" id="HSo-1k-sed"/>
+                <constraint firstItem="9Pj-Is-px8" firstAttribute="leading" secondItem="bnH-aF-0Tl" secondAttribute="leading" id="INg-vq-JGr"/>
+                <constraint firstAttribute="trailing" secondItem="9Pj-Is-px8" secondAttribute="trailing" id="XyK-HB-t6p"/>
+                <constraint firstItem="9Pj-Is-px8" firstAttribute="top" secondItem="bnH-aF-0Tl" secondAttribute="top" id="gcW-BX-bK8"/>
+                <constraint firstItem="9QY-VT-wR2" firstAttribute="width" secondItem="bnH-aF-0Tl" secondAttribute="width" id="pAk-Sw-afw"/>
+                <constraint firstItem="9Pj-Is-px8" firstAttribute="bottom" secondItem="pZN-p6-ZJg" secondAttribute="bottom" id="uKj-24-yz9"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Jxy-6m-WNM"/>
-            <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>
+            <viewLayoutGuide key="safeArea" id="pZN-p6-ZJg"/>
+            <point key="canvasLocation" x="841" y="205"/>
         </view>
     </objects>
     <resources>
-        <image name="iconCopyWhite" width="16" height="16"/>
-        <image name="iconNextBlue" width="16" height="16"/>
+        <image name="iconNextWhite" width="14" height="12"/>
+        <image name="iconRecovery" width="16" height="16"/>
     </resources>
 </document>

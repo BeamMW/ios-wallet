@@ -475,7 +475,7 @@ const int kFeeInGroth_Fork1 = 100;
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
     }
     
-    [[Settings sharedManager] resetWallet];
+    [[Settings sharedManager] resetNode];
 }
 
 
@@ -1241,6 +1241,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
+-(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name {
+    for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
+         if ([add.label isEqualToString:name]) {
+             return add;
+         }
+     }
+    return nil;
+}
+
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID {
     for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
         if ([add.walletId isEqualToString:ID]) {
@@ -1458,32 +1467,41 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 #pragma mark - Logs
 
--(void)createLogger {
+-(void)clearLogs {
     NSString *dataPath = [[Settings sharedManager] logPath];
     
     NSMutableArray *needRemove = [NSMutableArray new];
     
     NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dataPath error:nil];
     
-    NSTimeInterval period = 60 * 60 * (24*3); //3 day
-    
-    for (NSString *file in dirContents) {
-        NSString *path = [dataPath stringByAppendingPathComponent:file];
+    int days = [Settings sharedManager].logDays;
+    if (days > 0) {
+        NSTimeInterval period = 60 * 60 * (24*days);
+
+        for (NSString *file in dirContents) {
+            NSString *path = [dataPath stringByAppendingPathComponent:file];
+            
+            NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+            
+            NSDate *result = [fileAttribs objectForKey:NSFileCreationDate];
+            NSTimeInterval diff = [[NSDate date] timeIntervalSince1970] - [result timeIntervalSince1970];
+            
+            if (diff > period) {
+                [needRemove addObject:path];
+            }
+        }
         
-        NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
-        
-        NSDate *result = [fileAttribs objectForKey:NSFileCreationDate];
-        NSTimeInterval diff = [[NSDate date] timeIntervalSince1970] - [result timeIntervalSince1970];
-        
-        if (diff > period) {
-            [needRemove addObject:path];
+        for (NSString *file in needRemove) {
+            [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
         }
     }
+}
+
+-(void)createLogger {
+    NSString *dataPath = [[Settings sharedManager] logPath];
     
-    for (NSString *file in needRemove) {
-        [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
-    }
-    
+    [self clearLogs];
+
     
     static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string, dataPath.string);
     
@@ -2105,6 +2123,15 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
                                                             repeats: NO];
         
     });
+}
+
+-(void)completeWalletVerification {
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onWalletCompleteVerefication)]) {
+            [delegate onWalletCompleteVerefication];
+        }
+    }
 }
 
 @end

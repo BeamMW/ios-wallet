@@ -20,7 +20,15 @@
 import Foundation
 
 class StatusViewModel: NSObject {
-
+    
+    enum CellTypes: Int {
+        case buttons = 0
+        case available = 1
+        case progress = 2
+        case faucet = 3
+        case verefication = 4
+    }
+    
     enum SelectedState: Int {
         case available = 0
         case maturing = 1
@@ -66,6 +74,35 @@ class StatusViewModel: NSObject {
         else{
             UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
         }
+    }
+    
+    public func getCells() -> [CellTypes] {
+        var result = [CellTypes]()
+        
+        result.append(.buttons)
+        
+        let canReceive = OnboardManager.shared.canReceiveFaucet()
+
+        let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
+
+        if canReceive {
+            result.append(.faucet)
+        }
+        
+        var canMakeSecure = OnboardManager.shared.canMakeSecure()
+        
+
+        if canMakeSecure {
+            result.append(.verefication)
+        }
+        
+        result.append(.available)
+        
+        if isInProgress {
+            result.append(.progress)
+        }
+           
+        return result
     }
 }
 

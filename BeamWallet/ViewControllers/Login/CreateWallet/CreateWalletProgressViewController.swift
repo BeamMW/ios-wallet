@@ -103,7 +103,7 @@ class CreateWalletProgressViewController: BaseViewController {
     }
     
     private func openMainPage() {
-        if phrase != nil && !AppModel.sharedManager().isRestoreFlow {
+        if phrase != nil {
             OnboardManager.shared.saveSeed(seed: phrase!)
         }
 

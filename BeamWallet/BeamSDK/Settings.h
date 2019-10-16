@@ -21,6 +21,7 @@
 
 @class BMLanguage;
 @class BMLockScreenValue;
+@class BMLogValue;
 
 static double MAX_AMOUNT = 262800000;
 
@@ -57,6 +58,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) int lockScreenSeconds;
 @property (nonatomic, assign) BOOL isAllowOpenLink;
 @property (nonatomic, assign) BOOL connectToRandomNode;
+@property (nonatomic, assign) int logDays;
 
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
@@ -64,7 +66,8 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, strong) NSString * _Nonnull language;
 
 -(BOOL)isChangedNode;
--(void)resetWallet;
+-(void)resetSettings;
+-(void)resetNode;
 
 -(NSString*_Nonnull)walletStoragePath;
 -(NSString*_Nonnull)logPath;
@@ -83,5 +86,7 @@ typedef enum Target : NSUInteger {
 -(NSArray <BMLockScreenValue*> * _Nonnull)lockScreenValues;
 -(BMLockScreenValue*_Nonnull)currentLocedValue;
 
+-(NSArray <BMLogValue*> * _Nonnull)logValues;
+-(BMLogValue*_Nonnull)currentLogValue;
 
 @end

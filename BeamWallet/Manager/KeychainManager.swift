@@ -34,10 +34,6 @@ class KeychainManager {
     private static let seedKey = "seed"
     private static let readLock = NSLock()
 
-    public static func removeSeed() -> Bool {
-      return delete(seedKey)
-    }
-    
     public static func addSeed(seed:String) -> Bool {
         _ = delete(seedKey)
         

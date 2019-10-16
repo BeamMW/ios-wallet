@@ -37,10 +37,9 @@
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCo-Qh-eFv">
                             <rect key="frame" x="0.0" y="0.0" width="315" height="115"/>
-                            <string key="text">Create new wallet by generating seed phrase.
-If you ever lose your device,
-you will need this phrase to recover your wallet!
-Never type your seed phrase in keychains or password managers. Never save it in your local or remote folders in any form.</string>
+                            <string key="text">If you ever lose your device, you will need this phrase to recover your wallet!
+Never type your seed phrase in keychains or password managers. 
+Never save it in your local or remote folders in any form.</string>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -131,7 +130,7 @@ Never type your seed phrase in keychains or password managers. Never save it in 
                     </constraints>
                     <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                    <state key="normal" title="generate seed phrase" image="iconRecovery">
+                    <state key="normal" title="I understand" image="iconDoneBlue">
                         <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <userDefinedRuntimeAttributes>
@@ -139,7 +138,7 @@ Never type your seed phrase in keychains or password managers. Never save it in 
                             <real key="value" value="22"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="generate_seed"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="understand"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <action selector="onNextWithSender:" destination="-1" eventType="touchUpInside" id="pvF-SR-kwV"/>
@@ -159,8 +158,8 @@ Never type your seed phrase in keychains or password managers. Never save it in 
     </objects>
     <resources>
         <image name="iconCopy" width="34" height="38"/>
+        <image name="iconDoneBlue" width="16" height="16"/>
         <image name="iconEye" width="48" height="34"/>
         <image name="iconPassword" width="48" height="30"/>
-        <image name="iconRecovery" width="16" height="16"/>
     </resources>
 </document>

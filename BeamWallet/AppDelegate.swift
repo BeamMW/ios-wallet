@@ -55,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        FirebaseConfiguration.shared.setLoggerLevel(.min)
 //        FirebaseApp.configure()
         
+        Localizable.shared.reset()
         Settings.sharedManager()
         
         KeyboardListener.shared.start()
@@ -73,11 +74,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
     
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
-        
-        if(Settings.sharedManager().target != Mainnet) {
-            CrowdinManager.updateLocalizations()
-        }
-        
         
         if let crash = UserDefaults.standard.string(forKey: "crash") {
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_negative, confirmTitle: Localizable.shared.strings.crash_positive, cancelHandler: { (_ ) in
@@ -100,10 +96,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     public func logout() {
         AppModel.sharedManager().isLoggedin = false
-
-        AppModel.sharedManager().resetWallet(false)
-
-        let rootController = BaseNavigationController.navigationController(rootViewController: EnterWalletPasswordViewController(isNeedRequestedAuthorization: false))
+        AppModel.sharedManager().resetWallet(true)
+        Settings.sharedManager().resetSettings()
+        OnboardManager.shared.reset()
+        
+        let rootController = BaseNavigationController.navigationController(rootViewController: LoginViewController())
 
         self.window!.rootViewController = rootController
     }

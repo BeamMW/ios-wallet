@@ -27,9 +27,20 @@ class RestoreNodeViewController: BaseViewController {
     @IBOutlet private weak var nodeAddressField:BMField!
     @IBOutlet private weak var errorLabel: UILabel!
 
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+
         title = Localizable.shared.strings.restore_wallet_title
         
         hideKeyboardWhenTappedAround()

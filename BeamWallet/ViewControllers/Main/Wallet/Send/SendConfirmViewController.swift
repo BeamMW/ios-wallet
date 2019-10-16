@@ -80,7 +80,7 @@ class SendConfirmViewController: BaseTableViewController {
         view.endEditing(true)
         
         if Settings.sharedManager().isNeedaskPasswordForSend {
-            let modalViewController = SendPasswordViewController()
+            let modalViewController = UnlockPasswordPopover(event: .transaction)
             modalViewController.completion = { [weak self] obj in
                 self?.askForSaveContact()
             }

@@ -20,67 +20,42 @@
 import UIKit
 
 class DisplayPhraseViewController: BaseWizardViewController {
+    @IBOutlet private var scrollView: UIScrollView!
+    @IBOutlet private var collectionView: UICollectionView!
+    @IBOutlet private var laterButton: UIButton!
+    @IBOutlet private var nextButton: UIButton!
     
-    @IBOutlet private weak var collectionView: UICollectionView!
-    @IBOutlet private weak var testnetView: UIView!
-    @IBOutlet private weak var mainetView: UIView!
-    @IBOutlet private weak var textLabel: UILabel!
-
     var words = [String]()
-    var phrase:String!
+    var phrase: String!
     
     public var increaseSecutirty = false
     
     override var isUppercasedTitle: Bool {
-        get{
-            return increaseSecutirty
+        get {
+            return true
         }
-        set{
-            super.isUppercasedTitle = increaseSecutirty
+        set {
+            super.isUppercasedTitle = true
         }
     }
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if increaseSecutirty {
-            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
-            textLabel.text = Localizable.shared.strings.seed_phrase_text
+        if AppModel.sharedManager().isLoggedin {
+            laterButton.isHidden = true
         }
+        
+        if increaseSecutirty, !OnboardManager.shared.isSkipedSeed() {
+            nextButton.setTitle(Localizable.shared.strings.done, for: .normal)
+            nextButton.setImage(IconDoneBlue(), for: .normal)
+        }
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
         
         title = Localizable.shared.strings.seed_prhase
         
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
-        
-        if Settings.sharedManager().target == Testnet || Settings.sharedManager().target == Masternet {
-            mainetView.isHidden = true
-            testnetView.isHidden = false
-        }
-        else{
-            mainetView.isHidden = false
-            testnetView.isHidden = true
-        }
-        
-        if Device.isZoomed {
-            if Device.screenType == .iPhones_Plus {
-                mainStack?.spacing = 30
-            }
-            else{
-                mainStack?.spacing = 10
-            }
-        }
-        else{
-            switch Device.screenType {
-            case .iPhones_5:
-                mainStack?.spacing = 15
-            case .iPhones_6:
-                mainStack?.spacing = 30
-            case .iPhone_XSMax:
-                mainStack?.spacing = 110
-            default:
-                break
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,7 +70,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
             words = phrase.components(separatedBy: ";")
         }
         
-        self.collectionView.reloadData()
+        collectionView.reloadData()
         
         NotificationCenter.default.addObserver(self, selector: #selector(didTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
     }
@@ -107,11 +82,12 @@ class DisplayPhraseViewController: BaseWizardViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        self.alert(message: Localizable.shared.strings.seed_capture_warning)
+        alert(message: Localizable.shared.strings.seed_capture_warning)
     }
     
-// MARK: IBAction
-    @IBAction func onCopy(sender :UIButton) {
+    // MARK: IBAction
+    
+    @IBAction func onCopy(sender: UIButton) {
         var copyPhrase = ""
         var index = 1
         
@@ -120,7 +96,7 @@ class DisplayPhraseViewController: BaseWizardViewController {
             if copyPhrase.isEmpty {
                 copyPhrase = s
             }
-            else{
+            else {
                 copyPhrase = copyPhrase + "\n" + s
             }
             index = index + 1
@@ -131,30 +107,52 @@ class DisplayPhraseViewController: BaseWizardViewController {
         ShowCopied()
     }
     
-    @IBAction func onNext(sender :UIButton) {
-        self.confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { (_ ) in
+    @IBAction func onNext(sender: UIButton) {
+        if increaseSecutirty, !OnboardManager.shared.isSkipedSeed() {
+            if let viewControllers = self.navigationController?.viewControllers {
+                for vc in viewControllers {
+                    if vc is SettingsViewController {
+                        navigationController?.popToViewController(vc, animated: true)
+                    }
+                }
+            }
             
-        }) { (_ ) in            
+            return
+        }
+        else if !increaseSecutirty {
+            OnboardManager.shared.onSkipSeed(isSkiped: false)
+        }
+        
+        confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { _ in
+            
+        }) { _ in
             let vc = ConfirmPhraseViewController()
                 .withWords(words: self.words)
             vc.increaseSecutirty = self.increaseSecutirty
             self.pushViewController(vc: vc)
         }
     }
+    
+    @IBAction func onLater(sender: UIButton) {
+        OnboardManager.shared.onSkipSeed(isSkiped: true)
+
+        let vc = CreateWalletPasswordViewController()
+            .withPhrase(phrase: words.joined(separator: ";"))
+        pushViewController(vc: vc)
+    }
 }
 
-
 // MARK: UICollectionViewDataSource
-extension DisplayPhraseViewController : UICollectionViewDataSource {
 
+extension DisplayPhraseViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return words.count
+        return words.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: WordCell.reuseIdentifier,
-                                                      for: indexPath) as! WordCell)
-            .configured(with: (word: words[indexPath.row], number: String(indexPath.row+1)))
+                                                       for: indexPath) as! WordCell)
+            .configured(with: (word: words[indexPath.row], number: String(indexPath.row + 1)))
         return cell
     }
 }

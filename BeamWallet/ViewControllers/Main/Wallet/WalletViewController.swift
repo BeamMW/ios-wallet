@@ -29,12 +29,7 @@ class WalletViewController: BaseTableViewController {
     private let statusViewModel = StatusViewModel()
     
     private let maximumTransactionsCount = 5
-    
-    private var isUnsecure = false
-    
-    
-    private var onboardingCells = [Bool]()
-    
+        
     override var isUppercasedTitle: Bool {
         get {
             return true
@@ -50,9 +45,7 @@ class WalletViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        isUnsecure = OnboardManager.shared.canShowSeed()
-        
+                
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.wallet
@@ -113,36 +106,6 @@ class WalletViewController: BaseTableViewController {
         else if AppStoreReviewManager.checkAndAskForReview() {
             showRateDialog()
         }
-        else if isUnsecure == true, OnboardManager.shared.canShowSeed() == false {
-            isUnsecure = false
-            
-            alert(title: Localizable.shared.strings.all_set, message: Localizable.shared.strings.wallet_is_secure, handler: nil)
-        }
-    }
-    
-    private func checkOnboarding() {
-        onboardingCells.removeAll()
-        
-        let canReceive = OnboardManager.shared.canReceiveFaucet()
-        let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
-        let isBalanceZero = (AppModel.sharedManager().walletStatus?.available ?? 0) == 0
-        
-        var canMakeSecure = false
-        
-        if let available = AppModel.sharedManager().walletStatus?.available {
-            if available >= 100, OnboardManager.shared.getSeed() != nil {
-                canMakeSecure = true
-            }
-        }
-        let canFaucet = (canReceive && !isInProgress && isBalanceZero)
-        
-        if canFaucet {
-            onboardingCells.append(false)
-        }
-        
-        if canMakeSecure {
-            onboardingCells.append(true)
-        }
     }
     
     private func rightButton() {
@@ -154,13 +117,6 @@ class WalletViewController: BaseTableViewController {
             guard let strongSelf = self else { return }
             
             UIView.performWithoutAnimation {
-                let canReceive = OnboardManager.shared.canReceiveFaucet()
-                
-                if canReceive {
-                    _ = OnboardManager.shared.receivedFaucet(transactions: strongSelf.viewModel.transactions)
-                }
-                
-                strongSelf.checkOnboarding()
                 strongSelf.tableView.stopRefreshing()
                 strongSelf.tableView.reloadData()
             }
@@ -218,14 +174,12 @@ class WalletViewController: BaseTableViewController {
                 
                 if strongSelf.isNeedUpdatingReload {
                     strongSelf.isNeedUpdatingReload = false
-                    strongSelf.checkOnboarding()
                     strongSelf.tableView.reloadData()
                 }
             }
             else {
                 UIView.performWithoutAnimation {
                     strongSelf.tableView.stopRefreshing()
-                    strongSelf.checkOnboarding()
                     strongSelf.tableView.reloadData()
                 }
             }
@@ -264,7 +218,7 @@ class WalletViewController: BaseTableViewController {
 
 extension WalletViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 2, viewModel.transactions.count > 0 {
+        if indexPath.section == 1, viewModel.transactions.count > 0 {
             return true
         }
         
@@ -274,10 +228,12 @@ extension WalletViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            if indexPath.row == 0 {
+            let cell = statusViewModel.getCells()[indexPath.row]
+            
+            if cell == .buttons {
                 return UITableView.automaticDimension
             }
-            else if indexPath.row == 1 {
+            else if cell == .available {
                 if Settings.sharedManager().isHideAmounts || !expandAvailable {
                     return WalletAvailableCell.hideHeight()
                 }
@@ -285,7 +241,7 @@ extension WalletViewController: UITableViewDelegate {
                     return statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.singleHeight()
                 }
             }
-            else if indexPath.row == 2 {
+            else if cell == .progress {
                 if Settings.sharedManager().isHideAmounts || !expandProgress {
                     return WalletProgressCell.hideHeight()
                 }
@@ -294,11 +250,9 @@ extension WalletViewController: UITableViewDelegate {
                 }
             }
             else {
-                return 0
+                return UITableView.automaticDimension
             }
         case 1:
-            return UITableView.automaticDimension
-        case 2:
             if viewModel.transactions.count == 0 {
                 return 200
             }
@@ -311,13 +265,13 @@ extension WalletViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == 2 ? BMTableHeaderTitleView.height : 0)
+        return (section == 1 ? BMTableHeaderTitleView.height : 0)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 2, viewModel.transactions.count > 0 {
+        if indexPath.section == 1, viewModel.transactions.count > 0 {
             let vc = TransactionViewController(transaction: viewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
@@ -332,7 +286,7 @@ extension WalletViewController: UITableViewDelegate {
 extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
-        case 2:
+        case 1:
             let header = BMTableHeaderTitleView(title: Localizable.shared.strings.transactions.uppercased(), handler: #selector(onMore), target: self)
             header.letterSpacing = 1.5
             header.textColor = UIColor.white
@@ -346,24 +300,14 @@ extension WalletViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
-            let isBalanceZero = (AppModel.sharedManager().walletStatus?.available ?? 0) == 0
-            let canReceive = OnboardManager.shared.canReceiveFaucet()
-            
-            if canReceive, !isInProgress, isBalanceZero {
-                return 1
-            }
-            
-            return AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false ? 3 : 2
+            return statusViewModel.getCells().count
         case 1:
-            return onboardingCells.count
-        case 2:
             return (viewModel.transactions.count == 0) ? 1 : ((viewModel.transactions.count > maximumTransactionsCount) ? maximumTransactionsCount : viewModel.transactions.count)
         default:
             return 0
@@ -373,34 +317,37 @@ extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            switch indexPath.row {
-            case 0:
+            let cell = statusViewModel.getCells()[indexPath.row]
+            
+            switch cell {
+            case .buttons:
                 let cell = tableView.dequeueReusableCell(withType: WalletStatusCell.self, for: indexPath)
                 cell.delegate = self
                 return cell
-            case 1:
+            case .available:
                 let cell = tableView
                     .dequeueReusableCell(withType: WalletAvailableCell.self, for: indexPath)
                     .configured(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring()))
                 cell.delegate = self
                 return cell
-            case 2:
+            case .progress:
                 let cell = tableView
                     .dequeueReusableCell(withType: WalletProgressCell.self, for: indexPath)
                     .configured(with: (expand: expandProgress, status: AppModel.sharedManager().walletStatus))
                 cell.delegate = self
                 return cell
-            default:
-                return UITableViewCell()
+            case .verefication:
+                let cell = tableView.dequeueReusableCell(withType: OnboardCell.self, for: indexPath)
+                cell.delegate = self
+                cell.setIsSecure(secure: true)
+                return cell
+            case .faucet:
+                let cell = tableView.dequeueReusableCell(withType: OnboardCell.self, for: indexPath)
+                cell.delegate = self
+                cell.setIsSecure(secure: false)
+                return cell
             }
         case 1:
-            let cell = tableView.dequeueReusableCell(withType: OnboardCell.self, for: indexPath)
-            cell.delegate = self
-            
-            cell.setIsSecure(secure: onboardingCells[indexPath.row])
-
-            return cell
-        case 2:
             if viewModel.transactions.count == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
@@ -493,30 +440,34 @@ extension WalletViewController: UIViewControllerPreviewingDelegate {
 }
 
 extension WalletViewController: OnboardCellDelegate {
-    func onClickMakeSecure() {
-        
-    }
-    
-    func onClickCloseFaucet() {
+    func onClickMakeSecure(cell:UITableViewCell) {
         let vc = UnlockPasswordViewController(event: .seedPhrase)
-        vc.completion = { [weak self] _ in
-        }
         pushViewController(vc: vc)
-        
-//        if let path = tableView.findPath(OnboardCell.self) {
-//            OnboardManager.shared.closeFaucet()
-//            self.tableView.deleteRows(at: [path], with: .fade)
-//        }
     }
     
-    func onClickReceiveFaucet() {
-        OnboardManager.shared.receiveFaucet { [weak self] address, error in
+    func onClickCloseFaucet(cell:UITableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            let cell = statusViewModel.getCells()[indexPath.row]
+            
+            if cell == .faucet {
+                OnboardManager.shared.isCloseFaucet = true
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            else if cell == .verefication {
+                OnboardManager.shared.isCloseSecure = true
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
+    func onClickReceiveFaucet(cell:UITableViewCell) {
+        OnboardManager.shared.receiveFaucet { [weak self] url, error in
             guard let strongSelf = self else { return }
             if let reason = error?.localizedDescription {
                 strongSelf.alert(message: reason)
             }
-            else if let result = address {
-                strongSelf.openUrl(url: URL(string: "https://faucet.beamprivacy.community/")!)
+            else if let result = url {
+                strongSelf.openUrl(url: result)
             }
         }
     }

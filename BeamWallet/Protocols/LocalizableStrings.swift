@@ -136,10 +136,6 @@ class LocalizableStrings : NSObject {
     var in_24_hours_now = "in_24_hours".localized
     var transaction_history = "transaction_history".localized
     var min_fee_error = "min_fee_error".localized
-
-    
-    
-    
     var never = "never".localized
     var address_expires = "address_expires".localized
     var save = "save".localized
@@ -430,13 +426,31 @@ class LocalizableStrings : NSObject {
     var increase_security = "increase_security".localized
     var increase_security_text = "increase_security_text".localized
     var seed_phrase_text = "seed_phrase_text".localized
-    var all_set = "seed_phrase_text".localized
-    var wallet_is_secure = "seed_phrase_text".localized
     var make_wallet_secure_title = "make_wallet_secure".localized
     var make_wallet_secure_text = "make_wallet_secure_text".localized
     var complete_verification = "complete_verification".localized
     var yes_please = "yes_please".localized
-    
+    var create_password = "create_password".localized
+    var faucet_text = "faucet_text".localized
+    var get_coins = "get_coins".localized
+    var secure_your_phrase = "secure_your_phrase".localized
+    var privacy = "privacy".localized
+    var complete_wallet_verification = "complete_wallet_verification".localized
+    var clear_local_data = "clear_local_data".localized
+    var get_beam_faucet = "get_beam_faucet".localized
+    var save_wallet_logs = "save_wallet_logs".localized
+    var all_time = "all_time".localized
+    var last_5_days = "last_5_days".localized
+    var last_15_days = "last_15_days".localized
+    var last_30_days = "last_30_days".localized
+    var clear_wallet = "clear_wallet".localized
+    var change_node_text_1 = "change_node_text_1".localized
+    var change_node_text_2 = "change_node_text_2".localized
+    var change_node_text_3 = "change_node_text_3".localized
+    var change_settings_text_1 = "change_settings_text_1".localized
+    var change_settings_text_2 = "change_settings_text_2".localized
+    var change_settings_text_3 = "change_settings_text_3".localized
+    var clear_wallet_text = "clear_wallet_text".localized
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

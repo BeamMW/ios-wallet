@@ -43,10 +43,10 @@ public class BMAutoSecurityScreen {
     }
 
     @objc private func addBlur() {
-        if UIApplication.getTopMostViewController() is DisplayPhraseViewController
-        || UIApplication.getTopMostViewController() is InputPhraseViewController {
-            createBlurEffect()
-        }
+//        if let topVC = UIApplication.getTopMostViewController() {
+//            print(topVC)
+//        }
+//        createBlurEffect()
     }
 
     @objc private func removeBlur() {

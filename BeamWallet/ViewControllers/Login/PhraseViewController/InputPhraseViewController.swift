@@ -27,16 +27,23 @@ class InputPhraseViewController: BaseWizardViewController {
     @IBOutlet private weak var nextButton: UIButton!
     @IBOutlet private weak var scrollView: UIScrollView!
 
-    @IBOutlet private weak var testNetNextButton: UIButton!
-    @IBOutlet private weak var testNetNextView: UIView!
-
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = Localizable.shared.strings.restore_wallet_title
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+
+        title = Localizable.shared.strings.restore_wallet_title
         
         nextButton.isEnabled = false
-        testNetNextButton.isEnabled = false
 
         for i in 0 ... 11 {
             inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
@@ -45,15 +52,6 @@ class InputPhraseViewController: BaseWizardViewController {
         scrollView.keyboardDismissMode = .interactive
         collectionView.keyboardDismissMode = .interactive
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
-        
-        if Settings.sharedManager().target == Testnet || Settings.sharedManager().target == Masternet {
-            testNetNextView.isHidden = false
-            nextButton.isHidden = true
-        }
-        else{
-            testNetNextView.isHidden = true
-            nextButton.isHidden = false
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -131,7 +129,6 @@ class InputPhraseViewController: BaseWizardViewController {
             }
             
             nextButton.isEnabled = corretPhrase
-            testNetNextButton.isEnabled = corretPhrase
             
             collectionView.reloadData()
         }
@@ -218,7 +215,6 @@ extension InputPhraseViewController : InputWordCellCellDelegate {
             }
             
             nextButton.isEnabled = corretPhrase
-            testNetNextButton.isEnabled = corretPhrase
         }
     }
 }

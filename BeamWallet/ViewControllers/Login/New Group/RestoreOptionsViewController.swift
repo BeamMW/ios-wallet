@@ -22,6 +22,15 @@ import UIKit
 
 class RestoreOptionsViewController: BaseTableViewController {
 
+    override var isUppercasedTitle: Bool {
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
+    
     private var didSet = false
     
     private lazy var footerView: UIView = {
@@ -49,6 +58,8 @@ class RestoreOptionsViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
 
         title = Localizable.shared.strings.restore_wallet_title
         
@@ -103,7 +114,7 @@ class RestoreOptionsViewController: BaseTableViewController {
             self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.auto_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                Settings.sharedManager().resetWallet()
+                Settings.sharedManager().resetSettings()
                 AppModel.sharedManager().resetWallet(true)
                 AppModel.sharedManager().isRestoreFlow = true
                 
@@ -114,7 +125,7 @@ class RestoreOptionsViewController: BaseTableViewController {
             self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.manual_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                Settings.sharedManager().resetWallet()
+                Settings.sharedManager().resetSettings()
                 AppModel.sharedManager().resetWallet(true)
                 AppModel.sharedManager().isRestoreFlow = true
                 

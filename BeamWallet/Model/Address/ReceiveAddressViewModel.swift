@@ -116,13 +116,15 @@ class ReceiveAddressViewModel: NSObject {
     
     public func onExpire() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = AddressExpiresPickerViewController(duration: Int(self.address!.duration))
+            let vc = BMDataPickerViewController(type: .address_expire)
             vc.completion = { [weak self]
                 obj in
                 
-                self?.address?.duration = obj == 24 ? 86400 : 0
+                let selected = obj as! Int32
                 
-                AppModel.sharedManager().setExpires(Int32(obj), toAddress: self?.address?.walletId ?? String.empty())
+                self?.address?.duration = selected == 24 ? 86400 : 0
+                
+                AppModel.sharedManager().setExpires(Int32(selected), toAddress: self?.address?.walletId ?? String.empty())
                 
                 self?.onDataChanged?()
             }

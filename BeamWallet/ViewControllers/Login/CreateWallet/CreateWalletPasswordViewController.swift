@@ -32,10 +32,10 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     
     override var isUppercasedTitle: Bool {
         get{
-            return AppModel.sharedManager().isLoggedin
+            return true
         }
         set{
-            super.isUppercasedTitle = AppModel.sharedManager().isLoggedin
+            super.isUppercasedTitle = true
         }
     }
     
@@ -47,11 +47,11 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             
             saveButton.setTitle(Localizable.shared.strings.save, for: .normal)
             saveButton.setImage(IconSaveDone(), for: .normal)
-            
-            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
         }
         
-        title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.change_password : Localizable.shared.strings.password
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        
+        title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.change_password : Localizable.shared.strings.create_password
                 
         passField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         confirmPassField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -91,8 +91,9 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             self.confirmAlert(title: Localizable.shared.strings.return_to_seed_title, message: Localizable.shared.strings.return_to_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.retur, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
+                let count = OnboardManager.shared.isSkipedSeed() ? 2 : 3
                 let viewControllers = self.navigationController?.viewControllers
-                let vc = viewControllers![(viewControllers?.count)!-3]
+                let vc = viewControllers![(viewControllers?.count)!-count]
                 self.navigationController?.popToViewController(vc, animated: true)
             }
         }

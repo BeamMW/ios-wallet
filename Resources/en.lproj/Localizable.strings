@@ -16,7 +16,7 @@
 "seed_prhase" = "Seed phrase";
 "inpur_seed" = "Type in your seed phrase";
 "confirm_seed_text" = "To ensure the seed phrase is written down correctly, please fill in the specific words below";
-"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "intro_seed_main" = "Create a new wallet by generating a seed phrase. If you lose your device, you will need the seed phrase to recover your funds. Never type your seed phrase in keychains or password managers. Never save it in your local filesystem or remote folders of any kind.";
 "intro_seed_1" = "Do not let anyone see your seed phrase";
 "intro_seed_2" = "Never type your seed phrase into password managers or elsewhere";
@@ -445,8 +445,6 @@
 "use_face_id" = "Use your Face ID";
 "enter_your_password" = "Enter your password";
 "share_details" = "Share details";
-
-
 "faucet_title" = "Start using the wallet";
 "faucet_text" = "Would you like to see the wallet in action? Get a very small amount of Beams from the community faucet.";
 "faucet_ok" = "Yes, please";
@@ -461,3 +459,24 @@
 "make_wallet_secure_text" = "Please increase wallet security by saving your seed phrase so you won’t loose your funds.";
 "complete_verification" = "Complete verification";
 "yes_please" = "yes, please";
+"i_will_later" = "i will do it later";
+"create_password" = "Create password";
+"get_coins" = "Get coins";
+"secure_your_phrase" = "Secure your phrase";
+"privacy" = "Privacy";
+"complete_wallet_verification" = "Complete wallet verification";
+"clear_local_data" = "Clear local wallet data";
+"get_beam_faucet" = "Get Beams from Beam Community Faucet";
+"save_wallet_logs" = "Save wallet logs";
+"all_time" = "For all time";
+"last_5_days" = "Last 5 days";
+"last_15_days" = "Last 15 days";
+"last_30_days" = "Last 30 days";
+"clear_wallet" = "Clear wallet";
+"clear_wallet_text" = "All the local data will be deleted. Are you sure you want to clear your wallet?";
+"change_node_text_1" = "Use Face ID or enter your password to change node settings";
+"change_node_text_2" = "Use Touch ID or enter your password to change node settings";
+"change_node_text_3" = "Enter your password to change node settings";
+"change_settings_text_1" = "Use Face ID or enter your password to change settings";
+"change_settings_text_2" = "Use Touch ID or enter your password to change settings";
+"change_settings_text_3" = "Enter your password to change settings";

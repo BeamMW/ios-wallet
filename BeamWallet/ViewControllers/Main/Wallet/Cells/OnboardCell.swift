@@ -9,20 +9,20 @@
 import UIKit
 
 protocol OnboardCellDelegate: AnyObject {
-    func onClickReceiveFaucet()
-    func onClickCloseFaucet()
-    func onClickMakeSecure()
+    func onClickReceiveFaucet(cell:UITableViewCell)
+    func onClickCloseFaucet(cell:UITableViewCell)
+    func onClickMakeSecure(cell:UITableViewCell)
 }
 
 
 class OnboardCell: UITableViewCell {
     
     @IBOutlet weak private var mainView: UIView!
-    @IBOutlet weak private var titleLabel: UILabel!
+    
     @IBOutlet weak private var detailLabel: UILabel!
-    @IBOutlet weak private var nextButton: BMButton!
+    
+    @IBOutlet weak private var verificationButton: BMButton!
     @IBOutlet weak private var receiveButton: BMButton!
-    @IBOutlet weak private var noButton: BMButton!
 
     weak var delegate: OnboardCellDelegate?
 
@@ -31,35 +31,40 @@ class OnboardCell: UITableViewCell {
        
         selectionStyle = .none
         
-        titleLabel.text = Localizable.shared.strings.faucet_title
-        titleLabel.letterSpacing = 1.5
-        
-        noButton.setTitle(Localizable.shared.strings.no.lowercased(), for: .normal)
-        receiveButton.setTitle(Localizable.shared.strings.yes_please.lowercased(), for: .normal)
-        
+        receiveButton.setTitle(Localizable.shared.strings.get_coins.lowercased(), for: .normal)
+        verificationButton.setTitle(Localizable.shared.strings.secure_your_phrase, for: .normal)
+
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
     }
     
-    public func setIsSecure(secure:Bool) {        
+    public func setIsSecure(secure: Bool) {
         if secure {
-            mainView.backgroundColor = UIColor.main.cyan.withAlphaComponent(0.3)
-            titleLabel.text = Localizable.shared.strings.make_wallet_secure_title
+         //   mainView.backgroundColor = UIColor.main.cyan.withAlphaComponent(0.3)
+            
             detailLabel.text = Localizable.shared.strings.make_wallet_secure_text
-            noButton.isHidden = true
+            
             receiveButton.isHidden = true
-            nextButton.isHidden = false
+            verificationButton.isHidden = false
+        }
+        else {
+         //   mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+           
+            receiveButton.isHidden = false
+            verificationButton.isHidden = true
+                    
+            detailLabel.text = Localizable.shared.strings.faucet_text
         }
     }
     
     @IBAction private func onClose (sender :UIButton) {
-        self.delegate?.onClickCloseFaucet()
+        self.delegate?.onClickCloseFaucet(cell:self)
     }
     
     @IBAction private func onVerefication (sender :UIButton) {
-        self.delegate?.onClickMakeSecure()
+        self.delegate?.onClickMakeSecure(cell:self)
     }
     
     @IBAction private func onReceive (sender :UIButton) {
-        self.delegate?.onClickReceiveFaucet()
+        self.delegate?.onClickReceiveFaucet(cell: self)
     }
 }

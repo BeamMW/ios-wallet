@@ -639,15 +639,17 @@ extension SendViewController : SettingsModelDelegate {
 extension SendViewController {
     
     private func onExpire() {
-        let vc = AddressExpiresPickerViewController(duration: Int(viewModel.outgoindAdderss!.duration))
+        let vc = BMDataPickerViewController(type: .address_expire)
         vc.completion = { [weak self]
             obj in
             
             guard let strongSelf = self else { return }
 
-            strongSelf.viewModel.outgoindAdderss!.duration = obj == 24 ? 86400 : 0
+            let selected = obj as! Int32
             
-            AppModel.sharedManager().setExpires(Int32(obj), toAddress: strongSelf.viewModel.outgoindAdderss!.walletId)
+            strongSelf.viewModel.outgoindAdderss!.duration = selected == 24 ? 86400 : 0
+            
+            AppModel.sharedManager().setExpires(Int32(selected), toAddress: strongSelf.viewModel.outgoindAdderss!.walletId)
             
             strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 6)], with: .fade)
         }
