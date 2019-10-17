@@ -14,6 +14,9 @@
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
+        <array key="SF-Pro-Display-RegularItalic.otf">
+            <string>SFProDisplay-Italic</string>
+        </array>
         <array key="SF-Pro-Display-Semibold.otf">
             <string>SFProDisplay-Semibold</string>
         </array>
@@ -35,7 +38,7 @@
                                 <rect key="frame" x="15" y="25" width="44" height="44"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jaT-Ww-ivO">
-                                <rect key="frame" x="69" y="25" width="103" height="41"/>
+                                <rect key="frame" x="69" y="25" width="103" height="40.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfi-41-SbP">
                                         <rect key="frame" x="0.0" y="0.0" width="64" height="19"/>
@@ -47,8 +50,8 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwt-9z-uRX">
-                                        <rect key="frame" x="0.0" y="24" width="72.5" height="17"/>
-                                        <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
+                                        <rect key="frame" x="0.0" y="24" width="69.5" height="16.5"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
                                         <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -56,7 +59,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 Jun 2018   |   3:46 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ho-1u-9fd">
-                                        <rect key="frame" x="0.0" y="41" width="134" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="40.5" width="134" height="0.0"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -74,7 +77,7 @@
                                 </constraints>
                             </imageView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibY-g7-kSP">
-                                <rect key="frame" x="47" y="71.5" width="243" height="0.0"/>
+                                <rect key="frame" x="47" y="72" width="243" height="0.0"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -123,11 +126,11 @@
                             <constraint firstItem="jaT-Ww-ivO" firstAttribute="top" secondItem="fKt-Vb-Zkz" secondAttribute="top" constant="25" id="1ai-pE-Gzu"/>
                             <constraint firstAttribute="trailing" secondItem="ibY-g7-kSP" secondAttribute="trailing" constant="30" id="4ie-hE-3bc"/>
                             <constraint firstItem="dhp-eX-Z1e" firstAttribute="leading" secondItem="jaT-Ww-ivO" secondAttribute="trailing" constant="22" id="6pQ-Iv-Doe"/>
+                            <constraint firstItem="ibY-g7-kSP" firstAttribute="top" secondItem="jaT-Ww-ivO" secondAttribute="bottom" constant="5.5" id="Eel-jy-3rp"/>
                             <constraint firstAttribute="bottom" secondItem="ibY-g7-kSP" secondAttribute="bottom" constant="25" id="KDr-sL-6Lu"/>
                             <constraint firstAttribute="trailing" secondItem="3i8-ik-RhG" secondAttribute="trailing" constant="15" id="MnI-L2-ktd"/>
                             <constraint firstItem="Mdl-WO-PTo" firstAttribute="top" secondItem="fKt-Vb-Zkz" secondAttribute="top" constant="25" id="NYW-NO-axI"/>
                             <constraint firstItem="dhp-eX-Z1e" firstAttribute="top" secondItem="fKt-Vb-Zkz" secondAttribute="top" constant="20.5" id="ScP-G1-fZx"/>
-                            <constraint firstItem="ibY-g7-kSP" firstAttribute="top" secondItem="jaT-Ww-ivO" secondAttribute="bottom" constant="5" id="Wo0-J1-1kg"/>
                             <constraint firstItem="Mdl-WO-PTo" firstAttribute="leading" secondItem="fKt-Vb-Zkz" secondAttribute="leading" constant="15" id="Zsd-42-odU"/>
                             <constraint firstItem="3i8-ik-RhG" firstAttribute="top" secondItem="fKt-Vb-Zkz" secondAttribute="top" constant="39.5" id="aPy-XS-djA"/>
                             <constraint firstItem="jaT-Ww-ivO" firstAttribute="leading" secondItem="Mdl-WO-PTo" secondAttribute="trailing" constant="10" id="eic-Dj-gpA"/>
