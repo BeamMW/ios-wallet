@@ -26,7 +26,6 @@ class CreateWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var progressValueLabel: UILabel!
     @IBOutlet private weak var restotingInfoLabel: UILabel!
     @IBOutlet private weak var cancelButton: UIButton!
-    @IBOutlet private weak var stackYOffset: NSLayoutConstraint!
     @IBOutlet private weak var errorLabel: UILabel!
 
     private var timeoutTimer:Timer?
@@ -71,10 +70,7 @@ class CreateWalletProgressViewController: BaseViewController {
             progressTitleLabel.text = Localizable.shared.strings.loading_wallet
             cancelButton.isHidden = true
         }
-        
-        if Device.screenType == .iPhones_5 {
-            stackYOffset.constant = 50
-        }
+    
 
         if let base = self.navigationController as? BaseNavigationController {
             base.enableSwipeToDismiss = false

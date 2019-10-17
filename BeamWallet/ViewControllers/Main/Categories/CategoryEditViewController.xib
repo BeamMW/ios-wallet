@@ -82,7 +82,7 @@
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="gli-nu-8tx" firstAttribute="leading" secondItem="fs5-ri-haq" secondAttribute="leading" constant="15" id="ac3-qC-mLB"/>
-                <constraint firstItem="gli-nu-8tx" firstAttribute="top" secondItem="fs5-ri-haq" secondAttribute="top" constant="20" id="dii-Rp-qqY"/>
+                <constraint firstItem="gli-nu-8tx" firstAttribute="top" secondItem="ftq-nF-U2t" secondAttribute="top" constant="64" id="dii-Rp-qqY"/>
                 <constraint firstItem="3cK-vU-HXX" firstAttribute="leading" secondItem="ftq-nF-U2t" secondAttribute="leading" constant="15" id="fss-s4-KoX"/>
                 <constraint firstItem="fs5-ri-haq" firstAttribute="trailing" secondItem="gli-nu-8tx" secondAttribute="trailing" constant="15" id="oAm-Gg-MoL"/>
                 <constraint firstItem="3cK-vU-HXX" firstAttribute="top" secondItem="gli-nu-8tx" secondAttribute="bottom" constant="30" id="v2T-t3-eC3"/>

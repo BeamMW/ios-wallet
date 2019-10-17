@@ -26,11 +26,12 @@ static NSString *askKey = @"isNeedaskPasswordForSend";
 static NSString *lockScreen = @"lockScreen";
 static NSString *biometricKey = @"biometricKey";
 static NSString *hideAmountsKey = @"isHideAmounts";
-static NSString *nodeKey = @"nodeKey";
 static NSString *askHideAmountsKey = @"askHideAmountsKey";
 static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 static NSString *languageKey = @"languageKey";
 static NSString *randomNodeKey = @"randomNodeKey";
+static NSString *nodeKey = @"nodeKey";
+
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;

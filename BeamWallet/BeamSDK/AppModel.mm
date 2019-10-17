@@ -447,6 +447,10 @@ const int kFeeInGroth_Fork1 = 100;
         [self resetWallet:YES];
     }
     
+    [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     self.isRestoreFlow = YES;
 }
 
@@ -455,6 +459,10 @@ const int kFeeInGroth_Fork1 = 100;
     if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
           [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
     }
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)checkRecoveryWallet {
@@ -473,6 +481,14 @@ const int kFeeInGroth_Fork1 = 100;
         if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
             [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
         }
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"nodeKeyRecover"]) {
+        [Settings sharedManager].connectToRandomNode = [[NSUserDefaults standardUserDefaults] boolForKey:@"randomNodeKeyRecover"];
+        [Settings sharedManager].nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"nodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"nodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     self.isRestoreFlow = NO;

@@ -77,8 +77,6 @@ class CategoryEditViewController: BaseViewController {
         
         addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
-        topOffset?.constant = (Device.isXDevice ? 100 : 90) + 25
-
         titleNameLabel.text = Localizable.shared.strings.name.uppercased()
         titleNameLabel.letterSpacing = 1.2
         

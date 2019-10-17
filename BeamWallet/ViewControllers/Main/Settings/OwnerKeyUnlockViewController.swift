@@ -41,9 +41,7 @@ class OwnerKeyUnlockViewController: BaseViewController {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
         
         title = Localizable.shared.strings.show_owner_key
-        
-        topOffset?.constant = topOffset?.constant ?? 0 + 30
-        
+                
         if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
             nextButtonView.isHidden = true
             passField.isHidden = true
