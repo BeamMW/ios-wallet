@@ -14,6 +14,9 @@
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
+        <array key="SF-Pro-Display-RegularItalic.otf">
+            <string>SFProDisplay-Italic</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PaymentProofDetailViewController" customModule="BeamWallet" customModuleProvider="target">
@@ -112,8 +115,8 @@
                             </connections>
                         </textView>
                         <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cannot decode a proof, illegal sequence" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LPh-ri-LzL">
-                            <rect key="frame" x="20" y="92" width="335" height="19.5"/>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                            <rect key="frame" x="20" y="102" width="335" height="19.5"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="16"/>
                             <color key="textColor" red="1" green="0.38431372549999998" blue="0.36078431370000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>
                             <userDefinedRuntimeAttributes>
@@ -126,7 +129,7 @@
                     <constraints>
                         <constraint firstItem="aAk-wa-4Ob" firstAttribute="leading" secondItem="Ekq-f7-dCk" secondAttribute="leading" constant="15" id="0G6-7Q-W3z"/>
                         <constraint firstItem="aAk-wa-4Ob" firstAttribute="top" secondItem="Ekq-f7-dCk" secondAttribute="top" constant="20" id="34J-fe-Jvq"/>
-                        <constraint firstItem="LPh-ri-LzL" firstAttribute="top" secondItem="PWr-9E-sR9" secondAttribute="bottom" constant="10" id="Gjx-0x-zsy"/>
+                        <constraint firstItem="LPh-ri-LzL" firstAttribute="top" secondItem="PWr-9E-sR9" secondAttribute="bottom" constant="20" id="Gjx-0x-zsy"/>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="132" id="PI6-YT-Daf"/>
                         <constraint firstItem="LPh-ri-LzL" firstAttribute="leading" secondItem="Ekq-f7-dCk" secondAttribute="leading" constant="20" id="aa1-DQ-wdK"/>
                         <constraint firstAttribute="trailing" secondItem="LPh-ri-LzL" secondAttribute="trailing" constant="20" id="eQx-eE-p1Y"/>

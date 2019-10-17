@@ -34,10 +34,6 @@ class LoginViewController: BaseViewController {
         
         setTitles()
         
-//        if Device.isXDevice {
-//            versionOffset.constant = 30
-//        }
-        
         switch Settings.sharedManager().target {
         case Testnet:
             bgView.image = BackgroundTestnet()
@@ -68,8 +64,8 @@ class LoginViewController: BaseViewController {
         AppModel.sharedManager().resetWallet(true)
 
         if AppModel.sharedManager().canRestoreWallet() {
-            AppModel.sharedManager().isRestoreFlow = true;
-            self.pushViewController(vc: RestoreOptionsViewController())
+            AppModel.sharedManager().isRestoreFlow = true
+            self.pushViewController(vc: InputPhraseViewController())
         }
         else{
             self.alert(title: Localizable.shared.strings.no_space_title, message: Localizable.shared.strings.no_space_info) { (_ ) in
@@ -80,7 +76,6 @@ class LoginViewController: BaseViewController {
     @IBAction func onCreateWallet(sender :UIButton) {
         AppModel.sharedManager().resetWallet(true)
         AppModel.sharedManager().isRestoreFlow = false;
-        AppModel.sharedManager().isChangeWallet = false
 
         pushViewController(vc: IntroPhraseViewController())
     }

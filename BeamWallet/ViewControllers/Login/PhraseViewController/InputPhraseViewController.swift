@@ -73,6 +73,10 @@ class InputPhraseViewController: BaseWizardViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     @objc private func didTakeScreenshot() {
         var showAlert = false
         

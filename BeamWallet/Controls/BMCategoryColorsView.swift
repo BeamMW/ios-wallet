@@ -117,6 +117,10 @@ class BMCategoryColorsView: UIView {
             self.addSubview(colorView)
             
             x = x + (size + space)
+            
+            if Device.screenType == .iPhones_5 {
+                x = x - 5
+            }
         }
     }
     

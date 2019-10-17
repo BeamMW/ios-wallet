@@ -33,21 +33,18 @@ class OwnerKeyViewController: BaseViewController {
 
     override var isUppercasedTitle: Bool {
         get {
-            return !AppModel.sharedManager().isRestoreFlow
+            return true
         }
         set {
-            super.isUppercasedTitle = !AppModel.sharedManager().isRestoreFlow
+            super.isUppercasedTitle = true
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if !AppModel.sharedManager().isRestoreFlow {
-            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
-        }
-        
-        topOffset?.constant = topOffset?.constant ?? 0 + 30
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: AppModel.sharedManager().isLoggedin)
+
 
         ownerKeyLabel.text = ownerKey
         ownerKeyTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.key_code.uppercased())

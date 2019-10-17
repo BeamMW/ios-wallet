@@ -81,7 +81,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,assign) BOOL isLoggedin;
 @property (nonatomic,assign) BOOL isRestoreFlow;
 @property (nonatomic,assign) BOOL isNodeChanging;
-@property (nonatomic,assign) BOOL isChangeWallet;
 @property (nonatomic,assign) BMRestoreType restoreType;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
@@ -116,7 +115,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)resetWallet:(BOOL)removeDatabase;
 -(void)resetOnlyWallet;
 -(void)restartWallet;
--(void)resetChangeWallet;
 -(void)start;
 -(BOOL)isValidPassword:(NSString*_Nonnull)pass;
 -(void)changePassword:(NSString*_Nonnull)pass;
@@ -125,7 +123,9 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isWalletInitialized;
 -(BOOL)isWalletRunning;
 -(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block;
-
+-(void)checkRecoveryWallet;
+-(void)startChangeWallet;
+-(void)stopChangeWallet;
     
 // updates
 -(void)getWalletStatus;

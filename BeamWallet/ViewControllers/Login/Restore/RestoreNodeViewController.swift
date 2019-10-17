@@ -77,6 +77,7 @@ class RestoreNodeViewController: BaseViewController {
 
                 AppModel.sharedManager().resetOnlyWallet()
 
+                Settings.sharedManager().connectToRandomNode = false
                 Settings.sharedManager().nodeAddress = fullAddress
                 
                 let opened = AppModel.sharedManager().openWallet(password)
@@ -86,6 +87,9 @@ class RestoreNodeViewController: BaseViewController {
                     }
                 }
                 else{
+                    timer.invalidate()
+                    timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+                    
                     AppModel.sharedManager().getNetworkStatus()
                 }
             }
@@ -96,9 +100,10 @@ class RestoreNodeViewController: BaseViewController {
     }
     
     private func openMainPage() {
+        AppModel.sharedManager().stopChangeWallet()
+
         AppModel.sharedManager().removeDelegate(self)
         AppModel.sharedManager().isRestoreFlow = false
-        AppModel.sharedManager().isChangeWallet = false
 
         AppModel.sharedManager().refreshAddresses()
         

@@ -22,44 +22,36 @@ import UIKit
 
 class RestoreOptionsViewController: BaseTableViewController {
 
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
+    private var password:String!
+    private var phrase:String!
+    
+    init(password:String, phrase:String) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.password = password
+        self.phrase = phrase
     }
     
-    private var didSet = false
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
     
     private lazy var footerView: UIView = {
-        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 150))
+        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: Device.screenType == .iPhones_5 ? 100 : 150))
         view.backgroundColor = UIColor.clear
-        var nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-253)/2, y: 100, width: 253, height: 44), color: UIColor.main.brightTeal)
+        var nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-253)/2, y: Device.screenType == .iPhones_5 ? 50 : 100, width: 253, height: 44), color: UIColor.main.brightTeal)
         nextButton.setImage(IconNextBlue(), for: .normal)
         nextButton.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
         nextButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         nextButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        nextButton.translatesAutoresizingMaskIntoConstraints = false
-
         nextButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
         view.addSubview(nextButton)
-        
-        NSLayoutConstraint.activate([
-            nextButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: nextButton.x),
-            nextButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -nextButton.x),
-            nextButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -44),
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            ])
         
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
 
         title = Localizable.shared.strings.restore_wallet_title
         
@@ -69,67 +61,52 @@ class RestoreOptionsViewController: BaseTableViewController {
         tableView.tableFooterView = footerView
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 10))
         
-        let tapper = UITapGestureRecognizer(target: self, action: #selector(onTable))
-        tableView.gestureRecognizers = [tapper]
-        
         AppModel.sharedManager().restoreType = BMRestoreType(BMRestoreAutomatic)
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         
-        if (Device.isXDevice || Device.isLarge) && !Device.isZoomed {
-            if !didSet {
-                guard let footerView = tableView.tableFooterView else
-                {
-                    return
-                }
-                
-                didSet = true
-                
-                let cellsHeight:CGFloat = (tableView.tableHeaderView?.frame.height ?? 0) + tableView.rowHeight
-                
-                var frame = footerView.frame
-                
-                frame.size.height = tableView.contentSize.height - cellsHeight - 50;
-                frame.origin.y = cellsHeight
-                
-                footerView.frame = frame
-                
-                tableView.tableFooterView = footerView
-            }
-        }
-    }
-    
-    @objc private func onTable(sender:UITapGestureRecognizer)    {
-        let touch = sender.location(in: tableView)
-        if let indexPath = tableView.indexPathForRow(at: touch) {
-            AppModel.sharedManager().restoreType = (indexPath.section == 0 ? BMRestoreType(BMRestoreAutomatic) : BMRestoreType(BMRestoreManual))
-            tableView.reloadData()
-        }
-    }
     
     @objc private func onNext() {
         if AppModel.sharedManager().restoreType == BMRestoreAutomatic {
             self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.auto_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                Settings.sharedManager().resetSettings()
-                AppModel.sharedManager().resetWallet(true)
-                AppModel.sharedManager().isRestoreFlow = true
-                
-                self.pushViewController(vc: InputPhraseViewController())
+                Settings.sharedManager().connectToRandomNode = true
+                Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
+
+                let vc = CreateWalletProgressViewController(password: self.password, phrase: self.phrase)
+                self.pushViewController(vc: vc)
             }
         }
         else{
             self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.manual_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                Settings.sharedManager().resetSettings()
-                AppModel.sharedManager().resetWallet(true)
-                AppModel.sharedManager().isRestoreFlow = true
-                
-                self.pushViewController(vc: InputPhraseViewController())
+                let created = AppModel.sharedManager().createWallet(self.phrase, pass: self.password)
+                if(!created)
+                {
+                    self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { (_ ) in
+                        if AppModel.sharedManager().isInternetAvailable {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                        else{
+                            DispatchQueue.main.async {
+                                self.back()
+                            }
+                        }
+                    }
+                }
+                else{
+                    SVProgressHUD.show()
+                    AppModel.sharedManager().exportOwnerKey(self.password) {[weak self] (key) in
+                        SVProgressHUD.dismiss()
+                        
+                        guard let strongSelf = self else { return }
+
+                        let vc = OwnerKeyViewController()
+                        vc.ownerKey = key
+                        strongSelf.pushViewController(vc: vc)
+                    }
+                }
             }
         }
     }

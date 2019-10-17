@@ -22,7 +22,7 @@
                 <outlet property="nextButtonView" destination="AB7-ts-VYb" id="YDd-I8-Dbf"/>
                 <outlet property="passField" destination="wpy-QC-RxL" id="DQ6-cb-2By"/>
                 <outlet property="titleLabel" destination="PsH-3s-Vby" id="afS-hR-Vel"/>
-                <outlet property="topOffset" destination="5tx-ZJ-SNZ" id="RaH-xL-qzq"/>
+                <outlet property="topOffset" destination="Jyf-q6-ex7" id="ddN-7C-bzE"/>
                 <outlet property="touchIdButton" destination="kUU-h6-lIa" id="AoE-go-Iq3"/>
                 <outlet property="view" destination="OOM-GL-5e9" id="f0o-IU-67D"/>
             </connections>
@@ -32,22 +32,22 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="dF7-SV-PnC">
-                    <rect key="frame" x="20" y="94" width="374" height="250.5"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PsH-3s-Vby">
-                            <rect key="frame" x="0.0" y="0.0" width="374" height="38.5"/>
-                            <string key="text">Enter your password and use Touch ID 
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PsH-3s-Vby">
+                    <rect key="frame" x="20" y="94" width="374" height="38.5"/>
+                    <string key="text">Enter your password and use Touch ID 
 to access the wallet</string>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                            </userDefinedRuntimeAttributes>
-                        </label>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="dF7-SV-PnC">
+                    <rect key="frame" x="20" y="202.5" width="374" height="142"/>
+                    <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wpy-QC-RxL" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="108.5" width="374" height="22"/>
+                            <rect key="frame" x="0.0" y="0.0" width="374" height="22"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
@@ -70,7 +70,7 @@ to access the wallet</string>
                             </connections>
                         </textField>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUU-h6-lIa">
-                            <rect key="frame" x="0.0" y="165.5" width="374" height="0.0"/>
+                            <rect key="frame" x="0.0" y="57" width="374" height="0.0"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" image="iconTouchid">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -80,7 +80,7 @@ to access the wallet</string>
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AB7-ts-VYb">
-                            <rect key="frame" x="0.0" y="200.5" width="374" height="50"/>
+                            <rect key="frame" x="0.0" y="92" width="374" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hHU-2Y-hjL" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                     <rect key="frame" x="60.5" y="3" width="253" height="44"/>
@@ -118,9 +118,12 @@ to access the wallet</string>
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="dF7-SV-PnC" firstAttribute="top" secondItem="l0T-jN-EKK" secondAttribute="top" constant="50" id="5tx-ZJ-SNZ"/>
+                <constraint firstItem="dF7-SV-PnC" firstAttribute="top" secondItem="PsH-3s-Vby" secondAttribute="bottom" constant="70" id="Dcw-sk-oJ3"/>
+                <constraint firstItem="PsH-3s-Vby" firstAttribute="top" secondItem="OOM-GL-5e9" secondAttribute="top" constant="94" id="Jyf-q6-ex7"/>
                 <constraint firstAttribute="trailing" secondItem="dF7-SV-PnC" secondAttribute="trailing" constant="20" id="Lg3-1C-W4B"/>
+                <constraint firstItem="l0T-jN-EKK" firstAttribute="trailing" secondItem="PsH-3s-Vby" secondAttribute="trailing" constant="20" id="hJN-JA-Z8I"/>
                 <constraint firstItem="dF7-SV-PnC" firstAttribute="leading" secondItem="l0T-jN-EKK" secondAttribute="leading" constant="20" id="pKg-x1-yel"/>
+                <constraint firstItem="PsH-3s-Vby" firstAttribute="leading" secondItem="l0T-jN-EKK" secondAttribute="leading" constant="20" id="ueh-D4-3E9"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="l0T-jN-EKK"/>
             <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>

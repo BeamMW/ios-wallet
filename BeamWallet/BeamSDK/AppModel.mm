@@ -61,7 +61,6 @@ static int proofSize = 330;
 static NSString *categoriesKey = @"categoriesKey";
 static NSString *transactionCommentsKey = @"transaction_comment";
 static NSString *restoreFlowKey = @"restoreFlowKey";
-static NSString *changeFlowKey = @"changeFlowKey";
 
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
@@ -111,23 +110,14 @@ const int kFeeInGroth_Fork1 = 100;
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
     
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
-    
+        
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
-    _isChangeWallet = [[NSUserDefaults standardUserDefaults] boolForKey:changeFlowKey];
-
-    if (_isRestoreFlow && !_isChangeWallet) {
-        [self resetWallet:YES];
-    }
-    else if (_isChangeWallet)
-    {
-        [self resetChangeWallet];
-    }
+    
+    [self checkRecoveryWallet];
     
     [self checkInternetConnection];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didBecomeActiveNotification)
-                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self loadRules];
     
@@ -168,29 +158,6 @@ const int kFeeInGroth_Fork1 = 100;
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
     
--(void)setIsChangeWallet:(BOOL)isChangeWallet {
-    _isChangeWallet = isChangeWallet;
-    
-    NSString *oldPath = [Settings sharedManager].walletStoragePath;
-    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
- 
-    if (_isChangeWallet) {
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
-            [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
-        }
-        
-        NSError *error;
-        [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:recoverPath error:&error];
-        
-        if (error == nil) {
-            [self resetWallet:YES];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] setBool:_isChangeWallet forKey:changeFlowKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
 #pragma mark - Inetrnet
 
@@ -432,22 +399,7 @@ const int kFeeInGroth_Fork1 = 100;
     [SVProgressHUD dismiss];
 }
 
--(void)resetChangeWallet{
-    self.isChangeWallet = NO;
-
-    NSString *oldPath = [Settings sharedManager].walletStoragePath;
-    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
-    }
-    
-    NSError *error;
-    [[NSFileManager defaultManager] copyItemAtPath:recoverPath toPath:oldPath error:&error];
-    
-    NSLog(@"%@",error);
-}
-    
+ 
 -(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
@@ -471,6 +423,8 @@ const int kFeeInGroth_Fork1 = 100;
     walletDb = nil;
 
     if(removeDatabase) {
+        NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
     }
@@ -478,6 +432,67 @@ const int kFeeInGroth_Fork1 = 100;
     [[Settings sharedManager] resetNode];
 }
 
+-(void)startChangeWallet {
+    NSString *oldPath = [Settings sharedManager].walletStoragePath;
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+       
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+    }
+             
+    NSError *error;
+    [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:recoverPath error:&error];
+             
+    if (error == nil) {
+        [self resetWallet:YES];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    self.isRestoreFlow = YES;
+}
+
+-(void)stopChangeWallet {
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+          [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)checkRecoveryWallet {
+    NSString *oldPath = [Settings sharedManager].walletStoragePath;
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
+        }
+        
+        NSError *error;
+        [[NSFileManager defaultManager] copyItemAtPath:recoverPath toPath:oldPath error:&error];
+    }
+    else if (_isRestoreFlow) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
+        }
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"nodeKeyRecover"]) {
+        [Settings sharedManager].connectToRandomNode = [[NSUserDefaults standardUserDefaults] boolForKey:@"randomNodeKeyRecover"];
+        [Settings sharedManager].nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"nodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"nodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    self.isRestoreFlow = NO;
+}
 
 -(BOOL)isWalletInitialized{
     if (walletDb != nil && wallet != nil) {

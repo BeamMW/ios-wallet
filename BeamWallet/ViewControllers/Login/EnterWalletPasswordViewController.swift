@@ -20,19 +20,18 @@
 import UIKit
 
 class EnterWalletPasswordViewController: BaseWizardViewController {
-
     private var isRequestedAuthorization = false
     
-    @IBOutlet private weak var passField: BMField!
-    @IBOutlet private weak var touchIdButton: UIButton!
-    @IBOutlet private weak var loginLabel: UILabel!
-    @IBOutlet private weak var restoreButton: UIButton!
-    @IBOutlet private weak var stackView: UIStackView!
-    @IBOutlet private weak var topSpace: NSLayoutConstraint!
-
-    init(isNeedRequestedAuthorization:Bool = true) {
+    @IBOutlet private var passField: BMField!
+    @IBOutlet private var touchIdButton: UIButton!
+    @IBOutlet private var loginLabel: UILabel!
+    @IBOutlet private var restoreButton: UIButton!
+    @IBOutlet private var stackView: UIStackView!
+    @IBOutlet private var topSpace: NSLayoutConstraint!
+    
+    init(isNeedRequestedAuthorization: Bool = true) {
         super.init(nibName: nil, bundle: nil)
-
+        
         self.isRequestedAuthorization = !isNeedRequestedAuthorization
     }
     
@@ -50,11 +49,11 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             stackView.spacing = 40
             topSpace.constant = -50
         }
-  
+        
         if !BiometricAuthorization.shared.canAuthenticate() || !Settings.sharedManager().isEnableBiometric {
             touchIdButton.isHidden = true
         }
-        else{
+        else {
             if BiometricAuthorization.shared.faceIDAvailable() {
                 touchIdButton.setImage(IconFaceId(), for: .normal)
             }
@@ -72,18 +71,13 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        AppModel.sharedManager().isRestoreFlow = false;
         
-        if AppModel.sharedManager().isChangeWallet {
-            AppModel.sharedManager().resetChangeWallet()
-        }
-
-        if (self.presentedViewController as? UIAlertController) == nil {
-            if isRequestedAuthorization == false && TGBotManager.sharedManager.isNeedLinking() == false && UIApplication.shared.applicationState == .active && AppDelegate.isCrashed() == false {
-                
+        AppModel.sharedManager().checkRecoveryWallet()
+        
+        if (presentedViewController as? UIAlertController) == nil {
+            if isRequestedAuthorization == false, TGBotManager.sharedManager.isNeedLinking() == false, UIApplication.shared.applicationState == .active, AppDelegate.isCrashed() == false {
                 isRequestedAuthorization = true
-
+                
                 biometricAuthorization()
             }
         }
@@ -104,40 +98,37 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
-    
     @objc private func didBecomeActive() {
         if UIApplication.shared.applicationState == .active {
             viewWillAppear(false)
         }
     }
     
-    public func biometricAuthorization() {        
-        if BiometricAuthorization.shared.canAuthenticate() && Settings.sharedManager().isEnableBiometric {
-            
+    public func biometricAuthorization() {
+        if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
                 if let password = KeychainManager.getPassword() {
                     self.passField.text = password
                     self.onLogin(sender: UIButton())
                 }
-
+                
             }, failure: {
-                 self.touchIdButton.tintColor = UIColor.white
+                self.touchIdButton.tintColor = UIColor.white
             }, retry: {
                 self.touchIdButton.tintColor = UIColor.white
             })
         }
     }
     
-    //MARK: IBAction
+    // MARK: IBAction
     
-    @IBAction func onTouchId(sender :UIButton) {
+    @IBAction func onTouchId(sender: UIButton) {
         touchIdButton.tintColor = UIColor.white
-
+        
         biometricAuthorization()
     }
     
-    @IBAction func onLogin(sender :UIButton) {
-
+    @IBAction func onLogin(sender: UIButton) {
         if passField.text?.isEmpty ?? true {
             passField.error = Localizable.shared.strings.empty_password
             passField.status = BMField.Status.error
@@ -149,30 +140,28 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 passField.error = Localizable.shared.strings.incorrect_password
                 passField.status = BMField.Status.error
             }
-            else{
+            else {
                 _ = KeychainManager.addPassword(password: pass)
-
+                
                 let vc = CreateWalletProgressViewController(password: pass, phrase: nil)
                 pushViewController(vc: vc)
             }
         }
     }
     
-    @IBAction func onChangeWallet(sender :UIButton) {
-        self.confirmAlert(title: Localizable.shared.strings.restore_create_title, message: Localizable.shared.strings.restore_create_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.proceed, cancelHandler: { (_ ) in
+    @IBAction func onChangeWallet(sender: UIButton) {
+        confirmAlert(title: Localizable.shared.strings.restore_create_title, message: Localizable.shared.strings.restore_create_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.proceed, cancelHandler: { _ in
             
-        }) { (_ ) in
-            AppModel.sharedManager().isRestoreFlow = true;
-            AppModel.sharedManager().isChangeWallet = true;
-            
-            self.pushViewController(vc: RestoreOptionsViewController())
+        }) { _ in
+            AppModel.sharedManager().startChangeWallet()
+            self.pushViewController(vc: LoginViewController())
         }
     }
 }
 
 // MARK: TextField Actions
-extension EnterWalletPasswordViewController : UITextFieldDelegate {
-    
+
+extension EnterWalletPasswordViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
