@@ -88,7 +88,7 @@ class BMDataPickerViewController: BaseTableViewController {
     private func setValues() {
         switch type {
         case .language:
-            let languages = Settings.sharedManager().languages().sorted { $0.id > $1.id }
+            let languages = Settings.sharedManager().languages()
             for language in languages {
                 values.append(BMPickerData(title: language.localName, detail: language.enName, titleColor: UIColor.white, arrowType: (language.code == Settings.sharedManager().language) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: language.code))
             }

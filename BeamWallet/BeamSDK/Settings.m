@@ -394,73 +394,106 @@ static NSString *logsKey = @"logsKey";
     ru.code = @"ru";
     ru.enName = @"Русский";
     ru.localName = @"Russian";
+    ru.ID = 0;
     
     BMLanguage *es = [BMLanguage new];
     es.code = @"es";
     es.enName = @"Español";
     es.localName = @"Spanish";
-    
+    es.ID = 0;
+
     BMLanguage *sw = [BMLanguage new];
     sw.code = @"sv-SE";
     sw.enName = @"Svenska";
     sw.localName = @"Swedish";
-    
+    sw.ID = 0;
+
     BMLanguage *ko = [BMLanguage new];
     ko.code = @"ko";
     ko.enName = @"한국어";
     ko.localName = @"Korean";
-    
+    ko.ID = 0;
+
     BMLanguage *vi = [BMLanguage new];
     vi.code = @"vi";
     vi.enName = @"Tiếng Việt";
     vi.localName = @"Vietnamese";
-    
+    vi.ID = 0;
+
     BMLanguage *ch = [BMLanguage new];
     ch.code = @"zh-Hans";
     ch.enName = @"中文";
     ch.localName = @"Chinese";
-    
+    ch.ID = 0;
+
     BMLanguage *tr = [BMLanguage new];
     tr.code = @"tr";
     tr.enName = @"Türk";
     tr.localName = @"Turkish";
+    tr.ID = 0;
 
     BMLanguage *fr = [BMLanguage new];
     fr.code = @"fr";
     fr.enName = @"Français";
     fr.localName = @"French";
-    
+    fr.ID = 0;
+
     BMLanguage *jp = [BMLanguage new];
     jp.code = @"ja";
     jp.enName = @"日本語";
     jp.localName = @"Japanese";
-    
+    jp.ID = 0;
+
     BMLanguage *th = [BMLanguage new];
     th.code = @"th";
     th.enName = @"ภาษาไทย";
     th.localName = @"Thai";
-    
+    th.ID = 0;
+
     BMLanguage *dutch = [BMLanguage new];
     dutch.code = @"nl";
     dutch.enName = @"Nederlands";
     dutch.localName = @"Dutch";
-    
+    dutch.ID = 0;
+
     BMLanguage *fin = [BMLanguage new];
     fin.code = @"fi";
     fin.enName = @"Suomi";
     fin.localName = @"Finnish";
-    
+    fin.ID = 0;
+
     NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin];
     
     NSLocale *locale = [NSLocale currentLocale];
     
     for (BMLanguage *lang in array) {
-        if (lang.code == locale.languageCode) {
+        if ([lang.code isEqualToString:locale.languageCode] && lang.ID!=2) {
             lang.ID = 1;
         }
     }
     
-    return [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
+    NSArray *sortedNames = [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
+
+    NSMutableArray *result = [NSMutableArray array];
+    
+    for (BMLanguage *lang in sortedNames) {
+        if(lang.ID == 2) {
+            [result insertObject:lang atIndex:0];
+        }
+        else if(lang.ID == 1) {
+            if(result.count==0) {
+                [result insertObject:lang atIndex:0];
+            }
+            else{
+                [result insertObject:lang atIndex:1];
+            }
+        }
+        else{
+            [result addObject:lang];
+        }
+     }
+    
+    return result;
 }
 
 -(NSString*_Nonnull)languageName{
