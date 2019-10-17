@@ -151,7 +151,7 @@ class TransactionsTableView: UITableViewController {
                 text = Localizable.shared.strings.transactions_empty
             }
             else{
-               text = index == 3 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
+               text = index == 1 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
             }
             
             let cell = tableView

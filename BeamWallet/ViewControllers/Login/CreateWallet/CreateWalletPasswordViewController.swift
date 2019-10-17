@@ -159,40 +159,14 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     }
     
     private func goNext(pass:String) {
-        _ = KeychainManager.addPassword(password: pass)
-        
         if AppModel.sharedManager().isLoggedin {
             AppModel.sharedManager().changePassword(pass)
+            
             self.back()
         }
-        else if AppModel.sharedManager().isRestoreFlow && AppModel.sharedManager().restoreType == BMRestoreManual {
-            
-            let created = AppModel.sharedManager().createWallet(phrase, pass: pass)
-            if(!created)
-            {
-                self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { (_ ) in
-                    if AppModel.sharedManager().isInternetAvailable {
-                        self.navigationController?.popToRootViewController(animated: true)
-                    }
-                    else{
-                        DispatchQueue.main.async {
-                            self.back()
-                        }
-                    }
-                }
-            }
-            else{
-                SVProgressHUD.show()
-                AppModel.sharedManager().exportOwnerKey(pass) {[weak self] (key) in
-                    SVProgressHUD.dismiss()
-                    
-                    guard let strongSelf = self else { return }
-
-                    let vc = OwnerKeyViewController()
-                    vc.ownerKey = key
-                    strongSelf.pushViewController(vc: vc)
-                }
-            }
+        else if AppModel.sharedManager().isRestoreFlow {
+            let vc = RestoreOptionsViewController(password: pass, phrase: phrase)
+            pushViewController(vc: vc)
         }
         else{
             let vc = CreateWalletProgressViewController(password: pass, phrase: phrase)

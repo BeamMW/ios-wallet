@@ -27,9 +27,9 @@ class TransactionsViewController: BaseTableViewController {
 
     private let pagingViewController = BMPagingViewController()
     
-    private let titles = [Localizable.shared.strings.all, Localizable.shared.strings.send, Localizable.shared.strings.receive, Localizable.shared.strings.in_progress]
+    private let titles = [Localizable.shared.strings.all, Localizable.shared.strings.in_progress, Localizable.shared.strings.sent, Localizable.shared.strings.received]
    
-    private let viewModels = [TransactionViewModel(state: .all), TransactionViewModel(state: .sent), TransactionViewModel(state: .received), TransactionViewModel(state: .in_progress)]
+    private let viewModels = [TransactionViewModel(state: .all), TransactionViewModel(state: .in_progress), TransactionViewModel(state: .sent), TransactionViewModel(state: .received)]
 
     private var searchView:BMSearchView!
     private var controllers: [Int : TransactionsTableView] = [:]

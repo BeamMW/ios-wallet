@@ -48,7 +48,6 @@ class CreateWalletProgressViewController: BaseViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -98,7 +97,6 @@ class CreateWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             RestoreManager.shared.cancelRestore()
             AppModel.sharedManager().isRestoreFlow = false
-            AppModel.sharedManager().isChangeWallet = false
         }
     }
     
@@ -107,8 +105,14 @@ class CreateWalletProgressViewController: BaseViewController {
             OnboardManager.shared.saveSeed(seed: phrase!)
         }
 
+        if let pass = self.password {
+            _ = KeychainManager.addPassword(password: pass)
+        }
+
         timeoutTimer?.invalidate()
         
+        AppModel.sharedManager().stopChangeWallet()
+
         AppModel.sharedManager().removeDelegate(self)
         
         AppModel.sharedManager().refreshAddresses()
@@ -152,7 +156,6 @@ class CreateWalletProgressViewController: BaseViewController {
                 if let reason = error {
                     self.alert(title: Localizable.shared.strings.error, message: reason.localizedDescription) { (_ ) in
                         AppModel.sharedManager().isRestoreFlow = false
-                        AppModel.sharedManager().isChangeWallet = false
                         RestoreManager.shared.cancelRestore()
                         self.navigationController?.popToRootViewController(animated: true)
                     }
@@ -279,7 +282,6 @@ class CreateWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             RestoreManager.shared.cancelRestore()
             AppModel.sharedManager().isRestoreFlow = false
-            AppModel.sharedManager().isChangeWallet = false
         }
         
         let appModel = AppModel.sharedManager()
@@ -352,7 +354,6 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
             
             if done == total {
                 AppModel.sharedManager().isRestoreFlow = false
-                AppModel.sharedManager().isChangeWallet = false
                 RestoreManager.shared.cancelRestore()
                 
                 if !AppModel.sharedManager().isInternetAvailable {

@@ -57,17 +57,15 @@ class OnboardManager: NSObject {
     }
     
     public func getSeed() -> String? {
-        return KeychainManager.getSeed()
+        return nil
     }
     
     public func getStatus() -> Status {
-        let value = UserDefaults.standard.integer(forKey: statusKey)
-        return Status(rawValue: value) ?? Status.None
+        return Status.Received
     }
     
     public func canReceiveFaucet() -> Bool {
-        let status = getStatus()
-        return status == Status.Start
+        return false
     }
     
     public func canShowSeed() -> Bool {

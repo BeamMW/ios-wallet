@@ -23,6 +23,19 @@ import UIKit
 class RestoreOptionsViewController: BaseTableViewController {
 
     private var didSet = false
+    private var password:String!
+    private var phrase:String!
+    
+    init(password:String, phrase:String) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.password = password
+        self.phrase = phrase
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
     
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 150))
@@ -103,22 +116,40 @@ class RestoreOptionsViewController: BaseTableViewController {
             self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.auto_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                Settings.sharedManager().resetWallet()
-                AppModel.sharedManager().resetWallet(true)
-                AppModel.sharedManager().isRestoreFlow = true
-                
-                self.pushViewController(vc: InputPhraseViewController())
+                let vc = CreateWalletProgressViewController(password: self.password, phrase: self.phrase)
+                self.pushViewController(vc: vc)
             }
         }
         else{
             self.confirmAlert(title:Localizable.shared.strings.restore_wallet_title , message: Localizable.shared.strings.manual_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                Settings.sharedManager().resetWallet()
-                AppModel.sharedManager().resetWallet(true)
-                AppModel.sharedManager().isRestoreFlow = true
-                
-                self.pushViewController(vc: InputPhraseViewController())
+                let created = AppModel.sharedManager().createWallet(self.phrase, pass: self.password)
+                if(!created)
+                {
+                    self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { (_ ) in
+                        if AppModel.sharedManager().isInternetAvailable {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                        else{
+                            DispatchQueue.main.async {
+                                self.back()
+                            }
+                        }
+                    }
+                }
+                else{
+                    SVProgressHUD.show()
+                    AppModel.sharedManager().exportOwnerKey(self.password) {[weak self] (key) in
+                        SVProgressHUD.dismiss()
+                        
+                        guard let strongSelf = self else { return }
+
+                        let vc = OwnerKeyViewController()
+                        vc.ownerKey = key
+                        strongSelf.pushViewController(vc: vc)
+                    }
+                }
             }
         }
     }

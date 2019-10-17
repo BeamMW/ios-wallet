@@ -432,12 +432,33 @@ static NSString *randomNodeKey = @"randomNodeKey";
     NSLocale *locale = [NSLocale currentLocale];
     
     for (BMLanguage *lang in array) {
-        if (lang.code == locale.languageCode) {
+        if ([lang.code isEqualToString:locale.languageCode] && lang.ID!=2) {
             lang.ID = 1;
         }
     }
     
-    return [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
+    NSArray *sortedNames = [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
+
+    NSMutableArray *result = [NSMutableArray array];
+    
+    for (BMLanguage *lang in sortedNames) {
+        if(lang.ID == 2) {
+            [result insertObject:lang atIndex:0];
+        }
+        else if(lang.ID == 1) {
+            if(result.count==0) {
+                [result insertObject:lang atIndex:0];
+            }
+            else{
+                [result insertObject:lang atIndex:1];
+            }
+        }
+        else{
+            [result addObject:lang];
+        }
+     }
+    
+    return result;
 }
 
 -(NSString*_Nonnull)languageName{

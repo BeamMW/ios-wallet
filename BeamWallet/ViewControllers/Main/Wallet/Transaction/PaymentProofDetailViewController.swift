@@ -114,7 +114,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
     
     @objc private func onMoreDetails() {
         detailsExpand = !detailsExpand
-        tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
+        tableView.reloadSections(IndexSet(arrayLiteral: tableView.tableHeaderView == codeInputView ? 0 : 1), with: .fade)
     }
     
     private func fillTransactionInfo() {
@@ -122,7 +122,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
         
         if let paymentProof = self.paymentProof {
             var section_1 = [BMMultiLineItem]()
-            section_1.append(BMMultiLineItem(title: Localizable.shared.strings.key_code.uppercased(), detail: paymentProof.code, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            section_1.append(BMMultiLineItem(title: Localizable.shared.strings.key_code.uppercased(), detail: paymentProof.code, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             
             details.append(section_1)
             
@@ -131,10 +131,10 @@ class PaymentProofDetailViewController: BaseTableViewController {
         
         if let transaction = self.transaction {
             var section_2 = [BMMultiLineItem]()
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.sender.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.receiver.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.sender.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.receiver.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             section_2.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: String.currency(value: transaction.realAmount) + Localizable.shared.strings.beam, detailFont: RegularFont(size: 16), detailColor: UIColor.main.heliotrope))
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             
             details.append(section_2)
             
@@ -166,6 +166,11 @@ class PaymentProofDetailViewController: BaseTableViewController {
 
 extension PaymentProofDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if section == 0 && tableView.tableHeaderView == codeInputView  {
+            return BMTableHeaderTitleView.height
+        }
+        
         return section == 1 ? BMTableHeaderTitleView.height : 1
     }
     
@@ -187,6 +192,9 @@ extension PaymentProofDetailViewController: UITableViewDataSource {
         if section == 1, !detailsExpand {
             return 0
         }
+        else if section == 0, !detailsExpand, tableView.tableHeaderView == codeInputView {
+            return 0
+        }
         return details[section].count
     }
     
@@ -196,12 +204,19 @@ extension PaymentProofDetailViewController: UITableViewDataSource {
             .configured(with: details[indexPath.section][indexPath.row])
         cell.delegate = self
         
-        if indexPath.section == 1 {
+        if tableView.tableHeaderView == codeInputView {
             cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         }
-        else {
-            cell.contentView.backgroundColor = UIColor.clear
+        else{
+            if indexPath.section == 1 {
+                cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+            }
+            else {
+                cell.contentView.backgroundColor = UIColor.clear
+            }
         }
+        
+
         
         return cell
     }
@@ -209,9 +224,14 @@ extension PaymentProofDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            let view = UIView()
-            view.backgroundColor = UIColor.clear
-            return view
+            if tableView.tableHeaderView == codeInputView {
+                return BMTableHeaderTitleView(title: Localizable.shared.strings.details.uppercased(), handler: #selector(onMoreDetails), target: self, expand: detailsExpand)
+            }
+            else{
+                let view = UIView()
+                view.backgroundColor = UIColor.clear
+                return view
+            }
         case 1:
             return BMTableHeaderTitleView(title: Localizable.shared.strings.details.uppercased(), handler: #selector(onMoreDetails), target: self, expand: detailsExpand)
         default:

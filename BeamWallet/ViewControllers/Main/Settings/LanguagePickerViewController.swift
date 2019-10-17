@@ -27,7 +27,7 @@ class LanguagePickerViewController: BaseTableViewController {
     
     public var completion : ((String) -> Void)?
     
-    private var languages = Settings.sharedManager().languages().sorted { $0.id > $1.id }
+    private var languages = Settings.sharedManager().languages()
     private var selectedLanguage:String!
     private var currentLanguage:String!
     
