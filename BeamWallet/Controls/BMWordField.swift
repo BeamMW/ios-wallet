@@ -129,7 +129,7 @@ class BMWordField: BMField {
     
     public func tryAutoInsertWord() {
         if self.inputAccessoryView != nil, let text = self.text {
-            var words = MnemonicModel.mnemonicWords(forPrefix: text, suggestions: suggestions) as [String]
+            let words = MnemonicModel.mnemonicWords(forPrefix: text, suggestions: suggestions) as [String]
             if words.count == 1 {
                 if words[0] != text {
                     self.text = words[0]
@@ -139,8 +139,7 @@ class BMWordField: BMField {
     }
     
     private func updateAccessoryViewPrefix(prefix:String) {
-        var words = MnemonicModel.mnemonicWords(forPrefix: prefix, suggestions: suggestions) as [String]
-        
+        let words = MnemonicModel.mnemonicWords(forPrefix: prefix, suggestions: suggestions) as [String]
         
         for btn in accessoryOptions {
             btn.setAttributedTitle(nil, for: .normal)

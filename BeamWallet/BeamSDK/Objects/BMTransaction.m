@@ -234,12 +234,29 @@
     NSMutableArray *strings = [NSMutableArray array];
     
     NSRange commentRange = [_comment.lowercaseString rangeOfString:searchText.lowercaseString];
-    NSRange idRange = [_ID.lowercaseString rangeOfString:searchText.lowercaseString];
-    NSRange kernelRange = [_kernelId.lowercaseString rangeOfString:searchText.lowercaseString];
-    NSRange senderAddressRange = [_senderAddress.lowercaseString rangeOfString:searchText.lowercaseString];
-    NSRange receiverAddressRange = [_receiverAddress.lowercaseString rangeOfString:searchText.lowercaseString];
     NSRange senderNameRange = [_senderContactName.lowercaseString rangeOfString:searchText.lowercaseString];
     NSRange receiverNameRange = [_receiverContactName.lowercaseString rangeOfString:searchText.lowercaseString];
+        
+    NSRange idRange = NSMakeRange(NSNotFound, NSNotFound);
+    NSRange kernelRange = NSMakeRange(NSNotFound, NSNotFound);
+    NSRange senderAddressRange = NSMakeRange(NSNotFound, NSNotFound);
+    NSRange receiverAddressRange = NSMakeRange(NSNotFound, NSNotFound);
+
+    if ([_ID.lowercaseString hasPrefix:searchText.lowercaseString]) {
+        idRange = [_ID.lowercaseString rangeOfString:searchText.lowercaseString];
+    }
+    
+    if ([_kernelId.lowercaseString hasPrefix:searchText.lowercaseString]) {
+        idRange = [_kernelId.lowercaseString rangeOfString:searchText.lowercaseString];
+    }
+    
+    if ([_senderAddress.lowercaseString hasPrefix:searchText.lowercaseString]) {
+        senderAddressRange = [_senderAddress.lowercaseString rangeOfString:searchText.lowercaseString];
+    }
+    
+    if ([_receiverAddress.lowercaseString hasPrefix:searchText.lowercaseString]) {
+        receiverAddressRange = [_receiverAddress.lowercaseString rangeOfString:searchText.lowercaseString];
+    }
 
     CGFloat fontsize = 14;
     
