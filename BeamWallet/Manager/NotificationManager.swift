@@ -480,9 +480,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
                         rootVC.dismiss(animated: true) {
                             if let transactions = AppModel.sharedManager().transactions as? [BMTransaction] {
                                 if let transaction = transactions.first(where: { $0.id == response.notification.request.identifier }) {
-                                    let vc = TransactionViewController(transaction: transaction)
-                                    vc.hidesBottomBarWhenPushed = true
-                                    
+                                    let vc = TransactionViewController(transaction: transaction)                                    
                                     if let topVC = UIApplication.getTopMostViewController() {
                                         topVC.pushViewController(vc: vc)
                                     }

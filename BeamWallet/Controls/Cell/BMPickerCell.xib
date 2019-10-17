@@ -48,21 +48,17 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-XX-F4D">
-                                <rect key="frame" x="296" y="18.5" width="13" height="13"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="13" id="dys-ko-ix6"/>
-                                    <constraint firstAttribute="height" constant="13" id="ozG-8r-xCj"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-XX-F4D">
+                                <rect key="frame" x="292" y="18.5" width="13" height="13"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="J5U-XX-F4D" firstAttribute="centerY" secondItem="si6-ep-K1d" secondAttribute="centerY" id="6il-KS-lcg"/>
                             <constraint firstAttribute="bottom" secondItem="gQs-Rr-cAd" secondAttribute="bottom" constant="15" id="Fj1-Zt-WVC"/>
-                            <constraint firstAttribute="trailing" secondItem="J5U-XX-F4D" secondAttribute="trailing" constant="11" id="Y0c-Mj-4Lw"/>
                             <constraint firstItem="gQs-Rr-cAd" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="15" id="Zif-OU-tBF"/>
                             <constraint firstItem="gQs-Rr-cAd" firstAttribute="leading" secondItem="si6-ep-K1d" secondAttribute="leading" constant="15" id="e2g-bc-sPE"/>
+                            <constraint firstAttribute="trailing" secondItem="J5U-XX-F4D" secondAttribute="trailing" constant="15" id="g4a-xp-rLA"/>
                         </constraints>
                     </view>
                 </subviews>

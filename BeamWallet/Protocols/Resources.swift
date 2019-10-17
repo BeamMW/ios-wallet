@@ -80,6 +80,10 @@ func CheckboxFull() -> UIImage? {
     return UIImage(named: "checkboxFull")
 }
 
+func CheckboxEmptyNew() -> UIImage? {
+    return UIImage(named: "icnCheckmarkEmpty")
+}
+
 func CheckboxEmpty() -> UIImage? {
     return UIImage(named: "checkboxEmpty")
 }

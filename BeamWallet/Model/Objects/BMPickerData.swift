@@ -32,12 +32,14 @@ class BMPickerData: NSObject {
     public var titleColor:UIColor?
     public var arrowType:ArrowType?
     public var unique:Any?
+    public var multiplie:Bool = false
 
-    required init(title:String!, detail:String?, titleColor:UIColor?, arrowType:ArrowType?, unique:Any?) {
+    required init(title:String!, detail:String?, titleColor:UIColor?, arrowType:ArrowType?, unique:Any?, multiplie:Bool = false) {
         self.title = title
         self.detail = detail
         self.arrowType = arrowType
         self.titleColor = titleColor
         self.unique = unique
+        self.multiplie = multiplie
     }
 }

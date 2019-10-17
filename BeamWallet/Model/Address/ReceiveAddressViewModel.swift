@@ -19,9 +19,7 @@
 
 import Foundation
 
-
 class ReceiveAddressViewModel: NSObject {
-    
     enum ReceiveAddressViewModelSaveState: Int {
         case none = 0
         case new = 1
@@ -30,24 +28,24 @@ class ReceiveAddressViewModel: NSObject {
     
     public var transactionComment = String.empty()
     
-    public var onAddressCreated : ((Error?) -> Void)?
-    public var onDataChanged : (() -> Void)?
-    public var onShared : (() -> Void)?
-
-    public var address:BMAddress!
-    public var startedAddress:BMAddress!
-    public var pickedAddress:BMAddress?
+    public var onAddressCreated: ((Error?) -> Void)?
+    public var onDataChanged: (() -> Void)?
+    public var onShared: (() -> Void)?
+    
+    public var address: BMAddress!
+    public var startedAddress: BMAddress!
+    public var pickedAddress: BMAddress?
     
     public var isShared = false
     
-    public var amount:String?
-
+    public var amount: String?
+    
     override init() {
         super.init()
     }
     
     public func createAddress() {
-        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
+        AppModel.sharedManager().generateNewWalletAddress { address, error in
             if let result = address {
                 DispatchQueue.main.async {
                     self.address = result
@@ -55,7 +53,7 @@ class ReceiveAddressViewModel: NSObject {
                     self.onAddressCreated?(error)
                 }
             }
-            else if (error) != nil {
+            else if error != nil {
                 DispatchQueue.main.async {
                     self.onAddressCreated?(error)
                 }
@@ -82,8 +80,7 @@ class ReceiveAddressViewModel: NSObject {
                 AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
             }
         }
-        else if !isShared
-        {
+        else if !isShared {
             deleted = true
             AppModel.sharedManager().deleteAddress(address?.walletId)
         }
@@ -106,8 +103,7 @@ class ReceiveAddressViewModel: NSObject {
                 }
             }
         }
-        else if !isShared
-        {
+        else if !isShared {
             return .new
         }
         
@@ -150,16 +146,16 @@ class ReceiveAddressViewModel: NSObject {
                 }
                 top.pushViewController(vc: vc)
             }
-            else{
-                let vc  = CategoryPickerViewController(categories: self.address?.categories as? [String])
+            else {
+                let vc = BMDataPickerViewController(type: .category, selectedValue: address?.categories as? [String])
                 vc.completion = { [weak self]
                     obj in
+                    
                     guard let strongSelf = self else { return }
-
-                    if let categories = obj {
+                    
+                    if let categories = (obj as? [String]) {
                         strongSelf.address?.categories = NSMutableArray(array: categories)
-                        
-                        AppModel.sharedManager().setWalletCategories(strongSelf.address!.categories, toAddress: strongSelf.address!.walletId)
+                    AppModel.sharedManager().setWalletCategories(strongSelf.address!.categories, toAddress: strongSelf.address!.walletId)
                         
                         self?.onDataChanged?()
                     }
@@ -172,7 +168,7 @@ class ReceiveAddressViewModel: NSObject {
     public func onChangeAddress() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = ReceiveListViewController()
-            vc.completion = {[weak self]
+            vc.completion = { [weak self]
                 obj in
                 
                 self?.isShared = false
@@ -188,19 +184,18 @@ class ReceiveAddressViewModel: NSObject {
                 
                 self?.onDataChanged?()
             }
-            vc.excepted = self.startedAddress
-            vc.currenltyPicked = self.address
+            vc.excepted = startedAddress
+            vc.currenltyPicked = address
             top.pushViewController(vc: vc)
         }
     }
     
     public func onQRCode() {
-        
         if let top = UIApplication.getTopMostViewController() {
             if amount == Localizable.shared.strings.zero {
                 top.alert(title: Localizable.shared.strings.wrong_requested_amount_title, message: Localizable.shared.strings.wrong_requested_amount_text, handler: nil)
             }
-            else{
+            else {
                 isShared = true
                 
                 let modalViewController = QRViewController(address: address, amount: amount)
@@ -217,7 +212,7 @@ class ReceiveAddressViewModel: NSObject {
     public func onShare() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = UIActivityViewController(activityItems: [address.walletId], applicationActivities: [])
-            vc.completionWithItemsHandler = {[weak self] (activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = { [weak self] (activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {
                     self?.isShared = true
                     
@@ -228,7 +223,7 @@ class ReceiveAddressViewModel: NSObject {
                     self?.onShared?()
                 }
             }
-            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
             top.present(vc, animated: true)
         }
     }

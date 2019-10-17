@@ -158,7 +158,6 @@ extension SettingsViewModel {
             
             top.alert(title: Localizable.shared.strings.owner_key, message: text) { _ in
                 let vc = OwnerKeyUnlockViewController()
-                vc.hidesBottomBarWhenPushed = true
                 top.pushViewController(vc: vc)
             }
         }
@@ -169,7 +168,6 @@ extension SettingsViewModel {
             let vc = QRScannerViewController()
             vc.delegate = delegate
             vc.scanType = .tg_bot
-            vc.hidesBottomBarWhenPushed = true
             top.pushViewController(vc: vc)
         }
     }
@@ -178,12 +176,10 @@ extension SettingsViewModel {
         if let top = UIApplication.getTopMostViewController() {
             if category == nil {
                 let vc = CategoryEditViewController(category: category)
-                vc.hidesBottomBarWhenPushed = true
                 top.pushViewController(vc: vc)
             }
             else {
                 let vc = CategoryDetailViewController(category: category!)
-                vc.hidesBottomBarWhenPushed = true
                 top.pushViewController(vc: vc)
             }
         }
@@ -202,8 +198,7 @@ extension SettingsViewModel {
     
     func onClearData() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = ClearDataViewController()
-            vc.hidesBottomBarWhenPushed = true
+            let vc = BMDataPickerViewController(type: .clear)
             top.pushViewController(vc: vc)
         }
     }
@@ -233,7 +228,6 @@ extension SettingsViewModel {
     func onChangePassword(controller: UIViewController) {
         if let top = UIApplication.getTopMostViewController() {
             let vc = UnlockPasswordViewController(event: .changePassword)
-            vc.hidesBottomBarWhenPushed = true
             top.pushViewController(vc: vc)
         }
     }

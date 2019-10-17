@@ -17,14 +17,12 @@
 // limitations under the License.
 //
 
-
 import UIKit
 
 class EditAddressViewModel: DetailAddressViewModel {
-
-    public var newAddress:BMAddress!
+    public var newAddress: BMAddress!
     public let hours_24: UInt64 = 86400
-
+    
     override init(address: BMAddress) {
         super.init(address: address)
         
@@ -37,26 +35,26 @@ class EditAddressViewModel: DetailAddressViewModel {
         self.newAddress.ownerId = address.ownerId
         self.newAddress.isNowExpired = false
         self.newAddress.isNowActive = false
-        self.newAddress.isNowActiveDuration = hours_24
+        self.newAddress.isNowActiveDuration = self.hours_24
     }
     
     public func checkIsChanges() -> Bool {
-        if newAddress.label != address?.label {
+        if self.newAddress.label != address?.label {
             return true
         }
-        else if newAddress.isNowExpired != address?.isNowExpired {
+        else if self.newAddress.isNowExpired != address?.isNowExpired {
             return true
         }
-        else if newAddress.isNowActive != address?.isNowActive {
+        else if self.newAddress.isNowActive != address?.isNowActive {
             return true
         }
-        else if newAddress.duration != address?.duration {
+        else if self.newAddress.duration != address?.duration {
             return true
         }
-        else if newAddress.categories != address?.categories {
+        else if self.newAddress.categories != address?.categories {
             return true
         }
-       
+        
         return false
     }
     
@@ -82,7 +80,7 @@ class EditAddressViewModel: DetailAddressViewModel {
                     if self.newAddress.isNowActive {
                         self.newAddress.isNowActiveDuration = 0
                     }
-                    else{
+                    else {
                         self.newAddress.duration = 0
                     }
                     
@@ -111,14 +109,16 @@ class EditAddressViewModel: DetailAddressViewModel {
                 }
                 top.pushViewController(vc: vc)
             }
-            else{
-                let vc = CategoryPickerViewController(categories: self.newAddress?.categories as? [String])
+            else {
+                let vc = BMDataPickerViewController(type: .category, selectedValue: self.newAddress?.categories as? [String])
                 vc.completion = { [weak self]
                     obj in
-                    if let categories = obj {
+            
+                    if let categories = (obj as? [String]) {
                         self?.newAddress.categories = NSMutableArray(array: categories)
                         self?.onDataChanged?()
                     }
+                    
                 }
                 top.pushViewController(vc: vc)
             }
@@ -126,6 +126,6 @@ class EditAddressViewModel: DetailAddressViewModel {
     }
     
     public func saveChages() {
-        AppModel.sharedManager().edit(newAddress)
+        AppModel.sharedManager().edit(self.newAddress)
     }
 }

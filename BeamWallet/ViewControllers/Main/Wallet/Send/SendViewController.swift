@@ -670,13 +670,11 @@ extension SendViewController {
             pushViewController(vc: vc)
         }
         else{
-            let vc = CategoryPickerViewController(categories: viewModel.outgoindAdderss!.categories as? [String])
+            let vc = BMDataPickerViewController(type: .category, selectedValue:viewModel.outgoindAdderss!.categories as? [String])
             vc.completion = { [weak self]
                 obj in
-                
                 guard let strongSelf = self else { return }
-
-                if let categories = obj {
+                if let categories = (obj as? [String]) {
                     strongSelf.didSelectCategory(categories: categories)
                 }
             }
