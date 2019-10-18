@@ -19,17 +19,11 @@
 
 import UIKit
 
-class LanguagePickerViewController: BaseTableViewController {
+class LogPickerViewController: BaseTableViewController {
     
-    struct Language {
-        var name,code:String!
-    }
+    public var completion : (() -> Void)?
     
-    public var completion : ((String) -> Void)?
-    
-    private var languages = Settings.sharedManager().languages()
-    private var selectedLanguage:String!
-    private var currentLanguage:String!
+    private var values = Settings.sharedManager().logValues()
     
     override var tableStyle: UITableView.Style {
         get {
@@ -41,75 +35,55 @@ class LanguagePickerViewController: BaseTableViewController {
     }
     
     override var isUppercasedTitle: Bool {
-         get{
-             return true
-         }
-         set{
-             super.isUppercasedTitle = true
-         }
-     }
+        get{
+            return true
+        }
+        set{
+            super.isUppercasedTitle = true
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = Localizable.shared.strings.language
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+
+        title = Localizable.shared.strings.save_wallet_logs
         
-        //addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
-    
-        for lang in languages {
-            if lang.code == Settings.sharedManager().language {
-                selectedLanguage = lang.code
-                currentLanguage = lang.code
-            }
-        }
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.register(CategoryPickerCell.self)
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
-        tableView.register(CategoryPickerCell.self)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
+        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.backgroundColor = UIColor.main.marine
     }
-    
-    private func onSave() {
-        Settings.sharedManager().language = selectedLanguage
-        
-        Localizable.shared.reset()
-        
-        Settings.sharedManager().language = selectedLanguage
 
-        AppModel.sharedManager().getUTXO()
-        AppModel.sharedManager().getWalletStatus()
-        AppModel.sharedManager().refreshAddresses()
-        
-        self.completion?(selectedLanguage)
-
-        self.back()
-    }
 }
 
-extension LanguagePickerViewController : UITableViewDelegate {
+extension LogPickerViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 50
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        selectedLanguage = languages[indexPath.row].code
-        
-        enableRightButton(enabled: (currentLanguage == selectedLanguage) ? false : true)
+        Settings.sharedManager().logDays = values[indexPath.row].days
+            
+        self.completion?()
 
-        tableView.reloadData()
-        
-        onSave()
+        self.back()
     }
 }
 
-extension LanguagePickerViewController : UITableViewDataSource {
+extension LogPickerViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return languages.count
+        return values.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -126,7 +100,7 @@ extension LanguagePickerViewController : UITableViewDataSource {
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         cell.selectedBackgroundView = selectedView
         
-        if (languages[indexPath.row].code == selectedLanguage) {
+        if (values[indexPath.row].days == Settings.sharedManager().logDays) {
             let arrowView = UIImageView(frame: CGRect(x: 0, y: 0, width: 13, height: 13))
             arrowView.image = Tick()?.withRenderingMode(.alwaysTemplate)
             arrowView.tintColor = UIColor.main.brightTeal
@@ -136,8 +110,8 @@ extension LanguagePickerViewController : UITableViewDataSource {
             cell.accessoryView = nil
         }
         
-        cell.textLabel?.text = languages[indexPath.row].localName
-        cell.detailTextLabel?.text = languages[indexPath.row].enName
+        cell.textLabel?.text = values[indexPath.row].name
+        cell.detailTextLabel?.text = nil
 
         return cell
     }

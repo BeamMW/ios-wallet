@@ -31,6 +31,7 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 static NSString *languageKey = @"languageKey";
 static NSString *randomNodeKey = @"randomNodeKey";
 static NSString *nodeKey = @"nodeKey";
+static NSString *logsKey = @"logsKey";
 
 
 + (Settings*_Nonnull)sharedManager {
@@ -130,6 +131,13 @@ static NSString *nodeKey = @"nodeKey";
         _nodeAddress = [AppModel chooseRandomNode];
     }
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:logsKey]) {
+        _logDays = [[[NSUserDefaults standardUserDefaults] objectForKey:logsKey] intValue];
+    }
+    else{
+        _logDays = 5;
+    }
+    
     if (self.target == Testnet)
     {
         [self copyOldDatabaseToGroup];
@@ -167,6 +175,15 @@ static NSString *nodeKey = @"nodeKey";
         return [[NSUserDefaults standardUserDefaults] objectForKey:nodeKey];
     }
     return @"";
+}
+
+-(void)setLogDays:(int)logDays {
+    _logDays = logDays;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_logDays] forKey:logsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[AppModel sharedManager] clearLogs];
 }
 
 -(void)setIsHideAmounts:(BOOL)isHideAmounts {
@@ -523,6 +540,36 @@ static NSString *nodeKey = @"nodeKey";
 -(BMLockScreenValue*_Nonnull)currentLocedValue {
     for (BMLockScreenValue *v in [self lockScreenValues]) {
         if (v.seconds == _lockScreenSeconds) {
+            return v;
+        }
+    }
+    
+    return nil;
+}
+
+-(NSArray <BMLogValue*> * _Nonnull)logValues {
+    BMLogValue *never = [BMLogValue new];
+    never.name = [@"all_time" localized];
+    never.days = 0;
+
+    BMLogValue *d_5 = [BMLogValue new];
+    d_5.name = [@"last_5_days" localized];
+    d_5.days = 5;
+    
+    BMLogValue *d_15 = [BMLogValue new];
+    d_15.name = [@"last_15_days" localized];
+    d_15.days = 15;
+    
+    BMLogValue *d_30 = [BMLogValue new];
+    d_30.name = [@"last_30_days" localized];
+    d_30.days = 30;
+    
+    return @[never,d_5,d_15,d_30];
+}
+
+-(BMLogValue*_Nonnull)currentLogValue {
+    for (BMLogValue *v in [self logValues]) {
+        if (v.days == _logDays) {
             return v;
         }
     }

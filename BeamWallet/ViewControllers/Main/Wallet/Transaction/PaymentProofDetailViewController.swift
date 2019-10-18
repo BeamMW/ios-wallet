@@ -215,9 +215,7 @@ extension PaymentProofDetailViewController: UITableViewDataSource {
                 cell.contentView.backgroundColor = UIColor.clear
             }
         }
-        
-
-        
+                
         return cell
     }
     

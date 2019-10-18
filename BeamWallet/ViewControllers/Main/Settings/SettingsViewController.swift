@@ -146,6 +146,8 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.onLanguage()
             case 15:
                 self.viewModel.onLockScreen()
+            case 17:
+                self.viewModel.onLogScreen()
             default:
                 return
             }

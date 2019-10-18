@@ -83,7 +83,7 @@ extension SettingsCell: Configurable {
             titleLabel.textColor = UIColor(hexString: category.color)
         }
         else {
-            if item.id == 5 || item.id == 6 || item.id == 7 || item.id == 1 || item.id == 8 || item.id == 12 || item.id == 13 || item.id == 15 {
+            if item.id == 5 || item.id == 6 || item.id == 7 || item.id == 1 || item.id == 8 || item.id == 12 || item.id == 13 || item.id == 15 || item.id == 17 {
                 arrowView.isHidden = false
                 titleXOffset.constant = 25
             }

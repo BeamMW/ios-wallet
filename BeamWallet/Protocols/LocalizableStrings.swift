@@ -437,7 +437,11 @@ class LocalizableStrings : NSObject {
     var complete_verification = "complete_verification".localized
     var yes_please = "yes_please".localized
     var sent = "sent".localized
-    
+    var save_wallet_logs = "save_wallet_logs".localized
+    var all_time = "all_time".localized
+    var last_5_days = "last_5_days".localized
+    var last_15_days = "last_15_days".localized
+    var last_30_days = "last_30_days".localized
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

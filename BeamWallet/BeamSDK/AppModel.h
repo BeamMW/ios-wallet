@@ -32,6 +32,7 @@
 #import "BMLanguage.h"
 #import "StringLocalize.h"
 #import "BMLockScreenValue.h"
+#import "BMLogValue.h"
 
 enum {
     BMRestoreManual = 0,
@@ -168,6 +169,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
+-(void)clearLogs;
 
 // transactions
 -(BMTransaction*_Nullable)validatePaymentProof:(NSString*_Nullable)code;

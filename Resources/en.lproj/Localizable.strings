@@ -445,8 +445,6 @@
 "use_face_id" = "Use your Face ID";
 "enter_your_password" = "Enter your password";
 "share_details" = "Share details";
-
-
 "faucet_title" = "Start using the wallet";
 "faucet_text" = "Would you like to see the wallet in action? Get a very small amount of Beams from the community faucet.";
 "faucet_ok" = "Yes, please";
@@ -460,3 +458,8 @@
 "make_wallet_secure_title" = "Make your wallet secure";
 "make_wallet_secure_text" = "Please increase wallet security by saving your seed phrase so you won’t loose your funds.";
 "complete_verification" = "Complete verification";
+"save_wallet_logs" = "Save wallet logs";
+"all_time" = "For all time";
+"last_5_days" = "Last 5 days";
+"last_15_days" = "Last 15 days";
+"last_30_days" = "Last 30 days";

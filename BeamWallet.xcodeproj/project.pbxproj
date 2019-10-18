@@ -859,6 +859,12 @@
 		92E2EB89226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EB87226F222800367928 /* LaunchScreenMasterNet.storyboard */; };
 		92E2EB8A226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EB87226F222800367928 /* LaunchScreenMasterNet.storyboard */; };
 		92E2EB8C226F225700367928 /* bgMasternet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EB8B226F225700367928 /* bgMasternet.jpg */; };
+		92E4AED62359CEB1004062A1 /* LogPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AED52359CEB1004062A1 /* LogPickerViewController.swift */; };
+		92E4AED72359CEB1004062A1 /* LogPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AED52359CEB1004062A1 /* LogPickerViewController.swift */; };
+		92E4AED82359CEB1004062A1 /* LogPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AED52359CEB1004062A1 /* LogPickerViewController.swift */; };
+		92E4AEDB2359CF8A004062A1 /* BMLogValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AED92359CF89004062A1 /* BMLogValue.m */; };
+		92E4AEDC2359CF8A004062A1 /* BMLogValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AED92359CF89004062A1 /* BMLogValue.m */; };
+		92E4AEDD2359CF8A004062A1 /* BMLogValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AED92359CF89004062A1 /* BMLogValue.m */; };
 		92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
@@ -1382,6 +1388,9 @@
 		92E2EB85226F21C700367928 /* BeamWalletMasterNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamWalletMasterNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E2EB88226F222800367928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenMasterNet.storyboard; sourceTree = "<group>"; };
 		92E2EB8B226F225700367928 /* bgMasternet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgMasternet.jpg; sourceTree = "<group>"; };
+		92E4AED52359CEB1004062A1 /* LogPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogPickerViewController.swift; sourceTree = "<group>"; };
+		92E4AED92359CF89004062A1 /* BMLogValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMLogValue.m; sourceTree = "<group>"; };
+		92E4AEDA2359CF89004062A1 /* BMLogValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMLogValue.h; sourceTree = "<group>"; };
 		92E5E2FB22EEE0790098C699 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		92E884B7223F93FF0003D6BB /* BMUTXO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMUTXO.h; sourceTree = "<group>"; };
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
@@ -1761,6 +1770,8 @@
 		92435240222DED1800A0EF37 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				92E4AEDA2359CF89004062A1 /* BMLogValue.h */,
+				92E4AED92359CF89004062A1 /* BMLogValue.m */,
 				92435241222DED3200A0EF37 /* BMWalletStatus.h */,
 				92435242222DED3200A0EF37 /* BMWalletStatus.m */,
 				92435244222DF9AE00A0EF37 /* BMAddress.h */,
@@ -1831,6 +1842,7 @@
 				92C00D2222A00E2A00DDB579 /* OwnerKeyViewController.xib */,
 				92CAB06122C215550059CA08 /* LanguagePickerViewController.swift */,
 				92350D8C233A3FE9007652D8 /* LockPickerViewController.swift */,
+				92E4AED52359CEB1004062A1 /* LogPickerViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -3143,6 +3155,7 @@
 				92FC61262229C0C200AEABC1 /* BaseWizardViewController.swift in Sources */,
 				926EB47E231E843800D059BC /* WalletTransactionCell.swift in Sources */,
 				92D6DB5522DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
+				92E4AEDB2359CF8A004062A1 /* BMLogValue.m in Sources */,
 				921AE99A229957F6008869EB /* ShortcutManager.swift in Sources */,
 				92365AD3222D3E79000D7064 /* WalletModel.mm in Sources */,
 				9227AEAF2282C80E00FB221F /* CategoryDetailViewController.swift in Sources */,
@@ -3231,6 +3244,7 @@
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,
 				92790D96224CD8AE00F79D64 /* BMContact.m in Sources */,
 				92F8EFDB23509FE800A20B1A /* OnboardCell.swift in Sources */,
+				92E4AED62359CEB1004062A1 /* LogPickerViewController.swift in Sources */,
 				92F68C782244E37200197D4D /* UTXODetailViewController.swift in Sources */,
 				926A857C222EC10C00A3B747 /* WalletTransactionSearchCell.swift in Sources */,
 				928848022243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
@@ -3349,6 +3363,7 @@
 				9288DD43223A55410020C501 /* BaseWizardViewController.swift in Sources */,
 				926EB47F231E843800D059BC /* WalletTransactionCell.swift in Sources */,
 				92D6DB5622DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
+				92E4AEDC2359CF8A004062A1 /* BMLogValue.m in Sources */,
 				921AE99B229957F6008869EB /* ShortcutManager.swift in Sources */,
 				9288DD44223A55410020C501 /* WalletModel.mm in Sources */,
 				9227AEB02282C80E00FB221F /* CategoryDetailViewController.swift in Sources */,
@@ -3437,6 +3452,7 @@
 				9288DD58223A55410020C501 /* Configurable.swift in Sources */,
 				92790D97224CD8AE00F79D64 /* BMContact.m in Sources */,
 				92F8EFDC23509FE800A20B1A /* OnboardCell.swift in Sources */,
+				92E4AED72359CEB1004062A1 /* LogPickerViewController.swift in Sources */,
 				92F68C792244E37200197D4D /* UTXODetailViewController.swift in Sources */,
 				9288DD59223A55410020C501 /* WalletTransactionSearchCell.swift in Sources */,
 				928848032243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
@@ -3555,6 +3571,7 @@
 				92E2EAF1226F21C700367928 /* BaseWizardViewController.swift in Sources */,
 				926EB480231E843800D059BC /* WalletTransactionCell.swift in Sources */,
 				92D6DB5722DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
+				92E4AEDD2359CF8A004062A1 /* BMLogValue.m in Sources */,
 				921AE99C229957F6008869EB /* ShortcutManager.swift in Sources */,
 				92E2EAF2226F21C700367928 /* WalletModel.mm in Sources */,
 				9227AEB12282C80E00FB221F /* CategoryDetailViewController.swift in Sources */,
@@ -3643,6 +3660,7 @@
 				92E2EB1C226F21C700367928 /* Configurable.swift in Sources */,
 				92E2EB1D226F21C700367928 /* BMContact.m in Sources */,
 				92F8EFDD23509FE800A20B1A /* OnboardCell.swift in Sources */,
+				92E4AED82359CEB1004062A1 /* LogPickerViewController.swift in Sources */,
 				92E2EB1E226F21C700367928 /* UTXODetailViewController.swift in Sources */,
 				92E2EB1F226F21C700367928 /* WalletTransactionSearchCell.swift in Sources */,
 				92E2EB20226F21C700367928 /* BMCopyLabel.swift in Sources */,
@@ -4036,7 +4054,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletTestNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4117,7 +4135,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletTestNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

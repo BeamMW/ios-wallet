@@ -71,6 +71,7 @@ class SettingsViewModel: NSObject {
         }
         general.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
         general.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, id: 15))
+        general.append(SettingsItem(title: Localizable.shared.strings.save_wallet_logs, detail: Settings.sharedManager().currentLogValue().name, isSwitch: nil, id: 17))
         general.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
         general.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, id: 12))
         general.append(SettingsItem(title: Localizable.shared.strings.change_wallet_password, detail: nil, isSwitch: nil, id: 1))
@@ -247,6 +248,18 @@ extension SettingsViewModel {
                 self?.onDataChanged?()
             }
             vc.hidesBottomBarWhenPushed = true
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onLogScreen() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = LogPickerViewController()
+            vc.completion = { [weak self]  in
+                self?.items.removeAll()
+                self?.initItems()
+                self?.onDataChanged?()
+            }
             top.pushViewController(vc: vc)
         }
     }
