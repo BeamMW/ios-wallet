@@ -455,6 +455,11 @@ class LocalizableStrings : NSObject {
     var display_seed = "display_seed".localized
     var confirm_seed_text = "confirm_seed_text".localized
     var input_seed = "input_seed".localized
+    var intro_seed_main = "intro_seed_main".localized
+    var intro_seed_1 = "intro_seed_1".localized
+    var intro_seed_2 = "intro_seed_2".localized
+    var intro_seed_3 = "intro_seed_3".localized
+
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

@@ -89,8 +89,7 @@ class StatusViewModel: NSObject {
             result.append(.faucet)
         }
         
-        var canMakeSecure = OnboardManager.shared.canMakeSecure()
-        
+        let canMakeSecure = OnboardManager.shared.canMakeSecure()
 
         if canMakeSecure {
             result.append(.verefication)

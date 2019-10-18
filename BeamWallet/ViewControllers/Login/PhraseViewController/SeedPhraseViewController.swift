@@ -13,6 +13,7 @@ class SeedPhraseViewController: BaseViewController {
         case display
         case confirm
         case restore
+        case intro
     }
     
     private var collectionView: UICollectionView!
@@ -55,11 +56,12 @@ class SeedPhraseViewController: BaseViewController {
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 50, left: 15, bottom: 50, right: 15)
         
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.register(UINib(nibName: WordCell.nib, bundle: nil), forCellWithReuseIdentifier: WordCell.reuseIdentifier)
         collectionView.register(UINib(nibName: InputWordCell.nib, bundle: nil), forCellWithReuseIdentifier: InputWordCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: SeedIntroCell.nib, bundle: nil), forCellWithReuseIdentifier: SeedIntroCell.reuseIdentifier)
         collectionView.register(UINib(nibName: CollectionTextHeader.nib, bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionTextHeader.reuseIdentifier)
         collectionView.register(UINib(nibName: CollectionButtonFooter.nib, bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CollectionButtonFooter.reuseIdentifier)
         
@@ -104,10 +106,11 @@ class SeedPhraseViewController: BaseViewController {
             }
         case .restore:
             title = Localizable.shared.strings.restore_wallet_title
-            
             for i in 0 ... 11 {
                 inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
             }
+        case .intro:
+            title = Localizable.shared.strings.seed_prhase
         default:
             break
         }
@@ -116,8 +119,8 @@ class SeedPhraseViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        let y = navigationBarOffset - 30
-        collectionView.frame = CGRect(x: 15, y: y, width: view.bounds.width - 30, height: view.bounds.size.height - y)
+        let y = navigationBarOffset - (Device.isXDevice ? 0 : 30)
+        collectionView.frame = CGRect(x: 0, y: y, width: view.bounds.width, height: view.bounds.size.height - y)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -134,7 +137,6 @@ class SeedPhraseViewController: BaseViewController {
                 let phrase = MnemonicModel.generatePhrase()
                 words = phrase.components(separatedBy: ";")
             }
-            
         default:
             break
         }
@@ -152,14 +154,21 @@ class SeedPhraseViewController: BaseViewController {
         alert(message: Localizable.shared.strings.seed_capture_warning)
     }
     
+    //MARK: - Actions
+    
     @objc private func onNext() {
         if event == .display {
-            confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { _ in
-                
-            }) { _ in
-                let vc = SeedPhraseViewController(event: .confirm, words: self.words)
-                vc.increaseSecutirty = self.increaseSecutirty
-                self.pushViewController(vc: vc)
+            if increaseSecutirty, !OnboardManager.shared.isSkipedSeed() {
+                back()
+            }
+            else {
+                confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { _ in
+                    
+                }) { _ in
+                    let vc = SeedPhraseViewController(event: .confirm, words: self.words)
+                    vc.increaseSecutirty = self.increaseSecutirty
+                    self.pushViewController(vc: vc)
+                }
             }
         }
         else if event == .confirm {
@@ -196,6 +205,10 @@ class SeedPhraseViewController: BaseViewController {
                     .withPhrase(phrase: words.joined(separator: ";"))
                 strongSelf.pushViewController(vc: vc)
             }
+        }
+        else if event == .intro {
+            let vc = SeedPhraseViewController(event: .display, words: nil)
+            pushViewController(vc: vc)
         }
     }
     
@@ -245,6 +258,42 @@ class SeedPhraseViewController: BaseViewController {
             ShowCopied()
         }
     }
+    
+    //MARK: -
+
+    func isCorrectPhrase() -> Bool {
+        var corretPhrase = true
+        for i in 0 ... confirmCountWords - 1 {
+            if inputWords[i].value.isEmpty {
+                corretPhrase = false
+                break
+            }
+            else if !inputWords[i].correct {
+                corretPhrase = false
+                break
+            }
+        }
+        return corretPhrase
+    }
+    
+    func introOptions(row:Int) -> (text: String, image:UIImage?) {
+        switch row {
+        case 0:
+            return (text: Localizable.shared.strings.intro_seed_1, image: UIImage(named: "iconEye"))
+        case 1:
+            return (text: Localizable.shared.strings.intro_seed_2, image: UIImage(named: "iconPassword"))
+        case 2:
+            return (text: Localizable.shared.strings.intro_seed_3, image: UIImage(named: "iconCopy"))
+        default:
+            return (text: "", image: UIImage())
+        }
+    }
+    
+    func introHeight(row:Int) -> Int {
+        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let w = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 75
+        return Int(introOptions(row: row).text.height(withConstrainedWidth: w, font: RegularFont(size: 15))) + 30
+    }
 }
 
 // MARK: UICollectionViewDataSource
@@ -256,22 +305,27 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
             return confirmCountWords
         case .restore:
             return inputWords.count
+        case .intro:
+            return 3
         default:
             return words.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if event != .display {
-            let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: InputWordCell.reuseIdentifier,
-                                                           for: indexPath) as! InputWordCell)
-                .configured(with: inputWords[indexPath.row], delegate: self)
-            return cell
-        }
-        else {
+        switch event {
+        case .display:
             let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: WordCell.reuseIdentifier,
                                                            for: indexPath) as! WordCell)
                 .configured(with: (word: words[indexPath.row], number: String(indexPath.row + 1)))
+            return cell
+        case .intro:
+            let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: SeedIntroCell.reuseIdentifier, for: indexPath) as! SeedIntroCell)
+                .configured(with: introOptions(row: indexPath.row))
+            return cell
+        default:
+            let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: InputWordCell.reuseIdentifier, for: indexPath) as! InputWordCell)
+                .configured(with: inputWords[indexPath.row], delegate: self)
             return cell
         }
     }
@@ -286,8 +340,13 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
             footer.btn1.addTarget(self, action: #selector(onNext), for: .touchUpInside)
             footer.btn2.addTarget(self, action: #selector(onBack), for: .touchUpInside)
             
-            if event != .display {
+            if event != .display && event != .intro {
                 footer.btn1.isEnabled = isCorrectPhrase()
+            }
+            else if event == .display, increaseSecutirty, !OnboardManager.shared.isSkipedSeed() {
+                footer.btn2.isHidden = true
+                footer.btn1.setTitle(Localizable.shared.strings.done.lowercased(), for: .normal)
+                footer.btn1.setImage(IconDoneBlue(), for: .normal)
             }
             
             return footer
@@ -315,7 +374,7 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
 
 extension SeedPhraseViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let noOfCellsInRow = 2
+        let noOfCellsInRow = (event == .intro) ? 1 : 2
         
         let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         
@@ -325,7 +384,9 @@ extension SeedPhraseViewController: UICollectionViewDelegateFlowLayout {
         
         let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
         
-        return CGSize(width: size, height: 38)
+        let height = (event == .intro) ? introHeight(row: indexPath.row) : 38
+        
+        return CGSize(width: size, height: height)
     }
 }
 
@@ -375,21 +436,6 @@ extension SeedPhraseViewController: InputWordCellCellDelegate {
                 footer.btn1.isEnabled = isCorrectPhrase()
             }
         }
-    }
-    
-    func isCorrectPhrase() -> Bool {
-        var corretPhrase = true
-        for i in 0 ... confirmCountWords - 1 {
-            if inputWords[i].value.isEmpty {
-                corretPhrase = false
-                break
-            }
-            else if !inputWords[i].correct {
-                corretPhrase = false
-                break
-            }
-        }
-        return corretPhrase
     }
 }
 

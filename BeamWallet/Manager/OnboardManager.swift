@@ -108,9 +108,10 @@ class OnboardManager: NSObject {
     }
     
     public func makeSecure() {
-        AppModel.sharedManager().completeWalletVerification()
         UserDefaults.standard.set(false, forKey: isSkipedSeedKey)
         UserDefaults.standard.synchronize()
+        
+        AppModel.sharedManager().completeWalletVerification()
     }
     
     public func canMakeSecure() -> Bool {

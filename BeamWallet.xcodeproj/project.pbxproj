@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C58997BBD95511DB5847C74 /* Pods_BeamWalletMasterNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86B5F9A14B76D84596BA8C8C /* Pods_BeamWalletMasterNet.framework */; };
 		575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */; };
-		9207FF3F222932DA009D931B /* IntroPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */; };
-		9207FF40222932DA009D931B /* IntroPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */; };
 		9207FF4222293341009D931B /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF4122293341009D931B /* SF-Pro-Display-Regular.otf */; };
 		9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF432229336E009D931B /* SF-Pro-Display-Semibold.otf */; };
 		9207FF4C22294394009D931B /* WordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF4A22294394009D931B /* WordCell.swift */; };
@@ -453,7 +451,6 @@
 		9288DD5B223A55410020C501 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A856B222E835300A3B747 /* TableView.swift */; };
 		9288DD5C223A55410020C501 /* EnterWalletPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92365B04222D743A000D7064 /* EnterWalletPasswordViewController.swift */; };
 		9288DD5D223A55410020C501 /* WordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF4A22294394009D931B /* WordCell.swift */; };
-		9288DD5E223A55410020C501 /* IntroPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */; };
 		9288DD5F223A55410020C501 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435253222E73E900A0EF37 /* SettingsViewController.swift */; };
 		9288DD60223A55410020C501 /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366A22383D2300E0810B /* QRScannerViewController.swift */; };
 		9288DD77223A55410020C501 /* WalletTransactionSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A857B222EC10C00A3B747 /* WalletTransactionSearchCell.xib */; };
@@ -465,7 +462,6 @@
 		9288DD7F223A55410020C501 /* WordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF4B22294394009D931B /* WordCell.xib */; };
 		9288DD81223A55410020C501 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AE366B22383D2300E0810B /* QRScannerViewController.xib */; };
 		9288DD82223A55410020C501 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 925AD60022282C8400DDE66B /* SF-Pro-Display-Bold.otf */; };
-		9288DD83223A55410020C501 /* IntroPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */; };
 		9288DD85223A55410020C501 /* CreateWalletProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */; };
 		9288DD89223A55410020C501 /* WalletProgressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A8574222EA54F00A3B747 /* WalletProgressCell.xib */; };
 		9288DD8A223A55410020C501 /* QRViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A1BA022236920C008135B5 /* QRViewController.xib */; };
@@ -772,7 +768,6 @@
 		92E2EB25226F21C700367928 /* EnterWalletPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92365B04222D743A000D7064 /* EnterWalletPasswordViewController.swift */; };
 		92E2EB26226F21C700367928 /* WordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF4A22294394009D931B /* WordCell.swift */; };
 		92E2EB27226F21C700367928 /* NodeModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92BA7EC6225238C7002D9367 /* NodeModel.mm */; };
-		92E2EB28226F21C700367928 /* IntroPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */; };
 		92E2EB29226F21C700367928 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435253222E73E900A0EF37 /* SettingsViewController.swift */; };
 		92E2EB2A226F21C700367928 /* TransactionUTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92790DA2224E59E800F79D64 /* TransactionUTXOCell.swift */; };
 		92E2EB2B226F21C700367928 /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE366A22383D2300E0810B /* QRScannerViewController.swift */; };
@@ -796,7 +791,6 @@
 		92E2EB59226F21C700367928 /* UTXOTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F68C8C2245070200197D4D /* UTXOTransactionCell.xib */; };
 		92E2EB5A226F21C700367928 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92AE366B22383D2300E0810B /* QRScannerViewController.xib */; };
 		92E2EB5B226F21C700367928 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 925AD60022282C8400DDE66B /* SF-Pro-Display-Bold.otf */; };
-		92E2EB5C226F21C700367928 /* IntroPhraseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */; };
 		92E2EB60226F21C700367928 /* CreateWalletProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92538F60222B5F7E00792A25 /* CreateWalletProgressViewController.xib */; };
 		92E2EB63226F21C700367928 /* PaymentProofDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92790DA9224E6FDE00F79D64 /* PaymentProofDetailViewController.xib */; };
 		92E2EB66226F21C700367928 /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
@@ -834,6 +828,12 @@
 		92E4AED22359A055004062A1 /* CollectionButtonFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */; };
 		92E4AED32359A055004062A1 /* CollectionButtonFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */; };
 		92E4AED42359A055004062A1 /* CollectionButtonFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */; };
+		92E4AEE02359DC27004062A1 /* SeedIntroCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEDE2359DC27004062A1 /* SeedIntroCell.swift */; };
+		92E4AEE12359DC27004062A1 /* SeedIntroCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEDE2359DC27004062A1 /* SeedIntroCell.swift */; };
+		92E4AEE22359DC27004062A1 /* SeedIntroCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEDE2359DC27004062A1 /* SeedIntroCell.swift */; };
+		92E4AEE32359DC27004062A1 /* SeedIntroCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AEDF2359DC27004062A1 /* SeedIntroCell.xib */; };
+		92E4AEE42359DC27004062A1 /* SeedIntroCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AEDF2359DC27004062A1 /* SeedIntroCell.xib */; };
+		92E4AEE52359DC27004062A1 /* SeedIntroCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AEDF2359DC27004062A1 /* SeedIntroCell.xib */; };
 		92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
@@ -992,8 +992,6 @@
 		7BFB7F991044E9C6718DE261 /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
 		806FA090202F1A0731331665 /* Pods_BeamWalletNotificationView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletNotificationView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B5F9A14B76D84596BA8C8C /* Pods_BeamWalletMasterNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletMasterNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroPhraseViewController.swift; sourceTree = "<group>"; };
-		9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IntroPhraseViewController.xib; sourceTree = "<group>"; };
 		9207FF4122293341009D931B /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
 		9207FF432229336E009D931B /* SF-Pro-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Semibold.otf"; sourceTree = "<group>"; };
 		9207FF4A22294394009D931B /* WordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCell.swift; sourceTree = "<group>"; };
@@ -1349,6 +1347,8 @@
 		92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionTextHeader.xib; sourceTree = "<group>"; };
 		92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionButtonFooter.swift; sourceTree = "<group>"; };
 		92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionButtonFooter.xib; sourceTree = "<group>"; };
+		92E4AEDE2359DC27004062A1 /* SeedIntroCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedIntroCell.swift; sourceTree = "<group>"; };
+		92E4AEDF2359DC27004062A1 /* SeedIntroCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SeedIntroCell.xib; sourceTree = "<group>"; };
 		92E5E2FB22EEE0790098C699 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		92E884B7223F93FF0003D6BB /* BMUTXO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMUTXO.h; sourceTree = "<group>"; };
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
@@ -1554,8 +1554,6 @@
 			isa = PBXGroup;
 			children = (
 				9207FF51222949F6009D931B /* Cells */,
-				9207FF3D222932DA009D931B /* IntroPhraseViewController.swift */,
-				9207FF3E222932DA009D931B /* IntroPhraseViewController.xib */,
 				92E4AEC1235995F0004062A1 /* SeedPhraseViewController.swift */,
 			);
 			path = PhraseViewController;
@@ -1587,6 +1585,8 @@
 				92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */,
 				92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */,
 				92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */,
+				92E4AEDE2359DC27004062A1 /* SeedIntroCell.swift */,
+				92E4AEDF2359DC27004062A1 /* SeedIntroCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2558,6 +2558,7 @@
 				926F4B2922E0CDB7007755D9 /* LICENSE in Resources */,
 				9243C2EA22970EF10018B52D /* BMAddressCell.xib in Resources */,
 				9232EC982267383700A12EEE /* GoogleService-Info.plist in Resources */,
+				92E4AEE32359DC27004062A1 /* SeedIntroCell.xib in Resources */,
 				9225D55B229455CA0067B4EA /* ReceiveAddressButtonsCell.xib in Resources */,
 				925AD5E32228254F00DDE66B /* Assets.xcassets in Resources */,
 				923544852255F45B00889C74 /* SettingsCell.xib in Resources */,
@@ -2568,7 +2569,6 @@
 				927EDE3F22A6B47C005D5CEA /* BMMultiLinesCell.xib in Resources */,
 				92AE366D22383D2300E0810B /* QRScannerViewController.xib in Resources */,
 				925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */,
-				9207FF40222932DA009D931B /* IntroPhraseViewController.xib in Resources */,
 				92F6B78C22A541040055C3C3 /* SendAllCell.xib in Resources */,
 				9212DB9C22E0990D0053FC99 /* BMEmptyView.xib in Resources */,
 				92CC40EB22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
@@ -2630,6 +2630,7 @@
 				92790DA7224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */,
 				92E17910235735BD001C30A6 /* UnlockPasswordPopover.xib in Resources */,
 				92B39D6F2260CB97006D27A5 /* phrases.txt in Resources */,
+				92E4AEE42359DC27004062A1 /* SeedIntroCell.xib in Resources */,
 				926EB47C231E843800D059BC /* WalletTransactionCell.xib in Resources */,
 				9288DD78223A55410020C501 /* LaunchScreen.storyboard in Resources */,
 				9288DD79223A55410020C501 /* EnterWalletPasswordViewController.xib in Resources */,
@@ -2653,7 +2654,6 @@
 				9288DD81223A55410020C501 /* QRScannerViewController.xib in Resources */,
 				927993C522F424D300FF8ECC /* InfoPlist.strings in Resources */,
 				9288DD82223A55410020C501 /* SF-Pro-Display-Bold.otf in Resources */,
-				9288DD83223A55410020C501 /* IntroPhraseViewController.xib in Resources */,
 				9246F75E227C48830091FB0B /* BMEmptyCell.xib in Resources */,
 				92C00D1F22A009F100DDB579 /* OwnerKeyUnlockViewController.xib in Resources */,
 				9288DD85223A55410020C501 /* CreateWalletProgressViewController.xib in Resources */,
@@ -2718,6 +2718,7 @@
 				92E4AECC23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
 				92E2EB4D226F21C700367928 /* GoogleService-Info.plist in Resources */,
+				92E4AEE52359DC27004062A1 /* SeedIntroCell.xib in Resources */,
 				92B7DA3522D63EFB00D4F88B /* RestoreNodeViewController.xib in Resources */,
 				92E2EB51226F21C700367928 /* Localizable.strings in Resources */,
 				92E2EB52226F21C700367928 /* Assets.xcassets in Resources */,
@@ -2744,7 +2745,6 @@
 				92CC40ED22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				92E2EB5A226F21C700367928 /* QRScannerViewController.xib in Resources */,
 				92E2EB5B226F21C700367928 /* SF-Pro-Display-Bold.otf in Resources */,
-				92E2EB5C226F21C700367928 /* IntroPhraseViewController.xib in Resources */,
 				9261C282228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
 				92E2EB60226F21C700367928 /* CreateWalletProgressViewController.xib in Resources */,
 				92E2EB63226F21C700367928 /* PaymentProofDetailViewController.xib in Resources */,
@@ -3007,6 +3007,7 @@
 				92D6DB5E22DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				92365AD1222D3E79000D7064 /* AppModel.mm in Sources */,
 				926A8572222EA16000A3B747 /* String.swift in Sources */,
+				92E4AEE02359DC27004062A1 /* SeedIntroCell.swift in Sources */,
 				921AE99E22995B04008869EB /* BackButtonItem.swift in Sources */,
 				92FC9331225371D400555DE1 /* DiskStatusManager.m in Sources */,
 				92BA7EC322520915002D9367 /* BMTextView.swift in Sources */,
@@ -3179,7 +3180,6 @@
 				92480DA9229546300084512A /* BMCellProtocol.swift in Sources */,
 				92480DA2229540280084512A /* BMAmountCell.swift in Sources */,
 				927EDE4822A7F6BF005D5CEA /* InputFeePopover.swift in Sources */,
-				9207FF3F222932DA009D931B /* IntroPhraseViewController.swift in Sources */,
 				925AFBBB2297ECCF00B1C680 /* LeftMenuViewController.swift in Sources */,
 				92D2426D22F85B6C000945A6 /* TransactionsTableView.swift in Sources */,
 				92435255222E73E900A0EF37 /* SettingsViewController.swift in Sources */,
@@ -3208,6 +3208,7 @@
 				92D6DB5F22DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				9288DD2F223A55410020C501 /* AppModel.mm in Sources */,
 				9288DD30223A55410020C501 /* String.swift in Sources */,
+				92E4AEE12359DC27004062A1 /* SeedIntroCell.swift in Sources */,
 				921AE99F22995B04008869EB /* BackButtonItem.swift in Sources */,
 				92FC9332225371D400555DE1 /* DiskStatusManager.m in Sources */,
 				92BA7EC422520915002D9367 /* BMTextView.swift in Sources */,
@@ -3380,7 +3381,6 @@
 				92480DAA229546300084512A /* BMCellProtocol.swift in Sources */,
 				92480DA3229540280084512A /* BMAmountCell.swift in Sources */,
 				927EDE4922A7F6BF005D5CEA /* InputFeePopover.swift in Sources */,
-				9288DD5E223A55410020C501 /* IntroPhraseViewController.swift in Sources */,
 				925AFBBC2297ECCF00B1C680 /* LeftMenuViewController.swift in Sources */,
 				92D2426E22F85B6C000945A6 /* TransactionsTableView.swift in Sources */,
 				9288DD5F223A55410020C501 /* SettingsViewController.swift in Sources */,
@@ -3409,6 +3409,7 @@
 				92D6DB6022DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				92E2EAD2226F21C700367928 /* AppModel.mm in Sources */,
 				92E2EAD3226F21C700367928 /* String.swift in Sources */,
+				92E4AEE22359DC27004062A1 /* SeedIntroCell.swift in Sources */,
 				921AE9A022995B04008869EB /* BackButtonItem.swift in Sources */,
 				92E2EAD5226F21C700367928 /* DiskStatusManager.m in Sources */,
 				92E2EAD6226F21C700367928 /* BMTextView.swift in Sources */,
@@ -3581,7 +3582,6 @@
 				92480DAB229546300084512A /* BMCellProtocol.swift in Sources */,
 				92480DA4229540280084512A /* BMAmountCell.swift in Sources */,
 				927EDE4A22A7F6BF005D5CEA /* InputFeePopover.swift in Sources */,
-				92E2EB28226F21C700367928 /* IntroPhraseViewController.swift in Sources */,
 				925AFBBD2297ECCF00B1C680 /* LeftMenuViewController.swift in Sources */,
 				92D2426F22F85B6C000945A6 /* TransactionsTableView.swift in Sources */,
 				92E2EB29226F21C700367928 /* SettingsViewController.swift in Sources */,

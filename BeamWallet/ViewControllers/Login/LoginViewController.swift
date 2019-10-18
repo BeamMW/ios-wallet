@@ -76,8 +76,7 @@ class LoginViewController: BaseViewController {
     @IBAction func onCreateWallet(sender :UIButton) {
         AppModel.sharedManager().resetWallet(true)
         AppModel.sharedManager().isRestoreFlow = false;
-
-        pushViewController(vc: IntroPhraseViewController())
+        pushViewController(vc: SeedPhraseViewController(event: .intro, words: nil))
     }
 
     @IBAction func onLanguage(sender :UIButton) {

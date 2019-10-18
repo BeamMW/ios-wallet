@@ -22,6 +22,8 @@ class CollectionTextHeader: UICollectionReusableView {
             textLabel.text = Localizable.shared.strings.confirm_seed_text
         case .restore:
             textLabel.text = Localizable.shared.strings.input_seed
+        case .intro:
+            textLabel.text = Localizable.shared.strings.intro_seed_main
         }
     }
 }
