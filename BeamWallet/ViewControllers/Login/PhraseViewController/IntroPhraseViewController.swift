@@ -26,7 +26,6 @@ class IntroPhraseViewController: BaseWizardViewController {
 
     public var increaseSecutirty = false
     
-    
     override var isUppercasedTitle: Bool {
         get{
             return true
@@ -53,8 +52,8 @@ class IntroPhraseViewController: BaseWizardViewController {
     
 // MARK: IBAction
     @IBAction func onNext(sender :UIButton) {
-        let vc = DisplayPhraseViewController()
-        vc.increaseSecutirty = increaseSecutirty
+        let vc = SeedPhraseViewController(event: .display, words: nil)
+      //  vc.increaseSecutirty = increaseSecutirty
         pushViewController(vc: vc)
     }
 }

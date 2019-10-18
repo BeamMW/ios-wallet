@@ -84,7 +84,7 @@ public class BMLockScreen {
             seconds = 0
             inactiveDate = 0
             
-            let unlock = UnlockPasswordViewController(event: .unlock)
+            let unlock = UnlockPasswordViewController(event: .unlockSecurity)
             unlock.disableMenu = true
             unlock.completion = { [weak self]
                 obj in
@@ -103,7 +103,8 @@ public class BMLockScreen {
             vc.navigationBar.backgroundColor = .clear
             vc.navigationBar.tintColor = UIColor.white
             vc.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
-            
+            vc.modalPresentationStyle = .fullScreen
+
             topVc.present(vc, animated: false, completion: nil)
         }
     }

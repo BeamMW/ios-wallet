@@ -835,6 +835,21 @@
 		92E2EB89226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EB87226F222800367928 /* LaunchScreenMasterNet.storyboard */; };
 		92E2EB8A226F222900367928 /* LaunchScreenMasterNet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EB87226F222800367928 /* LaunchScreenMasterNet.storyboard */; };
 		92E2EB8C226F225700367928 /* bgMasternet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EB8B226F225700367928 /* bgMasternet.jpg */; };
+		92E4AEC2235995F0004062A1 /* SeedPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEC1235995F0004062A1 /* SeedPhraseViewController.swift */; };
+		92E4AEC3235995F0004062A1 /* SeedPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEC1235995F0004062A1 /* SeedPhraseViewController.swift */; };
+		92E4AEC4235995F0004062A1 /* SeedPhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEC1235995F0004062A1 /* SeedPhraseViewController.swift */; };
+		92E4AEC623599D3B004062A1 /* CollectionTextHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEC523599D3B004062A1 /* CollectionTextHeader.swift */; };
+		92E4AEC723599D3B004062A1 /* CollectionTextHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEC523599D3B004062A1 /* CollectionTextHeader.swift */; };
+		92E4AEC823599D3B004062A1 /* CollectionTextHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AEC523599D3B004062A1 /* CollectionTextHeader.swift */; };
+		92E4AECA23599D46004062A1 /* CollectionTextHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */; };
+		92E4AECB23599D46004062A1 /* CollectionTextHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */; };
+		92E4AECC23599D46004062A1 /* CollectionTextHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */; };
+		92E4AECE2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */; };
+		92E4AECF2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */; };
+		92E4AED02359A03E004062A1 /* CollectionButtonFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */; };
+		92E4AED22359A055004062A1 /* CollectionButtonFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */; };
+		92E4AED32359A055004062A1 /* CollectionButtonFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */; };
+		92E4AED42359A055004062A1 /* CollectionButtonFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */; };
 		92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E884B8223F93FF0003D6BB /* BMUTXO.m */; };
 		92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
@@ -1351,6 +1366,11 @@
 		92E2EB85226F21C700367928 /* BeamWalletMasterNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamWalletMasterNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E2EB88226F222800367928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenMasterNet.storyboard; sourceTree = "<group>"; };
 		92E2EB8B226F225700367928 /* bgMasternet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgMasternet.jpg; sourceTree = "<group>"; };
+		92E4AEC1235995F0004062A1 /* SeedPhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseViewController.swift; sourceTree = "<group>"; };
+		92E4AEC523599D3B004062A1 /* CollectionTextHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTextHeader.swift; sourceTree = "<group>"; };
+		92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionTextHeader.xib; sourceTree = "<group>"; };
+		92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionButtonFooter.swift; sourceTree = "<group>"; };
+		92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionButtonFooter.xib; sourceTree = "<group>"; };
 		92E5E2FB22EEE0790098C699 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		92E884B7223F93FF0003D6BB /* BMUTXO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMUTXO.h; sourceTree = "<group>"; };
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
@@ -1566,6 +1586,7 @@
 				92FC610822294F7D00AEABC1 /* ConfirmPhraseViewController.xib */,
 				929885F1222A15300038C015 /* InputPhraseViewController.swift */,
 				929885F2222A15300038C015 /* InputPhraseViewController.xib */,
+				92E4AEC1235995F0004062A1 /* SeedPhraseViewController.swift */,
 			);
 			path = PhraseViewController;
 			sourceTree = "<group>";
@@ -1592,6 +1613,10 @@
 				9207FF4B22294394009D931B /* WordCell.xib */,
 				92FC610B22295A6E00AEABC1 /* InputWordCell.swift */,
 				92FC610C22295A6E00AEABC1 /* InputWordCell.xib */,
+				92E4AEC523599D3B004062A1 /* CollectionTextHeader.swift */,
+				92E4AEC923599D46004062A1 /* CollectionTextHeader.xib */,
+				92E4AECD2359A03E004062A1 /* CollectionButtonFooter.swift */,
+				92E4AED12359A055004062A1 /* CollectionButtonFooter.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2554,6 +2579,7 @@
 				92FE263B22A11E4E00102DB4 /* BMPickedAddressCell.xib in Resources */,
 				92C00D2E22A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */,
 				9212DBBD22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
+				92E4AECA23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92B7DA3322D63EFB00D4F88B /* RestoreNodeViewController.xib in Resources */,
 				92B39D6E2260CB97006D27A5 /* phrases.txt in Resources */,
 				925AD5E62228254F00DDE66B /* LaunchScreen.storyboard in Resources */,
@@ -2599,6 +2625,7 @@
 				92A1BA042236920C008135B5 /* QRViewController.xib in Resources */,
 				9261C280228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
 				926A8570222E97DF00A3B747 /* WalletAvailableCell.xib in Resources */,
+				92E4AED22359A055004062A1 /* CollectionButtonFooter.xib in Resources */,
 				926A856A222E7FD900A3B747 /* WalletStatusCell.xib in Resources */,
 				9225D53722941F940067B4EA /* SFProText-Medium.ttf in Resources */,
 				92C00D1E22A009F100DDB579 /* OwnerKeyUnlockViewController.xib in Resources */,
@@ -2687,6 +2714,7 @@
 				9225D53822941F940067B4EA /* SFProText-Medium.ttf in Resources */,
 				9231E3FA225CC3A000121B33 /* SF-Pro-Display-LightItalic.otf in Resources */,
 				9288DD8E223A55410020C501 /* ProximaNova-Regular.ttf in Resources */,
+				92E4AED32359A055004062A1 /* CollectionButtonFooter.xib in Resources */,
 				9288DD8F223A55410020C501 /* SF-Pro-Display-Semibold.otf in Resources */,
 				9288DD90223A55410020C501 /* LoginViewController.xib in Resources */,
 				9212DB9D22E0990D0053FC99 /* BMEmptyView.xib in Resources */,
@@ -2701,6 +2729,7 @@
 				926F4B2A22E0CDB7007755D9 /* LICENSE in Resources */,
 				92F68C812244E77500197D4D /* UTXODetailCell.xib in Resources */,
 				92090D0D223A684000A1CFBB /* bgTestnet.jpg in Resources */,
+				92E4AECB23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92C00D2722A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
 				9235448C2256019C00889C74 /* UnlockPasswordViewController.xib in Resources */,
 			);
@@ -2723,6 +2752,7 @@
 				92E2EB4B226F21C700367928 /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				926EB47D231E843800D059BC /* WalletTransactionCell.xib in Resources */,
 				92E2EB4C226F21C700367928 /* InputWordCell.xib in Resources */,
+				92E4AECC23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
 				92E2EB4D226F21C700367928 /* GoogleService-Info.plist in Resources */,
 				92B7DA3522D63EFB00D4F88B /* RestoreNodeViewController.xib in Resources */,
@@ -2781,6 +2811,7 @@
 				92B7DA2D22D6254F00D4F88B /* RestoreOptionCell.xib in Resources */,
 				92E2EB76226F21C700367928 /* LoginViewController.xib in Resources */,
 				92E2EB77226F21C700367928 /* CreateWalletPasswordViewController.xib in Resources */,
+				92E4AED42359A055004062A1 /* CollectionButtonFooter.xib in Resources */,
 				92E2EB78226F21C700367928 /* ProximaNova-Bold.ttf in Resources */,
 				92E2EB79226F21C700367928 /* LaunchScreenTestNet.storyboard in Resources */,
 				92E2EB7A226F21C700367928 /* UTXODetailCell.xib in Resources */,
@@ -3069,6 +3100,7 @@
 				92F68C7E2244E77500197D4D /* UTXODetailCell.swift in Sources */,
 				927D2F8A22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
 				92C4F2E422B24F58001391FB /* RestoreManager.swift in Sources */,
+				92E4AECE2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
 				9235EB0E2296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
 				92790D9A224E41E800F79D64 /* BMPaymentProof.m in Sources */,
 				92C5EBA2229BE48E00ABFFF7 /* PreviewQRViewController.swift in Sources */,
@@ -3099,6 +3131,8 @@
 				92B8374D22859210002B385B /* Resources.swift in Sources */,
 				922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
+				92E4AEC2235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				92E4AEC623599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				929885F6222B2B1F0038C015 /* Label.swift in Sources */,
 				927EDE3422A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
 				9212DB9422E07ECA0053FC99 /* AddressTableView.swift in Sources */,
@@ -3270,6 +3304,7 @@
 				92F68C7F2244E77500197D4D /* UTXODetailCell.swift in Sources */,
 				927D2F8B22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
 				92C4F2E522B24F58001391FB /* RestoreManager.swift in Sources */,
+				92E4AECF2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
 				9235EB0F2296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
 				92790D9B224E41E800F79D64 /* BMPaymentProof.m in Sources */,
 				92C5EBA3229BE48E00ABFFF7 /* PreviewQRViewController.swift in Sources */,
@@ -3300,6 +3335,8 @@
 				92B8374E22859210002B385B /* Resources.swift in Sources */,
 				922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				9288DD47223A55410020C501 /* AppDelegate.swift in Sources */,
+				92E4AEC3235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				92E4AEC723599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				9288DD48223A55410020C501 /* Label.swift in Sources */,
 				927EDE3522A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
 				9212DB9522E07ECA0053FC99 /* AddressTableView.swift in Sources */,
@@ -3471,6 +3508,7 @@
 				92E2EAEA226F21C700367928 /* UTXODetailCell.swift in Sources */,
 				927D2F8C22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
 				92C4F2E622B24F58001391FB /* RestoreManager.swift in Sources */,
+				92E4AED02359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
 				9235EB102296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
 				92E2EAEB226F21C700367928 /* BMPaymentProof.m in Sources */,
 				92C5EBA4229BE48E00ABFFF7 /* PreviewQRViewController.swift in Sources */,
@@ -3501,6 +3539,8 @@
 				92B8374F22859210002B385B /* Resources.swift in Sources */,
 				922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				92E2EAF9226F21C700367928 /* AppDelegate.swift in Sources */,
+				92E4AEC4235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				92E4AEC823599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				92E2EAFB226F21C700367928 /* Label.swift in Sources */,
 				927EDE3622A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
 				9212DB9622E07ECA0053FC99 /* AddressTableView.swift in Sources */,

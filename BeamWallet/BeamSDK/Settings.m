@@ -292,7 +292,7 @@ static NSString *logsKey = @"logsKey";
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    if(![[AppModel sharedManager] isRestoreFlow]){
+    if([[AppModel sharedManager] isLoggedin]){
         for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {

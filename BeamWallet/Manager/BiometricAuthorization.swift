@@ -29,6 +29,7 @@ public typealias AuthorizationRetry = (() -> ())
 class BiometricAuthorization: NSObject {
     
     public static let shared = BiometricAuthorization()
+    public var isAuthorizationProccess = false
     
     public func canAuthenticate() -> Bool {
         var isBiometricAuthenticationAvailable = false
@@ -68,6 +69,8 @@ class BiometricAuthorization: NSObject {
     }
     
     public func authenticateWithBioMetrics(success successBlock: @escaping AuthorizationSuccess, failure failureBlock: @escaping AuthorizationFailure, retry retryBlock: @escaping AuthorizationRetry, reasonText:String? = nil) {
+        
+        isAuthorizationProccess = true
         
         let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.face_id : Localizable.shared.strings.touch_id
 
@@ -115,6 +118,8 @@ class BiometricAuthorization: NSObject {
                         failureBlock()
                     }
                 }
+                
+                self.isAuthorizationProccess = false
             }
         }
     }

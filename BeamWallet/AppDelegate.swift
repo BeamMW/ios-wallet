@@ -62,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NotificationManager.sharedManager.requestPermissions()
         
+        AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()

@@ -112,9 +112,7 @@ const int kFeeInGroth_Fork1 = 100;
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
         
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
-    
-    [self checkRecoveryWallet];
-    
+        
     [self checkInternetConnection];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -448,7 +446,7 @@ const int kFeeInGroth_Fork1 = 100;
     }
     
     [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
-    [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] setObject:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.isRestoreFlow = YES;

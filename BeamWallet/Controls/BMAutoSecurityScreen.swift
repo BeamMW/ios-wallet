@@ -43,10 +43,9 @@ public class BMAutoSecurityScreen {
     }
 
     @objc private func addBlur() {
-//        if let topVC = UIApplication.getTopMostViewController() {
-//            print(topVC)
-//        }
-//        createBlurEffect()
+        if !BiometricAuthorization.shared.isAuthorizationProccess {
+            createBlurEffect()
+        }
     }
 
     @objc private func removeBlur() {

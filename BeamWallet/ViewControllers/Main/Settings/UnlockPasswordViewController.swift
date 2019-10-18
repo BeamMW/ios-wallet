@@ -25,6 +25,7 @@ class UnlockPasswordViewController: BaseViewController {
         case unlock
         case changePassword
         case seedPhrase
+        case unlockSecurity
     }
     
     @IBOutlet private weak var passField: BMField!
@@ -65,6 +66,9 @@ class UnlockPasswordViewController: BaseViewController {
         case .unlock:
             title = Localizable.shared.strings.your_password
             titleLabel.text = Localizable.shared.strings.unlock_password
+        case .unlockSecurity:
+            title = Localizable.shared.strings.your_password
+            titleLabel.text = Localizable.shared.strings.enter_your_password
         case .changePassword:
             title = Localizable.shared.strings.change_password
         default:
@@ -100,14 +104,14 @@ class UnlockPasswordViewController: BaseViewController {
                 isUnlocked = true
                 
                 if event == .seedPhrase {
-                   let vc = IntroPhraseViewController()
-                   vc.increaseSecutirty = true
+                  let vc = SeedPhraseViewController(event: .increaseSecurity, words: nil)
+                  // vc.increaseSecutirty = true
                    if var viewControllers = self.navigationController?.viewControllers {
                        viewControllers[viewControllers.count - 1] = vc
                        navigationController?.setViewControllers(viewControllers, animated: true)
                    }
                 }
-                else if event == .unlock {
+                else if event == .unlock || event == .unlockSecurity {
                     if navigationController?.viewControllers.count == 1 {
                         dismiss(animated: true) {
                             
