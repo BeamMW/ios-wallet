@@ -64,6 +64,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
 @property (nonatomic, strong) NSString * _Nonnull whereBuyAddress;
 @property (nonatomic, strong) NSString * _Nonnull language;
+@property (nonatomic, assign) int logDays;
 
 -(BOOL)isChangedNode;
 -(void)resetSettings;

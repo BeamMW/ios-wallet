@@ -115,7 +115,7 @@ extension BMMultiLinesCell: Configurable {
         
         nameLabel.adjustFontSize = true
         
-        if item.title == Localizable.shared.strings.send_to || item.title == Localizable.shared.strings.outgoing_address.uppercased() {
+        if item.title == Localizable.shared.strings.send_to || item.title == Localizable.shared.strings.outgoing_address.uppercased()  {
             
             let address = AppModel.sharedManager().findAddress(byID: item.detail ?? String.empty())
             
@@ -167,7 +167,7 @@ extension BMMultiLinesCell: Configurable {
             }
         }
         else if item.title == Localizable.shared.strings.my_send_address.uppercased() ||
-            item.title == Localizable.shared.strings.my_rec_address.uppercased() || item.title == Localizable.shared.strings.contact.uppercased() || item.title == Localizable.shared.strings.my_address.uppercased() {
+            item.title == Localizable.shared.strings.my_rec_address.uppercased() || item.title == Localizable.shared.strings.contact.uppercased() || item.title == Localizable.shared.strings.my_address.uppercased() || item.title == Localizable.shared.strings.sender.uppercased() || item.title == Localizable.shared.strings.receiver.uppercased() {
 
             var attributedString = NSMutableAttributedString(string:item.detail!)
 

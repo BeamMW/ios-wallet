@@ -234,7 +234,7 @@ extension TransactionViewModel : WalletModelDelegate {
                         $0.senderAddress.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
                         $0.id.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
                         $0.kernelId.lowercased().starts(with: strongSelf.searchString.lowercased()) ||
-                        $0.comment.lowercased().contains(strongSelf.searchString.lowercased()) || $0.senderContactName.lowercased().contains(strongSelf.searchString.lowercased()) || $0.receiverContactName.lowercased().contains(strongSelf.searchString.lowercased())
+                        $0.comment.lowercased().starts(with:strongSelf.searchString.lowercased()) || $0.senderContactName.lowercased().starts(with:strongSelf.searchString.lowercased()) || $0.receiverContactName.lowercased().starts(with:strongSelf.searchString.lowercased())
                 }
                 
                 strongSelf.transactions.removeAll()
