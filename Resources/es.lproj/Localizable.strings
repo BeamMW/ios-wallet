@@ -14,7 +14,7 @@
 "open_another_wallet" = "Abrir otro wallet";
 "seed_capture_warning" = "Acabas de hacer una captura de tu frase semilla. Mantener la imagen en tu teléfono pone en riesgo tus fondos. Se recomienda encarecidamente eliminar la captura de pantalla manualmente de la galería de imágenes.";
 "seed_prhase" = "Frase semilla";
-"inpur_seed" = "Escribe en tu frase semilla";
+"input_seed" = "Escribe en tu frase semilla";
 "confirm_seed_text" = "Para asegurarse de que la frase semilla esté escrita correctamente, complete las palabras específicas a continuación";
 "display_seed" = "Su frase semilla es la clave de acceso a todas las criptomonedas en su wallet. Imprime o escribe la frase para guardarla en un lugar seguro o caja de seguridad. Sin la frase no podrás recuperar tu dinero.";
 "intro_seed_main" = "Crea un nuevo wallet generando una frase semilla. Si alguna vez pierdes tu dispositivo, necesitará esta frase para recuperar su wallet! Nunca escriba su frase semilla en keychains o administradores de contraseñas. Nunca lo guarde en sus carpetas locales o remotas de ninguna forma.";

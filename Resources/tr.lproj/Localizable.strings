@@ -14,7 +14,7 @@
 "open_another_wallet" = "Başka bir cüzdan aç";
 "seed_capture_warning" = "Anahtar kelimelerin ekran görüntüsünü aldınız. Resmin telefonunuzda tutulması paranızı tehlikeye atar. Ekran görüntüsünü resim galerinizden elle kaldırmanız şiddetle önerilir.";
 "seed_prhase" = "Anahtar kelimeler";
-"inpur_seed" = "Anahtar kelimelerinizi yazın";
+"input_seed" = "Anahtar kelimelerinizi yazın";
 "confirm_seed_text" = "Anahtar kelimelerin doğru yazıldığından emin olmak için lütfen aşağıdaki kelimeleri girin";
 "display_seed" = "Anahtar kelimeleriniz, cüzdanınızdaki tüm bakiyenin erişim anahtarıdır. Güvenli veya kilitli bir kasada saklamak için ifadeyi yazdırın veya yazın. İfade olmadan bakiyenize ulaşamazsınız.";
 "intro_seed_main" = "Anahtar kelimeleri kullanarak yeni bir cüzdan oluşturun. Cihazınızı kaybederseniz, cüzdanınızı kurtarmak için bu anahtar kelimelere ihtiyacınız olacak! Anahtar kelimelerinizi bir şifre yönetici uygulamasına yazmayın. Asla yerel ya da uzak klasörlerinize kaydetmeyin.";

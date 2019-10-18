@@ -27,7 +27,7 @@ protocol InputWordCellCellDelegate: AnyObject {
 
 class InputWordCell: UICollectionViewCell, Delegating {
 
-    static let reuseIdentifier = "WordCell"
+    static let reuseIdentifier = "InputWordCell"
     static let nib = "InputWordCell"
 
     @IBOutlet weak var wordField: BMWordField!

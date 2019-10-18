@@ -22,63 +22,59 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wyp-yH-ZU9">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="118"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="5Iu-v1-cmC">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="103"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sR9-jf-FGG" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="80.5" y="0.0" width="253" height="44"/>
-                                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="253" id="6Yd-Nt-qxh"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="complete verification" image="iconRecovery">
-                                        <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="complete_verification"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onButtonWithSender:" destination="kdm-ps-thR" eventType="touchUpInside" id="rDt-wF-Lem"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4uD-dE-Fca" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="80.5" y="59" width="253" height="44"/>
-                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="253" id="LnL-Qf-7aF"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                    <state key="normal" title="i will do it later" image="iconNextWhite">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="i_will_later"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onButtonWithSender:" destination="kdm-ps-thR" eventType="touchUpInside" id="P6C-kj-NoV"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sR9-jf-FGG" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                            <rect key="frame" x="80.5" y="0.0" width="253" height="44"/>
+                            <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="253" id="6Yd-Nt-qxh"/>
+                                <constraint firstAttribute="height" constant="44" id="IX7-J1-PZR"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                            <state key="normal" title="complete verification" image="iconRecovery">
+                                <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="22"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="complete_verification"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onButtonWithSender:" destination="kdm-ps-thR" eventType="touchUpInside" id="rDt-wF-Lem"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4uD-dE-Fca" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                            <rect key="frame" x="80.5" y="59" width="253" height="44"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="4lL-GE-Aef"/>
+                                <constraint firstAttribute="width" constant="253" id="LnL-Qf-7aF"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                            <state key="normal" title="i will do it later" image="iconNextWhite">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="22"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="i_will_later"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onButtonWithSender:" destination="kdm-ps-thR" eventType="touchUpInside" id="P6C-kj-NoV"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="5Iu-v1-cmC" secondAttribute="bottom" constant="15" id="2NK-KK-GSb"/>
-                        <constraint firstAttribute="trailing" secondItem="5Iu-v1-cmC" secondAttribute="trailing" id="6Bl-SO-PkT"/>
-                        <constraint firstItem="5Iu-v1-cmC" firstAttribute="leading" secondItem="Wyp-yH-ZU9" secondAttribute="leading" id="bHo-1E-Nzf"/>
-                        <constraint firstItem="5Iu-v1-cmC" firstAttribute="top" secondItem="Wyp-yH-ZU9" secondAttribute="top" id="wCN-At-Bk6"/>
-                        <constraint firstItem="5Iu-v1-cmC" firstAttribute="top" secondItem="Wyp-yH-ZU9" secondAttribute="top" id="wV8-je-Iu8"/>
+                        <constraint firstItem="sR9-jf-FGG" firstAttribute="top" secondItem="Wyp-yH-ZU9" secondAttribute="top" id="4KO-U2-EiC"/>
+                        <constraint firstItem="sR9-jf-FGG" firstAttribute="centerX" secondItem="Wyp-yH-ZU9" secondAttribute="centerX" id="YUm-4g-1k2"/>
+                        <constraint firstItem="4uD-dE-Fca" firstAttribute="centerX" secondItem="Wyp-yH-ZU9" secondAttribute="centerX" id="qiz-V1-6bw"/>
+                        <constraint firstItem="4uD-dE-Fca" firstAttribute="top" secondItem="sR9-jf-FGG" secondAttribute="bottom" constant="15" id="wVC-A4-Hhd"/>
                     </constraints>
                 </view>
             </subviews>
@@ -89,6 +85,10 @@
                 <constraint firstAttribute="trailing" secondItem="Wyp-yH-ZU9" secondAttribute="trailing" id="hgd-3p-1oj"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="pDg-gw-0nk"/>
+            <connections>
+                <outlet property="btn1" destination="sR9-jf-FGG" id="knW-4N-Zmn"/>
+                <outlet property="btn2" destination="4uD-dE-Fca" id="Yq0-VF-dHM"/>
+            </connections>
             <point key="canvasLocation" x="137.68115942028987" y="64.285714285714278"/>
         </collectionReusableView>
     </objects>

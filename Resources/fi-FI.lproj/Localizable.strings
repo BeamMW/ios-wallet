@@ -14,7 +14,7 @@
 "open_another_wallet" = "Avaa toinen lompakko";
 "seed_capture_warning" = "Olet juuri ottanut kuvakaappauksen palautusavaimestasi. Jos pidät kuvaa tallennettuna puhelimessasi, on olemassa riski, että joku ulkopuolinen pääsee käsiksi lompakkosi varallisuuteen. On erittäin suositeltavaa, että poistat kuvan pysyvästi puhelimestasi.";
 "seed_prhase" = "Palautusavain (seed phrase)";
-"inpur_seed" = "Kirjoita palautusavain";
+"input_seed" = "Kirjoita palautusavain";
 "confirm_seed_text" = "Varmistaaksesi, että palautusavaimesi sanat on kirjoitettu oikein, täytä alla olevat kentät, joihin kirjoitat sanat oikean numeron kohdalle";
 "display_seed" = "Palautusavaimellasi pääsee käsiksi kaikkeen lompakon varallisuuteen. Tulosta tai kirjoita huolellisesti ylös palautusavaimesi, sekä pidä se tallessa esimerkiksi kassakaapissa, pankkiholvissa tai muussa turvallisesti lukitussa tilassa. Ilman palautusavainta et voi palauttaa lompakkosi saldoa tarvittaessa.";
 "intro_seed_main" = "Luo uusi lompakko generoimalla palautusavain (seed phrase). Jos unohdat salasanasi tai kadotat laitteesi, tarvitset palautusavaimen, jolla voit palauttaa lompakkoon siirretyn varallisuuden. Älä koskaan tallenna palautusavainta salasananhallintaohjelmiin. Älä myöskään koskaan tallenna sitä omalle laitteellesi tai muuhunkaan vastaavaan digitaaliseen muotoon, kuten pilvipalvelinten tallennuskansioihin.";

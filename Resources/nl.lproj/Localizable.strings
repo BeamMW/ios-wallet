@@ -14,7 +14,7 @@
 "open_another_wallet" = "Open een andere portemonnee";
 "seed_capture_warning" = "U heeft zojuist een screenshot van uw herstelzin gemaakt. Door de afbeelding op uw telefoon te bewaren lopen uw tegoeden gevaar. Het is sterk aanbevolen de schermafbeelding handmatig uit uw fotogalerij te verwijderen.";
 "seed_prhase" = "Herstelzin";
-"inpur_seed" = "Typ uw herstelzin in";
+"input_seed" = "Typ uw herstelzin in";
 "confirm_seed_text" = "Om er zeker van te zijn dat de herstelzin correct is opgeschreven vult u de specifieke woorden hieronder in";
 "display_seed" = "Uw herstelzin is de toegangssleutel tot alle tegoeden in uw portemonnee. Print de zin uit of schrijf deze op en bewaar de zin op een veilige plaats zoals in een kluis. Zonder de zin kunt u uw portemonnee, en dus uw tegoeden, niet herstellen.";
 "intro_seed_main" = "Maak een nieuwe portemonnee door een herstelzin te genereren. Als u uw apparaat verliest, heeft u de herstelzin nodig om uw tegoeden te herstellen. Voer uw herstelzin nooit op wachtwoordbeheerders of dergelijke applicaties in. Sla het nooit op in uw lokale bestandssysteem of externe mappen van welke aard dan ook.";

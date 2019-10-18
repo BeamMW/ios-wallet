@@ -14,7 +14,7 @@
 "open_another_wallet" = "Ouvrir un nouveau portefeuille";
 "seed_capture_warning" = "Vous venez d'effectuer un capture d'écran de votre phrase clé. Sauvegarder cette capture met en danger vos fonds. Il est fortement recommendé d'effacer manuellement cette capture d'écran de toute application photo.";
 "seed_prhase" = "Phrase clé";
-"inpur_seed" = "Saisir votre phrase clé";
+"input_seed" = "Saisir votre phrase clé";
 "confirm_seed_text" = "Pour vous assurer que la phrase-clé est bien écrite, veuillez compléter les mots ci-dessous";
 "display_seed" = "Votre phrase clé est le moyen d'accéder à toutes les monnaies cryptées de votre portefeuille. Ecrivez la phrase pour la garder dans un coffre-fort ou dans un coffre-fort verrouillé. Sans cette phrase, vous ne pourrez pas récupérer votre argent.";
 "intro_seed_main" = "Créer un nouveau portefeuille en générant une phrase clé.\nSi vous perdez votre appareil,\nvous aurez besoin de cette phrase pour récupérer votre portefeuille! Merci de ne jamais sauvegarder cette phrase clé via un trousseau ou un manager de mot de passe. Ne l'enregistrez jamais dans vos dossiers locaux ou distants, sous quelque forme que ce soit.";

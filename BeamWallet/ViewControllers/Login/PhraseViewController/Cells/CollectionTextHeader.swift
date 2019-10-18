@@ -16,10 +16,12 @@ class CollectionTextHeader: UICollectionReusableView {
 
     public func setData(event:SeedPhraseViewController.EventType) {
         switch event {
-        case .display, .increaseSecurity:
+        case .display:
             textLabel.text = Localizable.shared.strings.display_seed
-        default:
-            break;
+        case .confirm:
+            textLabel.text = Localizable.shared.strings.confirm_seed_text
+        case .restore:
+            textLabel.text = Localizable.shared.strings.input_seed
         }
     }
 }

@@ -65,7 +65,7 @@ class LoginViewController: BaseViewController {
 
         if AppModel.sharedManager().canRestoreWallet() {
             AppModel.sharedManager().isRestoreFlow = true
-            self.pushViewController(vc: InputPhraseViewController())
+            self.pushViewController(vc: SeedPhraseViewController(event: .restore, words: nil))
         }
         else{
             self.alert(title: Localizable.shared.strings.no_space_title, message: Localizable.shared.strings.no_space_info) { (_ ) in

@@ -14,7 +14,7 @@
 "open_another_wallet" = "Open another wallet";
 "seed_capture_warning" = "You’ve just captured your seed phrase. Keeping the image on your phone puts your funds at risk. It is strongly recommended to remove the screenshot manually from your pictures gallery.";
 "seed_prhase" = "Seed phrase";
-"inpur_seed" = "Type in your seed phrase";
+"input_seed" = "Type in your seed phrase";
 "confirm_seed_text" = "To ensure the seed phrase is written down correctly, please fill in the specific words below";
 "display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "intro_seed_main" = "Create a new wallet by generating a seed phrase. If you lose your device, you will need the seed phrase to recover your funds. Never type your seed phrase in keychains or password managers. Never save it in your local filesystem or remote folders of any kind.";

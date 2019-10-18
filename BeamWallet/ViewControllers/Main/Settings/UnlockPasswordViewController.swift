@@ -20,7 +20,6 @@
 import UIKit
 
 class UnlockPasswordViewController: BaseViewController {
-
     enum UnlockEvent {
         case unlock
         case changePassword
@@ -28,17 +27,17 @@ class UnlockPasswordViewController: BaseViewController {
         case unlockSecurity
     }
     
-    @IBOutlet private weak var passField: BMField!
-    @IBOutlet private weak var titleLabel: UILabel!
-
-    private var event:UnlockEvent!
+    @IBOutlet private var passField: BMField!
+    @IBOutlet private var titleLabel: UILabel!
+    
+    private var event: UnlockEvent!
     private var isUnlocked = false
     
-    public var completion : ((Bool) -> Void)?
+    public var completion: ((Bool) -> Void)?
     
-    init(event:UnlockEvent) {
+    init(event: UnlockEvent) {
         super.init(nibName: nil, bundle: nil)
-
+        
         self.event = event
     }
     
@@ -47,10 +46,10 @@ class UnlockPasswordViewController: BaseViewController {
     }
     
     override var isUppercasedTitle: Bool {
-        get{
+        get {
             return true
         }
-        set{
+        set {
             super.isUppercasedTitle = true
         }
     }
@@ -89,7 +88,7 @@ class UnlockPasswordViewController: BaseViewController {
         completion?(isUnlocked)
     }
     
-    @IBAction func onLogin(sender :UIButton) {        
+    @IBAction func onLogin(sender: UIButton) {
         if passField.text?.isEmpty ?? true {
             passField.error = Localizable.shared.strings.empty_password
             passField.status = BMField.Status.error
@@ -100,32 +99,30 @@ class UnlockPasswordViewController: BaseViewController {
                 passField.error = Localizable.shared.strings.current_password_error
                 passField.status = BMField.Status.error
             }
-            else{
+            else {
                 isUnlocked = true
                 
-                if event == .seedPhrase {
-                  let vc = SeedPhraseViewController(event: .increaseSecurity, words: nil)
-                  // vc.increaseSecutirty = true
-                   if var viewControllers = self.navigationController?.viewControllers {
-                       viewControllers[viewControllers.count - 1] = vc
-                       navigationController?.setViewControllers(viewControllers, animated: true)
-                   }
+                if event == .seedPhrase, let seed = OnboardManager.shared.getSeed() {
+                    let vc = SeedPhraseViewController(event: .display, words: seed.components(separatedBy: ";"))
+                    vc.increaseSecutirty = true
+                    if var viewControllers = self.navigationController?.viewControllers {
+                        viewControllers[viewControllers.count - 1] = vc
+                        navigationController?.setViewControllers(viewControllers, animated: true)
+                    }
                 }
                 else if event == .unlock || event == .unlockSecurity {
                     if navigationController?.viewControllers.count == 1 {
-                        dismiss(animated: true) {
-                            
-                        }
+                        dismiss(animated: true) {}
                     }
-                    else{
+                    else {
                         back()
                     }
                 }
-                else{
+                else {
                     let vc = CreateWalletPasswordViewController()
                     if var viewControllers = self.navigationController?.viewControllers {
-                        viewControllers[viewControllers.count-1] = vc
-                        self.navigationController?.setViewControllers(viewControllers, animated: true)
+                        viewControllers[viewControllers.count - 1] = vc
+                        navigationController?.setViewControllers(viewControllers, animated: true)
                     }
                 }
             }
@@ -134,11 +131,11 @@ class UnlockPasswordViewController: BaseViewController {
 }
 
 // MARK: TextField Actions
-extension UnlockPasswordViewController : UITextFieldDelegate {
-    
+
+extension UnlockPasswordViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         return true
-    }  
+    }
 }

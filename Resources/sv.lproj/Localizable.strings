@@ -14,7 +14,7 @@
 "open_another_wallet" = "Öppna en annan plånbok";
 "seed_capture_warning" = "Du har precis tagit en skärmdump på ditt seed phrase. Behåller du denna bild på din telefon kommer dina tillgångar att vara utsatt för risk. Det är starkt rekommenderat att ta bort denna bild manuellt från ditt bild-galleri.";
 "seed_prhase" = "Seed phrase";
-"inpur_seed" = "Ange ditt seed phrase";
+"input_seed" = "Ange ditt seed phrase";
 "confirm_seed_text" = "För att säkerställa att seed phrase är nerskrivet, vänligen fyll i de specifika orden nedan";
 "display_seed" = "Ditt seed phrase tillåter åtkomsten till alla kryptovalutor i din plånbok. Skriv ner seed phrase och spar detta i ett kassaskåp eller i ett låst valv. Om ditt seed phrase försvinner kommer du inte kunna återställa dina pengar.";
 "intro_seed_main" = "Skapa en ny plånbok genom att generera ett seed phrase. Om du blir av med din enhet så behövs ditt seed phrase för att återställa tillgångarna. Ange aldrig ditt seed phrase på en nyckelknippa eller lösenordsmanagerare. Spara aldrig detta på ditt lokala filsystem eller några fjärr-mappar av någon sort.";
