@@ -61,7 +61,7 @@ class BMClearField: UITextField {
             button.backgroundColor = UIColor.clear
             button.setImage(ClearIcon(), for: .normal)
             button.tintColor = UIColor.main.steel
-            button.frame = CGRect(x: button.x, y: button.y + 3, width: 14, height: 14)
+            button.frame = CGRect(x: button.x, y: 6, width: 14, height: 14)
         }
     }
 }
@@ -262,7 +262,7 @@ class BMField: BMClearField {
             right = view.frame.size.width + 10
         }
         
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 0, bottom: 0, right: right)
         return bounds.inset(by: padding)
     }
     
@@ -276,7 +276,7 @@ class BMField: BMClearField {
         if let view = self.rightView {
             right = view.frame.size.width + 10
         }
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 0, bottom: 0, right: right)
         
         return bounds.inset(by: padding)
     }
@@ -298,7 +298,7 @@ class BMField: BMClearField {
         }
         
         
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height) * (-1)), left: 0, bottom: 0, right: right)
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 0, bottom: 0, right: right)
         return bounds.inset(by: padding)
     }
     

@@ -36,7 +36,7 @@ class BMCategoryColorsView: UIView {
             
             super.init(frame: frame)
             
-            let size:CGFloat = Device.isLarge ? 38 : 30
+            let size:CGFloat = 30
             
             self.color = color
             

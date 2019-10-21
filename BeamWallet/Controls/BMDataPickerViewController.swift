@@ -46,15 +46,6 @@ class BMDataPickerViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
-    }
-    
     override var tableStyle: UITableView.Style {
         get {
             return .grouped

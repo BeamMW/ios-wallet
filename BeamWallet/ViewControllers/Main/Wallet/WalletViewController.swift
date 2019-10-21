@@ -30,14 +30,7 @@ class WalletViewController: BaseTableViewController {
     
     private let maximumTransactionsCount = 5
         
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
-    }
+
     
     deinit {
         Settings.sharedManager().removeDelegate(self)

@@ -70,14 +70,6 @@ class SaveContactViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

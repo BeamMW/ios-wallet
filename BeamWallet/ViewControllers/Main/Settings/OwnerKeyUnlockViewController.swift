@@ -19,32 +19,35 @@
 
 import UIKit
 
-class OwnerKeyUnlockViewController: BaseViewController {
-    @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var passField: BMField!
-    @IBOutlet private var mainStack: UIStackView!
-    @IBOutlet private var touchIdButton: UIButton!
-    @IBOutlet private var nextButtonView: UIView!
+class OwnerKeyUnlockViewController: BMInputViewController {
     
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
+    private var touchIdButton = UIButton(type: .system)
+    
+    init() {
+        super.init(nibName: "BMInputViewController", bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+
+        touchIdButton.isHidden = true
+        touchIdButton.tintColor = UIColor.white
+        touchIdButton.setImage(IconTouchid(), for: .normal)
+        stackView.addArrangedSubview(touchIdButton)
         
         title = Localizable.shared.strings.show_owner_key
                 
+        inputField.placeholder = Localizable.shared.strings.enter_password
+        inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        inputField.delegate = self
+        
         if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
-            nextButtonView.isHidden = true
-            passField.isHidden = true
+            nextButton.isHidden = true
+            inputField.isHidden = true
             touchIdButton.isHidden = false
             
             if BiometricAuthorization.shared.faceIDAvailable() {
@@ -76,8 +79,8 @@ class OwnerKeyUnlockViewController: BaseViewController {
         if BiometricAuthorization.shared.canAuthenticate() {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
                 self.titleLabel.text = Localizable.shared.strings.enter_your_password
-                self.nextButtonView.isHidden = false
-                self.passField.isHidden = false
+                self.nextButton.isHidden = false
+                self.inputField.isHidden = false
                 self.touchIdButton.isHidden = true
             }, failure: {}, retry: {}, reasonText: Localizable.shared.strings.touch_id_ownerkey_verefication)
         }
@@ -87,16 +90,16 @@ class OwnerKeyUnlockViewController: BaseViewController {
         biometricAuthorization()
     }
     
-    @IBAction func onLogin(sender: UIButton) {
-        if passField.text?.isEmpty ?? true {
-            passField.error = Localizable.shared.strings.empty_password
-            passField.status = BMField.Status.error
+    override func onNext() {
+        if inputField.text?.isEmpty ?? true {
+            inputField.error = Localizable.shared.strings.empty_password
+            inputField.status = BMField.Status.error
         }
-        else if let pass = passField.text {
+        else if let pass = inputField.text {
             let valid = AppModel.sharedManager().isValidPassword(pass)
             if !valid {
-                passField.error = Localizable.shared.strings.incorrect_password
-                passField.status = BMField.Status.error
+                inputField.error = Localizable.shared.strings.incorrect_password
+                inputField.status = BMField.Status.error
             }
             else {
                 view.endEditing(true)

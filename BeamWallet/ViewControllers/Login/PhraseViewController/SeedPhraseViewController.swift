@@ -1,9 +1,19 @@
 //
-//  SeedPhraseViewController.swift
-//  BeamWallet
+// SeedPhraseViewController.swift
 //
-//  Created by Denis on 10/18/19.
-//  Copyright © 2019 Denis. All rights reserved.
+// Copyright 2018 Beam Development
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 import UIKit
@@ -38,15 +48,6 @@ class SeedPhraseViewController: BaseViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
-    }
-    
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
     }
     
     override func viewDidLoad() {
@@ -154,7 +155,7 @@ class SeedPhraseViewController: BaseViewController {
         alert(message: Localizable.shared.strings.seed_capture_warning)
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
     
     @objc private func onNext() {
         if event == .display {
@@ -224,6 +225,35 @@ class SeedPhraseViewController: BaseViewController {
                 back()
             }
         }
+        else if event == .restore, Settings.sharedManager().target != Mainnet {
+            if let string = UIPasteboard.general.string {
+                let s1 = string.split(separator: ";")
+                let s2 = string.split(separator: "\n")
+                
+                if s1.count > 2 {
+                    inputWords.removeAll()
+                    
+                    var i = 0
+                    for s in s1 {
+                        inputWords.append(BMWord(String(s), index: UInt(i), correct: true))
+                        i = i + 1
+                    }
+                }
+                else if s2.count > 2 {
+                    inputWords.removeAll()
+                    
+                    var i = 0
+                    for s in s2 {
+                        if let w = s.split(separator: " ").last {
+                            inputWords.append(BMWord(String(w), index: UInt(i), correct: true))
+                            i = i + 1
+                        }
+                    }
+                }
+                
+                collectionView.reloadData()
+            }
+        }
     }
     
     @objc private func onNavigationBack() {
@@ -259,8 +289,8 @@ class SeedPhraseViewController: BaseViewController {
         }
     }
     
-    //MARK: -
-
+    // MARK: -
+    
     func isCorrectPhrase() -> Bool {
         var corretPhrase = true
         for i in 0 ... confirmCountWords - 1 {
@@ -276,7 +306,7 @@ class SeedPhraseViewController: BaseViewController {
         return corretPhrase
     }
     
-    func introOptions(row:Int) -> (text: String, image:UIImage?) {
+    func introOptions(row: Int) -> (text: String, image: UIImage?) {
         switch row {
         case 0:
             return (text: Localizable.shared.strings.intro_seed_1, image: UIImage(named: "iconEye"))
@@ -289,7 +319,7 @@ class SeedPhraseViewController: BaseViewController {
         }
     }
     
-    func introHeight(row:Int) -> Int {
+    func introHeight(row: Int) -> Int {
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let w = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 75
         return Int(introOptions(row: row).text.height(withConstrainedWidth: w, font: RegularFont(size: 15))) + 30
@@ -340,7 +370,7 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
             footer.btn1.addTarget(self, action: #selector(onNext), for: .touchUpInside)
             footer.btn2.addTarget(self, action: #selector(onBack), for: .touchUpInside)
             
-            if event != .display && event != .intro {
+            if event != .display, event != .intro {
                 footer.btn1.isEnabled = isCorrectPhrase()
             }
             else if event == .display, increaseSecutirty, !OnboardManager.shared.isSkipedSeed() {

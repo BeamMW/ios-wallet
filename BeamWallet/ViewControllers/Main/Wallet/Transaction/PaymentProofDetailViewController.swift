@@ -35,14 +35,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
     @IBOutlet private var headerdHeight: NSLayoutConstraint!
     @IBOutlet private var keyKodeTitle: UILabel!
     
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
-    }
+
     
     override var tableStyle: UITableView.Style {
         get {

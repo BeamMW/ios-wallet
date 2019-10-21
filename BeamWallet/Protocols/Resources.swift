@@ -20,6 +20,8 @@
 
 import Foundation
 
+let EnableNewFeatures = false
+
 func IconShowBalance() -> UIImage? {
     return UIImage(named: "iconShowBalance")
 }
@@ -43,6 +45,11 @@ func IconSymbolBeam() -> UIImage? {
 func IconSendPink() -> UIImage? {
     return UIImage(named: "iconSendPink")
 }
+
+func IconCopyWhite() -> UIImage? {
+    return UIImage(named: "iconCopyWhite")
+}
+
 
 func IconUtxo() -> UIImage? {
     return UIImage(named: "iconUtxo")

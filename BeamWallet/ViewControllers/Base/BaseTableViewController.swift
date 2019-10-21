@@ -51,13 +51,13 @@ class BaseTableViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        var offset:CGFloat = tableStyle == .grouped ? 0 : 0
+        var offset:CGFloat =  0
        
         if !isGradient {
-            offset = offset + 30
+            offset =  30
         }
         else if isGradient && !isAddStatusView {
-            offset = offset + 30
+            offset = 30
         }
        
         let y = navigationBarOffset - offset

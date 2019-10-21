@@ -38,10 +38,13 @@ class OnboardManager: NSObject {
         UserDefaults.standard.set(false, forKey: isSkipedSeedKey)
         UserDefaults.standard.synchronize()
     }
-        
-    //MARK: Faucet
+    
+    // MARK: Faucet
     
     public func canReceiveFaucet() -> Bool {
+        if !EnableNewFeatures {
+            return false
+        }
         let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
         let isBalanceZero = (AppModel.sharedManager().walletStatus?.available ?? 0) == 0
         return !isInProgress && isBalanceZero && !isCloseFaucet
@@ -88,9 +91,9 @@ class OnboardManager: NSObject {
         }
     }
     
-    //MARK: Seed
+    // MARK: Seed
     
-    public func onSkipSeed(isSkiped:Bool) {
+    public func onSkipSeed(isSkiped: Bool) {
         UserDefaults.standard.set(isSkiped, forKey: isSkipedSeedKey)
         UserDefaults.standard.synchronize()
     }
@@ -100,10 +103,16 @@ class OnboardManager: NSObject {
     }
     
     public func getSeed() -> String? {
+        if !EnableNewFeatures {
+            return nil
+        }
         return KeychainManager.getSeed()
     }
     
     public func isSkipedSeed() -> Bool {
+        if !EnableNewFeatures {
+            return false
+        }
         return UserDefaults.standard.bool(forKey: isSkipedSeedKey)
     }
     
@@ -115,7 +124,10 @@ class OnboardManager: NSObject {
     }
     
     public func canMakeSecure() -> Bool {
-        if let available = AppModel.sharedManager().walletStatus?.realAmount {
+        if !EnableNewFeatures {
+            return false
+        }
+        else if let available = AppModel.sharedManager().walletStatus?.realAmount {
             if available >= OnboardManager.minAmountToSecure, isSkipedSeed(), !isCloseSecure {
                 return true
             }

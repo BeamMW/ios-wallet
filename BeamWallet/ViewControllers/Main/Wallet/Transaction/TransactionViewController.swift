@@ -76,14 +76,7 @@ class TransactionViewController: BaseTableViewController {
         return array
     }
     
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
-    }
+
     
     override var tableStyle: UITableView.Style {
         get {

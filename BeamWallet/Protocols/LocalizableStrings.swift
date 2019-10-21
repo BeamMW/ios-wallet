@@ -305,6 +305,7 @@ class LocalizableStrings : NSObject {
     var buy_transaction_success_title = "buy_transaction_success_title".localized
     var buy_transaction_success_text = "buy_transaction_success_text".localized
     var enter_password_title = "enter_password_title".localized
+    var enter_password = "enter_password".localized
     var receive_beam = "receive_beam".localized
     var send_beam = "send_beam".localized
     var expired = "expired".localized
@@ -357,9 +358,9 @@ class LocalizableStrings : NSObject {
     var addresses_empty = "addresses_empty".localized
     var utxo_empty = "utxo_empty".localized
     var transactions_empty = "transactions_empty".localized
-    var automatic_restore_title = "automatic_restore_title".localized
+    var automatic_restore_title = "automatic_restore_title".localized.uppercased()
     var automatic_restore_text = "automatic_restore_text".localized
-    var manual_restore_title = "manual_restore_title".localized
+    var manual_restore_title = "manual_restore_title".localized.uppercased()
     var manual_restore_text = "manual_restore_text".localized
     var paste_owner_key = "paste_owner_key".localized
     var after_paste_owner_key = "after_paste_owner_key".localized
@@ -407,6 +408,7 @@ class LocalizableStrings : NSObject {
     var estimted_time = "estimted_time".localized.lowercased()
     var node_address = "node_address".localized.lowercased()
     var create_new_password_short = "create_new_password_short".localized
+    var create_new_password = "create_new_password".localized
 
     var lock_screen = "lock_screen".localized
     var paste_payment_proof = "paste_payment_proof".localized
@@ -459,7 +461,10 @@ class LocalizableStrings : NSObject {
     var intro_seed_1 = "intro_seed_1".localized
     var intro_seed_2 = "intro_seed_2".localized
     var intro_seed_3 = "intro_seed_3".localized
-
+    var paste = "paste".localized
+    var enter_trusted_node = "enter_trusted_node".localized
+    var your_current_password = "your_current_password".localized
+    
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
 

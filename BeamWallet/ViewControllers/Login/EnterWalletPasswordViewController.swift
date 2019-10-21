@@ -64,33 +64,31 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         
-        restoreButton.titleLabel?.numberOfLines = 2
-        restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
-        restoreButton.titleLabel?.textAlignment = .center
+        if AppModel.sharedManager().isLoggedin {
+            restoreButton.isHidden = true
+        }
+        else {
+            restoreButton.titleLabel?.numberOfLines = 2
+            restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
+            restoreButton.titleLabel?.textAlignment = .center
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        AppModel.sharedManager().checkRecoveryWallet()
-        
-        if (presentedViewController as? UIAlertController) == nil {
-            if isRequestedAuthorization == false, TGBotManager.sharedManager.isNeedLinking() == false, UIApplication.shared.applicationState == .active, AppDelegate.isCrashed() == false {
-                isRequestedAuthorization = true
-                
-                biometricAuthorization()
+        if !AppModel.sharedManager().isLoggedin {
+            AppModel.sharedManager().checkRecoveryWallet()
+            
+            if (presentedViewController as? UIAlertController) == nil {
+                if isRequestedAuthorization == false, TGBotManager.sharedManager.isNeedLinking() == false, UIApplication.shared.applicationState == .active, AppDelegate.isCrashed() == false {
+                    isRequestedAuthorization = true
+                    
+                    biometricAuthorization()
+                }
             }
         }
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
-//        if let password = KeychainManager.getPassword() {
-//            self.passField.text = password
-//            self.onLogin(sender: UIButton())
-//        }
-//    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -124,7 +122,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     @IBAction func onTouchId(sender: UIButton) {
         touchIdButton.tintColor = UIColor.white
-        
         biometricAuthorization()
     }
     
@@ -134,17 +131,34 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
-            let appModel = AppModel.sharedManager()
-            let valid = appModel.canOpenWallet(pass)
-            if !valid {
-                passField.error = Localizable.shared.strings.incorrect_password
-                passField.status = BMField.Status.error
+            if AppModel.sharedManager().isLoggedin {
+                let valid = AppModel.sharedManager().isValidPassword(pass)
+                if !valid {
+                    passField.error = Localizable.shared.strings.incorrect_password
+                    passField.status = BMField.Status.error
+                }
+                else {
+                    if navigationController?.viewControllers.count == 1 {
+                        dismiss(animated: true) {}
+                    }
+                    else {
+                        back()
+                    }
+                }
             }
             else {
-                _ = KeychainManager.addPassword(password: pass)
-                
-                let vc = CreateWalletProgressViewController(password: pass, phrase: nil)
-                pushViewController(vc: vc)
+                let appModel = AppModel.sharedManager()
+                let valid = appModel.canOpenWallet(pass)
+                if !valid {
+                    passField.error = Localizable.shared.strings.incorrect_password
+                    passField.status = BMField.Status.error
+                }
+                else {
+                    _ = KeychainManager.addPassword(password: pass)
+                    
+                    let vc = CreateWalletProgressViewController(password: pass, phrase: nil)
+                    pushViewController(vc: vc)
+                }
             }
         }
     }

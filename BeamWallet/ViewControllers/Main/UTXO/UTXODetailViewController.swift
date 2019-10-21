@@ -32,14 +32,7 @@ class UTXODetailViewController: BaseTableViewController {
         }
     }
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     init(utxo:BMUTXO) {
         super.init(nibName: nil, bundle: nil)

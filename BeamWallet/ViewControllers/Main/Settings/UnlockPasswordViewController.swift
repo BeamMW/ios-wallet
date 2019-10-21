@@ -19,57 +19,42 @@
 
 import UIKit
 
-class UnlockPasswordViewController: BaseViewController {
+class UnlockPasswordViewController: BMInputViewController {
     enum UnlockEvent {
         case unlock
         case changePassword
         case seedPhrase
-        case unlockSecurity
     }
-    
-    @IBOutlet private var passField: BMField!
-    @IBOutlet private var titleLabel: UILabel!
-    
+        
     private var event: UnlockEvent!
     private var isUnlocked = false
     
     public var completion: ((Bool) -> Void)?
     
     init(event: UnlockEvent) {
-        super.init(nibName: nil, bundle: nil)
-        
+        super.init(nibName: "BMInputViewController", bundle: nil)
+
         self.event = event
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
-    
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
-    }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        hideKeyboardWhenTappedAround()
-        
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        inputField.placeholder = Localizable.shared.strings.enter_password
+        inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        inputField.delegate = self
         
         switch event {
         case .unlock:
             title = Localizable.shared.strings.your_password
             titleLabel.text = Localizable.shared.strings.unlock_password
-        case .unlockSecurity:
-            title = Localizable.shared.strings.your_password
-            titleLabel.text = Localizable.shared.strings.enter_your_password
         case .changePassword:
             title = Localizable.shared.strings.change_password
+            titleLabel.text = Localizable.shared.strings.your_current_password
         default:
             title = Localizable.shared.strings.show_seed_phrase
             titleLabel.text = Localizable.shared.strings.enter_your_password
@@ -79,7 +64,7 @@ class UnlockPasswordViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        _ = passField.becomeFirstResponder()
+        _ = inputField.becomeFirstResponder()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -88,16 +73,16 @@ class UnlockPasswordViewController: BaseViewController {
         completion?(isUnlocked)
     }
     
-    @IBAction func onLogin(sender: UIButton) {
-        if passField.text?.isEmpty ?? true {
-            passField.error = Localizable.shared.strings.empty_password
-            passField.status = BMField.Status.error
+    override func onNext() {
+        if inputField.text?.isEmpty ?? true {
+            inputField.error = Localizable.shared.strings.empty_password
+            inputField.status = BMField.Status.error
         }
-        else if let pass = passField.text {
+        else if let pass = inputField.text {
             let valid = AppModel.sharedManager().isValidPassword(pass)
             if !valid {
-                passField.error = Localizable.shared.strings.current_password_error
-                passField.status = BMField.Status.error
+                inputField.error = Localizable.shared.strings.current_password_error
+                inputField.status = BMField.Status.error
             }
             else {
                 isUnlocked = true
@@ -110,7 +95,7 @@ class UnlockPasswordViewController: BaseViewController {
                         navigationController?.setViewControllers(viewControllers, animated: true)
                     }
                 }
-                else if event == .unlock || event == .unlockSecurity {
+                else if event == .unlock {
                     if navigationController?.viewControllers.count == 1 {
                         dismiss(animated: true) {}
                     }

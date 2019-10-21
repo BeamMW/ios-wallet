@@ -253,7 +253,7 @@ class CreateWalletProgressViewController: BaseViewController {
     }
 
     private func openNodeController() {
-        let vc = EnterNodeAddressViewController()
+        let vc = TrustedNodeViewController(event: .change)
         vc.completion = { [weak self]
             obj in
             
@@ -414,7 +414,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
             else{
                 if let controllers = strongSelf.navigationController?.viewControllers {
                     for vc in controllers {
-                        if vc is EnterNodeAddressViewController {
+                        if vc is TrustedNodeViewController {
                             return
                         }
                     }

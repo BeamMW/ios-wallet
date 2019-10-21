@@ -84,17 +84,8 @@ public class BMLockScreen {
             seconds = 0
             inactiveDate = 0
             
-            let unlock = UnlockPasswordViewController(event: .unlockSecurity)
+            let unlock = EnterWalletPasswordViewController()
             unlock.disableMenu = true
-            unlock.completion = { [weak self]
-                obj in
-                
-                guard let strongSelf = self else { return }
-
-                strongSelf.isScreenLocked = false
-                
-                strongSelf.timer = Timer.scheduledTimer(timeInterval: 1, target: strongSelf, selector: #selector(strongSelf.applicationActive), userInfo: nil, repeats: true)
-            }
             
             let vc = UINavigationController(rootViewController: unlock)
             vc.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -104,6 +95,7 @@ public class BMLockScreen {
             vc.navigationBar.tintColor = UIColor.white
             vc.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white , NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Semibold", size: 17)!]
             vc.modalPresentationStyle = .fullScreen
+            vc.modalTransitionStyle = .crossDissolve
 
             topVc.present(vc, animated: false, completion: nil)
         }

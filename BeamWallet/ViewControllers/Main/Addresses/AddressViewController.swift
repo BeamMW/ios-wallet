@@ -23,14 +23,7 @@ class AddressViewController: BaseTableViewController {
 
     private var addressViewModel:DetailAddressViewModel!
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)

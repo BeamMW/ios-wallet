@@ -32,8 +32,15 @@ class CategoryEditViewController: BaseViewController {
 
     private var category:BMCategory!
     private let colors = [UIColor.init(hexString: "#ff746b"), UIColor.init(hexString: "#ffba55"), UIColor.init(hexString: "#fee65a"), UIColor.init(hexString: "#73ff7c"), UIColor.init(hexString: "#4fa5ff"), UIColor.init(hexString: "#d785ff")]
+    private let names = ["#ff746b":"Red", "#ffba55":"Orange", "#fee65a":"Yellow",
+                         "#73ff7c":"Green", "#4fa5ff":"Blue", "#d785ff":"Pink"]
     
-    private var selectedColor:String!
+    private var selectedColor:String! {
+        didSet {
+            nameField.placeholder = names[selectedColor]
+            nameField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
+    }
     
     init(category:BMCategory?) {
         super.init(nibName: nil, bundle: nil)
@@ -57,15 +64,6 @@ class CategoryEditViewController: BaseViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    override var isUppercasedTitle: Bool {
-        get {
-            return true
-        }
-        set {
-            super.isUppercasedTitle = true
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,8 +81,8 @@ class CategoryEditViewController: BaseViewController {
         titleColourLabel.text = Localizable.shared.strings.colour.uppercased()
         titleColourLabel.letterSpacing = 1.2
         
-        nameField.placeholder = Localizable.shared.strings.no_name
-        nameField.placeHolderColor = UIColor.white
+        nameField.placeholder = names[selectedColor]
+        nameField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         nameField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         nameField.text = category.name
 
@@ -94,6 +92,10 @@ class CategoryEditViewController: BaseViewController {
         colorsView.delegate = self
         colorsView.backgroundColor = UIColor.clear
         view.addSubview(colorsView)
+        
+        if let constant = self.topOffset?.constant, Device.isXDevice {
+            self.topOffset?.constant = constant - 20
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -107,7 +109,7 @@ class CategoryEditViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        let offset:CGFloat = Device.isLarge ? 7 : 0
+        let offset:CGFloat = 0
         colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: titleColourLabel.y + titleColourLabel.h + offset , width: colorsView.colorsWidht(), height: 50)
     }
     

@@ -468,7 +468,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
             #if EXTENSION
             print("ignore")
             #else
-            if AppModel.sharedManager().isLoggedin {
+            if AppModel.sharedManager().isLoggedin && !BMLockScreen.shared.isScreenLocked {
                 if let rootVC = UIApplication.getTopMostViewController() {
                     rootVC.sideMenuController?.hideLeftView()
                     

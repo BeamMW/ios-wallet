@@ -39,10 +39,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="u5q-PR-C50">
-                    <rect key="frame" x="20" y="124" width="374" height="46.5"/>
+                    <rect key="frame" x="15" y="124" width="384" height="46.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KEY CODE:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25z-VT-NVW">
-                            <rect key="frame" x="0.0" y="0.0" width="374" height="17"/>
+                            <rect key="frame" x="0.0" y="0.0" width="384" height="17"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="14"/>
                             <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -54,7 +54,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="10312" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fba-dd-bWj" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="27" width="374" height="19.5"/>
+                            <rect key="frame" x="0.0" y="27" width="384" height="19.5"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="19.5" id="XJW-dE-wbB"/>
                             </constraints>
@@ -176,10 +176,10 @@
             </subviews>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="d12-Nl-WeK" firstAttribute="trailing" secondItem="u5q-PR-C50" secondAttribute="trailing" constant="20" id="4ju-AK-OCi"/>
+                <constraint firstItem="d12-Nl-WeK" firstAttribute="trailing" secondItem="u5q-PR-C50" secondAttribute="trailing" constant="15" id="4ju-AK-OCi"/>
                 <constraint firstItem="SEX-lg-7i7" firstAttribute="top" secondItem="ov3-aD-402" secondAttribute="bottom" constant="70" id="7K8-xN-sCz"/>
                 <constraint firstItem="ov3-aD-402" firstAttribute="top" secondItem="u5q-PR-C50" secondAttribute="bottom" constant="70" id="9AS-r8-xZa"/>
-                <constraint firstItem="u5q-PR-C50" firstAttribute="top" secondItem="eSk-Xs-FZ0" secondAttribute="top" constant="124" id="DXm-Bo-2kJ"/>
+                <constraint firstItem="u5q-PR-C50" firstAttribute="top" secondItem="d12-Nl-WeK" secondAttribute="top" constant="80" id="DXm-Bo-2kJ"/>
                 <constraint firstAttribute="trailing" secondItem="ov3-aD-402" secondAttribute="trailing" constant="20" id="FpL-Um-E9b"/>
                 <constraint firstItem="PbD-6l-1Ad" firstAttribute="top" secondItem="ov3-aD-402" secondAttribute="bottom" constant="70" id="dYg-uj-U3N"/>
                 <constraint firstItem="PbD-6l-1Ad" firstAttribute="leading" secondItem="d12-Nl-WeK" secondAttribute="leading" constant="20" id="e2G-Eu-oZN"/>
@@ -187,7 +187,7 @@
                 <constraint firstItem="ov3-aD-402" firstAttribute="leading" secondItem="eSk-Xs-FZ0" secondAttribute="leading" constant="20" id="lfE-IW-7NH"/>
                 <constraint firstItem="SEX-lg-7i7" firstAttribute="leading" secondItem="d12-Nl-WeK" secondAttribute="leading" constant="20" id="vtP-Pl-8Am"/>
                 <constraint firstItem="d12-Nl-WeK" firstAttribute="trailing" secondItem="PbD-6l-1Ad" secondAttribute="trailing" constant="20" id="wLa-4O-vqu"/>
-                <constraint firstItem="u5q-PR-C50" firstAttribute="leading" secondItem="d12-Nl-WeK" secondAttribute="leading" constant="20" id="yDg-KV-NGA"/>
+                <constraint firstItem="u5q-PR-C50" firstAttribute="leading" secondItem="d12-Nl-WeK" secondAttribute="leading" constant="15" id="yDg-KV-NGA"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="d12-Nl-WeK"/>
             <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>

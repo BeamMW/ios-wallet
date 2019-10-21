@@ -1,5 +1,5 @@
 //
-// RestoreNodeViewController.swift
+// TrustedNodeViewController.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,92 +19,154 @@
 
 import UIKit
 
-class RestoreNodeViewController: BaseViewController {
-
+class TrustedNodeViewController: BMInputViewController {
+    enum EventType {
+        case restore
+        case change
+    }
+    
+    public var completion: ((Bool) -> Void)?
+    
     private var isPresented = false
-    var timer = Timer()
-
-    @IBOutlet private weak var nodeAddressField:BMField!
-    @IBOutlet private weak var errorLabel: UILabel!
-
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
+    private var timer = Timer()
+    private var event: EventType!
+    
+    private var oldAddress: String!
+        
+    init(event: EventType) {
+        super.init(nibName: "BMInputViewController", bundle: nil)
+        
+        self.event = event
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
 
-        title = Localizable.shared.strings.restore_wallet_title
+        titleLabel.text = Localizable.shared.strings.enter_trusted_node
         
-        hideKeyboardWhenTappedAround()
+        inputField.placeholder = Localizable.shared.strings.ip_port
+        inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        inputField.delegate = self
         
-        if let base = self.navigationController as? BaseNavigationController {
-            base.enableSwipeToDismiss = false
+        switch event {
+        case .change:
+            oldAddress = Settings.sharedManager().nodeAddress
+            
+            inputField.text = oldAddress
+            
+            title = Localizable.shared.strings.node_address
+           
+            nextButton.setTitle(Localizable.shared.strings.save, for: .normal)
+            nextButton.setImage(IconSaveDone(), for: .normal)
+        case .restore:
+            AppModel.sharedManager().addDelegate(self)
+            
+            nextButton.setTitle(Localizable.shared.strings.next, for: .normal)
+            nextButton.setImage(IconNextBlue(), for: .normal)
+          
+            if let base = self.navigationController as? BaseNavigationController {
+                base.enableSwipeToDismiss = false
+            }
+            
+            title = Localizable.shared.strings.restore_wallet_title
+        case .none:
+            break
         }
-        
-        AppModel.sharedManager().addDelegate(self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if isMovingFromParent {
+        if isMovingFromParent, event == .restore {
             timer.invalidate()
-
+            
             AppModel.sharedManager().removeDelegate(self)
         }
     }
     
-    @IBAction func onNext(sender :UIButton) {
+    override func onNext() {
         view.endEditing(true)
         
+        switch event {
+        case .change:
+            changeNode()
+        case .restore:
+            setNode()
+        case .none:
+            break
+        }
+    }
+    
+    private func setNode() {
         timer.invalidate()
-
+        
         if !AppModel.sharedManager().isInternetAvailable {
-            self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+            alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { _ in
             }
         }
-        else if let fullAddress = nodeAddressField.text, let password = KeychainManager.getPassword()  {
+        else if let fullAddress = inputField.text, let password = KeychainManager.getPassword() {
             if AppModel.sharedManager().isValidNodeAddress(fullAddress) {
                 SVProgressHUD.show()
-
+                
                 AppModel.sharedManager().resetOnlyWallet()
-
+                
                 Settings.sharedManager().connectToRandomNode = false
                 Settings.sharedManager().nodeAddress = fullAddress
                 
                 let opened = AppModel.sharedManager().openWallet(password)
-                if(!opened) {
-                    self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_opened) { (_ ) in
+                if !opened {
+                    alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_opened) { _ in
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 }
-                else{
+                else {
                     timer.invalidate()
                     timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
                     
                     AppModel.sharedManager().getNetworkStatus()
                 }
             }
-            else{
-                self.alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.invalid_address_text, handler: nil)
+            else {
+                alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.invalid_address_text, handler: nil)
+            }
+        }
+    }
+    
+    private func changeNode() {
+        if let fullAddress = inputField.text {
+            if AppModel.sharedManager().isValidNodeAddress(fullAddress) {
+                if fullAddress != oldAddress {
+                    Settings.sharedManager().nodeAddress = fullAddress
+                    
+                    AppModel.sharedManager().changeNodeAddress()
+                    
+                    completion?(true)
+                    
+                    back()
+                }
+                else {
+                    completion?(true)
+                    
+                    back()
+                }
+            }
+            else {
+                errorLabel.text = Localizable.shared.strings.invalid_address_text
+                errorLabel.isHidden = false
             }
         }
     }
     
     private func openMainPage() {
         AppModel.sharedManager().stopChangeWallet()
-
+        
         AppModel.sharedManager().removeDelegate(self)
         AppModel.sharedManager().isRestoreFlow = false
-
+        
         AppModel.sharedManager().refreshAddresses()
         
         let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
@@ -114,8 +176,8 @@ class RestoreNodeViewController: BaseViewController {
                                                       leftViewController: menuViewController,
                                                       rightViewController: nil)
         
-        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-        sideMenuController.leftViewPresentationStyle = .slideAbove;
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+        sideMenuController.leftViewPresentationStyle = .slideAbove
         sideMenuController.rootViewLayerShadowRadius = 0
         sideMenuController.rootViewLayerShadowColor = UIColor.clear
         sideMenuController.leftViewLayerShadowRadius = 0
@@ -125,12 +187,11 @@ class RestoreNodeViewController: BaseViewController {
         sideMenuController.rightViewCoverAlpha = 0.5
         sideMenuController.modalTransitionStyle = .crossDissolve
         
-        self.navigationController?.setViewControllers([sideMenuController], animated: true)
+        navigationController?.setViewControllers([sideMenuController], animated: true)
     }
 }
 
-extension RestoreNodeViewController : UITextFieldDelegate {
-    
+extension TrustedNodeViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -138,10 +199,9 @@ extension RestoreNodeViewController : UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         errorLabel.isHidden = true
         timer.invalidate()
-
+        
         let textFieldText: NSString = (textField.text ?? "") as NSString
         
         let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string)
@@ -175,8 +235,7 @@ extension RestoreNodeViewController : UITextFieldDelegate {
     }
 }
 
-extension RestoreNodeViewController : WalletModelDelegate {
-    
+extension TrustedNodeViewController: WalletModelDelegate {
     @objc private func timerAction() {
         SVProgressHUD.dismiss()
         
@@ -184,15 +243,15 @@ extension RestoreNodeViewController : WalletModelDelegate {
         
         if connected {
             errorLabel.isHidden = true
-            nodeAddressField.status = .normal
+            inputField.status = .normal
             
             if !isPresented {
                 isPresented = true
                 openMainPage()
             }
         }
-        else{
-            nodeAddressField.status = .error
+        else {
+            inputField.status = .error
             errorLabel.isHidden = false
         }
     }

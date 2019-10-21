@@ -27,14 +27,7 @@ class AddressesViewController: BaseTableViewController {
 
     private let titles = [Localizable.shared.strings.my_active, Localizable.shared.strings.my_expired, Localizable.shared.strings.contacts]
 
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -68,7 +68,11 @@ class SettingsViewModel: NSObject {
         general.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
         general.append(SettingsItem(title: Localizable.shared.strings.save_wallet_logs, detail: Settings.sharedManager().currentLogValue().name, isSwitch: nil, id: 17))
         general.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
-        general.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, id: 18))
+        
+        if EnableNewFeatures {
+            general.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, id: 18))
+        }
+        
         if OnboardManager.shared.isSkipedSeed() == true {
             general.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, id: 19))
         }
@@ -116,7 +120,11 @@ class SettingsViewModel: NSObject {
         }
         
         items.append(feedback)
-        items.append(clear)
+        
+        if EnableNewFeatures {
+            items.append(clear)
+        }
+        
     }
     
     public func getItem(indexPath: IndexPath) -> SettingsItem {
@@ -204,9 +212,27 @@ extension SettingsViewModel {
     
     func onChangeNode(completion: @escaping ((Bool) -> Void)) {
         if let top = UIApplication.getTopMostViewController() {
-            let modalViewController = UnlockPasswordPopover(event: .node)
-            modalViewController.completion = { [weak self] obj in
-                let vc = EnterNodeAddressViewController()
+            if EnableNewFeatures {
+                let modalViewController = UnlockPasswordPopover(event: .node)
+                modalViewController.completion = { [weak self] obj in
+                    let vc = TrustedNodeViewController(event: .change)
+                    vc.completion = { [weak self]
+                        obj in
+                        
+                        if obj == true {
+                            self?.items[0][1].detail = Settings.sharedManager().nodeAddress
+                        }
+                        
+                        completion(obj)
+                    }
+                    top.pushViewController(vc: vc)
+                }
+                modalViewController.modalPresentationStyle = .overFullScreen
+                modalViewController.modalTransitionStyle = .crossDissolve
+                top.present(modalViewController, animated: true, completion: nil)
+            }
+            else{
+                let vc = TrustedNodeViewController(event: .change)
                 vc.completion = { [weak self]
                     obj in
                     
@@ -218,9 +244,6 @@ extension SettingsViewModel {
                 }
                 top.pushViewController(vc: vc)
             }
-            modalViewController.modalPresentationStyle = .overFullScreen
-            modalViewController.modalTransitionStyle = .crossDissolve
-            top.present(modalViewController, animated: true, completion: nil)
         }
     }
     

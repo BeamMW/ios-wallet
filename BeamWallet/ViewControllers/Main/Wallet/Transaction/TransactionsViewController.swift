@@ -34,14 +34,7 @@ class TransactionsViewController: BaseTableViewController {
     private var searchView:BMSearchView!
     private var controllers: [Int : TransactionsTableView] = [:]
 
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()

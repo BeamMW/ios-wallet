@@ -75,16 +75,6 @@ class BaseViewController: UIViewController {
         }
     }
     
-    private var _isUppercasedTitle = false
-    var isUppercasedTitle: Bool {
-        get {
-            return _isUppercasedTitle
-        }
-        set {
-            _isUppercasedTitle = newValue
-        }
-    }
-    
     override var title: String? {
         get {
             return self.attributedTitle
@@ -143,11 +133,12 @@ class BaseViewController: UIViewController {
         }
         
         if addedStatusView {
-            self.topOffset?.constant = height
+            topOffset?.constant = navigationBarOffset
         }
-        else {
-            self.topOffset?.constant = height - 30
+        else{
+            topOffset?.constant = navigationBarOffset - (Device.isXDevice ? 0 : 20)
         }
+        
     }
     
     var attributedTitle: String? {
@@ -155,11 +146,9 @@ class BaseViewController: UIViewController {
             if let titleString = newValue {
                 view.viewWithTag(987)?.removeFromSuperview()
                 
-                let attributedString = NSMutableAttributedString(string: isUppercasedTitle ? titleString.uppercased() : titleString.capitalizingFirstLetter())
-                
-                if self.isUppercasedTitle {
-                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.count))
-                }
+                let attributedString = NSMutableAttributedString(string: titleString.uppercased())
+                                  attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.count))
+
                 
                 let w = UIScreen.main.bounds.size.width
                 
@@ -167,7 +156,7 @@ class BaseViewController: UIViewController {
                 
                 let titleLabel = UILabel()
                 titleLabel.frame = CGRect(x: 60, y: y, width: w - 120, height: 50)
-                titleLabel.font = self.isUppercasedTitle ? ProMediumFont(size: 20) : SemiboldFont(size: 17)
+                titleLabel.font = ProMediumFont(size: 20)
                 titleLabel.numberOfLines = 1
                 titleLabel.attributedText = attributedString
                 titleLabel.textColor = UIColor.white
