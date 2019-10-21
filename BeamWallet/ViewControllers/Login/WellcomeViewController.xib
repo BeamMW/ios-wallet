@@ -22,7 +22,7 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController" customModule="BeamWallet" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WellcomeViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="bgView" destination="iAW-fu-nfK" id="y8n-q0-XUE"/>
                 <outlet property="createButton" destination="1Iu-PO-y9I" id="7Bp-tq-CWe"/>

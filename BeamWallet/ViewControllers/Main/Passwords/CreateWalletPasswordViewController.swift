@@ -160,7 +160,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             pushViewController(vc: vc)
         }
         else {
-            let vc = CreateWalletProgressViewController(password: pass, phrase: phrase)
+            let vc = OpenWalletProgressViewController(password: pass, phrase: phrase)
             pushViewController(vc: vc)
         }
     }

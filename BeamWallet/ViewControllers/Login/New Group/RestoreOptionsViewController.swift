@@ -86,7 +86,7 @@ class RestoreOptionsViewController: BaseViewController {
                 Settings.sharedManager().connectToRandomNode = true
                 Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
                 
-                let vc = CreateWalletProgressViewController(password: self.password, phrase: self.phrase)
+                let vc = OpenWalletProgressViewController(password: self.password, phrase: self.phrase)
                 self.pushViewController(vc: vc)
             }
         }

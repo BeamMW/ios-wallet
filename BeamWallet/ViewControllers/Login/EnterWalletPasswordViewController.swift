@@ -156,7 +156,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 else {
                     _ = KeychainManager.addPassword(password: pass)
                     
-                    let vc = CreateWalletProgressViewController(password: pass, phrase: nil)
+                    let vc = OpenWalletProgressViewController(password: pass, phrase: nil)
                     pushViewController(vc: vc)
                 }
             }
@@ -168,7 +168,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             
         }) { _ in
             AppModel.sharedManager().startChangeWallet()
-            self.pushViewController(vc: LoginViewController())
+            self.pushViewController(vc: WellcomeViewController())
         }
     }
 }

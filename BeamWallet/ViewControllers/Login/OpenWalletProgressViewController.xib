@@ -19,7 +19,7 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CreateWalletProgressViewController" customModule="BeamWallet" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OpenWalletProgressViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
                 <outlet property="cancelButton" destination="FIX-uE-nue" id="eWY-zi-uAk"/>
                 <outlet property="errorLabel" destination="tzy-Nw-Qka" id="VdZ-8E-1DH"/>

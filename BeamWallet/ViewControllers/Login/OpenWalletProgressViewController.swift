@@ -1,5 +1,5 @@
 //
-// CreateWalletProgressViewController.swift
+// OpenWalletProgressViewController.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,7 +19,7 @@
 
 import UIKit
 
-class CreateWalletProgressViewController: BaseViewController {
+class OpenWalletProgressViewController: BaseViewController {
     
     @IBOutlet private weak var progressView: UIProgressView!
     @IBOutlet private weak var progressTitleLabel: UILabel!
@@ -297,7 +297,7 @@ class CreateWalletProgressViewController: BaseViewController {
     }
 }
 
-extension CreateWalletProgressViewController : WalletModelDelegate {
+extension OpenWalletProgressViewController : WalletModelDelegate {
     
     func onNetwotkStatusChange(_ connected: Bool) {
         DispatchQueue.main.async { [weak self] in
@@ -397,7 +397,7 @@ extension CreateWalletProgressViewController : WalletModelDelegate {
                 }
             }
             else if error.code == 1 {
-                if strongSelf.navigationController?.viewControllers.last is CreateWalletProgressViewController {
+                if strongSelf.navigationController?.viewControllers.last is OpenWalletProgressViewController {
                     strongSelf.confirmAlert(title: Localizable.shared.strings.incompatible_node_title, message: Localizable.shared.strings.incompatible_node_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.change_settings, cancelHandler: { (_ ) in
                         
                         AppModel.sharedManager().resetWallet(false)

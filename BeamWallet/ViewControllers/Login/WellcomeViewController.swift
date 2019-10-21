@@ -1,5 +1,5 @@
 //
-// LoginViewController.swift
+// WellcomeViewController.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,7 +19,7 @@
 
 import UIKit
 
-class LoginViewController: BaseViewController {
+class WellcomeViewController: BaseViewController {
 
     @IBOutlet private weak var bgView: UIImageView!
     @IBOutlet private weak var restoreButton: UIButton!

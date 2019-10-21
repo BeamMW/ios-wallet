@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
 
-        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : LoginViewController())
+        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : WellcomeViewController())
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.main.navy
@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Settings.sharedManager().resetSettings()
         OnboardManager.shared.reset()
         
-        let rootController = BaseNavigationController.navigationController(rootViewController: LoginViewController())
+        let rootController = BaseNavigationController.navigationController(rootViewController: WellcomeViewController())
 
         self.window!.rootViewController = rootController
     }
