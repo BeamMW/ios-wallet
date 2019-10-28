@@ -22,30 +22,33 @@ import MessageUI
 import SwipeTransition
 
 class BaseViewController: UIViewController {
-
-    public var navigationBarOffset:CGFloat = Device.isXDevice ? 150 : 120
-
-    @IBOutlet weak var topOffset: NSLayoutConstraint?
+    public var navigationBarOffset: CGFloat = Device.isXDevice ? 150 : 120
+    
+    @IBOutlet var topOffset: NSLayoutConstraint?
     public var isGradient = false
-
+    
     public var minimumVelocityToHide = 1500 as CGFloat
     public var minimumScreenRatioToHide = 0.5 as CGFloat
     public var animationDuration = 0.2 as TimeInterval
-
+    
     public var isAddStatusView = false
+    
+    public var disableMenu = false
+    
+    private var alpha:CGFloat = 1.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationController?.isNavigationBarHidden = true
-
-        topOffset?.constant = Device.isXDevice ? 100 : 70
+        
+        self.topOffset?.constant = Device.isXDevice ? 100 : 70
         
         view.backgroundColor = UIColor.main.marine
         
         if self.navigationController?.viewControllers.count ?? 0 > 1 {
-            self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
-        }        
+            self.addCustomBackButton(target: self, selector: #selector(self.onLeftBackButton))
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,41 +77,29 @@ class BaseViewController: UIViewController {
         }
     }
     
-    
-    private var _isUppercasedTitle = false
-    var isUppercasedTitle: Bool{
-        get{
-            return _isUppercasedTitle
+    override var title: String? {
+        get {
+            return self.attributedTitle
         }
-        set{
-            _isUppercasedTitle = newValue
+        set {
+            self.attributedTitle = newValue?.uppercased()
         }
     }
-    
-    override var title: String?{
-        get{
-            return attributedTitle
-        }
-        set{
-            attributedTitle = newValue?.uppercased()
-        }
-    }
-        
     
     @objc private func onLeftMenu() {
         sideMenuController?.toggleLeftViewAnimated()
     }
     
-    public func setGradientTopBar(mainColor:UIColor!, addedStatusView:Bool = true, menu:Bool = false) {
-        isGradient = true
+    public func setGradientTopBar(mainColor: UIColor!, addedStatusView: Bool = true, menu: Bool = false) {
+        self.isGradient = true
         
         view.viewWithTag(10)?.removeFromSuperview()
         view.viewWithTag(11)?.removeFromSuperview()
-
-        let height:CGFloat = Device.isXDevice ? 180 : 150
-
+        
+        let height: CGFloat = Device.isXDevice ? 180 : 150
+        
         let colors = [mainColor, UIColor.clear]
-
+        
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = colors.map { $0?.cgColor ?? UIColor.white.cgColor }
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: height)
@@ -119,16 +110,17 @@ class BaseViewController: UIViewController {
         backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: height)
         backgroundImage.tag = 10
         backgroundImage.layer.addSublayer(gradient)
+        backgroundImage.alpha = 0.5
         self.view.addSubview(backgroundImage)
-        
+
         if menu {
             self.onAddMenuIcon()
         }
-        else{
+        else {
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                self.addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
+                self.addCustomBackButton(target: self, selector: #selector(self.onLeftBackButton))
             }
-            else{
+            else if !self.disableMenu {
                 self.onAddMenuIcon()
             }
         }
@@ -142,6 +134,14 @@ class BaseViewController: UIViewController {
             statusView.x = 0
             self.view.addSubview(statusView)
         }
+        
+        if addedStatusView {
+            topOffset?.constant = navigationBarOffset
+        }
+        else{
+            topOffset?.constant = navigationBarOffset - (Device.isXDevice ? 0 : 20)
+        }
+        
     }
     
     var attributedTitle: String? {
@@ -149,19 +149,17 @@ class BaseViewController: UIViewController {
             if let titleString = newValue {
                 view.viewWithTag(987)?.removeFromSuperview()
                 
-                let attributedString = NSMutableAttributedString(string: (isUppercasedTitle) ? titleString.uppercased() : titleString.capitalizingFirstLetter())
-                
-                if isUppercasedTitle {
-                    attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.count))
-                }
+                let attributedString = NSMutableAttributedString(string: titleString.uppercased())
+                                  attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(2), range: NSRange(location: 0, length: titleString.count))
+
                 
                 let w = UIScreen.main.bounds.size.width
                 
-                let y:CGFloat = Device.isXDevice ? 55 : 30
+                let y: CGFloat = Device.isXDevice ? 55 : 30
                 
                 let titleLabel = UILabel()
                 titleLabel.frame = CGRect(x: 60, y: y, width: w - 120, height: 50)
-                titleLabel.font = isUppercasedTitle ? ProMediumFont(size: 20) : SemiboldFont(size: 17)
+                titleLabel.font = ProMediumFont(size: 20)
                 titleLabel.numberOfLines = 1
                 titleLabel.attributedText = attributedString
                 titleLabel.textColor = UIColor.white
@@ -174,19 +172,19 @@ class BaseViewController: UIViewController {
         }
     }
     
-//MARK: - Navigation Buttons
+    // MARK: - Navigation Buttons
     
     public func onAddMenuIcon() {
         view.viewWithTag(12)?.removeFromSuperview()
         
-        let y:CGFloat = Device.isXDevice ? 60 : 35
-
+        let y: CGFloat = Device.isXDevice ? 60 : 35
+        
         let menuButton = UIButton(type: .system)
         menuButton.tag = 12
         menuButton.contentHorizontalAlignment = .left
         menuButton.tintColor = UIColor.white
         menuButton.setImage(IconLeftMenu(), for: .normal)
-        menuButton.addTarget(self, action: #selector(onLeftMenu), for: .touchUpInside)
+        menuButton.addTarget(self, action: #selector(self.onLeftMenu), for: .touchUpInside)
         menuButton.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
         self.view.addSubview(menuButton)
     }
@@ -195,12 +193,11 @@ class BaseViewController: UIViewController {
         back()
     }
     
-    
-    public func addCustomBackButton(target:Any?, selector:Selector) {
-        let y:CGFloat = Device.isXDevice ? 60 : 35
-
+    public func addCustomBackButton(target: Any?, selector: Selector) {
+        let y: CGFloat = Device.isXDevice ? 60 : 35
+        
         self.view.viewWithTag(13)?.removeFromSuperview()
-
+        
         let button = UIButton(type: .system)
         button.frame = CGRect(x: defaultX, y: y, width: 40, height: 40)
         button.contentHorizontalAlignment = .left
@@ -211,8 +208,8 @@ class BaseViewController: UIViewController {
         self.view.addSubview(button)
     }
     
-    public func addRightButton(image:UIImage?, target:Any?, selector:Selector?) {
-        let y:CGFloat = Device.isXDevice ? 60 : 35
+    public func addRightButton(image: UIImage?, target: Any?, selector: Selector?) {
+        let y: CGFloat = Device.isXDevice ? 60 : 35
         
         self.view.viewWithTag(20191)?.removeFromSuperview()
         
@@ -222,19 +219,19 @@ class BaseViewController: UIViewController {
         rightButton.tintColor = UIColor.white
         rightButton.setImage(image, for: .normal)
         rightButton.addTarget(target, action: selector!, for: .touchUpInside)
-        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-55, y: y, width: 40, height: 40)
+        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width - 55, y: y, width: 40, height: 40)
         self.view.addSubview(rightButton)
     }
     
-    public func addRightButton(title:String, target:Any?, selector:Selector?, enabled:Bool) {
-        let y:CGFloat = Device.isXDevice ? 60 : 35
+    public func addRightButton(title: String, target: Any?, selector: Selector?, enabled: Bool) {
+        let y: CGFloat = Device.isXDevice ? 60 : 35
         
         self.view.viewWithTag(20191)?.removeFromSuperview()
         
-        let aString:NSString = title as NSString
+        let aString: NSString = title as NSString
         
         let rectNeeded = aString.boundingRect(with: CGSize(width: 9999, height: 15), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: RegularFont(size: 16)], context: nil)
-        let w = rectNeeded.width+10
+        let w = rectNeeded.width + 10
         
         let rightButton = UIButton(type: .system)
         rightButton.tag = 20191
@@ -243,19 +240,19 @@ class BaseViewController: UIViewController {
         rightButton.tintColor = UIColor.main.brightTeal
         rightButton.setTitle(title, for: .normal)
         rightButton.addTarget(target, action: selector!, for: .touchUpInside)
-        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width-w-15, y: y, width: w, height: 40)
+        rightButton.frame = CGRect(x: UIScreen.main.bounds.size.width - w - 15, y: y, width: w, height: 40)
         rightButton.isEnabled = enabled
         rightButton.adjustFontSize = true
         self.view.addSubview(rightButton)
     }
     
-    public func addRightButtons(image:[UIImage?], target:Any?, selector:[Selector?]) {
-        let y:CGFloat = Device.isXDevice ? 60 : 35
+    public func addRightButtons(image: [UIImage?], target: Any?, selector: [Selector?]) {
+        let y: CGFloat = Device.isXDevice ? 60 : 35
         
         self.view.viewWithTag(20194)?.removeFromSuperview()
         
         let stackView = UIView()
-        var x:CGFloat = 0
+        var x: CGFloat = 0
         
         for i in 0...image.count - 1 {
             let rightButton = UIButton(type: .system)
@@ -268,13 +265,13 @@ class BaseViewController: UIViewController {
             
             x = x + 45
         }
-
-        stackView.frame = CGRect(x: UIScreen.main.bounds.size.width-x-15, y: y, width: x, height: 40)
-
+        
+        stackView.frame = CGRect(x: UIScreen.main.bounds.size.width - x - 15, y: y, width: x, height: 40)
+        
         self.view.addSubview(stackView)
     }
     
-    public func enableRightButton(enabled:Bool) {
+    public func enableRightButton(enabled: Bool) {
         if let button = view.viewWithTag(20191) as? UIButton {
             button.isEnabled = enabled
         }
@@ -282,36 +279,36 @@ class BaseViewController: UIViewController {
     
     public func removeLeftButton() {
         self.view.viewWithTag(13)?.removeFromSuperview()
+        self.view.viewWithTag(12)?.removeFromSuperview()
     }
     
     public func removeRightButton() {
         self.view.viewWithTag(20191)?.removeFromSuperview()
     }
     
-//MARK: - Feedback
-        
+    // MARK: - Feedback
+    
     public func showRateDialog() {
-        let logoView = UIImageView(frame: CGRect(x: 10, y: 14, width: 40, height: 31))
+        let logoView = UIImageView(frame: CGRect(x: 10, y: 15, width: 40, height: 28))
         logoView.image = RateLogo()
         
         let view = UIView(frame: CGRect(x: 95, y: 15, width: 60, height: 60))
-        view.backgroundColor = UIColor.init(red: 11/255, green: 22/255, blue: 36/255, alpha: 1)
+        view.backgroundColor = UIColor(red: 11 / 255, green: 22 / 255, blue: 36 / 255, alpha: 1)
         view.layer.cornerRadius = 8
         view.addSubview(logoView)
         
         var title = Localizable.shared.strings.rate_title
         title = title.replacingOccurrences(of: "\n", with: "")
         title = "\n\n\n" + title
-
+        
         let text = Localizable.shared.strings.rate_text
         
-        var h:CGFloat = 285
-        if Settings.sharedManager().language == "vi"
-        {
+        var h: CGFloat = 285
+        if Settings.sharedManager().language == "vi" {
             view.frame = CGRect(x: 95, y: 10, width: 60, height: 60)
             h = 300
         }
-        else if (Settings.sharedManager().language == "ko" || Settings.sharedManager().language == "fi") {
+        else if Settings.sharedManager().language == "ko" || Settings.sharedManager().language == "fi" {
             title = "\n" + title
             h = 300
         }
@@ -324,15 +321,15 @@ class BaseViewController: UIViewController {
         showAlert.view.addConstraint(height)
         showAlert.view.addConstraint(width)
         
-        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.rate_app, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.rate_app, style: .default, handler: { _ in
             AppStoreReviewManager.openAppStoreRatingPage()
         }))
-        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.feedback, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.feedback, style: .default, handler: { _ in
             AppStoreReviewManager.resetRating()
             
             self.writeFeedback()
         }))
-        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.not_now, style: .default, handler: { action in
+        showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.not_now, style: .default, handler: { _ in
             AppStoreReviewManager.resetRating()
         }))
         
@@ -340,7 +337,7 @@ class BaseViewController: UIViewController {
     }
     
     public func writeFeedback() {
-        if(MFMailComposeViewController.canSendMail()) {
+        if MFMailComposeViewController.canSendMail() {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             mailComposer.setToRecipients([Localizable.shared.strings.support_email])
@@ -348,51 +345,46 @@ class BaseViewController: UIViewController {
             present(mailComposer, animated: true, completion: nil)
         }
         else {
-            UIApplication.shared.open(URL(string: Localizable.shared.strings.support_email_mailto)!, options: [:]) { (_ ) in
+            UIApplication.shared.open(URL(string: Localizable.shared.strings.support_email_mailto)!, options: [:]) { _ in
             }
         }
     }
     
-    //MARK: - Security
+    // MARK: - Security
     
     @objc public func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
             if Settings.sharedManager().isAskForHideAmounts {
-                
-                self.confirmAlert(title: Localizable.shared.strings.activate_security_title, message: Localizable.shared.strings.activate_security_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.activate, cancelHandler: { (_ ) in
+                self.confirmAlert(title: Localizable.shared.strings.activate_security_title, message: Localizable.shared.strings.activate_security_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.activate, cancelHandler: { _ in
                     
-                }) { (_ ) in
+                }) { _ in
                     Settings.sharedManager().isAskForHideAmounts = false
                     Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
                 }
             }
-            else{
+            else {
                 Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
             }
         }
-        else{
+        else {
             Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
         }
     }
 }
 
-//MARK: - MFMailComposeViewControllerDelegate
+// MARK: - MFMailComposeViewControllerDelegate
 
-extension BaseViewController : MFMailComposeViewControllerDelegate {
-
+extension BaseViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ didFinishWithcontroller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        
-        didFinishWithcontroller.dismiss(animated: true) {
-        }
+        didFinishWithcontroller.dismiss(animated: true) {}
     }
 }
 
-//MARK: - Dismiss Swipe
+// MARK: - Dismiss Swipe
 
 extension BaseViewController {
-    
     public func addSwipeToDismiss() {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onPan(_:)))
         self.view.addGestureRecognizer(panGesture)
     }
     
@@ -402,7 +394,7 @@ extension BaseViewController {
         if let visualView = self.view.subviews.first as? UIVisualEffectView {
             visualView.alpha = alpha
         }
-        else{
+        else {
             self.view.alpha = alpha
         }
         
@@ -419,32 +411,30 @@ extension BaseViewController {
             let translation = panGesture.translation(in: view)
             let y = max(0, translation.y)
             self.slideViewVerticallyTo(y)
-            break
         case .ended:
             let translation = panGesture.translation(in: view)
             let velocity = panGesture.velocity(in: view)
-            let closing = (translation.y > self.view.frame.size.height * minimumScreenRatioToHide) ||
-                (velocity.y > minimumVelocityToHide)
+            let closing = (translation.y > self.view.frame.size.height * self.minimumScreenRatioToHide) ||
+                (velocity.y > self.minimumVelocityToHide)
             
             if closing {
-                UIView.animate(withDuration: animationDuration, animations: {
+                UIView.animate(withDuration: self.animationDuration, animations: {
                     self.slideViewVerticallyTo(self.view.frame.size.height)
-                }, completion: { (isCompleted) in
+                }, completion: { isCompleted in
                     if isCompleted {
                         self.dismiss(animated: false, completion: nil)
                     }
                 })
-            } else {
-                UIView.animate(withDuration: animationDuration, animations: {
+            }
+            else {
+                UIView.animate(withDuration: self.animationDuration, animations: {
                     self.slideViewVerticallyTo(0)
                 })
             }
-            break
         default:
-            UIView.animate(withDuration: animationDuration, animations: {
+            UIView.animate(withDuration: self.animationDuration, animations: {
                 self.slideViewVerticallyTo(0)
             })
-            break
         }
     }
 }

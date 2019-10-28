@@ -136,10 +136,6 @@ class LocalizableStrings : NSObject {
     var in_24_hours_now = "in_24_hours".localized
     var transaction_history = "transaction_history".localized
     var min_fee_error = "min_fee_error".localized
-
-    
-    
-    
     var never = "never".localized
     var address_expires = "address_expires".localized
     var save = "save".localized
@@ -309,6 +305,7 @@ class LocalizableStrings : NSObject {
     var buy_transaction_success_title = "buy_transaction_success_title".localized
     var buy_transaction_success_text = "buy_transaction_success_text".localized
     var enter_password_title = "enter_password_title".localized
+    var enter_password = "enter_password".localized
     var receive_beam = "receive_beam".localized
     var send_beam = "send_beam".localized
     var expired = "expired".localized
@@ -333,7 +330,7 @@ class LocalizableStrings : NSObject {
     var language = "language".localized
     var as_set = "as_set".localized.capitalizingFirstLetter()
     var invalid_address_title = "invalid_address_title".localized.capitalizingFirstLetter()
-    var invalid_address_text = "invalid_address_text".localized.capitalizingFirstLetter()
+    var invalid_address_text = "invalid_address_text".localized
     var downloading = "downloading".localized
     var sent_to_own = "sent_to_own".localized
     var sending_to_own = "sending_to_own".localized
@@ -348,7 +345,8 @@ class LocalizableStrings : NSObject {
     var h = "h".localized
     var m = "m".localized
     var send_qr_secure = "send_qr_secure".localized
-    var share_transaction = "share_transaction".localized
+    var share_details = "share_details".localized
+    var copy_details = "copy_details".localized
     var maturing = "maturing".localized
     var auth_face_confirm = "auth_face_confirm".localized
     var auth_touch_confirm = "auth_touch_confirm".localized
@@ -360,9 +358,9 @@ class LocalizableStrings : NSObject {
     var addresses_empty = "addresses_empty".localized
     var utxo_empty = "utxo_empty".localized
     var transactions_empty = "transactions_empty".localized
-    var automatic_restore_title = "automatic_restore_title".localized
+    var automatic_restore_title = "automatic_restore_title".localized.uppercased()
     var automatic_restore_text = "automatic_restore_text".localized
-    var manual_restore_title = "manual_restore_title".localized
+    var manual_restore_title = "manual_restore_title".localized.uppercased()
     var manual_restore_text = "manual_restore_text".localized
     var paste_owner_key = "paste_owner_key".localized
     var after_paste_owner_key = "after_paste_owner_key".localized
@@ -401,6 +399,75 @@ class LocalizableStrings : NSObject {
 
     var info_restore_title = "info_restore_title".localized
     var info_restore_text = "info_restore_text".localized
+    
+    var crash_title = "crash_title".localized
+    var crash_message = "crash_message".localized
+    var crash_negative = "crash_negative".localized
+    var crash_positive = "crash_positive".localized
+
+    var estimted_time = "estimted_time".localized
+    var node_address = "node_address".localized.lowercased()
+    var create_new_password_short = "create_new_password_short".localized
+    var create_new_password = "create_new_password".localized
+
+    var lock_screen = "lock_screen".localized
+    var paste_payment_proof = "paste_payment_proof".localized
+    var colour = "colour".localized
+    var no_category_contacts = "no_category_contacts".localized
+
+    var show_owner_key_auth_1 = "show_owner_key_auth_1".localized
+    var show_owner_key_auth_2 = "show_owner_key_auth_2".localized
+    var show_owner_key_auth_3 = "show_owner_key_auth_3".localized
+    var use_touch_id = "use_touch_id".localized
+    var use_face_id = "use_face_id".localized
+    var enter_your_password = "enter_your_password".localized
+    var save_contact_title = "save_contact_title".localized
+
+    var faucet_title = "faucet_title".localized.uppercased()
+    var show_seed_phrase = "show_seed_phrase".localized
+    var increase_security = "increase_security".localized
+    var increase_security_text = "increase_security_text".localized
+    var seed_phrase_text = "seed_phrase_text".localized
+    var make_wallet_secure_title = "make_wallet_secure".localized
+    var make_wallet_secure_text = "make_wallet_secure_text".localized
+    var complete_verification = "complete_verification".localized
+    var yes_please = "yes_please".localized
+    var create_password = "create_password".localized
+    var faucet_text = "faucet_text".localized
+    var get_coins = "get_coins".localized
+    var secure_your_phrase = "secure_your_phrase".localized
+    var privacy = "privacy".localized
+    var complete_wallet_verification = "complete_wallet_verification".localized
+    var clear_local_data = "clear_local_data".localized
+    var get_beam_faucet = "get_beam_faucet".localized
+    var save_wallet_logs = "save_wallet_logs".localized
+    var all_time = "all_time".localized
+    var last_5_days = "last_5_days".localized
+    var last_15_days = "last_15_days".localized
+    var last_30_days = "last_30_days".localized
+    var clear_wallet = "clear_wallet".localized
+    var change_node_text_1 = "change_node_text_1".localized
+    var change_node_text_2 = "change_node_text_2".localized
+    var change_node_text_3 = "change_node_text_3".localized
+    var change_settings_text_1 = "change_settings_text_1".localized
+    var change_settings_text_2 = "change_settings_text_2".localized
+    var change_settings_text_3 = "change_settings_text_3".localized
+    var clear_wallet_text = "clear_wallet_text".localized
+    var sent = "sent".localized
+    var display_seed = "display_seed".localized
+    var display_seed_old = "display_seed_old".localized
+    var confirm_seed_text = "confirm_seed_text".localized
+    var input_seed = "input_seed".localized
+    var intro_seed_main = "intro_seed_main".localized
+    var intro_seed_1 = "intro_seed_1".localized
+    var intro_seed_2 = "intro_seed_2".localized
+    var intro_seed_3 = "intro_seed_3".localized
+    var paste = "paste".localized
+    var enter_trusted_node = "enter_trusted_node".localized
+    var your_current_password = "your_current_password".localized
+    var clear_wallet_password = "clear_wallet_password".localized
+    var remove_wallet = "remove_wallet".localized
+
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

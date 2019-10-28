@@ -1,5 +1,6 @@
 PODS:
-  - Crashlytics (3.13.4):
+  - CrashEye (1.2.0)
+  - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - Fabric (1.10.2)
   - Parchment (1.6.0)
@@ -8,6 +9,7 @@ PODS:
   - SwipeTransition (0.4.0)
 
 DEPENDENCIES:
+  - CrashEye
   - Crashlytics
   - Fabric
   - Parchment
@@ -17,6 +19,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - CrashEye
     - Crashlytics
     - Fabric
     - Parchment
@@ -25,13 +28,14 @@ SPEC REPOS:
     - SwipeTransition
 
 SPEC CHECKSUMS:
-  Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
+  CrashEye: 89d1ca174f0ef3ceeb27152f578c0a61667ba799
+  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Parchment: d3a7b367c529fa6ef51aa43f5717a7ff36d4b1f5
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwipeTransition: 6c6a03e3706ba9c24221c5995671b460f27753b7
 
-PODFILE CHECKSUM: 567ecbb4a44a28168cd1b35e6fad4255e219df33
+PODFILE CHECKSUM: 450e70ea2a8cd688a273d39b91cb39950bede173
 
 COCOAPODS: 1.5.3

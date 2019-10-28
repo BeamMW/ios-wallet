@@ -20,37 +20,35 @@
 import UIKit
 
 protocol SettingsCellDelegate: AnyObject {
-    func onClickSwitch(value:Bool, cell:SettingsCell)
+    func onClickSwitch(value: Bool, cell: SettingsCell)
 }
 
-
 class SettingsCell: BaseCell {
-
     weak var delegate: SettingsCellDelegate?
-
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var detailLabel: UILabel!
-    @IBOutlet private weak var mainView: UIView!
-    @IBOutlet private weak var switchView: UISwitch!
-    @IBOutlet private weak var arrowView: UIImageView!
-    @IBOutlet private weak var titleXOffset: NSLayoutConstraint!
-
+    
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var detailLabel: UILabel!
+    @IBOutlet private var mainView: UIView!
+    @IBOutlet private var switchView: UISwitch!
+    @IBOutlet private var arrowView: UIImageView!
+    @IBOutlet private var titleXOffset: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        switchView.tintColor = Settings.sharedManager().target == Testnet ? UIColor.init(hexString: "#0F0D17") : UIColor.main.marine
-        switchView.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor.init(hexString: "#0F0D17") : UIColor.main.marine
+        switchView.tintColor = Settings.sharedManager().target == Testnet ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
+        switchView.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
         
         backgroundColor = UIColor.main.marineThree
         mainView.backgroundColor = UIColor.main.marineThree
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        self.selectedBackgroundView = selectedView
+        selectedBackgroundView = selectedView
     }
-
-    @IBAction func onSwitch(sender : UISwitch) {
-        self.delegate?.onClickSwitch(value: sender.isOn, cell: self)
+    
+    @IBAction func onSwitch(sender: UISwitch) {
+        delegate?.onClickSwitch(value: sender.isOn, cell: self)
     }
     
     override func layoutSubviews() {
@@ -61,9 +59,7 @@ class SettingsCell: BaseCell {
 }
 
 extension SettingsCell: Configurable {
-    
-    func configure(with item:SettingsViewModel.SettingsItem) {
-
+    func configure(with item: SettingsViewModel.SettingsItem) {
         titleLabel.textColor = UIColor.white
         
         titleLabel?.text = item.title
@@ -84,28 +80,32 @@ extension SettingsCell: Configurable {
         if let category = item.category {
             arrowView.isHidden = false
             titleXOffset.constant = 25
-            titleLabel.textColor = UIColor.init(hexString: category.color)
+            titleLabel.textColor = UIColor(hexString: category.color)
         }
-        else{
-            if item.id == 5 || item.id == 6 || item.id == 7 || item.id == 1 || item.id == 8 || item.id == 12 || item.id == 13  {
+        else {
+            if item.id == 5 || item.id == 7 || item.id == 1 || item.id == 8 || item.id == 12 || item.id == 13 || item.id == 15 || item.id == 16 || item.id == 17  || item.id == 18 || item.id == 19 {
                 arrowView.isHidden = false
                 titleXOffset.constant = 25
             }
-            else{
+            else {
                 arrowView.isHidden = true
                 titleXOffset.constant = 15
             }
         }
         
-        if item.id == 5 && Settings.sharedManager().connectToRandomNode {
+        if item.id == 5, Settings.sharedManager().connectToRandomNode {
             isUserInteractionEnabled = false
             mainView.alpha = 0.8
             arrowView.isHidden = true
             titleXOffset.constant = 15
         }
-        else{
+        else {
             isUserInteractionEnabled = true
             mainView.alpha = 1
+        }
+        
+        if item.id == 20 {
+            titleLabel.textColor = UIColor.main.red
         }
     }
 }

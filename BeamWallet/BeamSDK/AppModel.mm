@@ -61,7 +61,6 @@ static int proofSize = 330;
 static NSString *categoriesKey = @"categoriesKey";
 static NSString *transactionCommentsKey = @"transaction_comment";
 static NSString *restoreFlowKey = @"restoreFlowKey";
-static NSString *changeFlowKey = @"changeFlowKey";
 
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
@@ -111,30 +110,19 @@ const int kFeeInGroth_Fork1 = 100;
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
     
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
-    
+        
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
-    _isChangeWallet = [[NSUserDefaults standardUserDefaults] boolForKey:changeFlowKey];
-
-    if (_isRestoreFlow && !_isChangeWallet) {
-        [self resetWallet:YES];
-    }
-    else if (_isChangeWallet)
-    {
-        [self resetChangeWallet];
-    }
-    
+        
     [self checkInternetConnection];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didBecomeActiveNotification)
-                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self loadRules];
     
     return self;
 }
 
--(void)loadRules{    
+-(void)loadRules{
     Rules::get().UpdateChecksum();
 
     LOG_INFO() << "Rules signature";
@@ -168,31 +156,18 @@ const int kFeeInGroth_Fork1 = 100;
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
     
--(void)setIsChangeWallet:(BOOL)isChangeWallet {
-    _isChangeWallet = isChangeWallet;
-    
-    NSString *oldPath = [Settings sharedManager].walletStoragePath;
-    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
- 
-    if (_isChangeWallet) {
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
-            [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
-        }
-        
-        NSError *error;
-        [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:recoverPath error:&error];
-        
-        if (error == nil) {
-            [self resetWallet:YES];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] setBool:_isChangeWallet forKey:changeFlowKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
 #pragma mark - Inetrnet
+
+-(void)onOnline {
+    if(self.connectionAfterOnlineTimer!=nil){
+        [self.connectionAfterOnlineTimer invalidate];
+        self.connectionAfterOnlineTimer = nil;
+    }
+    
+    [[AppModel sharedManager] setIsInternetAvailable:YES];
+    [[AppModel sharedManager] refreshAllInfo];
+}
 
 -(void)checkInternetConnection{
     __weak typeof(self) weakSelf = self;
@@ -203,22 +178,37 @@ const int kFeeInGroth_Fork1 = 100;
     {
         if (self->isRunning == NO && weakSelf.isLoggedin == YES) {
             self->isRunning = YES;
-            self->wallet->start();
         }
         
         if (![[AppModel sharedManager] isInternetAvailable]) {
-            [[AppModel sharedManager] refreshAllInfo];
-        }
-        
-        [[AppModel sharedManager] setIsInternetAvailable:YES];
-        
-        if (![AppModel sharedManager].isRestoreFlow) {
-            [[AppModel sharedManager] start];
+            
+            if (weakSelf.isLoggedin == YES)
+            {
+                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+                     if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                         [delegate onNodeStartChanging];
+                     }
+                 }
+                
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if([AppModel sharedManager].connectionAfterOnlineTimer==nil){
+                           [AppModel sharedManager].connectionAfterOnlineTimer = [NSTimer scheduledTimerWithTimeInterval:3 target: [AppModel sharedManager] selector: @selector(onOnline) userInfo: nil repeats: NO];
+            }
+            });
+            }
+           else{
+               [[AppModel sharedManager] setIsInternetAvailable:YES];
+           }
         }
     };
     
     internetReachableFoo.unreachableBlock = ^(Reachability*reach)
     {
+        if(weakSelf.connectionAfterOnlineTimer!=nil){
+            [weakSelf.connectionAfterOnlineTimer invalidate];
+            weakSelf.connectionAfterOnlineTimer = nil;
+        }
+        
         [[AppModel sharedManager] setIsInternetAvailable:NO];
         [[AppModel sharedManager] setIsConnected:NO];
         
@@ -260,12 +250,7 @@ const int kFeeInGroth_Fork1 = 100;
     _isNodeChanging = isNodeChanging;
     
     if (_isNodeChanging) {
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-        {
-            if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
-                [delegate onNodeStartChanging];
-            }
-        }
+        [[AppModel sharedManager] startChangeNode];
     }
 }
 
@@ -432,22 +417,7 @@ const int kFeeInGroth_Fork1 = 100;
     [SVProgressHUD dismiss];
 }
 
--(void)resetChangeWallet{
-    self.isChangeWallet = NO;
-
-    NSString *oldPath = [Settings sharedManager].walletStoragePath;
-    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
-    }
-    
-    NSError *error;
-    [[NSFileManager defaultManager] copyItemAtPath:recoverPath toPath:oldPath error:&error];
-    
-    NSLog(@"%@",error);
-}
-    
+ 
 -(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
@@ -471,13 +441,87 @@ const int kFeeInGroth_Fork1 = 100;
     walletDb = nil;
 
     if(removeDatabase) {
+        NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
     }
     
-    [[Settings sharedManager] resetWallet];
+    [[Settings sharedManager] resetNode];
 }
 
+-(void)startChangeWallet {
+    NSString *oldPath = [Settings sharedManager].walletStoragePath;
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+       
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+    }
+             
+    NSError *error;
+    [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:recoverPath error:&error];
+             
+    if (error == nil) {
+        [self resetWallet:YES];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] setObject:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    self.isRestoreFlow = YES;
+}
+
+-(void)stopChangeWallet {
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+          [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"nodeKeyRecover"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)startChangeNode {
+   if(self.isInternetAvailable)
+   {
+       for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+              if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                  [delegate onNodeStartChanging];
+              }
+          }
+   }
+}
+
+-(void)checkRecoveryWallet {
+    NSString *oldPath = [Settings sharedManager].walletStoragePath;
+    NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
+        }
+        
+        NSError *error;
+        [[NSFileManager defaultManager] copyItemAtPath:recoverPath toPath:oldPath error:&error];
+    }
+    else if (_isRestoreFlow) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
+        }
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"nodeKeyRecover"]) {
+        [Settings sharedManager].connectToRandomNode = [[NSUserDefaults standardUserDefaults] boolForKey:@"randomNodeKeyRecover"];
+        [Settings sharedManager].nodeAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"nodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"nodeKeyRecover"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    self.isRestoreFlow = NO;
+}
 
 -(BOOL)isWalletInitialized{
     if (walletDb != nil && wallet != nil) {
@@ -556,11 +600,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
-        if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
-            isRunning = YES;
-            wallet->start();
-        }
+        wallet->start();
         
+        isRunning = YES;
         isStarted = YES;
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
@@ -730,7 +772,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 }
                 catch (...) {
                     return NO;
-                }            
+                }
             }
         }
     }
@@ -1241,6 +1283,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
+-(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name {
+    for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
+         if ([add.label isEqualToString:name]) {
+             return add;
+         }
+     }
+    return nil;
+}
+
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID {
     for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
         if ([add.walletId isEqualToString:ID]) {
@@ -1458,32 +1509,41 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 #pragma mark - Logs
 
--(void)createLogger {
+-(void)clearLogs {
     NSString *dataPath = [[Settings sharedManager] logPath];
     
     NSMutableArray *needRemove = [NSMutableArray new];
     
     NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dataPath error:nil];
     
-    NSTimeInterval period = 60 * 60 * (24*3); //3 day
-    
-    for (NSString *file in dirContents) {
-        NSString *path = [dataPath stringByAppendingPathComponent:file];
+    int days = [Settings sharedManager].logDays;
+    if (days > 0) {
+        NSTimeInterval period = 60 * 60 * (24*days);
+
+        for (NSString *file in dirContents) {
+            NSString *path = [dataPath stringByAppendingPathComponent:file];
+            
+            NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+            
+            NSDate *result = [fileAttribs objectForKey:NSFileCreationDate];
+            NSTimeInterval diff = [[NSDate date] timeIntervalSince1970] - [result timeIntervalSince1970];
+            
+            if (diff > period) {
+                [needRemove addObject:path];
+            }
+        }
         
-        NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
-        
-        NSDate *result = [fileAttribs objectForKey:NSFileCreationDate];
-        NSTimeInterval diff = [[NSDate date] timeIntervalSince1970] - [result timeIntervalSince1970];
-        
-        if (diff > period) {
-            [needRemove addObject:path];
+        for (NSString *file in needRemove) {
+            [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
         }
     }
+}
+
+-(void)createLogger {
+    NSString *dataPath = [[Settings sharedManager] logPath];
     
-    for (NSString *file in needRemove) {
-        [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
-    }
-    
+    [self clearLogs];
+
     
     static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string, dataPath.string);
     
@@ -1929,6 +1989,39 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return NO;
 }
 
+-(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category {
+    NSMutableArray *addresses = [NSMutableArray array];
+    
+    NSMutableArray *contacts = [NSMutableArray arrayWithArray:_contacts];
+    
+    for (BMContact *contact in contacts) {
+        for (NSString *c in contact.address.categories) {
+            if (c.intValue == category.ID) {
+                [addresses addObject:contact];
+            }
+        }
+    }
+    
+    return addresses;
+}
+
+-(NSMutableArray<BMAddress*>*_Nonnull)getOnlyAddressesFromCategory:(BMCategory*_Nonnull)category {
+    NSMutableArray *addresses = [NSMutableArray array];
+    
+    NSMutableArray *walletAddresses = [NSMutableArray arrayWithArray:_walletAddresses];
+    
+    for (BMAddress *address in walletAddresses) {
+        for (NSString *c in address.categories) {
+            if (c.intValue == category.ID) {
+                [addresses addObject:address];
+            }
+        }
+    }
+    
+    
+    return addresses;
+}
+
 -(NSMutableArray<BMAddress*>*_Nonnull)getAddressesFromCategory:(BMCategory*_Nonnull)category {
     NSMutableArray *addresses = [NSMutableArray array];
     
@@ -2074,4 +2167,27 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     });
 }
 
+-(void)completeWalletVerification {
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onWalletCompleteVerefication)]) {
+            [delegate onWalletCompleteVerefication];
+        }
+    }
+}
+
+//MARK: - Export
+
+-(NSString*_Nonnull)exportData {
+    auto exported = storage::ExportDataToJson(*walletDb);
+    NSString *result = [NSString stringWithUTF8String:exported.c_str()];
+    return result;
+}
+
+-(void)importData:(NSString*)data {
+    auto _data = [data string];
+    storage::ImportDataFromJson(*walletDb, &_data[0], _data.size());
+}
+
 @end
+

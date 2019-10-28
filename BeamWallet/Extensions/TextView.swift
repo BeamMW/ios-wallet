@@ -47,6 +47,7 @@ class UITextViewPlacholder : UITextView
         }
     }
     
+    
     /// The UITextView placeholder text
     public var placeholder: String? {
         get {

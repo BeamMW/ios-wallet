@@ -17,7 +17,6 @@
 // limitations under the License.
 //
 
-
 import UIKit
 
 class AddressViewModel: NSObject {
@@ -27,49 +26,45 @@ class AddressViewModel: NSObject {
         case contacts = 2
     }
     
-    public var onDataChanged : (() -> Void)?
-    public var onDataDeleted : ((IndexPath?, BMAddress) -> Void)?
-
+    public var onDataChanged: (() -> Void)?
+    public var onDataDeleted: ((IndexPath?, BMAddress) -> Void)?
+    
     public var addresses = [BMAddress]()
     public var contacts = [BMContact]()
     public var selectedState: AddressesSelectedState = .active {
-        didSet{
-            self.filterAddresses()
+        didSet {
+            filterAddresses()
         }
     }
     
-    public var count:Int {
-        get{
-            return  selectedState == .contacts ? contacts.count : addresses.count
-        }
+    public var count: Int {
+        return selectedState == .contacts ? contacts.count : addresses.count
     }
     
-    public var allCount:Int {
-        get{
-            var count = 0
-            if let addresses = AppModel.sharedManager().walletAddresses {
-                count = count + addresses.count
-            }
-            count = count + AppModel.sharedManager().contacts.count
-            return count
+    public var allCount: Int {
+        var count = 0
+        if let addresses = AppModel.sharedManager().walletAddresses {
+            count = count + addresses.count
         }
+        count = count + AppModel.sharedManager().contacts.count
+        return count
     }
     
-    public var address:BMAddress?
+    public var address: BMAddress?
     
-    public var category:BMCategory?
-
+    public var category: BMCategory?
+    
     override init() {
         super.init()
     }
     
-    init(selected:AddressesSelectedState) {
+    init(selected: AddressesSelectedState) {
         super.init()
         
         AppModel.sharedManager().addDelegate(self)
     }
     
-    init(address:BMAddress) {
+    init(address: BMAddress) {
         super.init()
         
         self.address = address
@@ -77,7 +72,7 @@ class AddressViewModel: NSObject {
         AppModel.sharedManager().addDelegate(self)
     }
     
-    init(category:BMCategory?) {
+    init(category: BMCategory?) {
         super.init()
         
         self.category = category
@@ -92,101 +87,117 @@ class AddressViewModel: NSObject {
     deinit {
         AppModel.sharedManager().removeDelegate(self)
     }
-        
+    
     public func filterAddresses() {
         DispatchQueue.main.async {
             switch self.selectedState {
             case .active:
-                if let addresses = AppModel.sharedManager().walletAddresses {
+                if let category = self.category {
+                    let addresses = AppModel.sharedManager().getOnlyAddresses(from: category)
                     self.addresses = addresses as! [BMAddress]
                 }
-                self.addresses = self.addresses.filter { $0.isExpired() == false}
+                else {
+                    if let addresses = AppModel.sharedManager().walletAddresses {
+                        self.addresses = addresses as! [BMAddress]
+                    }
+                    self.addresses = self.addresses.filter { $0.isExpired() == false }
+                }
             case .expired:
-                if let addresses = AppModel.sharedManager().walletAddresses {
+                if let category = self.category {
+                    let addresses = AppModel.sharedManager().getOnlyContacts(from: category)
                     self.addresses = addresses as! [BMAddress]
                 }
-                self.addresses = self.addresses.filter { $0.isExpired() == true}
+                else {
+                    if let addresses = AppModel.sharedManager().walletAddresses {
+                        self.addresses = addresses as! [BMAddress]
+                    }
+                    self.addresses = self.addresses.filter { $0.isExpired() == true }
+                }
             case .contacts:
-                self.contacts = AppModel.sharedManager().contacts as! [BMContact]
+                if let category = self.category {
+                    let addresses = AppModel.sharedManager().getOnlyContacts(from: category)
+                    self.contacts = addresses as! [BMContact]
+                }
+                else {
+                    self.contacts = AppModel.sharedManager().contacts as! [BMContact]
+                }
             }
             
             self.onDataChanged?()
         }
     }
     
-    public func onDeleteAddress(address:BMAddress, indexPath:IndexPath?) {
+    public func onDeleteAddress(address: BMAddress, indexPath: IndexPath?) {
         let transactions = (AppModel.sharedManager().getCompletedTransactions(from: address) as! [BMTransaction])
         
-        if transactions.count > 0  {
-            self.showDeleteAddressAndTransactions(indexPath: indexPath)
+        if transactions.count > 0 {
+            showDeleteAddressAndTransactions(indexPath: indexPath)
         }
-        else{
+        else {
             if let path = indexPath {
-                if self.selectedState == .contacts {
-                    self.contacts.remove(at: path.row)
+                if selectedState == .contacts {
+                    contacts.remove(at: path.row)
                 }
-                else{
-                    self.addresses.remove(at: path.row)
+                else {
+                    addresses.remove(at: path.row)
                 }
             }
-            self.onDataDeleted?(indexPath, address)
+            onDataDeleted?(indexPath, address)
         }
     }
     
-    public func showDeleteAddressAndTransactions(indexPath:IndexPath?) {
-        var address:BMAddress!
+    public func showDeleteAddressAndTransactions(indexPath: IndexPath?) {
+        var address: BMAddress!
         
         if let path = indexPath {
             address = (selectedState == .contacts ? contacts[path.row].address : addresses[path.row])
         }
-        else{
+        else {
             address = self.address
         }
         
-        let items = [BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizable.shared.strings.delete_contact_transaction : Localizable.shared.strings.delete_address_transaction), icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: (selectedState == .contacts ? Localizable.shared.strings.delete_contact_only : Localizable.shared.strings.delete_address_only), icon: nil, action:.delete_address)]
+        let items = [BMPopoverMenu.BMPopoverMenuItem(name: selectedState == .contacts ? Localizable.shared.strings.delete_contact_transaction : Localizable.shared.strings.delete_address_transaction, icon: nil, action: .delete_address_transactions), BMPopoverMenu.BMPopoverMenuItem(name: selectedState == .contacts ? Localizable.shared.strings.delete_contact_only : Localizable.shared.strings.delete_address_only, icon: nil, action: .delete_address)]
         
-        BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
+        BMPopoverMenu.show(menuArray: items, done: { selectedItem in
             if let item = selectedItem {
-                switch (item.action) {
+                switch item.action {
                 case .delete_address:
                     if let path = indexPath {
                         if self.selectedState == .contacts {
                             self.contacts.remove(at: path.row)
                         }
-                        else{
+                        else {
                             self.addresses.remove(at: path.row)
                         }
                     }
                     address.isNeedRemoveTransactions = false
-                    self.onDataDeleted?(indexPath,address)
-                case .delete_address_transactions :
+                    self.onDataDeleted?(indexPath, address)
+                case .delete_address_transactions:
                     if let path = indexPath {
                         if self.selectedState == .contacts {
                             self.contacts.remove(at: path.row)
                         }
-                        else{
+                        else {
                             self.addresses.remove(at: path.row)
                         }
                     }
                     address.isNeedRemoveTransactions = true
-                    self.onDataDeleted?(indexPath,address)
+                    self.onDataDeleted?(indexPath, address)
                 default:
                     return
                 }
             }
-        }) {
-            
-        }
+        }) {}
     }
     
-    public func onEditAddress(address:BMAddress) {
+    public func onEditAddress(address: BMAddress) {
         let vc = EditAddressViewController(address: address)
         if let top = UIApplication.getTopMostViewController() {
             top.pushViewController(vc: vc)
         }
     }
     
-    public func onQRCodeAddress(address:BMAddress) {
+    public func onQRCodeAddress(address: BMAddress) {
         let modalViewController = QRViewController(address: address, amount: nil)
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -195,34 +206,34 @@ class AddressViewModel: NSObject {
         }
     }
     
-    public func onCopyAddress(address:BMAddress) {
+    public func onCopyAddress(address: BMAddress) {
         UIPasteboard.general.string = address.walletId
         ShowCopied(text: Localizable.shared.strings.address_copied)
     }
     
-    public func trailingSwipeActions(indexPath:IndexPath) -> UISwipeActionsConfiguration? {
-        let address:BMAddress = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
+    public func trailingSwipeActions(indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let address: BMAddress = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
         
-        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let delete = UIContextualAction(style: .normal, title: nil) { _, _, handler in
             handler(true)
-           self.onDeleteAddress(address: address, indexPath: indexPath)
+            self.onDeleteAddress(address: address, indexPath: indexPath)
         }
         delete.image = IconRowDelete()
-        delete.backgroundColor = UIColor.main.orangeRed
+        delete.backgroundColor = UIColor.main.coral
         
-        let copy = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let copy = UIContextualAction(style: .normal, title: nil) { _, _, handler in
             handler(true)
             self.onCopyAddress(address: address)
         }
         copy.image = IconRowCopy()
-        copy.backgroundColor = UIColor.main.warmBlue
+        copy.backgroundColor = UIColor.main.deepSeaBlue
         
-        let edit = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let edit = UIContextualAction(style: .normal, title: nil) { _, _, handler in
             handler(true)
             self.onEditAddress(address: address)
         }
         edit.image = IconRowEdit()
-        edit.backgroundColor = UIColor.main.steel
+        edit.backgroundColor = UIColor.main.cerulean
         
         let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
         configuration.performsFirstActionWithFullSwipe = false
@@ -230,7 +241,7 @@ class AddressViewModel: NSObject {
     }
 }
 
-extension AddressViewModel : WalletModelDelegate {
+extension AddressViewModel: WalletModelDelegate {
     func onWalletAddresses(_ walletAddresses: [BMAddress]) {
         DispatchQueue.main.async {
             if self.address != nil {
@@ -239,11 +250,7 @@ extension AddressViewModel : WalletModelDelegate {
                     self.onDataChanged?()
                 }
             }
-            else if self.category != nil{
-                self.addresses = AppModel.sharedManager().getAddressesFrom(self.category!) as! [BMAddress]
-                self.onDataChanged?()
-            }
-            else{
+            else {
                 self.filterAddresses()
             }
         }
@@ -257,11 +264,7 @@ extension AddressViewModel : WalletModelDelegate {
                     self.onDataChanged?()
                 }
             }
-            else if self.category != nil{
-                self.addresses = AppModel.sharedManager().getAddressesFrom(self.category!) as! [BMAddress]
-                self.onDataChanged?()
-            }
-            else{
+            else {
                 self.filterAddresses()
             }
         }
@@ -269,13 +272,7 @@ extension AddressViewModel : WalletModelDelegate {
     
     func onCategoriesChange() {
         DispatchQueue.main.async {
-            if self.category != nil{
-                self.addresses = AppModel.sharedManager().getAddressesFrom(self.category!) as! [BMAddress]
-                self.onDataChanged?()
-            }
-            else if self.address == nil {
-                self.filterAddresses()
-            }
+            self.filterAddresses()
         }
     }
 }

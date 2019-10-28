@@ -31,6 +31,7 @@ static NSString *askHideAmountsKey = @"askHideAmountsKey";
 static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 static NSString *languageKey = @"languageKey";
 static NSString *randomNodeKey = @"randomNodeKey";
+static NSString *logsKey = @"logsKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -57,7 +58,7 @@ static NSString *randomNodeKey = @"randomNodeKey";
     else{
         _target = Mainnet;
     }
-    
+
     _isLocalNode = NO;
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:askKey]) {
@@ -76,6 +77,12 @@ static NSString *randomNodeKey = @"randomNodeKey";
         _connectToRandomNode = NO;
     }
 
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:logsKey]) {
+        _logDays = [[[NSUserDefaults standardUserDefaults] objectForKey:logsKey] intValue];
+    }
+    else{
+        _logDays = 5;
+    }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:lockScreen]) {
         _lockScreenSeconds = [[[NSUserDefaults standardUserDefaults] objectForKey:lockScreen] intValue];
@@ -153,12 +160,19 @@ static NSString *randomNodeKey = @"randomNodeKey";
 
     return self;
 }
-    
--(void)resetWallet {
-    _nodeAddress = [AppModel chooseRandomNode];
 
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:nodeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+-(void)resetNode{
+    _nodeAddress = [AppModel chooseRandomNode];
+}
+    
+-(void)resetSettings {
+    self.nodeAddress = [AppModel chooseRandomNode];
+    self.logDays = 5;
+    self.lockScreenSeconds = 0;
+    self.connectToRandomNode = YES;
+    self.isAllowOpenLink = NO;
+    self.isAskForHideAmounts = YES;
+    self.isHideAmounts = NO;
 }
 
 -(NSString*_Nonnull)customNode {
@@ -194,6 +208,15 @@ static NSString *randomNodeKey = @"randomNodeKey";
     
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_lockScreenSeconds] forKey:lockScreen];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setLogDays:(int)logDays {
+    _logDays = logDays;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:_logDays] forKey:logsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[AppModel sharedManager] clearLogs];
 }
 
 -(void)setConnectToRandomNode:(BOOL)connectToRandomNode {
@@ -269,7 +292,7 @@ static NSString *randomNodeKey = @"randomNodeKey";
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    if(![[AppModel sharedManager] isRestoreFlow]){
+    if([[AppModel sharedManager] isLoggedin]){
         for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
@@ -328,8 +351,8 @@ static NSString *randomNodeKey = @"randomNodeKey";
 }
 
 -(void)copyOldDatabaseToGroup {
-//    [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
-//    [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet1" ofType:nil] toPath:[self walletStoragePath] error:nil];
+ //   [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
+   // [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet_old" ofType:@"uu"] toPath:[self walletStoragePath] error:nil];
     
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -365,71 +388,112 @@ static NSString *randomNodeKey = @"randomNodeKey";
     en.code = @"en";
     en.enName = @"English";
     en.localName = @"English";
-    en.ID = 1;
+    en.ID = 2;
 
     BMLanguage *ru = [BMLanguage new];
     ru.code = @"ru";
     ru.enName = @"Русский";
     ru.localName = @"Russian";
+    ru.ID = 0;
     
     BMLanguage *es = [BMLanguage new];
     es.code = @"es";
     es.enName = @"Español";
     es.localName = @"Spanish";
-    
+    es.ID = 0;
+
     BMLanguage *sw = [BMLanguage new];
     sw.code = @"sv-SE";
     sw.enName = @"Svenska";
     sw.localName = @"Swedish";
-    
+    sw.ID = 0;
+
     BMLanguage *ko = [BMLanguage new];
     ko.code = @"ko";
     ko.enName = @"한국어";
     ko.localName = @"Korean";
-    
+    ko.ID = 0;
+
     BMLanguage *vi = [BMLanguage new];
     vi.code = @"vi";
     vi.enName = @"Tiếng Việt";
     vi.localName = @"Vietnamese";
-    
+    vi.ID = 0;
+
     BMLanguage *ch = [BMLanguage new];
     ch.code = @"zh-Hans";
     ch.enName = @"中文";
     ch.localName = @"Chinese";
-    
+    ch.ID = 0;
+
     BMLanguage *tr = [BMLanguage new];
     tr.code = @"tr";
     tr.enName = @"Türk";
     tr.localName = @"Turkish";
+    tr.ID = 0;
 
     BMLanguage *fr = [BMLanguage new];
     fr.code = @"fr";
     fr.enName = @"Français";
     fr.localName = @"French";
-    
+    fr.ID = 0;
+
     BMLanguage *jp = [BMLanguage new];
     jp.code = @"ja";
     jp.enName = @"日本語";
     jp.localName = @"Japanese";
-    
+    jp.ID = 0;
+
     BMLanguage *th = [BMLanguage new];
     th.code = @"th";
     th.enName = @"ภาษาไทย";
     th.localName = @"Thai";
-    
+    th.ID = 0;
+
     BMLanguage *dutch = [BMLanguage new];
     dutch.code = @"nl";
     dutch.enName = @"Nederlands";
     dutch.localName = @"Dutch";
-    
+    dutch.ID = 0;
+
     BMLanguage *fin = [BMLanguage new];
     fin.code = @"fi";
     fin.enName = @"Suomi";
     fin.localName = @"Finnish";
-    
+    fin.ID = 0;
+
     NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin];
     
-    return [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
+    NSLocale *locale = [NSLocale currentLocale];
+    
+    for (BMLanguage *lang in array) {
+        if ([lang.code isEqualToString:locale.languageCode] && lang.ID!=2) {
+            lang.ID = 1;
+        }
+    }
+    
+    NSArray *sortedNames = [array sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"localName" ascending:YES]]];
+
+    NSMutableArray *result = [NSMutableArray array];
+    
+    for (BMLanguage *lang in sortedNames) {
+        if(lang.ID == 2) {
+            [result insertObject:lang atIndex:0];
+        }
+        else if(lang.ID == 1) {
+            if(result.count==0) {
+                [result insertObject:lang atIndex:0];
+            }
+            else{
+                [result insertObject:lang atIndex:1];
+            }
+        }
+        else{
+            [result addObject:lang];
+        }
+     }
+    
+    return result;
 }
 
 -(NSString*_Nonnull)languageName{
@@ -464,6 +528,70 @@ static NSString *randomNodeKey = @"randomNodeKey";
 
 -(void)removeDelegate:(id<SettingsModelDelegate>) delegate {
     [_delegates removeObject: delegate];
+}
+
+-(NSArray <BMLockScreenValue*> * _Nonnull)lockScreenValues {
+    BMLockScreenValue *never = [BMLockScreenValue new];
+    never.name = [@"never" localized];
+    never.shortName = [@"never" localized];
+    never.seconds = 0;
+
+    BMLockScreenValue *a_15 = [BMLockScreenValue new];
+    a_15.name = [@"a_15" localized];
+    a_15.shortName = [@"a_15_1" localized];
+    a_15.seconds = 15;
+    
+    BMLockScreenValue *a_30 = [BMLockScreenValue new];
+    a_30.name = [@"a_30" localized];
+    a_30.shortName = [@"a_30_1" localized];
+    a_30.seconds = 30;
+    
+    BMLockScreenValue *a_60 = [BMLockScreenValue new];
+    a_60.name = [@"a_60" localized];
+    a_60.shortName = [@"a_60_1" localized];
+    a_60.seconds = 60;
+    
+    return @[never,a_15,a_30,a_60];
+}
+
+-(BMLockScreenValue*_Nonnull)currentLocedValue {
+    for (BMLockScreenValue *v in [self lockScreenValues]) {
+        if (v.seconds == _lockScreenSeconds) {
+            return v;
+        }
+    }
+    
+    return nil;
+}
+
+-(NSArray <BMLogValue*> * _Nonnull)logValues {
+    BMLogValue *never = [BMLogValue new];
+    never.name = [@"all_time" localized];
+    never.days = 0;
+
+    BMLogValue *d_5 = [BMLogValue new];
+    d_5.name = [@"last_5_days" localized];
+    d_5.days = 5;
+    
+    BMLogValue *d_15 = [BMLogValue new];
+    d_15.name = [@"last_15_days" localized];
+    d_15.days = 15;
+    
+    BMLogValue *d_30 = [BMLogValue new];
+    d_30.name = [@"last_30_days" localized];
+    d_30.days = 30;
+    
+    return @[never,d_5,d_15,d_30];
+}
+
+-(BMLogValue*_Nonnull)currentLogValue {
+    for (BMLogValue *v in [self logValues]) {
+        if (v.days == _logDays) {
+            return v;
+        }
+    }
+    
+    return nil;
 }
 
 @end

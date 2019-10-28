@@ -84,8 +84,10 @@ class DetailTransactionViewModel: TransactionViewModel {
         
         details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
 
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.isExpired() ? "0000000000000000000000000000000000000000000000000000000000000000" :  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-
+        if !transaction.isExpired() && !transaction.isFailed() && !transaction.kernelId.contains("000000000") {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.isExpired() ? "0000000000000000000000000000000000000000000000000000000000000000" :  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+        }
+ 
         
      
         if transaction.isFailed() {
@@ -105,10 +107,19 @@ class DetailTransactionViewModel: TransactionViewModel {
         let transaction = self.transaction!
 
         var items = [BMPopoverMenu.BMPopoverMenuItem]()
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_transaction, icon: nil, action: .share))
+        
+        if transaction.canSaveContact() {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.save_contact_title, icon: nil, action: .save_contact))
+        }
+        
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_details, icon: nil, action: .share))
 
+        if EnableNewFeatures {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
+        }
+        
         if !transaction.isIncome {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.rep, icon: nil, action: .repeat_transaction))
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
         }
         
         if transaction.canCancel {
@@ -120,6 +131,19 @@ class DetailTransactionViewModel: TransactionViewModel {
         }
         
         return items
+    }
+    
+    public func copyDetails() {
+        if let tr = self.transaction, let top = UIApplication.getTopMostViewController() {
+            let activityItem: [String] = [tr.textDetails()]
+            let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            }
+            
+            vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+            
+            top.present(vc, animated: true)
+        }
     }
     
     public func share() {
@@ -138,6 +162,23 @@ class DetailTransactionViewModel: TransactionViewModel {
                 
                 top.present(vc, animated: true)
             }
+        }
+    }
+    
+    public func saveContact() {
+        if let top = UIApplication.getTopMostViewController() {
+            let transaction = self.transaction!
+            var address:String? = nil
+            
+            if transaction.isIncome {
+                address = transaction.senderAddress
+            }
+            else{
+                address = transaction.receiverAddress
+            }
+            
+            let vc = SaveContactViewController(address: address)
+            top.pushViewController(vc: vc)
         }
     }
 }

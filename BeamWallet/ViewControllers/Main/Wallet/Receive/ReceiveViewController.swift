@@ -26,14 +26,7 @@ class ReceiveViewController: BaseTableViewController {
     private var showAdvanced = false
     private var showEdit = false
 
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override var tableStyle: UITableView.Style {
         get {

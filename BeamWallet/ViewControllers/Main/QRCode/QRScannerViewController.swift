@@ -47,14 +47,7 @@ class QRScannerViewController: BaseViewController {
     
     public var scanType = ScanType.beam
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()

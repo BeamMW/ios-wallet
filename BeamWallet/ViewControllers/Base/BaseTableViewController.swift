@@ -21,6 +21,14 @@ import Foundation
 
 class BaseTableViewController: BaseViewController {
     
+//    struct FooterButton {
+//        let title:String
+//        let color:UIColor
+//        let image:UIImage?
+//        let target:Any
+//        let selector:Selector
+//    }
+    
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
     
@@ -51,18 +59,35 @@ class BaseTableViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        var offset:CGFloat = tableStyle == .grouped ? 0 : 0
+        var offset:CGFloat =  0
        
         if !isGradient {
-            offset = offset + 30
+            offset =  30
         }
         else if isGradient && !isAddStatusView {
-            offset = offset + 30
+            offset = 30
         }
        
         let y = navigationBarOffset - offset
         tableView.frame = CGRect(x: 0, y: y , width: self.view.bounds.width, height: self.view.bounds.size.height - y)
     }
+    
+//    public func footerView(buttons:[FooterButton]) -> UIView {
+//        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 104))
+//
+//        for item in buttons {
+//            let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
+//            button.setImage(item.image, for: .normal)
+//            button.setTitle(item.title.lowercased(), for: .normal)
+//            button.layer.borderWidth = 1
+//            button.layer.borderColor = UIColor.main.heliotrope.cgColor
+//            button.setTitleColor(UIColor.main.heliotrope, for: .normal)
+//            button.addTarget(item.target, action: item.selector, for: .touchUpInside)
+//            view.addSubview(button)
+//        }
+//
+//        return view
+//    }
 }
 
 extension BaseTableViewController {

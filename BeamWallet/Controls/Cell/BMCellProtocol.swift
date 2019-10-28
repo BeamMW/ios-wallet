@@ -19,8 +19,12 @@
 
 import Foundation
 
+protocol GeneralInfoCellDelegate: AnyObject {
+    func onClickToCell(cell: UITableViewCell)
+}
+
 @objc protocol BMCellProtocol: AnyObject {
-    @objc optional func textValueDidChange(_ sender: UITableViewCell, _ text:String, _ input:Bool)
+    @objc optional func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input: Bool)
     @objc optional func textValueDidReturn(_ sender: UITableViewCell)
     @objc optional func textValueDidBegin(_ sender: UITableViewCell)
     @objc optional func textDidChangeStatus(_ sender: UITableViewCell)
@@ -31,8 +35,8 @@ import Foundation
     @objc optional func onClickCopy()
 
     @objc optional func onRightButton(_ sender: UITableViewCell)
-    
+
     @objc optional func onExpandCell(_ sender: UITableViewCell)
-    
-    @objc optional func onDidChangeFee(value:Double)
+
+    @objc optional func onDidChangeFee(value: Double)
 }

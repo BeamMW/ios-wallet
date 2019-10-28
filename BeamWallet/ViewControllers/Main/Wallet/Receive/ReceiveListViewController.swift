@@ -53,14 +53,7 @@ class ReceiveListViewController: BaseTableViewController {
         return field
     }()
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()

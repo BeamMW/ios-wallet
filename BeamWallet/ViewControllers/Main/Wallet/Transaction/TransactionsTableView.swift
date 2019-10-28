@@ -47,13 +47,21 @@ class TransactionsTableView: UITableViewController {
         
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.separatorStyle = .none
-        tableView.register([BMEmptyCell.self, WalletTransactionCell.self])
+        tableView.register([BMEmptyCell.self, WalletTransactionCell.self, WalletTransactionSearchCell.self])
         tableView.keyboardDismissMode = .interactive
         
+        if EnableNewFeatures {
+            tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        }
+
         subscribeToChages()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,6 +82,10 @@ class TransactionsTableView: UITableViewController {
     
 //MARK: - Updates
 
+    @objc private func refreshData(_ sender: Any) {
+          AppModel.sharedManager().getWalletStatus()
+    }
+    
     private func subscribeToChages() {
         viewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
@@ -147,7 +159,7 @@ class TransactionsTableView: UITableViewController {
                 text = Localizable.shared.strings.transactions_empty
             }
             else{
-               text = index == 3 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
+               text = index == 1 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
             }
             
             let cell = tableView
@@ -156,10 +168,19 @@ class TransactionsTableView: UITableViewController {
             return cell
         }
         else {
-            let cell = tableView
-                .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo:true))
-            return cell
+            if(viewModel.isSearch && !viewModel.searchString.isEmpty) {
+                let cell = tableView
+                    .dequeueReusableCell(withType: WalletTransactionSearchCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo:true))
+                cell.setSearch(searchString: viewModel.searchString, transaction: viewModel.transactions[indexPath.row])
+                return cell
+            }
+            else{
+                let cell = tableView
+                    .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
+                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo:true))
+                return cell
+            }
         }
     }
     
@@ -205,5 +226,31 @@ extension TransactionsTableView {
         if viewModel.transactions.count == 0 {
             tableView.reloadData()
         }
+    }
+}
+
+extension TransactionsTableView: UIViewControllerPreviewingDelegate {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if  viewModel.transactions.count > 0 {
+            guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
+            
+            guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+            
+            let detailVC = TransactionViewController(transaction: viewModel.transactions[indexPath.row], preview: true)
+            detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
+            
+            previewingContext.sourceRect = cell.frame
+            
+            return detailVC
+        }
+        else {
+            return nil
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+        
+        (viewControllerToCommit as! TransactionViewController).didShow()
     }
 }

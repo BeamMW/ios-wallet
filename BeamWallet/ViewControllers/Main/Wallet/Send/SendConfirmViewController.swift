@@ -51,14 +51,7 @@ class SendConfirmViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +73,7 @@ class SendConfirmViewController: BaseTableViewController {
         view.endEditing(true)
         
         if Settings.sharedManager().isNeedaskPasswordForSend {
-            let modalViewController = SendPasswordViewController()
+            let modalViewController = UnlockPasswordPopover(event: .transaction)
             modalViewController.completion = { [weak self] obj in
                 self?.askForSaveContact()
             }

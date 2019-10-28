@@ -36,7 +36,7 @@ class BMCategoryColorsView: UIView {
             
             super.init(frame: frame)
             
-            let size:CGFloat = Device.isLarge ? 38 : 30
+            let size:CGFloat = 30
             
             self.color = color
             
@@ -107,7 +107,7 @@ class BMCategoryColorsView: UIView {
     private func fillBMColorView() {
         
         let size:CGFloat = 50
-        let space:CGFloat = 10
+        let space:CGFloat = (Device.iPhone) ? 5 : 10
         var x:CGFloat = 0
         
         for color in colors {
@@ -117,6 +117,10 @@ class BMCategoryColorsView: UIView {
             self.addSubview(colorView)
             
             x = x + (size + space)
+            
+            if Device.screenType == .iPhones_5 {
+                x = x - 5
+            }
         }
     }
     

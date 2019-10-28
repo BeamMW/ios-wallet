@@ -25,14 +25,22 @@ class CategoryEditViewController: BaseViewController {
     public var completion : ((BMCategory?) -> Void)?
 
     @IBOutlet private var nameField: BMClearField!
-    @IBOutlet private var nameView: UIView!
-    
+    @IBOutlet private var titleNameLabel: UILabel!
+    @IBOutlet private var titleColourLabel: UILabel!
+
     @IBOutlet private var colorsView: BMCategoryColorsView!
 
     private var category:BMCategory!
     private let colors = [UIColor.init(hexString: "#ff746b"), UIColor.init(hexString: "#ffba55"), UIColor.init(hexString: "#fee65a"), UIColor.init(hexString: "#73ff7c"), UIColor.init(hexString: "#4fa5ff"), UIColor.init(hexString: "#d785ff")]
+    private let names = ["#ff746b":"Red", "#ffba55":"Orange", "#fee65a":"Yellow",
+                         "#73ff7c":"Green", "#4fa5ff":"Blue", "#d785ff":"Pink"]
     
-    private var selectedColor:String!
+    private var selectedColor:String! {
+        didSet {
+            nameField.placeholder = names[selectedColor]
+            nameField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        }
+    }
     
     init(category:BMCategory?) {
         super.init(nibName: nil, bundle: nil)
@@ -59,55 +67,35 @@ class CategoryEditViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isGradient {
-            var mainColor = UIColor.main.brightSkyBlue
-            
-            if let viewControllers = self.navigationController?.viewControllers{
-                for vc in viewControllers {
-                    if vc is SendViewController {
-                        mainColor = UIColor.main.heliotrope
-                    }
-                }
-            }
-            
-            setGradientTopBar(mainColor: mainColor, addedStatusView: false)
-        }
-        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+
         hideKeyboardWhenTappedAround()
 
         title = category.id == 0 ? Localizable.shared.strings.new_category : Localizable.shared.strings.edit_category
         
         addRightButton(title:Localizable.shared.strings.save, target: self, selector: #selector(onSave), enabled: false)
         
-        nameView = UIView(frame: CGRect(x: 0, y: (Device.isXDevice ? 100 : 70) + 20, width: UIScreen.main.bounds.size.width, height: 49))
-        if isGradient {
-            nameView.y = (Device.isXDevice ? 100 : 70) + 60
-        }
-        nameView.backgroundColor = UIColor.main.marineThree
-        view.addSubview(nameView)
+        titleNameLabel.text = Localizable.shared.strings.name.uppercased()
+        titleNameLabel.letterSpacing = 1.2
         
-        nameField = BMClearField(frame: CGRect(x: defaultX, y: 0, width: defaultWidth, height: 49))
-        nameField.placeholder = Localizable.shared.strings.category_name
-        nameField.placeHolderColor = UIColor.main.steelGrey
-        nameField.textColor = UIColor.white
-        nameField.font = RegularFont(size: 16)
-        nameField.tintColor = UIColor.white
-        nameField.delegate = self
+        titleColourLabel.text = Localizable.shared.strings.colour.uppercased()
+        titleColourLabel.letterSpacing = 1.2
+        
+        nameField.placeholder = names[selectedColor]
+        nameField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         nameField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        nameField.backgroundColor = UIColor.clear
-        nameField.autocorrectionType = .no
-        nameField.spellCheckingType = .no
         nameField.text = category.name
-        nameField.clearButtonMode = .whileEditing
-        nameView.addSubview(nameField)
-        
+
         colorsView = BMCategoryColorsView()
         colorsView.colors = colors
         colorsView.selectedColor = UIColor.init(hexString: category.color)
         colorsView.delegate = self
-        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: nameView.frame.origin.y + nameView.frame.size.height + 20, width: colorsView.colorsWidht(), height: 50)
         colorsView.backgroundColor = UIColor.clear
         view.addSubview(colorsView)
+        
+        if let constant = self.topOffset?.constant, Device.isXDevice {
+            self.topOffset?.constant = constant - 20
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -116,6 +104,13 @@ class CategoryEditViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let offset:CGFloat = 0
+        colorsView.frame = CGRect(x: (UIScreen.main.bounds.size.width - colorsView.colorsWidht())/2, y: titleColourLabel.y + titleColourLabel.h + offset , width: colorsView.colorsWidht(), height: 50)
     }
     
     private func canSave(name:String, color:String) -> Bool {

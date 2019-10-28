@@ -21,9 +21,11 @@ import Foundation
 
 class BackgroundDownloader: NSObject {
 
-    typealias ProgressHandler = (Float?,Error?, String?) -> ()
+    typealias ProgressHandler = (Float?,Error?, String?, String?) -> ()
 
     var onProgress : ProgressHandler?
+    
+    private var avgTime = 0
     
     static var shared = BackgroundDownloader()
 
@@ -50,6 +52,7 @@ class BackgroundDownloader: NSObject {
 
         let session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue())
 
+        avgTime = 0
         start = Date.timeIntervalSinceReferenceDate
 
         task = session.downloadTask(with: url)
@@ -67,18 +70,27 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
         if totalBytesExpectedToWrite > 0 {
             
             let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-         //   print("Progress \(downloadTask) \(progress)")
-            onProgress?(progress, nil, nil)
+            
+            avgTime = avgTime + 1
             
             let speed = Double(totalBytesWritten) / Double((Date.timeIntervalSinceReferenceDate - self.start))
             
-            if speed > 0 {
+            if speed > 0 && avgTime >= 5 {
                 let sizeLeft = Double(totalBytesExpectedToWrite-totalBytesWritten)
-                let timeLeft = sizeLeft / speed
+                var timeLeft = sizeLeft / speed
                 
                 print("-----------")
                 print(timeLeft.asTime(style: .abbreviated))
                 print("-----------")
+                
+                if timeLeft < 1 {
+                    timeLeft = 1
+                }
+                
+                onProgress?(progress, nil, nil, timeLeft.asTime(style: .abbreviated))
+            }
+            else{
+                onProgress?(progress, nil, nil, nil)
             }
         }
     }
@@ -88,10 +100,10 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
         
         do {
             try FileManager.default.moveItem(at: location, to: destinationURLForFile)
-            onProgress?(nil, nil, destinationURLForFile.path)
+            onProgress?(nil, nil, destinationURLForFile.path, nil)
             
         }catch{
-            onProgress?(nil, error, nil)
+            onProgress?(nil, error, nil, nil)
         }
     }
     
@@ -99,7 +111,7 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
         if let reason = error {
             let code = (reason as NSError).code
             if code != -999 {
-                onProgress?(nil, reason, nil)
+                onProgress?(nil, reason, nil, nil)
             }
         }
     }

@@ -20,6 +20,8 @@
 
 import Foundation
 
+let EnableNewFeatures = false
+
 func IconShowBalance() -> UIImage? {
     return UIImage(named: "iconShowBalance")
 }
@@ -43,6 +45,11 @@ func IconSymbolBeam() -> UIImage? {
 func IconSendPink() -> UIImage? {
     return UIImage(named: "iconSendPink")
 }
+
+func IconCopyWhite() -> UIImage? {
+    return UIImage(named: "iconCopyWhite")
+}
+
 
 func IconUtxo() -> UIImage? {
     return UIImage(named: "iconUtxo")
@@ -78,6 +85,10 @@ func IconSettings() -> UIImage? {
 
 func CheckboxFull() -> UIImage? {
     return UIImage(named: "checkboxFull")
+}
+
+func CheckboxEmptyNew() -> UIImage? {
+    return UIImage(named: "icnCheckmarkEmpty")
 }
 
 func CheckboxEmpty() -> UIImage? {
@@ -273,5 +284,12 @@ func IconContact() -> UIImage? {
     return UIImage(named: "iconContact")
 }
 
+func IconSaveDone() -> UIImage? {
+    return UIImage(named: "iconDoneBlue")
+}
+
+func IconSeedPhrase() -> UIImage? {
+    return UIImage(named: "iconSeedPhrase")
+}
 
 

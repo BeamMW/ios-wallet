@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,18 +19,27 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="64M-o4-RIy" id="fIe-df-nNB">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="si6-ep-K1d">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gQs-Rr-cAd">
-                                <rect key="frame" x="15" y="15" width="37" height="19.5"/>
+                                <rect key="frame" x="15" y="15" width="37" height="20"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Yjw-w2-kMT">
-                                        <rect key="frame" x="0.0" y="0.0" width="37" height="19.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="37" height="20"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="P0I-aH-DGR">
+                                        <rect key="frame" x="0.0" y="20" width="37" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -41,21 +48,17 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-XX-F4D">
-                                <rect key="frame" x="296" y="18.5" width="13" height="13"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="13" id="dys-ko-ix6"/>
-                                    <constraint firstAttribute="height" constant="13" id="ozG-8r-xCj"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-XX-F4D">
+                                <rect key="frame" x="292" y="18.5" width="13" height="13"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="J5U-XX-F4D" firstAttribute="centerY" secondItem="si6-ep-K1d" secondAttribute="centerY" id="6il-KS-lcg"/>
                             <constraint firstAttribute="bottom" secondItem="gQs-Rr-cAd" secondAttribute="bottom" constant="15" id="Fj1-Zt-WVC"/>
-                            <constraint firstAttribute="trailing" secondItem="J5U-XX-F4D" secondAttribute="trailing" constant="11" id="Y0c-Mj-4Lw"/>
                             <constraint firstItem="gQs-Rr-cAd" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="15" id="Zif-OU-tBF"/>
                             <constraint firstItem="gQs-Rr-cAd" firstAttribute="leading" secondItem="si6-ep-K1d" secondAttribute="leading" constant="15" id="e2g-bc-sPE"/>
+                            <constraint firstAttribute="trailing" secondItem="J5U-XX-F4D" secondAttribute="trailing" constant="15" id="g4a-xp-rLA"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -70,8 +73,9 @@
             <viewLayoutGuide key="safeArea" id="J7g-wL-DrK"/>
             <connections>
                 <outlet property="arrowView" destination="J5U-XX-F4D" id="ivX-9Y-w3h"/>
+                <outlet property="detailLabel" destination="P0I-aH-DGR" id="d5e-w1-wNC"/>
                 <outlet property="mainView" destination="si6-ep-K1d" id="hvV-Xb-too"/>
-                <outlet property="nameLabel" destination="Yjw-w2-kMT" id="j2r-tQ-1pH"/>
+                <outlet property="titleLabel" destination="Yjw-w2-kMT" id="WRo-Bv-bEz"/>
             </connections>
             <point key="canvasLocation" x="176.81159420289856" y="110.49107142857143"/>
         </tableViewCell>

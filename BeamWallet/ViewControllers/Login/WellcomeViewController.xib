@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Bold.ttf">
+            <string>ProximaNova-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+        <array key="SFProText-Medium.ttf">
+            <string>SFProText-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WellcomeViewController" customModule="BeamWallet" customModuleProvider="target">
+            <connections>
+                <outlet property="bgView" destination="iAW-fu-nfK" id="y8n-q0-XUE"/>
+                <outlet property="createButton" destination="1Iu-PO-y9I" id="7Bp-tq-CWe"/>
+                <outlet property="languageButton" destination="gaV-vA-BtB" id="oez-V6-oTs"/>
+                <outlet property="restoreButton" destination="dil-6y-9Wr" id="p3C-q4-F1i"/>
+                <outlet property="titleLabel" destination="PCl-BH-n39" id="Wsl-bn-pSu"/>
+                <outlet property="versionLabel" destination="LSx-nV-P2m" id="ECg-Rn-Hy1"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="initial_background" translatesAutoresizingMaskIntoConstraints="NO" id="iAW-fu-nfK">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="150" translatesAutoresizingMaskIntoConstraints="NO" id="Prf-e9-uhW">
+                    <rect key="frame" x="55.5" y="143" width="264" height="181.5"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="XS3-jK-PB8">
+                            <rect key="frame" x="0.0" y="0.0" width="264" height="181.5"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="t3a-Bl-DlH">
+                                    <rect key="frame" x="52.5" y="0.0" width="159" height="142"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="142" id="4Rm-nu-emj"/>
+                                        <constraint firstAttribute="width" constant="159" id="HG5-Od-VgI"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scalable confidential cryptocurrency" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
+                                    <rect key="frame" x="0.0" y="162" width="264" height="19.5"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="264" id="z8M-cN-IIy"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="16"/>
+                                    <color key="textColor" red="0.14509803921568626" green="0.75686274509803919" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="beam_title"/>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                </stackView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="qyg-x7-z6S">
+                    <rect key="frame" x="61" y="439.5" width="253" height="118"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Iu-PO-y9I" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="253" height="44"/>
+                            <color key="backgroundColor" red="0.0" green="0.96470588235294119" blue="0.82352941176470584" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="253" id="ZTE-pa-QLF"/>
+                                <constraint firstAttribute="height" constant="44" id="cXQ-Gx-aKY"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                            <state key="normal" title="create new wallet" image="iconAddBlue">
+                                <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="22"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="create_new_wallet"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onCreateWalletWithSender:" destination="-1" eventType="touchUpInside" id="oiX-Hv-bGB"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dil-6y-9Wr">
+                            <rect key="frame" x="0.0" y="74" width="253" height="44"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="253" id="LeK-ma-hrN"/>
+                                <constraint firstAttribute="height" constant="44" id="P3G-3R-0Rt"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                            <state key="normal" title="restore wallet">
+                                <color key="titleColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="0.0"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="restore_wallet_title"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onRestoreWalletWithSender:" destination="-1" eventType="touchUpInside" id="BQr-b9-pxC"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gaV-vA-BtB">
+                    <rect key="frame" x="302" y="15" width="58" height="32"/>
+                    <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="LD5-bn-Nbh"/>
+                        <constraint firstAttribute="width" constant="58" id="PQn-aY-Xe5"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
+                    <state key="normal" title="EN">
+                        <color key="titleColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onLanguageWithSender:" destination="-1" eventType="touchUpInside" id="ZfO-RK-a29"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 1.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSx-nV-P2m">
+                    <rect key="frame" x="160" y="642.5" width="55.5" height="14.5"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.011764705882352941" green="0.1803921568627451" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="gaV-vA-BtB" secondAttribute="trailing" constant="15" id="7wk-ZQ-wjO"/>
+                <constraint firstItem="gaV-vA-BtB" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="15" id="MR4-dj-w6N"/>
+                <constraint firstItem="Prf-e9-uhW" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Nug-Hr-cfS"/>
+                <constraint firstItem="qyg-x7-z6S" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UNc-wS-U9l"/>
+                <constraint firstAttribute="bottom" secondItem="iAW-fu-nfK" secondAttribute="bottom" id="aDv-bD-yyo"/>
+                <constraint firstItem="iAW-fu-nfK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cGL-e8-ndK"/>
+                <constraint firstItem="Prf-e9-uhW" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-100" id="cnb-Qa-trn"/>
+                <constraint firstAttribute="trailing" secondItem="iAW-fu-nfK" secondAttribute="trailing" id="h0y-mt-lbA"/>
+                <constraint firstItem="LSx-nV-P2m" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" constant="-10" id="hWW-qR-tKS"/>
+                <constraint firstItem="LSx-nV-P2m" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ium-Sq-H0D"/>
+                <constraint firstItem="iAW-fu-nfK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="pue-Mz-6L0"/>
+                <constraint firstItem="qyg-x7-z6S" firstAttribute="top" secondItem="Prf-e9-uhW" secondAttribute="bottom" constant="115" id="sa9-Hh-xWu"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="140" y="112"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="iconAddBlue" width="16" height="16"/>
+        <image name="initial_background" width="1125" height="2001"/>
+        <image name="logo" width="158" height="142"/>
+    </resources>
+</document>

@@ -20,7 +20,8 @@
 import Foundation
 
 extension UIApplication {
-    
+
+
     class func appVersion() -> String {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String

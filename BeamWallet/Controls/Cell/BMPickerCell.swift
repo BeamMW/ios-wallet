@@ -1,5 +1,5 @@
 //
-// AddressDurationCell.swift
+// BMPickerCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -22,7 +22,8 @@ import UIKit
 
 class BMPickerCell: BaseCell {
     
-    @IBOutlet weak private var nameLabel: UILabel!
+    @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak private var detailLabel: UILabel!
     @IBOutlet private weak var mainView: UIView!
     @IBOutlet private weak var arrowView: UIImageView!
     
@@ -38,14 +39,23 @@ class BMPickerCell: BaseCell {
         
         arrowView.image = Tick()?.withRenderingMode(.alwaysTemplate)
         arrowView.tintColor = UIColor.main.brightTeal
+        detailLabel.textColor = UIColor.main.blueyGrey
     }
-}
-
-extension BMPickerCell: Configurable {
     
-    func configure(with options: (text: String?, selected:Bool, color:UIColor?)) {
-        arrowView.isHidden = !options.selected
-        nameLabel.text = options.text
-        nameLabel.textColor = options.color
+    func configure(data:BMPickerData) {
+        titleLabel.text = data.title
+        detailLabel.isHidden = data.detail == nil
+        detailLabel.text = data.detail
+        
+        if let color = data.titleColor {
+            titleLabel.textColor = color
+        }
+        
+        if data.multiplie {
+            arrowView.image = (data.arrowType == BMPickerData.ArrowType.selected) ? CheckboxFull() : CheckboxEmptyNew()
+        }
+        else{
+            arrowView.isHidden = data.arrowType != BMPickerData.ArrowType.selected
+        }
     }
 }

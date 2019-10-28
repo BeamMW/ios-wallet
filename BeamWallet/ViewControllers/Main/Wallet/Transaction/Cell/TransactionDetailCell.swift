@@ -49,6 +49,8 @@ extension TransactionDetailCell: Configurable {
     
     func configure(with transaction:BMTransaction) {
 
+        arrowIcon.image = transaction.statusIcon()
+
         amountLabel.isHidden = Settings.sharedManager().isHideAmounts
         currencyIcon.isHidden = Settings.sharedManager().isHideAmounts
         securityIcon.isHidden = !Settings.sharedManager().isHideAmounts
@@ -60,13 +62,9 @@ extension TransactionDetailCell: Configurable {
         case true:
             amountLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            circleView.layer.borderColor = UIColor.main.brightSkyBlue.cgColor
-            arrowIcon.image = IconReceived()
         case false:
             amountLabel.textColor = UIColor.main.heliotrope
             currencyIcon.tintColor = UIColor.main.heliotrope
-            circleView.layer.borderColor = UIColor.main.heliotrope.cgColor
-            arrowIcon.image = IconSent()
         }
         
         if transaction.isFailed() || transaction.isCancelled() || transaction.isExpired() {
@@ -81,5 +79,7 @@ extension TransactionDetailCell: Configurable {
         else if !transaction.isIncome {
             statusLabel.textColor = UIColor.main.heliotrope
         }
+        
+        circleView.layer.borderColor = statusLabel.textColor.cgColor
     }
 }

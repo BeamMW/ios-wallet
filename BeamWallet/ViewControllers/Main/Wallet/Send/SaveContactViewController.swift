@@ -70,14 +70,6 @@ class SaveContactViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -217,11 +209,12 @@ extension SaveContactViewController : UITableViewDelegate {
                 pushViewController(vc: vc)
             }
             else{
-                let vc = CategoryPickerViewController(categories: self.address.categories as? [String])
+                let vc = BMDataPickerViewController(type: .category, selectedValue: self.address.categories as? [String])
                 vc.completion = {[weak self]
                     obj in
                     guard let strongSelf = self else { return }
-                    if let categories = obj {
+                    
+                    if let categories = (obj as? [String]) {
                         strongSelf.address.categories = NSMutableArray(array: categories)
                         strongSelf.tableView.reloadData()
                     }
@@ -256,6 +249,7 @@ extension SaveContactViewController : UITableViewDataSource {
                 cell.backgroundColor = UIColor.clear
                 cell.contentView.backgroundColor = UIColor.clear
                 cell.copyText = copyAddress
+                cell.validateAddress = true
                 return cell
             }
             else{

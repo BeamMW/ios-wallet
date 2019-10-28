@@ -23,15 +23,40 @@ import Parchment
 
 class PagingLargeTitleCell : PagingTitleCell {
     
+    private var added = false
+   // private var selectedView = UIView()
+    
     override func configureTitleLabel() {
         super.configureTitleLabel()
         
         titleLabel.adjustFontSize = true
         titleLabel.letterSpacing = 1.5
+        
+//        selectedView.backgroundColor = UIColor.main.brightTeal
+//        selectedView.alpha = 0
+//        addSubview(selectedView)
     }
+    
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//
+//        selectedView.frame = CGRect(x: 0, y: self.frame.size.height - 5, width: self.frame.size.width, height: 5)
+//    }
+//
+//    override var isSelected: Bool {
+//        didSet{
+//            if isSelected {
+//                self.selectedView.alpha = 1
+//            }
+//            else{
+//                self.selectedView.alpha = 0
+//            }
+//        }
+//    }
 }
 
 class BMPagingViewController: PagingViewController<PagingIndexItem> {
+    
     
     override func loadView() {
         
@@ -49,6 +74,7 @@ class BMPagingViewController: PagingViewController<PagingIndexItem> {
             collectionView: collectionView,
             pageView: pageViewController.view
         )
+        custom.backgroundColor = UIColor.clear
         custom.options.indicatorColor = UIColor.main.brightTeal
         custom.options.font = BoldFont(size: fontSize)
         custom.options.selectedFont = BoldFont(size: fontSize)
@@ -58,7 +84,8 @@ class BMPagingViewController: PagingViewController<PagingIndexItem> {
         custom.options.backgroundColor = UIColor.clear
         custom.options.borderColor = UIColor.clear
         custom.options.menuItemSpacing = 0
-        custom.backgroundColor = UIColor.clear
+        custom.options.indicatorOptions = .visible(height: 4, zIndex: Int.max, spacing: UIEdgeInsets.zero, insets: UIEdgeInsets.zero)
+        
         contentInteraction = .none
         menuItemSource = .class(type: PagingLargeTitleCell.self)
 

@@ -30,16 +30,30 @@ enum KeychainError: Error {
 }
 
 class KeychainManager {
-    private static let key = "wallet"
+    private static let passKey = "wallet"
+    private static let seedKey = "seed"
     private static let readLock = NSLock()
 
+    public static func addSeed(seed:String) -> Bool {
+        _ = delete(seedKey)
+        
+        let password = seed.data(using: String.Encoding.utf8)!
+        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+                                    kSecValueData as String: password,
+                                    kSecAttrAccount as String : seedKey]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+       
+        return status == errSecSuccess
+    }
+    
     public static func addPassword(password:String) -> Bool {
-        _ = delete(key)
+        _ = delete(passKey)
         
         let password = password.data(using: String.Encoding.utf8)!
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                     kSecValueData as String: password,
-                                    kSecAttrAccount as String : key]
+                                    kSecAttrAccount as String : passKey]
         
         let status = SecItemAdd(query as CFDictionary, nil)
        
@@ -47,7 +61,18 @@ class KeychainManager {
     }
     
     public static func getPassword() -> String? {
-        if let data = getData(key) {
+        if let data = getData(passKey) {
+            
+            if let currentString = String(data: data, encoding: .utf8) {
+                return currentString
+            }
+        }
+        
+        return nil
+    }
+    
+    public static func getSeed() -> String? {
+        if let data = getData(seedKey) {
             
             if let currentString = String(data: data, encoding: .utf8) {
                 return currentString

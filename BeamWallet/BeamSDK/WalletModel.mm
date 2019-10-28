@@ -21,6 +21,7 @@
 #import "AppModel.h"
 
 #include <boost/regex.hpp>
+#include <boost/optional.hpp>
 
 #include "utility/logger.h"
 #include "utility/bridge.h"
@@ -634,7 +635,7 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-            return isIncome ? [[@"receiving" localized]lowercaseString] : [[@"sending" localized] lowercaseString];
+            return isIncome ? [[@"in_progress" localized]lowercaseString] : [[@"in_progress" localized] lowercaseString];
         }
         case TxStatus::Completed:
         {

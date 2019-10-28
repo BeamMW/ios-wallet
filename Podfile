@@ -19,6 +19,7 @@ def shared_pods
     pod 'SSZipArchive'
     pod 'Parchment'
     pod 'SwipeTransition'
+    pod 'CrashEye'
 end
 
 #def extension

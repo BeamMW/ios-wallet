@@ -61,9 +61,13 @@ typedef UInt64 BMTransactionStatus;
 -(BOOL)isCancelled;
 -(BOOL)isNew;
 -(BOOL)isExpired;
-    
+-(BOOL)canSaveContact;
+
 -(NSString*)details;
 -(NSString*)csvLine;
+-(NSString*)textDetails;
+
+-(NSMutableAttributedString*)searchString:(NSString*)searchText;
 
 @end
 

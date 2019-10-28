@@ -20,8 +20,18 @@
 import UIKit
 import Fabric
 import Crashlytics
+import CrashEye
 
-@UIApplicationMain
+
+class BeamApplication: UIApplication{
+    override func sendEvent(_ event: UIEvent) {
+        super.sendEvent(event)
+                
+        BMLockScreen.shared.onTapEvent()
+    }
+}
+
+//@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private var scannedTGUserId = String.empty()
@@ -34,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+        CrashEye.add(delegate: self)
 
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
@@ -42,21 +52,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 //        FirebaseConfiguration.shared.setLoggerLevel(.min)
 //        FirebaseApp.configure()
-
-        Crashlytics().debugMode = true
-        Fabric.with([Crashlytics.self()])
         
+        Localizable.shared.reset()
         Settings.sharedManager()
         
         KeyboardListener.shared.start()
         
         NotificationManager.sharedManager.requestPermissions()
         
+        if Settings.sharedManager().target != Mainnet {
+            CrowdinManager.updateLocalizations()
+        }
+        
+        AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
 
-        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : LoginViewController())
+        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : WellcomeViewController())
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.main.navy
@@ -65,17 +78,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
-        CrowdinManager.updateLocalizations()
+        if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
+            self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { (_ ) in
+                
+                 Fabric.with([Crashlytics.self()])
+                 
+                 Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
+                 
+                 Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace" : crash])
+                
+                 UserDefaults.standard.set(nil, forKey: "crash")
+                 UserDefaults.standard.synchronize()
+                
+            }, confirmHandler: { (_ ) in
+                UserDefaults.standard.set(nil, forKey: "crash")
+                UserDefaults.standard.synchronize()
+            })
+        }
 
         return true
     }
     
     public func logout() {
         AppModel.sharedManager().isLoggedin = false
-
-        AppModel.sharedManager().resetWallet(false)
-
-        let rootController = BaseNavigationController.navigationController(rootViewController: EnterWalletPasswordViewController(isNeedRequestedAuthorization: false))
+        AppModel.sharedManager().resetWallet(true)
+        Settings.sharedManager().resetSettings()
+        OnboardManager.shared.reset()
+        
+        let rootController = BaseNavigationController.navigationController(rootViewController: WellcomeViewController())
 
         self.window!.rootViewController = rootController
     }
@@ -130,6 +160,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        
+        if #available(iOS 12.0, *) {
+            if self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark {
+                UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.white
+            }
+            else{
+                UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+            }
+        } else {
+            UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+        }
         
         NotificationManager.sharedManager.clearNotifications()
                 
@@ -369,6 +410,21 @@ extension AppDelegate : WalletModelDelegate {
             UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: Localizable.shared.strings.transactions)
             UserDefaults.standard.synchronize()
         }
+    }
+}
+
+//MARK: - Crash
+
+extension AppDelegate: CrashEyeDelegate {
+    
+    public static func isCrashed() -> Bool {
+        return UserDefaults.standard.string(forKey: "crash") != nil
+    }
+    
+    func crashEyeDidCatchCrash(with model: CrashModel) {
+        UserDefaults.standard.set(model.callStack, forKey: "crash")
+        UserDefaults.standard.set(model.name, forKey: "crash_name")
+        UserDefaults.standard.synchronize()
     }
 }
 

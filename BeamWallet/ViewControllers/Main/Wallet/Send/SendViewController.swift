@@ -53,14 +53,7 @@ class SendViewController: BaseTableViewController {
         return view
     }()
     
-    override var isUppercasedTitle: Bool {
-        get{
-            return true
-        }
-        set{
-            super.isUppercasedTitle = true
-        }
-    }
+  
     
     override var tableStyle: UITableView.Style {
         get {
@@ -103,7 +96,6 @@ class SendViewController: BaseTableViewController {
         let pagingView = pagingViewController.view as! PagingView
         pagingView.options.indicatorColor = UIColor.main.heliotrope
         pagingView.options.menuItemSpacing = 30
-        pagingView.options.menuInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
 
         pagingViewController.view.backgroundColor = view.backgroundColor
         pagingViewController.view.isHidden = true
@@ -318,7 +310,7 @@ extension SendViewController : UITableViewDataSource {
                 total = String.currency(value: status.realAmount)
             }
             let cell = tableView
-                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: total)
+                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: (amount: total, isAll: viewModel.sendAll))
             cell.delegate = self
             return cell
         case 3:
@@ -459,6 +451,10 @@ extension SendViewController : BMCellProtocol {
                         removeGrothNotice = true
                     }
                     viewModel.sendAll = false
+                    
+                    if EnableNewFeatures {
+                        tableView.reloadRow(SendAllCell.self)
+                    }
                 }
                 viewModel.amount = text
             }
@@ -610,16 +606,16 @@ extension SendViewController : QRScannerViewControllerDelegate
 {
     func didScanQRCode(value:String, amount:String?) {
         viewModel.selectedContact = nil
-        
         if let a = amount {
             if Double(a) ?? 0 > 0 {
                 viewModel.amount = a
                 viewModel.sendAll = false
+                if EnableNewFeatures {
+                    tableView.reloadRow(SendAllCell.self)
+                }
             }
         }
-        
         didSelectAddress(value: value)
-        
     }
 }
 
@@ -639,15 +635,17 @@ extension SendViewController : SettingsModelDelegate {
 extension SendViewController {
     
     private func onExpire() {
-        let vc = AddressExpiresPickerViewController(duration: Int(viewModel.outgoindAdderss!.duration))
+        let vc = BMDataPickerViewController(type: .address_expire)
         vc.completion = { [weak self]
             obj in
             
             guard let strongSelf = self else { return }
 
-            strongSelf.viewModel.outgoindAdderss!.duration = obj == 24 ? 86400 : 0
+            let selected = obj as! Int32
             
-            AppModel.sharedManager().setExpires(Int32(obj), toAddress: strongSelf.viewModel.outgoindAdderss!.walletId)
+            strongSelf.viewModel.outgoindAdderss!.duration = selected == 24 ? 86400 : 0
+            
+            AppModel.sharedManager().setExpires(Int32(selected), toAddress: strongSelf.viewModel.outgoindAdderss!.walletId)
             
             strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 6)], with: .fade)
         }
@@ -668,13 +666,11 @@ extension SendViewController {
             pushViewController(vc: vc)
         }
         else{
-            let vc = CategoryPickerViewController(categories: viewModel.outgoindAdderss!.categories as? [String])
+            let vc = BMDataPickerViewController(type: .category, selectedValue:viewModel.outgoindAdderss!.categories as? [String])
             vc.completion = { [weak self]
                 obj in
-                
                 guard let strongSelf = self else { return }
-
-                if let categories = obj {
+                if let categories = (obj as? [String]) {
                     strongSelf.didSelectCategory(categories: categories)
                 }
             }

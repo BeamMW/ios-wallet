@@ -44,6 +44,10 @@ class TransactionShareView: UIView {
     
     @IBOutlet private weak var transactionFeeTitleLabel: UILabel!
     @IBOutlet private weak var transactionFeeValueLabel: UILabel!
+    
+    @IBOutlet private weak var kernelStackView: UIStackView!
+    @IBOutlet private weak var transactionKernelTitleLabel: UILabel!
+    @IBOutlet private weak var transactionKernelValueLabel: UILabel!
 
     var transaction:BMTransaction! {
         didSet{
@@ -80,34 +84,22 @@ class TransactionShareView: UIView {
         typeLabel.text = transaction.status.capitalizingFirstLetter()
 
         if transaction.isSelf {
-            senderTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_send_address)
-            
-            receiverTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_rec_address)
+            senderTitleLabel.text = Localizable.shared.strings.my_send_address
+            receiverTitleLabel.text = Localizable.shared.strings.my_rec_address
         }
         else if transaction.isIncome {
-            senderTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.contact)
-            receiverTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_address)
+            senderTitleLabel.text = Localizable.shared.strings.contact
+            receiverTitleLabel.text = Localizable.shared.strings.my_address
         }
         else{
-            senderTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.contact)
-            receiverTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.my_address)
+            senderTitleLabel.text = Localizable.shared.strings.contact
+            receiverTitleLabel.text = Localizable.shared.strings.my_address
         }
         
-        transactionFeeTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.transaction_fee)
+        transactionFeeTitleLabel.text = Localizable.shared.strings.transaction_fee
+        transactionFeeValueLabel.text = String(transaction.realFee) + " GROTH"
         
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = IconSymbolBeam()?.maskWithColor(color: UIColor.white)
-        imageAttachment.bounds = CGRect(x: 0, y: -3.5, width: 10, height: 15)
-        
-        let imageString = NSAttributedString(attachment: imageAttachment)
-        
-        let attributedString = NSMutableAttributedString(string:String.currency(value: transaction.fee))
-        attributedString.append(NSAttributedString(string: " "))
-        attributedString.append(imageString)
-        
-        transactionFeeValueLabel.attributedText = attributedString
-        
-        transactionIDTitleLabel.text  = Localizable.shared.strings.addDots(value: Localizable.shared.strings.transaction_id)
+        transactionIDTitleLabel.text  = Localizable.shared.strings.transaction_id
         transactionIDValueLabel.text = transaction.id
         
         
@@ -137,16 +129,19 @@ class TransactionShareView: UIView {
             currencyIcon.tintColor = UIColor.main.heliotrope
         }
         
-        switch Settings.sharedManager().target {
-        case Testnet:
-            bgView.image = BackgroundTestnet()
-        case Masternet:
-            bgView.image = BackgroundMasternet()
-        default:
-            return
+        transactionKernelValueLabel.text = transaction.kernelId
+        if transaction.kernelId.contains("000000") || transaction.isExpired() || transaction.isFailed() {
+            kernelStackView.isHidden = true
         }
         
-        let colors = [UIColor.main.peacockBlue, UIColor.clear].reversed()
+        senderTitleLabel.text = senderTitleLabel.text?.uppercased()
+        receiverTitleLabel.text = receiverTitleLabel.text?.uppercased()
+        transactionIDTitleLabel.text = transactionIDTitleLabel.text?.uppercased()
+        transactionFeeTitleLabel.text = transactionFeeTitleLabel.text?.uppercased()
+        transactionKernelTitleLabel.text = transactionKernelTitleLabel.text?.uppercased()
+        
+    
+        let colors = [UIColor.main.navyTwo, UIColor.main.deepSeaBlueTwo]
         
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = colors.map { $0.cgColor }
@@ -159,5 +154,15 @@ class TransactionShareView: UIView {
         backgroundImage.tag = 10
         backgroundImage.layer.addSublayer(gradient)
         mainView.insertSubview(backgroundImage, at: 0)
+        
+        switch Settings.sharedManager().target {
+        case Testnet:
+            bgView.image = BackgroundTestnet()
+        case Masternet:
+            bgView.image = BackgroundMasternet()
+        default:
+            break
+        }
+    
     }
 }

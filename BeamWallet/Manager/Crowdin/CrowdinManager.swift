@@ -44,7 +44,7 @@ class CrowdinManager : NSObject {
         let zipLink = URL(string: "https://api.crowdin.com/api/project/\(crowdinProject)/download/all.zip?key=\(crowdinKey)")!
         
         BackgroundDownloader.shared.startDownloading(zipLink, zipPath)
-        BackgroundDownloader.shared.onProgress = { (progress, error, filePath) in
+        BackgroundDownloader.shared.onProgress = { (progress, error, filePath, time) in
             if filePath != nil {
                 
                 if FileManager.default.fileExists(atPath: localizationPath.path)

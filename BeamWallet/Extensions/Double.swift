@@ -31,9 +31,16 @@ extension Double {
 
 extension Double {
     func asTime(style: DateComponentsFormatter.UnitsStyle) -> String {
+        let locale = Locale(identifier: Settings.sharedManager().language)
+        
+        var calendar = Calendar.current
+        calendar.locale = locale
+        
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second, .nanosecond]
         formatter.unitsStyle = style
+        formatter.calendar = calendar
+        
         guard let formattedString = formatter.string(from: self) else { return "" }
         return formattedString
     }

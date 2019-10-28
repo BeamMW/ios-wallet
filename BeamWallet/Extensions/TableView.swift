@@ -108,9 +108,9 @@ extension UITableView {
     }
     
     public func addPullToRefresh(target:Any?, handler: Selector) {
-        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(target, action: handler, for: .valueChanged)
+        refreshControl.tintColor = UIColor.white
         self.refreshControl = refreshControl
     }
     
