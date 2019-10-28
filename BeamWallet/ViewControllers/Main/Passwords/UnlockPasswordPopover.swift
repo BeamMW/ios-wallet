@@ -24,6 +24,7 @@ class UnlockPasswordPopover: BaseViewController {
         case transaction
         case node
         case settings
+        case clear_wallet
     }
     
     private var event: UnlockEvent!
@@ -80,6 +81,8 @@ class UnlockPasswordPopover: BaseViewController {
                 return Localizable.shared.strings.change_node_text_1
             case .settings:
                 return Localizable.shared.strings.change_settings_text_1
+            case .clear_wallet:
+                return String.empty()
             case .none:
                 return String.empty()
         }
@@ -93,6 +96,8 @@ class UnlockPasswordPopover: BaseViewController {
                 return Localizable.shared.strings.change_node_text_2
             case .settings:
                 return Localizable.shared.strings.change_settings_text_2
+            case .clear_wallet:
+                return String.empty()
             case .none:
                 return String.empty()
         }
@@ -106,6 +111,8 @@ class UnlockPasswordPopover: BaseViewController {
                 return Localizable.shared.strings.change_node_text_3
             case .settings:
                 return Localizable.shared.strings.change_settings_text_3
+            case .clear_wallet:
+                return Localizable.shared.strings.clear_wallet_password
             case .none:
                 return String.empty()
         }

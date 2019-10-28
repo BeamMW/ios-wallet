@@ -58,7 +58,7 @@ static NSString *logsKey = @"logsKey";
     else{
         _target = Mainnet;
     }
-    
+
     _isLocalNode = NO;
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:askKey]) {
@@ -351,8 +351,8 @@ static NSString *logsKey = @"logsKey";
 }
 
 -(void)copyOldDatabaseToGroup {
-//    [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
-//    [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet1" ofType:nil] toPath:[self walletStoragePath] error:nil];
+ //   [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
+   // [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet_old" ofType:@"uu"] toPath:[self walletStoragePath] error:nil];
     
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths objectAtIndex:0];

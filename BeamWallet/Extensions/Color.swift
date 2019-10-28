@@ -79,7 +79,7 @@ extension UIColor {
             else if Settings.sharedManager().target == Masternet {
                 return UIColor.main.blackTwo
             }
-            return .init(red: 13 / 255, green: 37 / 255, blue: 69 / 255, alpha: 1)
+            return .init(red: 4 / 255, green: 37 / 255, blue: 72 / 255, alpha: 1)
         }
         
         static var marineThree: UIColor {
@@ -221,6 +221,26 @@ extension UIColor {
         
         static var coral: UIColor {
             return .init(red: 242 / 255, green: 95 / 255, blue: 91 / 255, alpha: 1)
+        }
+        
+        static var navyTwo: UIColor {
+            if Settings.sharedManager().target == Testnet {
+                return .init(red: 26 / 255, green: 19 / 255, blue: 45 / 255, alpha: 1)
+            }
+            else if Settings.sharedManager().target == Masternet {
+                return .init(red: 16 / 255, green: 16 / 255, blue: 16 / 255, alpha: 1)
+            }
+            return .init(red: 4 / 255, green: 29 / 255, blue: 60 / 255, alpha: 1)
+        }
+        
+        static var deepSeaBlueTwo: UIColor {
+            if Settings.sharedManager().target == Testnet {
+                return .init(red: 52 / 255, green: 39 / 255, blue: 77 / 255, alpha: 1)
+            }
+            else if Settings.sharedManager().target == Masternet {
+                return .init(red: 41 / 255, green: 41 / 255, blue: 41 / 255, alpha: 1)
+            }
+            return .init(red: 0 / 255, green: 81 / 255, blue: 134 / 255, alpha: 1)
         }
     }
 }

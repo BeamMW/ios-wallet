@@ -1,5 +1,5 @@
 "restore_wallet_title" = "Restore wallet";
-"restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but  transaction history and addresses will be kept separately on each device.";
+"restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 "no_space_title" = "Not enough storage";
 "no_space_info" = "At least 200MB of free space is required on the device to restore the wallet";
 "beam_title" = "Scalable confidential cryptocurrency";
@@ -17,6 +17,7 @@
 "input_seed" = "Type in your seed phrase";
 "confirm_seed_text" = "To ensure the seed phrase is written down correctly, please fill in the specific words below";
 "display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"display_seed_old" = "Your seed phrase is the access key to all the funds in your wallet. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "intro_seed_main" = "Create a new wallet by generating a seed phrase. If you lose your device, you will need the seed phrase to recover your funds. Never type your seed phrase in keychains or password managers. Never save it in your local filesystem or remote folders of any kind.";
 "intro_seed_1" = "Do not let anyone see your seed phrase";
 "intro_seed_2" = "Never type your seed phrase into password managers or elsewhere";
@@ -50,8 +51,8 @@
 "no_internet" = "No internet connection";
 "wallet_not_created" = "Wallet not created";
 "wallet_not_opened" = "Wallet can not be opened";
-"restor_wallet_warning" = "Please wait for synchronization and do not close or minimize the application. Restoring the wallet may take a while.";
-"restor_wallet_info" = "Only the wallet balance (UTXO) can be restored,  transaction info is always private\nand never kept in the blockchain.";
+"restor_wallet_warning" = "Restoring your wallet may take a while. Please wait for synchronization to finish - do no close nor minimize the application.";
+"restor_wallet_info" = "Only the wallet balance (UTXOs) will be restored. Your transaction info is always private and never kept on the blockchain.";
 "receive" = "Receive";
 "send" = "Send";
 "available" = "Available";
@@ -358,7 +359,7 @@
 "default" = "Default";
 "my_active" = "My active"; //addresses
 "my_expired" = "My expired"; //addresses
-"general_settings" = "General settings";
+"general_settings" = "General";
 "unavailable" = "Unavailable";
 "in_progress_out" = "In progress\n(outgoing)";
 "in_progress_in" = "In progress\n(incoming)";
@@ -368,7 +369,6 @@
 "h" = "h"; //hour
 "m" = "m"; //minute
 "send_qr_secure" = "Show this QR code to the sender or send it over an external secure channel.";
-"share_transaction" = "Share transaction details";
 "auth_face_confirm" = "Confirm your face to authenticate";
 "auth_touch_confirm" = "Confirm your fingerprint to authenticate";
 "auth_bio_failed" = "(Mechanism) has been locked out due to few fail attemp. Enter iPhone passcode to enable (Mechanism)."; //(Mechanism) is Face ID or Touch ID.
@@ -422,7 +422,7 @@
 "restore_create_text" = "If you'll restore a wallet all transaction history and addresses will be lost.";
 "proceed" = "Proceed";
 "info_restore_title" = "Do not simultaneously run two wallets initiated from the same seed phrase";
-"info_restore_text" = "The balance and transaction history won't be synchronised across device and transactions might fail.";
+"info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
 "crash_title" = "Beam Wallet crashed unexpectedly";
 "crash_message" = "Would you agree to report your limited amount of information to us? Collecting crash information would allow us to discover and fix bugs much faster. This is only a single crash-related report, we won't keep collecting any of your data later.";
 "crash_negative" = "No, thanks";
@@ -452,7 +452,6 @@
 "show_seed_phrase" = "Show seed phrase";
 "increase_security" = "Increase security";
 "increase_security_text" = "If you ever lose your device, you will need this phrase to recover your wallet!\nNever type your seed phrase in keychains or password managers.\nNever save it in your local or remote folders in any form.";
-"seed_phrase_text" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "all_set" = "You are all set";
 "wallet_is_secure" = "Your wallet is secure now! Be calm in it’s feature use.";
 "make_wallet_secure_title" = "Make your wallet secure";
@@ -472,8 +471,9 @@
 "last_5_days" = "Last 5 days";
 "last_15_days" = "Last 15 days";
 "last_30_days" = "Last 30 days";
-"clear_wallet" = "Clear wallet";
-"clear_wallet_text" = "All the local data will be deleted. Are you sure you want to clear your wallet?";
+"clear_wallet" = "Remove current wallet";
+"clear_wallet_text" = "All data will be erased. Make sure you’ve saved your seed phrase if you want to restore this wallet later on! Are you sure you want to remove your wallet?";
+"clear_wallet_password" = "Enter your password to remove your wallet";
 "change_node_text_1" = "Use Face ID or enter your password to change node settings";
 "change_node_text_2" = "Use Touch ID or enter your password to change node settings";
 "change_node_text_3" = "Enter your password to change node settings";
@@ -481,3 +481,5 @@
 "change_settings_text_2" = "Use Touch ID or enter your password to change settings";
 "change_settings_text_3" = "Enter your password to change settings";
 "paste" = "Paste";
+"status" = "Status"; //transaction status
+"remove_wallet" = "Remove wallet";

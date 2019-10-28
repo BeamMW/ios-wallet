@@ -168,7 +168,10 @@ class TrustedNodeViewController: BMInputViewController {
         AppModel.sharedManager().isRestoreFlow = false
         
         AppModel.sharedManager().refreshAddresses()
-        
+        AppModel.sharedManager().getUTXO()
+        AppModel.sharedManager().getWalletStatus()
+        AppModel.sharedManager().getNetworkStatus()
+
         let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
         let menuViewController = LeftMenuViewController()
         

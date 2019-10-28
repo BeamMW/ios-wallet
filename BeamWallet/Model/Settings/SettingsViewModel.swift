@@ -18,6 +18,7 @@
 //
 
 import Foundation
+import MobileCoreServices
 
 class SettingsViewModel: NSObject {
     public var items = [[SettingsItem]]()
@@ -256,17 +257,30 @@ extension SettingsViewModel {
     
     func onClickReport() {
         if let top = UIApplication.getTopMostViewController() {
+            
+//            let types = [kUTTypeJSON]
+//            let importMenu = UIDocumentPickerViewController(documentTypes: types as [String], in: .exportToService)
+//            if #available(iOS 13.0, *) {
+//                importMenu.directoryURL = URL(fileURLWithPath: Settings.sharedManager().walletStoragePath())
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//            importMenu.delegate = self
+//            importMenu.modalPresentationStyle = .formSheet
+//
+//            top.present(importMenu, animated: true)
+            
             let path = AppModel.sharedManager().getZipLogs()
             let url = URL(fileURLWithPath: path)
-            
+
             let act = ShareLogActivity()
             act.zipUrl = url
-            
+
             let vc = UIActivityViewController(activityItems: [url], applicationActivities: [act])
             vc.setValue("beam wallet logs", forKey: "subject")
-            
+
             vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
-            
+
             top.present(vc, animated: true)
         }
     }
@@ -336,10 +350,10 @@ extension SettingsViewModel {
     
     func onClearWallet() {
         if let top = UIApplication.getTopMostViewController() {
-            top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.clear_wallet, cancelHandler: { (_ ) in
+            top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { (_ ) in
                 
             }) { (_ ) in
-                let modalViewController = UnlockPasswordPopover(event: .settings)
+                let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
                 modalViewController.completion = { obj in
                     let app = UIApplication.shared.delegate as! AppDelegate
                     app.logout()
@@ -349,5 +363,15 @@ extension SettingsViewModel {
                 top.present(modalViewController, animated: true, completion: nil)
             }
         }
+    }
+}
+
+extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        print(urls)
+    }
+
+     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }

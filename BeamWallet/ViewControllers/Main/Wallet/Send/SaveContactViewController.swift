@@ -249,6 +249,7 @@ extension SaveContactViewController : UITableViewDataSource {
                 cell.backgroundColor = UIColor.clear
                 cell.contentView.backgroundColor = UIColor.clear
                 cell.copyText = copyAddress
+                cell.validateAddress = true
                 return cell
             }
             else{

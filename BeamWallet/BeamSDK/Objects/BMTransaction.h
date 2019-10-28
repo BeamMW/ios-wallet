@@ -65,6 +65,7 @@ typedef UInt64 BMTransactionStatus;
 
 -(NSString*)details;
 -(NSString*)csvLine;
+-(NSString*)textDetails;
 
 -(NSMutableAttributedString*)searchString:(NSString*)searchText;
 

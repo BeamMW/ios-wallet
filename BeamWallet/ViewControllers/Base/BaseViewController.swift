@@ -35,6 +35,8 @@ class BaseViewController: UIViewController {
     
     public var disableMenu = false
     
+    private var alpha:CGFloat = 1.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -108,8 +110,9 @@ class BaseViewController: UIViewController {
         backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: height)
         backgroundImage.tag = 10
         backgroundImage.layer.addSublayer(gradient)
+        backgroundImage.alpha = 0.5
         self.view.addSubview(backgroundImage)
-        
+
         if menu {
             self.onAddMenuIcon()
         }
@@ -286,7 +289,7 @@ class BaseViewController: UIViewController {
     // MARK: - Feedback
     
     public func showRateDialog() {
-        let logoView = UIImageView(frame: CGRect(x: 10, y: 14, width: 40, height: 31))
+        let logoView = UIImageView(frame: CGRect(x: 10, y: 15, width: 40, height: 28))
         logoView.image = RateLogo()
         
         let view = UIView(frame: CGRect(x: 95, y: 15, width: 60, height: 60))

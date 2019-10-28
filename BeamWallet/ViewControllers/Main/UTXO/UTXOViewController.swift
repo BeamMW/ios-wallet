@@ -57,7 +57,6 @@ class UTXOViewController: BaseTableViewController {
         
         let pagingView = pagingViewController.view as! PagingView
         pagingView.options.menuItemSpacing = 20
-        pagingView.options.menuInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
 
         addChild(pagingViewController)
         view.addSubview(pagingViewController.view)

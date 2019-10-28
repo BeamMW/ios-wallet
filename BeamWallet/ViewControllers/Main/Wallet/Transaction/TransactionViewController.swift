@@ -30,12 +30,12 @@ class TransactionViewController: BaseTableViewController {
         
         if transaction.canSaveContact() {
             let action1 = UIPreviewAction(title: Localizable.shared.strings.save_contact_title,
-                                             style: .default,
-                                             handler: { _, _ in
-                                                 self.viewModel.saveContact()
-               })
-               
-               array.append(action1)
+                                          style: .default,
+                                          handler: { _, _ in
+                                              self.viewModel.saveContact()
+            })
+            
+            array.append(action1)
         }
         
         let action1 = UIPreviewAction(title: Localizable.shared.strings.share_details,
@@ -46,37 +46,45 @@ class TransactionViewController: BaseTableViewController {
         
         array.append(action1)
         
+        if EnableNewFeatures {
+            let action2 = UIPreviewAction(title: Localizable.shared.strings.copy_details,
+                                          style: .default,
+                                          handler: { _, _ in
+                                              self.viewModel.copyDetails()
+            })
+            
+            array.append(action2)
+        }
+        
         if !transaction.isIncome {
-            let action2 = UIPreviewAction(title: Localizable.shared.strings.repeat_transaction,
+            let action3 = UIPreviewAction(title: Localizable.shared.strings.repeat_transaction,
                                           style: .default,
                                           handler: { _, _ in
                                               self.viewModel.repeatTransation(transaction: self.viewModel.transaction!)
             })
-            array.append(action2)
+            array.append(action3)
         }
         
         if transaction.canCancel {
-            let action3 = UIPreviewAction(title: Localizable.shared.strings.cancel_transaction,
+            let action4 = UIPreviewAction(title: Localizable.shared.strings.cancel_transaction,
                                           style: .default,
                                           handler: { _, _ in
                                               self.viewModel.cancelTransation(indexPath: nil)
             })
-            array.append(action3)
+            array.append(action4)
         }
         
         if transaction.canDelete {
-            let action4 = UIPreviewAction(title: Localizable.shared.strings.delete_transaction,
+            let action5 = UIPreviewAction(title: Localizable.shared.strings.delete_transaction,
                                           style: .destructive,
                                           handler: { _, _ in
                                               self.viewModel.deleteTransation(indexPath: nil)
             })
-            array.append(action4)
+            array.append(action5)
         }
         
         return array
     }
-    
-
     
     override var tableStyle: UITableView.Style {
         get {
@@ -109,7 +117,9 @@ class TransactionViewController: BaseTableViewController {
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
         
-        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        if EnableNewFeatures {
+            tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        }
         
         if !isPreview {
             setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
@@ -177,6 +187,8 @@ class TransactionViewController: BaseTableViewController {
         BMPopoverMenu.show(menuArray: viewModel.actionItems(), done: { selectedItem in
             if let item = selectedItem {
                 switch item.action {
+                case .save_contact:
+                    self.viewModel.saveContact()
                 case .repeat_transaction:
                     self.viewModel.repeatTransation(transaction: self.viewModel.transaction!)
                 case .cancel_transaction:
@@ -185,6 +197,8 @@ class TransactionViewController: BaseTableViewController {
                     self.viewModel.deleteTransation(indexPath: nil)
                 case .share:
                     self.viewModel.share()
+                case .copy:
+                    self.viewModel.copyDetails()
                 default:
                     return
                 }

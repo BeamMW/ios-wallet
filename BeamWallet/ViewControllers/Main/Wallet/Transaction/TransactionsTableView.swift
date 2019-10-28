@@ -50,6 +50,10 @@ class TransactionsTableView: UITableViewController {
         tableView.register([BMEmptyCell.self, WalletTransactionCell.self, WalletTransactionSearchCell.self])
         tableView.keyboardDismissMode = .interactive
         
+        if EnableNewFeatures {
+            tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+        }
+
         subscribeToChages()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -78,6 +82,10 @@ class TransactionsTableView: UITableViewController {
     
 //MARK: - Updates
 
+    @objc private func refreshData(_ sender: Any) {
+          AppModel.sharedManager().getWalletStatus()
+    }
+    
     private func subscribeToChages() {
         viewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }

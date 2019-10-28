@@ -20,6 +20,8 @@
 import UIKit
 
 class EnterWalletPasswordViewController: BaseWizardViewController {
+    public var completion: (() -> Void)?
+    
     private var isRequestedAuthorization = false
     
     @IBOutlet private var passField: BMField!
@@ -28,6 +30,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     @IBOutlet private var restoreButton: UIButton!
     @IBOutlet private var stackView: UIStackView!
     @IBOutlet private var topSpace: NSLayoutConstraint!
+    @IBOutlet private var versionLabel: UILabel!
     
     init(isNeedRequestedAuthorization: Bool = true) {
         super.init(nibName: nil, bundle: nil)
@@ -72,6 +75,13 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
             restoreButton.titleLabel?.textAlignment = .center
         }
+        
+        if EnableNewFeatures {
+            versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+        }
+        else {
+            versionLabel.isHidden = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,10 +93,13 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             if (presentedViewController as? UIAlertController) == nil {
                 if isRequestedAuthorization == false, TGBotManager.sharedManager.isNeedLinking() == false, UIApplication.shared.applicationState == .active, AppDelegate.isCrashed() == false {
                     isRequestedAuthorization = true
-                    
                     biometricAuthorization()
                 }
             }
+        }
+        else if AppModel.sharedManager().isLoggedin, !isRequestedAuthorization, UIApplication.shared.applicationState == .active {
+            isRequestedAuthorization = true
+            biometricAuthorization()
         }
     }
     
@@ -144,6 +157,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                     else {
                         back()
                     }
+                    
+                    completion?()
                 }
             }
             else {
@@ -170,6 +185,21 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             AppModel.sharedManager().startChangeWallet()
             self.pushViewController(vc: WellcomeViewController())
         }
+    }
+    
+    @IBAction func onExport(sender: UIButton) {
+        let path = Settings.sharedManager().walletStoragePath()
+        let url = URL(fileURLWithPath: path)
+        
+        let act = ShareLogActivity()
+        act.zipUrl = url
+        
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: [act])
+        vc.setValue("database", forKey: "subject")
+        
+        vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
+        
+        present(vc, animated: true)
     }
 }
 

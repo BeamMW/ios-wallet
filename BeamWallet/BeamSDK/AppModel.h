@@ -94,6 +94,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
+@property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
+
 -(void)handleTimer;
 -(void)startConnectionTimer:(int)seconds;
 
@@ -126,7 +128,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)checkRecoveryWallet;
 -(void)startChangeWallet;
 -(void)stopChangeWallet;
-    
+-(void)startChangeNode;
+
 // updates
 -(void)getWalletStatus;
 -(void)getNetworkStatus;
@@ -215,5 +218,9 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isNodeInSync;
 
 -(void)completeWalletVerification;
+
+//export
+-(NSString*_Nonnull)exportData;
+-(void)importData:(NSString*)data;
 
 @end

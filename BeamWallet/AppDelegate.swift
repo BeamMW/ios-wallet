@@ -23,11 +23,10 @@ import Crashlytics
 import CrashEye
 
 
-private let g_secs = 5.0
-
 class BeamApplication: UIApplication{
     override func sendEvent(_ event: UIEvent) {
         super.sendEvent(event)
+                
         BMLockScreen.shared.onTapEvent()
     }
 }
@@ -47,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         CrashEye.add(delegate: self)
 
-
         UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = false
@@ -61,6 +59,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardListener.shared.start()
         
         NotificationManager.sharedManager.requestPermissions()
+        
+        if Settings.sharedManager().target != Mainnet {
+            CrowdinManager.updateLocalizations()
+        }
         
         AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)
@@ -76,17 +78,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
-        if let crash = UserDefaults.standard.string(forKey: "crash") {
-            self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_negative, confirmTitle: Localizable.shared.strings.crash_positive, cancelHandler: { (_ ) in
+        if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
+            self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { (_ ) in
                 
-                UserDefaults.standard.set(nil, forKey: "crash")
-                UserDefaults.standard.synchronize()
+                 Fabric.with([Crashlytics.self()])
+                 
+                 Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
+                 
+                 Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace" : crash])
+                
+                 UserDefaults.standard.set(nil, forKey: "crash")
+                 UserDefaults.standard.synchronize()
                 
             }, confirmHandler: { (_ ) in
-                Fabric.with([Crashlytics.self()])
-                
-                Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace" : crash])
-               
                 UserDefaults.standard.set(nil, forKey: "crash")
                 UserDefaults.standard.synchronize()
             })
@@ -419,6 +423,7 @@ extension AppDelegate: CrashEyeDelegate {
     
     func crashEyeDidCatchCrash(with model: CrashModel) {
         UserDefaults.standard.set(model.callStack, forKey: "crash")
+        UserDefaults.standard.set(model.name, forKey: "crash_name")
         UserDefaults.standard.synchronize()
     }
 }

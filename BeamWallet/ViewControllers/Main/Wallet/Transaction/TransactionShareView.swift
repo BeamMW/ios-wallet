@@ -140,17 +140,8 @@ class TransactionShareView: UIView {
         transactionFeeTitleLabel.text = transactionFeeTitleLabel.text?.uppercased()
         transactionKernelTitleLabel.text = transactionKernelTitleLabel.text?.uppercased()
         
-        
-        switch Settings.sharedManager().target {
-        case Testnet:
-            bgView.image = BackgroundTestnet()
-        case Masternet:
-            bgView.image = BackgroundMasternet()
-        default:
-            return
-        }
-        
-        let colors = [UIColor.main.peacockBlue, UIColor.clear].reversed()
+    
+        let colors = [UIColor.main.navyTwo, UIColor.main.deepSeaBlueTwo]
         
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = colors.map { $0.cgColor }
@@ -163,6 +154,15 @@ class TransactionShareView: UIView {
         backgroundImage.tag = 10
         backgroundImage.layer.addSublayer(gradient)
         mainView.insertSubview(backgroundImage, at: 0)
+        
+        switch Settings.sharedManager().target {
+        case Testnet:
+            bgView.image = BackgroundTestnet()
+        case Masternet:
+            bgView.image = BackgroundMasternet()
+        default:
+            break
+        }
     
     }
 }

@@ -27,6 +27,7 @@ class OpenWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var restotingInfoLabel: UILabel!
     @IBOutlet private weak var cancelButton: UIButton!
     @IBOutlet private weak var errorLabel: UILabel!
+    @IBOutlet private weak var versionLabel: UILabel!
 
     private var timeoutTimer:Timer?
     private var oldProgress:Int32 = 0
@@ -51,6 +52,13 @@ class OpenWalletProgressViewController: BaseViewController {
         super.viewDidLoad()
 
         removeLeftButton()
+        
+        if EnableNewFeatures && phrase != nil {
+            versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+        }
+        else{
+            versionLabel.isHidden = true
+        }
         
         let progressViewHeight: CGFloat = 4.0
         
@@ -97,6 +105,8 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     private func openMainPage() {
+        isPresented = true
+
         if phrase != nil {
             OnboardManager.shared.saveSeed(seed: phrase!)
         }
@@ -133,6 +143,8 @@ class OpenWalletProgressViewController: BaseViewController {
         sideMenuController.modalTransitionStyle = .crossDissolve
         
         self.navigationController?.setViewControllers([sideMenuController], animated: true)
+        
+        BMLockScreen.shared.onTapEvent()
     }
 
     private func downloadFile() {
@@ -161,7 +173,7 @@ class OpenWalletProgressViewController: BaseViewController {
                     self.progressView.progress = percent
                     
                     if let remaining = time {
-                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%" + ", " + Localizable.shared.strings.estimted_time + " " + remaining
+                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%" + "\n" + Localizable.shared.strings.estimted_time + " " + remaining
                     }
                     else{
                         self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%"
@@ -340,7 +352,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 
                 if time > 0 {
                     let asDouble = Double(time)
-                    strongSelf.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(progress_100)%" + ", " + Localizable.shared.strings.estimted_time + " " + asDouble.asTime(style: .abbreviated)
+                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " " + "\(progress_100)%" + "\n" + Localizable.shared.strings.estimted_time + " " + asDouble.asTime(style: .abbreviated)
                 }
                 else{
                     strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(progress_100)%"
@@ -392,7 +404,6 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             if error.code == 2 && Settings.sharedManager().isChangedNode() {
                 if !strongSelf.isPresented {
                     strongSelf.isPresented = true
-                    
                     strongSelf.openMainPage()
                 }
             }
@@ -409,9 +420,12 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 }
             }
             else if error.code == 4 {
-                strongSelf.openMainPage()
+                if !strongSelf.isPresented {
+                    strongSelf.isPresented = true
+                    strongSelf.openMainPage()
+                }
             }
-            else{
+            else if !strongSelf.isPresented {
                 if let controllers = strongSelf.navigationController?.viewControllers {
                     for vc in controllers {
                         if vc is TrustedNodeViewController {

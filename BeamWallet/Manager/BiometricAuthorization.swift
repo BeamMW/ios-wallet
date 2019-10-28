@@ -30,6 +30,7 @@ class BiometricAuthorization: NSObject {
     
     public static let shared = BiometricAuthorization()
     public var isAuthorizationProccess = false
+    private var mechanism = ""
     
     public func canAuthenticate() -> Bool {
         var isBiometricAuthenticationAvailable = false
@@ -72,7 +73,9 @@ class BiometricAuthorization: NSObject {
         
         isAuthorizationProccess = true
         
-        let mechanism = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.face_id : Localizable.shared.strings.touch_id
+        if mechanism.isEmpty {
+            mechanism = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.face_id : Localizable.shared.strings.touch_id
+        }
 
          var reason = ""
         
@@ -97,7 +100,7 @@ class BiometricAuthorization: NSObject {
                     {
                         let context : LAContext = LAContext();
                         
-                        let reason:String = Localizable.shared.strings.auth_bio_failed.replacingOccurrences(of: "(Mechanism)", with: mechanism)
+                        let reason:String = Localizable.shared.strings.auth_bio_failed.replacingOccurrences(of: "(Mechanism)", with: self.mechanism)
                         
                         context.evaluatePolicy(LAPolicy.deviceOwnerAuthentication,
                                                localizedReason: reason,

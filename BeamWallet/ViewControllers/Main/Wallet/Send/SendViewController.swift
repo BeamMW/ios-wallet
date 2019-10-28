@@ -96,7 +96,6 @@ class SendViewController: BaseTableViewController {
         let pagingView = pagingViewController.view as! PagingView
         pagingView.options.indicatorColor = UIColor.main.heliotrope
         pagingView.options.menuItemSpacing = 30
-        pagingView.options.menuInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
 
         pagingViewController.view.backgroundColor = view.backgroundColor
         pagingViewController.view.isHidden = true
@@ -311,7 +310,7 @@ extension SendViewController : UITableViewDataSource {
                 total = String.currency(value: status.realAmount)
             }
             let cell = tableView
-                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: total)
+                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: (amount: total, isAll: viewModel.sendAll))
             cell.delegate = self
             return cell
         case 3:
@@ -452,6 +451,10 @@ extension SendViewController : BMCellProtocol {
                         removeGrothNotice = true
                     }
                     viewModel.sendAll = false
+                    
+                    if EnableNewFeatures {
+                        tableView.reloadRow(SendAllCell.self)
+                    }
                 }
                 viewModel.amount = text
             }
@@ -603,16 +606,16 @@ extension SendViewController : QRScannerViewControllerDelegate
 {
     func didScanQRCode(value:String, amount:String?) {
         viewModel.selectedContact = nil
-        
         if let a = amount {
             if Double(a) ?? 0 > 0 {
                 viewModel.amount = a
                 viewModel.sendAll = false
+                if EnableNewFeatures {
+                    tableView.reloadRow(SendAllCell.self)
+                }
             }
         }
-        
         didSelectAddress(value: value)
-        
     }
 }
 

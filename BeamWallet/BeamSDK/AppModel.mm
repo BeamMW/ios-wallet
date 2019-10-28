@@ -122,7 +122,7 @@ const int kFeeInGroth_Fork1 = 100;
     return self;
 }
 
--(void)loadRules{    
+-(void)loadRules{
     Rules::get().UpdateChecksum();
 
     LOG_INFO() << "Rules signature";
@@ -159,6 +159,16 @@ const int kFeeInGroth_Fork1 = 100;
 
 #pragma mark - Inetrnet
 
+-(void)onOnline {
+    if(self.connectionAfterOnlineTimer!=nil){
+        [self.connectionAfterOnlineTimer invalidate];
+        self.connectionAfterOnlineTimer = nil;
+    }
+    
+    [[AppModel sharedManager] setIsInternetAvailable:YES];
+    [[AppModel sharedManager] refreshAllInfo];
+}
+
 -(void)checkInternetConnection{
     __weak typeof(self) weakSelf = self;
 
@@ -168,22 +178,37 @@ const int kFeeInGroth_Fork1 = 100;
     {
         if (self->isRunning == NO && weakSelf.isLoggedin == YES) {
             self->isRunning = YES;
-            self->wallet->start();
         }
         
         if (![[AppModel sharedManager] isInternetAvailable]) {
-            [[AppModel sharedManager] refreshAllInfo];
-        }
-        
-        [[AppModel sharedManager] setIsInternetAvailable:YES];
-        
-        if (![AppModel sharedManager].isRestoreFlow) {
-            [[AppModel sharedManager] start];
+            
+            if (weakSelf.isLoggedin == YES)
+            {
+                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+                     if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                         [delegate onNodeStartChanging];
+                     }
+                 }
+                
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if([AppModel sharedManager].connectionAfterOnlineTimer==nil){
+                           [AppModel sharedManager].connectionAfterOnlineTimer = [NSTimer scheduledTimerWithTimeInterval:3 target: [AppModel sharedManager] selector: @selector(onOnline) userInfo: nil repeats: NO];
+            }
+            });
+            }
+           else{
+               [[AppModel sharedManager] setIsInternetAvailable:YES];
+           }
         }
     };
     
     internetReachableFoo.unreachableBlock = ^(Reachability*reach)
     {
+        if(weakSelf.connectionAfterOnlineTimer!=nil){
+            [weakSelf.connectionAfterOnlineTimer invalidate];
+            weakSelf.connectionAfterOnlineTimer = nil;
+        }
+        
         [[AppModel sharedManager] setIsInternetAvailable:NO];
         [[AppModel sharedManager] setIsConnected:NO];
         
@@ -225,12 +250,7 @@ const int kFeeInGroth_Fork1 = 100;
     _isNodeChanging = isNodeChanging;
     
     if (_isNodeChanging) {
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-        {
-            if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
-                [delegate onNodeStartChanging];
-            }
-        }
+        [[AppModel sharedManager] startChangeNode];
     }
 }
 
@@ -463,6 +483,17 @@ const int kFeeInGroth_Fork1 = 100;
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+-(void)startChangeNode {
+   if(self.isInternetAvailable)
+   {
+       for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+              if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                  [delegate onNodeStartChanging];
+              }
+          }
+   }
+}
+
 -(void)checkRecoveryWallet {
     NSString *oldPath = [Settings sharedManager].walletStoragePath;
     NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
@@ -569,11 +600,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
-        if (![[Settings sharedManager] isLocalNode] && self.isInternetAvailable) {
-            isRunning = YES;
-            wallet->start();
-        }
+        wallet->start();
         
+        isRunning = YES;
         isStarted = YES;
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
@@ -743,7 +772,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 }
                 catch (...) {
                     return NO;
-                }            
+                }
             }
         }
     }
@@ -2147,4 +2176,18 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
 }
 
+//MARK: - Export
+
+-(NSString*_Nonnull)exportData {
+    auto exported = storage::ExportDataToJson(*walletDb);
+    NSString *result = [NSString stringWithUTF8String:exported.c_str()];
+    return result;
+}
+
+-(void)importData:(NSString*)data {
+    auto _data = [data string];
+    storage::ImportDataFromJson(*walletDb, &_data[0], _data.size());
+}
+
 @end
+

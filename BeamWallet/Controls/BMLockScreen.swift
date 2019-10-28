@@ -45,6 +45,7 @@ public class BMLockScreen {
     
     func onTapEvent() {
         seconds = 0
+        inactiveDate = 0
     }
     
     @objc private func applicationInactive() {
@@ -86,6 +87,10 @@ public class BMLockScreen {
             
             let unlock = EnterWalletPasswordViewController()
             unlock.disableMenu = true
+            unlock.completion = {
+                self.isScreenLocked = false
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self as Any, selector: #selector(self.applicationActive), userInfo: nil, repeats: true)
+            }
             
             let vc = UINavigationController(rootViewController: unlock)
             vc.navigationBar.setBackgroundImage(UIImage(), for: .default)

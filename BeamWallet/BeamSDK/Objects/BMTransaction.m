@@ -246,7 +246,7 @@
     }
     
     if ([_kernelId.lowercaseString hasPrefix:searchText.lowercaseString]) {
-        idRange = [_kernelId.lowercaseString rangeOfString:searchText.lowercaseString];
+        kernelRange = [_kernelId.lowercaseString rangeOfString:searchText.lowercaseString];
     }
     
     if ([_senderAddress.lowercaseString hasPrefix:searchText.lowercaseString]) {
@@ -448,6 +448,71 @@
         return address == nil;
     }
     return NO;
+}
+
+-(NSString*)textDetails {
+    NSMutableArray *details = [NSMutableArray array];
+    
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    formatter.currencyCode = @"";
+    formatter.currencySymbol = @"";
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 10;
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    formatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
+    
+    NSString *number = [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]];
+    number = [number stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSString *date = [NSString stringWithFormat:@"%@\n%@",[[@"date" localized]uppercaseString], [self formattedDate]];
+    
+    NSString *amount = [NSString stringWithFormat:@"%@\n%@",[[@"amount" localized]uppercaseString], [NSString stringWithFormat:@"%@ BEAM",number]];
+    
+    NSString *status = [NSString stringWithFormat:@"%@\n%@",[[@"status" localized]uppercaseString], _status];
+    
+    NSString *sender;
+    NSString *receiver;
+
+    if (_isSelf) {
+        sender = [NSString stringWithFormat:@"%@\n%@",[[@"my_send_address" localized]uppercaseString], _senderAddress];
+        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_rec_address" localized]uppercaseString], _receiverAddress];
+    }
+    else if(_isIncome)
+    {
+        sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _senderAddress];
+        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _receiverAddress];
+    }
+    else{
+        sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _receiverAddress];
+        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _senderAddress];
+    }
+
+    NSString *fee = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_fee" localized]uppercaseString], [NSString stringWithFormat:@"%llu GROTH",_realFee]];
+                      
+    NSString *trid = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_id" localized]uppercaseString], _ID];
+
+    [details addObject:date];
+    [details addObject:status];
+    [details addObject:amount];
+    [details addObject:sender];
+    [details addObject:receiver];
+    [details addObject:fee];
+    [details addObject:trid];
+
+    
+    NSString *kernel = [NSString stringWithFormat:@"%@\n%@",[[@"kernel_id" localized]uppercaseString], _ID];
+
+    if (!self.isExpired && !self.isFailed && ![_kernelId hasPrefix:@"00000"]) {
+        [details addObject:kernel];
+    }
+
+    
+    if ([self isFailed]) {
+        NSString *failed = [NSString stringWithFormat:@"%@\n%@",[[@"failure_reason" localized]uppercaseString], _failureReason];
+        [details addObject:failed];
+    }
+           
+    return [details componentsJoinedByString:@"\n\n"];
 }
 
 @end

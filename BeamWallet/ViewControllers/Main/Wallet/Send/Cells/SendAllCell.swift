@@ -34,6 +34,12 @@ class SendAllCell: BaseCell {
         titleLabel.letterSpacing = 1.5
         
         selectionStyle = .none
+        
+        if EnableNewFeatures {
+            allButton.borderColor = UIColor.clear
+            allButton.backgroundColor = UIColor.clear
+            allButton.borderWidth = 0
+        }
     }
     
     @IBAction func onSendAll(sender :UIButton) {
@@ -43,8 +49,19 @@ class SendAllCell: BaseCell {
 
 extension SendAllCell: Configurable {
     
-    func configure(with amount:String) {
-        amountLabel.text = amount + Localizable.shared.strings.beam
+    func configure(with options:(amount:String, isAll:Bool)) {
+        amountLabel.text = options.amount + Localizable.shared.strings.beam
         allButton.setBackgroundColor(color: UIColor.main.heliotrope.withAlphaComponent(0.3), forState: .highlighted)
+        
+        if EnableNewFeatures {
+            if options.isAll {
+                allButton.isUserInteractionEnabled = false
+                allButton.alpha = 0.5
+            }
+            else{
+                allButton.isUserInteractionEnabled = true
+                allButton.alpha = 1
+            }
+        }
     }
 }

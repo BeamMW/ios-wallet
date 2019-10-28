@@ -131,7 +131,7 @@ class SeedPhraseViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         switch event {
-        case .display:
+        case .display, .restore:
             NotificationCenter.default.addObserver(self, selector: #selector(didTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
             
             if !increaseSecutirty {
@@ -152,7 +152,21 @@ class SeedPhraseViewController: BaseViewController {
     }
     
     @objc private func didTakeScreenshot() {
-        alert(message: Localizable.shared.strings.seed_capture_warning)
+        if event == .restore {
+            var shouldDisplayAlert = false
+            for i in 0 ... confirmCountWords - 1 {
+                if inputWords[i].correct {
+                    shouldDisplayAlert = true
+                    break
+                }
+            }
+            if shouldDisplayAlert {
+                alert(message: Localizable.shared.strings.seed_capture_warning)
+            }
+        }
+        else {
+            alert(message: Localizable.shared.strings.seed_capture_warning)
+        }
     }
     
     // MARK: - Actions

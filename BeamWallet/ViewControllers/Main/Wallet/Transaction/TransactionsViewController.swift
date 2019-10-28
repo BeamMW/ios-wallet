@@ -46,9 +46,14 @@ class TransactionsViewController: BaseTableViewController {
         }
         
         if allSize < UIScreen.main.bounds.width {
-            addWidth = ((UIScreen.main.bounds.width - allSize)/4) - (8)
-            if addWidth < 0 {
+            if Device.screenType == .iPhones_6 {
                 addWidth = 10
+            }
+            else{
+                addWidth = ((UIScreen.main.bounds.width - allSize)/4) - (8)
+                if addWidth < 0 {
+                    addWidth = 10
+                }
             }
         }
         

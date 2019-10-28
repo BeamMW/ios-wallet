@@ -28,9 +28,8 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     @IBOutlet private var subTitleLabel: UILabel!
     @IBOutlet var constraintContentHeight: NSLayoutConstraint!
     
-    private var keyboardHeight: CGFloat!
-    
     private var phrase: String!
+    private var activeField: UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,6 +151,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     private func goNext(pass: String) {
         if AppModel.sharedManager().isLoggedin {
             AppModel.sharedManager().changePassword(pass)
+            KeychainManager.addPassword(password: pass)
             
             back()
         }
@@ -213,41 +213,52 @@ extension CreateWalletPasswordViewController: UITextFieldDelegate {
         return true
     }
     
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField == confirmPassField, Device.screenType == .iPhones_5 || Device.isZoomed {
-            UIView.animate(withDuration: 0.25) {
-                var frame = self.navigationController?.view.frame
-                frame?.origin.y = 0
-                self.navigationController?.view.frame = frame ?? CGRect.zero
-            }
-        }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        activeField = textField
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        var point = textField.frame.origin
-        point.y = point.y - 5
-        scrollView.setContentOffset(CGPoint(x: 0, y: point.y), animated: true)
+        if !Device.isLarge {
+            var point = textField.frame.origin
+            point.y = point.y - 5
+            scrollView.setContentOffset(CGPoint(x: 0, y: point.y), animated: true)
+        }
     }
 }
 
 extension CreateWalletPasswordViewController {
     @objc func keyboardWillShow(_ notification: Notification) {
-        if keyboardHeight != nil {
-            return
-        }
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            
-            constraintContentHeight.constant += keyboardHeight
+        if let userInfo = notification.userInfo,
+            let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+            let animationCurveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber {
+            let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: UIView.AnimationOptions.RawValue(truncating: animationCurveRaw))
+            let contentInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
+            UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
+                self.scrollView.contentInset = contentInsets
+                self.scrollView.scrollIndicatorInsets = contentInsets
+                var aRect: CGRect = self.view.frame
+                aRect.size.height -= keyboardSize.height
+                if let activeField = self.activeField {
+                    if !aRect.contains(activeField.frame.origin) {
+                        self.scrollView.scrollRectToVisible(activeField.frame, animated: false)
+                    }
+                }
+            }, completion: nil)
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if constraintContentHeight != nil, keyboardHeight != nil {
-            constraintContentHeight.constant -= keyboardHeight
+        if let userInfo = notification.userInfo,
+            let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+            let animationCurveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber {
+            let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: UIView.AnimationOptions.RawValue(truncating: animationCurveRaw))
+            UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
+                self.scrollView.contentInset = .zero
+                self.scrollView.scrollIndicatorInsets = .zero
+            }, completion: nil)
         }
-        keyboardHeight = nil
     }
 }
 

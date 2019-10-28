@@ -27,7 +27,6 @@ class WellcomeViewController: BaseViewController {
     @IBOutlet private weak var createButton: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var versionLabel: UILabel!
-    @IBOutlet private weak var versionOffset: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +40,10 @@ class WellcomeViewController: BaseViewController {
             bgView.image = BackgroundMasternet()
         default:
             break
+        }
+                
+        if EnableNewFeatures {
+            bgView.addParallaxEffect()
         }
     }
     

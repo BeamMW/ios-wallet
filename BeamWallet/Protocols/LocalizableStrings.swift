@@ -345,8 +345,8 @@ class LocalizableStrings : NSObject {
     var h = "h".localized
     var m = "m".localized
     var send_qr_secure = "send_qr_secure".localized
-    var share_transaction = "share_transaction".localized
     var share_details = "share_details".localized
+    var copy_details = "copy_details".localized
     var maturing = "maturing".localized
     var auth_face_confirm = "auth_face_confirm".localized
     var auth_touch_confirm = "auth_touch_confirm".localized
@@ -405,7 +405,7 @@ class LocalizableStrings : NSObject {
     var crash_negative = "crash_negative".localized
     var crash_positive = "crash_positive".localized
 
-    var estimted_time = "estimted_time".localized.lowercased()
+    var estimted_time = "estimted_time".localized
     var node_address = "node_address".localized.lowercased()
     var create_new_password_short = "create_new_password_short".localized
     var create_new_password = "create_new_password".localized
@@ -455,6 +455,7 @@ class LocalizableStrings : NSObject {
     var clear_wallet_text = "clear_wallet_text".localized
     var sent = "sent".localized
     var display_seed = "display_seed".localized
+    var display_seed_old = "display_seed_old".localized
     var confirm_seed_text = "confirm_seed_text".localized
     var input_seed = "input_seed".localized
     var intro_seed_main = "intro_seed_main".localized
@@ -464,6 +465,9 @@ class LocalizableStrings : NSObject {
     var paste = "paste".localized
     var enter_trusted_node = "enter_trusted_node".localized
     var your_current_password = "your_current_password".localized
+    var clear_wallet_password = "clear_wallet_password".localized
+    var remove_wallet = "remove_wallet".localized
+
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

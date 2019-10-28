@@ -20,19 +20,19 @@
 import UIKit
 
 class BMSearchAddressCell: BaseCell {
-    
     weak var delegate: BMCellProtocol?
     
-    @IBOutlet weak private var textField: BMTextView!
-    @IBOutlet weak private var nameLabel: UILabel!
-    @IBOutlet weak private var errorLabel: UILabel!
-    @IBOutlet weak private var rightButton: UIButton!
-
-    @IBOutlet weak private var contactView: UIStackView!
-    @IBOutlet weak private var contactName: UILabel!
-    @IBOutlet weak private var contactCategory: UILabel!
-
-
+    @IBOutlet private var textField: BMTextView!
+    @IBOutlet private var nameLabel: UILabel!
+    @IBOutlet private var errorLabel: UILabel!
+    @IBOutlet private var rightButton: UIButton!
+    
+    @IBOutlet private var contactView: UIStackView!
+    @IBOutlet private var contactName: UILabel!
+    @IBOutlet private var contactCategory: UILabel!
+    
+    public var validateAddress = false
+    
     public var copyText: String?
     
     override func awakeFromNib() {
@@ -56,12 +56,12 @@ class BMSearchAddressCell: BaseCell {
         _ = textField.becomeFirstResponder()
     }
     
-    public func beginEditing(text:String?){
+    public func beginEditing(text: String?) {
         copyText = text
         _ = textField.becomeFirstResponder()
     }
     
-    public var contact:BMContact? {
+    public var contact: BMContact? {
         didSet {
             if contact == nil {
                 contactView.isHidden = true
@@ -77,15 +77,14 @@ class BMSearchAddressCell: BaseCell {
                 if contact?.address.categories.count ?? 0 > 0 {
                     contactCategory.attributedText = contact?.address.categoriesName()
                 }
-                else{
+                else {
                     contactCategory.text = nil
                 }
             }
         }
     }
     
-    public var error:String?
-    {
+    public var error: String? {
         didSet {
             if error != nil {
                 textField.lineColor = UIColor.main.red
@@ -94,7 +93,7 @@ class BMSearchAddressCell: BaseCell {
                 errorLabel.text = error
                 errorLabel.isHidden = false
             }
-            else{
+            else {
                 textField.lineColor = UIColor.white.withAlphaComponent(0.1)
                 textField.textColor = UIColor.white
                 errorLabel.text = nil
@@ -104,47 +103,44 @@ class BMSearchAddressCell: BaseCell {
         }
     }
     
-    private func checkAttributes(string:String?) {
+    private func checkAttributes(string: String?) {
         if let text = string {
-            if AppModel.sharedManager().isValidAddress(text)
-            {
+            if AppModel.sharedManager().isValidAddress(text) {
                 let length = text.lengthOfBytes(using: .utf8)
-                if (length > 12)
-                {
-                    let att = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font : RegularFont(size: 16), NSAttributedString.Key.foregroundColor : UIColor.white])
+                if length > 12 {
+                    let att = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: RegularFont(size: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
                     att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: 0, length: 6))
-                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length-6, length: 6))
-
-                    self.textField.attributedText = att
+                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length - 6, length: 6))
+                    
+                    textField.attributedText = att
                 }
-                else{
-                    self.textField.text = string
+                else {
+                    textField.text = string
                 }
             }
-            else{
-                self.textField.text = string
+            else {
+                textField.text = string
             }
         }
-        else{
-            self.textField.text = string
+        else {
+            textField.text = string
         }
     }
     
-    @IBAction func onRightButton(sender :UIButton) {
+    @IBAction func onRightButton(sender: UIButton) {
         delegate?.onRightButton?(self)
     }
 }
 
-extension BMSearchAddressCell : UITextViewDelegate {
-    
+extension BMSearchAddressCell: UITextViewDelegate {
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         textView.inputAccessoryView = nil
         
         if let copy = copyText {
-            let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy:copy)
+            let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy: copy)
             
             inputBar.completion = {
-                (obj : String?) -> Void in
+                (obj: String?) -> Void in
                 if let text = obj {
                     self.delegate?.textValueDidChange?(self, text, false)
                     _ = self.textField.resignFirstResponder()
@@ -155,48 +151,52 @@ extension BMSearchAddressCell : UITextViewDelegate {
             textView.layoutIfNeeded()
             textView.layoutSubviews()
         }
-
+        
         return true
     }
     
-    
     func textViewDidEndEditing(_ textView: UITextView) {
-        self.delegate?.textValueDidReturn?(self)
+        delegate?.textValueDidReturn?(self)
         
         if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = String.empty()
         }
-        else{
+        else {
             textField.placeholder = "  "
         }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        self.delegate?.textValueDidBegin?(self)
+        delegate?.textValueDidBegin?(self)
         
         if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = Localizable.shared.strings.address_search
         }
-        else{
+        else {
             textField.placeholder = "  "
         }
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        self.delegate?.textValueDidChange?(self, textView.text ?? String.empty(), true)
+        delegate?.textValueDidChange?(self, textView.text ?? String.empty(), true)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
         if text == Localizable.shared.strings.new_line {
             textView.resignFirstResponder()
             return false
         }
         else if text == UIPasteboard.general.string {
-            self.delegate?.textValueDidChange?(self, text, false)
-            _ = self.textField.resignFirstResponder()
-            self.checkAttributes(string: text)
+            delegate?.textValueDidChange?(self, text, false)
+            _ = textField.resignFirstResponder()
+            checkAttributes(string: text)
             return false
+        }
+        else if validateAddress {
+          let alphaNumericSet = CharacterSet(charactersIn: "abcdefABCDEF0123456789")
+            if text.rangeOfCharacter(from: alphaNumericSet.inverted) != nil {
+                return false
+            }
         }
         
         error = nil
@@ -206,8 +206,7 @@ extension BMSearchAddressCell : UITextViewDelegate {
 }
 
 extension BMSearchAddressCell: Configurable {
-    
-    func configure(with options: (name: String, value:String, rightIcon:UIImage? )) {
+    func configure(with options: (name: String, value: String, rightIcon: UIImage?)) {
         nameLabel.text = options.name
         nameLabel.letterSpacing = 2
         
