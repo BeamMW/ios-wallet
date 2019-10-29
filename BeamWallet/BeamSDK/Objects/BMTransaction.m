@@ -206,14 +206,18 @@
                 return [UIImage imageNamed:@"icon-receiving"];
             case BMTransactionStatusInProgress:
                 return [UIImage imageNamed:@"icon-receiving"];
+            case BMTransactionStatusRegistering:
+                return [UIImage imageNamed:@"icon-receiving"];
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-received"];
             default:
-                return [UIImage imageNamed:@"icon-received"];
+                return [UIImage imageNamed:@"icon-receiving"];
         }
     }
     else{
         switch (_enumStatus) {
+            case BMTransactionStatusRegistering:
+                return [UIImage imageNamed:@"icon-icon-sending"];
             case BMTransactionStatusPending:
                 return [UIImage imageNamed:@"icon-icon-sending"];
             case BMTransactionStatusInProgress:
@@ -221,7 +225,7 @@
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-sent"];
             default:
-                return [UIImage imageNamed:@"icon-sent"];
+                return [UIImage imageNamed:@"icon-icon-sending"];
         }
     }
     
