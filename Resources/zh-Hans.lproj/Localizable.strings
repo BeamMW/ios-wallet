@@ -1,5 +1,5 @@
 "restore_wallet_title" = "恢复钱包";
-"restore_wallet_info" = "您正在尝试还原已存在的Beam钱包\n请注意：如果您在其他设备上使用该钱包，您的余额将是最新的，但交易历史和地址将分别保存在每个设备上";
+"restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 "no_space_title" = "存储空间不足";
 "no_space_info" = "本设备上需要有200MB以上空间方能恢复钱包";
 "beam_title" = "可扩展加密数字货币";
@@ -51,8 +51,8 @@
 "no_internet" = "无网络连接";
 "wallet_not_created" = "未创建钱包";
 "wallet_not_opened" = "钱包无法打开";
-"restor_wallet_warning" = "请等待同步，请勿关闭或最小化应用程序\n恢复钱包可能需要一段时间";
-"restor_wallet_info" = "仅可恢复钱包余额(UTXO)\n交易历史信息保存在本地，区块链上不保存交易历史";
+"restor_wallet_warning" = "Restoring your wallet may take a while. Please wait for synchronization to finish - do no close nor minimize the application.";
+"restor_wallet_info" = "Only the wallet balance (UTXOs) will be restored. Your transaction info is always private and never kept on the blockchain.";
 "receive" = "收款";
 "send" = "付款";
 "available" = "可用余额";
@@ -359,7 +359,7 @@
 "default" = "默认";
 "my_active" = "有效"; // addresses
 "my_expired" = "已失效"; // addresses
-"general_settings" = "通用设置";
+"general_settings" = "General";
 "unavailable" = "不可用";
 "in_progress_out" = "进行中\n(出账)";
 "in_progress_in" = "进行中\n(入账)";
@@ -369,7 +369,6 @@
 "h" = "小时"; // hour
 "m" = "分钟"; // minute
 "send_qr_secure" = "请向付款方出示该二维码、或通过外部安全媒介将其发送给付款方";
-"share_transaction" = "分享交易详情";
 "auth_face_confirm" = "请验证面容认证";
 "auth_touch_confirm" = "请验证指纹认证";
 "auth_bio_failed" = "(Mechanism)已因多次失败尝试被锁定\n请输入iPhone密码以启用(Mechanism)"; // (Mechanism) is Face ID or Touch ID.
@@ -423,7 +422,7 @@
 "restore_create_text" = "如果恢复钱包，所有的交易历史和地址都将丢失";
 "proceed" = "开始";
 "info_restore_title" = "不要同时运行同一助记词下的两个钱包";
-"info_restore_text" = "余额和交易历史不会在设备之间同步 交易可能失败";
+"info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
 "crash_title" = "Beam Wallet crashed unexpectedly";
 "crash_message" = "Would you agree to report your limited amount of information to us? Collecting crash information would allow us to discover and fix bugs much faster. This is only a single crash-related report, we won't keep collecting any of your data later.";
 "crash_negative" = "No, thanks";
@@ -472,8 +471,9 @@
 "last_5_days" = "Last 5 days";
 "last_15_days" = "Last 15 days";
 "last_30_days" = "Last 30 days";
-"clear_wallet" = "Clear wallet";
-"clear_wallet_text" = "All the local data will be deleted. Are you sure you want to clear your wallet?";
+"clear_wallet" = "Remove current wallet";
+"clear_wallet_text" = "All data will be erased. Make sure you’ve saved your seed phrase if you want to restore this wallet later on! Are you sure you want to remove your wallet?";
+"clear_wallet_password" = "Enter your password to remove your wallet";
 "change_node_text_1" = "Use Face ID or enter your password to change node settings";
 "change_node_text_2" = "Use Touch ID or enter your password to change node settings";
 "change_node_text_3" = "Enter your password to change node settings";
@@ -481,3 +481,5 @@
 "change_settings_text_2" = "Use Touch ID or enter your password to change settings";
 "change_settings_text_3" = "Enter your password to change settings";
 "paste" = "粘贴";
+"status" = "状态"; // transaction status
+"remove_wallet" = "Remove wallet";

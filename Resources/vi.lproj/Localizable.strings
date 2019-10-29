@@ -1,5 +1,5 @@
 "restore_wallet_title" = "Khôi phục ví";
-"restore_wallet_info" = "Bạn đang cố gắng khôi phục một ví Beam hiện có. Xin lưu ý rằng nếu bạn sử dụng ví của mình trên một thiết bị khác, số dư của bạn sẽ được cập nhật, nhưng lịch sử giao dịch và địa chỉ sẽ được giữ riêng trên mỗi thiết bị.";
+"restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 "no_space_title" = "Không đủ dung lượng lưu trữ";
 "no_space_info" = "Cần ít nhất 200 MB dung lượng trống trên thiết bị để khôi phục ví";
 "beam_title" = "Tiền điện tử bảo mật có thể mở rộng";
@@ -51,8 +51,8 @@
 "no_internet" = "Không có kết nối Internet";
 "wallet_not_created" = "Ví không được tạo";
 "wallet_not_opened" = "Ví không thể mở";
-"restor_wallet_warning" = "Vui lòng đợi đồng bộ hóa và không đóng hoặc thu nhỏ ứng dụng. Khôi phục ví có thể sẽ mất một lúc.";
-"restor_wallet_info" = "Chỉ có thể khôi phục số dư ví (UTXO), thông tin giao dịch luôn ở chế độ riêng tư và không bao giờ được giữ trong blockchain.";
+"restor_wallet_warning" = "Restoring your wallet may take a while. Please wait for synchronization to finish - do no close nor minimize the application.";
+"restor_wallet_info" = "Only the wallet balance (UTXOs) will be restored. Your transaction info is always private and never kept on the blockchain.";
 "receive" = "Nhận";
 "send" = "Gửi";
 "available" = "Có sẵn";
@@ -359,7 +359,7 @@
 "default" = "Mặc định";
 "my_active" = "Hoạt động của tôi"; // addresses
 "my_expired" = "Hết hạn của tôi"; // addresses
-"general_settings" = "Cài đặt chung";
+"general_settings" = "General";
 "unavailable" = "Không có sẵn";
 "in_progress_out" = "Trong tiến trình ( đang gửi)";
 "in_progress_in" = "Trong tiến trình (đang tới)";
@@ -369,7 +369,6 @@
 "h" = "h"; // hour
 "m" = "m"; // minute
 "send_qr_secure" = "Hiện địa chỉ này cho người gửi hoặc gửi qua kênh bảo mật bên ngoài.";
-"share_transaction" = "Chia sẻ chi tiết giao dịch";
 "auth_face_confirm" = "Xác nhận gương mặt để xác minh";
 "auth_touch_confirm" = "Xác nhận vân tay để xác minh";
 "auth_bio_failed" = "(Cơ chế) đã bị khóa do một vài thất bại. Nhập mật mã iPhone để bật (Cơ chế)."; // (Mechanism) is Face ID or Touch ID.
@@ -423,7 +422,7 @@
 "restore_create_text" = "Nếu bạn không khôi phục ví, tất cả lịch sử giao dịch và địa chỉ sẽ bị mất.";
 "proceed" = "Tiến hành";
 "info_restore_title" = "Không đồng thời chạy hai ví bắt đầu từ cùng một cụm từ hạt giống";
-"info_restore_text" = "Số dư và lịch sử giao dịch sẽ không được đồng bộ hóa qua thiết bị và giao dịch có thể thất bại.";
+"info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
 "crash_title" = "Beam Wallet crashed unexpectedly";
 "crash_message" = "Would you agree to report your limited amount of information to us? Collecting crash information would allow us to discover and fix bugs much faster. This is only a single crash-related report, we won't keep collecting any of your data later.";
 "crash_negative" = "No, thanks";
@@ -472,8 +471,9 @@
 "last_5_days" = "Last 5 days";
 "last_15_days" = "Last 15 days";
 "last_30_days" = "Last 30 days";
-"clear_wallet" = "Clear wallet";
-"clear_wallet_text" = "All the local data will be deleted. Are you sure you want to clear your wallet?";
+"clear_wallet" = "Remove current wallet";
+"clear_wallet_text" = "All data will be erased. Make sure you’ve saved your seed phrase if you want to restore this wallet later on! Are you sure you want to remove your wallet?";
+"clear_wallet_password" = "Enter your password to remove your wallet";
 "change_node_text_1" = "Use Face ID or enter your password to change node settings";
 "change_node_text_2" = "Use Touch ID or enter your password to change node settings";
 "change_node_text_3" = "Enter your password to change node settings";
@@ -481,3 +481,5 @@
 "change_settings_text_2" = "Use Touch ID or enter your password to change settings";
 "change_settings_text_3" = "Enter your password to change settings";
 "paste" = "Dán";
+"status" = "Trạng thái"; // transaction status
+"remove_wallet" = "Remove wallet";
