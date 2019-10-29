@@ -1504,6 +1504,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     NSString *allValue =  [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:d]];
     allValue = [allValue stringByReplacingOccurrencesOfString:@"," withString:@""];
     
+    if ([allValue hasPrefix:@"."])
+    {
+        allValue = [NSString stringWithFormat:@"0%@",allValue];
+    }
+    
     return allValue;
 }
 
@@ -2184,7 +2189,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     return result;
 }
 
--(void)importData:(NSString*)data {
+-(void)importData:(NSString*_Nonnull)data {
     auto _data = [data string];
     storage::ImportDataFromJson(*walletDb, &_data[0], _data.size());
 }

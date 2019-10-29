@@ -17,10 +17,6 @@ class CollectionButtonFooter: UICollectionReusableView {
 
     public func setData(event: SeedPhraseViewController.EventType) {
         switch event {
-        case .display:
-            if !EnableNewFeatures {
-                btn2.isHidden = true
-            }
         case .confirm:
             btn1.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
             btn1.setImage(IconNextBlue(), for: .normal)

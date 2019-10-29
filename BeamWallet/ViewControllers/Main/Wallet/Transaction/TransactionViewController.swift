@@ -46,15 +46,13 @@ class TransactionViewController: BaseTableViewController {
         
         array.append(action1)
         
-        if EnableNewFeatures {
-            let action2 = UIPreviewAction(title: Localizable.shared.strings.copy_details,
-                                          style: .default,
-                                          handler: { _, _ in
-                                              self.viewModel.copyDetails()
-            })
-            
-            array.append(action2)
-        }
+        let action2 = UIPreviewAction(title: Localizable.shared.strings.copy_details,
+                                      style: .default,
+                                      handler: { _, _ in
+                                          self.viewModel.copyDetails()
+        })
+        
+        array.append(action2)
         
         if !transaction.isIncome {
             let action3 = UIPreviewAction(title: Localizable.shared.strings.repeat_transaction,
@@ -117,9 +115,7 @@ class TransactionViewController: BaseTableViewController {
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
         
-        if EnableNewFeatures {
-            tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        }
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
         if !isPreview {
             setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)

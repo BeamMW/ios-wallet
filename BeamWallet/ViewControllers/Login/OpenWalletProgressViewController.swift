@@ -53,7 +53,7 @@ class OpenWalletProgressViewController: BaseViewController {
 
         removeLeftButton()
         
-        if EnableNewFeatures && phrase != nil {
+        if phrase != nil {
             versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
         }
         else{

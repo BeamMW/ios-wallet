@@ -467,6 +467,9 @@ class LocalizableStrings : NSObject {
     var your_current_password = "your_current_password".localized
     var clear_wallet_password = "clear_wallet_password".localized
     var remove_wallet = "remove_wallet".localized
+    var export_wallet_data = "export_wallet_data".localized
+    var import_wallet_data = "import_wallet_data".localized
+    var utilities = "utilities".localized
 
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

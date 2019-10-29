@@ -20,8 +20,6 @@
 
 import Foundation
 
-let EnableNewFeatures = false
-
 func IconShowBalance() -> UIImage? {
     return UIImage(named: "iconShowBalance")
 }

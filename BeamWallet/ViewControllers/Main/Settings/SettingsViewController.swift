@@ -102,7 +102,7 @@ extension SettingsViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 5 ? 10 : BMTableHeaderTitleView.height
+        return section == 6 ? 10 : BMTableHeaderTitleView.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -149,6 +149,12 @@ extension SettingsViewController : UITableViewDelegate {
                 self.viewModel.makeSecure()
             case 20:
                 self.viewModel.onClearWallet()
+            case 21:
+                self.viewModel.onPaymentProof()
+            case 22:
+                self.viewModel.onExportWallet()
+            case 23:
+                self.viewModel.onImportWallet()
             default:
                 return
             }
@@ -166,10 +172,12 @@ extension SettingsViewController : UITableViewDataSource {
         case 1:
             return BMTableHeaderTitleView(title: Localizable.shared.strings.general_settings, bold: false)
         case 2:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.privacy, bold: false)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.utilities, bold: false)
         case 3:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories, bold: false)
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.privacy, bold: false)
         case 4:
+            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories, bold: false)
+        case 5:
             return BMTableHeaderTitleView(title: Localizable.shared.strings.feedback, bold: false)
         default:
             return nil

@@ -483,3 +483,6 @@
 "paste" = "Paste";
 "status" = "Status"; //transaction status
 "remove_wallet" = "Remove wallet";
+"export_wallet_data" = "Export wallet data";
+"import_wallet_data" = "Import wallet data";
+"utilities" = "Utilities";

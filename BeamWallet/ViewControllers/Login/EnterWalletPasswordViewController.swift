@@ -76,12 +76,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             restoreButton.titleLabel?.textAlignment = .center
         }
         
-        if EnableNewFeatures {
-            versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
-        }
-        else {
-            versionLabel.isHidden = true
-        }
+        versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {

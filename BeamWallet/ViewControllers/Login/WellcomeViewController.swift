@@ -42,9 +42,8 @@ class WellcomeViewController: BaseViewController {
             break
         }
                 
-        if EnableNewFeatures {
-            bgView.addParallaxEffect()
-        }
+        bgView.addParallaxEffect()
+
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

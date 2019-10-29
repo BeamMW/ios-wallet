@@ -69,15 +69,16 @@ class SettingsViewModel: NSObject {
         general.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, id: 9))
         general.append(SettingsItem(title: Localizable.shared.strings.save_wallet_logs, detail: Settings.sharedManager().currentLogValue().name, isSwitch: nil, id: 17))
         general.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, id: 13))
-        
-        if EnableNewFeatures {
-            general.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, id: 18))
-        }
-        
-        if OnboardManager.shared.isSkipedSeed() == true {
-            general.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, id: 19))
-        }
         general.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, id: 6))
+        
+        var utilites = [SettingsItem]()
+        utilites.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, id: 18))
+        utilites.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, id: 21))
+        if OnboardManager.shared.isSkipedSeed() == true {
+            utilites.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, id: 19))
+        }
+        utilites.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, id: 22))
+        utilites.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, id: 23))
         
         var security = [SettingsItem]()
         security.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, id: 3))
@@ -110,6 +111,7 @@ class SettingsViewModel: NSObject {
         
         items.append(node)
         items.append(general)
+        items.append(utilites)
         items.append(security)
         items.append(categories)
         
@@ -121,11 +123,7 @@ class SettingsViewModel: NSObject {
         }
         
         items.append(feedback)
-        
-        if EnableNewFeatures {
-            items.append(clear)
-        }
-        
+        items.append(clear)
     }
     
     public func getItem(indexPath: IndexPath) -> SettingsItem {
@@ -213,26 +211,8 @@ extension SettingsViewModel {
     
     func onChangeNode(completion: @escaping ((Bool) -> Void)) {
         if let top = UIApplication.getTopMostViewController() {
-            if EnableNewFeatures {
-                let modalViewController = UnlockPasswordPopover(event: .node)
-                modalViewController.completion = { [weak self] obj in
-                    let vc = TrustedNodeViewController(event: .change)
-                    vc.completion = { [weak self]
-                        obj in
-                        
-                        if obj == true {
-                            self?.items[0][1].detail = Settings.sharedManager().nodeAddress
-                        }
-                        
-                        completion(obj)
-                    }
-                    top.pushViewController(vc: vc)
-                }
-                modalViewController.modalPresentationStyle = .overFullScreen
-                modalViewController.modalTransitionStyle = .crossDissolve
-                top.present(modalViewController, animated: true, completion: nil)
-            }
-            else{
+            let modalViewController = UnlockPasswordPopover(event: .node)
+            modalViewController.completion = { [weak self] obj in
                 let vc = TrustedNodeViewController(event: .change)
                 vc.completion = { [weak self]
                     obj in
@@ -245,6 +225,9 @@ extension SettingsViewModel {
                 }
                 top.pushViewController(vc: vc)
             }
+            modalViewController.modalPresentationStyle = .overFullScreen
+            modalViewController.modalTransitionStyle = .crossDissolve
+            top.present(modalViewController, animated: true, completion: nil)
         }
     }
     
@@ -257,30 +240,17 @@ extension SettingsViewModel {
     
     func onClickReport() {
         if let top = UIApplication.getTopMostViewController() {
-            
-//            let types = [kUTTypeJSON]
-//            let importMenu = UIDocumentPickerViewController(documentTypes: types as [String], in: .exportToService)
-//            if #available(iOS 13.0, *) {
-//                importMenu.directoryURL = URL(fileURLWithPath: Settings.sharedManager().walletStoragePath())
-//            } else {
-//                // Fallback on earlier versions
-//            }
-//            importMenu.delegate = self
-//            importMenu.modalPresentationStyle = .formSheet
-//
-//            top.present(importMenu, animated: true)
-            
             let path = AppModel.sharedManager().getZipLogs()
             let url = URL(fileURLWithPath: path)
-
+            
             let act = ShareLogActivity()
             act.zipUrl = url
-
+            
             let vc = UIActivityViewController(activityItems: [url], applicationActivities: [act])
             vc.setValue("beam wallet logs", forKey: "subject")
-
+            
             vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
-
+            
             top.present(vc, animated: true)
         }
     }
@@ -350,11 +320,11 @@ extension SettingsViewModel {
     
     func onClearWallet() {
         if let top = UIApplication.getTopMostViewController() {
-            top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { (_ ) in
+            top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { _ in
                 
-            }) { (_ ) in
+            }) { _ in
                 let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
-                modalViewController.completion = { obj in
+                modalViewController.completion = { _ in
                     let app = UIApplication.shared.delegate as! AppDelegate
                     app.logout()
                 }
@@ -364,14 +334,62 @@ extension SettingsViewModel {
             }
         }
     }
+    
+    func onPaymentProof() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = PaymentProofDetailViewController(transaction: nil, paymentProof: nil)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onExportWallet() {
+        if let top = UIApplication.getTopMostViewController() {
+            let data = AppModel.sharedManager().exportData()
+            
+            let fileName = "wallet_data.json"
+            
+            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                let fileURL = dir.appendingPathComponent(fileName)
+                
+                do {
+                    try data.write(to: fileURL, atomically: false, encoding: .utf8)
+                    
+                    let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+                    
+                    vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
+                    
+                    top.present(vc, animated: true)
+                }
+                catch {}
+            }
+        }
+    }
+    
+    func onImportWallet() {
+        if let top = UIApplication.getTopMostViewController() {
+            let types = [kUTTypeJSON]
+            let importMenu = UIDocumentPickerViewController(documentTypes: types as [String], in: .import)
+            importMenu.delegate = self
+            importMenu.modalPresentationStyle = .formSheet
+            top.present(importMenu, animated: true)
+        }
+    }
 }
 
 extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         print(urls)
+        
+        if let url = urls.first {
+            do {
+                let data = try String(contentsOf: url)
+                AppModel.sharedManager().importData(data)
+            }
+            catch {}
+        }
     }
-
-     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
 }

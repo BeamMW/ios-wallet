@@ -48,9 +48,8 @@ class WalletViewController: BaseTableViewController {
         tableView.register([WalletStatusCell.self, WalletAvailableCell.self, WalletProgressCell.self, WalletTransactionCell.self, BMEmptyCell.self, OnboardCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         tableView.keyboardDismissMode = .interactive
-        if EnableNewFeatures {
-              tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        }
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
+
         
         AppModel.sharedManager().isLoggedin = true
         
@@ -260,7 +259,7 @@ extension WalletViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if EnableNewFeatures, viewModel.transactions.count == 0 && section == 1 {
+        if  viewModel.transactions.count == 0 && section == 1 {
             return 0
         }
         return (section == 1 ? BMTableHeaderTitleView.height : 0)
@@ -285,7 +284,7 @@ extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 1:
-            if EnableNewFeatures, viewModel.transactions.count == 0 {
+            if viewModel.transactions.count == 0 {
                 return nil
             }
             let header = BMTableHeaderTitleView(title: Localizable.shared.strings.transactions.uppercased(), handler: #selector(onMore), target: self)

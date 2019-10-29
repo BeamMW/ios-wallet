@@ -17,7 +17,7 @@ class CollectionTextHeader: UICollectionReusableView {
     public func setData(event:SeedPhraseViewController.EventType) {
         switch event {
         case .display:
-            textLabel.text = EnableNewFeatures ? Localizable.shared.strings.display_seed : Localizable.shared.strings.display_seed_old
+            textLabel.text = Localizable.shared.strings.display_seed
         case .confirm:
             textLabel.text = Localizable.shared.strings.confirm_seed_text
         case .restore:

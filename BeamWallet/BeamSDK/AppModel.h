@@ -221,6 +221,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 //export
 -(NSString*_Nonnull)exportData;
--(void)importData:(NSString*)data;
+-(void)importData:(NSString*_Nonnull)data;
 
 @end

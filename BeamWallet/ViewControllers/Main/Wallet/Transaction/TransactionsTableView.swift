@@ -50,9 +50,7 @@ class TransactionsTableView: UITableViewController {
         tableView.register([BMEmptyCell.self, WalletTransactionCell.self, WalletTransactionSearchCell.self])
         tableView.keyboardDismissMode = .interactive
         
-        if EnableNewFeatures {
-            tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        }
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         subscribeToChages()
         
