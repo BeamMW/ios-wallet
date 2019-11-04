@@ -37,6 +37,8 @@
 #include "wallet/wallet_model_async.h"
 #include "wallet/wallet_client.h"
 #include "wallet/default_peers.h"
+#include "keykeeper/private_key_keeper.h"
+#include "keykeeper/local_private_key_keeper.h"
 
 #include "core/block_rw.h"
 
@@ -77,6 +79,7 @@ const int kFeeInGroth_Fork1 = 100;
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
     Reactor::Ptr walletReactor;
+    beam::wallet::IPrivateKeyKeeper::Ptr keyKeeper;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
@@ -283,6 +286,8 @@ const int kFeeInGroth_Fork1 = 100;
         if (!walletDb){
             return NO;
         }
+        
+        keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
     }
     
     localPassword = [NSString stringWithString:pass];
@@ -309,6 +314,8 @@ const int kFeeInGroth_Fork1 = 100;
         return NO;
     }
     
+    keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
+
     return YES;
 }
 
@@ -367,8 +374,10 @@ const int kFeeInGroth_Fork1 = 100;
         return NO;
     }
     
+    keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
+
     // generate default address
-    auto address = beam::wallet::storage::createAddress(*walletDb);
+    auto address = beam::wallet::storage::createAddress(*walletDb, keyKeeper);
     address.m_label = "Default";
     walletDb->saveAddress(address);
     
@@ -435,10 +444,15 @@ const int kFeeInGroth_Fork1 = 100;
     if (wallet!=nil){
         wallet.reset();
     }
-
+    if (keyKeeper!=nil){
+        keyKeeper.reset();
+    }
+    
+    
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
+    keyKeeper = nil;
 
     if(removeDatabase) {
         NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
@@ -597,7 +611,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
-        wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+        wallet = make_shared<WalletModel>(walletDb, keyKeeper, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
         wallet->start();
@@ -807,7 +821,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 
                 if ([wAddress isEqualToString:address])
                 {
-                    wallet->getAsync()->saveAddressChanges(walletID, "telegram bot", true, true, false);
+                    wallet->getAsync()->updateAddress(walletID, "telegram bot", WalletAddress::ExpirationStatus::Never);
                     
                     break;
                 }
@@ -836,7 +850,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             {
                 
                 try{
-                    wallet->getAsync()->saveAddressChanges(walletID, addresses[i].m_label, (hours == 0 ? true : false), true, false);
+                    wallet->getAsync()->updateAddress(walletID, addresses[i].m_label, hours == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::OneDay);
                 }
                 catch (const std::exception& e) {
                     NSLog(@"setExpires failed");
@@ -926,7 +940,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             if ([wAddress isEqualToString:address])
             {
                 try{
-                    wallet->getAsync()->saveAddressChanges(walletID, comment.string, (addresses[i].m_duration == 0 ? true : false), true, false);
+                    wallet->getAsync()->updateAddress(walletID, comment.string, addresses[i].m_duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::OneDay);
                 }
                 catch (const std::exception& e) {
                     NSLog(@"setExpires failed");
@@ -1228,22 +1242,22 @@ bool OnProgress(uint64_t done, uint64_t total) {
             }
             
             if(address.isNowExpired) {
-                wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
+                wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
             }
             else if(address.isNowActive) {
                 if (address.isNowActiveDuration == 0){
-                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, true, true, false);
+                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Never);
                 }
                 else{
-                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, true, false);
+                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::OneDay);
                 }
             }
             else{
                 if (address.isExpired) {
-                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, false, false, true);
+                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
                 }
                 else  {
-                    wallet->getAsync()->saveAddressChanges(walletID, address.label.string, (address.duration == 0 ? true : false), address.isChangedDate ? true : false, false);
+                    wallet->getAsync()->updateAddress(walletID, address.label.string, address.duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::AsIs);
                 }
             }
         }
@@ -1907,6 +1921,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return 0;
 }
 
+-(BOOL)isCategoryAdded:(int)ID {
+    for (int i=0; i<_categories.count; i++) {
+        if (_categories[i].ID == ID) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 -(NSMutableArray<BMCategory*>*_Nonnull)allCategories{
     if ([[NSUserDefaults standardUserDefaults] objectForKey:categoriesKey]) {
         NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
@@ -1936,6 +1960,27 @@ bool OnProgress(uint64_t done, uint64_t total) {
             }
         }
     }
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
+            [delegate onCategoriesChange];
+        }
+    }
+}
+
+-(void)updateCategory:(BMCategory*_Nonnull)category {
+    if ([self isCategoryAdded:category.ID]) {
+        NSUInteger index = [self findCategoryIndex:category.ID];
+        [_categories replaceObjectAtIndex:index withObject:category];
+    }
+    else{
+        [_categories addObject:category];
+    }
+    
+  NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+  [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
+  [[NSUserDefaults standardUserDefaults] synchronize];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
@@ -2183,15 +2228,70 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
 //MARK: - Export
 
--(NSString*_Nonnull)exportData {
+-(NSString*_Nonnull)exportData:(NSArray*_Nonnull)items{
     auto exported = storage::ExportDataToJson(*walletDb);
     NSString *result = [NSString stringWithUTF8String:exported.c_str()];
-    return result;
+    
+    NSData *objectData = [result dataUsingEncoding:NSUTF8StringEncoding];
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers
+                     error:nil]];
+    
+    if (![items containsObject:@"transaction"]) {
+        [dictionary removeObjectForKey:@"TransactionParameters"];
+    }
+    
+    if (![items containsObject:@"category"]) {
+        [dictionary removeObjectForKey:@"Categories"];
+    }
+    else {
+        NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
+         
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+        
+        NSMutableArray *categories = [NSMutableArray array];
+        
+        for (BMCategory *cat in array) {
+            [categories addObject:cat.dict];
+        }
+        
+        [dictionary setObject:categories forKey:@"Categories"];
+    }
+    
+    if (![items containsObject:@"address"]) {
+        [dictionary removeObjectForKey:@"OwnAddresses"];
+    }
+    
+    if (![items containsObject:@"contact"]) {
+        [dictionary removeObjectForKey:@"Contacts"];
+    }
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonString;
 }
 
--(void)importData:(NSString*_Nonnull)data {
-    auto _data = [data string];
-    storage::ImportDataFromJson(*walletDb, &_data[0], _data.size());
+-(BOOL)importData:(NSString*_Nonnull)jsonString {
+    NSError *error = nil;
+    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error) {
+        return NO;
+    }
+    auto _data = [jsonString string];
+    bool result = storage::ImportDataFromJson(*walletDb, keyKeeper ,&_data[0], _data.size());
+    
+    if (result) {
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers
+                         error:nil]];
+        if ([dictionary objectForKey:@"Categories"]) {
+            NSMutableArray *categories = [NSMutableArray arrayWithArray:[dictionary objectForKey:@"Categories"]];
+            
+            for (NSDictionary *dict in categories) {
+                [self updateCategory:[BMCategory fromDict:dict]];
+            }
+        }
+    }
+    return result;
 }
 
 @end

@@ -44,8 +44,8 @@ NSString *const AppErrorDomain = @"beam.mw";
 NSTimer *timer;
 
 
-WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
-: WalletClient(walletDB, nodeAddr, reactor)
+WalletModel::WalletModel(IWalletDB::Ptr walletDB, IPrivateKeyKeeper::Ptr keyKeeper, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
+: WalletClient(walletDB, nodeAddr, reactor, keyKeeper)
 {
     pre_connected_status = true;
 }
@@ -579,10 +579,33 @@ void WalletModel::onAddressChecked(const std::string& addr, bool isValid)
     
 }
 
-//void WalletModel::onImportRecoveryProgress(uint64_t done, uint64_t total)
-//{
-//    
-//}
+void WalletModel::onNoDeviceConnected()
+{
+
+}
+
+void WalletModel::onImportRecoveryProgress(uint64_t done, uint64_t total)
+{
+}
+
+void WalletModel::onShowKeyKeeperMessage()
+{
+
+}
+
+void WalletModel::onHideKeyKeeperMessage()
+{
+
+}
+
+void WalletModel::onShowKeyKeeperError(const std::string& error)
+{
+
+}
+
+void WalletModel::onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers)
+{
+}
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
 {
@@ -645,7 +668,7 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             }
             return isIncome ? [[@"received" localized] lowercaseString] : [[@"sent" localized] lowercaseString];
         }
-        case TxStatus::Cancelled:
+        case TxStatus::Canceled:
             return [[@"cancelled" localized] lowercaseString];
         case TxStatus::Failed:
             {

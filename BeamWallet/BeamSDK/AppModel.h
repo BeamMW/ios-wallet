@@ -220,7 +220,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)completeWalletVerification;
 
 //export
--(NSString*_Nonnull)exportData;
--(void)importData:(NSString*_Nonnull)data;
+-(NSString*_Nonnull)exportData:(NSArray*_Nonnull)items;
+-(BOOL)importData:(NSString*_Nonnull)jsonString;
 
 @end

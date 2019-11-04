@@ -470,7 +470,12 @@ class LocalizableStrings : NSObject {
     var export_wallet_data = "export_wallet_data".localized
     var import_wallet_data = "import_wallet_data".localized
     var utilities = "utilities".localized
-
+    var incorrect_file_title = "incorrect_file_title".localized
+    var incorrect_file_text = "incorrect_file_text".localized
+    var import_data_title = "import_data_title".localized
+    var import_data_text = "import_data_text".localized
+    var imprt = "import".localized
+    var export_data = "export_data".localized
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

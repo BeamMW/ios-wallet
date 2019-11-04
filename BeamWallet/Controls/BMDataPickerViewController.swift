@@ -27,6 +27,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case address_expire
         case category
         case clear
+        case export_data
     }
     
     private var type: DataType!
@@ -75,6 +76,9 @@ class BMDataPickerViewController: BaseTableViewController {
         case .clear:
             title = Localizable.shared.strings.clear_data
             addRightButton(title: Localizable.shared.strings.done, target: self, selector: #selector(onRightButton), enabled: false)
+        case .export_data:
+            title = Localizable.shared.strings.export_data
+            addRightButton(title: Localizable.shared.strings.export, target: self, selector: #selector(onRightButton), enabled: true)
         default:
             title = String.empty()
         }
@@ -82,6 +86,7 @@ class BMDataPickerViewController: BaseTableViewController {
         setValues()
         
         tableView.register(BMPickerCell.self)
+        tableView.register(UINib(nibName: "BMPickerCell2", bundle: nil), forCellReuseIdentifier: "BMPickerCell2")
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
         tableView.dataSource = self
@@ -142,15 +147,48 @@ class BMDataPickerViewController: BaseTableViewController {
                 self.back()
             }
         }
-        else if type == .category {
-            var newSelectedCategories = [String]()
-              for item in values {
-                  if item.arrowType == BMPickerData.ArrowType.selected {
-                      newSelectedCategories.append(String(item.unique as! Int32))
-                  }
-              }
-            completion?(newSelectedCategories)
-            back()
+        else if type == .category || type == .export_data {
+            var selectedValues = [String]()
+            for item in values {
+                if item.arrowType == BMPickerData.ArrowType.selected {
+                    if type == .category {
+                        selectedValues.append(String(item.unique as! Int32))
+                    }
+                    else {
+                        selectedValues.append(item.unique as! String)
+                    }
+                }
+            }
+            
+            if type == .export_data {
+                let data = AppModel.sharedManager().exportData(selectedValues)
+
+                let date = Int64(Date().timeIntervalSince1970)
+                let fileName = "wallet_data_\(date).json"
+
+                if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                    let fileURL = dir.appendingPathComponent(fileName)
+
+                    do {
+                        try data.write(to: fileURL, atomically: false, encoding: .utf8)
+
+                        let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+                        vc.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+                           if completed {
+                                self.back()
+                           }
+                        }
+                        vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
+
+                        self.present(vc, animated: true)
+                    }
+                    catch {}
+                }
+            }
+            else{
+                completion?(selectedValues)
+                back()
+            }
         }
     }
     
@@ -192,6 +230,11 @@ class BMDataPickerViewController: BaseTableViewController {
                 let selected = selectedCategories.contains(String(category.id))
                 values.append(BMPickerData(title: category.name, detail: nil, titleColor: UIColor(hexString: category.color), arrowType: selected ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: category.id, multiplie: true))
             }
+        case .export_data:
+            values.append(BMPickerData(title: Localizable.shared.strings.transaction_history, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "transaction", multiplie: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.categories, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "category", multiplie: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "address", multiplie: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "contact", multiplie: true))
         default:
             break
         }
@@ -221,7 +264,7 @@ class BMDataPickerViewController: BaseTableViewController {
                 completion?(data.unique)
             }
             back()
-        case .clear:
+        case .clear, .export_data:
             if data.arrowType == BMPickerData.ArrowType.selected {
                 data.arrowType = BMPickerData.ArrowType.unselected
             }
@@ -292,7 +335,7 @@ extension BMDataPickerViewController: UITableViewDelegate {
         
         onSave(data: values[indexPath.row])
         
-        if type == .clear {
+        if type == .clear || type == .export_data {
             tableView.reloadRows(at: [indexPath], with: .none)
         }
         else if type == .category {
@@ -307,10 +350,20 @@ extension BMDataPickerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView
-            .dequeueReusableCell(withType: BMPickerCell.self, for: indexPath)
-        cell.configure(data: values[indexPath.row])
-        return cell
+       let value = values[indexPath.row]
+        if value.multiplie {
+            let cell = tableView
+                .dequeueReusableCell(withIdentifier: "BMPickerCell2", for: indexPath) as! BMPickerCell
+            cell.configure(data: values[indexPath.row])
+            return cell
+        }
+        else{
+            let cell = tableView
+                .dequeueReusableCell(withType: BMPickerCell.self, for: indexPath)
+            cell.configure(data: values[indexPath.row])
+            return cell
+        }
+
     }
 }
 

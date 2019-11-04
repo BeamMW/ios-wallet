@@ -486,3 +486,9 @@
 "export_wallet_data" = "Export wallet data";
 "import_wallet_data" = "Import wallet data";
 "utilities" = "Utilities";
+"incorrect_file_title" = "Incorrect file";
+"incorrect_file_text" = "The file you’re trying to import to Beam wallet doesn’t fit. PLease choose another file and try again.";
+"import_data_title" = "Import data";
+"import_data_text" = "Are you sure you want to import data to your Beam wallet? All the current data will be replaced with imported one.";
+"import" = "Import";
+"export_data" = "Export data";

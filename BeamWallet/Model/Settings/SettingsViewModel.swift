@@ -343,25 +343,10 @@ extension SettingsViewModel {
     }
     
     func onExportWallet() {
+        
         if let top = UIApplication.getTopMostViewController() {
-            let data = AppModel.sharedManager().exportData()
-            
-            let fileName = "wallet_data.json"
-            
-            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                let fileURL = dir.appendingPathComponent(fileName)
-                
-                do {
-                    try data.write(to: fileURL, atomically: false, encoding: .utf8)
-                    
-                    let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
-                    
-                    vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
-                    
-                    top.present(vc, animated: true)
-                }
-                catch {}
-            }
+            let vc = BMDataPickerViewController(type: .export_data)
+            top.pushViewController(vc: vc)
         }
     }
     
@@ -380,12 +365,28 @@ extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDel
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         print(urls)
         
-        if let url = urls.first {
-            do {
-                let data = try String(contentsOf: url)
-                AppModel.sharedManager().importData(data)
+        if let topVC = UIApplication.getTopMostViewController() {
+            topVC.confirmAlert(title: Localizable.shared.strings.import_data_title, message: Localizable.shared.strings.import_data_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.imprt, cancelHandler: { _ in
+                
+            }) { _ in
+                if let url = urls.first {
+                    do {
+                        let data = try String(contentsOf: url)
+                        let result = AppModel.sharedManager().importData(data)
+                        if !result {
+                            topVC.alert(title: Localizable.shared.strings.incorrect_file_title, message: Localizable.shared.strings.incorrect_file_text, handler: nil)
+                        }
+                        else{
+                            self.items.removeAll()
+                            self.initItems()
+                            self.onDataChanged?()
+                        }
+                    }
+                    catch {
+                        topVC.alert(title: Localizable.shared.strings.incorrect_file_title, message: Localizable.shared.strings.incorrect_file_text, handler: nil)
+                    }
+                }
             }
-            catch {}
         }
     }
     
