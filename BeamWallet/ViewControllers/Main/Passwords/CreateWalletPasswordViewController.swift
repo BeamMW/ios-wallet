@@ -20,12 +20,12 @@
 import UIKit
 
 class CreateWalletPasswordViewController: BaseWizardViewController {
-    @IBOutlet private var passField: BMField!
-    @IBOutlet private var confirmPassField: BMField!
-    @IBOutlet private var passProgressView: BMStepView!
-    @IBOutlet private var saveButton: UIButton!
-    @IBOutlet private var scrollView: UIScrollView!
-    @IBOutlet private var subTitleLabel: UILabel!
+    @IBOutlet private weak var passField: BMField!
+    @IBOutlet private weak var confirmPassField: BMField!
+    @IBOutlet private weak var passProgressView: BMStepView!
+    @IBOutlet private weak var saveButton: UIButton!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var subTitleLabel: UILabel!
     @IBOutlet var constraintContentHeight: NSLayoutConstraint!
     
     private var phrase: String!

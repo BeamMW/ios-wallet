@@ -441,8 +441,8 @@ extension WalletViewController: UIViewControllerPreviewingDelegate {
 
 extension WalletViewController: OnboardCellDelegate {
     func onClickMakeSecure(cell:UITableViewCell) {
-        let vc = UnlockPasswordViewController(event: .seedPhrase)
-        pushViewController(vc: vc)
+        let vc = BMDoubleAuthViewController(event: .verification)
+        self.pushViewController(vc: vc)
     }
     
     func onClickCloseFaucet(cell:UITableViewCell) {

@@ -26,11 +26,11 @@ class RestoreOptionsViewController: BaseViewController {
     
     @IBOutlet private weak var scrollView: UIScrollView!
 
-    @IBOutlet private var manualButton: UIButton!
-    @IBOutlet private var automaticButton: UIButton!
+    @IBOutlet private weak var manualButton: UIButton!
+    @IBOutlet private weak var automaticButton: UIButton!
     
-    @IBOutlet private var manualStackView: UIStackView!
-    @IBOutlet private var automaticStackView: UIStackView!
+    @IBOutlet private weak var manualStackView: UIStackView!
+    @IBOutlet private weak var automaticStackView: UIStackView!
     
     init(password: String, phrase: String) {
         super.init(nibName: nil, bundle: nil)

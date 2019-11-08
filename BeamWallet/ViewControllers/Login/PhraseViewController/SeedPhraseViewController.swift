@@ -24,6 +24,7 @@ class SeedPhraseViewController: BaseViewController {
         case confirm
         case restore
         case intro
+        case onlyDisplay
     }
     
     private var collectionView: UICollectionView!
@@ -75,8 +76,8 @@ class SeedPhraseViewController: BaseViewController {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
         
         switch event {
-        case .display:
-            title = Localizable.shared.strings.seed_prhase
+        case .display, .onlyDisplay:
+            title = event == .display ? Localizable.shared.strings.seed_prhase : Localizable.shared.strings.show_seed_phrase
             if Settings.sharedManager().target != Mainnet {
                 let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
                 view.addGestureRecognizer(lpgr)
@@ -131,7 +132,7 @@ class SeedPhraseViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         switch event {
-        case .display, .restore:
+        case .display, .restore, .onlyDisplay:
             NotificationCenter.default.addObserver(self, selector: #selector(didTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
             
             if !increaseSecutirty {
@@ -238,6 +239,9 @@ class SeedPhraseViewController: BaseViewController {
             else {
                 back()
             }
+        }
+        else if event == .onlyDisplay {
+            back()
         }
         else if event == .restore, Settings.sharedManager().target != Mainnet {
             if let string = UIPasteboard.general.string {
@@ -358,7 +362,7 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch event {
-        case .display:
+        case .display, .onlyDisplay:
             let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: WordCell.reuseIdentifier,
                                                            for: indexPath) as! WordCell)
                 .configured(with: (word: words[indexPath.row], number: String(indexPath.row + 1)))
@@ -384,13 +388,20 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
             footer.btn1.addTarget(self, action: #selector(onNext), for: .touchUpInside)
             footer.btn2.addTarget(self, action: #selector(onBack), for: .touchUpInside)
             
-            if event != .display, event != .intro {
+            if event == .onlyDisplay {
+                footer.btn1.isHidden = true
+                footer.btn2.isHidden = true
+            }
+            else if event != .display, event != .intro {
                 footer.btn1.isEnabled = isCorrectPhrase()
             }
             else if event == .display, increaseSecutirty, !OnboardManager.shared.isSkipedSeed() {
                 footer.btn2.isHidden = true
                 footer.btn1.setTitle(Localizable.shared.strings.done.lowercased(), for: .normal)
                 footer.btn1.setImage(IconDoneBlue(), for: .normal)
+            }
+            else if event == .display, increaseSecutirty, OnboardManager.shared.isSkipedSeed() {
+                footer.btn2.isHidden = true
             }
             
             return footer

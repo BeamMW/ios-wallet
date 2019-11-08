@@ -719,6 +719,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(void)getWalletStatus {
     if (wallet != nil)  {
         wallet->getAsync()->getWalletStatus();
+        wallet->getAsync()->getTransactions();
     }
 }
 
@@ -984,6 +985,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
     if (isNeedRequestTransactions) {
         wallet->getAsync()->getWalletStatus();
+        wallet->getAsync()->getTransactions();
     }
 }
 
@@ -1737,6 +1739,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (found)
     {
         wallet->getAsync()->getWalletStatus();
+        wallet->getAsync()->getTransactions();
     }
 }
 

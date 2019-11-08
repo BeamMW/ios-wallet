@@ -43,7 +43,6 @@ class TransactionViewController: BaseTableViewController {
                                       handler: { _, _ in
                                           self.viewModel.share()
         })
-        
         array.append(action1)
         
         let action2 = UIPreviewAction(title: Localizable.shared.strings.copy_details,

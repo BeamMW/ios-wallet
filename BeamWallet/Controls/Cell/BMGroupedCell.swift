@@ -46,6 +46,12 @@ class BMGroupedCell: BaseCell {
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
     }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : backgroundColor
+    }
 }
 
 extension BMGroupedCell: Configurable {

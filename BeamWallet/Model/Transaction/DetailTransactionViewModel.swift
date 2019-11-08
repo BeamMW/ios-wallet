@@ -149,6 +149,7 @@ class DetailTransactionViewModel: TransactionViewModel {
         let shareView: TransactionShareView = UIView.fromNib()
         shareView.transaction = transaction
         shareView.layoutIfNeeded()
+        shareView.resize()
         
         if let top = UIApplication.getTopMostViewController() {
             if let image = shareView.snapshot(scale: false) {

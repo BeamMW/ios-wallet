@@ -26,13 +26,15 @@ protocol SettingsCellDelegate: AnyObject {
 class SettingsCell: BaseCell {
     weak var delegate: SettingsCellDelegate?
     
-    @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var detailLabel: UILabel!
-    @IBOutlet private var mainView: UIView!
-    @IBOutlet private var switchView: UISwitch!
-    @IBOutlet private var arrowView: UIImageView!
-    @IBOutlet private var titleXOffset: NSLayoutConstraint!
-    
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var detailLabel: UILabel!
+    @IBOutlet private weak var mainView: UIView!
+    @IBOutlet private weak var switchView: UISwitch!
+    @IBOutlet private weak var arrowView: UIImageView!
+    @IBOutlet private weak var titleXOffset: NSLayoutConstraint!
+    @IBOutlet private weak var iconView: UIImageView!
+    @IBOutlet private weak var titleLeftOffset: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -56,12 +58,19 @@ class SettingsCell: BaseCell {
         
         switchView.layer.cornerRadius = switchView.frame.height / 2
     }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : UIColor.main.marineThree
+    }
 }
 
 extension SettingsCell: Configurable {
     func configure(with item: SettingsViewModel.SettingsItem) {
+        selectionStyle = .default
+
         titleLabel.textColor = UIColor.white
-        
         titleLabel?.text = item.title
         detailLabel?.text = item.detail
         
@@ -74,16 +83,18 @@ extension SettingsCell: Configurable {
         else {
             switchView.isHidden = true
             
-            selectionStyle = item.id == 0 ? .none : .default
         }
         
+        if item.type == .remove_wallet {
+            titleLabel.textColor = UIColor.main.red
+        }
         if let category = item.category {
             arrowView.isHidden = false
             titleXOffset.constant = 25
             titleLabel.textColor = UIColor(hexString: category.color)
         }
         else {
-            if item.id == 5 || item.id == 7 || item.id == 1 || item.id == 8 || item.id == 12 || item.id == 13 || item.id == 15 || item.id == 16 || item.id == 17  || item.id == 6 || item.id == 19 || item.id == 21 || item.id == 22 || item.id == 23 {
+            if item.hasArrow {
                 arrowView.isHidden = false
                 titleXOffset.constant = 25
             }
@@ -93,7 +104,7 @@ extension SettingsCell: Configurable {
             }
         }
         
-        if item.id == 5, Settings.sharedManager().connectToRandomNode {
+        if item.type == .ip_port , Settings.sharedManager().connectToRandomNode {
             isUserInteractionEnabled = false
             mainView.alpha = 0.8
             arrowView.isHidden = true
@@ -104,8 +115,14 @@ extension SettingsCell: Configurable {
             mainView.alpha = 1
         }
         
-        if item.id == 20 {
-            titleLabel.textColor = UIColor.main.red
+        if let icon = item.icon {
+            iconView.isHidden = false
+            iconView.image = icon
+            titleLeftOffset.constant = 50
+        }
+        else{
+            iconView.isHidden = true
+            titleLeftOffset.constant = 15
         }
     }
 }

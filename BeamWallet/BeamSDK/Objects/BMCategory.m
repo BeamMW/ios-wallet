@@ -58,7 +58,7 @@
 }
 
 -(NSDictionary*_Nonnull)dict {
-    return @{@"id":[NSNumber numberWithInt:_ID],@"name":_name,@"color":_color};
+    return @{@"id":[NSString stringWithFormat:@"%d",_ID],@"name":_name,@"color":_color};
 }
 
 @end

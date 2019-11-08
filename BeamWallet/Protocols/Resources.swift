@@ -17,7 +17,6 @@
 // limitations under the License.
 //
 
-
 import Foundation
 
 func IconShowBalance() -> UIImage? {
@@ -37,7 +36,7 @@ func IconCopyBlue() -> UIImage? {
 }
 
 func IconSymbolBeam() -> UIImage? {
-    return UIImage.init(named: "iconSymbol")
+    return UIImage(named: "iconSymbol")
 }
 
 func IconSendPink() -> UIImage? {
@@ -47,7 +46,6 @@ func IconSendPink() -> UIImage? {
 func IconCopyWhite() -> UIImage? {
     return UIImage(named: "iconCopyWhite")
 }
-
 
 func IconUtxo() -> UIImage? {
     return UIImage(named: "iconUtxo")
@@ -132,7 +130,6 @@ func IconNextArrow() -> UIImage? {
 func GradientBlue() -> UIImage? {
     return UIImage(named: "gradientBlue")
 }
-
 
 func IconScanQr() -> UIImage? {
     return UIImage(named: "iconScanQr")
@@ -290,4 +287,35 @@ func IconSeedPhrase() -> UIImage? {
     return UIImage(named: "iconSeedPhrase")
 }
 
+func IconNode() -> UIImage? {
+    return UIImage(named: "iconNode")
+}
+
+func IconSettingsGeneral() -> UIImage? {
+    return UIImage(named: "iconSettingsGeneral")
+}
+
+func IconSettingsPrivacy() -> UIImage? {
+    return UIImage(named: "iconSettingsPrivacy")
+}
+
+func IconSettingsRate() -> UIImage? {
+    return UIImage(named: "iconSettingsRate")
+}
+
+func IconSettingsRemove() -> UIImage? {
+    return UIImage(named: "iconSettingsRemove")
+}
+
+func IconSettingsReport() -> UIImage? {
+    return UIImage(named: "iconSettingsReport")
+}
+
+func IconSettingsTags() -> UIImage? {
+    return UIImage(named: "iconSettingsTags")
+}
+
+func IconSettingsUtilities() -> UIImage? {
+    return UIImage(named: "iconSettingsUtilities")
+}
 

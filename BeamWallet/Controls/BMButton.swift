@@ -24,48 +24,26 @@ import UIKit
 @IBDesignable
 class BMButton: UIButton {
     
-    public static func defaultButton(frame:CGRect, color:UIColor) -> BMButton {
+    public static func defaultButton(frame: CGRect, color: UIColor) -> BMButton {
         let button = BMButton(frame: frame)
         button.cornerRadius = frame.size.height / 2
         button.backgroundColor = color
         button.awakeFromNib()
         button.titleLabel?.font = BoldFont(size: 14)
         button.adjustFontSize = true
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -1, right: 20)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -1, right: 10)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         return button
     }
-    
-    private var _testnetColor:UIColor?
-
-    @IBInspectable
-    var testnetColor: UIColor? {
-        get {
-            return _testnetColor
-        }
-        set {
-            _testnetColor = newValue
-        }
-    }
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        #if EXTENSION
-        print("ignore")
-        #else
-        if let color = testnetColor {
-            if Settings.sharedManager().target == Testnet {
-                self.backgroundColor = color
-            }
-            else if Settings.sharedManager().target == Masternet{
-                self.backgroundColor = UIColor.main.black
-            }
-        }
-        #endif
-
+        imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -1, right: 10)
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         
         if let color = self.backgroundColor {
-            self.setBackgroundColor(color: UIColor.init(red: 2/255, green: 86/255, blue: 100/255, alpha: 1), forState: .disabled)
+            self.setBackgroundColor(color: UIColor(red: 2 / 255, green: 86 / 255, blue: 100 / 255, alpha: 1), forState: .disabled)
             self.setBackgroundColor(color: color, forState: .normal)
             self.setBackgroundColor(color: color.withAlphaComponent(0.5), forState: .highlighted)
             self.backgroundColor = UIColor.clear

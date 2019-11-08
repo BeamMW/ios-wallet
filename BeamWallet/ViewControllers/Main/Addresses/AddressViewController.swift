@@ -23,8 +23,6 @@ class AddressViewController: BaseTableViewController {
 
     private var addressViewModel:DetailAddressViewModel!
     
-  
-    
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
         self.addressViewModel = DetailAddressViewModel(address: address)

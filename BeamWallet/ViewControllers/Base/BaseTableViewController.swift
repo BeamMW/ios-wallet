@@ -27,6 +27,8 @@ class BaseTableViewController: BaseViewController {
 //        let image:UIImage?
 //        let target:Any
 //        let selector:Selector
+//        let borderWidth:CGFloat?
+//        let borderColor:UIColor?
 //    }
     
     var tableView: UITableView!
@@ -73,13 +75,16 @@ class BaseTableViewController: BaseViewController {
     }
     
 //    public func footerView(buttons:[FooterButton]) -> UIView {
-//        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 104))
+//        let view = UIStackView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 104))
+//        view.spacing = 20
+//        view.
 //
 //        for item in buttons {
 //            let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
 //            button.setImage(item.image, for: .normal)
 //            button.setTitle(item.title.lowercased(), for: .normal)
-//            button.layer.borderWidth = 1
+//            button.layer.borderWidth = item.borderWidth ?? 0
+//            button.layer.borderColor = item.borderColor?.cgColor ?? UIColor.clear.cgColor
 //            button.layer.borderColor = UIColor.main.heliotrope.cgColor
 //            button.setTitleColor(UIColor.main.heliotrope, for: .normal)
 //            button.addTarget(item.target, action: item.selector, for: .touchUpInside)

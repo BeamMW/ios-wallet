@@ -24,13 +24,13 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     private var isRequestedAuthorization = false
     
-    @IBOutlet private var passField: BMField!
-    @IBOutlet private var touchIdButton: UIButton!
-    @IBOutlet private var loginLabel: UILabel!
-    @IBOutlet private var restoreButton: UIButton!
-    @IBOutlet private var stackView: UIStackView!
-    @IBOutlet private var topSpace: NSLayoutConstraint!
-    @IBOutlet private var versionLabel: UILabel!
+    @IBOutlet private weak var passField: BMField!
+    @IBOutlet private weak var touchIdButton: UIButton!
+    @IBOutlet private weak var loginLabel: UILabel!
+    @IBOutlet private weak var restoreButton: UIButton!
+    @IBOutlet private weak var stackView: UIStackView!
+    @IBOutlet private weak var topSpace: NSLayoutConstraint!
+    @IBOutlet private weak var versionLabel: UILabel!
     
     init(isNeedRequestedAuthorization: Bool = true) {
         super.init(nibName: nil, bundle: nil)

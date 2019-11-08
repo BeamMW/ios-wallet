@@ -45,6 +45,12 @@ class BMAddressCell: BaseCell {
         selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         self.selectedBackgroundView = selectedView
     }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : backgroundColor
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -72,7 +78,6 @@ extension BMAddressCell: Configurable {
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
         
         backgroundColor = mainView.backgroundColor
-        
         
         if options.address.label.isEmpty {
             nameLabel.text = Localizable.shared.strings.no_name

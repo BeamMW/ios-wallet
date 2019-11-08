@@ -78,11 +78,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
+        Fabric.with([Crashlytics.self()])
+
         if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { (_ ) in
                 
-                 Fabric.with([Crashlytics.self()])
-                 
                  Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
                  
                  Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace" : crash])
@@ -164,11 +164,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 12.0, *) {
             if self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark {
                 UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.white
+                self.window?.tintColor = UIColor.white
             }
             else{
                 UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+                self.window?.tintColor = UIColor.main.marine
             }
         } else {
+            self.window?.tintColor = UIColor.main.marine
             UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
         }
         

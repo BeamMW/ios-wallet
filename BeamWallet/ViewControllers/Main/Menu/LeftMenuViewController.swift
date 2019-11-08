@@ -211,7 +211,7 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
             case Localizable.shared.strings.addresses :
                 navigationController.setViewControllers([AddressesViewController()], animated: false)
             case Localizable.shared.strings.settings :
-                navigationController.setViewControllers([SettingsViewController()], animated: false)
+                navigationController.setViewControllers([SettingsViewController(type: .main)], animated: false)
             case Localizable.shared.strings.logout :
                 self.confirmAlert(title: Localizable.shared.strings.logout, message: Localizable.shared.strings.logout_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.yes, cancelHandler: { (_ ) in
                     

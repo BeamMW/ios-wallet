@@ -24,9 +24,9 @@ class CategoryEditViewController: BaseViewController {
 
     public var completion : ((BMCategory?) -> Void)?
 
-    @IBOutlet private var nameField: BMClearField!
-    @IBOutlet private var titleNameLabel: UILabel!
-    @IBOutlet private var titleColourLabel: UILabel!
+    @IBOutlet private weak var nameField: BMClearField!
+    @IBOutlet private weak var titleNameLabel: UILabel!
+    @IBOutlet private weak var titleColourLabel: UILabel!
 
     @IBOutlet private var colorsView: BMCategoryColorsView!
 

@@ -35,7 +35,7 @@ class CollectionButtonFooter: UICollectionReusableView {
             btn1.setTitle(Localizable.shared.strings.understand, for: .normal)
             btn1.setImage(IconDoneBlue(), for: .normal)
             btn2.isHidden = true
-        case .display:
+        case .display, .onlyDisplay:
             break
         }
     }

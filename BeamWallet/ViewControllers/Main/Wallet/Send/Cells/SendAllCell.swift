@@ -20,9 +20,9 @@
 import UIKit
 
 class SendAllCell: BaseCell {
-    @IBOutlet private var amountLabel: UILabel!
-    @IBOutlet private var allButton: BMButton!
-    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private weak var amountLabel: UILabel!
+    @IBOutlet private weak var allButton: UIButton!
+    @IBOutlet private weak var titleLabel: UILabel!
 
     weak var delegate: BMCellProtocol?
 
@@ -33,6 +33,8 @@ class SendAllCell: BaseCell {
         titleLabel.letterSpacing = 1.5
 
         selectionStyle = .none
+        
+        allButton.setTitle(Localizable.shared.strings.add_all, for: .normal)
     }
 
     @IBAction func onSendAll(sender: UIButton) {

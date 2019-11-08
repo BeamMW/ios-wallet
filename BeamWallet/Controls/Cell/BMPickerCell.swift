@@ -42,6 +42,12 @@ class BMPickerCell: BaseCell {
         detailLabel.textColor = UIColor.main.blueyGrey
     }
     
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : backgroundColor
+    }
+    
     func configure(data:BMPickerData) {
         titleLabel.text = data.title
         detailLabel.isHidden = data.detail == nil

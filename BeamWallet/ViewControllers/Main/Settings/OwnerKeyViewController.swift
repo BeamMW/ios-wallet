@@ -22,13 +22,13 @@ import UIKit
 class OwnerKeyViewController: BaseViewController {
     public var ownerKey: String!
     
-    @IBOutlet private var ownerKeyLabel: UILabel!
-    @IBOutlet private var ownerKeyTitleLabel: UILabel!
-    @IBOutlet private var noticeLabel: UILabel!
+    @IBOutlet private weak var ownerKeyLabel: UILabel!
+    @IBOutlet private weak var ownerKeyTitleLabel: UILabel!
+    @IBOutlet private weak var noticeLabel: UILabel!
     
-    @IBOutlet private var copyView: UIView!
-    @IBOutlet private var copyNextView: UIView!
-    @IBOutlet private var copyRestoreButton: UIButton!
+    @IBOutlet private weak var copyView: UIView!
+    @IBOutlet private weak var copyNextView: UIView!
+    @IBOutlet private weak var copyRestoreButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()

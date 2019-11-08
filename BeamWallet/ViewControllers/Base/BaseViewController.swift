@@ -165,7 +165,7 @@ class BaseViewController: UIViewController {
                 titleLabel.textColor = UIColor.white
                 titleLabel.textAlignment = .center
                 titleLabel.tag = 987
-                titleLabel.lineBreakMode = .byTruncatingMiddle
+                titleLabel.lineBreakMode = .byTruncatingTail
                 
                 view.addSubview(titleLabel)
             }
