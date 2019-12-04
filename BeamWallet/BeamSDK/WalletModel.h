@@ -22,6 +22,8 @@
 
 #include "wallet/wallet_client.h"
 #include "wallet/common.h"
+#include "wallet/wallet_client.h"
+#include <set>
 
 class WalletModel : public beam::wallet::WalletClient
 {
@@ -30,6 +32,7 @@ public:
 
     WalletModel(beam::wallet::IWalletDB::Ptr walletDB, beam::wallet::IPrivateKeyKeeper::Ptr keyKeeper, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
+    
 
     bool pre_connected_status;
 
@@ -66,4 +69,9 @@ private:
     void onHideKeyKeeperMessage() override;
     void onShowKeyKeeperError(const std::string&) override;
     void onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers) override;
+    
+    void onSwapParamsLoaded(const beam::ByteBuffer& token) override;
+    void onImportDataFromJson(bool isOk) override;
+    void onExportDataToJson(const std::string& data) override;
+    void onPostFunctionToClientContext(MessageFunction&& func) override;
 };

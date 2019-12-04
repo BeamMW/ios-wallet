@@ -210,6 +210,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSMutableArray<BMAddress*>*_Nonnull)getOnlyAddressesFromCategory:(BMCategory*_Nonnull)category;
 -(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category;
 -(void)fixCategories;
+-(void)clearAllCategories;
 
 //fork
 -(BOOL)isFork;

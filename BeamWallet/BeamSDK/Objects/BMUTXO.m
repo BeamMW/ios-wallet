@@ -19,7 +19,19 @@
 
 #import "BMUTXO.h"
 #import "BMTransaction.h"
+#import "StringLocalize.h"
 
 @implementation BMUTXO
+
+-(NSMutableAttributedString*_Nonnull)attributedStatus {
+    NSString *available = [NSString stringWithFormat:@"(%@ %llu)",[@"till_block" localized].lowercaseString, self.maturity];
+    NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.capitalizedString, available];
+    
+    NSRange range = [str rangeOfString:available];
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:str];
+    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:range];
+    return attrString;
+}
 
 @end

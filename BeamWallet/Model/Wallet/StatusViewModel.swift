@@ -36,10 +36,13 @@ class StatusViewModel: NSObject {
     
     public var onDataChanged : (() -> Void)?
     public var selectedState = SelectedState.available
+    public var cells = [CellTypes]()
     
     override init() {
         super.init()
         
+        self.cells = getCells()
+
         AppModel.sharedManager().addDelegate(self)
     }
     
@@ -76,7 +79,7 @@ class StatusViewModel: NSObject {
         }
     }
     
-    public func getCells() -> [CellTypes] {
+    private func getCells() -> [CellTypes] {
         var result = [CellTypes]()
         
         result.append(.buttons)
@@ -107,8 +110,16 @@ class StatusViewModel: NSObject {
 
 extension StatusViewModel: WalletModelDelegate {
     
+    func onWalletCompleteVerefication() {
+        DispatchQueue.main.async {
+             self.cells = self.getCells()
+             self.onDataChanged?()
+         }
+    }
+    
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
+            self.cells = self.getCells()
             self.onDataChanged?()
         }
     }

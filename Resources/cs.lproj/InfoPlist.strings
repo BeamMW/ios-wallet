@@ -1,0 +1,4 @@
+"NSPhotoLibraryAddUsageDescription" = "Uložit podrobnosti transakce a naskenovat QR kódy ze snímků";
+"NSPhotoLibraryUsageDescription" = "Poskytnout přístup k galerii pro výběr QR kódu";
+"NSFaceIDUsageDescription" = "Tato aplikace vyžaduje oprávnění Face ID k ověření pomocí rozpoznávání obličeje";
+"NSCameraUsageDescription" = "K načtení QR kódů je potřeba fotokamera";

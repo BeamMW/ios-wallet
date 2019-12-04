@@ -52,7 +52,7 @@ WalletModel::WalletModel(IWalletDB::Ptr walletDB, IPrivateKeyKeeper::Ptr keyKeep
 
 WalletModel::~WalletModel()
 {
-    
+    stopReactor();
 }
 
 std::string txIDToString(const TxID& txId)
@@ -246,7 +246,7 @@ void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
     
     @autoreleasepool {
         for (const auto& coin : utxos)
-        {
+        {            
             BMUTXO *bmUTXO = [[BMUTXO alloc] init];
             bmUTXO.ID = coin.m_ID.m_Idx;
             bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
@@ -605,6 +605,22 @@ void WalletModel::onShowKeyKeeperError(const std::string& error)
 
 void WalletModel::onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers)
 {
+}
+
+void WalletModel::onSwapParamsLoaded(const beam::ByteBuffer& token) {
+    
+}
+
+void WalletModel::onImportDataFromJson(bool isOk) {
+    
+}
+
+void WalletModel::onExportDataToJson(const std::string& data) {
+    
+}
+
+void WalletModel::onPostFunctionToClientContext(MessageFunction&& func) {
+    
 }
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)

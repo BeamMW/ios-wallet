@@ -32,7 +32,7 @@ class OnboardCell: UITableViewCell {
         selectionStyle = .none
         
         receiveButton.setTitle(Localizable.shared.strings.get_coins.lowercased(), for: .normal)
-        verificationButton.setTitle(Localizable.shared.strings.secure_your_phrase, for: .normal)
+        verificationButton.setTitle(Localizable.shared.strings.complete_verification, for: .normal)
 
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
     }

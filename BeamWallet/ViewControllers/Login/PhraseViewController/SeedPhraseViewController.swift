@@ -107,6 +107,8 @@ class SeedPhraseViewController: BaseViewController {
                 }
             }
         case .restore:
+            OnboardManager.shared.onSkipSeed(isSkiped: false)
+            
             title = Localizable.shared.strings.restore_wallet_title
             for i in 0 ... 11 {
                 inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))

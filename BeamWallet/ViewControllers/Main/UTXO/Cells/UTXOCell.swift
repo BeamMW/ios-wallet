@@ -32,6 +32,7 @@ class UTXOCell: UITableViewCell {
     @IBOutlet weak private var transactionIcon: UIImageView!
     @IBOutlet weak private var transactionIconHeight: NSLayoutConstraint!
     @IBOutlet weak private var transactionIconWidth: NSLayoutConstraint!
+    @IBOutlet weak private var transactionDateWidth: NSLayoutConstraint!
 
     @IBOutlet weak private var statusY: NSLayoutConstraint!
     @IBOutlet weak private var dateY: NSLayoutConstraint!
@@ -92,10 +93,17 @@ extension UTXOCell: Configurable {
         else{
             transactionIconWidth.constant = 0
             transactionIconHeight.constant = 0
-            
+            transactionDateWidth.constant = 80
+
             transactionIcon.isHidden = true
             transactionDateLabel.text = nil
             transactionCommentLabel.text = nil
+            
+            if(options.utxo.status == BMUTXOMaturing)
+            {
+                transactionDateLabel.text = "\(Localizable.shared.strings.till_block.lowercased()) \(options.utxo.maturity)"
+                transactionDateWidth.constant = 150
+            }
         }
         
         let selectedView = UIView()

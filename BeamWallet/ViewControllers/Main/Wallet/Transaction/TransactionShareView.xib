@@ -324,6 +324,6 @@
         <image name="iconBeam" width="22" height="22"/>
         <image name="iconSymbol" width="16" height="24.5"/>
         <image name="initial_background" width="1125" height="2001"/>
-        <image name="logo" width="158" height="142"/>
+        <image name="logo" width="101" height="89"/>
     </resources>
 </document>

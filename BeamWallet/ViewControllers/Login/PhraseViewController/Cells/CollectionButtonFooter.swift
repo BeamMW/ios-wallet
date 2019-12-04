@@ -15,6 +15,7 @@ class CollectionButtonFooter: UICollectionReusableView {
     @IBOutlet var btn1: BMButton!
     @IBOutlet var btn2: BMButton!
 
+
     public func setData(event: SeedPhraseViewController.EventType) {
         switch event {
         case .confirm:
@@ -36,6 +37,7 @@ class CollectionButtonFooter: UICollectionReusableView {
             btn1.setImage(IconDoneBlue(), for: .normal)
             btn2.isHidden = true
         case .display, .onlyDisplay:
+            btn2.setTitle(Localizable.shared.strings.i_will_later, for: .normal)
             break
         }
     }

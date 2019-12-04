@@ -134,15 +134,23 @@ class AddressViewModel: NSObject {
             showDeleteAddressAndTransactions(indexPath: indexPath)
         }
         else {
-            if let path = indexPath {
-                if selectedState == .contacts {
-                    contacts.remove(at: path.row)
-                }
-                else {
-                    addresses.remove(at: path.row)
-                }
+            let title = selectedState == .contacts ? Localizable.shared.strings.delete_contact : Localizable.shared.strings.delete_address
+            let text = selectedState == .contacts ? Localizable.shared.strings.delete_contact_text : Localizable.shared.strings.delete_address_text
+            
+            if let top = UIApplication.getTopMostViewController() {
+                top.confirmAlert(title: title, message: text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.delete, cancelHandler: { _ in
+                }, confirmHandler: { _ in
+                    if let path = indexPath {
+                        if self.selectedState == .contacts {
+                            self.contacts.remove(at: path.row)
+                        }
+                        else {
+                            self.addresses.remove(at: path.row)
+                        }
+                    }
+                    self.onDataDeleted?(indexPath, address)
+                })
             }
-            onDataDeleted?(indexPath, address)
         }
     }
     

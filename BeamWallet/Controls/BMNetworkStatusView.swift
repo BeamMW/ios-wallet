@@ -50,7 +50,7 @@ class BMNetworkStatusView: UIView {
         statusView.layer.cornerRadius = 6
         addSubview(statusView)
         
-        statusLabel = UILabel(frame: CGRect(x: !fromNib ? 33 : 18, y: !fromNib ? 13 : -2, width: UIScreen.main.bounds.size.width-50, height: 18))
+        statusLabel = UILabel(frame: CGRect(x: !fromNib ? 35 : 20, y: !fromNib ? 13 : -2, width: UIScreen.main.bounds.size.width-50, height: 18))
         statusLabel.font = RegularFont(size: 14)
         statusLabel.adjustsFontSizeToFitWidth = true
         statusLabel.minimumScaleFactor = 0.5
@@ -97,7 +97,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
             self.statusView.alpha = 1
             self.statusView.layer.borderWidth = 0
 
-            self.statusLabel.x = self.fromNib ? 18 : 33
+            self.statusLabel.x = self.fromNib ? 20 : 35
             
              if connected {
                 self.statusView.backgroundColor = UIColor.main.green
@@ -143,7 +143,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.color = UIColor.main.green
                 self.indicatorView.startAnimating()
                 
-                self.statusLabel.x = self.fromNib ? 20 : 35
+                self.statusLabel.x = self.fromNib ? 22 : 37
                 self.statusLabel.text = Localizable.shared.strings.updating.lowercased()
                 self.statusView.alpha = 0
                 self.statusLabel.textColor = UIColor.main.blueyGrey
@@ -167,7 +167,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
             self.indicatorView.color = UIColor.main.orange
             self.indicatorView.startAnimating()
             
-            self.statusLabel.x = self.fromNib ? 20 : 35
+            self.statusLabel.x = self.fromNib ? 22 : 37
             self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
             self.statusView.backgroundColor = UIColor.main.orange
             self.statusLabel.textColor = UIColor.main.orange

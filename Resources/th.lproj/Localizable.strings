@@ -459,7 +459,7 @@
 "make_wallet_secure_text" = "Please increase wallet security by saving your seed phrase so you won’t loose your funds.";
 "complete_verification" = "Complete verification";
 "yes_please" = "yes, please";
-"i_will_later" = "i will do it later";
+"i_will_later" = "I will do it later";
 "create_password" = "Create password";
 "get_coins" = "Get coins";
 "secure_your_phrase" = "Secure your phrase";

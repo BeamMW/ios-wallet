@@ -20,7 +20,7 @@
 import UIKit
 
 class OnboardManager: NSObject {
-    public static let minAmountToSecure: Double = 100.0
+    public static let minAmountToSecure: Double = 10.0
     
     private let faucetKey = "faucetKey"
     private let isSkipedSeedKey = "isSkipedSeedKey"

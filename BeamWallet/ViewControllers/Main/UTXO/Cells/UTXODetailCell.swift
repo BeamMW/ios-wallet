@@ -41,7 +41,6 @@ extension UTXODetailCell: Configurable {
     
     func configure(with utxo:BMUTXO) {
         amountLabel.text = String.currency(value: utxo.realAmount)
-        statusLabel.text = utxo.statusString.replacingOccurrences(of: "\n", with: " ")
         
         if utxo.status == 1 || utxo.status == 2 {
             statusLabel.textColor = UIColor.white
@@ -54,6 +53,13 @@ extension UTXODetailCell: Configurable {
         }
         else{
             statusLabel.textColor = UIColor.main.blueyGrey
+        }
+        
+        if(utxo.status == BMUTXOMaturing) {
+            statusLabel.attributedText = utxo.attributedStatus()
+        }
+        else{
+            statusLabel.text = utxo.statusString.replacingOccurrences(of: "\n", with: " ")
         }
     }
 }

@@ -461,8 +461,15 @@ static NSString *logsKey = @"logsKey";
     fin.enName = @"Suomi";
     fin.localName = @"Finnish";
     fin.ID = 0;
+    
+    BMLanguage *cs = [BMLanguage new];
+    cs.code = @"cs";
+    cs.enName = @"Češka";
+    cs.localName = @"Czech";
+    cs.ID = 0;
+    
 
-    NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin];
+    NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin, cs];
     
     NSLocale *locale = [NSLocale currentLocale];
     

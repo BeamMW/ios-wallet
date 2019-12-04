@@ -78,7 +78,7 @@ class UTXOViewModel: NSObject {
             case .progress:
                 if let utxos = AppModel.sharedManager().utxos {
                     strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3 || $0.status == 4}
+                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3 || $0.status == 4 || $0.status == 2}
                 }
             case .incoming:
                 if let utxos = AppModel.sharedManager().utxos {

@@ -58,6 +58,9 @@ extension UIViewController {
 }
 
 extension UIViewController {
+    func removeBlur() {
+        self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
+    }
     func addBlur() {
         self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
         if let image = self.view.snapshot() {

@@ -476,6 +476,13 @@ class LocalizableStrings : NSObject {
     var import_data_text = "import_data_text".localized
     var imprt = "import".localized
     var export_data = "export_data".localized
+    var delete_address_text = "delete_address_text".localized
+    var delete_contact_text = "delete_contact_text".localized
+    var i_will_later = "i_will_later".localized
+    var import_data_text_2 = "import_data_text_2".localized
+    var till_block = "till_block".localized
+    var since = "till_block".localized
+
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

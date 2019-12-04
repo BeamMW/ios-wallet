@@ -23,7 +23,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     public var completion: (() -> Void)?
     
     private var isRequestedAuthorization = false
-    
+    private var isLoggedin = false
+
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var touchIdButton: UIButton!
     @IBOutlet private weak var loginLabel: UILabel!
@@ -44,6 +45,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        isLoggedin = AppModel.sharedManager().isLoggedin
         
         if Device.isLarge {
             stackView.spacing = 60
@@ -67,25 +70,19 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         
-        if AppModel.sharedManager().isLoggedin {
-            restoreButton.isHidden = true
-        }
-        else {
-            restoreButton.titleLabel?.numberOfLines = 2
-            restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
-            restoreButton.titleLabel?.textAlignment = .center
-        }
+        restoreButton.titleLabel?.numberOfLines = 2
+        restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
+        restoreButton.titleLabel?.textAlignment = .center
         
         versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !AppModel.sharedManager().isLoggedin {
-            AppModel.sharedManager().checkRecoveryWallet()
-            
+        AppModel.sharedManager().checkRecoveryWallet()
+
+        if !isLoggedin {
             if (presentedViewController as? UIAlertController) == nil {
                 if isRequestedAuthorization == false, TGBotManager.sharedManager.isNeedLinking() == false, UIApplication.shared.applicationState == .active, AppDelegate.isCrashed() == false {
                     isRequestedAuthorization = true
@@ -93,7 +90,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 }
             }
         }
-        else if AppModel.sharedManager().isLoggedin, !isRequestedAuthorization, UIApplication.shared.applicationState == .active {
+        else if isLoggedin, !isRequestedAuthorization, UIApplication.shared.applicationState == .active {
             isRequestedAuthorization = true
             biometricAuthorization()
         }
@@ -140,13 +137,19 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
             passField.status = BMField.Status.error
         }
         else if let pass = passField.text {
-            if AppModel.sharedManager().isLoggedin {
+            if isLoggedin {
                 let valid = AppModel.sharedManager().isValidPassword(pass)
                 if !valid {
                     passField.error = Localizable.shared.strings.incorrect_password
                     passField.status = BMField.Status.error
                 }
                 else {
+                    if(!AppModel.sharedManager().isWalletRunning())     {
+                        AppModel.sharedManager().openWallet(pass)
+                        isLoggedin = true
+                        AppModel.sharedManager().isLoggedin = isLoggedin;
+                        AppModel.sharedManager().isConnected = true
+                    }
                     if navigationController?.viewControllers.count == 1 {
                         dismiss(animated: true) {}
                     }
@@ -178,6 +181,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         confirmAlert(title: Localizable.shared.strings.restore_create_title, message: Localizable.shared.strings.restore_create_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.proceed, cancelHandler: { _ in
             
         }) { _ in
+            AppModel.sharedManager().isLoggedin = false;
             AppModel.sharedManager().startChangeWallet()
             self.pushViewController(vc: WellcomeViewController())
         }

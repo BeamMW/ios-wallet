@@ -131,7 +131,7 @@ class BaseViewController: UIViewController {
             let statusView = BMNetworkStatusView()
             statusView.tag = 11
             statusView.y = Device.isXDevice ? 110 : 80
-            statusView.x = 0
+            statusView.x = 5
             self.view.addSubview(statusView)
         }
         
@@ -289,6 +289,8 @@ class BaseViewController: UIViewController {
     // MARK: - Feedback
     
     public func showRateDialog() {
+        addBlur()
+        
         let logoView = UIImageView(frame: CGRect(x: 10, y: 15, width: 40, height: 28))
         logoView.image = RateLogo()
         
@@ -322,14 +324,19 @@ class BaseViewController: UIViewController {
         showAlert.view.addConstraint(width)
         
         showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.rate_app, style: .default, handler: { _ in
+            self.removeBlur()
             AppStoreReviewManager.openAppStoreRatingPage()
         }))
         showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.feedback, style: .default, handler: { _ in
+            self.removeBlur()
+
             AppStoreReviewManager.resetRating()
             
             self.writeFeedback()
         }))
         showAlert.addAction(UIAlertAction(title: Localizable.shared.strings.not_now, style: .default, handler: { _ in
+            self.removeBlur()
+
             AppStoreReviewManager.resetRating()
         }))
         

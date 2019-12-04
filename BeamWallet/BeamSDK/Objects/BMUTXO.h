@@ -49,5 +49,7 @@ typedef int BMUTXOStatus;
 @property (nonatomic,strong) BMTransaction * _Nullable transaction;
 @property (nonatomic,assign) UInt64 transactionDate;
 
+-(NSMutableAttributedString*_Nonnull)attributedStatus;
+
 @end
 

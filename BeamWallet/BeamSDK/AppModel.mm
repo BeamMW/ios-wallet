@@ -111,9 +111,7 @@ const int kFeeInGroth_Fork1 = 100;
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
-    
-    _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
-        
+            
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
         
     [self checkInternetConnection];
@@ -294,6 +292,8 @@ const int kFeeInGroth_Fork1 = 100;
     
     [self onWalledOpened:SecString(pass.string)];
     
+    _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
+
     return YES;
 }
 
@@ -326,6 +326,8 @@ const int kFeeInGroth_Fork1 = 100;
 }
 
 -(BOOL)createWallet:(NSString*)phrase pass:(NSString*)pass {
+    [self clearAllCategories];
+    
     if (walletReactor == nil) {
         walletReactor = Reactor::create();
     }
@@ -383,6 +385,9 @@ const int kFeeInGroth_Fork1 = 100;
     
     [self onWalledOpened:SecString(pass.string)];
     
+    
+    _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
+    
     return YES;
 }
 
@@ -435,20 +440,21 @@ const int kFeeInGroth_Fork1 = 100;
     isStarted = NO;
     isRunning = NO;
 
+    if (wallet!=nil){
+        wallet.reset();
+    }
+    
+    if (keyKeeper!=nil){
+        keyKeeper.reset();
+    }
+    
     if (walletReactor!=nil){
         walletReactor.reset();
     }
     if (walletDb!=nil){
         walletDb.reset();
     }
-    if (wallet!=nil){
-        wallet.reset();
-    }
-    if (keyKeeper!=nil){
-        keyKeeper.reset();
-    }
-    
-    
+        
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
@@ -481,6 +487,7 @@ const int kFeeInGroth_Fork1 = 100;
     
     [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
     [[NSUserDefaults standardUserDefaults] setObject:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
+        
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.isRestoreFlow = YES;
@@ -546,6 +553,9 @@ const int kFeeInGroth_Fork1 = 100;
 }
     
 -(BOOL)isWalletRunning {
+    if(wallet == nil) {
+        return NO;
+    }
     return isRunning;
 }
 
@@ -720,6 +730,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (wallet != nil)  {
         wallet->getAsync()->getWalletStatus();
         wallet->getAsync()->getTransactions();
+        wallet->getAsync()->getAddresses(false);
+        wallet->getAsync()->getAddresses(true);
     }
 }
 
@@ -1126,7 +1138,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {
     std::vector<WalletAddress> addrs = walletDb->getAddresses(true);
-    
+
     wallet->ownAddresses.clear();
     
     for (int i=0; i<addrs.size(); i++)
@@ -2099,6 +2111,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     
     return addresses;
+}
+
+-(void)clearAllCategories {
+    [_categories removeAllObjects];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:categoriesKey];
 }
 
 -(void)fixCategories {

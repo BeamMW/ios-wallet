@@ -121,7 +121,7 @@ class WalletViewController: BaseTableViewController {
             
             guard let strongSelf = self else { return }
             
-            if strongSelf.viewModel.transactions.count == 0 {
+            if strongSelf.viewModel.transactions.count == 0 ||  strongSelf.viewModel.transactions.count >= strongSelf.maximumTransactionsCount {
                 strongSelf.tableView.reloadData()
                 AppModel.sharedManager().prepareDeleteTransaction(transaction)
             }
@@ -222,7 +222,7 @@ extension WalletViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            let cell = statusViewModel.getCells()[indexPath.row]
+            let cell = statusViewModel.cells[indexPath.row]
             
             if cell == .buttons {
                 return UITableView.automaticDimension
@@ -306,7 +306,7 @@ extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return statusViewModel.getCells().count
+            return statusViewModel.cells.count
         case 1:
             return (viewModel.transactions.count == 0) ? 1 : ((viewModel.transactions.count > maximumTransactionsCount) ? maximumTransactionsCount : viewModel.transactions.count)
         default:
@@ -317,7 +317,7 @@ extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = statusViewModel.getCells()[indexPath.row]
+            let cell = statusViewModel.cells[indexPath.row]
             
             switch cell {
             case .buttons:
@@ -447,14 +447,16 @@ extension WalletViewController: OnboardCellDelegate {
     
     func onClickCloseFaucet(cell:UITableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
-            let cell = statusViewModel.getCells()[indexPath.row]
+            let cell = statusViewModel.cells[indexPath.row]
             
             if cell == .faucet {
                 OnboardManager.shared.isCloseFaucet = true
+                statusViewModel.cells.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
             else if cell == .verefication {
                 OnboardManager.shared.isCloseSecure = true
+                statusViewModel.cells.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
         }

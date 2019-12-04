@@ -69,7 +69,7 @@ class SettingsViewModel: NSObject {
         public var icon: UIImage?
         public var hasArrow: Bool!
         public var id: Int?
-
+        
         init(title: String?, type: SettingsItemType, icon: UIImage?, hasArrow: Bool) {
             self.title = title
             self.type = type
@@ -160,16 +160,15 @@ class SettingsViewModel: NSObject {
                 section_0.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, type: .enable_bio, hasArrow: false))
             }
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
-            if OnboardManager.shared.getSeed() != nil {
-                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
-            }
+//            if OnboardManager.shared.isSkipedSeed() == true {
+//                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
+//            }
             section_0.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
             items.append(section_0)
         case .utilites:
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-            section_0.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             if OnboardManager.shared.isSkipedSeed() == true {
                 section_0.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
@@ -183,7 +182,7 @@ class SettingsViewModel: NSObject {
                     categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, type: .open_category, category: category, hasArrow: true))
                 }
             }
-            if(categories.count > 0) {
+            if categories.count > 0 {
                 items.append(categories)
             }
             var section_1 = [SettingsItem]()
@@ -214,8 +213,8 @@ class SettingsViewModel: NSObject {
     }
     
     public func reload() {
-        self.items.removeAll()
-        self.initItems()
+        items.removeAll()
+        initItems()
     }
     
     public func getItem(indexPath: IndexPath) -> SettingsItem {
@@ -266,7 +265,7 @@ class SettingsViewModel: NSObject {
         case .create_category:
             openCategory(category: nil)
         case .open_category:
-            openCategory(category:item.category)
+            openCategory(category: item.category)
         default:
             return
         }
@@ -488,11 +487,13 @@ extension SettingsViewModel {
     
     func onImportWallet() {
         if let top = UIApplication.getTopMostViewController() {
-            let types = [kUTTypeJSON]
-            let importMenu = UIDocumentPickerViewController(documentTypes: types as [String], in: .import)
-            importMenu.delegate = self
-            importMenu.modalPresentationStyle = .formSheet
-            top.present(importMenu, animated: true)
+            top.alert(title: Localizable.shared.strings.import_data_title, message: Localizable.shared.strings.import_data_text_2) { _ in
+                let types = [kUTTypeJSON]
+                let importMenu = UIDocumentPickerViewController(documentTypes: types as [String], in: .import)
+                importMenu.delegate = self
+                importMenu.modalPresentationStyle = .formSheet
+                top.present(importMenu, animated: true)
+            }
         }
     }
 }

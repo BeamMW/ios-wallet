@@ -205,7 +205,7 @@ extension UIColor {
                 return .init(red: 76 / 255, green: 54 / 255, blue: 119 / 255, alpha: 1)
             }
             else if Settings.sharedManager().target == Masternet {
-                return .init(red: 57 / 255, green: 57 / 255, blue: 57 / 255, alpha: 1)
+                return .init(red: 66 / 255, green: 66 / 255, blue: 66 / 255, alpha: 1)
             }
             return .init(red: 3 / 255, green: 91 / 255, blue: 143 / 255, alpha: 1)
         }

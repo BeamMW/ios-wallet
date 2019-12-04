@@ -185,6 +185,7 @@ class UnlockPasswordPopover: BaseViewController {
     }
     
     @IBAction func onClose(sender: UIButton) {
+        self.completion?(false)
         dismiss(animated: true, completion: nil)
     }
 }
