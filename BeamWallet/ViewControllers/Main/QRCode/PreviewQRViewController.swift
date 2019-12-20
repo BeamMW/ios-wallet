@@ -63,9 +63,15 @@ class PreviewQRViewController: BaseViewController {
         addressLabel.attributedText = attributedString
         addressLabel.sizeToFit()
         view.addSubview(addressLabel)
+        
+        if Settings.sharedManager().isDarkMode {
+            view.backgroundColor = UIColor.main.twilightBlue2
+        }
     }
     
     public func didShow() {
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+
         title = Localizable.shared.strings.qr_code.replacingOccurrences(of: "Qr", with: "QR")
         
         addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
@@ -74,6 +80,10 @@ class PreviewQRViewController: BaseViewController {
         
         codeView.y = codeView.y + navigationBarOffset
         addressLabel.y = addressLabel.y + navigationBarOffset
+        
+        if Settings.sharedManager().isDarkMode {
+            view.backgroundColor = UIColor.main.marine
+        }
     }
     
 

@@ -119,6 +119,8 @@
 "delete_address" = "Borrar dirección";
 "delete_address_transaction" = "Eliminar dirección y transacciones relacionadas";
 "delete_address_only" = "Borrar sólo la dirección";
+"delete_address_text" = "¿Está seguro de que desea eliminar esta dirección de su wallet?";
+"delete_contact_text" = "¿Está seguro que desea eliminar este contacto de su wallet?";
 "category" = "Etiqueta";
 "in_24_hours" = "En 24 horas";
 "never" = "Nunca";
@@ -312,7 +314,7 @@
 "id" = "ID";
 "date_time" = "Fecha | hora";
 "utxo_history" = "Historial de UTXO";
-"delete_all_text" = "¿Está seguro de que desea eliminar todo (str) de su wallet?";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" = "¿Está usted seguro de querer borrar “(str)” etiqueta?";
 "canot_connect_node" = "No se puede conectar al nodo";
 "buy_beam_value" = "Enviar (value) a la dirección (name) anterior para completar la transacción"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -446,7 +448,11 @@
 "enter_your_password" = "Introduce tu contraseña";
 "share_details" = "Compartir detalles";
 "faucet_title" = "Empezar a usar la wallet";
+<<<<<<< HEAD
 "faucet_text" = "¿Quieres ver la wallet en acción? Obtén una pequeña cantidad de Beams del grifo de la comunidad.";
+=======
+"faucet_text" = "Vea la wallet en acción. Obtenga una pequeña cantidad de Beams del grifo de la comunidad.";
+>>>>>>> sprint_4
 "faucet_ok" = "Sí, por favor";
 "faucet_no" = "No, estoy bien";
 "show_seed_phrase" = "Mostrar frase semilla";
@@ -455,7 +461,11 @@
 "all_set" = "Ya está todo listo";
 "wallet_is_secure" = "¡Su wallet está segura ahora! Tenga calma en su uso de características.";
 "make_wallet_secure_title" = "Haz tu wallet segura";
+<<<<<<< HEAD
 "make_wallet_secure_text" = "Por favor, aumente la seguridad de la wallet guardando su frase semilla para que no pierda sus fondos.";
+=======
+"make_wallet_secure_text" = "Escribe y valida tu frase semilla para que siempre puedas recuperar tus fondos.";
+>>>>>>> sprint_4
 "complete_verification" = "Verificación completa";
 "yes_please" = "sí, por favor";
 "i_will_later" = "lo haré más tarde";
@@ -483,3 +493,21 @@
 "paste" = "Pegar";
 "status" = "Estado"; // transaction status
 "remove_wallet" = "Eliminar wallet";
+<<<<<<< HEAD
+=======
+"export_wallet_data" = "Exportar datos del wallet";
+"import_wallet_data" = "Importar datos del wallet";
+"utilities" = "Utilidades";
+"incorrect_file_title" = "Archivo incorrecto";
+"incorrect_file_text" = "El archivo que estás intentando importar a Beam Wallet no encaja. Por favor, elige otro archivo e inténtalo de nuevo.";
+"import_data_title" = "Importar datos";
+"import_data_text" = "¿Está seguro que desea importar datos a su wallet de Beam? Todos los datos actuales serán reemplazados por uno importado.";
+"import_data_text_2" = "Sólo los datos exportados desde la wallet con la misma frase semilla pueden ser importados.";
+"import" = "Importar";
+"export_data" = "Exportar datos";
+"till_block" = "altura hasta bloque";
+"since" = "since"; // example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";
+>>>>>>> sprint_4

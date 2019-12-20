@@ -119,6 +119,8 @@
 "delete_address" = "Poista osoite";
 "delete_address_transaction" = "Poista osoite ja siihen liittyvät tapahtumat";
 "delete_address_only" = "Poista vain osoite";
+"delete_address_text" = "Haluatko varmasti poistaa tämän osoitteen lompakostasi?";
+"delete_contact_text" = "Haluatko varmasti poistaa tämän yhteystiedon lompakostasi?";
 "category" = "Luokka";
 "in_24_hours" = "24 tunnissa";
 "never" = "Ei koskaan";
@@ -312,7 +314,7 @@
 "id" = "ID";
 "date_time" = "Päivämäärä   |   aika";
 "utxo_history" = "UTXO-historia";
-"delete_all_text" = "Oletko varma, että haluat poistaa kaikki (str) lompakostasi?";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" = "Oletko varma, että haluat poistaa luokan “(str)”?";
 "canot_connect_node" = "Palvelimeen (node) ei saada yhteyttä";
 "buy_beam_value" = "Lähetä (value) yllä olevaan (name)-osoitteeseen suorittaaksesi ostotapahtuman loppuun"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -446,7 +448,11 @@
 "enter_your_password" = "Kirjoita salasanasi";
 "share_details" = "Jaa tiedot";
 "faucet_title" = "Aloita lompakon käyttö";
+<<<<<<< HEAD
 "faucet_text" = "Haluatko testata lompakon toimintoja? Ota vastaan pieni summa Beamiä yhteisön testikäyttöön tarkoitetusta kassasta.";
+=======
+"faucet_text" = "Näe lompakko toiminnassa. Ota vastaan pieni summa Beamiä yhteisön testikäyttöön tarkoitetusta kassasta.";
+>>>>>>> sprint_4
 "faucet_ok" = "Kyllä kiitos";
 "faucet_no" = "Ei kiitos";
 "show_seed_phrase" = "Näytä seed phrase";
@@ -455,7 +461,11 @@
 "all_set" = "Kaikki on valmista";
 "wallet_is_secure" = "Lompakkosi on nyt turvallinen!";
 "make_wallet_secure_title" = "Tee lompakostasi turvallinen";
+<<<<<<< HEAD
 "make_wallet_secure_text" = "Lisää lompakon turvallisuutta pitämällä seed phrase tallessa, jotta et hukkaa varojasi.";
+=======
+"make_wallet_secure_text" = "Kirjoita ylös ja tarkista seed phrasesi, jotta voit palauttaa saldosi tarvittaessa.";
+>>>>>>> sprint_4
 "complete_verification" = "Suorita varmennus";
 "yes_please" = "kyllä kiitos";
 "i_will_later" = "myöhemmin";
@@ -483,3 +493,21 @@
 "paste" = "Liitä";
 "status" = "Tila"; // transaction status
 "remove_wallet" = "Poista lompakko";
+<<<<<<< HEAD
+=======
+"export_wallet_data" = "Vie lompakon tiedot";
+"import_wallet_data" = "Tuo lompakon tiedot";
+"utilities" = "Ominaisuudet";
+"incorrect_file_title" = "Virheellinen tiedosto";
+"incorrect_file_text" = "Tiedosto, jonka yrität tuoda Beam lompakkoon, ei ole yhteensopiva. Valitse toinen tiedosto ja yritä uudelleen.";
+"import_data_title" = "Tuo tiedot";
+"import_data_text" = "Oletko varma, että haluat tuoda tiedot Beam-lompakkoosi? Nykyiset tiedot pyyhitään ja korvataan liittämilläsi tiedoilla.";
+"import_data_text_2" = "Vain sellaiset tiedot voidaan tuoda lompakkoon, jotka tuodaan lompakosta, jossa on käytössä sama seed phrase.";
+"import" = "Tuo";
+"export_data" = "Vie tiedot";
+"till_block" = "lohkon tasolla";
+"since" = "since"; // example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";
+>>>>>>> sprint_4

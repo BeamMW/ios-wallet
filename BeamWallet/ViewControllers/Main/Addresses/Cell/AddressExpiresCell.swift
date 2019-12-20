@@ -35,7 +35,7 @@ class AddressExpiresCell: BaseCell {
         backgroundColor = UIColor.clear
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
     }
 }

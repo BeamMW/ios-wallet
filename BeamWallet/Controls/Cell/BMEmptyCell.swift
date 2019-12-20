@@ -20,29 +20,34 @@
 import UIKit
 
 class BMEmptyCell: BaseCell {
-
-    @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var mainView: UIView!
-    @IBOutlet weak private var iconView: UIImageView!
-
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var mainView: UIView!
+    @IBOutlet private var iconView: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
 
         selectionStyle = .none
-        
+
         isUserInteractionEnabled = false
     }
 }
 
 extension BMEmptyCell: Configurable {
-    
-    func configure(with options: (text:String, image:UIImage?)) {
+    func configure(with options: (text: String, image: UIImage?)) {
         titleLabel.text = options.text
         iconView.isHidden = (options.image == nil)
-        iconView.image = options.image
+
+        if Settings.sharedManager().isDarkMode {
+            titleLabel.textColor = UIColor.main.steel
+            iconView.image = options.image?.withRenderingMode(.alwaysTemplate)
+            iconView.tintColor = UIColor.main.steel
+        }
+        else {
+            iconView.image = options.image
+        }
     }
 }

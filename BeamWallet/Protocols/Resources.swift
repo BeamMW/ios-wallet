@@ -17,10 +17,7 @@
 // limitations under the License.
 //
 
-
 import Foundation
-
-let EnableNewFeatures = false
 
 func IconShowBalance() -> UIImage? {
     return UIImage(named: "iconShowBalance")
@@ -39,7 +36,7 @@ func IconCopyBlue() -> UIImage? {
 }
 
 func IconSymbolBeam() -> UIImage? {
-    return UIImage.init(named: "iconSymbol")
+    return UIImage(named: "iconSymbol")
 }
 
 func IconSendPink() -> UIImage? {
@@ -49,7 +46,6 @@ func IconSendPink() -> UIImage? {
 func IconCopyWhite() -> UIImage? {
     return UIImage(named: "iconCopyWhite")
 }
-
 
 func IconUtxo() -> UIImage? {
     return UIImage(named: "iconUtxo")
@@ -66,6 +62,11 @@ func BackgroundTestnet() -> UIImage? {
 func BackgroundMasternet() -> UIImage? {
     return UIImage(named: "bgMasternet.jpg")
 }
+
+func BackgroundDark() -> UIImage? {
+    return UIImage(named: "bgBlack.jpg")
+}
+
 
 func IconBack() -> UIImage? {
     return UIImage(named: "iconBack")
@@ -124,17 +125,26 @@ func IconLeftMenu() -> UIImage? {
 }
 
 func IconDownArrow() -> UIImage? {
-    return UIImage(named: "iconDownArrow")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconDownArrow")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconDownArrow")
+    }
 }
 
 func IconNextArrow() -> UIImage? {
-    return UIImage(named: "iconNextArrow")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconNextArrow")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconNextArrow")
+    }
 }
 
 func GradientBlue() -> UIImage? {
     return UIImage(named: "gradientBlue")
 }
-
 
 func IconScanQr() -> UIImage? {
     return UIImage(named: "iconScanQr")
@@ -158,6 +168,10 @@ func IconDoneBlue() -> UIImage? {
 
 func IconCancel() -> UIImage? {
     return UIImage(named: "iconCancel")
+}
+
+func IconCancelWhite() -> UIImage? {
+    return UIImage(named: "iconCancel")?.maskWithColor(color: UIColor.white)
 }
 
 func IconComment() -> UIImage? {
@@ -205,11 +219,21 @@ func Tick() -> UIImage? {
 }
 
 func IconInfinity() -> UIImage? {
-    return UIImage(named: "iconInfinity")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconInfinity")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconInfinity")
+    }
 }
 
 func IconExpires() -> UIImage? {
-    return UIImage(named: "iconExpires")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconExpires")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconExpires")
+    }
 }
 
 func ClearIcon() -> UIImage? {
@@ -217,7 +241,12 @@ func ClearIcon() -> UIImage? {
 }
 
 func IconExpired() -> UIImage? {
-    return UIImage(named: "iconExpired")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconExpired")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconExpired")
+    }
 }
 
 func IconUtxoEmpty() -> UIImage? {
@@ -289,7 +318,43 @@ func IconSaveDone() -> UIImage? {
 }
 
 func IconSeedPhrase() -> UIImage? {
-    return UIImage(named: "iconSeedPhrase")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconSeedPhrase")?.maskWithColor(color: UIColor.main.marine)
+    }
+    else{
+        return UIImage(named: "iconSeedPhrase")?.maskWithColor(color: UIColor.main.marineOriginal)
+    }
 }
 
+func IconNode() -> UIImage? {
+    return UIImage(named: "iconNode")
+}
+
+func IconSettingsGeneral() -> UIImage? {
+    return UIImage(named: "iconSettingsGeneral")
+}
+
+func IconSettingsPrivacy() -> UIImage? {
+    return UIImage(named: "iconSettingsPrivacy")
+}
+
+func IconSettingsRate() -> UIImage? {
+    return UIImage(named: "iconSettingsRate")
+}
+
+func IconSettingsRemove() -> UIImage? {
+    return UIImage(named: "iconSettingsRemove")
+}
+
+func IconSettingsReport() -> UIImage? {
+    return UIImage(named: "iconSettingsReport")
+}
+
+func IconSettingsTags() -> UIImage? {
+    return UIImage(named: "iconSettingsTags")
+}
+
+func IconSettingsUtilities() -> UIImage? {
+    return UIImage(named: "iconSettingsUtilities")
+}
 

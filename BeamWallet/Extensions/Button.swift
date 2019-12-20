@@ -21,26 +21,20 @@ import Foundation
 import UIKit
 
 extension UIButton {
-    
     @IBInspectable
     var adjustFontSize: Bool {
         get {
             return self.adjustFontSize
         }
         set {
-            #if EXTENSION
-            print("ignore")
-            #else
             if newValue {
                 if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
                     self.titleLabel?.adjustFontSize = true
                 }
             }
-            #endif
-       
         }
     }
-    
+
     @IBInspectable
     var localizationKey: String? {
         get {
@@ -59,9 +53,8 @@ extension UIButton {
 }
 
 extension UIButton {
-    
     func setBackgroundColor(color: UIColor, forState: UIControl.State) {
         self.clipsToBounds = true
-        self.setBackgroundImage(UIImage.fromColor(color:color), for: forState)
+        self.setBackgroundImage(UIImage.fromColor(color: color), for: forState)
     }
 }

@@ -17,39 +17,36 @@
 // limitations under the License.
 //
 
-import UIKit
-import Fabric
-import Crashlytics
 import CrashEye
+import Crashlytics
+import Fabric
+import UIKit
 
-
-class BeamApplication: UIApplication{
+class BeamApplication: UIApplication {
     override func sendEvent(_ event: UIEvent) {
         super.sendEvent(event)
-                
+        
         BMLockScreen.shared.onTapEvent()
     }
 }
 
-//@UIApplicationMain
+// @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     private var scannedTGUserId = String.empty()
-
+    
     var securityScreen = BMAutoSecurityScreen()
-
+    
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     var completionHandler: ((UIBackgroundFetchResult) -> Void)?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         CrashEye.add(delegate: self)
-
-        UIApplication.shared.setMinimumBackgroundFetchInterval (UIApplication.backgroundFetchIntervalMinimum)
+        
+        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = false
-
+        
 //        FirebaseConfiguration.shared.setLoggerLevel(.min)
 //        FirebaseApp.configure()
         
@@ -66,70 +63,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)
+        Settings.sharedManager().addDelegate(self)
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
-
+        
         let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : WellcomeViewController())
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.main.navy
         self.window?.rootViewController = rootController
         self.window?.makeKeyAndVisible()
-    
+        
+        if #available(iOS 12.0, *) {
+            let isDark = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark
+            Settings.sharedManager().setDefaultDarkMode(isDark)
+        }
+        else {
+            Settings.sharedManager().setDefaultDarkMode(false)
+        }
+        
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
+        Fabric.with([Crashlytics.self()])
+        
         if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
-            self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { (_ ) in
+            self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { _ in
                 
-                 Fabric.with([Crashlytics.self()])
-                 
-                 Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
-                 
-                 Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace" : crash])
+                Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
                 
-                 UserDefaults.standard.set(nil, forKey: "crash")
-                 UserDefaults.standard.synchronize()
+                Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace": crash])
                 
-            }, confirmHandler: { (_ ) in
+                UserDefaults.standard.set(nil, forKey: "crash")
+                UserDefaults.standard.synchronize()
+                
+            }, confirmHandler: { _ in
                 UserDefaults.standard.set(nil, forKey: "crash")
                 UserDefaults.standard.synchronize()
             })
         }
-
+        
         return true
     }
     
     public func logout() {
+        AppModel.sharedManager().clearAllCategories()
         AppModel.sharedManager().isLoggedin = false
         AppModel.sharedManager().resetWallet(true)
         Settings.sharedManager().resetSettings()
         OnboardManager.shared.reset()
         
         let rootController = BaseNavigationController.navigationController(rootViewController: WellcomeViewController())
-
+        
         self.window!.rootViewController = rootController
     }
-
-    func applicationWillResignActive(_ application: UIApplication) {
- 
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
     
-        if AppModel.sharedManager().connectionTimer != nil  {
+    func applicationWillResignActive(_ application: UIApplication) {}
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        if AppModel.sharedManager().connectionTimer != nil {
             AppModel.sharedManager().connectionTimer?.invalidate()
             AppModel.sharedManager().connectionTimer = nil
         }
         
         if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
-            registerBackgroundTask()
+            self.registerBackgroundTask()
         }
         
         if let transactions = AppModel.sharedManager().preparedTransactions as? [BMPreparedTransaction] {
-            
-            if transactions.count > 0 && AppModel.sharedManager().isLoggedin {
+            if transactions.count > 0, AppModel.sharedManager().isLoggedin {
                 BMSnackBar.dismiss(canceled: true)
-
+                
                 for tr in transactions {
                     AppModel.sharedManager().sendPreparedTransaction(tr.id)
                 }
@@ -137,8 +140,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if let addresses = AppModel.sharedManager().preparedDeleteAddresses as? [BMAddress] {
-            
-            if addresses.count > 0 && AppModel.sharedManager().isLoggedin {
+            if addresses.count > 0, AppModel.sharedManager().isLoggedin {
                 BMSnackBar.dismiss(canceled: true)
                 
                 for a in addresses {
@@ -151,59 +153,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AppModel.sharedManager().isConnecting = true
         }
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
-        
         if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
-            endBackgroundTask()
+            self.endBackgroundTask()
         }
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
-        
         if #available(iOS 12.0, *) {
-            if self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark {
+            if self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark || Settings.sharedManager().isDarkMode {
                 UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.white
+                self.window?.tintColor = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark ? UIColor.white : UIColor.black
             }
-            else{
+            else {
+                UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+                self.window?.tintColor = UIColor.main.marine
+            }
+        }
+        else {
+            if Settings.sharedManager().isDarkMode {
+                UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.white
+                self.window?.tintColor = UIColor.white
+            }
+            else {
+                self.window?.tintColor = UIColor.main.marine
                 UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
             }
-        } else {
-            UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
         }
         
         NotificationManager.sharedManager.clearNotifications()
-                
+        
         if ShortcutManager.canHandle() {
             _ = ShortcutManager.handleShortcutItem()
         }
     }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        
-    }
-
+    
+    func applicationWillTerminate(_ application: UIApplication) {}
+    
     private func registerBackgroundTask() {
-        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+        self.backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()
         }
     }
     
     private func endBackgroundTask() {
-        UIApplication.shared.endBackgroundTask(backgroundTask)
-        backgroundTask = .invalid
+        UIApplication.shared.endBackgroundTask(self.backgroundTask)
+        self.backgroundTask = .invalid
     }
     
-    private func tryLinkingBot(url:URL) {
+    private func tryLinkingBot(url: URL) {
         if TGBotManager.sharedManager.isValidUserFromUrl(url: url) {
             if AppModel.sharedManager().isLoggedin {
-                TGBotManager.sharedManager.startLinking { (_ ) in
-                    
+                TGBotManager.sharedManager.startLinking { _ in
                 }
             }
-            else{
+            else {
                 if let vc = UIApplication.getTopMostViewController() {
-                    vc.alert(title: Localizable.shared.strings.tg_bot, message: Localizable.shared.strings.tg_bot_link) { (_ ) in
+                    vc.alert(title: Localizable.shared.strings.tg_bot, message: Localizable.shared.strings.tg_bot_link) { _ in
                         
                         if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
                             passVC.biometricAuthorization()
@@ -215,38 +222,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-       
         if let url = userActivity.webpageURL {
-            if ((UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController) != nil) {
+            if (UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController) != nil {
                 _ = TGBotManager.sharedManager.isValidUserFromUrl(url: url)
             }
-            else{
-                tryLinkingBot(url: url)
+            else {
+                self.tryLinkingBot(url: url)
             }
         }
-
+        
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
-        tryLinkingBot(url: url)
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        self.tryLinkingBot(url: url)
         
         return true
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-       // Messaging.messaging().apnsToken = deviceToken
+        // Messaging.messaging().apnsToken = deviceToken
     }
     
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    }
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {}
     
-    
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         completionHandler(.noData)
-
+        
 //        if(!AppModel.sharedManager().isRestoreFlow) {
 //            if let password = KeychainManager.getPassword() {
 //                if NotificationManager.sharedManager.sendAutomaticMoney(data: userInfo) == false
@@ -281,9 +283,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
         completionHandler(.noData)
-
+        
 //        if(!AppModel.sharedManager().isRestoreFlow) {
 //            if let password = KeychainManager.getPassword() {
 //                self.completionHandler = completionHandler
@@ -317,31 +318,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-//MARK: - 3D TOUCH
+// MARK: - 3D TOUCH
 
 extension AppDelegate {
-
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        
         ShortcutManager.launchedShortcutItem = shortcutItem
         
         if ShortcutManager.canHandle() {
-           _ = ShortcutManager.handleShortcutItem()
+            _ = ShortcutManager.handleShortcutItem()
         }
-
+        
         completionHandler(true)
     }
 }
 
-extension AppDelegate : WalletModelDelegate {
-   
+extension AppDelegate: WalletModelDelegate {
     func onAddedDelete(_ transaction: BMTransaction) {
         DispatchQueue.main.async {
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: .delete_transaction, id: transaction.id), done: { (data) in
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .delete_transaction, id: transaction.id), done: { data in
                 if let result = data, result.type == .delete_transaction {
                     AppModel.sharedManager().cancelDeleteTransaction(result.id)
                 }
-            }, ended: { (data) in
+            }, ended: { data in
                 if let result = data, result.type == .delete_transaction {
                     AppModel.sharedManager().deleteTransaction(result.id)
                 }
@@ -353,11 +351,11 @@ extension AppDelegate : WalletModelDelegate {
         DispatchQueue.main.async {
             let isContact = address.isContact
             
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: isContact ? .contact : .address, id: address.walletId), done: { (data) in
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: isContact ? .contact : .address, id: address.walletId), done: { data in
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().cancelDeleteAddress(result.id)
                 }
-            }) { (data) in
+            }) { data in
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().deletePreparedAddresses(result.id)
                 }
@@ -367,11 +365,11 @@ extension AppDelegate : WalletModelDelegate {
     
     func onAddedPrepare(_ transaction: BMPreparedTransaction) {
         DispatchQueue.main.async {
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { (data) in
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { data in
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().cancelPreparedTransaction(result.id)
                 }
-            }) { (data) in
+            }) { data in
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().sendPreparedTransaction(result.id)
                 }
@@ -381,10 +379,9 @@ extension AppDelegate : WalletModelDelegate {
     
     public func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
-            
             var oldTransactions = [BMTransaction]()
             
-            //get old notifications
+            // get old notifications
             if let data = UserDefaults.standard.data(forKey: Localizable.shared.strings.transactions) {
                 if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
                     oldTransactions = array
@@ -392,16 +389,15 @@ extension AppDelegate : WalletModelDelegate {
             }
             
             for transaction in transactions {
-                if transaction.isIncome && !transaction.isSelf {
+                if transaction.isIncome, !transaction.isSelf {
                     if let oldTransaction = oldTransactions.first(where: { $0.id == transaction.id }) {
-                        if oldTransaction.status != transaction.status && UIApplication.shared.applicationState != .active {
-                          
-                            //NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
+                        if oldTransaction.status != transaction.status, UIApplication.shared.applicationState != .active {
+                            // NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
                         }
                     }
-                    else{
+                    else {
                         AppStoreReviewManager.incrementAppTransactions()
-
+                        
                         NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
                     }
                 }
@@ -413,10 +409,9 @@ extension AppDelegate : WalletModelDelegate {
     }
 }
 
-//MARK: - Crash
+// MARK: - Crash
 
 extension AppDelegate: CrashEyeDelegate {
-    
     public static func isCrashed() -> Bool {
         return UserDefaults.standard.string(forKey: "crash") != nil
     }
@@ -425,6 +420,30 @@ extension AppDelegate: CrashEyeDelegate {
         UserDefaults.standard.set(model.callStack, forKey: "crash")
         UserDefaults.standard.set(model.name, forKey: "crash_name")
         UserDefaults.standard.synchronize()
+    }
+}
+
+extension AppDelegate: SettingsModelDelegate {
+    func onChangeDarkMode() {
+        if Settings.sharedManager().isDarkMode {
+            UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.white
+            if #available(iOS 12.0, *) {
+                self.window?.tintColor = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark ? UIColor.white : UIColor.black
+            }
+            else {
+                self.window?.tintColor = UIColor.white
+            }
+        }
+        else {
+            if #available(iOS 12.0, *) {
+                self.window?.tintColor = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark ? UIColor.white : UIColor.main.marine
+            }
+            else {
+                self.window?.tintColor = UIColor.main.marine
+            }
+            
+            UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+        }
     }
 }
 

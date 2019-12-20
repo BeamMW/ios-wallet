@@ -104,12 +104,13 @@ class TransactionsViewController: BaseTableViewController {
     
     @objc private func onMore() {
         var items = [BMPopoverMenu.BMPopoverMenuItem]()
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.payment_proof, icon: nil, action: .payment_proof))
         
         if viewModels[currentIndex].transactions.count > 0 {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.export, icon: nil, action: .export_transactions))
         }
         
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.payment_proof, icon: nil, action: .payment_proof))
+
         BMPopoverMenu.show(menuArray: items, done: { (selectedItem) in
             if let item = selectedItem {
                 switch (item.action) {

@@ -387,6 +387,8 @@ class LocalizableStrings : NSObject {
     var manual_restore_warning = "manual_restore_warning".localized
     var search_transactions = "search_transactions".localized
     var random_node = "random_node".localized
+    var generate_seed = "generate_seed".localized
+
     
     var restore_create_title = "restore_create_title".localized
     var restore_create_text = "restore_create_text".localized
@@ -467,7 +469,25 @@ class LocalizableStrings : NSObject {
     var your_current_password = "your_current_password".localized
     var clear_wallet_password = "clear_wallet_password".localized
     var remove_wallet = "remove_wallet".localized
+    var export_wallet_data = "export_wallet_data".localized
+    var import_wallet_data = "import_wallet_data".localized
+    var utilities = "utilities".localized
+    var incorrect_file_title = "incorrect_file_title".localized
+    var incorrect_file_text = "incorrect_file_text".localized
+    var import_data_title = "import_data_title".localized
+    var import_data_text = "import_data_text".localized
+    var imprt = "import".localized
+    var export_data = "export_data".localized
+    var delete_address_text = "delete_address_text".localized
+    var delete_contact_text = "delete_contact_text".localized
+    var i_will_later = "i_will_later".localized
+    var import_data_text_2 = "import_data_text_2".localized
+    var till_block = "till_block".localized
+    var since = "till_block".localized
+    var dark_mode = "dark_mode".localized
+    var delete_all_tags = "delete_all_tags".localized
 
+    
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

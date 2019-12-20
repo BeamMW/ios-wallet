@@ -27,13 +27,13 @@ class PaymentProofDetailViewController: BaseTableViewController {
     
     private var detailsExpand = true
     
-    @IBOutlet private var footerView: UIView!
-    @IBOutlet private var codeInputView: UIView!
-    @IBOutlet private var codeInputField: BMTextView!
-    @IBOutlet private var codeInputLabel: UILabel!
-    @IBOutlet private var inputFieldHeight: NSLayoutConstraint!
-    @IBOutlet private var headerdHeight: NSLayoutConstraint!
-    @IBOutlet private var keyKodeTitle: UILabel!
+    @IBOutlet private weak var footerView: UIView!
+    @IBOutlet private weak var codeInputView: UIView!
+    @IBOutlet private weak var codeInputField: BMTextView!
+    @IBOutlet private weak var codeInputLabel: UILabel!
+    @IBOutlet private weak var inputFieldHeight: NSLayoutConstraint!
+    @IBOutlet private weak var headerdHeight: NSLayoutConstraint!
+    @IBOutlet private weak var keyKodeTitle: UILabel!
     
 
     

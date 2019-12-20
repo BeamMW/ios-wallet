@@ -114,9 +114,8 @@ class DetailTransactionViewModel: TransactionViewModel {
         
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_details, icon: nil, action: .share))
 
-        if EnableNewFeatures {
-            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
-        }
+        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
+
         
         if !transaction.isIncome {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
@@ -150,6 +149,7 @@ class DetailTransactionViewModel: TransactionViewModel {
         let shareView: TransactionShareView = UIView.fromNib()
         shareView.transaction = transaction
         shareView.layoutIfNeeded()
+        shareView.resize()
         
         if let top = UIApplication.getTopMostViewController() {
             if let image = shareView.snapshot(scale: false) {

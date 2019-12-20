@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,15 +21,15 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KuL-Jr-XfQ" id="cgk-y0-vp1">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="234.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZnL-da-miM">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="234.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NVr-Vl-UQM">
-                        <rect key="frame" x="15" y="10" width="290" height="107.5"/>
+                        <rect key="frame" x="15" y="10" width="290" height="108"/>
                         <string key="text">Send this address to the sender over an external secure channel.
 
 For the transaction to complete, you should get online during the 12 hours after Beams are sent. </string>
@@ -44,7 +41,7 @@ For the transaction to complete, you should get online during the 12 hours after
                         </userDefinedRuntimeAttributes>
                     </label>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wAG-wz-QgD">
-                        <rect key="frame" x="15" y="157.5" width="290" height="44"/>
+                        <rect key="frame" x="15" y="158" width="290" height="44"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vqb-dl-gV4" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
@@ -111,6 +108,7 @@ For the transaction to complete, you should get online during the 12 hours after
             <viewLayoutGuide key="safeArea" id="ST6-m8-Wr2"/>
             <connections>
                 <outlet property="infoLabel" destination="NVr-Vl-UQM" id="APT-vE-lO9"/>
+                <outlet property="showQRButton" destination="Vqb-dl-gV4" id="a30-Wg-IIs"/>
             </connections>
             <point key="canvasLocation" x="24.637681159420293" y="98.772321428571431"/>
         </tableViewCell>

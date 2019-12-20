@@ -1,5 +1,5 @@
 //
-// OwnerKeyUnlockViewController.swift
+// BMDoubleAuthViewController.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,12 +19,20 @@
 
 import UIKit
 
-class OwnerKeyUnlockViewController: BMInputViewController {
+class BMDoubleAuthViewController: BMInputViewController {
+    enum EventType {
+        case owner
+        case seed
+        case verification
+    }
     
     private var touchIdButton = UIButton(type: .system)
+    private var event: EventType!
     
-    init() {
+    init(event: EventType) {
         super.init(nibName: "BMInputViewController", bundle: nil)
+        
+        self.event = event
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,14 +41,24 @@ class OwnerKeyUnlockViewController: BMInputViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         touchIdButton.isHidden = true
         touchIdButton.tintColor = UIColor.white
         touchIdButton.setImage(IconTouchid(), for: .normal)
+        touchIdButton.addTarget(self, action: #selector(biometricAuthorization), for: .touchUpInside)
         stackView.addArrangedSubview(touchIdButton)
         
-        title = Localizable.shared.strings.show_owner_key
-                
+        switch event {
+        case .owner:
+            title = Localizable.shared.strings.show_owner_key
+        case .seed:
+            title = Localizable.shared.strings.show_seed_phrase
+        case .verification:
+            title = Localizable.shared.strings.complete_verification
+        default:
+            break
+        }
+        
         inputField.placeholder = Localizable.shared.strings.enter_password
         inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         inputField.delegate = self
@@ -73,7 +91,7 @@ class OwnerKeyUnlockViewController: BMInputViewController {
         }
     }
     
-    private func biometricAuthorization() {
+    @objc private func biometricAuthorization() {
         view.endEditing(true)
         
         if BiometricAuthorization.shared.canAuthenticate() {
@@ -103,16 +121,31 @@ class OwnerKeyUnlockViewController: BMInputViewController {
             }
             else {
                 view.endEditing(true)
-                SVProgressHUD.show()
-                AppModel.sharedManager().exportOwnerKey(pass) { key in
-                    SVProgressHUD.dismiss()
-                    let vc = OwnerKeyViewController()
-                    vc.ownerKey = key
-                    vc.hidesBottomBarWhenPushed = true
-                    if var viewControllers = self.navigationController?.viewControllers {
-                        viewControllers[viewControllers.count - 1] = vc
-                        self.navigationController?.setViewControllers(viewControllers, animated: true)
+                
+                switch event {
+                case .owner:
+                    SVProgressHUD.show()
+                    AppModel.sharedManager().exportOwnerKey(pass) { key in
+                        SVProgressHUD.dismiss()
+                        let vc = OwnerKeyViewController()
+                        vc.ownerKey = key
+                        vc.hidesBottomBarWhenPushed = true
+                        if var viewControllers = self.navigationController?.viewControllers {
+                            viewControllers[viewControllers.count - 1] = vc
+                            self.navigationController?.setViewControllers(viewControllers, animated: true)
+                        }
                     }
+                case .seed, .verification:
+                    if let seed = OnboardManager.shared.getSeed() {
+                        let vc = SeedPhraseViewController(event: event == .seed ?.onlyDisplay : .display, words: seed.components(separatedBy: ";"))
+                        vc.increaseSecutirty = true
+                        if var viewControllers = self.navigationController?.viewControllers {
+                            viewControllers[viewControllers.count - 1] = vc
+                            navigationController?.setViewControllers(viewControllers, animated: true)
+                        }
+                    }
+                default:
+                    break
                 }
             }
         }
@@ -121,7 +154,7 @@ class OwnerKeyUnlockViewController: BMInputViewController {
 
 // MARK: TextField Actions
 
-extension OwnerKeyUnlockViewController: UITextFieldDelegate {
+extension BMDoubleAuthViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         

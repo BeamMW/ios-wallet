@@ -49,6 +49,8 @@ class TransactionShareView: UIView {
     @IBOutlet private weak var transactionKernelTitleLabel: UILabel!
     @IBOutlet private weak var transactionKernelValueLabel: UILabel!
 
+    @IBOutlet private weak var height: NSLayoutConstraint!
+
     var transaction:BMTransaction! {
         didSet{
             setupView()
@@ -139,22 +141,7 @@ class TransactionShareView: UIView {
         transactionIDTitleLabel.text = transactionIDTitleLabel.text?.uppercased()
         transactionFeeTitleLabel.text = transactionFeeTitleLabel.text?.uppercased()
         transactionKernelTitleLabel.text = transactionKernelTitleLabel.text?.uppercased()
-        
-    
-        let colors = [UIColor.main.navyTwo, UIColor.main.deepSeaBlueTwo]
-        
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.colors = colors.map { $0.cgColor }
-        gradient.frame = CGRect(x: 0.0, y: 0.0, width: mainView.width, height: mainView.h)
-        
-        let backgroundImage = UIImageView()
-        backgroundImage.clipsToBounds = true
-        backgroundImage.contentMode = .scaleToFill
-        backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: mainView.width, height: mainView.h)
-        backgroundImage.tag = 10
-        backgroundImage.layer.addSublayer(gradient)
-        mainView.insertSubview(backgroundImage, at: 0)
-        
+                                
         switch Settings.sharedManager().target {
         case Testnet:
             bgView.image = BackgroundTestnet()
@@ -164,5 +151,29 @@ class TransactionShareView: UIView {
             break
         }
     
+    }
+    
+    func resize() {
+        if let last = mainView.subviews.last {
+            var frame = self.frame
+            frame.size.height = last.frame.size.height + last.frame.origin.y + 30
+            height.constant = frame.size.height
+            self.frame = CGRect(x: 0, y: 0, width: 414, height: height.constant+10)
+            self.layoutIfNeeded()
+            
+            let colors = [UIColor.main.navyTwo, UIColor.main.deepSeaBlueTwo]
+            
+            let gradient: CAGradientLayer = CAGradientLayer()
+            gradient.colors = colors.map { $0.cgColor }
+            gradient.frame = CGRect(x: 0.0, y: 0.0, width: mainView.width, height: mainView.h-20)
+            
+            let backgroundImage = UIImageView()
+            backgroundImage.clipsToBounds = true
+            backgroundImage.contentMode = .scaleToFill
+            backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: mainView.width, height: mainView.h-20)
+            backgroundImage.tag = 10
+            backgroundImage.layer.addSublayer(gradient)
+            mainView.insertSubview(backgroundImage, at: 0)
+        }
     }
 }

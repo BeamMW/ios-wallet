@@ -119,6 +119,8 @@
 "delete_address" = "Adres verwijderen";
 "delete_address_transaction" = "Verwijder adres en gerelateerde transacties";
 "delete_address_only" = "Verwijder alleen adres";
+"delete_address_text" = "Weet u zeker dat u dit adres uit uw portemonnee wilt verwijderen?";
+"delete_contact_text" = "Weet u zeker dat u dit contact uit uw portemonnee wilt verwijderen?";
 "category" = "Label";
 "in_24_hours" = "In 24 uur";
 "never" = "Nooit";
@@ -304,7 +306,7 @@
 "share_qr" = "QR delen";
 "requested_amount" = "Gevraagd bedrag";
 "now" = "Nu";
-"blockchain_height" = "Blockchain hoogte";
+"blockchain_height" = "Blockchain height";
 "block_hash" = "Laatste block hash";
 "coinbase" = "Coinbase";
 "regular" = "Normaal";
@@ -312,7 +314,7 @@
 "id" = "ID";
 "date_time" = "Datum | tijd";
 "utxo_history" = "UTXO geschiedenis";
-"delete_all_text" = "Weet u zeker dat u alle (str) uit uw wallet wilt verwijderen?";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" = "Weet u zeker dat u label “(str)” wilt verwijderen?";
 "canot_connect_node" = "Kan geen verbinding maken met node";
 "buy_beam_value" = "Verzend (waarde) naar bovenstaand (naam) adres om de transactie te voltooien"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -446,7 +448,11 @@
 "enter_your_password" = "Voer uw wachtwoord in";
 "share_details" = "Details delen";
 "faucet_title" = "Begin met het gebruik van uw wallet";
+<<<<<<< HEAD
 "faucet_text" = "Wilt u de wallet in actie zien? Ontvang een heel kleine hoeveelheid Beam's van de community faucet.";
+=======
+"faucet_text" = "De wallet in gebruik zien. Ontvang een heel klein aantal Beam's van de community faucet.";
+>>>>>>> sprint_4
 "faucet_ok" = "Ja, graag";
 "faucet_no" = "Nee, dank u";
 "show_seed_phrase" = "Herstelzin weergeven";
@@ -455,7 +461,11 @@
 "all_set" = "U bent helemaal klaar";
 "wallet_is_secure" = "Uw wallet is nu veilig! Doe voorzichtig met het gebruik ervan.";
 "make_wallet_secure_title" = "Maak uw wallet veilig";
+<<<<<<< HEAD
 "make_wallet_secure_text" = "Versterk de beveiliging van de wallet door het opslaan van uw herstelzin zodat u uw saldo niet verliest.";
+=======
+"make_wallet_secure_text" = "Schrijf uw herstelzin op en valideer deze zodat u uw saldo altijd kunt herstellen.";
+>>>>>>> sprint_4
 "complete_verification" = "Verificatie voltooien";
 "yes_please" = "ja, graag";
 "i_will_later" = "ik zal het later doen";
@@ -483,3 +493,21 @@
 "paste" = "Plakken";
 "status" = "Status"; // transaction status
 "remove_wallet" = "Wallet verwijderen";
+<<<<<<< HEAD
+=======
+"export_wallet_data" = "Exporteer wallet data";
+"import_wallet_data" = "Importeer wallet data";
+"utilities" = "Utilities";
+"incorrect_file_title" = "Onjuist bestand";
+"incorrect_file_text" = "Het bestand dat u in de Beam wallet probeert te importeren is ongeschikt. Kies een ander bestand en probeer het opnieuw.";
+"import_data_title" = "Importeer data";
+"import_data_text" = "Weet u zeker dat u data naar uw Beam wallet wilt importeren? Alle huidige data worden vervangen door de geïmporteerde data.";
+"import_data_text_2" = "Alleen de data geëxporteerd uit een wallet met dezelfde herstelzin kan worden geïmporteerd.";
+"import" = "Importeren";
+"export_data" = "Exporteer data";
+"till_block" = "tot block height";
+"since" = "since"; // example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";
+>>>>>>> sprint_4

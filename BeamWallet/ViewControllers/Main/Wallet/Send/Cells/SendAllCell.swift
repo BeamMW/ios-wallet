@@ -20,48 +20,44 @@
 import UIKit
 
 class SendAllCell: BaseCell {
-
-    @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var allButton: BMButton!
-    @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet private weak var amountLabel: UILabel!
+    @IBOutlet private weak var allButton: UIButton!
+    @IBOutlet private weak var titleLabel: UILabel!
 
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         titleLabel.text = Localizable.shared.strings.total_available.uppercased()
         titleLabel.letterSpacing = 1.5
-        
+
         selectionStyle = .none
         
-        if EnableNewFeatures {
-            allButton.borderColor = UIColor.clear
-            allButton.backgroundColor = UIColor.clear
-            allButton.borderWidth = 0
+        allButton.setTitle(Localizable.shared.strings.add_all, for: .normal)
+        
+        if Settings.sharedManager().isDarkMode {
+            titleLabel.textColor = UIColor.main.steel;
+            amountLabel.textColor = UIColor.main.steel;
         }
     }
-    
-    @IBAction func onSendAll(sender :UIButton) {
+
+    @IBAction func onSendAll(sender: UIButton) {
         delegate?.onRightButton?(self)
     }
 }
 
 extension SendAllCell: Configurable {
-    
-    func configure(with options:(amount:String, isAll:Bool)) {
+    func configure(with options: (amount: String, isAll: Bool)) {
         amountLabel.text = options.amount + Localizable.shared.strings.beam
-        allButton.setBackgroundColor(color: UIColor.main.heliotrope.withAlphaComponent(0.3), forState: .highlighted)
-        
-        if EnableNewFeatures {
-            if options.isAll {
-                allButton.isUserInteractionEnabled = false
-                allButton.alpha = 0.5
-            }
-            else{
-                allButton.isUserInteractionEnabled = true
-                allButton.alpha = 1
-            }
+
+        if options.isAll {
+            allButton.isUserInteractionEnabled = false
+            allButton.alpha = 0.5
+        }
+        else {
+            allButton.isUserInteractionEnabled = true
+            allButton.alpha = 1
         }
     }
 }

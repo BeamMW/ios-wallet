@@ -46,6 +46,10 @@ class FeeCell: BaseCell {
         minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
        
         titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
+        if Settings.sharedManager().isDarkMode {
+            titleLabel.textColor = UIColor.main.steel
+            feeSlider.maximumTrackTintColor = UIColor.white.withAlphaComponent(0.02)
+        }
 
         selectionStyle = .none
         

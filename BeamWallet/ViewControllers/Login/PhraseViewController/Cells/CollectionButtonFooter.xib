@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,14 +15,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="kdm-ps-thR" customClass="CollectionButtonFooter" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="118"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wyp-yH-ZU9">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="118"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sR9-jf-FGG" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="80.5" y="0.0" width="253" height="44"/>
+                            <rect key="frame" x="80.5" y="2" width="253" height="44"/>
                             <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="253" id="6Yd-Nt-qxh"/>
@@ -46,7 +45,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4uD-dE-Fca" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="80.5" y="59" width="253" height="44"/>
+                            <rect key="frame" x="80.5" y="61" width="253" height="44"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="4lL-GE-Aef"/>
@@ -54,7 +53,7 @@
                             </constraints>
                             <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                            <state key="normal" title="i will do it later" image="iconNextWhite">
+                            <state key="normal" title="I will do it later" image="iconNextWhite">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <userDefinedRuntimeAttributes>
@@ -71,8 +70,8 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="sR9-jf-FGG" firstAttribute="top" secondItem="Wyp-yH-ZU9" secondAttribute="top" id="4KO-U2-EiC"/>
                         <constraint firstItem="sR9-jf-FGG" firstAttribute="centerX" secondItem="Wyp-yH-ZU9" secondAttribute="centerX" id="YUm-4g-1k2"/>
+                        <constraint firstAttribute="bottom" secondItem="4uD-dE-Fca" secondAttribute="bottom" constant="15" id="duP-JF-qlR"/>
                         <constraint firstItem="4uD-dE-Fca" firstAttribute="centerX" secondItem="Wyp-yH-ZU9" secondAttribute="centerX" id="qiz-V1-6bw"/>
                         <constraint firstItem="4uD-dE-Fca" firstAttribute="top" secondItem="sR9-jf-FGG" secondAttribute="bottom" constant="15" id="wVC-A4-Hhd"/>
                     </constraints>

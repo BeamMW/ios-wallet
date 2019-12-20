@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,7 +27,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="78"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B4s-Ic-dth" id="tiW-dZ-Buv">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="77.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="78"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ndh-8Z-dyd">
@@ -140,9 +137,9 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="Ndh-8Z-dyd" firstAttribute="leading" secondItem="tiW-dZ-Buv" secondAttribute="leading" id="7vF-HX-6sG"/>
-                    <constraint firstAttribute="bottom" secondItem="Ndh-8Z-dyd" secondAttribute="bottom" id="EM0-6I-Jgg"/>
                     <constraint firstItem="Ndh-8Z-dyd" firstAttribute="top" secondItem="tiW-dZ-Buv" secondAttribute="top" id="hSK-7o-eLg"/>
                     <constraint firstAttribute="trailing" secondItem="Ndh-8Z-dyd" secondAttribute="trailing" id="nzN-qf-x0W"/>
+                    <constraint firstAttribute="bottom" secondItem="Ndh-8Z-dyd" secondAttribute="bottom" constant="0.5" id="xao-qR-Si2"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -157,6 +154,7 @@
                 <outlet property="statusY" destination="Ovw-y6-7sg" id="8Kl-XN-mBr"/>
                 <outlet property="transactionCommentLabel" destination="ttz-3a-JJI" id="M0U-de-hk3"/>
                 <outlet property="transactionDateLabel" destination="KCD-Zk-wOD" id="a9O-i5-djw"/>
+                <outlet property="transactionDateWidth" destination="Vim-ro-wOt" id="A6E-fN-gQ9"/>
                 <outlet property="transactionIcon" destination="uPF-36-8IK" id="Pf7-Vk-TKc"/>
                 <outlet property="transactionIconHeight" destination="jjv-yR-ZBa" id="1my-oI-Mbg"/>
                 <outlet property="transactionIconWidth" destination="upj-kD-Oey" id="0fs-P3-bwu"/>

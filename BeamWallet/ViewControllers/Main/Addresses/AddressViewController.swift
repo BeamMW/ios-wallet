@@ -23,8 +23,6 @@ class AddressViewController: BaseTableViewController {
 
     private var addressViewModel:DetailAddressViewModel!
     
-  
-    
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
         self.addressViewModel = DetailAddressViewModel(address: address)
@@ -49,6 +47,15 @@ class AddressViewController: BaseTableViewController {
         title = Localizable.shared.strings.details
         
         subscribeToUpdates()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if isMovingFromParent {
+            addressViewModel.transactionViewModel = nil
+            addressViewModel = nil
+        }
     }
     
     private func subscribeToUpdates() {

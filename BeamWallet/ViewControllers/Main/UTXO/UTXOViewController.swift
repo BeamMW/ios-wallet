@@ -92,6 +92,7 @@ class UTXOViewController: BaseTableViewController {
         checkIsEmpty()
         
         AppModel.sharedManager().addDelegate(self)
+        AppModel.sharedManager().getUTXO()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

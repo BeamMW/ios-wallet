@@ -49,4 +49,16 @@
     return category;
 }
 
++(BMCategory*_Nonnull)fromDict:(NSDictionary*_Nonnull)dict {
+    BMCategory *category = [[BMCategory alloc] init];
+    category.name = [dict objectForKey:@"name"];
+    category.ID = [[dict objectForKey:@"id"] intValue];
+    category.color = [dict objectForKey:@"color"];;
+    return category;
+}
+
+-(NSDictionary*_Nonnull)dict {
+    return @{@"id":[NSString stringWithFormat:@"%d",_ID],@"name":_name,@"color":_color};
+}
+
 @end

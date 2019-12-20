@@ -77,6 +77,8 @@ class WalletProgressCell: BaseCell {
         
         titleLabel.text = Localizable.shared.strings.in_progress.uppercased()
         titleLabel.letterSpacing = 1.5
+        
+        arrowIcon.image = IconDownArrow()
     }
     
     @IBAction func onExpand(sender :UIButton) {

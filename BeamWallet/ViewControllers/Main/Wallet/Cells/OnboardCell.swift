@@ -32,23 +32,19 @@ class OnboardCell: UITableViewCell {
         selectionStyle = .none
         
         receiveButton.setTitle(Localizable.shared.strings.get_coins.lowercased(), for: .normal)
-        verificationButton.setTitle(Localizable.shared.strings.secure_your_phrase, for: .normal)
+        verificationButton.setTitle(Localizable.shared.strings.complete_verification, for: .normal)
 
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
     }
     
     public func setIsSecure(secure: Bool) {
         if secure {
-         //   mainView.backgroundColor = UIColor.main.cyan.withAlphaComponent(0.3)
-            
             detailLabel.text = Localizable.shared.strings.make_wallet_secure_text
             
             receiveButton.isHidden = true
             verificationButton.isHidden = false
         }
-        else {
-         //   mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-           
+        else {           
             receiveButton.isHidden = false
             verificationButton.isHidden = true
                     

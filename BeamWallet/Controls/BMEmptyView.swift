@@ -20,19 +20,27 @@
 import Foundation
 
 class BMEmptyView: UIView {
-    
-    @IBOutlet weak private var textLabel: UILabel!
-    @IBOutlet weak private var imageView: UIImageView!
-    
-    public var text:String? {
-        didSet{
+    @IBOutlet private var textLabel: UILabel!
+    @IBOutlet private var imageView: UIImageView!
+
+    public var text: String? {
+        didSet {
             textLabel.text = text
+            if Settings.sharedManager().isDarkMode {
+                textLabel.textColor = UIColor.main.steel
+            }
         }
     }
-    
-    public var image:UIImage? {
-        didSet{
-            imageView.image = image
+
+    public var image: UIImage? {
+        didSet {
+            if Settings.sharedManager().isDarkMode {
+                imageView.image = image?.withRenderingMode(.alwaysTemplate)
+                imageView.tintColor = UIColor.main.steel
+            }
+            else {
+                imageView.image = image
+            }
         }
     }
 }

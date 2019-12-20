@@ -90,6 +90,8 @@ class WalletAvailableCell: BaseCell {
 
         availableButton.setAttributedTitle(avaiableString, for: .normal)
         maturingButton.setAttributedTitle(maturingString, for: .normal)
+        
+        arrowIcon.image = IconDownArrow()
     }
     
     @IBAction func onExpand(sender :UIButton) {

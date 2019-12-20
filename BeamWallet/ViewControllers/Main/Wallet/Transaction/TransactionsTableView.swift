@@ -50,9 +50,7 @@ class TransactionsTableView: UITableViewController {
         tableView.register([BMEmptyCell.self, WalletTransactionCell.self, WalletTransactionSearchCell.self])
         tableView.keyboardDismissMode = .interactive
         
-        if EnableNewFeatures {
-            tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        }
+        tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
 
         subscribeToChages()
         
@@ -238,7 +236,6 @@ extension TransactionsTableView: UIViewControllerPreviewingDelegate {
             
             let detailVC = TransactionViewController(transaction: viewModel.transactions[indexPath.row], preview: true)
             detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
-            
             previewingContext.sourceRect = cell.frame
             
             return detailVC

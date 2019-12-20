@@ -21,25 +21,30 @@ import UIKit
 
 class SettingsViewController: BaseTableViewController {
     
-    private let viewModel = SettingsViewModel()
+    private var viewModel:SettingsViewModel!
+    private var type:SettingsViewModel.SettingsType!
     
-    override var tableStyle: UITableView.Style {
-        get {
-            return .grouped
-        }
-        set {
-            super.tableStyle = newValue
-        }
+    init(type:SettingsViewModel.SettingsType) {
+        super.init(nibName: nil, bundle: nil)
+        self.type = type
+        self.viewModel = SettingsViewModel(type: type)
     }
     
-  
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
+    
+    override var tableStyle: UITableView.Style {
+        get { return .grouped }
+        set { super.tableStyle = newValue }
+    }  
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
-        title = Localizable.shared.strings.settings
+        title = viewModel.title()
         
         viewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()
@@ -48,19 +53,23 @@ class SettingsViewController: BaseTableViewController {
         tableView.register(SettingsCell.self)
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
-        tableView.tableFooterView = versionView()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.contentInsetAdjustmentBehavior = .never
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
+        
+        if type == .main {
+            tableView.tableFooterView = versionView()
+        }
         
         Settings.sharedManager().addDelegate(self)        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
         tableView.frame = CGRect(x: 0, y: tableView.y - 5, width: self.view.bounds.width, height: tableView.h + 10)
     }
     
@@ -101,80 +110,14 @@ extension SettingsViewController : UITableViewDelegate {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 5 ? 10 : BMTableHeaderTitleView.height
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let item = viewModel.getItem(indexPath: indexPath)
-        
-        if item.category != nil {
-          self.viewModel.openCategory(category: item.category)
-        }
-        else{
-            switch item.id {
-            case 2:
-                self.viewModel.onClickReport()
-            case 1:
-                self.viewModel.onChangePassword(controller: self)
-            case 5:
-                self.viewModel.onChangeNode() { [weak self] (_)  in
-                    self?.tableView.reloadData()
-                }
-            case 6:
-                self.viewModel.onClearData()
-            case 7:
-               self.viewModel.openQRScanner(delegate: self)
-            case 8:
-                self.viewModel.onOpenTgBot()
-            case 10:
-                self.viewModel.openCategory(category: nil)
-            case 11:
-                self.showRateDialog()
-            case 12:
-                self.viewModel.showOwnerKey()
-            case 13:
-                self.viewModel.onLanguage()
-            case 15:
-                self.viewModel.onLockScreen()
-            case 16:
-                self.viewModel.showSeed()
-            case 17:
-                self.viewModel.onLogScreen()
-            case 18:
-                self.viewModel.receiveFaucet()
-            case 19:
-                self.viewModel.makeSecure()
-            case 20:
-                self.viewModel.onClearWallet()
-            default:
-                return
-            }
-        }
+        viewModel.didSelectItem(item: viewModel.getItem(indexPath: indexPath))
     }
-    
 }
 
 extension SettingsViewController : UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.node, bold: false)
-        case 1:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.general_settings, bold: false)
-        case 2:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.privacy, bold: false)
-        case 3:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.categories, bold: false)
-        case 4:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.feedback, bold: false)
-        default:
-            return nil
-        }
-    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.items.count
@@ -198,14 +141,13 @@ extension SettingsViewController : UITableViewDataSource {
 extension SettingsViewController : SettingsCellDelegate {
     
     func onClickSwitch(value: Bool, cell: SettingsCell) {
-        
         if let indexPath = tableView.indexPath(for: cell) {
             
             let item = viewModel.getItem(indexPath: indexPath)
             item.isSwitch = value
             viewModel.items[indexPath.section][indexPath.row] = item
 
-            if value == false && item.id == 3 {
+            if value == false && item.type == .ask_password {
                 let vc = UnlockPasswordPopover(event: .settings)
                 vc.completion = { [weak self]
                     obj in
@@ -224,10 +166,10 @@ extension SettingsViewController : SettingsCellDelegate {
                 vc.modalTransitionStyle = .crossDissolve
                 present(vc, animated: true, completion: nil)
             }
-            else if value == true && item.id == 3 {
+            else if value == true && item.type == .ask_password {
                 Settings.sharedManager().isNeedaskPasswordForSend = true
             }
-            else if value == false && item.id == 4 {
+            else if value == false && item.type == .enable_bio {
                 let vc = UnlockPasswordPopover(event: .settings, allowBiometric: false)
                 vc.completion = {
                     obj in
@@ -246,13 +188,16 @@ extension SettingsViewController : SettingsCellDelegate {
                 vc.modalTransitionStyle = .crossDissolve
                 present(vc, animated: true, completion: nil)
             }
-            else if value == true && item.id == 4 {
+            else if value == true && item.type == .enable_bio {
                 Settings.sharedManager().isEnableBiometric = true
             }
-            else if item.id == 9 {
+            else if item.type == .allow_open_link {
                 Settings.sharedManager().isAllowOpenLink = value
             }
-            else if item.id == 14 {
+            else if item.type == .dark_mode {
+                Settings.sharedManager().isDarkMode = value
+            }
+            else if item.type == .node {
                 Settings.sharedManager().connectToRandomNode = value
                 
                 if(value)
@@ -275,22 +220,33 @@ extension SettingsViewController : SettingsCellDelegate {
     }
 }
 
-extension SettingsViewController : QRScannerViewControllerDelegate {
-   
-    func didScanQRCode(value:String, amount:String?) {
-        if TGBotManager.sharedManager.isValidUserFromJson(value: value) {
-            TGBotManager.sharedManager.startLinking { (_ ) in
-                
-            }
-        }
-    }
-}
 
 extension SettingsViewController : SettingsModelDelegate {
     
     func onChangeLanguage() {
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: true)
-        title = Localizable.shared.strings.settings
-        tableView.tableFooterView = versionView()
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: self.navigationController?.viewControllers.first == self)
+        title = viewModel.title()
+        if type == .main {
+            tableView.tableFooterView = versionView()
+        }
+        viewModel.reload()
+        tableView.reloadData()
+    }
+    
+    func onChangeDarkMode() {
+        UIView.animate(withDuration: 0.5) {
+            self.view.backgroundColor = UIColor.main.marine
+            self.tableView.backgroundColor = UIColor.main.marine
+            self.tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        }
+        
+        let cells = tableView.visibleCells
+        for cell in cells {
+            if let bCell = cell as? SettingsCell {
+                bCell.changeBacgkroundView()
+            }
+        }
+        
+        tableView.reloadData()
     }
 }

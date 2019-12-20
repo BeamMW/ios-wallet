@@ -22,7 +22,7 @@ import Foundation
 import UIKit
 
 extension UIImage {
-    
+        
     func maskWithColor(color: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()

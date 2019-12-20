@@ -22,14 +22,14 @@ import UIKit
 class BMSearchAddressCell: BaseCell {
     weak var delegate: BMCellProtocol?
     
-    @IBOutlet private var textField: BMTextView!
-    @IBOutlet private var nameLabel: UILabel!
-    @IBOutlet private var errorLabel: UILabel!
-    @IBOutlet private var rightButton: UIButton!
+    @IBOutlet private weak var textField: BMTextView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var errorLabel: UILabel!
+    @IBOutlet private weak var rightButton: UIButton!
     
-    @IBOutlet private var contactView: UIStackView!
-    @IBOutlet private var contactName: UILabel!
-    @IBOutlet private var contactCategory: UILabel!
+    @IBOutlet private weak var contactView: UIStackView!
+    @IBOutlet private weak var contactName: UILabel!
+    @IBOutlet private weak var contactCategory: UILabel!
     
     public var validateAddress = false
     
@@ -48,6 +48,10 @@ class BMSearchAddressCell: BaseCell {
         textField.allowsEditingTextAttributes = true
         textField.defaultOffset = 4
         textField.lineColor = UIColor.white.withAlphaComponent(0.1)
+        
+        if Settings.sharedManager().isDarkMode {
+            nameLabel.textColor = UIColor.main.steel;
+        }
         
         contentView.backgroundColor = UIColor.main.marineThree
     }

@@ -1,5 +1,9 @@
 "restore_wallet_title" = "Återställ plånbok";
+<<<<<<< HEAD
 "restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
+=======
+"restore_wallet_info" = "Du försöker nu återställa en befintlig Beam-plånbok. Notera att om du använder din plånbok på en annan enhet kommer beloppet vara uppdaterat men transaktionshistorik och adresser kommer hållas separat per enhet.";
+>>>>>>> sprint_4
 "no_space_title" = "Otillräckligt lagringsutrymme";
 "no_space_info" = "Åtminstone 200 MB ledigt utrymme behövs på enheten för att återställa plånboken";
 "beam_title" = "Skalbar konfidentiell kryptovaluta";
@@ -51,8 +55,13 @@
 "no_internet" = "Internetåtkomst saknas";
 "wallet_not_created" = "Plånbok ej skapad";
 "wallet_not_opened" = "Plånbok kan ej öppnas";
+<<<<<<< HEAD
 "restor_wallet_warning" = "Restoring your wallet may take a while. Please wait for synchronization to finish - do no close nor minimize the application.";
 "restor_wallet_info" = "Only the wallet balance (UTXOs) will be restored. Your transaction info is always private and never kept on the blockchain.";
+=======
+"restor_wallet_warning" = "Det kan ta en stund att återställa din plånbok. Vänta tills synkroniseringen är klar - stäng inte och minimera inte applikationen.";
+"restor_wallet_info" = "Endast plånbokens saldo(UTXO) kommer återställas. Din transaktionsinformation är alltid privata och lagras aldrig i block-kedjan.";
+>>>>>>> sprint_4
 "receive" = "Ta emot";
 "send" = "Skicka";
 "available" = "Tillgängligt";
@@ -119,6 +128,8 @@
 "delete_address" = "Ta bort adress";
 "delete_address_transaction" = "Ta bort adress och relaterade transaktioner";
 "delete_address_only" = "Ta bort endast adress";
+"delete_address_text" = "Är du säker på att du vill ta bort denna adress från din plånbok?";
+"delete_contact_text" = "Är du säker på att du vill ta bort denna kontakt från din plånbok?";
 "category" = "Tag";
 "in_24_hours" = "Inom 24 timmar";
 "never" = "Aldrig";
@@ -312,7 +323,7 @@
 "id" = "ID";
 "date_time" = "Datum | tid";
 "utxo_history" = "UTXO-historik";
-"delete_all_text" = "Är du säker på att du vill ta bort all (str) från din plånbok?";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" = "Är du säker på att du vill ta bort \"(str)\" tag?";
 "canot_connect_node" = "Kunde inte ansluta till nod";
 "buy_beam_value" = "Skicka (value) till ovan (name) adress för att slutföra transaktionen"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -359,7 +370,11 @@
 "default" = "Standard";
 "my_active" = "Min aktiva"; // addresses
 "my_expired" = "Mina utgångna"; // addresses
+<<<<<<< HEAD
 "general_settings" = "General";
+=======
+"general_settings" = "Generell";
+>>>>>>> sprint_4
 "unavailable" = "Otillgängligt";
 "in_progress_out" = "Pågår(utgående)";
 "in_progress_in" = "Pågår(inkommande)";
@@ -384,9 +399,9 @@
 "transactions_empty" = "Din transaktions-lista är tom";
 "transactions_empty_progress" = "Du har inga aktiva transaktioner";
 "automatic_restore_title" = "Rekommenderad återställning";
-"automatic_restore_text" = "Beam Wallet will download a snapshot of the blockchain and restore your funds on the device";
+"automatic_restore_text" = "Beam-plånboken kommer att ladda ner en ögonblicksbild av block-kedjan och återställer ditt saldo på enheten";
 "manual_restore_title" = "Återställ med trovärdig nod";
-"manual_restore_text" = "Beam Wallet will connect to specific trusted node (configured with your owner key) and the node will restore your funds";
+"manual_restore_text" = "Beam-Plånboken kommer att ansluta till en specifik nod (konfigurerad med ägar-nyckeln) och noden kommer att återställa ditt saldo";
 "paste_owner_key" = "Klistra in denna kod i Beam-plånboken på din dator för att fortsätta återställningen från noden.";
 "after_paste_owner_key" = "När du har klistrat in koden, kör din nod på datorn och klicka \"nästa\" på din mobila app.";
 "enter_trusted_node" = "Mata in pålitlig nod-adress";
@@ -422,7 +437,11 @@
 "restore_create_text" = "Om du återställer en plånbok så kommer all transaktionshistorik och adresser att förloras.";
 "proceed" = "Fortsätt";
 "info_restore_title" = "Kör inte två plånböcker sammtidigt som har blivit initierade från samma seed phrase";
+<<<<<<< HEAD
 "info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
+=======
+"info_restore_text" = "Om du kör två plånböcker med samma seed, synkroniseras inte saldona. För att hålla saldona synkroniserade använder du din egen betrodda nod konfigurerad med din ägarnyckel. Observera också att transaktionshistoriken inte synkroniseras mellan plånböcker i alla fall.";
+>>>>>>> sprint_4
 "crash_title" = "Beam-plånboken krashade oväntat";
 "crash_message" = "Skulle du godkänna att rapportera din begränsade mängd information till oss? Insamlandet av krash-informationen skulle möjliggöra att vi upptäcker fixar och buggar mycket snabbare. Detta är endast en krash-relaterad rapport, vi kommer inte att samla in några av dina data senare.";
 "crash_negative" = "Nej tack";
@@ -439,12 +458,21 @@
 "lock_screen" = "Lås skärm";
 "colour" = "Färg";
 "show_owner_key_auth_1" = "Om du installerar ägarnyckeln på en betrodd nod, tillåter noden att övervaka all UTXO som skickas till denna plånbok och plånböcker som genereras från samma seed phrase. Du måste ange ditt lösenord för att se Ägarnyckeln.";
+<<<<<<< HEAD
 "show_owner_key_auth_2" = "Deploying the Owner Key at a trusted node will allow the node to monitor all UTXOs sent to this wallet and any wallet generated from your seed phrase. You must pass 2-step verification (submit a password and use Touch ID) to see your Owner Key.";
 "show_owner_key_auth_3" = "Deploying the Owner Key at a trusted node will allow the node to monitor all UTXOs sent to this wallet and any wallet generated from your seed phrase. You must pass 2-step verification (submit a password and use Face ID) to see your Owner Key.";
 "use_touch_id" = "Use your Touch ID";
 "use_face_id" = "Use your Face ID";
 "enter_your_password" = "Enter your password";
 "share_details" = "Share details";
+=======
+"show_owner_key_auth_2" = "Om du installerar ägarnyckeln på en betrodd nod, tillåter du noden att övervaka all UTXO som skickas till denna plånbok och plånböcker som genereras från samma seed phrase. Du måste klara 2-stegsverifieringen (ange lösenord samt använda Touch ID) för att se Ägarnyckeln.";
+"show_owner_key_auth_3" = "Om du installerar ägarnyckeln på en betrodd nod, tillåter du noden att övervaka all UTXO som skickas till denna plånbok och plånböcker som genereras från samma seed phrase. Du måste klara 2-stegsverifieringen (ange lösenord samt använda Face ID) för att se Ägarnyckeln.";
+"use_touch_id" = "Använd ditt Touch ID";
+"use_face_id" = "Använd ditt Face ID";
+"enter_your_password" = "Ange ditt lösenord";
+"share_details" = "Dela Detaljer";
+>>>>>>> sprint_4
 "faucet_title" = "Börja använda din plånbok";
 "faucet_text" = "Vill du se plånboken \"in action\"? Tillgodose en liten mängd Beam från community-fauceten.";
 "faucet_ok" = "Ja, tack";
@@ -455,7 +483,11 @@
 "all_set" = "Du är klar";
 "wallet_is_secure" = "Din plånbok är säker nu! Var lugn när det gäller funktionen.";
 "make_wallet_secure_title" = "Gör din plånbok säker";
+<<<<<<< HEAD
 "make_wallet_secure_text" = "Vänligen öka plånbokssäkerheten genom att spara din seed phrase så att du inte blir av med dina medel.";
+=======
+"make_wallet_secure_text" = "Skriv ner och validera din seed phrase så att du alltid kan återställa dina medel.";
+>>>>>>> sprint_4
 "complete_verification" = "Komplettera verifieringen";
 "yes_please" = "ja, tack";
 "i_will_later" = "jag gör det senare";
@@ -467,6 +499,7 @@
 "clear_local_data" = "Rensa lokal plånboksdata";
 "get_beam_faucet" = "Skaffa Beam från Community-fauceten";
 "save_wallet_logs" = "Spara plånboksloggar";
+<<<<<<< HEAD
 "all_time" = "For all time";
 "last_5_days" = "Last 5 days";
 "last_15_days" = "Last 15 days";
@@ -474,6 +507,15 @@
 "clear_wallet" = "Remove current wallet";
 "clear_wallet_text" = "All data will be erased. Make sure you’ve saved your seed phrase if you want to restore this wallet later on! Are you sure you want to remove your wallet?";
 "clear_wallet_password" = "Enter your password to remove your wallet";
+=======
+"all_time" = "För all tid";
+"last_5_days" = "Senaste 5 dagarna";
+"last_15_days" = "Senaste 15 dagarna";
+"last_30_days" = "Senaste 30 dagarna";
+"clear_wallet" = "Ta bort aktuell plånbok";
+"clear_wallet_text" = "All data kommer att raderas. Säkerställ att du har sparat ditt seed phrase om du vill återställa din plånbok vid ett senare tillfälle. Är du säker på att du vill ta bort plånboken?";
+"clear_wallet_password" = "Ange ditt lösenord för att ta bort plånboken";
+>>>>>>> sprint_4
 "change_node_text_1" = "Använd Ansikts-ID eller mata in ditt lösenord för att ändra nod-inställningar";
 "change_node_text_2" = "Använd Touch-ID eller mata in ditt lösenord för att ändra nod-inställningar";
 "change_node_text_3" = "Ange ditt lösenord för att ändra nod-inställningar";
@@ -482,4 +524,23 @@
 "change_settings_text_3" = "Ange ditt lösenord för att ändra inställningar";
 "paste" = "Klistra in";
 "status" = "Status"; // transaction status
+<<<<<<< HEAD
 "remove_wallet" = "Remove wallet";
+=======
+"remove_wallet" = "Ta bort plånbok";
+"export_wallet_data" = "Exportera plånbokens data";
+"import_wallet_data" = "Importera plånboksdata";
+"utilities" = "Verktyg";
+"incorrect_file_title" = "Fel filtyp";
+"incorrect_file_text" = "Filen du försöker importera till Beam-plånboken passar inte. Vänligen välj en annan fil och försök igen.";
+"import_data_title" = "Importera data";
+"import_data_text" = "Är du säker på att du vill importera data till Beam-plånboken? All nuvarande data kommer att ersättas med det som importeras.";
+"import_data_text_2" = "Endast datat från den exporterade plånboken med samma seed phrase kan bli importerat.";
+"import" = "Importera";
+"export_data" = "Exportera data";
+"till_block" = "till block-höjd";
+"since" = "since"; // example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";
+>>>>>>> sprint_4

@@ -2,7 +2,7 @@
 "restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 "no_space_title" = "พื้นที่เก็บข้อมูลไม่เพียงพอ";
 "no_space_info" = "ต้องมีพื้นที่อย่างน้อย 200 MB ในอุปกรณ์ในการกู้กระเป๋า";
-"beam_title" = "คริปโตเคอเรนซี่ที่ปลอดภัยและยืดหยุ่น";
+"beam_title" = "คริปโตที่วางใจได้และไร้ขีดจำกัด";
 "create_new_wallet" = "สร้างกระเป๋าใหม่";
 "enter_password_title" = "กรุณากรอกรหัสผ่านเพื่อเปิดกระเป๋า";
 "empty_password" = "รหัสผ่านไม่สามารถปล่อยว่างได้";
@@ -51,8 +51,13 @@
 "no_internet" = "ไม่​มี​การเชื่อม​ต่อ​อินเตอร์​เน็ต";
 "wallet_not_created" = "กระเป๋าไม่ถูกสร้าง";
 "wallet_not_opened" = "กระเป๋าไม่สามารถถูกเปิดได้";
+<<<<<<< HEAD
 "restor_wallet_warning" = "Restoring your wallet may take a while. Please wait for synchronization to finish - do no close nor minimize the application.";
 "restor_wallet_info" = "Only the wallet balance (UTXOs) will be restored. Your transaction info is always private and never kept on the blockchain.";
+=======
+"restor_wallet_warning" = "การกู้คืนกระเป๋าของคุณอาจจะใช้เวลาซักระยะ กรุณารอจนกว่าจะเสร็จสิ้น - อย่าปิดหรือลดหน้าต่างแอพลิเคชั่น";
+"restor_wallet_info" = "มีแค่ยอดคงเหลือของกระเป๋า (UTXO) เท่านั้นที่จะสามารถกู้คืนได้ รายการธุรกรรมและรายการที่อยู่จะเก็บอยู่บนอุปกรณ์ และจะไม่ถูกนำไปบันทึกบนบล็อกเชน";
+>>>>>>> sprint_4
 "receive" = "รับ";
 "send" = "โอน";
 "available" = "พร้อมใช้งาน";
@@ -63,7 +68,7 @@
 "sending_address" = "กำลังส่งที่อยู่";
 "receiving_address" = "ที่อยู่ที่ใช้รับโอน";
 "transaction_fee" = "ค่าธรรมเนียมธุรกรรม";
-"transaction_id" = "หมายเลขธุรกรรม";
+"transaction_id" = "ID ของธุรกรรม";
 "kernel_id" = "Kernel ID";
 "comment" = "คอมเมนต์";
 "failure_reason" = "รายละเอียดของข้อผิดพลาด";
@@ -119,6 +124,8 @@
 "delete_address" = "ลบที่อยู่";
 "delete_address_transaction" = "ลบที่อยู่และธุรกรรมที่เกี่ยวข้อง";
 "delete_address_only" = "ลบที่อยู่เท่านั้น";
+"delete_address_text" = "คุณแน่ใจหรือไม่ว่าต้องการลบที่อยู่นี้ออกจากกระเป๋าของคุณ?";
+"delete_contact_text" = "คุณแน่ใจหรือไม่ว่าต้องการลบรายชื่อผู้ติดต่อนี้ออกจากกระเป๋าของคุณ?";
 "category" = "แท็ก";
 "in_24_hours" = "ภายใน 24 ชั่วโมง";
 "never" = "ไม่มี";
@@ -261,7 +268,7 @@
 "you_send" = "คุณโอน";
 "you_get" = "คุณจะได้รับ";
 "recipient_address" = "ที่อยู่ของผู้รับ";
-"refund_address" = "ที่อยู่ที่คืนเงิน";
+"refund_address" = "ที่อยู่ในการชำระคืน";
 "min_amount" = "จำนวนขั้นต่ำคือ";
 "beam_to_receive" = "จำนวน Beam ที่จะรับ";
 "beam_recepient_auto" = "ที่อยู่ปลายทางที่จะรับ Beam (สร้างอัตโนมัติ)";
@@ -312,7 +319,7 @@
 "id" = "ID";
 "date_time" = "วันที่  | เวลา";
 "utxo_history" = "ประวัติ UTXO";
-"delete_all_text" = "คุณแน่ใจที่จะลบ (str) ทั้งหมดจากกระเป๋าของคุณ";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" = "คุณแน่ใจที่จะลบแท็ก “(str)”?";
 "canot_connect_node" = "ไม่สามารถเชื่อมต่อ Node ได้";
 "buy_beam_value" = "โอน (value) ไปยังที่อยู่ (name) ด้านบนเพื่อดำเนินการธุรกรรม"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -359,7 +366,11 @@
 "default" = "ค่าเริ่มต้น";
 "my_active" = "ยังคงใช้งานอยู่"; // addresses
 "my_expired" = "หมดอายุแล้ว"; // addresses
+<<<<<<< HEAD
 "general_settings" = "General";
+=======
+"general_settings" = "ทั่วไป";
+>>>>>>> sprint_4
 "unavailable" = "ไม่สามารถใช้ได้";
 "in_progress_out" = "กำลังดำเนินการ\n(โอนออก)";
 "in_progress_in" = "กำลังดำเนินการ\n(รับโอน)";
@@ -416,13 +427,17 @@
 "NSPhotoLibraryUsageDescription" = "อนุญาตให้เข้าถึงแกลอรี่เพื่อเลือก QR Code";
 "NSFaceIDUsageDescription" = "แอปนี้จำเป็นจะต้องใช้การอนุญาตการใช้งาน Face ID สำหรับการใช้งานสแกนใบหน้า";
 "NSCameraUsageDescription" = "จำเป็นจะต้องมีกล้องสำหรับการสแกน QR Code";
-"search_transactions" = "ค้นหาโดยหมายเลขธุรกรรม, คอมเมนต์, ที่อยู่หรือรายชื่อผู้ติดต่อ";
+"search_transactions" = "ค้นหาโดย ID ของธุรกรรม, คอมเมนต์, ที่อยู่หรือรายชื่อผู้ติดต่อ";
 "random_node" = "เชื่อมต่อไปยัง Node อื่นแบบสุ่ม";
 "restore_create_title" = "กู้กระเป๋าหรือสร้างกระเป๋าใหม่";
 "restore_create_text" = "หากคุณกู้กระเป๋าของคุณจะส่งผลให้ประวัติการทำธุรกรรมและที่อยู่นั้นหายไป";
 "proceed" = "ดำเนินการ";
 "info_restore_title" = "อย่าใช้กลุ่มคำลับในกระเป๋าบนหลายๆอุปกรณ์";
+<<<<<<< HEAD
 "info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
+=======
+"info_restore_text" = "หากคุณทำการใช้งาน 2 กระเป๋าที่มีกลุ่มคำลับเดียวกัน ยอดคงเหลือทั้ง 2 กระเป๋าจะไม่ตรงกัน หากต้องการทำให้ตรงกันคุณจะต้องเชื่อมต่อไปยัง Trusted Node โดยใช้ Owner Key ของคุณ และโปรดเข้าใจว่าข้อมูลธุรกรรมทั้ง 2 กระเป๋ายังไงก็แล้วแต่จะไม่ตรงกันอยู่ดี";
+>>>>>>> sprint_4
 "crash_title" = "กระเป๋า Beam มีปัญหาที่ไม่สามารถระบุได้";
 "crash_message" = "คุณตกลงที่จะรายงานข้อมูลเล็กน้อยกับทางเราหรือไม่? ข้อมูลความผิดพลาดนี้จะทำให้ทางเราสามารถหาปัญหาและแก้ไขได้เร็วยิ่งขึ้น เราจะเก็บเฉพาะข้อมูลที่เกี่ยวกับความผิดพลาดเท่านั้น เราจะไม่เก็บข้อมูลอื่นๆในภายหลัง";
 "crash_negative" = "ไม่ ขอบคุณ";
@@ -446,31 +461,51 @@
 "enter_your_password" = "ใส่รหัสผ่านของคุณ";
 "share_details" = "แชร์รายละเอียด";
 "faucet_title" = "เริ่มต้นใช้งานกระเป๋า";
+<<<<<<< HEAD
 "faucet_text" = "คุณต้องการดูว่ากระเป๋าทำงานอย่างไรไหม? คุณสามารถรับเหรียญ Beam จำนวนเล็กน้อยเพื่อมาทดสอบได้ที่ Community Faucet";
+=======
+"faucet_text" = "หากต้องการทดลองใช้งานจริง คุณสามารถรับเหรียญ Beam จำนวนเล็กน้อยเพื่อมาทดสอบได้ที่ Community Faucet";
+>>>>>>> sprint_4
 "faucet_ok" = "ใช่ กรุณาด้วย";
 "faucet_no" = "ไม่เป็นไร ขอบคุณ";
 "show_seed_phrase" = "แสดงกลุ่มคำลับ";
 "increase_security" = "เพิ่มความปลอดภัย";
+<<<<<<< HEAD
 "increase_security_text" = "If you ever lose your device, you will need this phrase to recover your wallet!\nNever type your seed phrase in keychains or password managers.\nNever save it in your local or remote folders in any form.";
 "all_set" = "You are all set";
 "wallet_is_secure" = "Your wallet is secure now! Be calm in it’s feature use.";
 "make_wallet_secure_title" = "Make your wallet secure";
 "make_wallet_secure_text" = "Please increase wallet security by saving your seed phrase so you won’t loose your funds.";
 "complete_verification" = "Complete verification";
+=======
+"increase_security_text" = "หากคุณทำอุปกรณ์สูญหาย คุณจะต้องใช้กลุ่มคำเหล่านี้ในการกู้กระเป๋าของคุณ!\nอย่าเก็บกลุ่มคำลับเหล่านี้ไว้ในพวงกุญแจหรือโปรแกรมจัดการรหัสผ่าน\nอย่าบันทึกไว้ในโฟลเดอร์ต่างๆหรือที่เก็บแบบออนไลน์";
+"all_set" = "คุณทำทุกอย่างเสร็จเรียบร้อย";
+"wallet_is_secure" = "กระเป๋าของคุณปลอดภัยแล้ว! ไม่ต้องห่วงในการใช้งานในอนาคต";
+"make_wallet_secure_title" = "ทำให้กระเป๋าของคุณมีความปลอดภัย";
+"make_wallet_secure_text" = "จดบันทึกและตรวจสอบกลุ่มคำลับของคุณเพื่อจะทำให้คุณสามารถกู้ทรัพย์สินได้เสมอ";
+"complete_verification" = "การตรวจสอบเสร็จสิ้น";
+>>>>>>> sprint_4
 "yes_please" = "ใช่ กรุณาด้วย";
 "i_will_later" = "ฉันต้องการทำที่หลัง";
 "create_password" = "สร้างรหัสผ่าน";
 "get_coins" = "รับเหรียญ";
 "secure_your_phrase" = "ปกป้องกลุ่มคำของคุณ";
 "privacy" = "ความเป็นส่วนตัว";
+<<<<<<< HEAD
 "complete_wallet_verification" = "Complete wallet verification";
 "clear_local_data" = "Clear local wallet data";
 "get_beam_faucet" = "Get Beams from Beam Community Faucet";
+=======
+"complete_wallet_verification" = "การตรวจสอบกระเป๋าเสร็จสิ้น";
+"clear_local_data" = "ล้างข้อมูลกระเป๋าในอุปกรณ์นี้";
+"get_beam_faucet" = "รับ Beam จาก Faucet โดยชุมชนของ Beam";
+>>>>>>> sprint_4
 "save_wallet_logs" = "เซฟ Log ของกระเป๋า";
 "all_time" = "ทุกช่วงเวลา";
 "last_5_days" = "5 วันที่แล้ว";
 "last_15_days" = "15 วันที่แล้ว";
 "last_30_days" = "30 วันที่แล้ว";
+<<<<<<< HEAD
 "clear_wallet" = "Remove current wallet";
 "clear_wallet_text" = "All data will be erased. Make sure you’ve saved your seed phrase if you want to restore this wallet later on! Are you sure you want to remove your wallet?";
 "clear_wallet_password" = "Enter your password to remove your wallet";
@@ -483,3 +518,32 @@
 "paste" = "วาง";
 "status" = "สถานะ"; // transaction status
 "remove_wallet" = "Remove wallet";
+=======
+"clear_wallet" = "ลบกระเป๋าปัจจุบัน";
+"clear_wallet_text" = "ข้อมูลทั้งหมดจะถูกลบทิ้ง กรุณาแน่ใจว่าคุณได้ทำการบันทึกกลุ่มคำลับไว้แล้วเผื่อไว้ในกรณีที่คุณต้องการกู้คืนกระเป๋านี้อีกครั้ง!\nคุณแน่ใจที่จะทำการลบกระเป๋านี้?";
+"clear_wallet_password" = "กรุณากรอกรหัสผ่านเพื่อทำการลบกระเป๋าของคุณ";
+"change_node_text_1" = "ใช้ Face ID หรือใส่รหัสผ่านเพื่อแก้การตั้งค่า Node";
+"change_node_text_2" = "ใช้ Touch ID หรือใส่รหัสผ่านเพื่อแก้การตั้งค่า Node";
+"change_node_text_3" = "ใส่รหัสผ่านของคุณเพื่อแก้การตั้งค่า Node";
+"change_settings_text_1" = "ใช้ Face ID หรือใส่รหัสผ่านเพื่อแก้การตั้งค่า";
+"change_settings_text_2" = "ใช้ Touch ID หรือใส่รหัสผ่านเพื่อแก้การตั้งค่า";
+"change_settings_text_3" = "ใส่รหัสผ่านของคุณเพื่อแก้การตั้งค่า";
+"paste" = "วาง";
+"status" = "สถานะ"; // transaction status
+"remove_wallet" = "ลบกระเป๋า";
+"export_wallet_data" = "ส่งออกข้อมูลกระเป๋า";
+"import_wallet_data" = "นำเข้าข้อมูลกระเป๋า";
+"utilities" = "ยูทิลิตี้";
+"incorrect_file_title" = "ไฟล์ไม่ถูกต้อง";
+"incorrect_file_text" = "ไฟล์ที่คุณกำลังนำเข้านั้นไม่ถูกต้อง กรุณาเลือกไฟล์อื่นและลองอีกครั้ง";
+"import_data_title" = "นำเข้าข้อมูล";
+"import_data_text" = "คุณแน่ใจที่จะนำเข้าข้อมูลเข้ากระเป๋านี้? ข้อมูลในกระเป๋าปัจจุบันจะถูกแทนที่ด้วยข้อมูลที่นำเข้าทั้งหมด";
+"import_data_text_2" = "ข้อมูลกระเป๋าที่จะนำเข้าจะต้องมีกลุ่มคำลับเหมือนกันถึงจะสามารถนำเข้าได้";
+"import" = "นําเข้า";
+"export_data" = "ส่งออกข้อมูล";
+"till_block" = "กระทั่ง Block Height";
+"since" = "since"; // example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";
+>>>>>>> sprint_4

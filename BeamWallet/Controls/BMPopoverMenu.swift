@@ -22,27 +22,38 @@ import UIKit
 extension BMPopoverMenu {
     public static func show(menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel: @escaping () -> Void) {
         if let rootVC = UIApplication.getTopMostViewController() {
+            rootVC.addBlur()
+
             let generator = UIImpactFeedbackGenerator(style: .medium)
             generator.impactOccurred()
             
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
             for item in menuArray {
-                if item.action == .delete_transaction {
+                if item.action == .delete_transaction || item.action == .delete_address
+                || item.action == .delete_address_transactions{
                     alert.addAction(UIAlertAction(title: item.name, style: .destructive, handler: { _ in
+                        rootVC.removeBlur()
                         done(item)
                     }))
                 }
                 else {
                     alert.addAction(UIAlertAction(title: item.name, style: .default, handler: { _ in
+                        rootVC.removeBlur()
                         done(item)
                     }))
                 }
             }
             
-            alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: .cancel, handler: { _ in
-                cancel()
-            }))
+            alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: Settings.sharedManager().isDarkMode ? .default : .cancel, handler: { _ in
+                                   rootVC.removeBlur()
+                                   cancel()
+                               }))
+            
+            
+            if(Settings.sharedManager().isDarkMode) {
+                alert.setBackgroundColor(color: UIColor.black)
+            }
             
             rootVC.present(alert, animated: true)
         }

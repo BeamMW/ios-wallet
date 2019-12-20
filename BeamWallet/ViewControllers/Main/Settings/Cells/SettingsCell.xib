@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -61,6 +60,13 @@
                                     <constraint firstAttribute="width" constant="8" id="cSb-16-lar"/>
                                 </constraints>
                             </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="f4b-bo-ylv">
+                                <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="DtZ-u7-DyN"/>
+                                    <constraint firstAttribute="width" constant="20" id="n8g-Ms-Bfz"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
@@ -70,9 +76,11 @@
                             <constraint firstItem="L9T-j8-Tlp" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" constant="15" id="985-aK-EJa"/>
                             <constraint firstItem="I27-EI-w1l" firstAttribute="trailing" secondItem="8vt-rz-tFN" secondAttribute="trailing" constant="15" id="E9a-rE-Bpx"/>
                             <constraint firstAttribute="trailing" secondItem="I27-EI-w1l" secondAttribute="trailing" constant="11" id="JwD-MB-2fg"/>
+                            <constraint firstItem="f4b-bo-ylv" firstAttribute="centerY" secondItem="eLd-yJ-xMq" secondAttribute="centerY" id="TlL-1f-3S2"/>
                             <constraint firstItem="L9T-j8-Tlp" firstAttribute="top" secondItem="eLd-yJ-xMq" secondAttribute="top" constant="15" id="ZNc-O0-rLl"/>
                             <constraint firstAttribute="bottom" secondItem="8vt-rz-tFN" secondAttribute="bottom" constant="15" id="aWV-Gh-fYm"/>
                             <constraint firstAttribute="trailing" secondItem="eOW-a8-ams" secondAttribute="trailing" constant="15" id="u88-7v-oxI"/>
+                            <constraint firstItem="f4b-bo-ylv" firstAttribute="leading" secondItem="eLd-yJ-xMq" secondAttribute="leading" constant="15" id="uqP-Y2-fgD"/>
                             <constraint firstItem="I27-EI-w1l" firstAttribute="trailing" secondItem="L9T-j8-Tlp" secondAttribute="trailing" constant="65" id="wS1-nx-5kR"/>
                             <constraint firstAttribute="bottom" secondItem="L9T-j8-Tlp" secondAttribute="bottom" constant="14.5" id="wzQ-co-3uv"/>
                         </constraints>
@@ -91,9 +99,11 @@
             <connections>
                 <outlet property="arrowView" destination="I27-EI-w1l" id="yw2-PF-EUC"/>
                 <outlet property="detailLabel" destination="8vt-rz-tFN" id="7h0-Z4-9eo"/>
+                <outlet property="iconView" destination="f4b-bo-ylv" id="Mk3-WR-eIQ"/>
                 <outlet property="mainView" destination="eLd-yJ-xMq" id="T0d-ye-Z2J"/>
                 <outlet property="switchView" destination="eOW-a8-ams" id="wm8-5O-fbZ"/>
                 <outlet property="titleLabel" destination="L9T-j8-Tlp" id="Dwc-ir-vdD"/>
+                <outlet property="titleLeftOffset" destination="985-aK-EJa" id="2Ns-YF-fBY"/>
                 <outlet property="titleXOffset" destination="E9a-rE-Bpx" id="WCh-tR-oIu"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="48.575712143928037"/>

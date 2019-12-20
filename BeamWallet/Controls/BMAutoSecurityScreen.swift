@@ -43,7 +43,7 @@ public class BMAutoSecurityScreen {
     }
 
     @objc private func addBlur() {
-        if !BiometricAuthorization.shared.isAuthorizationProccess, EnableNewFeatures {
+        if !BiometricAuthorization.shared.isAuthorizationProccess {
             createBlurEffect()
         }
     }

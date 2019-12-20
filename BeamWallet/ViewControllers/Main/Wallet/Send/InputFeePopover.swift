@@ -23,23 +23,30 @@ class InputFeePopover: BaseViewController {
 
     public var completion : ((String) -> Void)?
     public var mainFee:String!
-    public var hideBlur = false
 
     @IBOutlet weak private var feeField: BMField!
     @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var visualView: UIVisualEffectView!
     @IBOutlet weak private var grothTitleLabelY: NSLayoutConstraint!
-
+    @IBOutlet weak private var mainView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        if let image = appDelegate.window?.snapshot() {
+            let blured = image.blurredImage(withRadius: 10, iterations: 5, tintColor: UIColor.main.blurBackground)
+            let imageView = UIImageView(frame: UIScreen.main.bounds)
+            imageView.image = blured
+            view.insertSubview(imageView, at: 0)
+        }
+        
+        mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
+        
         titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
-
-        view.backgroundColor = UIColor.clear
-        view.isOpaque = false
-       
-        if(hideBlur) {
-            visualView.isHidden = true
+        if Settings.sharedManager().isDarkMode {
+            titleLabel.textColor = UIColor.main.steel
+            mainView.backgroundColor = UIColor.main.twilightBlue2
         }
         
         feeField.text = mainFee
@@ -49,13 +56,6 @@ class InputFeePopover: BaseViewController {
         hideKeyboardWhenTappedAround()
     }
     
-    public func showBlur() {
-        visualView.isHidden = false
-        view.backgroundColor = UIColor.clear
-        view.isOpaque = false
-    }
-
-
     @IBAction func onSave(sender :UIButton) {
         feeField.resignFirstResponder()
         

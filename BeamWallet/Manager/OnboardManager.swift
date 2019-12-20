@@ -20,7 +20,7 @@
 import UIKit
 
 class OnboardManager: NSObject {
-    public static let minAmountToSecure: Double = 100.0
+    public static let minAmountToSecure: Double = 10.0
     
     private let faucetKey = "faucetKey"
     private let isSkipedSeedKey = "isSkipedSeedKey"
@@ -42,9 +42,6 @@ class OnboardManager: NSObject {
     // MARK: Faucet
     
     public func canReceiveFaucet() -> Bool {
-        if !EnableNewFeatures {
-            return false
-        }
         let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
         let isBalanceZero = (AppModel.sharedManager().walletStatus?.available ?? 0) == 0
         return !isInProgress && isBalanceZero && !isCloseFaucet
@@ -103,16 +100,10 @@ class OnboardManager: NSObject {
     }
     
     public func getSeed() -> String? {
-        if !EnableNewFeatures {
-            return nil
-        }
         return KeychainManager.getSeed()
     }
     
     public func isSkipedSeed() -> Bool {
-        if !EnableNewFeatures {
-            return false
-        }
         return UserDefaults.standard.bool(forKey: isSkipedSeedKey)
     }
     
@@ -124,10 +115,7 @@ class OnboardManager: NSObject {
     }
     
     public func canMakeSecure() -> Bool {
-        if !EnableNewFeatures {
-            return false
-        }
-        else if let available = AppModel.sharedManager().walletStatus?.realAmount {
+        if let available = AppModel.sharedManager().walletStatus?.realAmount {
             if available >= OnboardManager.minAmountToSecure, isSkipedSeed(), !isCloseSecure {
                 return true
             }

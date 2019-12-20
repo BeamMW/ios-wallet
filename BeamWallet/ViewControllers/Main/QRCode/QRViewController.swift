@@ -41,14 +41,12 @@ class QRViewController: BaseViewController {
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var amountTitleLabel: UILabel!
 
-    @IBOutlet weak private var visualEffectView: UIVisualEffectView!
-
     @IBOutlet weak private var codeConentView: UIView!
     @IBOutlet weak private var codeView: QRCodeView!
     @IBOutlet weak private var shareAddress: UIButton!
     
-    @IBOutlet private var scrollView: UIScrollView!
-    @IBOutlet private var mainView: BaseView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var mainView: BaseView!
 
     init(address:BMAddress, amount:String?) {
         super.init(nibName: nil, bundle: nil)
@@ -63,9 +61,17 @@ class QRViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+                
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
-        view.backgroundColor = UIColor.clear
-        view.isOpaque = false
+        if let image = appDelegate.window?.snapshot() {
+            let blured = image.blurredImage(withRadius: 10, iterations: 5, tintColor: UIColor.main.blurBackground)
+            let imageView = UIImageView(frame: UIScreen.main.bounds)
+            imageView.image = blured
+            view.insertSubview(imageView, at: 0)
+        }
+        
+        mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
         
         amountTitleLabel.text = Localizable.shared.strings.requested_amount.uppercased()
         
@@ -76,8 +82,8 @@ class QRViewController: BaseViewController {
         
         if address.categories.count > 0
         {
-            categoryLabel.isHidden = false
             categoryLabel.attributedText = address.categoriesName()
+            categoryLabel.isHidden = address.categoriesName().length > 0 ? false : true
         }
         else{
             categoryLabel.isHidden = true
@@ -103,10 +109,7 @@ class QRViewController: BaseViewController {
         
         if mainView.frame.size.height > (self.view.frame.size.height - 40)
         {
-            visualEffectView.isHidden = true
-            
             view.backgroundColor = mainView.backgroundColor
-            view.isOpaque = true
             
             mainView.removeFromSuperview()
             scrollView.addSubview(mainView)
@@ -115,6 +118,9 @@ class QRViewController: BaseViewController {
             mainView.frame = CGRect(x: 0, y: 15, width: view.frame.size.width, height: mainView.frame.size.height)
             
             scrollView.contentSize = CGSize(width: 0, height: mainView.frame.size.height + 15)
+        }
+        else if Settings.sharedManager().isDarkMode {
+            mainView.backgroundColor = UIColor.main.twilightBlue2
         }
     }
     

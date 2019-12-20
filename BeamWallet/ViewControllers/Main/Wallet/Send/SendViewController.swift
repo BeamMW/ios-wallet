@@ -17,15 +17,13 @@
 // limitations under the License.
 //
 
-
-import UIKit
 import Parchment
+import UIKit
 
 class SendViewController: BaseTableViewController {
-
     private var alreadyChanged = false
-    private var cellHeights: [IndexPath : CGFloat] = [:]
-
+    private var cellHeights: [IndexPath: CGFloat] = [:]
+    
     private var isSearch = false {
         didSet {
             tableView.isScrollEnabled = !isSearch
@@ -36,10 +34,9 @@ class SendViewController: BaseTableViewController {
     }
     
     private lazy var footerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
         
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:0))
-
-        let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
+        let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
         button.setImage(IconNextPink(), for: .normal)
         button.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
         button.layer.borderWidth = 1
@@ -48,12 +45,10 @@ class SendViewController: BaseTableViewController {
         button.addTarget(self, action: #selector(onNext), for: .touchUpInside)
         view.addSubview(button)
         
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height:button.frame.origin.y + button.frame.size.height + 40)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: button.frame.origin.y + button.frame.size.height + 40)
         
         return view
     }()
-    
-  
     
     override var tableStyle: UITableView.Style {
         get {
@@ -72,12 +67,11 @@ class SendViewController: BaseTableViewController {
     
     private let pagingViewController = BMPagingViewController()
     private var titles = [Localizable.shared.strings.contacts, Localizable.shared.strings.my_active_addresses]
-    private var searchControlles = [SearchTableView(),SearchTableView()]
-    
+    private var searchControlles = [SearchTableView(), SearchTableView()]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         if let repeatTransaction = transaction {
             viewModel.transaction = repeatTransaction
         }
@@ -96,7 +90,7 @@ class SendViewController: BaseTableViewController {
         let pagingView = pagingViewController.view as! PagingView
         pagingView.options.indicatorColor = UIColor.main.heliotrope
         pagingView.options.menuItemSpacing = 30
-
+        
         pagingViewController.view.backgroundColor = view.backgroundColor
         pagingViewController.view.isHidden = true
         addChild(pagingViewController)
@@ -111,8 +105,6 @@ class SendViewController: BaseTableViewController {
         title = Localizable.shared.strings.send.uppercased()
         
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
-        
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -140,7 +132,7 @@ class SendViewController: BaseTableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -153,14 +145,14 @@ class SendViewController: BaseTableViewController {
         }
     }
     
-    private func layoutSearchTableView () {
-        let rect = self.tableView.rectForRow(at: IndexPath(row: 0, section: 0))
-        let y:CGFloat = navigationBarOffset + rect.size.height + 20
+    private func layoutSearchTableView() {
+        let rect = tableView.rectForRow(at: IndexPath(row: 0, section: 0))
+        let y: CGFloat = navigationBarOffset + rect.size.height + 20
         
-        pagingViewController.view.frame = CGRect(x: 0, y: y, width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+        pagingViewController.view.frame = CGRect(x: 0, y: y, width: view.bounds.width, height: view.bounds.size.height - y)
     }
     
-    private func didSelectAddress(value:String) {
+    private func didSelectAddress(value: String) {
         isSearch = false
         
         viewModel.toAddress = value
@@ -174,8 +166,8 @@ class SendViewController: BaseTableViewController {
         }
     }
     
-    //MARK: - IBAction
-
+    // MARK: - IBAction
+    
     @objc private func onNext() {
         if !viewModel.canSend() {
             tableView.reloadData()
@@ -188,11 +180,10 @@ class SendViewController: BaseTableViewController {
     }
 }
 
-extension SendViewController : UITableViewDelegate {
-    
+extension SendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = (section == 5 || section == 6 || section == 7) ?  UIColor.main.marineThree : UIColor.clear
+        view.backgroundColor = (section == 5 || section == 6 || section == 7) ? UIColor.main.marineThree : UIColor.clear
         return view
     }
     
@@ -203,7 +194,7 @@ extension SendViewController : UITableViewDelegate {
         case 5, 7, 6:
             return 10
         default:
-            return (section > 0 ) ? 30 : 10
+            return (section > 0) ? 30 : 10
         }
     }
     
@@ -213,7 +204,7 @@ extension SendViewController : UITableViewDelegate {
                 return 60
             }
         }
-        else if indexPath.section == 1 && indexPath.row == 1 {
+        else if indexPath.section == 1, indexPath.row == 1 {
             return 17
         }
         return UITableView.automaticDimension
@@ -225,9 +216,9 @@ extension SendViewController : UITableViewDelegate {
         if indexPath.section == 6 {
             switch indexPath.row {
             case 2:
-                self.onExpire()
+                onExpire()
             case 3:
-                self.onCategory()
+                onCategory()
             default:
                 return
             }
@@ -235,9 +226,7 @@ extension SendViewController : UITableViewDelegate {
     }
 }
 
-
-extension SendViewController : UITableViewDataSource {
-    
+extension SendViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return (showAdvanced ? 8 : 5)
     }
@@ -273,7 +262,7 @@ extension SendViewController : UITableViewDataSource {
             cell.delegate = self
             cell.error = viewModel.toAddressError
             cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon:IconScanQr()))
+            cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon: IconScanQr()))
             cell.contact = viewModel.selectedContact
             return cell
         case 1:
@@ -285,7 +274,7 @@ extension SendViewController : UITableViewDataSource {
                 cell.fee = Double(viewModel.fee) ?? 0
                 return cell
             }
-            else{
+            else {
                 var cell = tableView.dequeueReusableCell(withIdentifier: "cell")
                 
                 if cell == nil {
@@ -301,6 +290,10 @@ extension SendViewController : UITableViewDataSource {
                 }
                 
                 cell?.textLabel?.text = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+                
+                if Settings.sharedManager().isDarkMode {
+                    cell?.textLabel?.textColor = UIColor.main.steel
+                }
                 
                 return cell!
             }
@@ -351,7 +344,7 @@ extension SendViewController : UITableViewDataSource {
             else if indexPath.row == 2 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.expires.uppercased(), value: (viewModel.outgoindAdderss!.duration > 0 ? Localizable.shared.strings.hours_24 : Localizable.shared.strings.never), valueColor: UIColor.white))
+                    .configured(with: (title: Localizable.shared.strings.expires.uppercased(), value: viewModel.outgoindAdderss!.duration > 0 ? Localizable.shared.strings.hours_24 : Localizable.shared.strings.never, valueColor: UIColor.white))
                 return cell
             }
             else if indexPath.row == 3 {
@@ -360,7 +353,7 @@ extension SendViewController : UITableViewDataSource {
                 cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: viewModel.outgoindAdderss!.categoriesName()))
                 return cell
             }
-            else{
+            else {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                     .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.outgoindAdderss!.label))
@@ -381,8 +374,7 @@ extension SendViewController : UITableViewDataSource {
     }
 }
 
-extension SendViewController : BMCellProtocol {
-    
+extension SendViewController: BMCellProtocol {
     func textDidChangeStatus(_ sender: UITableViewCell) {
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 //            if let path = self.tableView.indexPath(for: sender)  {
@@ -399,12 +391,12 @@ extension SendViewController : BMCellProtocol {
     }
     
     func textValueDidBegin(_ sender: UITableViewCell) {
-        if let path = tableView.indexPath(for: sender)  {
+        if let path = tableView.indexPath(for: sender) {
             tableView.scrollToRow(at: path, at: .middle, animated: true)
             
             if path.section == 0 {
                 isSearch = true
-           
+                
                 searchControlles[0].contacts = viewModel.searchForContacts(searchIndex: 0)
                 searchControlles[1].contacts = viewModel.searchForContacts(searchIndex: 1)
                 
@@ -415,14 +407,14 @@ extension SendViewController : BMCellProtocol {
         }
     }
     
-    func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
+    func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input: Bool) {
         var removeGrothNotice = false
         var isNeedReload = true
         
-        if let path = tableView.indexPath(for: sender)  {
+        if let path = tableView.indexPath(for: sender) {
             if path.section == 0 {
                 viewModel.toAddress = text
-
+                
                 if viewModel.selectedContact != nil {
                     viewModel.selectedContact = nil
                     
@@ -441,7 +433,7 @@ extension SendViewController : BMCellProtocol {
                         vc.reload()
                     }
                 }
-                else{
+                else {
                     isSearch = false
                 }
             }
@@ -452,8 +444,13 @@ extension SendViewController : BMCellProtocol {
                     }
                     viewModel.sendAll = false
                     
-                    if EnableNewFeatures {
-                        tableView.reloadRow(SendAllCell.self)
+                    var total = Localizable.shared.strings.zero
+                    if let status = AppModel.sharedManager().walletStatus {
+                        total = String.currency(value: status.realAmount)
+                    }
+                    
+                    if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
+                        cell.configure(with: (amount: total, isAll: viewModel.sendAll))
                     }
                 }
                 viewModel.amount = text
@@ -483,17 +480,17 @@ extension SendViewController : BMCellProtocol {
     }
     
     func textValueDidReturn(_ sender: UITableViewCell) {
-        if let path = tableView.indexPath(for: sender)  {
+        if let path = tableView.indexPath(for: sender) {
             if path.section == 6 {
                 AppModel.sharedManager().setWalletComment(viewModel.outgoindAdderss!.label, toAddress: viewModel.outgoindAdderss!.walletId)
             }
             else if path.section == 1 {
                 viewModel.checkAmountError()
-                if  viewModel.amountError != nil {
+                if viewModel.amountError != nil {
                     tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
                 }
             }
-            else{
+            else {
                 if path.section == 0 {
                     if !viewModel.toAddress.isEmpty {
                         if !AppModel.sharedManager().isValidAddress(viewModel.toAddress) {
@@ -516,15 +513,15 @@ extension SendViewController : BMCellProtocol {
                     }
                 }
                 
-                if path.section == 0 && isSearch {
+                if path.section == 0, isSearch {
                     isSearch = false
                     tableView.reloadData()
                 }
-                else{
+                else {
                     tableView.reloadRows(at: [path], with: .none)
                 }
                 
-                if path.section == 0 && viewModel.amount.isEmpty && !viewModel.toAddress.isEmpty {
+                if path.section == 0, viewModel.amount.isEmpty, !viewModel.toAddress.isEmpty {
                     if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
                         cell.beginEditing()
                     }
@@ -548,14 +545,14 @@ extension SendViewController : BMCellProtocol {
             }
             else if path.section == 5 {
                 let vc = ReceiveListViewController()
-                vc.completion = {[weak self]
+                vc.completion = { [weak self]
                     obj in
                     
                     guard let strongSelf = self else { return }
-
+                    
                     strongSelf.viewModel.outgoindAdderss = obj
                     strongSelf.viewModel.pickedOutgoingAddress = BMAddress.fromAddress(obj)
-
+                    
                     strongSelf.tableView.reloadData()
                 }
                 vc.excepted = viewModel.startedAddress
@@ -566,26 +563,25 @@ extension SendViewController : BMCellProtocol {
     }
     
     func onExpandCell(_ sender: UITableViewCell) {
-        if let path = tableView.indexPath(for: sender)
-        {
+        if let path = tableView.indexPath(for: sender) {
             if path.section == 4 {
                 showAdvanced = !showAdvanced
                 
                 if showAdvanced {
-                    self.tableView.insertSections([5,6,7], with: .fade)
+                    tableView.insertSections([5, 6, 7], with: .fade)
                 }
-                else{
-                    self.tableView.deleteSections([5,6,7], with: .fade)
+                else {
+                    tableView.deleteSections([5, 6, 7], with: .fade)
                 }
             }
             else if path.section == 6 {
                 showEdit = !showEdit
-
+                
                 if showEdit {
-                    self.tableView.insertRows(at: [IndexPath(row: 1, section: path.section), IndexPath(row: 2, section: path.section), IndexPath(row: 3, section: path.section)], with: .fade)
+                    tableView.insertRows(at: [IndexPath(row: 1, section: path.section), IndexPath(row: 2, section: path.section), IndexPath(row: 3, section: path.section)], with: .fade)
                 }
-                else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: path.section), IndexPath(row: 2, section: path.section), IndexPath(row: 3, section: path.section)], with: .fade)
+                else {
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: path.section), IndexPath(row: 2, section: path.section), IndexPath(row: 3, section: path.section)], with: .fade)
                 }
             }
         }
@@ -602,16 +598,21 @@ extension SendViewController : BMCellProtocol {
     }
 }
 
-extension SendViewController : QRScannerViewControllerDelegate
-{
-    func didScanQRCode(value:String, amount:String?) {
+extension SendViewController: QRScannerViewControllerDelegate {
+    func didScanQRCode(value: String, amount: String?) {
         viewModel.selectedContact = nil
         if let a = amount {
             if Double(a) ?? 0 > 0 {
                 viewModel.amount = a
                 viewModel.sendAll = false
-                if EnableNewFeatures {
-                    tableView.reloadRow(SendAllCell.self)
+                
+                var total = Localizable.shared.strings.zero
+                if let status = AppModel.sharedManager().walletStatus {
+                    total = String.currency(value: status.realAmount)
+                }
+                
+                if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
+                    cell.configure(with: (amount: total, isAll: viewModel.sendAll))
                 }
             }
         }
@@ -619,28 +620,27 @@ extension SendViewController : QRScannerViewControllerDelegate
     }
 }
 
-extension SendViewController : SettingsModelDelegate {
+extension SendViewController: SettingsModelDelegate {
     func onChangeHideAmounts() {
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
-
+        
         if Settings.sharedManager().isHideAmounts {
             tableView.deleteRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
         }
-        else{
+        else {
             tableView.insertRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
         }
     }
 }
 
 extension SendViewController {
-    
     private func onExpire() {
         let vc = BMDataPickerViewController(type: .address_expire)
         vc.completion = { [weak self]
             obj in
             
             guard let strongSelf = self else { return }
-
+            
             let selected = obj as! Int32
             
             strongSelf.viewModel.outgoindAdderss!.duration = selected == 24 ? 86400 : 0
@@ -665,8 +665,8 @@ extension SendViewController {
             }
             pushViewController(vc: vc)
         }
-        else{
-            let vc = BMDataPickerViewController(type: .category, selectedValue:viewModel.outgoindAdderss!.categories as? [String])
+        else {
+            let vc = BMDataPickerViewController(type: .category, selectedValue: viewModel.outgoindAdderss!.categories as? [String])
             vc.completion = { [weak self]
                 obj in
                 guard let strongSelf = self else { return }
@@ -678,7 +678,7 @@ extension SendViewController {
         }
     }
     
-    private func didSelectCategory(categories:[String]) {
+    private func didSelectCategory(categories: [String]) {
         viewModel.outgoindAdderss!.categories = NSMutableArray(array: categories)
         
         AppModel.sharedManager().setWalletCategories(viewModel.outgoindAdderss!.categories, toAddress: viewModel.outgoindAdderss!.walletId)
@@ -692,7 +692,6 @@ extension SendViewController: PagingViewControllerDelegate {
         _ pagingViewController: PagingViewController<T>,
         widthForPagingItem pagingItem: T,
         isSelected: Bool) -> CGFloat? {
-        
         let index = pagingItem as! PagingIndexItem
         let title = index.title
         let size = title.boundingWidth(with: pagingViewController.options.font, kern: 1.5)
@@ -701,14 +700,12 @@ extension SendViewController: PagingViewControllerDelegate {
 }
 
 extension SendViewController: PagingViewControllerDataSource {
-    
     func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, viewControllerForIndex index: Int) -> UIViewController {
-        
         searchControlles[index].tableView.contentInsetAdjustmentBehavior = .never
         searchControlles[index].view.backgroundColor = UIColor.clear
         searchControlles[index].delegate = self
         searchControlles[index].tableView.contentInset = tableView.contentInset
-
+        
         return searchControlles[index]
     }
     
@@ -716,7 +713,7 @@ extension SendViewController: PagingViewControllerDataSource {
         return PagingIndexItem(index: index, title: titles[index].uppercased()) as! T
     }
     
-    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int{
+    func numberOfViewControllers<T>(in: PagingViewController<T>) -> Int {
         return titles.count
     }
 }

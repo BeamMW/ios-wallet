@@ -28,8 +28,8 @@ class TransactionPaymentProofCell: BaseCell {
 
     weak var delegate: TransactionPaymentProofCellDelegate?
 
-    @IBOutlet weak private var buttonDetails: UIButton!
-    @IBOutlet weak private var buttonCopy: UIButton!
+    @IBOutlet weak private var buttonDetails: BMButton!
+    @IBOutlet weak private var buttonCopy: BMButton!
     @IBOutlet weak private var titleLabel: UILabel!
 
     override func awakeFromNib() {
@@ -40,8 +40,24 @@ class TransactionPaymentProofCell: BaseCell {
         titleLabel.text = Localizable.shared.strings.payment_proof.uppercased()
         titleLabel.letterSpacing = 1.5
         
-        buttonDetails.backgroundColor = UIColor.main.marineThree;
-        buttonCopy.backgroundColor = UIColor.main.marineThree;
+        if !Settings.sharedManager().isDarkMode {
+            buttonDetails.backgroundColor = UIColor.main.marineThree
+            buttonCopy.backgroundColor = UIColor.main.marineThree
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if Settings.sharedManager().isDarkMode {
+              buttonDetails.setBackgroundColor(color: UIColor.main.marineThree, forState: .normal)
+              buttonDetails.setTitleColor(UIColor.white, for: .normal)
+              
+              buttonCopy.setBackgroundColor(color: UIColor.main.marineThree, forState: .normal)
+              buttonCopy.setTitleColor(UIColor.white, for: .normal)
+              
+              titleLabel.textColor = UIColor.main.steel
+          }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

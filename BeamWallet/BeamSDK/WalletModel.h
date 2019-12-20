@@ -22,15 +22,17 @@
 
 #include "wallet/wallet_client.h"
 #include "wallet/common.h"
+#include "wallet/wallet_client.h"
+#include <set>
 
 class WalletModel : public beam::wallet::WalletClient
 {
 public:
     using Ptr = std::shared_ptr<WalletModel>;
-    
-    WalletModel(beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
-    
+
+    WalletModel(beam::wallet::IWalletDB::Ptr walletDB, beam::wallet::IPrivateKeyKeeper::Ptr keyKeeper, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
+    
 
     bool pre_connected_status;
 
@@ -49,6 +51,7 @@ private:
     void onSyncProgressUpdated(int done, int total) override;
     void onChangeCalculated(beam::Amount change) override;
     void onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos) override;
+   // void onAllUtxoChanged(beam::wallet::ChangeAction , const std::vector<beam::wallet::Coin>& utxos) override;
     void onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs) override;
     void onGeneratedNewAddress(const beam::wallet::WalletAddress& walletAddr) override;
     void onNewAddressFailed() override;
@@ -61,5 +64,17 @@ private:
     void onPaymentProofExported(const beam::wallet::TxID& txID, const beam::ByteBuffer& proof) override;
     void onCoinsByTx(const std::vector<beam::wallet::Coin>& coins) override;
     void onAddressChecked(const std::string& addr, bool isValid) override;
-  //  void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
+    void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
+    void onNoDeviceConnected() override;
+    void onShowKeyKeeperMessage() override;
+    void onHideKeyKeeperMessage() override;
+    void onShowKeyKeeperError(const std::string&) override;
+    void onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers) override;
+    
+    void onSwapParamsLoaded(const beam::ByteBuffer& token) override;
+    void onImportDataFromJson(bool isOk) override;
+    void onExportDataToJson(const std::string& data) override;
+    void onPostFunctionToClientContext(MessageFunction&& func) override;
+   // void onExportTxHistoryToCsv(const std::string& data) override;
+    //void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
 };

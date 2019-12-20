@@ -27,5 +27,8 @@
 @property (nonatomic,assign) int ID;
 
 +(BMCategory*_Nonnull)noneCategory;
++(BMCategory*_Nonnull)fromDict:(NSDictionary*_Nonnull)dict;
+-(NSDictionary*_Nonnull)dict;
+
 
 @end

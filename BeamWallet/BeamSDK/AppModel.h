@@ -210,6 +210,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSMutableArray<BMAddress*>*_Nonnull)getOnlyAddressesFromCategory:(BMCategory*_Nonnull)category;
 -(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category;
 -(void)fixCategories;
+-(void)clearAllCategories;
 
 //fork
 -(BOOL)isFork;
@@ -220,7 +221,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)completeWalletVerification;
 
 //export
--(NSString*_Nonnull)exportData;
--(void)importData:(NSString*)data;
+-(NSString*_Nonnull)exportData:(NSArray*_Nonnull)items;
+-(BOOL)importData:(NSString*_Nonnull)jsonString;
 
 @end

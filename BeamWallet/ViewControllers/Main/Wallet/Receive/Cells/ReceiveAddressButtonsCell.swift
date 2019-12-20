@@ -20,24 +20,32 @@
 import UIKit
 
 class ReceiveAddressButtonsCell: BaseCell {
-
-    @IBOutlet weak private var infoLabel: UILabel!
+    @IBOutlet private var infoLabel: UILabel!
+    @IBOutlet private var showQRButton: BMButton!
 
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         infoLabel.text = Localizable.shared.strings.receive_notice
 
         selectionStyle = .none
     }
 
-    @IBAction func onShare(sender :UIButton) {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if Settings.sharedManager().isDarkMode {
+            showQRButton.setBackgroundColor(color: UIColor.main.marineThree, forState: .normal)
+            showQRButton.setTitleColor(UIColor.white, for: .normal)
+        }
+    }
+
+    @IBAction func onShare(sender: UIButton) {
         delegate?.onClickShare?()
     }
-    
-    @IBAction func onQRCode(sender :UIButton) {
+
+    @IBAction func onQRCode(sender: UIButton) {
         delegate?.onClickQRCode?()
     }
 }

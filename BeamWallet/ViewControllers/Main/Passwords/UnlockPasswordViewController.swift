@@ -23,7 +23,6 @@ class UnlockPasswordViewController: BMInputViewController {
     enum UnlockEvent {
         case unlock
         case changePassword
-        case seedPhrase
     }
         
     private var event: UnlockEvent!
@@ -56,8 +55,7 @@ class UnlockPasswordViewController: BMInputViewController {
             title = Localizable.shared.strings.change_password
             titleLabel.text = Localizable.shared.strings.your_current_password
         default:
-            title = Localizable.shared.strings.show_seed_phrase
-            titleLabel.text = Localizable.shared.strings.enter_your_password
+            break
         }
     }
     
@@ -87,15 +85,7 @@ class UnlockPasswordViewController: BMInputViewController {
             else {
                 isUnlocked = true
                 
-                if event == .seedPhrase, let seed = OnboardManager.shared.getSeed() {
-                    let vc = SeedPhraseViewController(event: .display, words: seed.components(separatedBy: ";"))
-                    vc.increaseSecutirty = true
-                    if var viewControllers = self.navigationController?.viewControllers {
-                        viewControllers[viewControllers.count - 1] = vc
-                        navigationController?.setViewControllers(viewControllers, animated: true)
-                    }
-                }
-                else if event == .unlock {
+                if event == .unlock {
                     if navigationController?.viewControllers.count == 1 {
                         dismiss(animated: true) {}
                     }
