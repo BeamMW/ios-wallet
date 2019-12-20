@@ -35,6 +35,11 @@ class UTXOBlockView: UIView {
         heightTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.blockchain_height).uppercased()
         hashTitleLabel.letterSpacing = 1.5
         heightTitleLabel.letterSpacing = 1.5
+        
+        if Settings.sharedManager().isDarkMode {
+            heightTitleLabel.textColor = UIColor.main.steel
+            hashTitleLabel.textColor = UIColor.main.steel
+        }
     }
     
     func configure(with status:BMWalletStatus?) {

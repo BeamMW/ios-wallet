@@ -42,14 +42,21 @@ class BMAddressCell: BaseCell {
         super.awakeFromNib()
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
+        
+        if(Settings.sharedManager().isDarkMode) {
+            idLabel.textColor =  UIColor.main.steel
+            expiredLabel.textColor =  UIColor.main.steel
+            transactionCommentLabel.textColor =  UIColor.main.steel
+            transactionCommentDate.textColor =  UIColor.main.steel
+        }
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         
-        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : backgroundColor
+        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : backgroundColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -75,7 +82,7 @@ extension BMAddressCell: Configurable {
     
     func configure(with options: (row: Int, address:BMAddress, displayTransaction:Bool, displayCategory:Bool)) {
         
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
         
         backgroundColor = mainView.backgroundColor
         
@@ -137,7 +144,7 @@ extension BMAddressCell: Configurable {
         if options.displayCategory {
             if options.address.categories.count > 0 {
                 categoryLabel.attributedText = options.address.categoriesName()
-                categoryLabel.isHidden = false
+                categoryLabel.isHidden = options.address.categoriesName().length > 0 ? false : true
             }
             else{
                 categoryLabel.isHidden = true

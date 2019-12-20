@@ -194,6 +194,9 @@ extension SettingsViewController : SettingsCellDelegate {
             else if item.type == .allow_open_link {
                 Settings.sharedManager().isAllowOpenLink = value
             }
+            else if item.type == .dark_mode {
+                Settings.sharedManager().isDarkMode = value
+            }
             else if item.type == .node {
                 Settings.sharedManager().connectToRandomNode = value
                 
@@ -227,6 +230,23 @@ extension SettingsViewController : SettingsModelDelegate {
             tableView.tableFooterView = versionView()
         }
         viewModel.reload()
+        tableView.reloadData()
+    }
+    
+    func onChangeDarkMode() {
+        UIView.animate(withDuration: 0.5) {
+            self.view.backgroundColor = UIColor.main.marine
+            self.tableView.backgroundColor = UIColor.main.marine
+            self.tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        }
+        
+        let cells = tableView.visibleCells
+        for cell in cells {
+            if let bCell = cell as? SettingsCell {
+                bCell.changeBacgkroundView()
+            }
+        }
+        
         tableView.reloadData()
     }
 }

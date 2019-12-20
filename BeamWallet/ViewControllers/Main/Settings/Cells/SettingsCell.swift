@@ -38,15 +38,26 @@ class SettingsCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        switchView.tintColor = Settings.sharedManager().target == Testnet ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
-        switchView.backgroundColor = Settings.sharedManager().target == Testnet ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
+        switchView.tintColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
+        switchView.backgroundColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17")  : UIColor.main.marine
         
-        backgroundColor = UIColor.main.marineThree
-        mainView.backgroundColor = UIColor.main.marineThree
+        changeBacgkroundView()
+        
+        detailLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey
+    }
+    
+    override func changeBacgkroundView() {
+        super.changeBacgkroundView()
+        
+        backgroundColor = UIColor.clear
+        contentView.backgroundColor = UIColor.clear
+        mainView.backgroundColor = UIColor.main.cellBackgroundColor
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         selectedBackgroundView = selectedView
+        
+        detailLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey
     }
     
     @IBAction func onSwitch(sender: UISwitch) {
@@ -62,7 +73,7 @@ class SettingsCell: BaseCell {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         
-        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : UIColor.main.marineThree
+        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
     }
 }
 
@@ -117,8 +128,13 @@ extension SettingsCell: Configurable {
         
         if let icon = item.icon {
             iconView.isHidden = false
-            iconView.image = icon
             titleLeftOffset.constant = 50
+            if item.type != .remove_wallet {
+                iconView.image = icon.maskWithColor(color: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey)
+            }
+            else{
+                iconView.image = icon
+            }
         }
         else{
             iconView.isHidden = true

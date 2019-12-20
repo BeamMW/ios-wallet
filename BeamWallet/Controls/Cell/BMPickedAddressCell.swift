@@ -33,7 +33,11 @@ class BMPickedAddressCell: BaseCell {
         addressLabel.delegate = self
         addressLabel.displayCopyAlert = false
         
-        selectionStyle = .none        
+        selectionStyle = .none
+        
+        if Settings.sharedManager().isDarkMode {
+            nameLabel.textColor = UIColor.main.steel;
+        }
     }
     
     @IBAction func onChange(sender :UIButton) {

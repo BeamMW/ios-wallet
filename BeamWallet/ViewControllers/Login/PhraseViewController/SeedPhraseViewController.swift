@@ -114,7 +114,23 @@ class SeedPhraseViewController: BaseViewController {
                 inputWords.append(BMWord(String.empty(), index: UInt(i), correct: false))
             }
         case .intro:
-            title = Localizable.shared.strings.seed_prhase
+            title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.seed_prhase : Localizable.shared.strings.create_new_wallet
+            
+            let y:CGFloat = Device.isXDevice ? 120 : 100
+            let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 253) / 2, y: UIScreen.main.bounds.size.height - y, width: 253, height: 44), color: UIColor.main.brightTeal)
+            if AppModel.sharedManager().isLoggedin {
+                button.setTitle(Localizable.shared.strings.understand, for: .normal)
+                button.setImage(IconDoneBlue(), for: .normal)
+            }
+            else{
+                button.setTitle(Localizable.shared.strings.generate_seed, for: .normal)
+                button.setImage(IconSeedPhrase(), for: .normal)
+            }
+  
+            button.setTitleColor(UIColor.main.marine, for: .normal)
+            button.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+            view.addSubview(button)
+            
         default:
             break
         }
@@ -153,6 +169,8 @@ class SeedPhraseViewController: BaseViewController {
         
         NotificationCenter.default.removeObserver(self)
     }
+    
+    
     
     @objc private func didTakeScreenshot() {
         if event == .restore {
@@ -382,6 +400,10 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
+            if(event == .intro) {
+                return UICollectionReusableView()
+            }
+
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
                 CollectionButtonFooter.reuseIdentifier, for: indexPath) as! CollectionButtonFooter
             footer.setData(event: event)
@@ -423,6 +445,20 @@ extension SeedPhraseViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if(event == .intro) {
+            return CGSize(width: collectionView.width, height: 0)
+        }
+        else if((event == .display || event == .onlyDisplay) && (Device.isXDevice || Device.isLarge)) {
+            let indexPath = IndexPath(row: 0, section: section)
+
+            let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+            
+            let size =  headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            
+            //magic?(
+            let h = size.height + (6 * 38) + (6 * 10) + 120 + 100 + 80 + (increaseSecutirty ? -80 : 0)
+            return CGSize(width: collectionView.width, height: UIScreen.main.bounds.size.height - h)
+        }
         return CGSize(width: collectionView.width, height: 120)
     }
 }

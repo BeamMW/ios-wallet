@@ -44,7 +44,11 @@ class InputFeePopover: BaseViewController {
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
         
         titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
-       
+        if Settings.sharedManager().isDarkMode {
+            titleLabel.textColor = UIColor.main.steel
+            mainView.backgroundColor = UIColor.main.twilightBlue2
+        }
+        
         feeField.text = mainFee
         
         addSwipeToDismiss()

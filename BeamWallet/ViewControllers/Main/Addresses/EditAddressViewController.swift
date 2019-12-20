@@ -194,7 +194,7 @@ extension EditAddressViewController : UITableViewDataSource {
             cell.simpleConfigure(with: (title: (viewModel.newAddress.categories.count > 1 ? Localizable.shared.strings.categories.uppercased() : Localizable.shared.strings.category.uppercased()), attributedValue: viewModel.newAddress!.categoriesName()))
             cell.backgroundColor = UIColor.clear
             cell.contentView.backgroundColor = UIColor.clear
-            cell.selectedBackgroundView?.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+            cell.selectedBackgroundView?.backgroundColor = UIColor.main.selectedColor
             cell.space = 15
             return cell
         }

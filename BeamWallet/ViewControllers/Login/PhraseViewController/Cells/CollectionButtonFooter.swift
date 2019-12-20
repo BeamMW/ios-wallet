@@ -40,6 +40,11 @@ class CollectionButtonFooter: UICollectionReusableView {
             btn2.setTitle(Localizable.shared.strings.i_will_later, for: .normal)
             break
         }
+        
+        if Settings.sharedManager().isDarkMode {
+            btn2.setBackgroundColor(color: UIColor.main.marineThree, forState: .normal)
+            btn2.setTitleColor(UIColor.white, for: .normal)
+        }
     }
 
     @IBAction private func onButton(sender: UIButton) {}

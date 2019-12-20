@@ -53,6 +53,12 @@ class OpenWalletProgressViewController: BaseViewController {
 
         removeLeftButton()
         
+        if Settings.sharedManager().isDarkMode {
+            cancelButton.setBackgroundColor(color: UIColor.main.marineThree, forState: .normal)
+            cancelButton.setTitleColor(UIColor.white, for: .normal)
+            cancelButton.setImage(IconCancelWhite(), for: .normal)
+        }
+        
         if phrase != nil {
             versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
         }
@@ -78,7 +84,6 @@ class OpenWalletProgressViewController: BaseViewController {
             progressTitleLabel.text = Localizable.shared.strings.loading_wallet
             cancelButton.isHidden = true
         }
-    
 
         if let base = self.navigationController as? BaseNavigationController {
             base.enableSwipeToDismiss = false

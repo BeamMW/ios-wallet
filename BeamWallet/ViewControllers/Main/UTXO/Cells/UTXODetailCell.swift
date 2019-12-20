@@ -55,11 +55,6 @@ extension UTXODetailCell: Configurable {
             statusLabel.textColor = UIColor.main.blueyGrey
         }
         
-        if(utxo.status == BMUTXOMaturing) {
-            statusLabel.attributedText = utxo.attributedStatus()
-        }
-        else{
-            statusLabel.text = utxo.statusString.replacingOccurrences(of: "\n", with: " ")
-        }
+        statusLabel.attributedText = utxo.attributedStatus()
     }
 }

@@ -40,7 +40,7 @@ class WalletTransactionCell: UITableViewCell {
         currencyIcon.tintAdjustmentMode = .normal
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
     }
 }
@@ -49,7 +49,7 @@ extension WalletTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
      
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
         statusIcon.image = options.transaction.statusIcon()
         

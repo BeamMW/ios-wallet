@@ -37,9 +37,15 @@ extension String {
         }
 
         let path = Bundle.main.path(forResource: lang, ofType: "lproj")
-        let bundle = Bundle(path: path!)
-        
-        return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
+        if(path == nil )
+        {
+            let bundle =  Bundle(path: Bundle.main.path(forResource: "en", ofType: "lproj")!)!
+            return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+        }
+        else{
+            let bundle = Bundle(path: path!)
+            return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
+        }
     }
 }
 

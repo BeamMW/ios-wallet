@@ -32,6 +32,10 @@ static NSString *alowOpenLinkKey = @"alowOpenLinkKey";
 static NSString *languageKey = @"languageKey";
 static NSString *randomNodeKey = @"randomNodeKey";
 static NSString *logsKey = @"logsKey";
+static NSString *darkModeKey = @"darkModeKey";
+static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
+
+
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -136,6 +140,7 @@ static NSString *logsKey = @"logsKey";
         _nodeAddress = [AppModel chooseRandomNode];
     }
     
+    
     if (self.target == Testnet)
     {
         [self copyOldDatabaseToGroup];
@@ -224,6 +229,32 @@ static NSString *logsKey = @"logsKey";
     
     [[NSUserDefaults standardUserDefaults] setBool:_connectToRandomNode forKey:randomNodeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setDefaultDarkMode:(BOOL)isSystemMode {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:isSetDarkModeKey]) {
+        self.isDarkMode = isSystemMode;
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:isSetDarkModeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    else{
+        _isDarkMode = [[[NSUserDefaults standardUserDefaults] objectForKey:darkModeKey] boolValue];
+    }
+}
+
+-(void)setIsDarkMode:(BOOL)isDarkMode {
+    _isDarkMode = isDarkMode;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_isDarkMode forKey:darkModeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    for(id<SettingsModelDelegate> delegate in [Settings sharedManager].delegates)
+     {
+         if ([delegate respondsToSelector:@selector(onChangeDarkMode)]) {
+             [delegate onChangeDarkMode];
+         }
+     }
 }
 
 -(void)setIsNeedaskPasswordForSend:(BOOL)isNeedaskPasswordForSend {

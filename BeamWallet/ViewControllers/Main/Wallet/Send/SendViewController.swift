@@ -291,6 +291,10 @@ extension SendViewController: UITableViewDataSource {
                 
                 cell?.textLabel?.text = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
                 
+                if Settings.sharedManager().isDarkMode {
+                    cell?.textLabel?.textColor = UIColor.main.steel
+                }
+                
                 return cell!
             }
         case 2:

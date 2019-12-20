@@ -340,6 +340,18 @@ class BaseViewController: UIViewController {
             AppStoreReviewManager.resetRating()
         }))
         
+        if Settings.sharedManager().isDarkMode {
+            showAlert.setBackgroundColor(color: UIColor.main.twilightBlue2)
+            showAlert.setValue(NSAttributedString(string: title, attributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedTitle")
+            showAlert.setValue(NSAttributedString(string: text, attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedMessage")
+        }
+        
         self.present(showAlert, animated: true, completion: nil)
     }
     

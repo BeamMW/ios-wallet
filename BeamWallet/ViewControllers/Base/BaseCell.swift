@@ -20,7 +20,7 @@
 
 import Foundation
 
-class BaseCell: UITableViewCell {    
+class BaseCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -30,7 +30,15 @@ class BaseCell: UITableViewCell {
     
     public func setSelectionBackgroundView() {
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
+    }
+    
+    public func changeBacgkroundView() {
+        backgroundColor = UIColor.main.marineThree
+        
+        let selectedView = UIView()
+        selectedView.backgroundColor = UIColor.main.selectedColor
+        selectedBackgroundView = selectedView
     }
 }

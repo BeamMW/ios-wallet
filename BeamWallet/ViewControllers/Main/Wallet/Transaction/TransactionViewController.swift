@@ -136,7 +136,7 @@ class TransactionViewController: BaseTableViewController {
         if isPreview {
             tableView.y = 0
             tableView.h = 450
-        }
+        }        
     }
     
     public func didShow() {

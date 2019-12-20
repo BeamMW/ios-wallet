@@ -82,8 +82,8 @@ class QRViewController: BaseViewController {
         
         if address.categories.count > 0
         {
-            categoryLabel.isHidden = false
             categoryLabel.attributedText = address.categoriesName()
+            categoryLabel.isHidden = address.categoriesName().length > 0 ? false : true
         }
         else{
             categoryLabel.isHidden = true
@@ -118,6 +118,9 @@ class QRViewController: BaseViewController {
             mainView.frame = CGRect(x: 0, y: 15, width: view.frame.size.width, height: mainView.frame.size.height)
             
             scrollView.contentSize = CGSize(width: 0, height: mainView.frame.size.height + 15)
+        }
+        else if Settings.sharedManager().isDarkMode {
+            mainView.backgroundColor = UIColor.main.twilightBlue2
         }
     }
     

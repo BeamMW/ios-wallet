@@ -33,17 +33,21 @@ class WellcomeViewController: BaseViewController {
         
         setTitles()
         
-        switch Settings.sharedManager().target {
-        case Testnet:
-            bgView.image = BackgroundTestnet()
-        case Masternet:
-            bgView.image = BackgroundMasternet()
-        default:
-            break
+        if Settings.sharedManager().isDarkMode {
+            bgView.image = BackgroundDark()
         }
-                
-        bgView.addParallaxEffect()
+        else {
+            switch Settings.sharedManager().target {
+            case Testnet:
+                bgView.image = BackgroundTestnet()
+            case Masternet:
+                bgView.image = BackgroundMasternet()
+            default:
+                break
+            }
+        }
 
+        bgView.addParallaxEffect()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

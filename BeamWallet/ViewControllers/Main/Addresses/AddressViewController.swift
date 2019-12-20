@@ -49,6 +49,15 @@ class AddressViewController: BaseTableViewController {
         subscribeToUpdates()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if isMovingFromParent {
+            addressViewModel.transactionViewModel = nil
+            addressViewModel = nil
+        }
+    }
+    
     private func subscribeToUpdates() {
         addressViewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()

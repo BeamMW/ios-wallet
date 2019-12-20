@@ -35,6 +35,15 @@ class BMButton: UIButton {
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         return button
     }
+    
+//    override func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
+//        if state == UIControl.State.normal && Settings.sharedManager().isDarkMode {
+//            super.setTitleColor(UIColor.init(red: 28/255, green: 28/255, blue: 30/255, alpha: 1), for: state)
+//        }
+//        else{
+//            super.setTitleColor(color, for: state)
+//        }
+//    }
         
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -51,6 +60,15 @@ class BMButton: UIButton {
         
         if let color = self.titleColor(for: .normal) {
             self.setTitleColor(color.withAlphaComponent(0.5), for: .highlighted)
+        }
+        
+        if Settings.sharedManager().isDarkMode {
+            if let color = self.layer.borderColor, self.layer.borderWidth > 0 {
+                self.setTitleColor(UIColor.init(cgColor: color), for:.normal)
+            }
+            else{
+                self.setTitleColor(UIColor.init(red: 28/255, green: 28/255, blue: 30/255, alpha: 1), for: .normal)
+            }
         }
     }
 }

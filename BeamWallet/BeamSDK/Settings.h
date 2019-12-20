@@ -36,6 +36,7 @@ typedef enum Target : NSUInteger {
 @optional
 -(void)onChangeHideAmounts;
 -(void)onChangeLanguage;
+-(void)onChangeDarkMode;
 @end
 
 @interface Settings : NSObject
@@ -59,11 +60,14 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL isAllowOpenLink;
 @property (nonatomic, assign) BOOL connectToRandomNode;
 @property (nonatomic, assign) int logDays;
+@property (nonatomic, assign) BOOL isDarkMode;
 
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
 @property (nonatomic, strong) NSString * _Nonnull whereBuyAddress;
 @property (nonatomic, strong) NSString * _Nonnull language;
+
+-(void)setDefaultDarkMode:(BOOL)isSystemMode;
 
 -(BOOL)isChangedNode;
 -(void)resetSettings;

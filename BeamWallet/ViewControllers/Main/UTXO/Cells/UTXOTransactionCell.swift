@@ -33,7 +33,7 @@ class UTXOTransactionCell: BaseCell {
         super.awakeFromNib()
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
     }
 
@@ -46,7 +46,7 @@ extension UTXOTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction)) {
      
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marine : UIColor.main.marineThree
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marine : UIColor.main.cellBackgroundColor
 
         dateLabel.text = options.transaction.formattedDate()
         

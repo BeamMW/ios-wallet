@@ -25,7 +25,12 @@ class CollectionTextHeader: UICollectionReusableView {
         case .restore:
             textLabel.text = Localizable.shared.strings.input_seed
         case .intro:
-            textLabel.text = Localizable.shared.strings.intro_seed_main
+            if AppModel.sharedManager().isLoggedin {
+                textLabel.text = Localizable.shared.strings.increase_security_text
+            }
+            else{
+                textLabel.text = Localizable.shared.strings.intro_seed_main
+            }
         }
     }
 }

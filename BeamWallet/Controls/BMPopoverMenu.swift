@@ -22,7 +22,6 @@ import UIKit
 extension BMPopoverMenu {
     public static func show(menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel: @escaping () -> Void) {
         if let rootVC = UIApplication.getTopMostViewController() {
-            
             rootVC.addBlur()
 
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -46,10 +45,15 @@ extension BMPopoverMenu {
                 }
             }
             
-            alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: .cancel, handler: { _ in
-                rootVC.removeBlur()
-                cancel()
-            }))
+            alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: Settings.sharedManager().isDarkMode ? .default : .cancel, handler: { _ in
+                                   rootVC.removeBlur()
+                                   cancel()
+                               }))
+            
+            
+            if(Settings.sharedManager().isDarkMode) {
+                alert.setBackgroundColor(color: UIColor.black)
+            }
             
             rootVC.present(alert, animated: true)
         }

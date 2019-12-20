@@ -135,5 +135,60 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleDocumentTypes</key>
+			<array>
+				<dict>
+					<key>CFBundleTypeIconFiles</key>
+					<array/>
+					<key>CFBundleTypeName</key>
+					<string>Dat model</string>
+					<key>CFBundleTypeRole</key>
+					<string>Editor</string>
+					<key>LSHandlerRank</key>
+					<string>Alternate</string>
+					<key>LSItemContentTypes</key>
+					<array>
+						<string>dat</string>
+					</array>
+				</dict>
+			</array>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>Dat file</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.giena.Interface.document.dat</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Dat model</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>com.giena.Interface.document.dat</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dat</string>
+				</array>
+			</dict>
+		</dict>
+		<dict/>
+	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<false/>
 </dict>
 </plist>

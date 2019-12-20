@@ -114,7 +114,7 @@ class BMTableHeaderTitleView: UIView {
         
         let mainButton = UIButton(frame: self.bounds)
         mainButton.addTarget(target, action: handler, for: .touchUpInside)
-        mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.2)), for: .highlighted)
+        mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.main.selectedColor), for: .highlighted)
         self.addSubview(mainButton)
     }
     

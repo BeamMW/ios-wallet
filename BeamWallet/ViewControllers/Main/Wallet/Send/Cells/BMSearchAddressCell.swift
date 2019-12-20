@@ -49,6 +49,10 @@ class BMSearchAddressCell: BaseCell {
         textField.defaultOffset = 4
         textField.lineColor = UIColor.white.withAlphaComponent(0.1)
         
+        if Settings.sharedManager().isDarkMode {
+            nameLabel.textColor = UIColor.main.steel;
+        }
+        
         contentView.backgroundColor = UIColor.main.marineThree
     }
     

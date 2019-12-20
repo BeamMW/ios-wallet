@@ -146,6 +146,7 @@ class SettingsViewModel: NSObject {
             
             var section_1 = [SettingsItem]()
             section_1.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.dark_mode, detail: nil, isSwitch: Settings.sharedManager().isDarkMode, type: .dark_mode, hasArrow: false))
             items.append(section_0)
             items.append(section_1)
         case .node:
@@ -159,6 +160,9 @@ class SettingsViewModel: NSObject {
             if BiometricAuthorization.shared.canAuthenticate() {
                 section_0.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, type: .enable_bio, hasArrow: false))
             }
+            if OnboardManager.shared.isSkipedSeed() == true {
+                   section_0.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
+            }
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
 //            if OnboardManager.shared.isSkipedSeed() == true {
 //                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
@@ -169,9 +173,6 @@ class SettingsViewModel: NSObject {
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-            if OnboardManager.shared.isSkipedSeed() == true {
-                section_0.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
-            }
             section_0.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
             items.append(section_0)
@@ -460,9 +461,11 @@ extension SettingsViewModel {
                 
             }) { _ in
                 let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
-                modalViewController.completion = { _ in
-                    let app = UIApplication.shared.delegate as! AppDelegate
-                    app.logout()
+                modalViewController.completion = { obj in
+                    if obj {
+                        let app = UIApplication.shared.delegate as! AppDelegate
+                        app.logout()
+                    }
                 }
                 modalViewController.modalPresentationStyle = .overFullScreen
                 modalViewController.modalTransitionStyle = .crossDissolve
@@ -488,11 +491,14 @@ extension SettingsViewModel {
     func onImportWallet() {
         if let top = UIApplication.getTopMostViewController() {
             top.alert(title: Localizable.shared.strings.import_data_title, message: Localizable.shared.strings.import_data_text_2) { _ in
-                let types = [kUTTypeJSON]
+                let types = ["com.giena.Interface.document.dat"]
                 let importMenu = UIDocumentPickerViewController(documentTypes: types as [String], in: .import)
                 importMenu.delegate = self
                 importMenu.modalPresentationStyle = .formSheet
-                top.present(importMenu, animated: true)
+                importMenu.view.tintColor = UIColor.main.marine
+                top.present(importMenu, animated: true,completion: {
+                    importMenu.view.tintColor = UIColor.main.marine
+                })
             }
         }
     }

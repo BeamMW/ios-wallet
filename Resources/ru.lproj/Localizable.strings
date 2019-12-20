@@ -314,7 +314,7 @@
 "id" = "Идентификатор";
 "date_time" = "Дата | время";
 "utxo_history" = "История UTXO";
-"delete_all_text" = "Вы уверены что хотите удалить все (str) из кошелька?";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" = "Вы уверены что хотите удалить метку “(str)”?";
 "canot_connect_node" = "Невозможно подключиться к узлу";
 "buy_beam_value" = "Отправьте (value) на указанный выше (name) адрес для завершения транзакции"; // example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -496,3 +496,7 @@
 "import" = "Импорт";
 "export_data" = "Экспорт данных";
 "till_block" = "till block height";
+"since" = "since"; // example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";

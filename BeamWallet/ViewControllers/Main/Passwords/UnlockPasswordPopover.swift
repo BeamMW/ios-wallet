@@ -131,7 +131,7 @@ class UnlockPasswordPopover: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric, BiometricAuthorization.shared.faceIDAvailable(), allowBiometric {
+        if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric, allowBiometric {
             biometricAuthorization()
         }
     }

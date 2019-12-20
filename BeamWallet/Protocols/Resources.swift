@@ -63,6 +63,11 @@ func BackgroundMasternet() -> UIImage? {
     return UIImage(named: "bgMasternet.jpg")
 }
 
+func BackgroundDark() -> UIImage? {
+    return UIImage(named: "bgBlack.jpg")
+}
+
+
 func IconBack() -> UIImage? {
     return UIImage(named: "iconBack")
 }
@@ -120,11 +125,21 @@ func IconLeftMenu() -> UIImage? {
 }
 
 func IconDownArrow() -> UIImage? {
-    return UIImage(named: "iconDownArrow")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconDownArrow")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconDownArrow")
+    }
 }
 
 func IconNextArrow() -> UIImage? {
-    return UIImage(named: "iconNextArrow")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconNextArrow")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconNextArrow")
+    }
 }
 
 func GradientBlue() -> UIImage? {
@@ -153,6 +168,10 @@ func IconDoneBlue() -> UIImage? {
 
 func IconCancel() -> UIImage? {
     return UIImage(named: "iconCancel")
+}
+
+func IconCancelWhite() -> UIImage? {
+    return UIImage(named: "iconCancel")?.maskWithColor(color: UIColor.white)
 }
 
 func IconComment() -> UIImage? {
@@ -200,11 +219,21 @@ func Tick() -> UIImage? {
 }
 
 func IconInfinity() -> UIImage? {
-    return UIImage(named: "iconInfinity")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconInfinity")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconInfinity")
+    }
 }
 
 func IconExpires() -> UIImage? {
-    return UIImage(named: "iconExpires")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconExpires")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconExpires")
+    }
 }
 
 func ClearIcon() -> UIImage? {
@@ -212,7 +241,12 @@ func ClearIcon() -> UIImage? {
 }
 
 func IconExpired() -> UIImage? {
-    return UIImage(named: "iconExpired")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconExpired")?.maskWithColor(color: UIColor.main.steel)
+    }
+    else{
+        return UIImage(named: "iconExpired")
+    }
 }
 
 func IconUtxoEmpty() -> UIImage? {
@@ -284,7 +318,12 @@ func IconSaveDone() -> UIImage? {
 }
 
 func IconSeedPhrase() -> UIImage? {
-    return UIImage(named: "iconSeedPhrase")
+    if Settings.sharedManager().isDarkMode {
+        return UIImage(named: "iconSeedPhrase")?.maskWithColor(color: UIColor.main.marine)
+    }
+    else{
+        return UIImage(named: "iconSeedPhrase")?.maskWithColor(color: UIColor.main.marineOriginal)
+    }
 }
 
 func IconNode() -> UIImage? {

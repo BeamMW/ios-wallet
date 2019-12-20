@@ -387,6 +387,8 @@ class LocalizableStrings : NSObject {
     var manual_restore_warning = "manual_restore_warning".localized
     var search_transactions = "search_transactions".localized
     var random_node = "random_node".localized
+    var generate_seed = "generate_seed".localized
+
     
     var restore_create_title = "restore_create_title".localized
     var restore_create_text = "restore_create_text".localized
@@ -482,7 +484,10 @@ class LocalizableStrings : NSObject {
     var import_data_text_2 = "import_data_text_2".localized
     var till_block = "till_block".localized
     var since = "till_block".localized
+    var dark_mode = "dark_mode".localized
+    var delete_all_tags = "delete_all_tags".localized
 
+    
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

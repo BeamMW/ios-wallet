@@ -75,7 +75,9 @@ class SendConfirmViewController: BaseTableViewController {
         if Settings.sharedManager().isNeedaskPasswordForSend {
             let modalViewController = UnlockPasswordPopover(event: .transaction)
             modalViewController.completion = { [weak self] obj in
-                self?.askForSaveContact()
+                if obj == true {
+                    self?.askForSaveContact()
+                }
             }
             modalViewController.modalPresentationStyle = .overFullScreen
             modalViewController.modalTransitionStyle = .crossDissolve

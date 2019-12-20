@@ -28,6 +28,7 @@
 #import "CurrencyFormatter.h"
 #import "RecoveryProgress.h"
 #import <SVProgressHUD/SVProgressHUD.h>
+#include "nlohmann/json.hpp"
 
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -403,11 +404,17 @@ const int kFeeInGroth_Fork1 = 100;
     
 -(void)restartWallet {
     LOG_INFO() << "restart wallet";
-
-    [SVProgressHUD show];
     
     isStarted = NO;
     isRunning = NO;
+
+    if (wallet!=nil){
+        wallet.reset();
+    }
+    
+    if (keyKeeper!=nil){
+        keyKeeper.reset();
+    }
     
     if (walletReactor!=nil){
         walletReactor.reset();
@@ -415,20 +422,16 @@ const int kFeeInGroth_Fork1 = 100;
     if (walletDb!=nil){
         walletDb.reset();
     }
-    if (wallet!=nil){
-        wallet.reset();
-    }
-    
+        
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
+    keyKeeper = nil;
     
    BOOL opened = [self canOpenWallet:localPassword];
     if (opened) {
-        [self openWallet:@""];
+        [self openWallet:localPassword];
     }
-    
-    [SVProgressHUD dismiss];
 }
 
  
@@ -1187,7 +1190,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address {
     
     NSMutableArray *result = [NSMutableArray array];
-    for (BMTransaction *tr in self.transactions.reverseObjectEnumerator)
+    NSArray * array = [NSArray arrayWithArray:self.transactions];
+    
+    for (BMTransaction *tr in array)
     {
         if ([tr.senderAddress isEqualToString:address.walletId]
             || [tr.receiverAddress isEqualToString:address.walletId]) {
@@ -1216,6 +1221,37 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return result;
 }
 
+-(void)editCategoryAddress:(BMAddress*_Nonnull)address {
+    BMContact *contact = [self getContactFromId:address.walletId];
+    if(contact != nil)
+    {
+        WalletID walletID(Zero);
+        if (walletID.FromHex(address.walletId.string))
+        {
+            WalletAddress _address;
+            _address.m_label = address.label.string;
+            _address.m_category = [address.categories componentsJoinedByString:@","].string;
+            _address.m_walletID = walletID;
+            _address.m_createTime = NSDate.date.timeIntervalSince1970;
+            walletDb->saveAddress(_address);
+        }
+    }
+    else{
+        WalletID walletID(Zero);
+          if (walletID.FromHex(address.walletId.string)){
+              std::vector<WalletAddress> addresses = wallet->ownAddresses;
+              for (int i=0; i<addresses.size(); i++){
+                  NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+                  NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+                  if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]]){
+                      addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
+                      wallet->getAsync()->saveAddress(addresses[i], true);
+                      break;
+                  }
+              }
+          }
+    }
+}
 
 -(void)editAddress:(BMAddress*_Nonnull)address {
     BMContact *contact = [self getContactFromId:address.walletId];
@@ -1248,7 +1284,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]])
                 {
                     addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
-                    
                     wallet->getAsync()->saveAddress(addresses[i], true);
                     
                     break;
@@ -1465,6 +1500,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         try{
             wallet->getAsync()->sendMoney(walletID, comment.string, bAmount, fee);
+            wallet->getAsync()->getWalletStatus();
         }
         catch(NSException *ex) {
             NSLog(@"%@",ex);
@@ -1486,7 +1522,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
            __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
             
             wallet->getAsync()->sendMoney(fromID, walletID, comment.string, bAmount, fee);
-            
+            wallet->getAsync()->getWalletStatus();
+
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if ([[AppModel sharedManager] isMyAddress:to]) {
                     [[AppModel sharedManager] setWalletComment:address.label toAddress:address.walletId];
@@ -1757,6 +1794,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)cancelTransaction:(BMTransaction*_Nonnull)transaction {
     wallet->getAsync()->cancelTx([self txIDfromString:transaction.ID]);
+    wallet->getAsync()->getWalletStatus();
 }
 
 -(void)cancelPreparedTransaction:(NSString*_Nonnull)transaction {
@@ -1970,7 +2008,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         for (int i=0; i<address.categories.count; i++) {
             if ([address.categories[i] intValue] == category.ID) {
                 [address.categories removeObjectAtIndex:i];
-                [[AppModel sharedManager] editAddress:address];
+                [[AppModel sharedManager] editCategoryAddress:address];
                 break;
             }
         }
@@ -2116,6 +2154,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(void)clearAllCategories {
     [_categories removeAllObjects];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:categoriesKey];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+     {
+         if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
+             [delegate onCategoriesChange];
+         }
+     }
 }
 
 -(void)fixCategories {
@@ -2246,7 +2291,32 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
 }
 
-//MARK: - Export
+//MARK: - Export, Import
+
+-(BOOL)importData:(NSString*_Nonnull)jsonString {
+    NSError *error = nil;
+    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error) {
+        return NO;
+    }
+    
+    auto _data = [jsonString string];
+    bool result = storage::ImportDataFromJson(*walletDb, keyKeeper ,&_data[0], _data.size());
+
+    if (result) {
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers
+                         error:nil]];
+        if ([dictionary objectForKey:@"Categories"]) {
+            NSMutableArray *categories = [NSMutableArray arrayWithArray:[dictionary objectForKey:@"Categories"]];
+            
+            for (NSDictionary *dict in categories) {
+                [self updateCategory:[BMCategory fromDict:dict]];
+            }
+        }
+    }
+    return result;
+}
 
 -(NSString*_Nonnull)exportData:(NSArray*_Nonnull)items{
     auto exported = storage::ExportDataToJson(*walletDb);
@@ -2288,30 +2358,6 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     return jsonString;
-}
-
--(BOOL)importData:(NSString*_Nonnull)jsonString {
-    NSError *error = nil;
-    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-    if (error) {
-        return NO;
-    }
-    auto _data = [jsonString string];
-    bool result = storage::ImportDataFromJson(*walletDb, keyKeeper ,&_data[0], _data.size());
-    
-    if (result) {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers
-                         error:nil]];
-        if ([dictionary objectForKey:@"Categories"]) {
-            NSMutableArray *categories = [NSMutableArray arrayWithArray:[dictionary objectForKey:@"Categories"]];
-            
-            for (NSDictionary *dict in categories) {
-                [self updateCategory:[BMCategory fromDict:dict]];
-            }
-        }
-    }
-    return result;
 }
 
 @end

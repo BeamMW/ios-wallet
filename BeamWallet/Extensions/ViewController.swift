@@ -24,7 +24,6 @@ import UIKit
 let BLUR_TAG = 102
 
 extension UIViewController {
-    
     func presentDetail(_ viewControllerToPresent: UIViewController) {
         let transition = CATransition()
         transition.duration = 0.28
@@ -61,6 +60,7 @@ extension UIViewController {
     func removeBlur() {
         self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
     }
+    
     func addBlur() {
         self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
         if let image = self.view.snapshot() {
@@ -90,10 +90,20 @@ extension UIViewController {
             return
         }
         
-        addBlur()
+        self.addBlur()
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
+        if Settings.sharedManager().isDarkMode {
+            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
+            alertController.setValue(NSAttributedString(string: title, attributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedTitle")
+            alertController.setValue(NSAttributedString(string: message, attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedMessage")
+        }
         let OKAction = UIAlertAction(title: button, style: .default) { action in
             if handler != nil {
                 handler!(action)
@@ -109,9 +119,20 @@ extension UIViewController {
             return
         }
         
-        addBlur()
+        self.addBlur()
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        if Settings.sharedManager().isDarkMode {
+            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
+            alertController.setValue(NSAttributedString(string: title, attributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedTitle")
+            alertController.setValue(NSAttributedString(string: message, attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedMessage")
+        }
         let OKAction = UIAlertAction(title: "OK", style: .default) { action in
             if handler != nil {
                 handler!(action)
@@ -127,10 +148,20 @@ extension UIViewController {
             return
         }
         
-        addBlur()
+        self.addBlur()
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
+        if Settings.sharedManager().isDarkMode {
+            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
+            alertController.setValue(NSAttributedString(string: title, attributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedTitle")
+            alertController.setValue(NSAttributedString(string: message, attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedMessage")
+        }
         let confirmAction = UIAlertAction(title: confirmTitle, style: .default) { action in
             confirmHandler(action)
             self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
@@ -158,23 +189,33 @@ extension UIViewController {
             return
         }
         
-        addBlur()
+        self.addBlur()
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
+        if Settings.sharedManager().isDarkMode {
+            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
+            alertController.setValue(NSAttributedString(string: title, attributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedTitle")
+            alertController.setValue(NSAttributedString(string: message, attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ]), forKey: "attributedMessage")
+        }
         let cancelAction = UIAlertAction(title: cancelTitle, style: .default) { action in
             cancelHandler(action)
             self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
         }
         alertController.addAction(cancelAction)
-
-        let confirmAction = UIAlertAction(title: confirmTitle, style: .default) { action in
+        
+        let confirmAction = UIAlertAction(title: confirmTitle, style: (confirmTitle == Localizable.shared.strings.delete ? .destructive : .default)) { action in
             confirmHandler(action)
             self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
         }
         alertController.addAction(confirmAction)
         alertController.preferredAction = confirmAction
-
+        
         self.present(alertController, animated: true, completion: nil)
     }
 }

@@ -236,7 +236,6 @@ extension TransactionsTableView: UIViewControllerPreviewingDelegate {
             
             let detailVC = TransactionViewController(transaction: viewModel.transactions[indexPath.row], preview: true)
             detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
-            
             previewingContext.sourceRect = cell.frame
             
             return detailVC

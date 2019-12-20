@@ -47,6 +47,10 @@ class BMDetailCell: BaseCell {
         contentView.backgroundColor = UIColor.main.marineThree
 
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)
+        
+        if Settings.sharedManager().isDarkMode {
+            nameLabel.textColor = UIColor.main.steel;
+        }
     }
     
     func simpleConfigure(with options: (title:String, attributedValue:NSMutableAttributedString)) {

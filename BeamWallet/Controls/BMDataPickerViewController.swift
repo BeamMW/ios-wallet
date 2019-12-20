@@ -110,6 +110,8 @@ class BMDataPickerViewController: BaseTableViewController {
                         deleted.append(Localizable.shared.strings.contacts.lowercased())
                     case 3:
                         deleted.append(Localizable.shared.strings.transactions.lowercased())
+                    case 4:
+                        deleted.append(Localizable.shared.strings.categories.lowercased())
                     default:
                         break
                     }
@@ -123,11 +125,11 @@ class BMDataPickerViewController: BaseTableViewController {
             else if deleted.count == 2 {
                 str = deleted.joined(separator: " \(Localizable.shared.strings.and) ")
             }
-            else if deleted.count == 3 {
+            else if deleted.count > 2 {
                 str = deleted.joined(separator: ", ")
             }
             
-            confirmAlert(title: Localizable.shared.strings.clear_data, message: Localizable.shared.strings.delete_data_text(str: str), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.clear, cancelHandler: { _ in
+            confirmAlert(title: Localizable.shared.strings.clear_data, message: Localizable.shared.strings.delete_data_text(str: str), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.delete, cancelHandler: { _ in
                 
             }) { _ in
                 for item in self.values {
@@ -139,6 +141,8 @@ class BMDataPickerViewController: BaseTableViewController {
                             AppModel.sharedManager().clearAllContacts()
                         case 3:
                             AppModel.sharedManager().clearAllTransactions()
+                        case 4:
+                            AppModel.sharedManager().clearAllCategories()
                         default:
                             break
                         }
@@ -164,7 +168,7 @@ class BMDataPickerViewController: BaseTableViewController {
                 let data = AppModel.sharedManager().exportData(selectedValues)
 
                 let date = Int64(Date().timeIntervalSince1970)
-                let fileName = "wallet_data_\(date).json"
+                let fileName = "wallet_data_\(date).dat"
 
                 if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                     let fileURL = dir.appendingPathComponent(fileName)
@@ -216,6 +220,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case .clear:
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 1, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 2, multiplie: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.delete_all_tags, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 4, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_transactions, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 3, multiplie: true))
         case .category:
             var selectedCategories = (selectedValue as! [String])

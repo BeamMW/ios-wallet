@@ -49,7 +49,7 @@ extension UTXOCell: Configurable {
     
     func configure(with options: (row: Int, utxo:BMUTXO)) {
     
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.marineThree : UIColor.main.marine
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
         
         amountLabel.text = String.currency(value: options.utxo.realAmount)
         statusLabel.text = options.utxo.statusString
@@ -107,7 +107,7 @@ extension UTXOCell: Configurable {
         }
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         selectedBackgroundView = selectedView
     }
 }

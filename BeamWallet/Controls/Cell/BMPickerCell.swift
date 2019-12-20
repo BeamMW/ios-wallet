@@ -30,11 +30,12 @@ class BMPickerCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundColor = UIColor.main.marineThree
-        mainView.backgroundColor = UIColor.main.marineThree
+        backgroundColor = UIColor.clear
+        contentView.backgroundColor = UIColor.clear
+        mainView.backgroundColor = UIColor.main.cellBackgroundColor
         
         let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
         
         arrowView.image = Tick()?.withRenderingMode(.alwaysTemplate)
@@ -45,7 +46,7 @@ class BMPickerCell: BaseCell {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         
-        mainView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.2) : backgroundColor
+        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
     }
     
     func configure(data:BMPickerData) {

@@ -314,7 +314,7 @@
 "id" = "ID";
 "date_time" = "Date   |   time";
 "utxo_history" = "UTXO history";
-"delete_all_text" = "Are you sure you want to delete all (str) from your wallet?";
+"delete_all_text" = "Are you sure you want to delete all (str) from your device?";
 "delete_category_text" =  "Are you sure you want to delete “(str)” tag?";
 "canot_connect_node" = "Cannot connect to node";
 "buy_beam_value" = "Send (value) to the above (name) address to complete the transaction"; //example Send 1 BTC to the above BITCOIN address to complete the transaction
@@ -496,3 +496,7 @@
 "import" = "Import";
 "export_data" = "Export data";
 "till_block" = "till block height";
+"since" = "since"; //example since 1024 block height
+"block_height" = "block height";
+"dark_mode" = "Dark mode";
+"delete_all_tags" = "Delete all tags";

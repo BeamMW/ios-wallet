@@ -54,6 +54,11 @@ class OwnerKeyViewController: BaseViewController {
         if let constant = self.topOffset?.constant, Device.isXDevice {
             topOffset?.constant = constant - 20
         }
+        
+        if Settings.sharedManager().isDarkMode {
+            noticeLabel.textColor = UIColor.main.steel
+            ownerKeyTitleLabel.textColor = UIColor.main.steel
+        }
     }
     
     @IBAction func onCopy(sender: UIButton) {

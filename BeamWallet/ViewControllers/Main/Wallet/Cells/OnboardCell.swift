@@ -39,16 +39,12 @@ class OnboardCell: UITableViewCell {
     
     public func setIsSecure(secure: Bool) {
         if secure {
-         //   mainView.backgroundColor = UIColor.main.cyan.withAlphaComponent(0.3)
-            
             detailLabel.text = Localizable.shared.strings.make_wallet_secure_text
             
             receiveButton.isHidden = true
             verificationButton.isHidden = false
         }
-        else {
-         //   mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-           
+        else {           
             receiveButton.isHidden = false
             verificationButton.isHidden = true
                     

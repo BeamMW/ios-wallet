@@ -73,7 +73,10 @@ extension UIColor {
         }
         
         static var marine: UIColor {
-            if Settings.sharedManager().target == Testnet {
+            if Settings.sharedManager().isDarkMode {
+                return UIColor.black
+            }
+            else if Settings.sharedManager().target == Testnet {
                 return UIColor.main.dark
             }
             else if Settings.sharedManager().target == Masternet {
@@ -83,7 +86,28 @@ extension UIColor {
         }
         
         static var marineThree: UIColor {
+            if Settings.sharedManager().isDarkMode {
+                return .init(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1)
+            }
             return UIColor.white.withAlphaComponent(0.02)
+        }
+        
+        static var cellBackgroundColor: UIColor {
+             if Settings.sharedManager().isDarkMode {
+                return .init(red: 12 / 255, green: 12 / 255, blue: 12 / 255, alpha: 1)
+             }
+             return UIColor.white.withAlphaComponent(0.02)
+         }
+        
+        static var gasine: UIColor {
+             return .init(red: 4 / 255, green: 37 / 255, blue: 72 / 255, alpha: 1)
+         }
+                
+        static var selectedColor: UIColor {
+            if Settings.sharedManager().isDarkMode {
+                return .init(red: 28 / 255, green: 28 / 255, blue: 30 / 255, alpha: 1)
+            }
+            return .init(red: 0 / 255, green: 0 / 255, blue: 0 / 255, alpha: 0.002)
         }
         
         static var marineThree2: UIColor {
@@ -91,7 +115,10 @@ extension UIColor {
         }
         
         static var twilightBlue2: UIColor {
-            if Settings.sharedManager().target == Testnet {
+            if Settings.sharedManager().isDarkMode {
+                return .init(red: 28 / 255, green: 28 / 255, blue: 30 / 255, alpha: 1)
+            }
+            else if Settings.sharedManager().target == Testnet {
                 return .init(red: 28 / 255, green: 23 / 255, blue: 41 / 255, alpha: 1)
             }
             else if Settings.sharedManager().target == Masternet {
@@ -101,7 +128,10 @@ extension UIColor {
         }
         
         static var twilightBlue: UIColor {
-            if Settings.sharedManager().target == Testnet {
+            if Settings.sharedManager().isDarkMode {
+                return .init(red: 28 / 255, green: 28 / 255, blue: 30 / 255, alpha: 1)
+            }
+            else if Settings.sharedManager().target == Testnet {
                 return .init(red: 27 / 255, green: 32 / 255, blue: 57 / 255, alpha: 1)
             }
             else if Settings.sharedManager().target == Masternet {
@@ -149,6 +179,9 @@ extension UIColor {
         }
         
         static var blueyGrey: UIColor {
+            if(Settings.sharedManager().isDarkMode) {
+                return UIColor.main.steel
+            }
             return .init(red: 141 / 255, green: 161 / 255, blue: 173 / 255, alpha: 1)
         }
         

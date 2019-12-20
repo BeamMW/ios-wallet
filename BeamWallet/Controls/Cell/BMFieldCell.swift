@@ -43,6 +43,9 @@ class BMFieldCell: BaseCell {
         mainStack.isUserInteractionEnabled = true
         mainStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         
+        if Settings.sharedManager().isDarkMode {
+            nameLabel.textColor = UIColor.main.steel;
+        }
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {

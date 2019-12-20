@@ -42,6 +42,10 @@ class BMExpandCell: BaseCell {
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.clear
         selectedBackgroundView = selectedView
+        
+        if Settings.sharedManager().isDarkMode {
+            nameLabel.textColor = UIColor.main.steel;
+        }
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

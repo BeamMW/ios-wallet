@@ -224,11 +224,6 @@
             }
         }
     }
-    else{
-        NSMutableAttributedString *categoryString = [[NSMutableAttributedString alloc] initWithString:[@"none" localized]];
-        [categoryString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, categoryString.string.length)];
-        [attrString appendAttributedString:categoryString];
-    }
 
     return attrString;
 }

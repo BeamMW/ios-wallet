@@ -47,20 +47,6 @@ class LeftMenuViewController: BaseTableViewController {
         
         Settings.sharedManager().addDelegate(self)
         
-        let colors = [UIColor.main.twilightBlue, UIColor.main.twilightBlue2]
-
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.colors = colors.map { $0.cgColor }
-        gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
-        
-        let backgroundImage = UIImageView()
-        backgroundImage.clipsToBounds = true
-        backgroundImage.contentMode = .scaleToFill
-        backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
-        backgroundImage.tag = 10
-        backgroundImage.layer.addSublayer(gradient)
-        
-        tableView.backgroundView = backgroundImage
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -82,7 +68,24 @@ class LeftMenuViewController: BaseTableViewController {
 
         tableView.tableHeaderView = header
 
+        addBackgroundView()
         addFooterView()
+    }
+    
+    private func addBackgroundView() {
+        let colors = [UIColor.main.twilightBlue, (Settings.sharedManager().target == Mainnet && !Settings.sharedManager().isDarkMode) ? UIColor.main.gasine : UIColor.black]
+
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.colors = colors.map { $0.cgColor }
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        
+        let backgroundImage = UIImageView()
+        backgroundImage.clipsToBounds = true
+        backgroundImage.contentMode = .scaleToFill
+        backgroundImage.frame = CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        backgroundImage.tag = 10
+        backgroundImage.layer.addSublayer(gradient)
+        tableView.backgroundView = backgroundImage
     }
     
     private func addFooterView() {
@@ -95,7 +98,7 @@ class LeftMenuViewController: BaseTableViewController {
         titleParagraphStyle.alignment = .left
         
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = IconExternalLinkGray()?.maskWithColor(color: UIColor.main.steelGrey)
+        imageAttachment.image = IconExternalLinkGray()?.maskWithColor(color: Settings.sharedManager().isDarkMode ? UIColor.main.brightTeal.withAlphaComponent(0.5) : UIColor.main.steelGrey)
         let imageString = NSAttributedString(attachment: imageAttachment)
         
         let attributedString = NSMutableAttributedString(string:Localizable.shared.strings.where_buy_beam)
@@ -172,18 +175,17 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.backgroundColor = UIColor.clear
             cell?.contentView.backgroundColor = UIColor.clear
             cell?.textLabel?.highlightedTextColor = UIColor.main.brightTeal
-            cell?.textLabel?.textColor = UIColor.main.steelGrey
             cell?.textLabel?.font = RegularFont(size: 17)
-
-            let selectedBackgroundView = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
-            selectedBackgroundView.image = MenuSelectedBackground();
-            cell?.selectedBackgroundView = selectedBackgroundView
         }
         
+        cell?.textLabel?.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey
         cell?.textLabel?.text = items[indexPath.row].name
-        cell?.imageView?.image = items[indexPath.row].icon?.maskWithColor(color: UIColor.main.steelGrey)
+        cell?.imageView?.image = items[indexPath.row].icon?.maskWithColor(color: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey)
         cell?.imageView?.highlightedImage = items[indexPath.row].icon?.maskWithColor(color: UIColor.main.brightTeal)
 
+        let selectedBackgroundView = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
+        selectedBackgroundView.image = MenuSelectedBackground();
+        cell?.selectedBackgroundView = selectedBackgroundView
         
         return cell!
     }
@@ -253,7 +255,17 @@ extension LeftMenuViewController : SettingsModelDelegate {
     func onChangeLanguage() {
         addFooterView()
         
-        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
+        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: false, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: true, type: SettingsViewController.self)]
+        
+        tableView.reloadData()
+    }
+    
+    func onChangeDarkMode() {
+        addBackgroundView()
+        addFooterView()
+
+        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: false, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: true, type: SettingsViewController.self)]
+
         
         tableView.reloadData()
     }

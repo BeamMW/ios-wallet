@@ -20,18 +20,34 @@
 #import "BMUTXO.h"
 #import "BMTransaction.h"
 #import "StringLocalize.h"
+#import "Settings.h"
 
 @implementation BMUTXO
 
 -(NSMutableAttributedString*_Nonnull)attributedStatus {
-    NSString *available = [NSString stringWithFormat:@"(%@ %llu)",[@"till_block" localized].lowercaseString, self.maturity];
-    NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.capitalizedString, available];
-    
-    NSRange range = [str rangeOfString:available];
-    
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:str];
-    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:range];
-    return attrString;
+    if(_status == BMUTXOMaturing) {
+        NSString *available = [NSString stringWithFormat:@"(%@ %llu)",[@"till_block" localized].lowercaseString, self.maturity];
+        NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.capitalizedString, available];
+        
+        NSRange range = [str rangeOfString:available];
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:str];
+        [attrString addAttribute:NSForegroundColorAttributeName value:[Settings sharedManager].isDarkMode ?  [UIColor colorWithRed:142.0f/255.0f green:142.0f/255.0f blue:147.0f/255.0f alpha:1] : [UIColor lightGrayColor] range:range];
+        return attrString;
+    }
+    else if(_maturity > 0) {
+        NSString *available = [NSString stringWithFormat:@"(%@ %llu %@)",[@"since" localized].lowercaseString, self.maturity, [@"block_height" localized].lowercaseString];
+        NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.capitalizedString, available];
+        
+        NSRange range = [str rangeOfString:available];
+        
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:str];
+        [attrString addAttribute:NSForegroundColorAttributeName value:[Settings sharedManager].isDarkMode ?  [UIColor colorWithRed:142.0f/255.0f green:142.0f/255.0f blue:147.0f/255.0f alpha:1] : [UIColor lightGrayColor] range:range];
+        return attrString;
+    }
+    else{
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_statusString];
+        return attrString;
+    }
 }
 
 @end

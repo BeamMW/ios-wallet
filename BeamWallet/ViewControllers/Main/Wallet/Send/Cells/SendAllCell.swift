@@ -35,6 +35,11 @@ class SendAllCell: BaseCell {
         selectionStyle = .none
         
         allButton.setTitle(Localizable.shared.strings.add_all, for: .normal)
+        
+        if Settings.sharedManager().isDarkMode {
+            titleLabel.textColor = UIColor.main.steel;
+            amountLabel.textColor = UIColor.main.steel;
+        }
     }
 
     @IBAction func onSendAll(sender: UIButton) {
