@@ -16,7 +16,7 @@
 "seed_prhase" = "시드 구문";
 "input_seed" = "당신의 시드 구문을 작성하세요";
 "confirm_seed_text" = "시드 구문을 똑바로 적었는지 확인하는 절차입니다. \n아래에 특정 단어들을 채워 넣어주세요";
-"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. After successful verification, you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "display_seed_old" = "당신의 시드 구문은 당신의 지갑에 있는 모든 자금에 접근할 수 있는 키입니다. 안전하게 구문을 프린트하거나 적어놓으십시오. 혹은 금고에 보관하세요. 구문 없이는 당신의 자금을 복구할 수 없을 것입니다.";
 "intro_seed_main" = "시드 구문을 생성하여 새로운 지갑을 만드십시오. 기기를 잃어버린 후, 자금을 복구 하려면 시드 구문이 필요할 것입니다. 절대 시드 구문을 키체인이나 비밀번호 관리자에 적어놓지 마십시오. 절대 이를 로컬 파일시스템이나 원격 폴더에 저장하지 마십시오.";
 "intro_seed_1" = "아무에게도 당신의 시드 구문을 보여주지 마세요";

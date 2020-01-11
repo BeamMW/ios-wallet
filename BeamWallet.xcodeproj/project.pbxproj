@@ -365,9 +365,6 @@
 		926F4B4122E0CDB7007755D9 /* LGSideMenuBorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 926F4B2822E0CDB7007755D9 /* LGSideMenuBorderView.m */; };
 		926F4B4222E0CDB7007755D9 /* LGSideMenuBorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 926F4B2822E0CDB7007755D9 /* LGSideMenuBorderView.m */; };
 		926F4B4322E0CDB7007755D9 /* LGSideMenuBorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 926F4B2822E0CDB7007755D9 /* LGSideMenuBorderView.m */; };
-		92708DCF2271B2ED00B30613 /* TGBotManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DCE2271B2ED00B30613 /* TGBotManager.swift */; };
-		92708DD02271B2ED00B30613 /* TGBotManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DCE2271B2ED00B30613 /* TGBotManager.swift */; };
-		92708DD12271B2ED00B30613 /* TGBotManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DCE2271B2ED00B30613 /* TGBotManager.swift */; };
 		92708DD82271FA5100B30613 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DD72271FA5100B30613 /* SettingsViewModel.swift */; };
 		92708DD92271FA5100B30613 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DD72271FA5100B30613 /* SettingsViewModel.swift */; };
 		92708DDA2271FA5100B30613 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DD72271FA5100B30613 /* SettingsViewModel.swift */; };
@@ -1182,7 +1179,6 @@
 		926F4B2622E0CDB7007755D9 /* UIViewController+LGSideMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LGSideMenuController.m"; sourceTree = "<group>"; };
 		926F4B2722E0CDB7007755D9 /* LGSideMenuHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGSideMenuHelper.h; sourceTree = "<group>"; };
 		926F4B2822E0CDB7007755D9 /* LGSideMenuBorderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSideMenuBorderView.m; sourceTree = "<group>"; };
-		92708DCE2271B2ED00B30613 /* TGBotManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGBotManager.swift; sourceTree = "<group>"; };
 		92708DD72271FA5100B30613 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		92708DDB2272398300B30613 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		927367212277AB330060CB67 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
@@ -2357,7 +2353,6 @@
 				92D3CBD02264AB6D007E3C55 /* BiometricAuthorization.swift */,
 				92480DAD22957C4D0084512A /* AppStoreReviewManager.swift */,
 				921AE999229957F6008869EB /* ShortcutManager.swift */,
-				92708DCE2271B2ED00B30613 /* TGBotManager.swift */,
 				92C4F2DF22B2474E001391FB /* BackgroundDownloader.swift */,
 				92C4F2E322B24F58001391FB /* RestoreManager.swift */,
 				92F8EFD5235091B500A20B1A /* OnboardManager.swift */,
@@ -3010,7 +3005,6 @@
 				9219595522821F9C007E9723 /* BMTableHeaderTitleView.swift in Sources */,
 				92480DAE22957C4D0084512A /* AppStoreReviewManager.swift in Sources */,
 				927EDE1B22A66033005D5CEA /* NonDisappearingView.swift in Sources */,
-				92708DCF2271B2ED00B30613 /* TGBotManager.swift in Sources */,
 				92F8EFD6235091B500A20B1A /* OnboardManager.swift in Sources */,
 				92FC611F2229803700AEABC1 /* BMField.swift in Sources */,
 				929885F8222B32C40038C015 /* Field.swift in Sources */,
@@ -3211,7 +3205,6 @@
 				9219595622821F9C007E9723 /* BMTableHeaderTitleView.swift in Sources */,
 				92480DAF22957C4D0084512A /* AppStoreReviewManager.swift in Sources */,
 				927EDE1C22A66033005D5CEA /* NonDisappearingView.swift in Sources */,
-				92708DD02271B2ED00B30613 /* TGBotManager.swift in Sources */,
 				92F8EFD7235091B500A20B1A /* OnboardManager.swift in Sources */,
 				9288DD32223A55410020C501 /* BMField.swift in Sources */,
 				9288DD34223A55410020C501 /* Field.swift in Sources */,
@@ -3412,7 +3405,6 @@
 				9219595722821F9C007E9723 /* BMTableHeaderTitleView.swift in Sources */,
 				92480DB022957C4D0084512A /* AppStoreReviewManager.swift in Sources */,
 				927EDE1D22A66033005D5CEA /* NonDisappearingView.swift in Sources */,
-				92708DD12271B2ED00B30613 /* TGBotManager.swift in Sources */,
 				92F8EFD8235091B500A20B1A /* OnboardManager.swift in Sources */,
 				92E2EAD8226F21C700367928 /* BMField.swift in Sources */,
 				92E2EAD9226F21C700367928 /* Field.swift in Sources */,
@@ -3805,11 +3797,7 @@
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 11;
-=======
 				CURRENT_PROJECT_VERSION = 4;
->>>>>>> sprint_4
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -3890,11 +3878,7 @@
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 11;
-=======
 				CURRENT_PROJECT_VERSION = 4;
->>>>>>> sprint_4
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3975,7 +3959,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletTestNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4010,7 +3994,7 @@
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 				);
-				MARKETING_VERSION = 4;
+				MARKETING_VERSION = 4.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -4058,7 +4042,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletTestNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4102,7 +4086,7 @@
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/masternet",
 				);
-				MARKETING_VERSION = 4;
+				MARKETING_VERSION = 4.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -4148,7 +4132,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4183,7 +4167,7 @@
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
 				);
-				MARKETING_VERSION = 4.0;
+				MARKETING_VERSION = 4.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -4228,7 +4212,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4262,7 +4246,7 @@
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
 				);
-				MARKETING_VERSION = 4.0;
+				MARKETING_VERSION = 4.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

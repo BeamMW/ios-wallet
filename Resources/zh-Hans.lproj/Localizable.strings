@@ -16,7 +16,7 @@
 "seed_prhase" = "助记词";
 "input_seed" = "请输入助记词";
 "confirm_seed_text" = "为验证助记词已被您被正确誊写并保存，请根据下面数字提示输入相应的助记词";
-"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. After successful verification, you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "display_seed_old" = "助记词是访问您账户资金的密钥\n必须打印或誊写助记词，并将其妥善保存在保险箱中\n如果您遗失或忘记助记词，您将无法找回或恢复钱包中的资金";
 "intro_seed_main" = "通过生成助记词来创建新钱包\n如果您不幸丢失了本设备，可以通过助记词来恢复钱包\n永远不要使用“钥匙串”功能或密码管理器功能来存储助记词\n永远不要用电子系统或云盘保存助记词";
 "intro_seed_1" = "不要向任何人泄漏您的助记词";

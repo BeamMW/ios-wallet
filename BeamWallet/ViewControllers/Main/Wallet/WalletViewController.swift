@@ -51,22 +51,11 @@ class WalletViewController: BaseTableViewController {
         AppModel.sharedManager().isLoggedin = true
         
         AppStoreReviewManager.incrementAppOpenedCount()
-        
-        NotificationManager.sharedManager.subscribeToTopics(addresses: AppModel.sharedManager().walletAddresses as? [BMAddress])
-        
+                
         Settings.sharedManager().addDelegate(self)
         
         expandProgress = !Settings.sharedManager().isHideAmounts
         expandAvailable = !Settings.sharedManager().isHideAmounts
-        
-        if TGBotManager.sharedManager.isNeedLinking() {
-            TGBotManager.sharedManager.startLinking { [weak self] _ in
-                self?.tableView.reloadData()
-            }
-        }
-        else {
-            NotificationManager.sharedManager.displayConfirmAlert()
-        }
         
         rightButton()
         
@@ -145,6 +134,14 @@ class WalletViewController: BaseTableViewController {
             }
         }
         
+        statusViewModel.onVerificationCompleted = { [weak self] in
+            UIView.performWithoutAnimation {
+                guard let strongSelf = self else { return }
+                strongSelf.tableView.stopRefreshing()
+                strongSelf.tableView.reloadData()
+            }
+        }
+        
         statusViewModel.onDataChanged = { [weak self] in
             
             guard let strongSelf = self else { return }
@@ -158,11 +155,11 @@ class WalletViewController: BaseTableViewController {
                 if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
                     cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: strongSelf.statusViewModel.selectedState, avaiableMaturing: strongSelf.statusViewModel.isAvaiableMautring()))
                 }
-                
+
                 if let cell = strongSelf.tableView.findCell(WalletProgressCell.self) as? WalletProgressCell {
                     cell.configure(with: (expand: strongSelf.expandProgress, status: AppModel.sharedManager().walletStatus))
                 }
-                
+
                 if strongSelf.isNeedUpdatingReload {
                     strongSelf.isNeedUpdatingReload = false
                     strongSelf.tableView.reloadData()
@@ -488,7 +485,7 @@ extension WalletViewController: OnboardCellDelegate {
                 strongSelf.alert(message: reason)
             }
             else if let result = url {
-                strongSelf.openUrl(url: result)
+                strongSelf.openUrl(url: result, additionalInfo: Localizable.shared.strings.faucet_address_alert, infoDelay: 4)
             }
         }
     }

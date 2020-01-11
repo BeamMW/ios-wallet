@@ -24,11 +24,20 @@ class BMToast: UIView {
     
     private static var toast: BMToast!
     private static var timer:Timer!
-    
-    init(text:String, shadow:Bool = true) {
+    private static var onDismissed : (() -> Void)?
+
+    init(text:String, shadow:Bool = true, block:(() -> Void)? = nil) {
         let offset:CGFloat = (Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS) ? 40 : 15
 
-        super.init(frame: CGRect(x: 20, y: UIScreen.main.bounds.size.height - 44 - offset, width: UIScreen.main.bounds.size.width - 40, height: 44))
+        let w = UIScreen.main.bounds.size.width - 40
+        
+        var textSize = text.boundingRect(with: CGSize(width: w - 30, height: 9999), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: RegularFont(size: 14)], context: nil)
+        
+        if(textSize.height<34) {
+            textSize.size.height = 34
+        }
+        
+        super.init(frame: CGRect(x: 20, y: UIScreen.main.bounds.size.height - offset - textSize.height, width: w, height: textSize.height + 10))
         
         backgroundColor = UIColor.white
         
@@ -43,10 +52,13 @@ class BMToast: UIView {
             layer.shadowRadius = 1.0
         }
         
-        let label = UILabel(frame: CGRect(x: 20, y: 5, width: frame.size.width - 30, height: 34))
+        
+        
+        let label = UILabel(frame: CGRect(x: 20, y: 5, width: frame.size.width - 30, height: textSize.height))
         label.font = RegularFont(size: 14)
         label.textColor = UIColor.main.marineOriginal
         label.text = text
+        label.numberOfLines = 0
         label.textAlignment = .left
         addSubview(label)
     }
@@ -55,14 +67,16 @@ class BMToast: UIView {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-    public static func show(text:String, shadow:Bool = true) {
+    public static func show(text:String, shadow:Bool = true, duration:Double? = nil, block:(() -> Void)? = nil) {
+        
+        BMToast.onDismissed = block
         
         if timer != nil {
             timer.invalidate()
             timer = nil
         }
 
-        timer = Timer.scheduledTimer(timeInterval: TimeInterval(seconds), target: self, selector: #selector(BMToast.dismiss), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: TimeInterval(duration == nil ? seconds : duration!), target: self, selector: #selector(BMToast.dismiss), userInfo: nil, repeats: false)
 
         
         if toast != nil {
@@ -72,14 +86,20 @@ class BMToast: UIView {
         
         let app = UIApplication.shared.delegate as! AppDelegate
         
-        toast = BMToast(text: text, shadow: shadow)
+        toast = BMToast(text: text, shadow: shadow, block: block)
     
         app.window?.addSubview(toast)
     
         toast.popIn()
     }
     
+    @objc private func dismissTimer() {
+        BMToast.dismiss()
+    }
+    
     @objc public static func dismiss() {
+        BMToast.onDismissed?()
+
         if BMToast.timer != nil {
             BMToast.timer.invalidate()
             BMToast.timer = nil

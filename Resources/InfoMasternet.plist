@@ -6,6 +6,36 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Beam Wallet Masternet</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleDocumentTypes</key>
+			<array>
+				<dict>
+					<key>CFBundleTypeIconFiles</key>
+					<array/>
+					<key>CFBundleTypeName</key>
+					<string>Dat model</string>
+					<key>CFBundleTypeRole</key>
+					<string>Editor</string>
+					<key>LSHandlerRank</key>
+					<string>Alternate</string>
+					<key>LSItemContentTypes</key>
+					<array>
+						<string>dat</string>
+					</array>
+				</dict>
+			</array>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>Dat file</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.giena.Interface.document.dat</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -18,6 +48,17 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.mw.beam.beamwalletiOSMasternet</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bmwalletmaster</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>Fabric</key>
@@ -133,38 +174,10 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<false/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleDocumentTypes</key>
-			<array>
-				<dict>
-					<key>CFBundleTypeIconFiles</key>
-					<array/>
-					<key>CFBundleTypeName</key>
-					<string>Dat model</string>
-					<key>CFBundleTypeRole</key>
-					<string>Editor</string>
-					<key>LSHandlerRank</key>
-					<string>Alternate</string>
-					<key>LSItemContentTypes</key>
-					<array>
-						<string>dat</string>
-					</array>
-				</dict>
-			</array>
-			<key>CFBundleTypeIconFiles</key>
-			<array/>
-			<key>CFBundleTypeName</key>
-			<string>Dat file</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>com.giena.Interface.document.dat</string>
-			</array>
-		</dict>
-	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -188,7 +201,5 @@
 		</dict>
 		<dict/>
 	</array>
-	<key>UISupportsDocumentBrowser</key>
-	<false/>
 </dict>
 </plist>

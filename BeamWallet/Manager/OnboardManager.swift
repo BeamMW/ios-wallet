@@ -78,13 +78,13 @@ class OnboardManager: NSObject {
     
     private func faucetURLForAddress(address: BMAddress) -> URL {
         if Settings.sharedManager().target == Testnet {
-            return URL(string: "https://faucet.beamprivacy.community/?address=\(address.walletId)&type=testnet")!
+            return URL(string: "https://faucet.beamprivacy.community/?address=\(address.walletId)&type=testnet&redirectUri=bmwallettestnet://")!
         }
         else if Settings.sharedManager().target == Masternet {
-            return URL(string: "https://faucet.beamprivacy.community/?address=\(address.walletId)&type=masternet")!
+            return URL(string: "https://faucet.beamprivacy.community/?address=\(address.walletId)&type=masternet&redirectUri=bmwalletmaster://")!
         }
         else {
-            return URL(string: "https://faucet.beamprivacy.community/?address=\(address.walletId)&type=mainnet")!
+            return URL(string: "https://faucet.beamprivacy.community/?address=\(address.walletId)&type=mainnet&redirectUri=bmwallet://")!
         }
     }
     

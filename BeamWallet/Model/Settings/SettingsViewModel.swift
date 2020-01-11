@@ -161,7 +161,7 @@ class SettingsViewModel: NSObject {
                 section_0.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, type: .enable_bio, hasArrow: false))
             }
             if OnboardManager.shared.isSkipedSeed() == true {
-                   section_0.append(SettingsItem(title: Localizable.shared.strings.complete_wallet_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
+                   section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
 //            if OnboardManager.shared.isSkipedSeed() == true {
@@ -449,7 +449,7 @@ extension SettingsViewModel {
                     top.alert(message: reason)
                 }
                 else if let result = link {
-                    top.openUrl(url: result)
+                    top.openUrl(url: result, additionalInfo: Localizable.shared.strings.faucet_address_alert, infoDelay: 4)
                 }
             }
         }

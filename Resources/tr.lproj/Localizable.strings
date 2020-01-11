@@ -16,7 +16,7 @@
 "seed_prhase" = "Anahtar kelimeler";
 "input_seed" = "Anahtar kelimelerinizi yazın";
 "confirm_seed_text" = "Anahtar kelimelerin doğru yazıldığından emin olmak için lütfen aşağıdaki kelimeleri girin";
-"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. After successful verification, you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "display_seed_old" = "Anahtar kelimeleriniz, cüzdanınızdaki tüm bakiyenin erişim anahtarıdır. Güvenli veya kilitli bir kasada saklamak için ifadeyi yazdırın veya yazın. İfade olmadan bakiyenize ulaşamazsınız.";
 "intro_seed_main" = "Anahtar kelimeleri kullanarak yeni bir cüzdan oluşturun. Cihazınızı kaybederseniz, cüzdanınızı kurtarmak için bu anahtar kelimelere ihtiyacınız olacak! Anahtar kelimelerinizi bir şifre yönetici uygulamasına yazmayın. Asla yerel ya da uzak klasörlerinize kaydetmeyin.";
 "intro_seed_1" = "Kimsenin anahtar kelimelerinizi görmesine izin vermeyin";

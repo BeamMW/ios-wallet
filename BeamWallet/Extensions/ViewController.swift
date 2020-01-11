@@ -72,15 +72,29 @@ extension UIViewController {
         }
     }
     
-    func openUrl(url: URL) {
+    func openUrl(url: URL, additionalInfo:String? = nil, infoDelay:Double? = nil) {
         if Settings.sharedManager().isAllowOpenLink {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if let info = additionalInfo, let seconds = infoDelay {
+                BMToast.show(text: info, shadow: true, duration: seconds, block: {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                })
+            }
+            else{
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
         }
         else {
             self.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
                 
             }) { _ in
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if let info = additionalInfo, let seconds = infoDelay {
+                    BMToast.show(text: info, shadow: true, duration: seconds, block: {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    })
+                }
+                else{
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
             }
         }
     }

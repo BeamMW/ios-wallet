@@ -49,7 +49,6 @@ class BiometricAuthorization: NSObject {
     }
     
     public func faceIDAvailable() -> Bool {
-        
         if #available(iOS 11.0, *) {
             let context = LAContext()
             return (context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: nil) && context.biometryType == .faceID)
@@ -77,7 +76,7 @@ class BiometricAuthorization: NSObject {
             mechanism = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.face_id : Localizable.shared.strings.touch_id
         }
 
-         var reason = ""
+        var reason = ""
         
         if let value = reasonText {
             reason = value
@@ -89,7 +88,7 @@ class BiometricAuthorization: NSObject {
         let context = LAContext()
         context.localizedFallbackTitle = ""
         context.touchIDAuthenticationAllowableReuseDuration = 0
-        
+
         context.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (success, error) in
             DispatchQueue.main.async {
                 if success {

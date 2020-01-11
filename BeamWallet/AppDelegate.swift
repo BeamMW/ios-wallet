@@ -202,41 +202,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.backgroundTask = .invalid
     }
     
-    private func tryLinkingBot(url: URL) {
-        if TGBotManager.sharedManager.isValidUserFromUrl(url: url) {
-            if AppModel.sharedManager().isLoggedin {
-                TGBotManager.sharedManager.startLinking { _ in
-                }
-            }
-            else {
-                if let vc = UIApplication.getTopMostViewController() {
-                    vc.alert(title: Localizable.shared.strings.tg_bot, message: Localizable.shared.strings.tg_bot_link) { _ in
-                        
-                        if let passVC = UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController {
-                            passVC.biometricAuthorization()
-                        }
-                    }
-                }
-            }
-        }
-    }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if let url = userActivity.webpageURL {
-            if (UIApplication.getTopMostViewController() as? EnterWalletPasswordViewController) != nil {
-                _ = TGBotManager.sharedManager.isValidUserFromUrl(url: url)
-            }
-            else {
-                self.tryLinkingBot(url: url)
-            }
-        }
-        
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        self.tryLinkingBot(url: url)
-        
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {        
         return true
     }
     

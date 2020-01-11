@@ -35,6 +35,7 @@ class StatusViewModel: NSObject {
     }
     
     public var onDataChanged : (() -> Void)?
+    public var onVerificationCompleted : (() -> Void)?
     public var selectedState = SelectedState.available
     public var cells = [CellTypes]()
     
@@ -113,7 +114,7 @@ extension StatusViewModel: WalletModelDelegate {
     func onWalletCompleteVerefication() {
         DispatchQueue.main.async {
              self.cells = self.getCells()
-             self.onDataChanged?()
+             self.onVerificationCompleted?()
          }
     }
     

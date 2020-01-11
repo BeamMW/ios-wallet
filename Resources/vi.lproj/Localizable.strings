@@ -16,7 +16,7 @@
 "seed_prhase" = "Cụm từ hạt giống";
 "input_seed" = "Gõ cụm từ hạt giống của bạn";
 "confirm_seed_text" = "Để đảm bảo cụm từ hạt giống được viết chính xác, vui lòng điền vào các từ cụ thể bên dưới";
-"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. From now on you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
+"display_seed" = "Your seed phrase is the access key to all the funds in your wallet. After successful verification, you won’t be able to see your seed phrase in settings. Print or write down the phrase to keep it in a safe or in a locked vault. Without the phrase you will not be able to recover your money.";
 "display_seed_old" = "Cụm từ hạt giống của bạn là khóa truy cập vào tất cả các khoản tiền trong ví của bạn. In hoặc viết cụm từ để giữ nó an toàn hoặc trong một hầm có khóa. Nếu không có cụm từ, bạn sẽ không thể lấy lại tiền của mình.";
 "intro_seed_main" = "Tạo một ví mới bằng cách tạo một cụm từ hạt giống. Nếu bạn mất thiết bị của mình, bạn sẽ cần cụm từ hạt giống để lấy lại tiền của mình. Không bao giờ nhập cụm từ hạt giống của bạn trong móc khóa hoặc trình quản lý mật khẩu. Không bao giờ lưu nó trong hệ thống tập tin cục bộ của bạn hoặc các thư mục từ xa.";
 "intro_seed_1" = "Không để ai nhìn thấy cụm từ hạt giống của bạn";

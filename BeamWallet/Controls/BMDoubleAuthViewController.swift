@@ -54,7 +54,7 @@ class BMDoubleAuthViewController: BMInputViewController {
         case .seed:
             title = Localizable.shared.strings.show_seed_phrase
         case .verification:
-            title = Localizable.shared.strings.complete_verification
+            title = Localizable.shared.strings.seed_verification
         default:
             break
         }

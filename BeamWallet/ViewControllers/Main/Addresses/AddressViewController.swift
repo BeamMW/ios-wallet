@@ -51,11 +51,6 @@ class AddressViewController: BaseTableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        if isMovingFromParent {
-            addressViewModel.transactionViewModel = nil
-            addressViewModel = nil
-        }
     }
     
     private func subscribeToUpdates() {
