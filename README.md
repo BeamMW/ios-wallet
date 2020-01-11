@@ -23,7 +23,7 @@ Things that make BEAM special include:
 - April 2019    : Mainnet release
 
 # Current status
-- First Testnet development started
+- Released
 
 
 # How to build
