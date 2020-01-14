@@ -23,6 +23,11 @@ class TransactionShareView: UIView {
     
     @IBOutlet private weak var mainView: UIView!
 
+    @IBOutlet private weak var amountStackView: UIStackView!
+    @IBOutlet private weak var statusView: UIView!
+    @IBOutlet private weak var centeredStatusView: UIView!
+    @IBOutlet private weak var topView: UIView!
+
     @IBOutlet private weak var bgView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var dateLabel: UILabel!
@@ -30,8 +35,10 @@ class TransactionShareView: UIView {
     @IBOutlet private weak var amountLabel: UILabel!
     @IBOutlet private weak var typeLabel: UILabel!
     @IBOutlet private weak var currencyIcon: UIImageView!
-
     @IBOutlet private weak var statusIcon: UIImageView!
+    
+    @IBOutlet private weak var centeredTypeLabel: UILabel!
+    @IBOutlet private weak var centeredStatusIcon: UIImageView!
 
     @IBOutlet private weak var senderTitleLabel: UILabel!
     @IBOutlet private weak var senderValueLabel: UILabel!
@@ -70,8 +77,16 @@ class TransactionShareView: UIView {
     }
     
     private func setupView() {
-        statusIcon.image = transaction.statusIcon()
+        amountStackView.isHidden = Settings.sharedManager().isHideAmounts
         
+        if Settings.sharedManager().isHideAmounts {
+            statusView.isHidden = true
+            centeredStatusView.isHidden = false
+        }
+        
+        statusIcon.image = transaction.statusIcon()
+        centeredStatusIcon.image = transaction.statusIcon()
+
         currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintAdjustmentMode = .normal
         
@@ -84,6 +99,7 @@ class TransactionShareView: UIView {
         receiverValueLabel.text = transaction.receiverAddress
         
         typeLabel.text = transaction.status.capitalizingFirstLetter()
+        centeredTypeLabel.text = transaction.status.capitalizingFirstLetter()
 
         if transaction.isSelf {
             senderTitleLabel.text = Localizable.shared.strings.my_send_address
@@ -119,6 +135,7 @@ class TransactionShareView: UIView {
         {
             typeLabel.textColor = UIColor.main.heliotrope
         }
+        centeredTypeLabel.textColor = typeLabel.textColor
         
         switch transaction.isIncome {
         case true:

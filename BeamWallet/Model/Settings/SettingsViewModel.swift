@@ -58,6 +58,7 @@ class SettingsViewModel: NSObject {
         case imprt = 25
         case create_category = 26
         case open_category = 27
+        case random_node = 28
     }
     
     class SettingsItem {
@@ -151,7 +152,7 @@ class SettingsViewModel: NSObject {
             items.append(section_1)
         case .node:
             var section_0 = [SettingsItem]()
-            section_0.append(SettingsItem(title: Localizable.shared.strings.random_node, detail: nil, isSwitch: Settings.sharedManager().connectToRandomNode, type: .node, hasArrow: false))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.random_node, detail: nil, isSwitch: Settings.sharedManager().connectToRandomNode, type: .random_node, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, type: .ip_port, hasArrow: true))
             items.append(section_0)
         case .privacy:
