@@ -485,7 +485,16 @@ extension WalletViewController: OnboardCellDelegate {
                 strongSelf.alert(message: reason)
             }
             else if let result = url {
-                strongSelf.openUrl(url: result, additionalInfo: Localizable.shared.strings.faucet_address_alert, infoDelay: 4)
+                if Settings.sharedManager().isAllowOpenLink {
+                    BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
+                }
+                else {
+                    strongSelf.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
+                        
+                    }) { _ in
+                        BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
+                    }
+                }
             }
         }
     }

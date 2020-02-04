@@ -151,7 +151,7 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     private func goNext(pass: String) {
         if AppModel.sharedManager().isLoggedin {
             AppModel.sharedManager().changePassword(pass)
-            KeychainManager.addPassword(password: pass)
+            _ = KeychainManager.addPassword(password: pass)
             
             back()
         }

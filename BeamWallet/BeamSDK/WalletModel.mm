@@ -89,8 +89,6 @@ void WalletModel::onStatus(const WalletStatus& status)
 
 void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vector<beam::wallet::TxDescription>& items)
 {
-    NSLog(@"onTxStatus");
-    
     NSMutableArray *transactions = [NSMutableArray new];
     
     for (const auto& item : items)
@@ -720,17 +718,13 @@ void WalletModel::onPostFunctionToClientContext(MessageFunction&& func) {
     
 }
 
-//void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
-//    
-//}
+void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
+    
+}
 
 //void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const std::vector <beam::wallet::WalletAddress > &items) {
-//    if(items[0].isOwn()) {
-//        getAsync()->getAddresses(true);
-//    }
-//    else{
-//        getAsync()->getAddresses(false);
-//    }
+//    getAsync()->getAddresses(true);
+//    getAsync()->getAddresses(false);
 //}
 
 

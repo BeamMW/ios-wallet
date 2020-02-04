@@ -101,9 +101,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UserDefaults.standard.synchronize()
             })
         }
-        
+    
         return true
     }
+    
+    func before(value1: String, value2: String) -> Bool {
+        let ch1 = value1.first
+        let l1 = ch1!.isLetter
+        if (!l1) {
+            return false
+        }
+        
+         let ch2 = value2.first
+         let l2 = ch2!.isLetter
+         if (!l2) {
+             return false
+         }
+        
+        return value1.lowercased() < value2.lowercased()
+    }
+    
     
     public func logout() {
         AppModel.sharedManager().clearAllCategories()

@@ -503,3 +503,5 @@
 "faucet_address_alert" = "Your address will be filled-in automatically on the faucet webpage";
 "seed_verification" = "Seed verification";
 "complete_seed_verification" = "Complete seed verification";
+"faucet_redirect_text" = "Redirecting to the faucet website.\nYour address will be filled-in automatically.";
+"clear_wallet_transactions_text" = "Unable to delete wallet with active transactions";

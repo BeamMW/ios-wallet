@@ -180,7 +180,10 @@ class SettingsViewModel: NSObject {
         case .tags:
             var categories = [SettingsItem]()
             if AppModel.sharedManager().categories.count > 0 {
-                for category in AppModel.sharedManager().categories as! [BMCategory] {
+               
+                let sorted = AppModel.sharedManager().sortedCategories()
+                
+                for category in sorted as! [BMCategory] {
                     categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, type: .open_category, category: category, hasArrow: true))
                 }
             }
@@ -450,7 +453,16 @@ extension SettingsViewModel {
                     top.alert(message: reason)
                 }
                 else if let result = link {
-                    top.openUrl(url: result, additionalInfo: Localizable.shared.strings.faucet_address_alert, infoDelay: 4)
+                    if Settings.sharedManager().isAllowOpenLink {
+                        BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
+                    }
+                    else {
+                        top.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
+                            
+                        }) { _ in
+                            BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
+                        }
+                    }
                 }
             }
         }
@@ -458,19 +470,25 @@ extension SettingsViewModel {
     
     func onClearWallet() {
         if let top = UIApplication.getTopMostViewController() {
-            top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { _ in
-                
-            }) { _ in
-                let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
-                modalViewController.completion = { obj in
-                    if obj {
-                        let app = UIApplication.shared.delegate as! AppDelegate
-                        app.logout()
+            
+            if(AppModel.sharedManager().hasActiveTransactions()) {
+                top.alert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_transactions_text, handler: nil)
+            }
+            else {
+                top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { _ in
+                    
+                }) { _ in
+                    let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
+                    modalViewController.completion = { obj in
+                        if obj {
+                            let app = UIApplication.shared.delegate as! AppDelegate
+                            app.logout()
+                        }
                     }
+                    modalViewController.modalPresentationStyle = .overFullScreen
+                    modalViewController.modalTransitionStyle = .crossDissolve
+                    top.present(modalViewController, animated: true, completion: nil)
                 }
-                modalViewController.modalPresentationStyle = .overFullScreen
-                modalViewController.modalTransitionStyle = .crossDissolve
-                top.present(modalViewController, animated: true, completion: nil)
             }
         }
     }

@@ -120,6 +120,7 @@ const int kFeeInGroth_Fork1 = 100;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self loadRules];
+
     
     return self;
 }
@@ -1894,6 +1895,18 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return _id;
 }
 
+-(BOOL)hasActiveTransactions {
+    for (BMTransaction *tr in self.transactions.reverseObjectEnumerator)
+    {
+        if(tr.enumStatus == BMTransactionStatusPending || tr.enumStatus == BMTransactionStatusInProgress
+           || tr.enumStatus == BMTransactionStatusRegistering) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 #pragma mark - UTXO
 
 -(void)setUtxos:(NSMutableArray<BMUTXO *> *)utxos {
@@ -2161,6 +2174,53 @@ bool OnProgress(uint64_t done, uint64_t total) {
              [delegate onCategoriesChange];
          }
      }
+}
+
+-(NSArray *)partitionObjects:(NSArray *)array collationStringSelector:(SEL)selector
+{
+    UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
+    NSInteger sectionCount = [[collation sectionTitles] count]; //section count is take from sectionTitles and not sectionIndexTitles
+    NSMutableArray *unsortedSections = [NSMutableArray arrayWithCapacity:sectionCount];
+
+    //create an array to hold the data for each section
+    for(int i = 0; i < sectionCount; i++)
+    {
+        [unsortedSections addObject:[NSMutableArray array]];
+    }
+
+    //put each object into a section
+    for (id object in array)
+    {
+        NSInteger index = [collation sectionForObject:object collationStringSelector:selector];
+        [[unsortedSections objectAtIndex:index] addObject:object];
+    }
+    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:sectionCount];
+
+    //sort each section
+    for (NSMutableArray *section in unsortedSections)
+    {
+        [sections addObject:[collation sortedArrayFromArray:section collationStringSelector:selector]];
+    }
+    return sections;
+}
+
+-(NSMutableArray<BMCategory*>*_Nonnull)sortedCategories {    
+    NSArray *sections = [self partitionObjects:_categories collationStringSelector:@selector(name)];
+    
+    NSMutableArray *sorted = [NSMutableArray array];
+    
+    for (NSArray *arr in sections) {
+        if(arr.count > 0) {
+            NSSortDescriptor *sortDescriptor;
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name"
+                                                       ascending:YES];
+            NSArray *sortedArray = [arr sortedArrayUsingDescriptors:@[sortDescriptor]];
+            
+            [sorted addObjectsFromArray:sortedArray];
+        }
+    }
+    
+    return sorted;
 }
 
 -(void)fixCategories {

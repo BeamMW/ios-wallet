@@ -44,8 +44,16 @@ class OnboardManager: NSObject {
     public func canReceiveFaucet() -> Bool {
         let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
         let isBalanceZero = (AppModel.sharedManager().walletStatus?.available ?? 0) == 0
-        return !isInProgress && isBalanceZero && !isCloseFaucet
+        let emptyTransactions = AppModel.sharedManager().transactions?.count == 0
+        return !isInProgress && isBalanceZero && !isCloseFaucet && emptyTransactions
     }
+    
+    public func faucetAvailable() -> Bool {
+          let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
+          let isBalanceZero = (AppModel.sharedManager().walletStatus?.available ?? 0) == 0
+          let emptyTransactions = AppModel.sharedManager().transactions?.count == 0
+          return !isInProgress && isBalanceZero && emptyTransactions
+      }
     
     public func receiveFaucet(completion: @escaping ((URL?, Error?) -> Void)) {
         let address = AppModel.sharedManager().findAddress(byName: "Beam community faucet")

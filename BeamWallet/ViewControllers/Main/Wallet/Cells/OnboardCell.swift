@@ -23,6 +23,7 @@ class OnboardCell: UITableViewCell {
     
     @IBOutlet weak private var verificationButton: BMButton!
     @IBOutlet weak private var receiveButton: BMButton!
+    @IBOutlet weak private var closeButton: UIButton!
 
     weak var delegate: OnboardCellDelegate?
 
@@ -41,10 +42,12 @@ class OnboardCell: UITableViewCell {
         if secure {
             detailLabel.text = Localizable.shared.strings.make_wallet_secure_text
             
+            closeButton.isHidden = true
             receiveButton.isHidden = true
             verificationButton.isHidden = false
         }
-        else {           
+        else {
+            closeButton.isHidden = false
             receiveButton.isHidden = false
             verificationButton.isHidden = true
                     

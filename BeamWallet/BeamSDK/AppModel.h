@@ -191,6 +191,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)clearAllTransactions;
 -(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID;
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
+-(BOOL)hasActiveTransactions;
 
 // utxo
 -(void)getUTXO;
@@ -211,6 +212,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category;
 -(void)fixCategories;
 -(void)clearAllCategories;
+-(NSMutableArray<BMCategory*>*_Nonnull)sortedCategories;
 
 //fork
 -(BOOL)isFork;

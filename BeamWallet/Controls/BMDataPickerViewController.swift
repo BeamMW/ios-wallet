@@ -227,10 +227,13 @@ class BMDataPickerViewController: BaseTableViewController {
             if selectedCategories.count == 0 {
                 selectedCategories.append("0")
             }
+            
             let none = BMCategory.none()
             none.name = none.name.capitalizingFirstLetter()
-            var categories = (AppModel.sharedManager().categories as! [BMCategory])
+           
+            var categories = AppModel.sharedManager().sortedCategories() as! [BMCategory]
             categories.insert(none, at: 0)
+            
             for category in categories {
                 let selected = selectedCategories.contains(String(category.id))
                 values.append(BMPickerData(title: category.name, detail: nil, titleColor: UIColor(hexString: category.color), arrowType: selected ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: category.id, multiplie: true))

@@ -25,8 +25,9 @@ import Foundation
 
 public class BMCountdownView: UIView {
     private var lineWidth: CGFloat = 1.5
-    private var lineColor: UIColor = UIColor.init(hexString: "#032E49")
-    private var trailLineColor: UIColor = UIColor.main.steelGrey.withAlphaComponent(0.3)
+    
+    var lineColor: UIColor = UIColor.init(hexString: "#032E49")
+    var trailLineColor: UIColor = UIColor.main.steelGrey.withAlphaComponent(0.3)
     
     public weak var delegate: BMCountdownViewDelegate?
     
@@ -37,7 +38,7 @@ public class BMCountdownView: UIView {
     private var interval: TimeInterval = 1
     private let fireInterval: TimeInterval = 0.01
     
-    private lazy var counterLabel: UILabel = {
+    lazy var counterLabel: UILabel = {
         let label = UILabel()
         self.addSubview(label)
         
