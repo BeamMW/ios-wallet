@@ -35,8 +35,6 @@ static NSString *logsKey = @"logsKey";
 static NSString *darkModeKey = @"darkModeKey";
 static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
 
-
-
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
     static dispatch_once_t onceToken;

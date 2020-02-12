@@ -30,12 +30,12 @@ class UnlockPasswordPopover: BaseViewController {
     private var event: UnlockEvent!
     private var allowBiometric: Bool = true
     
-    @IBOutlet private weak var passField: BMField!
-    @IBOutlet private weak var touchIdButton: UIButton!
-    @IBOutlet private weak var loginLabel: UILabel!
-    @IBOutlet private weak var height: NSLayoutConstraint!
-    @IBOutlet private weak var mainView: UIView!
-
+    @IBOutlet private var passField: BMField!
+    @IBOutlet private var touchIdButton: UIButton!
+    @IBOutlet private var loginLabel: UILabel!
+    @IBOutlet private var height: NSLayoutConstraint!
+    @IBOutlet private var mainView: UIView!
+    
     public var completion: ((Bool) -> Void)?
     
     init(event: UnlockEvent, allowBiometric: Bool = true) {
@@ -62,7 +62,6 @@ class UnlockPasswordPopover: BaseViewController {
         }
         
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
-        
         
         if !BiometricAuthorization.shared.canAuthenticate() || !Settings.sharedManager().isEnableBiometric || !allowBiometric {
             touchIdButton.isHidden = true
@@ -148,8 +147,12 @@ class UnlockPasswordPopover: BaseViewController {
                 
             }, failure: {
                 self.touchIdButton.tintColor = UIColor.white
+                
                 if BiometricAuthorization.shared.faceIDAvailable() {
-                    self.loginLabel.text = Localizable.shared.strings.confirm_transaction_3
+                    self.loginLabel.text = self.getTextForFaceID()
+                }
+                else {
+                    self.loginLabel.text = self.getTextForTouchID()
                 }
                 
             }, retry: {
@@ -185,7 +188,7 @@ class UnlockPasswordPopover: BaseViewController {
     }
     
     @IBAction func onClose(sender: UIButton) {
-        self.completion?(false)
+        completion?(false)
         dismiss(animated: true, completion: nil)
     }
 }

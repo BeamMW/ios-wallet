@@ -81,6 +81,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,assign) BOOL isLoggedin;
 @property (nonatomic,assign) BOOL isRestoreFlow;
 @property (nonatomic,assign) BOOL isNodeChanging;
+@property (nonatomic,assign) BOOL isOwnNode;
 @property (nonatomic,assign) BMRestoreType restoreType;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;

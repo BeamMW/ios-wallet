@@ -107,17 +107,17 @@ extension BMAddressCell: Configurable {
         if options.displayTransaction {
             if let last = AppModel.sharedManager().lastTransaction(fromAddress: options.address.walletId)
             {
-                transactionCommentIconY.constant = 10
-                
-                transactionCommentIconHeight.constant = 16
-                transactionCommentIconWidth.constant = 16
-                transactionCommentIcon.image = IconComment()
+                if(!last.comment.isEmpty) {
+                    transactionCommentIconY.constant = 10
+                    
+                    transactionCommentIconHeight.constant = 16
+                    transactionCommentIconWidth.constant = 16
+                    transactionCommentIcon.image = IconComment()
 
-                if !last.comment.isEmpty {
                     transactionCommentLabel.text =  "”" + last.comment + "”"
+
+                    transactionCommentDate.text = last.shortDate()
                 }
-                
-                transactionCommentDate.text = last.shortDate()
             }
         }
         

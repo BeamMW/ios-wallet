@@ -197,7 +197,7 @@ extension SettingsViewController : SettingsCellDelegate {
             else if item.type == .dark_mode {
                 Settings.sharedManager().isDarkMode = value
             }
-            else if item.type == .node {
+            else if item.type == .random_node {
                 Settings.sharedManager().connectToRandomNode = value
                 
                 if(value)

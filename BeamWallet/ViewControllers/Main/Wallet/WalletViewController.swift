@@ -151,7 +151,7 @@ class WalletViewController: BaseTableViewController {
                 strongSelf.statusViewModel.selectedState = .available
             }
             
-            if AppModel.sharedManager().isUpdating {
+            if AppModel.sharedManager().isUpdating && AppModel.sharedManager().isOwnNode {
                 if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
                     cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: strongSelf.statusViewModel.selectedState, avaiableMaturing: strongSelf.statusViewModel.isAvaiableMautring()))
                 }

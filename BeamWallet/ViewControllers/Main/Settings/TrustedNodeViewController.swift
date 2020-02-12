@@ -166,7 +166,8 @@ class TrustedNodeViewController: BMInputViewController {
         
         AppModel.sharedManager().removeDelegate(self)
         AppModel.sharedManager().isRestoreFlow = false
-        
+        AppModel.sharedManager().isOwnNode = true
+
         AppModel.sharedManager().refreshAddresses()
         AppModel.sharedManager().getUTXO()
         AppModel.sharedManager().getWalletStatus()

@@ -162,7 +162,7 @@ class SettingsViewModel: NSObject {
                 section_0.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, type: .enable_bio, hasArrow: false))
             }
             if OnboardManager.shared.isSkipedSeed() == true {
-                   section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
+                section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
 //            if OnboardManager.shared.isSkipedSeed() == true {
@@ -180,7 +180,6 @@ class SettingsViewModel: NSObject {
         case .tags:
             var categories = [SettingsItem]()
             if AppModel.sharedManager().categories.count > 0 {
-               
                 let sorted = AppModel.sharedManager().sortedCategories()
                 
                 for category in sorted as! [BMCategory] {
@@ -359,17 +358,17 @@ extension SettingsViewModel {
         if let top = UIApplication.getTopMostViewController() {
             let modalViewController = UnlockPasswordPopover(event: .node)
             modalViewController.completion = { [weak self] obj in
-                let vc = TrustedNodeViewController(event: .change)
-                vc.completion = { [weak self]
-                    obj in
-                    
-                    if obj == true {
-                        self?.items[0][1].detail = Settings.sharedManager().nodeAddress
+                if obj {
+                    let vc = TrustedNodeViewController(event: .change)
+                    vc.completion = { [weak self]
+                        obj in
+                        if obj == true {
+                            self?.items[0][1].detail = Settings.sharedManager().nodeAddress
+                        }
+                        self?.onDataChanged?()
                     }
-                    
-                    self?.onDataChanged?()
+                    top.pushViewController(vc: vc)
                 }
-                top.pushViewController(vc: vc)
             }
             modalViewController.modalPresentationStyle = .overFullScreen
             modalViewController.modalTransitionStyle = .crossDissolve
@@ -470,8 +469,7 @@ extension SettingsViewModel {
     
     func onClearWallet() {
         if let top = UIApplication.getTopMostViewController() {
-            
-            if(AppModel.sharedManager().hasActiveTransactions()) {
+            if AppModel.sharedManager().hasActiveTransactions() {
                 top.alert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_transactions_text, handler: nil)
             }
             else {
@@ -515,7 +513,7 @@ extension SettingsViewModel {
                 importMenu.delegate = self
                 importMenu.modalPresentationStyle = .formSheet
                 importMenu.view.tintColor = UIColor.main.marine
-                top.present(importMenu, animated: true,completion: {
+                top.present(importMenu, animated: true, completion: {
                     importMenu.view.tintColor = UIColor.main.marine
                 })
             }

@@ -201,5 +201,7 @@
 		</dict>
 		<dict/>
 	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
 </dict>
 </plist>
