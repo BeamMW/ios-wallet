@@ -20,9 +20,8 @@
 #import <Foundation/Foundation.h>
 #include <csignal>
 
-#include "wallet/wallet_client.h"
-#include "wallet/common.h"
-#include "wallet/wallet_client.h"
+#include "wallet/core/common.h"
+#include "wallet/client/wallet_client.h"
 #include <set>
 
 class WalletModel : public beam::wallet::WalletClient
@@ -50,8 +49,8 @@ private:
     void onTxStatus(beam::wallet::ChangeAction, const std::vector<beam::wallet::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;
     void onChangeCalculated(beam::Amount change) override;
-    void onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos) override;
-   // void onAllUtxoChanged(beam::wallet::ChangeAction , const std::vector<beam::wallet::Coin>& utxos) override;
+  //  void onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos) override;
+    void onAllUtxoChanged(beam::wallet::ChangeAction , const std::vector<beam::wallet::Coin>& utxos) override;
     void onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs) override;
     void onGeneratedNewAddress(const beam::wallet::WalletAddress& walletAddr) override;
     void onNewAddressFailed() override;
@@ -70,11 +69,12 @@ private:
     void onHideKeyKeeperMessage() override;
     void onShowKeyKeeperError(const std::string&) override;
     void onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers) override;
-    
+    void onNewWalletVersion(const beam::wallet::VersionInfo&) override;
+
     void onSwapParamsLoaded(const beam::ByteBuffer& token) override;
     void onImportDataFromJson(bool isOk) override;
     void onExportDataToJson(const std::string& data) override;
     void onPostFunctionToClientContext(MessageFunction&& func) override;
     void onExportTxHistoryToCsv(const std::string& data) override;
-   // void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
+    void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
 };

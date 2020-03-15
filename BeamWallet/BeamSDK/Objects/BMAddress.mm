@@ -23,7 +23,7 @@
 #import "StringLocalize.h"
 #import "AppModel.h"
 #import "Color.h"
-#include "wallet/wallet_client.h"
+#include "wallet/client/wallet_client.h"
 
 @implementation BMAddress
 
@@ -77,7 +77,6 @@
     }
 
     NSDateFormatter *f = [self formatter];
-
     
     NSDate *date = [NSDate dateWithTimeIntervalSince1970: [self getExpirationTime]];
     

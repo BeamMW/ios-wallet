@@ -32,13 +32,15 @@
 
 #import <SSZipArchive/SSZipArchive.h>
 
-#include "wallet/wallet.h"
-#include "wallet/wallet_db.h"
-#include "wallet/wallet_network.h"
-#include "wallet/wallet_model_async.h"
-#include "wallet/wallet_client.h"
-#include "wallet/default_peers.h"
-#include "keykeeper/private_key_keeper.h"
+#include "wallet/core/wallet.h"
+
+#include "wallet/core/wallet_db.h"
+#include "wallet/core/wallet_network.h"
+#include "wallet/client/wallet_model_async.h"
+#include "wallet/client/wallet_client.h"
+#include "wallet/core/default_peers.h"
+//#include "keykeeper/private_key_keeper.h"
+
 #include "keykeeper/local_private_key_keeper.h"
 
 #include "core/block_rw.h"
@@ -67,6 +69,8 @@ static NSString *restoreFlowKey = @"restoreFlowKey";
 
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
+
+const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de047f485e7a9daec";
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -102,7 +106,8 @@ const int kFeeInGroth_Fork1 = 100;
     [self createLogger];
     
      walletReactor = Reactor::create();
-    
+     io::Reactor::Scope s(*walletReactor); // do it in main thread
+
     _delegates = [NSPointerArray weakObjectsPointerArray];
 
     _transactions = [[NSMutableArray alloc] init];
@@ -276,13 +281,13 @@ const int kFeeInGroth_Fork1 = 100;
 -(BOOL)openWallet:(NSString*)pass {
     if (walletReactor == nil) {
         walletReactor = Reactor::create();
+        io::Reactor::Scope s(*walletReactor); // do it in main thread
     }
     
     string dbFilePath = Settings.sharedManager.walletStoragePath.string;
     
     if (!walletDb) {
-        walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
-        
+        walletDb = WalletDB::open(dbFilePath, pass.string);
         if (!walletDb){
             return NO;
         }
@@ -302,6 +307,7 @@ const int kFeeInGroth_Fork1 = 100;
 -(BOOL)canOpenWallet:(NSString*)pass {
     if (walletReactor == nil) {
         walletReactor = Reactor::create();
+        io::Reactor::Scope s(*walletReactor); // do it in main thread
     }
     
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
@@ -310,7 +316,7 @@ const int kFeeInGroth_Fork1 = 100;
         return YES;
     }
     
-    walletDb = WalletDB::open(dbFilePath, pass.string, walletReactor);
+    walletDb = WalletDB::open(dbFilePath, pass.string);
     
     if (!walletDb) {
         return NO;
@@ -332,6 +338,7 @@ const int kFeeInGroth_Fork1 = 100;
     
     if (walletReactor == nil) {
         walletReactor = Reactor::create();
+        io::Reactor::Scope s(*walletReactor); // do it in main thread
     }
     
     if (self.isInternetAvailable == NO) {
@@ -372,7 +379,7 @@ const int kFeeInGroth_Fork1 = 100;
     seed.assign(buf.data(), buf.size());
 
     //create wallet db
-     walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash(), walletReactor);
+     walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash());
     
     if (!walletDb) {
         return NO;
@@ -381,12 +388,12 @@ const int kFeeInGroth_Fork1 = 100;
     keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
 
     // generate default address
-    auto address = beam::wallet::storage::createAddress(*walletDb, keyKeeper);
+    WalletAddress address;
+    walletDb->createAddress(address);
     address.m_label = "Default";
     walletDb->saveAddress(address);
     
     [self onWalledOpened:SecString(pass.string)];
-    
     
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
     
@@ -649,6 +656,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
             wallet->start();
         }
     }
+    
+    wallet->getAsync()->setNewscastKey(newsKey);
 }
 
 -(void)changePassword:(NSString*_Nonnull)pass {
@@ -704,25 +713,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     dispatch_async(queue, ^{
         auto pass = SecString(password.string);
         
-       // auto pKey = self->walletDb->get_ChildKdf(0);
-
-        beam::Key::IKdf::Ptr pKey = self->walletDb->get_MasterKdf();
+        const auto& ownerKey = self->wallet->exportOwnerKey(pass);
         
-        const ECC::HKdf& kdf = static_cast<ECC::HKdf&>(*pKey);
-
-        KeyString ks;
-        ks.SetPassword(Blob(pass.data(), static_cast<uint32_t>(pass.size())));
-        ks.m_sMeta = std::to_string(0);
-
-        ECC::HKdfPub pkdf;
-        pkdf.GenerateFrom(kdf);
-
-        ks.Export(pkdf);
-
-        NSString *exportedKey = [NSString stringWithUTF8String:ks.m_sRes.c_str()];
-
+        NSString *exportedKey = [NSString stringWithUTF8String:ownerKey.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
-
             block(exportedKey);
         });
     });
@@ -2362,7 +2356,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     auto _data = [jsonString string];
-    bool result = storage::ImportDataFromJson(*walletDb, keyKeeper ,&_data[0], _data.size());
+    bool result = storage::ImportDataFromJson(*walletDb, &_data[0], _data.size());
 
     if (result) {
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers

@@ -19,8 +19,8 @@
 
 
 #import <Foundation/Foundation.h>
-#include "wallet/wallet_client.h"
-#include "wallet/common.h"
+#include "wallet/client/wallet_client.h"
+#include "wallet/core/common.h"
 
 class Filter
 {
