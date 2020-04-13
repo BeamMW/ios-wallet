@@ -18,7 +18,7 @@ DEPENDENCIES:
   - SwipeTransition
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - CrashEye
     - Crashlytics
     - Fabric
@@ -38,4 +38,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 450e70ea2a8cd688a273d39b91cb39950bede173
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.1

@@ -142,6 +142,16 @@ class WalletViewController: BaseTableViewController {
             }
         }
         
+        statusViewModel.onRatesChange = { [weak self] in
+            guard let strongSelf = self else { return }
+            if strongSelf.tableView.findCell(WalletAvailableCell.self) != nil {
+                strongSelf.tableView.reloadRow(WalletAvailableCell.self)
+            }
+            if strongSelf.tableView.findCell(WalletProgressCell.self) != nil {
+                strongSelf.tableView.reloadRow(WalletProgressCell.self)
+            }
+        }
+        
         statusViewModel.onDataChanged = { [weak self] in
             
             guard let strongSelf = self else { return }
@@ -226,7 +236,11 @@ extension WalletViewController: UITableViewDelegate {
                     return WalletAvailableCell.hideHeight()
                 }
                 else {
-                    return statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.singleHeight()
+                    var height = statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.singleHeight()
+                    if statusViewModel.isAvaiableBalance() {
+                        height = WalletAvailableCell.secondHeight()
+                    }
+                    return height
                 }
             }
             else if cell == .progress {

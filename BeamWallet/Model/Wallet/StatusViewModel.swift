@@ -35,6 +35,7 @@ class StatusViewModel: NSObject {
     }
     
     public var onDataChanged : (() -> Void)?
+    public var onRatesChange : (() -> Void)?
     public var onVerificationCompleted : (() -> Void)?
     public var selectedState = SelectedState.available
     public var cells = [CellTypes]()
@@ -53,6 +54,14 @@ class StatusViewModel: NSObject {
     
     public func isAvaiableMautring() -> Bool {
         if AppModel.sharedManager().walletStatus?.maturing ?? 0 > 0 {
+            return true
+        }
+        
+        return false
+    }
+    
+    public func isAvaiableBalance() -> Bool {
+        if AppModel.sharedManager().walletStatus?.available ?? 0 > 0 {
             return true
         }
         
@@ -122,6 +131,12 @@ extension StatusViewModel: WalletModelDelegate {
         DispatchQueue.main.async {
             self.cells = self.getCells()
             self.onDataChanged?()
+        }
+    }
+    
+    func onExchangeRatesChange() {
+        DispatchQueue.main.async {
+            self.onRatesChange?()
         }
     }
 }

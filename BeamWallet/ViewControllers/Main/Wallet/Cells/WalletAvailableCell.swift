@@ -49,6 +49,9 @@ class WalletAvailableCell: BaseCell {
     @IBOutlet weak private var maturingLabel: UILabel!
     @IBOutlet weak private var maturingCurrencyIcon: UIImageView!
     
+    @IBOutlet weak private var secondAvailableLabel: UILabel!
+    @IBOutlet weak private var secondMaturingLabel: UILabel!
+
     private var selectedState = StatusViewModel.SelectedState.available
     private var availableMaturing = false
     private var isExpand = true
@@ -61,8 +64,12 @@ class WalletAvailableCell: BaseCell {
         return 140.0
     }
     
+    public static func secondHeight() -> CGFloat {
+        return 150.0
+    }
+    
     public static func maturingHeight() -> CGFloat {
-        return 160.0
+        return 166.0
     }
         
     override func awakeFromNib() {
@@ -70,6 +77,11 @@ class WalletAvailableCell: BaseCell {
         
         selectionStyle = .none
         
+        secondMaturingLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondMaturingLabel.font = RegularFont(size: 14)
+        secondAvailableLabel.font = RegularFont(size: 14)
+
         currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
         
@@ -210,10 +222,36 @@ extension WalletAvailableCell: Configurable {
         if let status = options.status {
             balanceLabel.text = String.currency(value: status.realAmount)
             maturingLabel.text = String.currency(value: status.realMaturing)
+           
+            if status.realAmount == 0 {
+                secondAvailableLabel.isHidden = true
+            }
+            else {
+                secondAvailableLabel.isHidden = false
+                secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(status.realAmount)
+                
+                if secondAvailableLabel.text?.isEmpty == true {
+                    secondAvailableLabel.isHidden = true
+                }
+            }
+
+            if status.realMaturing == 0 {
+                secondMaturingLabel.isHidden = true
+            }
+            else {
+                secondMaturingLabel.isHidden = false
+                secondMaturingLabel.text = AppModel.sharedManager().exchangeValue(status.realMaturing)
+                
+                if secondMaturingLabel.text?.isEmpty == true {
+                    secondMaturingLabel.isHidden = true
+                }
+            }
         }
         else{
             balanceLabel.text = nil
             maturingLabel.text = nil
+            secondAvailableLabel.isHidden = true
+            secondMaturingLabel.isHidden = true
         }
         
         expand(expand: options.expand, animation: false)

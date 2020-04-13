@@ -28,11 +28,15 @@ class TransactionDetailCell: UITableViewCell {
     @IBOutlet weak private var circleView: UIView!
     @IBOutlet weak private var arrowIcon: UIImageView!
     @IBOutlet weak private var securityIcon: UIImageView!
+    @IBOutlet weak private var secondAmountLabel: UILabel!
 
     //
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        secondAmountLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAmountLabel.font = RegularFont(size: 14)
         
         currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
         currencyIcon.tintColor = UIColor.white
@@ -50,9 +54,11 @@ extension TransactionDetailCell: Configurable {
     func configure(with transaction:BMTransaction) {
 
         arrowIcon.image = transaction.statusIcon()
-
+        secondAmountLabel.text = AppModel.sharedManager().exchangeValue(transaction.realAmount)
+        
         amountLabel.isHidden = Settings.sharedManager().isHideAmounts
         currencyIcon.isHidden = Settings.sharedManager().isHideAmounts
+        secondAmountLabel.isHidden = Settings.sharedManager().isHideAmounts
         securityIcon.isHidden = !Settings.sharedManager().isHideAmounts
 
         amountLabel.text = String.currency(value: transaction.realAmount)

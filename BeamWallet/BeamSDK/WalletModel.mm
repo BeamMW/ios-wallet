@@ -44,8 +44,8 @@ NSString *const AppErrorDomain = @"beam.mw";
 NSTimer *timer;
 
 
-WalletModel::WalletModel(IWalletDB::Ptr walletDB, IPrivateKeyKeeper::Ptr keyKeeper, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
-: WalletClient(walletDB, nodeAddr, reactor, keyKeeper)
+WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
+: WalletClient(walletDB, nodeAddr, reactor)
 {
     pre_connected_status = true;
 }
@@ -528,11 +528,6 @@ void WalletModel::onNewAddressFailed()
     [AppModel sharedManager].generatedNewAddressBlock(nil, nativeError);
 }
 
-void WalletModel::onChangeCurrentWalletIDs(beam::wallet::WalletID senderID, beam::wallet::WalletID receiverID)
-{
-    NSLog(@"onChangeCurrentWalletIDs");
-}
-
 void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 {
     NSLog(@"onNodeConnectionChanged %d",isNodeConnected);
@@ -648,7 +643,6 @@ void WalletModel::onPaymentProofExported(const beam::wallet::TxID& txID, const b
     string str;
     str.resize(proof.size() * 2);
 
-    //beam::to_hex(str.data(), proof.data(), proof.size());
     str = to_hex(proof.data(), proof.size());
     
     BMPaymentProof *paymentProof = [[BMPaymentProof alloc] init];
@@ -691,10 +685,6 @@ void WalletModel::onShowKeyKeeperError(const std::string& error){
     NSLog(@"onShowKeyKeeperError");
 }
 
-void WalletModel::onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers){
-    NSLog(@"onSwapOffersChanged");
-}
-
 void WalletModel::onSwapParamsLoaded(const beam::ByteBuffer& token) {
     NSLog(@"onSwapParamsLoaded");
 }
@@ -720,8 +710,75 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
     getAsync()->getAddresses(false);
 }
 
-void WalletModel::onNewWalletVersion(const beam::wallet::VersionInfo& v) {
-    NSLog(@"onNewWalletVersion");
+
+void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
+    for (int i=0; i<rates.size(); i++) {
+        auto rate = rates[i];
+        
+        BMCurrency *currency = [BMCurrency new];
+        currency.value = rate.m_rate;
+        currency.realValue = double(int64_t(rate.m_rate)) / Rules::Coin;
+        
+        if (rate.m_unit == beam::wallet::ExchangeRate::Currency::Usd) {
+            currency.type = BMCurrencyUSD;
+            currency.maximumFractionDigits = 2;
+            currency.code = @"USD";
+        }
+        else if (rate.m_unit == beam::wallet::ExchangeRate::Currency::Bitcoin) {
+            currency.type = BMCurrencyBTC;
+            currency.maximumFractionDigits = 10;
+            currency.code = @"BTC";
+        }
+        
+        bool found = false;
+        
+        for (int j=0; j<[[[AppModel sharedManager] currencies] count]; j++) {
+            if([[[AppModel sharedManager] currencies] objectAtIndex:j].type == currency.type) {
+                found = true;
+                [[[AppModel sharedManager] currencies] replaceObjectAtIndex:j withObject:currency];
+                break;
+            }
+        }
+        
+        if (!found) {
+            [[[AppModel sharedManager] currencies] addObject:currency];
+        }
+        
+        NSLog(@"onExchangeRates %@ -> %@ = %llu", GetCurrencyString(rate.m_currency), GetCurrencyString(rate.m_unit), rate.m_rate);
+    }
+    
+    [[AppModel sharedManager] saveCurrencies];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
+            [delegate onExchangeRatesChange];
+        }
+    }
+}
+
+
+void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Notification>& notif) {
+    NSLog(@"onNotificationsChanged");
+}
+
+NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)
+{
+   switch (type)
+    {
+        case beam::wallet::ExchangeRate::Currency::Beam:
+            return @"Beam";
+        case beam::wallet::ExchangeRate::Currency::Bitcoin:
+            return @"Bitcoin";
+        case beam::wallet::ExchangeRate::Currency::Litecoin:
+            return @"Litecoin";
+        case beam::wallet::ExchangeRate::Currency::Qtum:
+            return @"Qtum";
+        case beam::wallet::ExchangeRate::Currency::Usd:
+            return @"USD";
+        default:
+            return @"Unexpected error!";
+    }
 }
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)

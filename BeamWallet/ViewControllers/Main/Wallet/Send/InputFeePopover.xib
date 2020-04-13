@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +12,9 @@
         </array>
         <array key="SF-Pro-Display-Light.otf">
             <string>SFProDisplay-Light</string>
+        </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
         </array>
         <array key="SF-Pro-Display-Semibold.otf">
             <string>SFProDisplay-Semibold</string>
@@ -23,6 +26,7 @@
                 <outlet property="feeField" destination="YOk-TX-DM6" id="TeB-k6-DB2"/>
                 <outlet property="grothTitleLabelY" destination="bbC-sr-h4m" id="IWv-w4-KcU"/>
                 <outlet property="mainView" destination="tFf-TN-Dqo" id="yEH-Tn-Tvm"/>
+                <outlet property="secondAvailableLabel" destination="grc-RF-o7o" id="ecQ-eC-7cQ"/>
                 <outlet property="titleLabel" destination="6VT-6U-Hnp" id="yNc-wz-gBf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -33,7 +37,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view verifyAmbiguity="off" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tFf-TN-Dqo" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="20" y="253" width="374" height="270"/>
+                    <rect key="frame" x="20" y="242" width="374" height="292"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M0h-a5-hOs">
                             <rect key="frame" x="331" y="3" width="40" height="40"/>
@@ -47,7 +51,7 @@
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEB-ZD-CPb">
-                            <rect key="frame" x="15" y="63" width="344" height="83"/>
+                            <rect key="frame" x="15" y="63" width="344" height="105"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRANSACTION FEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6VT-6U-Hnp">
                                     <rect key="frame" x="15" y="10" width="314" height="17"/>
@@ -62,7 +66,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GROTH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-v9-g43">
-                                    <rect key="frame" x="259" y="47" width="70" height="19.5"/>
+                                    <rect key="frame" x="259" y="58" width="70" height="19.5"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="70" id="csr-gL-HN4"/>
                                     </constraints>
@@ -98,22 +102,30 @@
                                         <outlet property="delegate" destination="-1" id="kQv-Nb-ZSa"/>
                                     </connections>
                                 </textField>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grc-RF-o7o">
+                                    <rect key="frame" x="15" y="78" width="38.5" height="17"/>
+                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="Ieq-v9-g43" secondAttribute="trailing" constant="15" id="2ON-pO-hDf"/>
-                                <constraint firstAttribute="bottom" secondItem="YOk-TX-DM6" secondAttribute="bottom" constant="10" id="IRG-Bx-xy1"/>
+                                <constraint firstItem="grc-RF-o7o" firstAttribute="top" secondItem="YOk-TX-DM6" secondAttribute="bottom" constant="5" id="6Fi-uE-D5u"/>
+                                <constraint firstAttribute="bottom" secondItem="grc-RF-o7o" secondAttribute="bottom" constant="10" id="BfF-2y-hvS"/>
                                 <constraint firstItem="YOk-TX-DM6" firstAttribute="top" secondItem="6VT-6U-Hnp" secondAttribute="bottom" constant="10" id="OJe-hk-sWz"/>
                                 <constraint firstItem="Ieq-v9-g43" firstAttribute="centerY" secondItem="pEB-ZD-CPb" secondAttribute="centerY" constant="15" id="bbC-sr-h4m"/>
                                 <constraint firstAttribute="trailing" secondItem="6VT-6U-Hnp" secondAttribute="trailing" constant="15" id="dZ8-3v-mYF"/>
                                 <constraint firstItem="6VT-6U-Hnp" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="ev2-iZ-eCA"/>
                                 <constraint firstItem="YOk-TX-DM6" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="fug-Gi-r9f"/>
                                 <constraint firstItem="6VT-6U-Hnp" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="top" constant="10" id="jGX-zS-LgC"/>
+                                <constraint firstItem="grc-RF-o7o" firstAttribute="leading" secondItem="pEB-ZD-CPb" secondAttribute="leading" constant="15" id="lSt-10-FpK"/>
                                 <constraint firstItem="Ieq-v9-g43" firstAttribute="leading" secondItem="YOk-TX-DM6" secondAttribute="trailing" constant="5" id="r1A-pU-o32"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QhX-9d-901" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="117" y="196" width="140" height="44"/>
+                            <rect key="frame" x="117" y="208" width="140" height="44"/>
                             <color key="backgroundColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="TU4-fI-zIF"/>
@@ -140,12 +152,12 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="pEB-ZD-CPb" secondAttribute="trailing" constant="15" id="1Ie-Mv-l9C"/>
                         <constraint firstItem="QhX-9d-901" firstAttribute="centerX" secondItem="tFf-TN-Dqo" secondAttribute="centerX" id="ARf-TX-GPa"/>
-                        <constraint firstItem="QhX-9d-901" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="bottom" constant="50" id="UbR-Bt-bRC"/>
+                        <constraint firstAttribute="bottom" secondItem="QhX-9d-901" secondAttribute="bottom" constant="40" id="C5A-Qg-lwy"/>
+                        <constraint firstItem="QhX-9d-901" firstAttribute="top" secondItem="pEB-ZD-CPb" secondAttribute="bottom" constant="40" id="YBd-g1-IvP"/>
                         <constraint firstAttribute="trailing" secondItem="M0h-a5-hOs" secondAttribute="trailing" constant="3" id="cSe-2V-mrY"/>
                         <constraint firstItem="M0h-a5-hOs" firstAttribute="top" secondItem="tFf-TN-Dqo" secondAttribute="top" constant="3" id="ds0-Jd-wdd"/>
                         <constraint firstItem="pEB-ZD-CPb" firstAttribute="leading" secondItem="tFf-TN-Dqo" secondAttribute="leading" constant="15" id="nx6-gc-JKW"/>
                         <constraint firstItem="pEB-ZD-CPb" firstAttribute="top" secondItem="M0h-a5-hOs" secondAttribute="bottom" constant="20" id="oDx-vo-AjR"/>
-                        <constraint firstAttribute="bottom" secondItem="QhX-9d-901" secondAttribute="bottom" constant="30" id="rGt-La-erW"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

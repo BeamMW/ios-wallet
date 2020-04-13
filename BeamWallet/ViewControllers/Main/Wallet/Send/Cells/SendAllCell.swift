@@ -23,12 +23,16 @@ class SendAllCell: BaseCell {
     @IBOutlet private weak var amountLabel: UILabel!
     @IBOutlet private weak var allButton: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var secondAvailableLabel: UILabel!
 
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAvailableLabel.font = RegularFont(size: 14)
+        
         titleLabel.text = Localizable.shared.strings.total_available.uppercased()
         titleLabel.letterSpacing = 1.5
 
@@ -48,9 +52,16 @@ class SendAllCell: BaseCell {
 }
 
 extension SendAllCell: Configurable {
-    func configure(with options: (amount: String, isAll: Bool)) {
-        amountLabel.text = options.amount + Localizable.shared.strings.beam
+    func configure(with options: (realAmount: Double, isAll: Bool)) {
+        let total = String.currency(value: options.realAmount)
+        
+        amountLabel.text = total + Localizable.shared.strings.beam
+        secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.realAmount)
 
+        if options.realAmount == 0 {
+            secondAvailableLabel.isHidden = true
+        }
+        
         if options.isAll {
             allButton.isUserInteractionEnabled = false
             allButton.alpha = 0.5

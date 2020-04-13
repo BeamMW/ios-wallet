@@ -39,9 +39,6 @@
 #include "wallet/client/wallet_model_async.h"
 #include "wallet/client/wallet_client.h"
 #include "wallet/core/default_peers.h"
-//#include "keykeeper/private_key_keeper.h"
-
-#include "keykeeper/local_private_key_keeper.h"
 
 #include "core/block_rw.h"
 
@@ -66,11 +63,21 @@ static int proofSize = 330;
 static NSString *categoriesKey = @"categoriesKey";
 static NSString *transactionCommentsKey = @"transaction_comment";
 static NSString *restoreFlowKey = @"restoreFlowKey";
+static NSString *currenciesKey = @"allCurrenciesKey";
 
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
 
-const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de047f485e7a9daec";
+const std::map<Notification::Type,bool> activeNotifications {
+    { Notification::Type::SoftwareUpdateAvailable, true },
+    { Notification::Type::BeamNews, true },
+    { Notification::Type::TransactionStatusChanged,true },
+    { Notification::Type::TransactionCompleted, true },
+    { Notification::Type::TransactionFailed, true },
+    { Notification::Type::AddressStatusChanged, true }
+};
+
+const bool isSecondCurrencyEnabled = true;
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -84,11 +91,12 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
     Reactor::Ptr walletReactor;
-    beam::wallet::IPrivateKeyKeeper::Ptr keyKeeper;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
     NSString *pathLog;
+    
+    NSNumberFormatter *currencyFormatter;
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -105,6 +113,14 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     
     [self createLogger];
     
+    currencyFormatter = [[NSNumberFormatter alloc] init];
+    currencyFormatter.currencyCode = @"";
+    currencyFormatter.currencySymbol = @"";
+    currencyFormatter.minimumFractionDigits = 0;
+    currencyFormatter.maximumFractionDigits = 10;
+    currencyFormatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
+    currencyFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+    
      walletReactor = Reactor::create();
      io::Reactor::Scope s(*walletReactor); // do it in main thread
 
@@ -117,7 +133,8 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
-            
+    _currencies = [[NSMutableArray alloc] initWithArray:[self allCurrencies]];
+    
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
         
     [self checkInternetConnection];
@@ -161,6 +178,26 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     _isRestoreFlow = isRestoreFlow;
     
     [[NSUserDefaults standardUserDefaults] setBool:_isRestoreFlow forKey:restoreFlowKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Exchange
+
+-(NSMutableArray<BMCurrency*>*_Nonnull)allCurrencies{
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:currenciesKey]) {
+        NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:currenciesKey];
+        
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+        
+        return array;
+    }
+    
+    return @[].mutableCopy;
+}
+
+-(void)saveCurrencies {
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_currencies];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:currenciesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
     
@@ -287,12 +324,16 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     string dbFilePath = Settings.sharedManager.walletStoragePath.string;
     
     if (!walletDb) {
-        walletDb = WalletDB::open(dbFilePath, pass.string);
-        if (!walletDb){
+        try{
+            walletDb = WalletDB::open(dbFilePath, pass.string);
+        }
+        catch (const std::exception& e) {
             return NO;
         }
         
-        keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
+        if (!walletDb){
+            return NO;
+        }
     }
     
     localPassword = [NSString stringWithString:pass];
@@ -316,14 +357,17 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
         return YES;
     }
     
-    walletDb = WalletDB::open(dbFilePath, pass.string);
+    try{
+        walletDb = WalletDB::open(dbFilePath, pass.string);
+    }
+    catch (const std::exception& e) {
+        return NO;
+    }
     
     if (!walletDb) {
         return NO;
     }
     
-    keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
-
     return YES;
 }
 
@@ -385,8 +429,6 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
         return NO;
     }
     
-    keyKeeper = std::make_shared<LocalPrivateKeyKeeper>(walletDb, walletDb->get_MasterKdf());
-
     // generate default address
     WalletAddress address;
     walletDb->createAddress(address);
@@ -420,10 +462,6 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
         wallet.reset();
     }
     
-    if (keyKeeper!=nil){
-        keyKeeper.reset();
-    }
-    
     if (walletReactor!=nil){
         walletReactor.reset();
     }
@@ -434,7 +472,6 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
-    keyKeeper = nil;
     
    BOOL opened = [self canOpenWallet:localPassword];
     if (opened) {
@@ -455,10 +492,6 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
         wallet.reset();
     }
     
-    if (keyKeeper!=nil){
-        keyKeeper.reset();
-    }
-    
     if (walletReactor!=nil){
         walletReactor.reset();
     }
@@ -469,7 +502,6 @@ const std::string newsKey = "db617cedb17543375b602036ab223b67b06f8648de2bb04de04
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
-    keyKeeper = nil;
 
     if(removeDatabase) {
         NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
@@ -632,11 +664,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
-        wallet = make_shared<WalletModel>(walletDb, keyKeeper, nodeAddrStr, walletReactor);
+        wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
-        wallet->start();
-        
+        wallet->start(activeNotifications, isSecondCurrencyEnabled);
+
         isRunning = YES;
         isStarted = YES;
     }
@@ -653,11 +685,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if(self.isInternetAvailable && isRunning == NO && ![[Settings sharedManager] isLocalNode])
         {
             isRunning = YES;
-            wallet->start();
+            wallet->start(activeNotifications, isSecondCurrencyEnabled);
         }
     }
-    
-    wallet->getAsync()->setNewscastKey(newsKey);
 }
 
 -(void)changePassword:(NSString*_Nonnull)pass {
@@ -730,6 +760,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet->getAsync()->getTransactions();
         wallet->getAsync()->getAddresses(false);
         wallet->getAsync()->getAddresses(true);
+        wallet->getAsync()->getExchangeRates();
     }
 }
 
@@ -2279,13 +2310,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return [self isFork] ? kFeeInGroth_Fork1 : 0;
 }
 
--(BOOL)isNodeInSync {
-    Block::SystemState::Full sTip;
-    walletDb->get_History().get_Tip(sTip);
-    BOOL isSync =  IsValidTimeStamp(sTip.m_TimeStamp);
-    return isSync;
-}
-
 bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 {
     Timestamp currentTime_s = getTimestamp();
@@ -2412,6 +2436,48 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     return jsonString;
+}
+
+-(NSString*_Nonnull)exchangeValue:(double)amount {
+    for (BMCurrency *currency in _currencies) {
+        if(currency.type == Settings.sharedManager.currency) {
+            currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
+            currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
+
+            double value = double(int64_t(currency.value)) / Rules::Coin;
+            double rate = value * amount;
+            return [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
+        }
+    }
+
+    return @"";
+}
+
+-(NSString*_Nonnull)exchangeValueFee:(double)amount {
+    if(amount == 0) {
+        return @"";
+    }
+    for (BMCurrency *currency in _currencies) {
+        if(currency.type == Settings.sharedManager.currency) {
+            currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
+            currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
+            
+            double value = double(int64_t(currency.value)) / Rules::Coin;
+            double rate = value * (amount / Rules::Coin);
+            if(rate < 0.01 && currency.type == BMCurrencyUSD) {
+                return @"< 1 cent";
+            }
+            NSString *result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
+            if([result isEqualToString:@"0 BTC"]) {
+                rate = rate * 100000000;
+                currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",@"satoshis"];
+                result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
+            }
+            return result;
+        }
+    }
+    
+    return @"";
 }
 
 @end

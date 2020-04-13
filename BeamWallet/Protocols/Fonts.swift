@@ -36,6 +36,10 @@ func SemiboldFont(size:CGFloat) -> UIFont {
     return UIFont(name: "SFProDisplay-Semibold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
 }
 
+func LightFont(size:CGFloat) -> UIFont {
+    return UIFont(name: "SFProDisplay-Light", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+}
+
 func ProMediumFont(size:CGFloat) -> UIFont {
     return UIFont(name: "SFProText-Medium", size: size) ?? UIFont.boldSystemFont(ofSize: size)
 }

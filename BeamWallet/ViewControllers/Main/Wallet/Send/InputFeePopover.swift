@@ -28,9 +28,13 @@ class InputFeePopover: BaseViewController {
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var grothTitleLabelY: NSLayoutConstraint!
     @IBOutlet weak private var mainView: UIView!
-    
+    @IBOutlet private weak var secondAvailableLabel: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAvailableLabel.font = RegularFont(size: 14)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
@@ -50,6 +54,7 @@ class InputFeePopover: BaseViewController {
         }
         
         feeField.text = mainFee
+        secondAvailableLabel.text = AppModel.sharedManager().exchangeValueFee(Double(mainFee) ?? 0)
         
         addSwipeToDismiss()
         
@@ -120,7 +125,8 @@ extension InputFeePopover : UITextFieldDelegate {
         textField.text = txtAfterUpdate
         
         mainFee = txtAfterUpdate
-        
+        secondAvailableLabel.text = AppModel.sharedManager().exchangeValueFee(Double(mainFee) ?? 0)
+
         return false
     }
     

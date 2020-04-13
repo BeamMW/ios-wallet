@@ -59,6 +59,7 @@ class SettingsViewModel: NSObject {
         case create_category = 26
         case open_category = 27
         case random_node = 28
+        case currency = 29
     }
     
     class SettingsItem {
@@ -143,6 +144,7 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, type: .allow_open_link, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.save_wallet_logs, detail: Settings.sharedManager().currentLogValue().name, isSwitch: nil, type: .save_logs, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
             
             var section_1 = [SettingsItem]()
@@ -165,9 +167,9 @@ class SettingsViewModel: NSObject {
                 section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
-//            if OnboardManager.shared.isSkipedSeed() == true {
-//                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
-//            }
+            //            if OnboardManager.shared.isSkipedSeed() == true {
+            //                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
+            //            }
             section_0.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
             items.append(section_0)
         case .utilites:
@@ -270,6 +272,8 @@ class SettingsViewModel: NSObject {
             openCategory(category: nil)
         case .open_category:
             openCategory(category: item.category)
+        case .currency:
+            onCurrencyScreen()
         default:
             return
         }
@@ -419,6 +423,18 @@ extension SettingsViewModel {
         }
     }
     
+    func onCurrencyScreen() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = BMDataPickerViewController(type: .currency)
+            vc.completion = { [weak self] _ in
+                self?.items.removeAll()
+                self?.initItems()
+                self?.onDataChanged?()
+            }
+            top.pushViewController(vc: vc)
+        }
+    }
+    
     func onLogScreen() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .log)
@@ -552,3 +568,4 @@ extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDel
         controller.dismiss(animated: true, completion: nil)
     }
 }
+

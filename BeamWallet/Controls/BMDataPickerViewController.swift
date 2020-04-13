@@ -28,6 +28,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case category
         case clear
         case export_data
+        case currency
     }
     
     private var type: DataType!
@@ -79,6 +80,8 @@ class BMDataPickerViewController: BaseTableViewController {
         case .export_data:
             title = Localizable.shared.strings.export_data
             addRightButton(title: Localizable.shared.strings.export, target: self, selector: #selector(onRightButton), enabled: true)
+        case .currency:
+            title = Localizable.shared.strings.second_currency
         default:
             title = String.empty()
         }
@@ -243,6 +246,14 @@ class BMDataPickerViewController: BaseTableViewController {
             values.append(BMPickerData(title: Localizable.shared.strings.categories, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "category", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "address", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "contact", multiplie: true))
+        case .currency:
+            var currencies = AppModel.sharedManager().currencies as! [BMCurrency]
+            currencies.sort {
+                $0.type < $1.type
+            }
+            for currency in currencies {
+                values.append(BMPickerData(title: currency.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (currency.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: currency.type))
+            }
         default:
             break
         }
@@ -327,6 +338,10 @@ class BMDataPickerViewController: BaseTableViewController {
                 sorted1 = "0"
             }
             enableRightButton(enabled: sorted1 != sorted2)
+        case .currency:
+            Settings.sharedManager().currency = data.unique as! BMCurrencyType
+            completion?(data.unique)
+            back()
         default:
             break
         }

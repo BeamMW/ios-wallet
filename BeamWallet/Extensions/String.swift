@@ -115,7 +115,6 @@ extension String {
         formatter.maximumFractionDigits = 10
         formatter.numberStyle = .currencyAccounting
         formatter.locale = Locale(identifier: "en_US")
-
         return formatter
     }()
     

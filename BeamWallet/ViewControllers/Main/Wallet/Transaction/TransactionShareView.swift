@@ -21,6 +21,7 @@ import Foundation
 
 class TransactionShareView: UIView {
     
+
     @IBOutlet private weak var mainView: UIView!
 
     @IBOutlet private weak var amountStackView: UIStackView!
@@ -58,6 +59,8 @@ class TransactionShareView: UIView {
 
     @IBOutlet private weak var height: NSLayoutConstraint!
 
+    @IBOutlet weak private var secondAmountLabel: UILabel!
+
     var transaction:BMTransaction! {
         didSet{
             setupView()
@@ -74,11 +77,15 @@ class TransactionShareView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        secondAmountLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAmountLabel.font = RegularFont(size: 14)
     }
     
     private func setupView() {
         amountStackView.isHidden = Settings.sharedManager().isHideAmounts
-        
+        secondAmountLabel.text = AppModel.sharedManager().exchangeValue(transaction.realAmount)
+
         if Settings.sharedManager().isHideAmounts {
             statusView.isHidden = true
             centeredStatusView.isHidden = false

@@ -34,6 +34,7 @@ static NSString *randomNodeKey = @"randomNodeKey";
 static NSString *logsKey = @"logsKey";
 static NSString *darkModeKey = @"darkModeKey";
 static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
+static NSString *currenctKey = @"currenctKey";
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -120,7 +121,7 @@ static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
     else{
         _isAllowOpenLink = NO;
     }
-    
+        
     if (self.target == Testnet) {
         _explorerAddress = @"https://testnet.explorer.beam.mw/block?kernel_id=";
     }
@@ -137,12 +138,6 @@ static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
     else{
         _nodeAddress = [AppModel chooseRandomNode];
     }
-    
-    
-    if (self.target == Testnet)
-    {
-        [self copyOldDatabaseToGroup];
-   }
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
@@ -161,6 +156,13 @@ static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
         }
     }
 
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:currenctKey]) {
+        _currency = [[[NSUserDefaults standardUserDefaults] objectForKey:currenctKey] intValue];
+    }
+    else{
+        _currency = BMCurrencyUSD;
+    }
+    
     return self;
 }
 
@@ -310,6 +312,32 @@ static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
         if ([delegate respondsToSelector:@selector(onChangeLanguage)]) {
             [delegate onChangeLanguage];
         }
+    }
+}
+
+
+-(void)setCurrency:(BMCurrencyType)currency {
+    _currency = currency;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:_currency] forKey:currenctKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
+            [delegate onExchangeRatesChange];
+        }
+    }
+}
+
+-(NSString*_Nonnull)currencyName {
+    switch (_currency) {
+        case BMCurrencyUSD:
+            return @"USD";
+        case BMCurrencyBTC:
+            return @"BTC";
+        default:
+            return @"";
     }
 }
 
@@ -497,7 +525,6 @@ static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
     cs.localName = @"Czech";
     cs.ID = 0;
     
-
     NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin, cs];
     
     NSLocale *locale = [NSLocale currentLocale];

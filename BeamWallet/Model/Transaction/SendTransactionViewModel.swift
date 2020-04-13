@@ -270,7 +270,28 @@ class SendTransactionViewModel: NSObject {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        items.append(BMMultiLineItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amount + Localizable.shared.strings.beam, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
+        let amountString = amount + Localizable.shared.strings.beam + "\n"
+        let secondString = AppModel.sharedManager().exchangeValue(Double(amount) ?? 0)
+        let attributedString = amountString + "space\n" + secondString
+
+        let attributedTitle = NSMutableAttributedString(string: attributedString)
+        let rangeAmount = (attributedString as NSString).range(of: String(amountString))
+        let rangeSecond = (attributedString as NSString).range(of: String(secondString))
+        let spaceRange = (attributedString as NSString).range(of: String("space"))
+
+        attributedTitle.addAttribute(NSAttributedString.Key.font, value: SemiboldFont(size: 16) , range: rangeAmount)
+        attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope , range: rangeAmount)
+        
+        attributedTitle.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
+        attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
+        
+        attributedTitle.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14), range: rangeSecond)
+        attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeSecond)
+
+        let amountItem = BMMultiLineItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: attributedString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope)
+        amountItem.detailAttributedString = attributedTitle
+        items.append(amountItem)
+              
         items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
         items.append(BMMultiLineItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
         items.append(BMMultiLineItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))

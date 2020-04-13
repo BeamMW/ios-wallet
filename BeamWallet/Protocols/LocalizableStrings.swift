@@ -491,8 +491,8 @@ class LocalizableStrings : NSObject {
     var complete_seed_verification = "complete_seed_verification".localized
     var faucet_redirect_text = "faucet_redirect_text".localized
     var clear_wallet_transactions_text = "clear_wallet_transactions_text".localized
-
-    
+    var show_amounts_in = "show_amounts_in".localized
+    var second_currency = "second_currency".localized
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

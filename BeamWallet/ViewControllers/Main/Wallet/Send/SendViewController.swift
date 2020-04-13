@@ -20,6 +20,13 @@
 import Parchment
 import UIKit
 
+class SecondCell: UITableViewCell {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        textLabel?.x = 15
+    }
+}
+
 class SendViewController: BaseTableViewController {
     private var alreadyChanged = false
     private var cellHeights: [IndexPath: CGFloat] = [:]
@@ -205,7 +212,8 @@ extension SendViewController: UITableViewDelegate {
             }
         }
         else if indexPath.section == 1, indexPath.row == 1 {
-            return 17
+            let amount = (Double(viewModel.amount) ?? 0)
+            return ((viewModel.sendAll || amount > 0) ? 17 : 0)
         }
         return UITableView.automaticDimension
     }
@@ -234,7 +242,7 @@ extension SendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 1:
-            return (viewModel.sendAll ? 2 : 1)
+            return 2
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 1
         case 5:
@@ -278,7 +286,7 @@ extension SendViewController: UITableViewDataSource {
                 var cell = tableView.dequeueReusableCell(withIdentifier: "cell")
                 
                 if cell == nil {
-                    cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+                    cell = SecondCell(style: .default, reuseIdentifier: "cell")
                     
                     cell?.textLabel?.textColor = UIColor.main.blueyGrey
                     cell?.textLabel?.font = RegularFont(size: 14)
@@ -289,7 +297,18 @@ extension SendViewController: UITableViewDataSource {
                     cell?.indentationLevel = 0
                 }
                 
-                cell?.textLabel?.text = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+                let fee = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+                let second = AppModel.sharedManager().exchangeValue(Double(viewModel.amount) ?? 0)
+                
+                if viewModel.sendAll {
+                    cell?.textLabel?.text = second + " (" + fee + ")"
+                }
+                else if (Double(viewModel.amount) ?? 0) > 0 {
+                    cell?.textLabel?.text = second
+                }
+                else {
+                    cell?.textLabel?.text = nil
+                }
                 
                 if Settings.sharedManager().isDarkMode {
                     cell?.textLabel?.textColor = UIColor.main.steel
@@ -298,12 +317,8 @@ extension SendViewController: UITableViewDataSource {
                 return cell!
             }
         case 2:
-            var total = Localizable.shared.strings.zero
-            if let status = AppModel.sharedManager().walletStatus {
-                total = String.currency(value: status.realAmount)
-            }
             let cell = tableView
-                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: (amount: total, isAll: viewModel.sendAll))
+                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: (realAmount:  AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll))
             cell.delegate = self
             return cell
         case 3:
@@ -408,7 +423,6 @@ extension SendViewController: BMCellProtocol {
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input: Bool) {
-        var removeGrothNotice = false
         var isNeedReload = true
         
         if let path = tableView.indexPath(for: sender) {
@@ -439,21 +453,13 @@ extension SendViewController: BMCellProtocol {
             }
             else if path.section == 1 {
                 if input {
-                    if viewModel.sendAll {
-                        removeGrothNotice = true
-                    }
                     viewModel.sendAll = false
-                    
-                    var total = Localizable.shared.strings.zero
-                    if let status = AppModel.sharedManager().walletStatus {
-                        total = String.currency(value: status.realAmount)
-                    }
-                    
                     if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
-                        cell.configure(with: (amount: total, isAll: viewModel.sendAll))
+                        cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll))
                     }
                 }
                 viewModel.amount = text
+                tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .none)
             }
             else if path.section == 3 {
                 isNeedReload = false
@@ -468,9 +474,6 @@ extension SendViewController: BMCellProtocol {
         if isNeedReload {
             UIView.performWithoutAnimation {
                 tableView.beginUpdates()
-                if removeGrothNotice {
-                    tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
-                }
                 tableView.endUpdates()
                 if isSearch {
                     layoutSearchTableView()
@@ -606,13 +609,8 @@ extension SendViewController: QRScannerViewControllerDelegate {
                 viewModel.amount = a
                 viewModel.sendAll = false
                 
-                var total = Localizable.shared.strings.zero
-                if let status = AppModel.sharedManager().walletStatus {
-                    total = String.currency(value: status.realAmount)
-                }
-                
                 if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
-                    cell.configure(with: (amount: total, isAll: viewModel.sendAll))
+                    cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll))
                 }
             }
         }

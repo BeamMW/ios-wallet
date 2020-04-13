@@ -29,7 +29,7 @@ class WalletModel : public beam::wallet::WalletClient
 public:
     using Ptr = std::shared_ptr<WalletModel>;
 
-    WalletModel(beam::wallet::IWalletDB::Ptr walletDB, beam::wallet::IPrivateKeyKeeper::Ptr keyKeeper, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
+    WalletModel(beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
     
 
@@ -44,7 +44,8 @@ private:
     NSString *GetTransactionFailurString(beam::wallet::TxFailureReason reason);
     NSString *GetUTXOStatusString(beam::wallet::Coin coin);
     NSString *GetUTXOTypeString(beam::wallet::Coin coin);
-
+    NSString* GetCurrencyString(beam::wallet::ExchangeRate::Currency type);
+    
     void onStatus(const beam::wallet::WalletStatus& status) override;
     void onTxStatus(beam::wallet::ChangeAction, const std::vector<beam::wallet::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;
@@ -54,7 +55,6 @@ private:
     void onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs) override;
     void onGeneratedNewAddress(const beam::wallet::WalletAddress& walletAddr) override;
     void onNewAddressFailed() override;
-    void onChangeCurrentWalletIDs(beam::wallet::WalletID senderID, beam::wallet::WalletID receiverID) override;
     void onNodeConnectionChanged(bool isNodeConnected) override;
     void onWalletError(beam::wallet::ErrorType error) override;
     void FailedToStartWallet() override;
@@ -68,8 +68,9 @@ private:
     void onShowKeyKeeperMessage() override;
     void onHideKeyKeeperMessage() override;
     void onShowKeyKeeperError(const std::string&) override;
-    void onSwapOffersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::SwapOffer>& offers) override;
-    void onNewWalletVersion(const beam::wallet::VersionInfo&) override;
+    
+    void onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&) override;
+    void onNotificationsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Notification>&) override;
 
     void onSwapParamsLoaded(const beam::ByteBuffer& token) override;
     void onImportDataFromJson(bool isOk) override;

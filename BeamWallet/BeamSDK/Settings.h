@@ -18,6 +18,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "BMCurrency.h"
 
 @class BMLanguage;
 @class BMLockScreenValue;
@@ -61,6 +62,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL connectToRandomNode;
 @property (nonatomic, assign) int logDays;
 @property (nonatomic, assign) BOOL isDarkMode;
+@property (nonatomic, assign) BMCurrencyType currency;
 
 @property (nonatomic, strong) NSString * _Nonnull explorerAddress;
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
@@ -92,5 +94,7 @@ typedef enum Target : NSUInteger {
 
 -(NSArray <BMLogValue*> * _Nonnull)logValues;
 -(BMLogValue*_Nonnull)currentLogValue;
+
+-(NSString*_Nonnull)currencyName;
 
 @end

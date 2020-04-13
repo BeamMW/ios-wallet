@@ -45,17 +45,20 @@ class WalletProgressCell: BaseCell {
     @IBOutlet weak private var currencySendingIcon: UIImageView!
 
     @IBOutlet weak private var mainButton: UIButton!
+    
+    @IBOutlet weak private var secondSendLabel: UILabel!
+    @IBOutlet weak private var secondReceiveLabel: UILabel!
 
     public static func hideHeight() -> CGFloat {
         return 63
     }
     
     public static func mainHeight() -> CGFloat {
-        return 160
+        return 200
     }
     
     public static func singleHeight() -> CGFloat {
-        return 120
+        return 135
     }
     
     override func awakeFromNib() {
@@ -63,6 +66,11 @@ class WalletProgressCell: BaseCell {
         
         selectionStyle = .none
 
+        secondSendLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondReceiveLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondSendLabel.font = RegularFont(size: 14)
+        secondReceiveLabel.font = RegularFont(size: 14)
+        
         mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.3)), for: .highlighted)
 
         currencyReceivingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
@@ -105,6 +113,26 @@ extension WalletProgressCell: Configurable {
             receivingLabel.text = "+ " + String.currency(value: status.realReceiving)
             sentLabel.text = "- " + String.currency(value: status.realSending)
             
+            let secondReceive = AppModel.sharedManager().exchangeValue(status.realReceiving)
+            let secondSent = AppModel.sharedManager().exchangeValue(status.realSending)
+
+            secondReceiveLabel.text = "+ " + secondReceive
+            secondSendLabel.text = "- " + secondSent
+            
+            if secondReceive.isEmpty == true {
+                secondReceiveLabel.isHidden = true
+            }
+            else {
+                secondReceiveLabel.isHidden = false
+            }
+            
+            if secondSent.isEmpty == true {
+                secondSendLabel.isHidden = true
+            }
+            else {
+                secondSendLabel.isHidden = false
+            }
+
             sentStack.isHidden = status.realSending == 0 ? true : false
             receivingStack.isHidden = status.realReceiving == 0 ? true : false
         }

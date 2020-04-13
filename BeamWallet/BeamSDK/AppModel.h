@@ -33,6 +33,7 @@
 #import "StringLocalize.h"
 #import "BMLockScreenValue.h"
 #import "BMLogValue.h"
+#import "BMCurrency.h"
 
 enum {
     BMRestoreManual = 0,
@@ -64,6 +65,7 @@ typedef int BMRestoreType;
 -(void)onAddedDeleteAddress:(BMAddress*_Nonnull)address;
 -(void)onAddedDeleteTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)onWalletCompleteVerefication;
+-(void)onExchangeRatesChange;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -93,6 +95,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) NSMutableArray<BMPreparedTransaction*>*_Nonnull preparedTransactions;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
+@property (nonatomic,strong) NSMutableArray<BMCurrency*>*_Nonnull currencies;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -219,12 +222,16 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isFork;
 -(int)getDefaultFeeInGroth;
 -(int)getMinFeeInGroth;
--(BOOL)isNodeInSync;
 
 -(void)completeWalletVerification;
 
 //export
 -(NSString*_Nonnull)exportData:(NSArray*_Nonnull)items;
 -(BOOL)importData:(NSString*_Nonnull)jsonString;
+
+//exchange
+-(NSString*_Nonnull)exchangeValue:(double)amount;
+-(NSString*_Nonnull)exchangeValueFee:(double)amount;
+-(void)saveCurrencies;
 
 @end
