@@ -42,6 +42,12 @@ class BMTableHeaderTitleView: UIView {
         }
     }
     
+    public var aligment:NSTextAlignment? {
+        didSet{
+            titleLabel.textAlignment = aligment ?? .left
+        }
+    }
+    
     public var textFont:UIFont? {
         didSet{
             titleLabel.font = textFont

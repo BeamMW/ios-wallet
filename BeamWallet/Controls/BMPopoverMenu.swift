@@ -51,11 +51,16 @@ extension BMPopoverMenu {
                                }))
             
             
-            if(Settings.sharedManager().isDarkMode) {
-                alert.setBackgroundColor(color: UIColor.black)
-            }
-            
             rootVC.present(alert, animated: true)
+                        
+            if #available(iOS 13, *) {
+                
+            }
+            else {
+                if(Settings.sharedManager().isDarkMode) {
+                    alert.setBackgroundColor(color: UIColor.black)
+                }
+            }
         }
     }
     

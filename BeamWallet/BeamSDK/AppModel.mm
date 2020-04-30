@@ -129,6 +129,8 @@ const bool isSecondCurrencyEnabled = true;
     _transactions = [[NSMutableArray alloc] init];
     
     _contacts = [[NSMutableArray alloc] init];
+    _notifications = [[NSMutableArray alloc] init];
+    _presendedNotifications = [[NSMutableDictionary alloc] init];
     
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
@@ -148,8 +150,19 @@ const bool isSecondCurrencyEnabled = true;
 }
 
 -(void)loadRules{
-    Rules::get().UpdateChecksum();
+    if(Settings.sharedManager.target == Masternet) {
+        Rules::get().pForks[1].m_Height = 10;
+        Rules::get().pForks[2].m_Height = 20;
+        Rules::get().MaxRollback = 10;
+        Rules::get().CA.LockPeriod = 10;
+        Rules::get().Shielded.m_ProofMax.n = 4;
+        Rules::get().Shielded.m_ProofMax.M = 3;
+        Rules::get().Shielded.m_ProofMin.n = 4;
+        Rules::get().Shielded.m_ProofMin.M = 2;
+        Rules::get().Shielded.MaxWindowBacklog = 150;
+    }
 
+    Rules::get().UpdateChecksum();
     LOG_INFO() << "Rules signature";
 }
 
@@ -380,11 +393,6 @@ const bool isSecondCurrencyEnabled = true;
 -(BOOL)createWallet:(NSString*)phrase pass:(NSString*)pass {
     [self clearAllCategories];
     
-    if (walletReactor == nil) {
-        walletReactor = Reactor::create();
-        io::Reactor::Scope s(*walletReactor); // do it in main thread
-    }
-    
     if (self.isInternetAvailable == NO) {
         return NO;
     }
@@ -429,11 +437,15 @@ const bool isSecondCurrencyEnabled = true;
         return NO;
     }
     
+    walletReactor = Reactor::create();
+    io::Reactor::Scope s(*walletReactor); // do it in main thread
+    
     // generate default address
     WalletAddress address;
     walletDb->createAddress(address);
     address.m_label = "Default";
     walletDb->saveAddress(address);
+    
     
     [self onWalledOpened:SecString(pass.string)];
     
@@ -761,7 +773,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet->getAsync()->getAddresses(false);
         wallet->getAsync()->getAddresses(true);
         wallet->getAsync()->getExchangeRates();
+        wallet->getAsync()->getNotifications();
     }
+}
+
+-(void)getWalletNotifications {
+    wallet->getAsync()->getNotifications();
 }
 
 -(void)getNetworkStatus {
@@ -1906,6 +1923,18 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return nil;
 }
 
+-(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID {
+    NSMutableArray *transactions = [NSMutableArray arrayWithArray:_transactions];
+    
+    for (BMTransaction *tr in transactions) {
+        if ([tr.ID isEqualToString:ID]) {
+            return tr;
+        }
+    }
+    
+    return nil;
+}
+
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address {
     NSMutableArray *transactions = [NSMutableArray arrayWithArray:_transactions];
     
@@ -2478,6 +2507,104 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     return @"";
+}
+
+#pragma mark - Notifications
+
+-(int)getUnreadNotificationsCount {
+    int count = 0;
+    
+    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+        if(!notification.isRead) {
+            count += 1;
+        }
+    }
+    
+    return count;
+}
+
+-(int)getUnsendedNotificationsCount {
+    int count = 0;
+    
+    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+        if(!notification.isSended && !notification.isRead) {
+            count += 1;
+        }
+    }
+    
+    return count;
+}
+
+-(BMNotification*_Nullable)getUnsendedNotification {
+    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+        if(!notification.isSended && !notification.isRead) {
+            return notification;
+        }
+    }
+    return nil;
+}
+
+-(BMNotification*_Nullable)getLastVersionNotification {
+    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+        if(notification.type == VERSION && !notification.isRead) {
+            return notification;
+        }
+    }
+    return nil;
+}
+
+-(BOOL)allUnsendedIsAddresses {
+    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+        if(notification.type != ADDRESS && !notification.isSended && !notification.isRead) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+-(void)readNotification:(NSString*_Nonnull) notifId {
+    auto buffer = from_hex(notifId.string);
+    Blob rawData(buffer.data(), static_cast<uint32_t>(buffer.size()));
+    ECC::uintBig nid(rawData);
+    wallet->getAsync()->markNotificationAsRead(nid);
+}
+
+-(void)readNotificationByObject:(NSString*_Nonnull) objectId {
+    NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+    for (BMNotification *notification in notifications) {
+        if([notification.pId isEqualToString:objectId]) {
+            [self readNotification:notification.nId];
+            break;
+        }
+    }
+}
+
+-(void)deleteNotification:(NSString*_Nonnull) notifId {
+    auto buffer = from_hex(notifId.string);
+    Blob rawData(buffer.data(), static_cast<uint32_t>(buffer.size()));
+    ECC::uintBig nid(rawData);
+    wallet->getAsync()->deleteNotification(nid);
+}
+
+-(void)deleteAllNotifications {
+    NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+    for (BMNotification *notification in notifications) {
+        [self deleteNotification:notification.nId];
+    }
+}
+
+-(void)sendNotifications {
+    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+        if(!notification.isSended) {
+            notification.isSended = YES;
+            [_presendedNotifications setObject:notification.nId forKey:notification.nId];
+        }
+    }
+}
+
+-(void)clearNotifications {
+    [_notifications removeAllObjects];
+    [_presendedNotifications removeAllObjects];
 }
 
 @end

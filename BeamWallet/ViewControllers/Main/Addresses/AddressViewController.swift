@@ -22,9 +22,11 @@ import UIKit
 class AddressViewController: BaseTableViewController {
 
     private var addressViewModel:DetailAddressViewModel!
+    public var walletId = ""
     
     init(address:BMAddress) {
         super.init(nibName: nil, bundle: nil)
+        self.walletId = address.walletId
         self.addressViewModel = DetailAddressViewModel(address: address)
     }
     

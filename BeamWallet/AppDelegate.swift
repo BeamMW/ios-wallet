@@ -21,6 +21,7 @@ import CrashEye
 import Crashlytics
 import Fabric
 import UIKit
+import UserNotifications
 
 class BeamApplication: UIApplication {
     override func sendEvent(_ event: UIEvent) {
@@ -102,28 +103,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
         }
     
-        return true
-    }
-    
-    func before(value1: String, value2: String) -> Bool {
-        let ch1 = value1.first
-        let l1 = ch1!.isLetter
-        if (!l1) {
-            return false
+        if #available(iOS 13.0, *) {
+            window?.overrideUserInterfaceStyle = Settings.sharedManager().isDarkMode ? .dark : .light
         }
         
-         let ch2 = value2.first
-         let l2 = ch2!.isLetter
-         if (!l2) {
-             return false
-         }
         
-        return value1.lowercased() < value2.lowercased()
+        return true
     }
-    
-    
+        
     public func logout() {
         AppModel.sharedManager().clearAllCategories()
+        AppModel.sharedManager().clearNotifications()
         AppModel.sharedManager().isLoggedin = false
         AppModel.sharedManager().resetWallet(true)
         Settings.sharedManager().resetSettings()
@@ -134,7 +124,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = rootController
     }
     
-    func applicationWillResignActive(_ application: UIApplication) {}
+    func applicationWillResignActive(_ application: UIApplication) {
+        
+    }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         if AppModel.sharedManager().connectionTimer != nil {
@@ -219,6 +211,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.backgroundTask = .invalid
     }
     
+
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return true
@@ -229,75 +222,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        // Messaging.messaging().apnsToken = deviceToken
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {}
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         completionHandler(.noData)
-        
-//        if(!AppModel.sharedManager().isRestoreFlow) {
-//            if let password = KeychainManager.getPassword() {
-//                if NotificationManager.sharedManager.sendAutomaticMoney(data: userInfo) == false
-//                {
-//                    self.registerBackgroundTask()
-//
-//                    self.completionHandler = completionHandler
-//
-//                    if(AppModel.sharedManager().isLoggedin) {
-//                        AppModel.sharedManager().refreshAllInfo()
-//                    }
-//                    else{
-//                        AppModel.sharedManager().openWallet(password)
-//                    }
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
-//                        self.endBackgroundTask()
-//                        self.completionHandler?(.newData)
-//                    }
-//                }
-//                else{
-//                    completionHandler(.newData)
-//                }
-//            }
-//            else{
-//                completionHandler(.noData)
-//            }
-//        }
-//        else{
-//            completionHandler(.newData)
-//        }
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         completionHandler(.noData)
-        
-//        if(!AppModel.sharedManager().isRestoreFlow) {
-//            if let password = KeychainManager.getPassword() {
-//                self.completionHandler = completionHandler
-//
-//                self.registerBackgroundTask()
-//
-//                if(AppModel.sharedManager().isLoggedin) {
-//                    AppModel.sharedManager().refreshAllInfo()
-//                }
-//                else{
-//                    AppModel.sharedManager().openWallet(password)
-//                }
-//
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 26) {
-//                    self.endBackgroundTask()
-//                    self.completionHandler?(.newData)
-//                }
-//            }
-//            else{
-//                completionHandler(.noData)
-//            }
-//        }
-//        else{
-//            completionHandler(.noData)
-//        }
     }
     
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
@@ -369,7 +303,6 @@ extension AppDelegate: WalletModelDelegate {
         DispatchQueue.main.async {
             var oldTransactions = [BMTransaction]()
             
-            // get old notifications
             if let data = UserDefaults.standard.data(forKey: Localizable.shared.strings.transactions) {
                 if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
                     oldTransactions = array
@@ -378,14 +311,7 @@ extension AppDelegate: WalletModelDelegate {
             
             for transaction in transactions {
                 if transaction.isIncome, !transaction.isSelf {
-                    if let oldTransaction = oldTransactions.first(where: { $0.id == transaction.id }) {
-                        if oldTransaction.status != transaction.status, UIApplication.shared.applicationState != .active {
-                            // NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
-                        }
-                    }
-                    else {
-                        AppStoreReviewManager.incrementAppTransactions()
-                        
+                    if oldTransactions.first(where: { $0.id == transaction.id }) == nil {
                         NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
                     }
                 }
@@ -431,6 +357,10 @@ extension AppDelegate: SettingsModelDelegate {
             }
             
             UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.main.marine
+        }
+        
+        if #available(iOS 13.0, *) {
+            window?.overrideUserInterfaceStyle = Settings.sharedManager().isDarkMode ? .dark : .light
         }
     }
 }

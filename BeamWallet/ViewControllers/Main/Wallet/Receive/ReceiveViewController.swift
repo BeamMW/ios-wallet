@@ -140,6 +140,15 @@ extension ReceiveViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 3 && indexPath.row == 2 {
+            let amount = Double(viewModel.amount ?? "0") ?? 0
+            if amount > 0 {
+                return 17
+            }
+            else {
+                return 0
+            }
+        }
         return UITableView.automaticDimension
     }
     
@@ -171,7 +180,7 @@ extension ReceiveViewController : UITableViewDataSource {
             return showEdit ? 4 : 1
         }
         else if section == 3 {
-            return showAdvanced ? 2 : 1
+            return showAdvanced ? 3 : 1
         }
         return 1
     }
@@ -237,12 +246,43 @@ extension ReceiveViewController : UITableViewDataSource {
                 cell.delegate = self
                 return cell
             }
-            else  {
+            else if indexPath.row == 1  {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.request_amount, value: viewModel.amount))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 return cell
+            }
+            else {
+                var cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+                
+                if cell == nil {
+                    cell = SecondCell(style: .default, reuseIdentifier: "cell")
+                    
+                    cell?.textLabel?.textColor = UIColor.main.blueyGrey
+                    cell?.textLabel?.font = RegularFont(size: 14)
+                    
+                    cell?.contentView.backgroundColor = UIColor.main.marineThree
+                    cell?.selectionStyle = .none
+                    cell?.separatorInset = UIEdgeInsets.zero
+                    cell?.indentationLevel = 0
+                }
+                
+                let amount = Double(viewModel.amount ?? "0") ?? 0
+                let second = AppModel.sharedManager().exchangeValue(amount)
+                
+                if amount > 0 {
+                    cell?.textLabel?.text = second
+                }
+                else {
+                    cell?.textLabel?.text = nil
+                }
+                
+                if Settings.sharedManager().isDarkMode {
+                    cell?.textLabel?.textColor = UIColor.main.steel
+                }
+                
+                return cell!
             }
         case 4:
             let cell = tableView
@@ -297,6 +337,7 @@ extension ReceiveViewController : BMCellProtocol {
             }
             else if path.section == 3 {
                 viewModel.amount = text
+                tableView.reloadRows(at: [IndexPath(row: 2, section: 3)], with: .none)
             }
         }
     }
@@ -326,10 +367,10 @@ extension ReceiveViewController : BMCellProtocol {
                 showAdvanced = !showAdvanced
 
                 if showAdvanced {
-                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3)], with: .fade)
                 }
                 else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3)], with: .fade)
                 }
             }
         }

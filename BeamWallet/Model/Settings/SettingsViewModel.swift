@@ -28,6 +28,7 @@ class SettingsViewModel: NSObject {
         case privacy = 3
         case tags = 4
         case utilites = 5
+        case notifications = 6
     }
     
     enum SettingsItemType: Int {
@@ -60,6 +61,7 @@ class SettingsViewModel: NSObject {
         case open_category = 27
         case random_node = 28
         case currency = 29
+        case notifications = 30
     }
     
     class SettingsItem {
@@ -121,6 +123,7 @@ class SettingsViewModel: NSObject {
         case .main:
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.general_settings.capitalizingFirstLetter(), type: SettingsItemType.general, icon: IconSettingsGeneral(), hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.notifications.capitalizingFirstLetter(), type: SettingsItemType.notifications, icon: IconNotifications(), hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.node.capitalizingFirstLetter(), type: SettingsItemType.node, icon: IconNode(), hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.privacy.capitalizingFirstLetter(), type: SettingsItemType.privacy, icon: IconSettingsPrivacy(), hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.utilities.capitalizingFirstLetter(), type: SettingsItemType.utilites, icon: IconSettingsUtilities(), hasArrow: true))
@@ -213,6 +216,8 @@ class SettingsViewModel: NSObject {
             return Localizable.shared.strings.utilities
         case .tags:
             return Localizable.shared.strings.categories
+        case .notifications:
+            return Localizable.shared.strings.notifications
         case .none:
             return String.empty()
         }
@@ -274,6 +279,8 @@ class SettingsViewModel: NSObject {
             openCategory(category: item.category)
         case .currency:
             onCurrencyScreen()
+        case .notifications:
+            onNotifications()
         default:
             return
         }
@@ -407,6 +414,13 @@ extension SettingsViewModel {
     func onLanguage() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .language)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onNotifications() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = BMDataPickerViewController(type: .notifications)
             top.pushViewController(vc: vc)
         }
     }

@@ -22,7 +22,8 @@ import UIKit
 class TransactionViewController: BaseTableViewController {
     private var viewModel: DetailTransactionViewModel!
     private var isPreview = false
-    
+    public var transactionId = ""
+
     override var previewActionItems: [UIPreviewActionItem] {
         let transaction = viewModel.transaction!
         
@@ -96,6 +97,7 @@ class TransactionViewController: BaseTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         isPreview = preview
+        transactionId = transaction.id
         viewModel = DetailTransactionViewModel(transaction: transaction)
     }
     

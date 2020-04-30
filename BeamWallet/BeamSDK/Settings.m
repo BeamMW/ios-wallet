@@ -35,6 +35,12 @@ static NSString *logsKey = @"logsKey";
 static NSString *darkModeKey = @"darkModeKey";
 static NSString *isSetDarkModeKey = @"isSetDarkModeKey";
 static NSString *currenctKey = @"currenctKey";
+static NSString *notificationsWalletKey = @"notificationsWalletKey";
+static NSString *notificationsNewsKey = @"notificationsNewsKey";
+static NSString *notificationsTransactionKey = @"notificationsTransactionKey";
+static NSString *notificationsAddressKey = @"notificationsAddressKey";
+
+
 
 + (Settings*_Nonnull)sharedManager {
     static Settings *sharedMyManager = nil;
@@ -161,6 +167,34 @@ static NSString *currenctKey = @"currenctKey";
     }
     else{
         _currency = BMCurrencyUSD;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:notificationsNewsKey]) {
+        _isNotificationNewsON = [[[NSUserDefaults standardUserDefaults] objectForKey:notificationsNewsKey] boolValue];
+    }
+    else{
+        _isNotificationNewsON = YES;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:notificationsWalletKey]) {
+        _isNotificationWalletON = [[[NSUserDefaults standardUserDefaults] objectForKey:notificationsWalletKey] boolValue];
+    }
+    else{
+        _isNotificationWalletON = YES;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:notificationsAddressKey]) {
+        _isNotificationAddressON = [[[NSUserDefaults standardUserDefaults] objectForKey:notificationsAddressKey] boolValue];
+    }
+    else{
+        _isNotificationAddressON = YES;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:notificationsTransactionKey]) {
+        _isNotificationTransactionON = [[[NSUserDefaults standardUserDefaults] objectForKey:notificationsTransactionKey] boolValue];
+    }
+    else{
+        _isNotificationTransactionON = YES;
     }
     
     return self;
@@ -357,6 +391,30 @@ static NSString *currenctKey = @"currenctKey";
             }
         }
     }
+}
+
+-(void)setIsNotificationNewsON:(BOOL)isNotificationNewsON {
+    _isNotificationNewsON = isNotificationNewsON;
+    [[NSUserDefaults standardUserDefaults] setBool:_isNotificationNewsON forKey:notificationsNewsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setIsNotificationWalletON:(BOOL)isNotificationWalletON {
+    _isNotificationWalletON = isNotificationWalletON;
+    [[NSUserDefaults standardUserDefaults] setBool:_isNotificationWalletON forKey:notificationsWalletKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setIsNotificationAddressON:(BOOL)isNotificationAddressON {
+    _isNotificationAddressON = isNotificationAddressON;
+    [[NSUserDefaults standardUserDefaults] setBool:_isNotificationAddressON forKey:notificationsAddressKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)setIsNotificationTransactionON:(BOOL)isNotificationTransactionON {
+    _isNotificationTransactionON = isNotificationTransactionON;
+    [[NSUserDefaults standardUserDefaults] setBool:_isNotificationTransactionON forKey:notificationsTransactionKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(NSString*_Nonnull)logPath {

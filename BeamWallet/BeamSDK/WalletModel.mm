@@ -43,7 +43,6 @@ using namespace std;
 NSString *const AppErrorDomain = @"beam.mw";
 NSTimer *timer;
 
-
 WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
 : WalletClient(walletDB, nodeAddr, reactor)
 {
@@ -758,8 +757,124 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
 }
 
 
-void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Notification>& notif) {
-    NSLog(@"onNotificationsChanged");
+void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Notification>& notifications) {
+       
+    if (action == beam::wallet::ChangeAction::Removed) {
+        for (int i=0; i<notifications.size(); i++) {
+            auto notification = notifications[i];
+            NSString *nId = [NSString stringWithUTF8String:to_string(notification.m_ID).c_str()];
+            NSLog(@"notification removed: %@", nId);
+            
+            NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+            for (int i=0; i<AppModel.sharedManager.notifications.count; i++) {
+                if([AppModel.sharedManager.notifications[i].nId isEqualToString:nId]) {
+                    [set addIndex:i];
+                    break;
+                }
+            }
+            [AppModel.sharedManager.notifications removeObjectsAtIndexes:set];
+        }
+    }
+    else {
+        for (int i=0; i<notifications.size(); i++) {
+            BMNotification *bmNotification;
+            
+            auto notification = notifications[i];
+            NSLog(@"notification received: %d", notification.m_type);
+            
+            NSString *nId = [NSString stringWithUTF8String:to_string(notification.m_ID).c_str()];
+            
+            if(notification.m_type == beam::wallet::Notification::Type::SoftwareUpdateAvailable && Settings.sharedManager.isNotificationWalletON) {
+                beam::wallet::VersionInfo info;
+                if (beam::wallet::fromByteBuffer(notification.m_content, info)) {
+                    NSString *version = [NSString stringWithFormat:@"v%d.%d",info.m_version.m_major,info.m_version.m_revision];
+                    NSLog(@"notification version: %@", version);
+                    
+                    bmNotification = [BMNotification new];
+                    bmNotification.nId = nId;
+                    bmNotification.type = VERSION;
+                    bmNotification.pId = version;
+                    bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
+                    bmNotification.createdTime = notification.m_createTime;
+                    bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
+                }
+            }
+            else if(notification.m_type == beam::wallet::Notification::Type::AddressStatusChanged && Settings.sharedManager.isNotificationAddressON) {
+                beam::wallet::WalletAddress address;
+                if (beam::wallet::fromByteBuffer(notification.m_content, address))  {
+                    if(address.isExpired()) {
+                        bmNotification = [BMNotification new];
+                        bmNotification.nId = nId;
+                        bmNotification.pId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
+                        bmNotification.type = ADDRESS;
+                        bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
+                        bmNotification.createdTime = notification.m_createTime;
+                        bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
+                    }
+                    NSLog(@"notification address: %@", bmNotification.pId);
+                }
+            }
+            else if((notification.m_type == beam::wallet::Notification::Type::TransactionStatusChanged
+                     || notification.m_type == beam::wallet::Notification::Type::TransactionFailed
+                     || notification.m_type == beam::wallet::Notification::Type::TransactionCompleted) && Settings.sharedManager.isNotificationTransactionON) {
+                TxToken token;
+                Deserializer d;
+                d.reset(notification.m_content);
+                d& token;
+                beam::wallet::TxParameters transaction = token.UnpackParameters();
+                std::string tx = to_hex(transaction.GetTxID()->data(), transaction.GetTxID()->size());
+                
+                bmNotification = [BMNotification new];
+                bmNotification.nId = nId;
+                bmNotification.pId = [NSString stringWithUTF8String:tx.c_str()];
+                bmNotification.type = TRANSACTION;
+                bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
+                bmNotification.createdTime = notification.m_createTime;
+                bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
+                
+                NSLog(@"notification transaction: %@", bmNotification.pId);
+            }
+            else if(notification.m_type == beam::wallet::Notification::Type::BeamNews && Settings.sharedManager.isNotificationNewsON) {
+                bmNotification = [BMNotification new];
+                bmNotification.nId = nId;
+                bmNotification.type = NEWS;
+                bmNotification.isRead = false;
+                bmNotification.createdTime = notification.m_createTime;
+                bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
+                
+                NSLog(@"notification news: %@", bmNotification.nId);
+            }
+            
+            if(bmNotification != nil) {
+                int index = -1;
+                for (int i=0; i<AppModel.sharedManager.notifications.count; i++) {
+                    if([AppModel.sharedManager.notifications[i].nId isEqualToString:nId]) {
+                        index = i;
+                        [AppModel.sharedManager.notifications replaceObjectAtIndex:i withObject:bmNotification];
+                        break;
+                    }
+                }
+                if(index == -1) {
+                    [AppModel.sharedManager.notifications addObject:bmNotification];
+                }
+            }
+        }
+    }
+        
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdTime"
+                                                                   ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [[[AppModel sharedManager] notifications] sortedArrayUsingDescriptors:sortDescriptors];
+    
+    [[[AppModel sharedManager] notifications] removeAllObjects];
+    [[[AppModel sharedManager] notifications] addObjectsFromArray:sortedArray];
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onNotificationsChanged)]) {
+            [delegate onNotificationsChanged];
+        }
+    }
 }
 
 NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)

@@ -48,6 +48,8 @@ class QRViewController: BaseViewController {
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainView: BaseView!
 
+    @IBOutlet weak private var secondAvailableLabel: UILabel!
+
     init(address:BMAddress, amount:String?) {
         super.init(nibName: nil, bundle: nil)
         
@@ -62,6 +64,9 @@ class QRViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
+        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAvailableLabel.font = RegularFont(size: 14)
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         if let image = appDelegate.window?.snapshot() {
@@ -91,7 +96,15 @@ class QRViewController: BaseViewController {
         
         if let a = amount, !a.isEmpty {
             amountStack.isHidden = false
+            
+            let amount = Double(a) ?? 0
+
             amountLabel.text = Localizable.shared.strings.beam_amount(a)
+            
+            if amount > 0 {
+                secondAvailableLabel.isHidden = false
+                secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(amount)
+            }
         }
         else{
             amountStack.isHidden = true

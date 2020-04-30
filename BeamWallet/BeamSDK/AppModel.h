@@ -34,6 +34,7 @@
 #import "BMLockScreenValue.h"
 #import "BMLogValue.h"
 #import "BMCurrency.h"
+#import "BMNotification.h"
 
 enum {
     BMRestoreManual = 0,
@@ -66,6 +67,7 @@ typedef int BMRestoreType;
 -(void)onAddedDeleteTransaction:(BMTransaction*_Nonnull)transaction;
 -(void)onWalletCompleteVerefication;
 -(void)onExchangeRatesChange;
+-(void)onNotificationsChanged;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -96,6 +98,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
 @property (nonatomic,strong) NSMutableArray<BMCurrency*>*_Nonnull currencies;
+@property (nonatomic,strong) NSMutableArray<BMNotification*>*_Nonnull notifications;
+@property (nonatomic,strong) NSMutableDictionary*_Nonnull presendedNotifications;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -138,6 +142,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)getWalletStatus;
 -(void)getNetworkStatus;
 -(void)refreshAllInfo;
+-(void)getWalletNotifications;
 
 // addresses
 -(NSString*_Nonnull)getTransactionComment:(NSString*_Nonnull)address;
@@ -196,6 +201,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID;
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
 -(BOOL)hasActiveTransactions;
+-(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID;
 
 // utxo
 -(void)getUTXO;
@@ -233,5 +239,19 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSString*_Nonnull)exchangeValue:(double)amount;
 -(NSString*_Nonnull)exchangeValueFee:(double)amount;
 -(void)saveCurrencies;
+
+
+//notifications
+-(int)getUnreadNotificationsCount;
+-(int)getUnsendedNotificationsCount;
+-(BMNotification*_Nullable)getUnsendedNotification;
+-(BOOL)allUnsendedIsAddresses;
+-(void)sendNotifications;
+-(void)readNotification:(NSString*_Nonnull) notifId;
+-(void)readNotificationByObject:(NSString*_Nonnull) objectId;
+-(void)clearNotifications;
+-(void)deleteNotification:(NSString*_Nonnull) notifId;
+-(void)deleteAllNotifications;
+-(BMNotification*_Nullable)getLastVersionNotification;
 
 @end

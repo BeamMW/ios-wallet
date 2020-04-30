@@ -80,6 +80,11 @@ func IconAddresses() -> UIImage? {
     return UIImage(named: "iconAddresses")
 }
 
+
+func IconNotifications() -> UIImage? {
+    return UIImage(named: "iconNotificationMenu")
+}
+
 func IconSettings() -> UIImage? {
     return UIImage(named: "iconSettings")
 }
@@ -249,8 +254,25 @@ func IconExpired() -> UIImage? {
     }
 }
 
+func IconBeam() -> UIImage? {
+    return UIImage(named: "iconBeam")
+}
+
+func IconNotifictionsUpdate() -> UIImage? {
+    return UIImage(named: "iconNotifictionsUpdate")
+}
+
+
 func IconUtxoEmpty() -> UIImage? {
     return UIImage(named: "iconUtxoEmptyState")
+}
+
+func IconNotifictionsExpired() -> UIImage? {
+    return UIImage(named: "iconNotifictionsExpired")
+}
+
+func IconNotificationsEmpty() -> UIImage? {
+    return UIImage(named: "iconNotificationEmpty")
 }
 
 func IconAddressbookEmpty() -> UIImage? {

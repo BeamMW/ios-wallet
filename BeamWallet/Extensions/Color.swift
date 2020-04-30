@@ -65,6 +65,10 @@ extension UIColor {
             return .init(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 0.5)
         }
         
+        static var cyan15: UIColor {
+            return .init(red: 0.0, green: 240.0 / 255.0, blue: 1.0, alpha: 0.15)
+        }
+        
         static var darkSlateBlue: UIColor {
             if Settings.sharedManager().target == Masternet {
                 return UIColor.main.black

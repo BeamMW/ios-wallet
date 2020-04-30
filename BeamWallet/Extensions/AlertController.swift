@@ -19,18 +19,25 @@
 
 import Foundation
 
-private extension UIView {
-    var visualEffectView: UIVisualEffectView? {
-        
-        if self is UIVisualEffectView {
-            return self as? UIVisualEffectView
+private extension UIView
+{
+    func searchVisualEffectsSubview() -> UIVisualEffectView?
+    {
+        if let visualEffectView = self as? UIVisualEffectView
+        {
+            return visualEffectView
         }
-        
-        for subview in self.subviews {
-            if let validView = subview.visualEffectView {
-                return validView
+        else
+        {
+            for subview in subviews
+            {
+                if let found = subview.searchVisualEffectsSubview()
+                {
+                    return found
+                }
             }
         }
+        
         return nil
     }
 }
@@ -38,14 +45,17 @@ private extension UIView {
 extension UIAlertController {
     // Set background color of UIAlertController
     func setBackgroundColor(color: UIColor) {
-        self.view.visualEffectView?.effect = UIBlurEffect(style: .dark)
-        
-        if let bgView = self.view.subviews.first, let groupView = bgView.subviews.first, let contentView = groupView.subviews.first {
-            contentView.layer.cornerRadius = 0
-            contentView.layer.borderWidth = 0
-            contentView.clipsToBounds = true
-            contentView.backgroundColor = preferredStyle == .actionSheet  ? UIColor.clear : color
+        if let visualEffectView = self.view.searchVisualEffectsSubview()
+        {
+            visualEffectView.effect = UIBlurEffect(style: .dark)
         }
+        
+//        if let bgView = self.view.subviews.first, let groupView = bgView.subviews.first, let contentView = groupView.subviews.first {
+//            contentView.layer.cornerRadius = 0
+//            contentView.layer.borderWidth = 0
+//            contentView.clipsToBounds = true
+//            contentView.backgroundColor = preferredStyle == .actionSheet  ? UIColor.clear : color
+//        }
     }
 }
 

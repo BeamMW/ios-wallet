@@ -28,6 +28,8 @@ enum {
     BMTransactionStatusFailed = 4,
     BMTransactionStatusRegistering = 5
 };
+
+
 typedef UInt64 BMTransactionStatus;
 
 @interface BMTransaction : NSObject

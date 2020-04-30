@@ -493,6 +493,70 @@ class LocalizableStrings : NSObject {
     var clear_wallet_transactions_text = "clear_wallet_transactions_text".localized
     var show_amounts_in = "show_amounts_in".localized
     var second_currency = "second_currency".localized
+    var notifications = "notifications".localized
+    var news = "news".localized
+    var address_expiration = "address_expiration".localized
+    var transaction_status = "transaction_status".localized
+    var wallet_updates = "wallet_updates".localized
+    var new_notifications_title = "new_notifications_title".localized
+    var new_notifications_text = "new_notifications_text".localized
+    var transaction = "transaction".localized
+    var address_expired_notif = "address_expired_notif".localized
+    var clear_all = "clear_all".localized
+    var address_expired = "address_expired".localized
+    var transaction_received = "transaction_received".localized
+    var transaction_sent = "transaction_sent".localized
+    var read = "read".localized
+    var no_notifications = "no_notifications".localized
+    var new_version_available_notif_title = "new_version_available_notif_title".localized
+    var new_version_available_notif_detail = "new_version_available_notif_detail".localized
+    var notification = "notification".localized
+    var update_now = "update_now".localized
+
+    public func new_version_available_title(version: String) -> String {
+        return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
+    }
+    
+    public func new_version_available_detail(version: String) -> String {
+        return "new_version_available_detail".localized.replacingOccurrences(of: "(version)", with: version)
+    }
+    
+    public func transaction_received_notif_body(beam:String, address:String) -> String {
+        return "transaction_received_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address)
+    }
+    
+    public func transaction_sent_notif_body(beam:String, address:String) -> String {
+        return "transaction_sent_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address)
+    }
+    
+    public func muttableTransaction_received_notif_body(beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
+        let string = !failed ? "transaction_received_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_received_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
+        
+        let rangeBeam = (string as NSString).range(of: String(beam + " BEAM"))
+        let rangeAddress = (string as NSString).range(of: String(address))
+        
+        let attributedText = NSMutableAttributedString(string: string)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeBeam)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeAddress)
+        return attributedText
+    }
+    
+    public func muttableTransaction_sent_notif_body(beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
+        let string = !failed ? "transaction_sent_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_sent_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
+        
+        
+        let rangeBeam = (string as NSString).range(of: String(beam + " BEAM"))
+        let rangeAddress = (string as NSString).range(of: String(address))
+        
+        let attributedText = NSMutableAttributedString(string: string)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeBeam)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeAddress)
+        return attributedText
+    }
+    
+    public func addresses_expired_notif(count:Int) -> String {
+        return "addresses_expired_notif".localized.replacingOccurrences(of: "(count)", with: String(count))
+    }
     
     var in_progress_out = "in_progress_out".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")
     var in_progress_in = "in_progress_in".localized.split(separator: "\n").last!.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "in_progress".localized, with: "").replacingOccurrences(of: " ", with: "")

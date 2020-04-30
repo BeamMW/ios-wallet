@@ -20,13 +20,21 @@
 import UIKit
 
 
+protocol BMPickerCellDelegate: AnyObject {
+    func onClickSwitch(value: Bool, cell: BMPickerCell)
+}
+
+
 class BMPickerCell: BaseCell {
     
+    weak var delegate: BMPickerCellDelegate?
+
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var detailLabel: UILabel!
     @IBOutlet private weak var mainView: UIView!
     @IBOutlet private weak var arrowView: UIImageView!
-    
+    @IBOutlet private weak var switchView: UISwitch!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -38,8 +46,13 @@ class BMPickerCell: BaseCell {
         selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
         
-        arrowView.image = Tick()?.withRenderingMode(.alwaysTemplate)
-        arrowView.tintColor = UIColor.main.brightTeal
+        arrowView?.image = Tick()?.withRenderingMode(.alwaysTemplate)
+        arrowView?.tintColor = UIColor.main.brightTeal
+
+        switchView?.onTintColor = UIColor.main.brightTeal
+        switchView?.tintColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
+        switchView?.backgroundColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
+        
         detailLabel.textColor = UIColor.main.blueyGrey
     }
     
@@ -58,11 +71,18 @@ class BMPickerCell: BaseCell {
             titleLabel.textColor = color
         }
         
-        if data.multiplie {
+        if(data.isSwitch) {
+            switchView?.isOn = data.arrowType == BMPickerData.ArrowType.selected
+        }
+        else if data.multiplie {
             arrowView.image = (data.arrowType == BMPickerData.ArrowType.selected) ? CheckboxFull() : CheckboxEmptyNew()
         }
         else{
             arrowView.isHidden = data.arrowType != BMPickerData.ArrowType.selected
         }
+    }
+    
+    @IBAction func onSwitch(sender: UISwitch) {
+        delegate?.onClickSwitch(value: sender.isOn, cell: self)
     }
 }

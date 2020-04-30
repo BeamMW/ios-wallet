@@ -29,6 +29,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case clear
         case export_data
         case currency
+        case notifications
     }
     
     private var type: DataType!
@@ -82,6 +83,8 @@ class BMDataPickerViewController: BaseTableViewController {
             addRightButton(title: Localizable.shared.strings.export, target: self, selector: #selector(onRightButton), enabled: true)
         case .currency:
             title = Localizable.shared.strings.second_currency
+        case .notifications:
+            title = Localizable.shared.strings.notifications
         default:
             title = String.empty()
         }
@@ -90,6 +93,7 @@ class BMDataPickerViewController: BaseTableViewController {
         
         tableView.register(BMPickerCell.self)
         tableView.register(UINib(nibName: "BMPickerCell2", bundle: nil), forCellReuseIdentifier: "BMPickerCell2")
+        tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
         tableView.dataSource = self
@@ -254,6 +258,12 @@ class BMDataPickerViewController: BaseTableViewController {
             for currency in currencies {
                 values.append(BMPickerData(title: currency.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (currency.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: currency.type))
             }
+        case .notifications:
+            values.append(BMPickerData(title: Localizable.shared.strings.wallet_updates, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationWalletON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.wallet_updates, multiplie: false, isSwitch: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.news, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationNewsON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.news, multiplie: false, isSwitch: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.address_expiration, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationAddressON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.address_expiration, multiplie: false, isSwitch: true))
+            values.append(BMPickerData(title: Localizable.shared.strings.transaction_status, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationTransactionON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.transaction_status, multiplie: false, isSwitch: true))
+        
         default:
             break
         }
@@ -380,6 +390,13 @@ extension BMDataPickerViewController: UITableViewDataSource {
             cell.configure(data: values[indexPath.row])
             return cell
         }
+        else if value.isSwitch {
+            let cell = tableView
+                .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
+            cell.configure(data: values[indexPath.row])
+            cell.delegate = self
+            return cell
+        }
         else{
             let cell = tableView
                 .dequeueReusableCell(withType: BMPickerCell.self, for: indexPath)
@@ -387,6 +404,34 @@ extension BMDataPickerViewController: UITableViewDataSource {
             return cell
         }
 
+    }
+}
+
+extension BMDataPickerViewController: BMPickerCellDelegate {
+    func onClickSwitch(value: Bool, cell: BMPickerCell) {
+        if(type == .notifications) {
+            if let indexPath = tableView.indexPath(for: cell) {
+                let item = values[indexPath.row]
+                item.arrowType = value ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected
+                if(item.title == Localizable.shared.strings.wallet_updates) {
+                    Settings.sharedManager().isNotificationWalletON = value
+                }
+                else if(item.title == Localizable.shared.strings.news) {
+                    Settings.sharedManager().isNotificationNewsON = value
+                }
+                else if(item.title == Localizable.shared.strings.transaction_status) {
+                    Settings.sharedManager().isNotificationTransactionON = value
+                }
+                else if(item.title == Localizable.shared.strings.address_expiration) {
+                    Settings.sharedManager().isNotificationAddressON = value
+                }
+                
+                if(value) {
+                    AppModel.sharedManager().getWalletStatus()
+                }
+            }
+        }
+    
     }
 }
 

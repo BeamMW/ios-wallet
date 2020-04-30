@@ -74,7 +74,6 @@ class WalletViewController: BaseTableViewController {
         if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
             if let transaction = viewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
                 let vc = TransactionViewController(transaction: transaction)
-                vc.hidesBottomBarWhenPushed = true
                 pushViewController(vc: vc)
             }
             

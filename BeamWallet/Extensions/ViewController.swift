@@ -206,17 +206,6 @@ extension UIViewController {
         self.addBlur()
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if Settings.sharedManager().isDarkMode {
-            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
-            alertController.setValue(NSAttributedString(string: title, attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedTitle")
-            alertController.setValue(NSAttributedString(string: message, attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedMessage")
-        }
         let cancelAction = UIAlertAction(title: cancelTitle, style: .default) { action in
             cancelHandler(action)
             self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
@@ -231,6 +220,23 @@ extension UIViewController {
         alertController.preferredAction = confirmAction
         
         self.present(alertController, animated: true, completion: nil)
+        
+        if #available(iOS 13, *) {
+
+        }
+        else {
+            if Settings.sharedManager().isDarkMode {
+                alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
+                alertController.setValue(NSAttributedString(string: title, attributes: [
+                    NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                    NSAttributedString.Key.foregroundColor: UIColor.white
+                ]), forKey: "attributedTitle")
+                alertController.setValue(NSAttributedString(string: message, attributes: [
+                    NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+                    NSAttributedString.Key.foregroundColor: UIColor.white
+                ]), forKey: "attributedMessage")
+            }
+        }
     }
 }
 
