@@ -231,7 +231,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        completionHandler(.noData)
+        if(AppModel.sharedManager().isLoggedin) {
+            AppModel.sharedManager().getWalletStatus()
+            self.completionHandler = completionHandler
+        }
+        else {
+            completionHandler(.noData)
+        }
     }
     
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
@@ -319,6 +325,8 @@ extension AppDelegate: WalletModelDelegate {
             
             UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: Localizable.shared.strings.transactions)
             UserDefaults.standard.synchronize()
+            
+            self.completionHandler?(.newData)
         }
     }
 }

@@ -143,10 +143,10 @@ class LeftMenuViewController: BaseTableViewController {
             items[0].selected = true
             self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
         }
-        else if navigationController.viewControllers.first is NotificationsViewController{
-            items[1].selected = true
-            self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
-        }
+//        else if navigationController.viewControllers.first is NotificationsViewController{
+//            items[1].selected = true
+//            self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
+//        }
         else if navigationController.viewControllers.first is AddressesViewController{
             items[2].selected = true
             self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
@@ -318,6 +318,7 @@ extension LeftMenuViewController : WalletModelDelegate {
     func onNotificationsChanged() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.viewDidLayoutSubviews()
         }
     }
 }

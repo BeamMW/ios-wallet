@@ -79,9 +79,68 @@ class NotificationManager : NSObject {
     
     //MARK: - Send
     
+    public func scheduleNotification(notification: BMNotification){
+        if(notification.type == ADDRESS) {            
+            scheduleNotification(title: Localizable.shared.strings.address_expired_notif, body: "", id: notification.pId)
+        }
+        else if (notification.type == TRANSACTION) {
+            if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
+                var title: String = ""
+                var detail: String = ""
+                
+                if transaction.isIncome {
+                    if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
+                        title = Localizable.shared.strings.new_transaction
+                        detail = Localizable.shared.strings.click_to_receive
+                    }
+                    else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
+                        title = Localizable.shared.strings.buy_transaction_failed_title
+                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: true).string
+                    }
+                    else {
+                        title = Localizable.shared.strings.transaction_received
+                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false).string
+                    }
+                }
+                else {
+                    if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
+                        title = Localizable.shared.strings.buy_transaction_failed_title
+                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true).string
+                    }
+                    else {
+                        title = Localizable.shared.strings.transaction_sent
+                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam: beam, address: transaction.receiverAddress, failed: false).string
+                    }
+                }
+                
+                scheduleNotification(title: title, body: detail, id: NotificationManager.versionID)
+            }
+        }
+        else if (notification.type == VERSION) {
+            scheduleNotification(title: Localizable.shared.strings.new_version_available_notif_title, body: Localizable.shared.strings.new_version_available_notif_detail, id: NotificationManager.versionID)
+        }
+        else if (notification.type == NEWS) {
+            scheduleNotification(title: Localizable.shared.strings.new_notifications_title, body: Localizable.shared.strings.new_notifications_text, id: NotificationManager.versionID)
+
+        }
+    }
+    
     public func scheduleNotification(transaction: BMTransaction){
-        if transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending {
-            BMNotificationView.showTransaction(transaction: transaction, delegate: self)
+        if ((transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf && transaction.isIncome) {
+            if UIApplication.shared.applicationState == .active {
+                BMNotificationView.showTransaction(transaction: transaction, delegate: self)
+            }
+            else {
+                let notif = BMNotification()
+                notif.type = BMNotificationType(TRANSACTION)
+                notif.nId = String.empty()
+                notif.pId = transaction.id
+                scheduleNotification(notification: notif)
+            }
         }
     }
         
@@ -106,10 +165,6 @@ class NotificationManager : NSObject {
             }
         }
     }
-    
-    public func didReceiveNotification(id:String) {
-        
-    }
 }
 
 extension NotificationManager : UNUserNotificationCenterDelegate {
@@ -117,6 +172,7 @@ extension NotificationManager : UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
+        onOpenNotification(id: response.notification.request.identifier)
         completionHandler()
     }
     
@@ -135,19 +191,42 @@ extension NotificationManager: WalletModelDelegate {
         if count > 1 && AppModel.sharedManager().allUnsendedIsAddresses() {
             let title = Localizable.shared.strings.addresses_expired_notif(count: Int(count))
             let id = NotificationManager.addressesID
-            BMNotificationView.show(title: title, detail: nil, icon: IconNotifictionsExpired()?.maskWithColor(color: UIColor.main.marine), id: id, delegate: self)
+            DispatchQueue.main.async {
+                if UIApplication.shared.applicationState == .active {
+                    BMNotificationView.show(title: title, detail: nil, icon: IconNotifictionsExpired()?.maskWithColor(color: UIColor.main.marine), id: id, delegate: self)
+                }
+                else {
+                    self.scheduleNotification(title: title, body: "", id: id)
+                }
+            }
         }
         else if count > 1  {
+            let title = Localizable.shared.strings.new_notifications_title
+            let id = NotificationManager.notificationID
             let attributedText = NSMutableAttributedString(string: Localizable.shared.strings.new_notifications_text)
             attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: NSRange(location: 0, length: Localizable.shared.strings.new_notifications_text.count))
-            BMNotificationView.show(title: Localizable.shared.strings.new_notifications_title, detail: attributedText, icon: IconBeam(), id: NotificationManager.notificationID, delegate: self)
+            DispatchQueue.main.async {
+                if UIApplication.shared.applicationState == .active {
+                    BMNotificationView.show(title: title, detail: attributedText, icon: IconBeam(), id: id, delegate: self)
+                }
+                else {
+                    self.scheduleNotification(title: title, body: attributedText.string, id: id)
+                }
+            }
         }
         else if count == 1 {
             if let notification = AppModel.sharedManager().getUnsendedNotification() {
-                BMNotificationView.show(notification: notification, delegate: self)
+                DispatchQueue.main.async {
+                    if UIApplication.shared.applicationState == .active {
+                        BMNotificationView.show(notification: notification, delegate: self)
+                    }
+                    else {
+                        self.scheduleNotification(notification: notification)
+                    }
+                }
             }
         }
-        
+ 
         AppModel.sharedManager().sendNotifications()
     }
 }
@@ -184,6 +263,7 @@ extension NotificationManager: BMNotificationViewDelegate {
                     if !notificationFound {
                         if let notification = AppModel.sharedManager().getLastVersionNotification() {
                             vc.navigationController?.pushViewController(NotificationVersionViewController(version: notification.pId), animated: true)
+                            AppModel.sharedManager().readNotification(byObject: notification.nId)
                         }
                     }
                 }

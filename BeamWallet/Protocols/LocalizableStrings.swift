@@ -529,6 +529,18 @@ class LocalizableStrings : NSObject {
         return "transaction_sent_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address)
     }
     
+    public func transaction_receiving_notif_body(beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
+        let string = !failed ? "transaction_receiving_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_received_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
+        
+        let rangeBeam = (string as NSString).range(of: String(beam + " BEAM"))
+        let rangeAddress = (string as NSString).range(of: String(address))
+        
+        let attributedText = NSMutableAttributedString(string: string)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeBeam)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeAddress)
+        return attributedText
+    }
+    
     public func muttableTransaction_received_notif_body(beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
         let string = !failed ? "transaction_received_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_received_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
         

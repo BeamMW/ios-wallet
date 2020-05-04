@@ -12,6 +12,7 @@ class NotificationTableViewCell: UITableViewCell {
 
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var bottomOffset: NSLayoutConstraint!
+ 
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var nameLabel: UILabel!
@@ -59,5 +60,6 @@ extension NotificationTableViewCell: Configurable {
         dateLabel.text = options.item.date
         iconView.image = options.item.icon
         categoriesLabel.isHidden = options.item.categories == nil
+        detailLabel.isHidden = options.item.detail == nil
     }
 }

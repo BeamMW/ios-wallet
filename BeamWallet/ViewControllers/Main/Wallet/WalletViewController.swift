@@ -66,6 +66,8 @@ class WalletViewController: BaseTableViewController {
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
+        
+        // AppModel.sharedManager().testVersionNotification()
     }
     
     override func viewDidAppear(_ animated: Bool) {

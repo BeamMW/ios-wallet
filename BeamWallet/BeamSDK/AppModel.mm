@@ -355,6 +355,8 @@ const bool isSecondCurrencyEnabled = true;
     
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
 
+
+    
     return YES;
 }
 
@@ -2606,6 +2608,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [_notifications removeAllObjects];
     [_presendedNotifications removeAllObjects];
 }
+
 
 @end
 

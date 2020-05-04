@@ -39,10 +39,14 @@ class NotificationItem {
         type = notification.type
         date = notification.formattedDate()
         
-        if(notification.type == TRANSACTION) {
+        if(notification.type == VERSION) {
+            icon = IconNotifictionsUpdate()
+            name = Localizable.shared.strings.new_version_available_title(version: notification.pId)
+        }
+        else if(notification.type == TRANSACTION) {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
                 if transaction.isIncome {
-                    if transaction.isFailed() || transaction.isExpired() {
+                    if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         icon = UIImage.init(named: "iconNotifictionsFailedReceived")
                         name = Localizable.shared.strings.buy_transaction_failed_title
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
@@ -56,7 +60,7 @@ class NotificationItem {
                     }
                 }
                 else {
-                    if transaction.isFailed() || transaction.isExpired() {
+                    if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         icon = UIImage.init(named: "iconNotifictionsFailed")
                         name = Localizable.shared.strings.buy_transaction_failed_title
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
@@ -72,7 +76,7 @@ class NotificationItem {
             }
         }
         else if(notification.type == ADDRESS) {
-            icon = UIImage.init(named: "iconNotifictionsExpired")
+            icon = IconNotifictionsExpired()
             name = Localizable.shared.strings.address_expired
             
             if let address = AppModel.sharedManager().findAddress(byID: notification.pId) {

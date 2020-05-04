@@ -47,10 +47,12 @@ class NotificationViewModel: NSObject {
         
         for notification in AppModel.sharedManager().notifications as! [BMNotification] {
             let item = NotificationItem(notification: notification)
-            if item.isRead {
-                reads.append(item)
-            } else {
-                unreads.append(item)
+            if item.name != nil {
+                if item.isRead {
+                    reads.append(item)
+                } else {
+                    unreads.append(item)
+                }
             }
         }
     }

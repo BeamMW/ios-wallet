@@ -787,16 +787,29 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
             if(notification.m_type == beam::wallet::Notification::Type::SoftwareUpdateAvailable && Settings.sharedManager.isNotificationWalletON) {
                 beam::wallet::VersionInfo info;
                 if (beam::wallet::fromByteBuffer(notification.m_content, info)) {
-                    NSString *version = [NSString stringWithFormat:@"v%d.%d",info.m_version.m_major,info.m_version.m_revision];
+                    
+                    int major = info.m_version.m_major;
+                    int minor = info.m_version.m_minor;
+                    int revision = (int)info.m_version.m_revision;
+                    BOOL iOS = info.m_application == beam::wallet::VersionInfo::Application::IOSWallet;
+                    
+                    NSString *version = [NSString stringWithFormat:@"%d.%d", major, minor];
+                   
                     NSLog(@"notification version: %@", version);
                     
-                    bmNotification = [BMNotification new];
-                    bmNotification.nId = nId;
-                    bmNotification.type = VERSION;
-                    bmNotification.pId = version;
-                    bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
-                    bmNotification.createdTime = notification.m_createTime;
-                    bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
+                    NSDictionary *dictionary = [[NSBundle mainBundle] infoDictionary];
+                    NSString *currentVersion = [dictionary objectForKey:@"CFBundleShortVersionString"];
+                    NSString *currentBuild = [dictionary objectForKey:@"CFBundleVersion"];
+
+                    if (iOS && ([version doubleValue] > [currentVersion doubleValue] || ([version doubleValue] == [currentVersion doubleValue] && revision > [currentBuild intValue]))) {
+                        bmNotification = [BMNotification new];
+                        bmNotification.nId = nId;
+                        bmNotification.type = VERSION;
+                        bmNotification.pId = [NSString stringWithFormat:@"v%@",version];
+                        bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
+                        bmNotification.createdTime = notification.m_createTime;
+                        bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
+                    }
                 }
             }
             else if(notification.m_type == beam::wallet::Notification::Type::AddressStatusChanged && Settings.sharedManager.isNotificationAddressON) {

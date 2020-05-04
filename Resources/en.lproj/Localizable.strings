@@ -516,6 +516,7 @@
 "new_notifications_text" = "Please click to open details";
 "transaction" = "Transaction";
 "transaction_received_notif_body" = "You received (value) BEAM from (address)";
+"transaction_receiving_notif_body" = "You receiving (value) BEAM from (address)";
 "transaction_sent_notif_body" = "You sent (value) BEAM to (address)";
 "address_expired_notif" = "1 address expired";
 "addresses_expired_notif" = "(count) addresses expired";

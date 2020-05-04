@@ -20,7 +20,7 @@ def shared_pods
     pod 'Parchment'
     pod 'SwipeTransition'
     pod 'CrashEye'
-    pod 'Firebase/Analytics'
+  #  pod 'Firebase/Analytics'
 
 end
 
