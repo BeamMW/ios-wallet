@@ -17,7 +17,7 @@
 // limitations under the License.
 //
 
-import Parchment
+
 import UIKit
 
 class SecondCell: UITableViewCell {

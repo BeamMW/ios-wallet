@@ -17,7 +17,7 @@ def shared_pods
     pod 'Crashlytics'
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
-    pod 'Parchment'
+   # pod 'Parchment'
     pod 'SwipeTransition'
     pod 'CrashEye'
   #  pod 'Firebase/Analytics'

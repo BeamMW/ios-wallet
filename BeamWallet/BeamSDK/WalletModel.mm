@@ -827,8 +827,7 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                     NSLog(@"notification address: %@", bmNotification.pId);
                 }
             }
-            else if((notification.m_type == beam::wallet::Notification::Type::TransactionStatusChanged
-                     || notification.m_type == beam::wallet::Notification::Type::TransactionFailed
+            else if((notification.m_type == beam::wallet::Notification::Type::TransactionFailed
                      || notification.m_type == beam::wallet::Notification::Type::TransactionCompleted) && Settings.sharedManager.isNotificationTransactionON) {
                 TxToken token;
                 Deserializer d;

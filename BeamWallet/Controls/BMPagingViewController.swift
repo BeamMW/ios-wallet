@@ -19,7 +19,7 @@
 
 
 import Foundation
-import Parchment
+
 
 class PagingLargeTitleCell : PagingTitleCell {
     

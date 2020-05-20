@@ -255,7 +255,7 @@ func IconExpired() -> UIImage? {
 }
 
 func IconBeam() -> UIImage? {
-    return UIImage(named: "iconBeam")
+    return UIImage(named: "a")
 }
 
 func IconNotifictionsUpdate() -> UIImage? {

@@ -18,7 +18,7 @@
 //
 
 import UIKit
-import Parchment
+
 
 class CategoryDetailViewController: BaseTableViewController {
     

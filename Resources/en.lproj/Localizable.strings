@@ -528,9 +528,9 @@
 "transaction_sent" = "Transaction sent";
 "read" = "Read";
 "no_notifications" = "There are no notifications yet.";
-"new_version_available_title" = "New version (version) is avalable";
+"new_version_available_title" = "New version (version) is available";
 "new_version_available_detail" = "Your current version is (version)\nPlease update to get the most of your Beam wallet.";
-"new_version_available_notif_title" = "New version is avalable";
+"new_version_available_notif_title" = "New version is available";
 "new_version_available_notif_detail" = "Please update to get the most of your Beam wallet.";
 "notification" = "Notification";
 "update_now" = "Update now";

@@ -101,11 +101,11 @@ class NotificationItem {
                     detail = attributedText
                 }
             }
-            else {
-                let attributedText = NSMutableAttributedString(string: pId)
-                attributedText.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: NSRange(location: 0, length: pId.count))
-                detail = attributedText
-            }
+        }
+        else {
+            let attributedText = NSMutableAttributedString(string: pId)
+            attributedText.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: NSRange(location: 0, length: pId.count))
+            detail = attributedText
         }
     }
     

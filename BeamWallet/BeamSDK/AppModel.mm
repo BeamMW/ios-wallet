@@ -71,7 +71,6 @@ const int kFeeInGroth_Fork1 = 100;
 const std::map<Notification::Type,bool> activeNotifications {
     { Notification::Type::SoftwareUpdateAvailable, true },
     { Notification::Type::BeamNews, true },
-    { Notification::Type::TransactionStatusChanged,true },
     { Notification::Type::TransactionCompleted, true },
     { Notification::Type::TransactionFailed, true },
     { Notification::Type::AddressStatusChanged, true }
@@ -163,7 +162,7 @@ const bool isSecondCurrencyEnabled = true;
     }
 
     Rules::get().UpdateChecksum();
-    LOG_INFO() << "Rules signature";
+    LOG_INFO() << "Rules signature: " << Rules::get().get_SignatureStr();
 }
 
 +(NSString*_Nonnull)chooseRandomNode {

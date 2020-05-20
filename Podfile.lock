@@ -3,7 +3,6 @@ PODS:
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - Fabric (1.10.2)
-  - Parchment (2.3.0)
   - SSZipArchive (2.2.3)
   - SVProgressHUD (2.2.5)
   - SwipeTransition (0.4.2)
@@ -12,7 +11,6 @@ DEPENDENCIES:
   - CrashEye
   - Crashlytics
   - Fabric
-  - Parchment
   - SSZipArchive
   - SVProgressHUD
   - SwipeTransition
@@ -22,7 +20,6 @@ SPEC REPOS:
     - CrashEye
     - Crashlytics
     - Fabric
-    - Parchment
     - SSZipArchive
     - SVProgressHUD
     - SwipeTransition
@@ -31,11 +28,10 @@ SPEC CHECKSUMS:
   CrashEye: 89d1ca174f0ef3ceeb27152f578c0a61667ba799
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
-  Parchment: 72a7eb8072454a9500a53dd84776e04fba24e740
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwipeTransition: 03f6f995646bdff37946af75c442692b011cb348
 
-PODFILE CHECKSUM: e82e8059d4552f32178831952e2989c761247d17
+PODFILE CHECKSUM: 8a7df87812a1bd871cd437e559acfc50bfc5abd5
 
 COCOAPODS: 1.9.1

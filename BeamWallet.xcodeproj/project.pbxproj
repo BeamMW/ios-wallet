@@ -23,6 +23,147 @@
 		920DE98B22F8BC1C002B1110 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DE98822F8BC1C002B1110 /* KeyboardListener.swift */; };
 		920F460D223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		920F460E223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
+		921027A024606E42001A7130 /* PagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276D24606E42001A7130 /* PagingViewController.swift */; };
+		921027A124606E42001A7130 /* PagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276D24606E42001A7130 /* PagingViewController.swift */; };
+		921027A224606E42001A7130 /* PagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276D24606E42001A7130 /* PagingViewController.swift */; };
+		921027A324606E42001A7130 /* PagingTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276E24606E42001A7130 /* PagingTitleCell.swift */; };
+		921027A424606E42001A7130 /* PagingTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276E24606E42001A7130 /* PagingTitleCell.swift */; };
+		921027A524606E42001A7130 /* PagingTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276E24606E42001A7130 /* PagingTitleCell.swift */; };
+		921027A624606E42001A7130 /* PagingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276F24606E42001A7130 /* PagingIndicatorView.swift */; };
+		921027A724606E42001A7130 /* PagingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276F24606E42001A7130 /* PagingIndicatorView.swift */; };
+		921027A824606E42001A7130 /* PagingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276F24606E42001A7130 /* PagingIndicatorView.swift */; };
+		921027A924606E42001A7130 /* PagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277024606E42001A7130 /* PagingView.swift */; };
+		921027AA24606E42001A7130 /* PagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277024606E42001A7130 /* PagingView.swift */; };
+		921027AB24606E42001A7130 /* PagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277024606E42001A7130 /* PagingView.swift */; };
+		921027AC24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277124606E42001A7130 /* PagingCellLayoutAttributes.swift */; };
+		921027AD24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277124606E42001A7130 /* PagingCellLayoutAttributes.swift */; };
+		921027AE24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277124606E42001A7130 /* PagingCellLayoutAttributes.swift */; };
+		921027AF24606E42001A7130 /* EMPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277224606E42001A7130 /* EMPageViewController.swift */; };
+		921027B024606E42001A7130 /* EMPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277224606E42001A7130 /* EMPageViewController.swift */; };
+		921027B124606E42001A7130 /* EMPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277224606E42001A7130 /* EMPageViewController.swift */; };
+		921027B224606E42001A7130 /* PagingIndicatorLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift */; };
+		921027B324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift */; };
+		921027B424606E42001A7130 /* PagingIndicatorLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift */; };
+		921027B524606E42001A7130 /* PagingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277424606E42001A7130 /* PagingCell.swift */; };
+		921027B624606E42001A7130 /* PagingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277424606E42001A7130 /* PagingCell.swift */; };
+		921027B724606E42001A7130 /* PagingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277424606E42001A7130 /* PagingCell.swift */; };
+		921027B824606E42001A7130 /* PagingInvalidationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277524606E42001A7130 /* PagingInvalidationContext.swift */; };
+		921027B924606E42001A7130 /* PagingInvalidationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277524606E42001A7130 /* PagingInvalidationContext.swift */; };
+		921027BA24606E42001A7130 /* PagingInvalidationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277524606E42001A7130 /* PagingInvalidationContext.swift */; };
+		921027BB24606E42001A7130 /* PagingSizeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277624606E42001A7130 /* PagingSizeCache.swift */; };
+		921027BC24606E42001A7130 /* PagingSizeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277624606E42001A7130 /* PagingSizeCache.swift */; };
+		921027BD24606E42001A7130 /* PagingSizeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277624606E42001A7130 /* PagingSizeCache.swift */; };
+		921027BE24606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277724606E42001A7130 /* PagingCollectionViewLayout.swift */; };
+		921027BF24606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277724606E42001A7130 /* PagingCollectionViewLayout.swift */; };
+		921027C024606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277724606E42001A7130 /* PagingCollectionViewLayout.swift */; };
+		921027C124606E42001A7130 /* FixedPagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277824606E42001A7130 /* FixedPagingViewController.swift */; };
+		921027C224606E42001A7130 /* FixedPagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277824606E42001A7130 /* FixedPagingViewController.swift */; };
+		921027C324606E42001A7130 /* FixedPagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277824606E42001A7130 /* FixedPagingViewController.swift */; };
+		921027C424606E42001A7130 /* PagingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277924606E42001A7130 /* PagingStateMachine.swift */; };
+		921027C524606E42001A7130 /* PagingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277924606E42001A7130 /* PagingStateMachine.swift */; };
+		921027C624606E42001A7130 /* PagingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277924606E42001A7130 /* PagingStateMachine.swift */; };
+		921027C724606E42001A7130 /* PagingBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277A24606E42001A7130 /* PagingBorderView.swift */; };
+		921027C824606E42001A7130 /* PagingBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277A24606E42001A7130 /* PagingBorderView.swift */; };
+		921027C924606E42001A7130 /* PagingBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277A24606E42001A7130 /* PagingBorderView.swift */; };
+		921027CA24606E42001A7130 /* IndexedPagingDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277B24606E42001A7130 /* IndexedPagingDataSource.swift */; };
+		921027CB24606E42001A7130 /* IndexedPagingDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277B24606E42001A7130 /* IndexedPagingDataSource.swift */; };
+		921027CC24606E42001A7130 /* IndexedPagingDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277B24606E42001A7130 /* IndexedPagingDataSource.swift */; };
+		921027CD24606E42001A7130 /* PagingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277C24606E42001A7130 /* PagingOptions.swift */; };
+		921027CE24606E42001A7130 /* PagingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277C24606E42001A7130 /* PagingOptions.swift */; };
+		921027CF24606E42001A7130 /* PagingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277C24606E42001A7130 /* PagingOptions.swift */; };
+		921027D024606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277D24606E42001A7130 /* PagingBorderLayoutAttributes.swift */; };
+		921027D124606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277D24606E42001A7130 /* PagingBorderLayoutAttributes.swift */; };
+		921027D224606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277D24606E42001A7130 /* PagingBorderLayoutAttributes.swift */; };
+		921027D324606E42001A7130 /* PagingMenuInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277F24606E42001A7130 /* PagingMenuInteraction.swift */; };
+		921027D424606E42001A7130 /* PagingMenuInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277F24606E42001A7130 /* PagingMenuInteraction.swift */; };
+		921027D524606E42001A7130 /* PagingMenuInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210277F24606E42001A7130 /* PagingMenuInteraction.swift */; };
+		921027D624606E42001A7130 /* PagingMenuItemSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278024606E42001A7130 /* PagingMenuItemSize.swift */; };
+		921027D724606E42001A7130 /* PagingMenuItemSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278024606E42001A7130 /* PagingMenuItemSize.swift */; };
+		921027D824606E42001A7130 /* PagingMenuItemSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278024606E42001A7130 /* PagingMenuItemSize.swift */; };
+		921027D924606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278124606E42001A7130 /* PagingSelectedScrollPosition.swift */; };
+		921027DA24606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278124606E42001A7130 /* PagingSelectedScrollPosition.swift */; };
+		921027DB24606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278124606E42001A7130 /* PagingSelectedScrollPosition.swift */; };
+		921027DC24606E42001A7130 /* InvalidationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278224606E42001A7130 /* InvalidationState.swift */; };
+		921027DD24606E42001A7130 /* InvalidationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278224606E42001A7130 /* InvalidationState.swift */; };
+		921027DE24606E42001A7130 /* InvalidationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278224606E42001A7130 /* InvalidationState.swift */; };
+		921027DF24606E42001A7130 /* PagingMenuTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278324606E42001A7130 /* PagingMenuTransition.swift */; };
+		921027E024606E42001A7130 /* PagingMenuTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278324606E42001A7130 /* PagingMenuTransition.swift */; };
+		921027E124606E42001A7130 /* PagingMenuTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278324606E42001A7130 /* PagingMenuTransition.swift */; };
+		921027E224606E42001A7130 /* PagingContentInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278424606E42001A7130 /* PagingContentInteraction.swift */; };
+		921027E324606E42001A7130 /* PagingContentInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278424606E42001A7130 /* PagingContentInteraction.swift */; };
+		921027E424606E42001A7130 /* PagingContentInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278424606E42001A7130 /* PagingContentInteraction.swift */; };
+		921027E524606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278524606E42001A7130 /* PagingMenuHorizontalAlignment.swift */; };
+		921027E624606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278524606E42001A7130 /* PagingMenuHorizontalAlignment.swift */; };
+		921027E724606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278524606E42001A7130 /* PagingMenuHorizontalAlignment.swift */; };
+		921027E824606E42001A7130 /* PagingIndicatorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278624606E42001A7130 /* PagingIndicatorOptions.swift */; };
+		921027E924606E42001A7130 /* PagingIndicatorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278624606E42001A7130 /* PagingIndicatorOptions.swift */; };
+		921027EA24606E42001A7130 /* PagingIndicatorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278624606E42001A7130 /* PagingIndicatorOptions.swift */; };
+		921027EB24606E42001A7130 /* PagingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278724606E42001A7130 /* PagingEvent.swift */; };
+		921027EC24606E42001A7130 /* PagingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278724606E42001A7130 /* PagingEvent.swift */; };
+		921027ED24606E42001A7130 /* PagingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278724606E42001A7130 /* PagingEvent.swift */; };
+		921027EE24606E42001A7130 /* PagingDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278824606E42001A7130 /* PagingDirection.swift */; };
+		921027EF24606E42001A7130 /* PagingDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278824606E42001A7130 /* PagingDirection.swift */; };
+		921027F024606E42001A7130 /* PagingDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278824606E42001A7130 /* PagingDirection.swift */; };
+		921027F124606E42001A7130 /* PagingBorderOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278924606E42001A7130 /* PagingBorderOptions.swift */; };
+		921027F224606E42001A7130 /* PagingBorderOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278924606E42001A7130 /* PagingBorderOptions.swift */; };
+		921027F324606E42001A7130 /* PagingBorderOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278924606E42001A7130 /* PagingBorderOptions.swift */; };
+		921027F424606E42001A7130 /* PagingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278A24606E42001A7130 /* PagingState.swift */; };
+		921027F524606E42001A7130 /* PagingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278A24606E42001A7130 /* PagingState.swift */; };
+		921027F624606E42001A7130 /* PagingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278A24606E42001A7130 /* PagingState.swift */; };
+		921027F724606E42001A7130 /* PagingMenuItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278B24606E42001A7130 /* PagingMenuItemSource.swift */; };
+		921027F824606E42001A7130 /* PagingMenuItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278B24606E42001A7130 /* PagingMenuItemSource.swift */; };
+		921027F924606E42001A7130 /* PagingMenuItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278B24606E42001A7130 /* PagingMenuItemSource.swift */; };
+		921027FA24606E42001A7130 /* UIScrollView+near.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278D24606E42001A7130 /* UIScrollView+near.swift */; };
+		921027FB24606E42001A7130 /* UIScrollView+near.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278D24606E42001A7130 /* UIScrollView+near.swift */; };
+		921027FC24606E42001A7130 /* UIScrollView+near.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278D24606E42001A7130 /* UIScrollView+near.swift */; };
+		921027FD24606E42001A7130 /* UIColor+interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278E24606E42001A7130 /* UIColor+interpolation.swift */; };
+		921027FE24606E42001A7130 /* UIColor+interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278E24606E42001A7130 /* UIColor+interpolation.swift */; };
+		921027FF24606E42001A7130 /* UIColor+interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278E24606E42001A7130 /* UIColor+interpolation.swift */; };
+		9210280024606E42001A7130 /* UIView+constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278F24606E42001A7130 /* UIView+constraints.swift */; };
+		9210280124606E42001A7130 /* UIView+constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278F24606E42001A7130 /* UIView+constraints.swift */; };
+		9210280224606E42001A7130 /* UIView+constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210278F24606E42001A7130 /* UIView+constraints.swift */; };
+		9210280324606E42001A7130 /* UIEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279024606E42001A7130 /* UIEdgeInsets.swift */; };
+		9210280424606E42001A7130 /* UIEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279024606E42001A7130 /* UIEdgeInsets.swift */; };
+		9210280524606E42001A7130 /* UIEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279024606E42001A7130 /* UIEdgeInsets.swift */; };
+		9210280624606E42001A7130 /* PagingDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279224606E42001A7130 /* PagingDistance.swift */; };
+		9210280724606E42001A7130 /* PagingDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279224606E42001A7130 /* PagingDistance.swift */; };
+		9210280824606E42001A7130 /* PagingDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279224606E42001A7130 /* PagingDistance.swift */; };
+		9210280924606E42001A7130 /* IndexedPagingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279324606E42001A7130 /* IndexedPagingItem.swift */; };
+		9210280A24606E42001A7130 /* IndexedPagingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279324606E42001A7130 /* IndexedPagingItem.swift */; };
+		9210280B24606E42001A7130 /* IndexedPagingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279324606E42001A7130 /* IndexedPagingItem.swift */; };
+		9210280C24606E42001A7130 /* PagingIndicatorMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279424606E42001A7130 /* PagingIndicatorMetric.swift */; };
+		9210280D24606E42001A7130 /* PagingIndicatorMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279424606E42001A7130 /* PagingIndicatorMetric.swift */; };
+		9210280E24606E42001A7130 /* PagingIndicatorMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279424606E42001A7130 /* PagingIndicatorMetric.swift */; };
+		9210280F24606E42001A7130 /* PagingDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279524606E42001A7130 /* PagingDiff.swift */; };
+		9210281024606E42001A7130 /* PagingDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279524606E42001A7130 /* PagingDiff.swift */; };
+		9210281124606E42001A7130 /* PagingDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279524606E42001A7130 /* PagingDiff.swift */; };
+		9210281224606E42001A7130 /* PagingItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279624606E42001A7130 /* PagingItems.swift */; };
+		9210281324606E42001A7130 /* PagingItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279624606E42001A7130 /* PagingItems.swift */; };
+		9210281424606E42001A7130 /* PagingItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279624606E42001A7130 /* PagingItems.swift */; };
+		9210281524606E42001A7130 /* PagingCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279724606E42001A7130 /* PagingCellViewModel.swift */; };
+		9210281624606E42001A7130 /* PagingCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279724606E42001A7130 /* PagingCellViewModel.swift */; };
+		9210281724606E42001A7130 /* PagingCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279724606E42001A7130 /* PagingCellViewModel.swift */; };
+		9210281824606E42001A7130 /* PagingTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279824606E42001A7130 /* PagingTransition.swift */; };
+		9210281924606E42001A7130 /* PagingTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279824606E42001A7130 /* PagingTransition.swift */; };
+		9210281A24606E42001A7130 /* PagingTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279824606E42001A7130 /* PagingTransition.swift */; };
+		9210281B24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279A24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift */; };
+		9210281C24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279A24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift */; };
+		9210281D24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279A24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift */; };
+		9210281E24606E42001A7130 /* Tween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279B24606E42001A7130 /* Tween.swift */; };
+		9210281F24606E42001A7130 /* Tween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279B24606E42001A7130 /* Tween.swift */; };
+		9210282024606E42001A7130 /* Tween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279B24606E42001A7130 /* Tween.swift */; };
+		9210282124606E42001A7130 /* PagingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279C24606E42001A7130 /* PagingItem.swift */; };
+		9210282224606E42001A7130 /* PagingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279C24606E42001A7130 /* PagingItem.swift */; };
+		9210282324606E42001A7130 /* PagingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279C24606E42001A7130 /* PagingItem.swift */; };
+		9210282424606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279D24606E42001A7130 /* PagingViewControllerDelegate.swift */; };
+		9210282524606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279D24606E42001A7130 /* PagingViewControllerDelegate.swift */; };
+		9210282624606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279D24606E42001A7130 /* PagingViewControllerDelegate.swift */; };
+		9210282724606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279E24606E42001A7130 /* PagingViewControllerDataSource.swift */; };
+		9210282824606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279E24606E42001A7130 /* PagingViewControllerDataSource.swift */; };
+		9210282924606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279E24606E42001A7130 /* PagingViewControllerDataSource.swift */; };
+		9210282A24606E42001A7130 /* PagingLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279F24606E42001A7130 /* PagingLayout.swift */; };
+		9210282B24606E42001A7130 /* PagingLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279F24606E42001A7130 /* PagingLayout.swift */; };
+		9210282C24606E42001A7130 /* PagingLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210279F24606E42001A7130 /* PagingLayout.swift */; };
 		92103F692339117B009EA34C /* BMLockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* BMLockScreen.swift */; };
 		92103F6A2339117B009EA34C /* BMLockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* BMLockScreen.swift */; };
 		92103F6B2339117B009EA34C /* BMLockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92103F682339117B009EA34C /* BMLockScreen.swift */; };
@@ -987,6 +1128,53 @@
 		92090D0B223A684000A1CFBB /* bgTestnet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgTestnet.jpg; sourceTree = "<group>"; };
 		920DE98822F8BC1C002B1110 /* KeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
 		920F460C223A9EA20048966E /* BMInputCopyBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMInputCopyBar.swift; sourceTree = "<group>"; };
+		9210276D24606E42001A7130 /* PagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingViewController.swift; sourceTree = "<group>"; };
+		9210276E24606E42001A7130 /* PagingTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingTitleCell.swift; sourceTree = "<group>"; };
+		9210276F24606E42001A7130 /* PagingIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingIndicatorView.swift; sourceTree = "<group>"; };
+		9210277024606E42001A7130 /* PagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingView.swift; sourceTree = "<group>"; };
+		9210277124606E42001A7130 /* PagingCellLayoutAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCellLayoutAttributes.swift; sourceTree = "<group>"; };
+		9210277224606E42001A7130 /* EMPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EMPageViewController.swift; sourceTree = "<group>"; };
+		9210277324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingIndicatorLayoutAttributes.swift; sourceTree = "<group>"; };
+		9210277424606E42001A7130 /* PagingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCell.swift; sourceTree = "<group>"; };
+		9210277524606E42001A7130 /* PagingInvalidationContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingInvalidationContext.swift; sourceTree = "<group>"; };
+		9210277624606E42001A7130 /* PagingSizeCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingSizeCache.swift; sourceTree = "<group>"; };
+		9210277724606E42001A7130 /* PagingCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCollectionViewLayout.swift; sourceTree = "<group>"; };
+		9210277824606E42001A7130 /* FixedPagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixedPagingViewController.swift; sourceTree = "<group>"; };
+		9210277924606E42001A7130 /* PagingStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingStateMachine.swift; sourceTree = "<group>"; };
+		9210277A24606E42001A7130 /* PagingBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingBorderView.swift; sourceTree = "<group>"; };
+		9210277B24606E42001A7130 /* IndexedPagingDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexedPagingDataSource.swift; sourceTree = "<group>"; };
+		9210277C24606E42001A7130 /* PagingOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingOptions.swift; sourceTree = "<group>"; };
+		9210277D24606E42001A7130 /* PagingBorderLayoutAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingBorderLayoutAttributes.swift; sourceTree = "<group>"; };
+		9210277F24606E42001A7130 /* PagingMenuInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingMenuInteraction.swift; sourceTree = "<group>"; };
+		9210278024606E42001A7130 /* PagingMenuItemSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingMenuItemSize.swift; sourceTree = "<group>"; };
+		9210278124606E42001A7130 /* PagingSelectedScrollPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingSelectedScrollPosition.swift; sourceTree = "<group>"; };
+		9210278224606E42001A7130 /* InvalidationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidationState.swift; sourceTree = "<group>"; };
+		9210278324606E42001A7130 /* PagingMenuTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingMenuTransition.swift; sourceTree = "<group>"; };
+		9210278424606E42001A7130 /* PagingContentInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingContentInteraction.swift; sourceTree = "<group>"; };
+		9210278524606E42001A7130 /* PagingMenuHorizontalAlignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingMenuHorizontalAlignment.swift; sourceTree = "<group>"; };
+		9210278624606E42001A7130 /* PagingIndicatorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingIndicatorOptions.swift; sourceTree = "<group>"; };
+		9210278724606E42001A7130 /* PagingEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingEvent.swift; sourceTree = "<group>"; };
+		9210278824606E42001A7130 /* PagingDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingDirection.swift; sourceTree = "<group>"; };
+		9210278924606E42001A7130 /* PagingBorderOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingBorderOptions.swift; sourceTree = "<group>"; };
+		9210278A24606E42001A7130 /* PagingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingState.swift; sourceTree = "<group>"; };
+		9210278B24606E42001A7130 /* PagingMenuItemSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingMenuItemSource.swift; sourceTree = "<group>"; };
+		9210278D24606E42001A7130 /* UIScrollView+near.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+near.swift"; sourceTree = "<group>"; };
+		9210278E24606E42001A7130 /* UIColor+interpolation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+interpolation.swift"; sourceTree = "<group>"; };
+		9210278F24606E42001A7130 /* UIView+constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+constraints.swift"; sourceTree = "<group>"; };
+		9210279024606E42001A7130 /* UIEdgeInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIEdgeInsets.swift; sourceTree = "<group>"; };
+		9210279224606E42001A7130 /* PagingDistance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingDistance.swift; sourceTree = "<group>"; };
+		9210279324606E42001A7130 /* IndexedPagingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexedPagingItem.swift; sourceTree = "<group>"; };
+		9210279424606E42001A7130 /* PagingIndicatorMetric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingIndicatorMetric.swift; sourceTree = "<group>"; };
+		9210279524606E42001A7130 /* PagingDiff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingDiff.swift; sourceTree = "<group>"; };
+		9210279624606E42001A7130 /* PagingItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingItems.swift; sourceTree = "<group>"; };
+		9210279724606E42001A7130 /* PagingCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCellViewModel.swift; sourceTree = "<group>"; };
+		9210279824606E42001A7130 /* PagingTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingTransition.swift; sourceTree = "<group>"; };
+		9210279A24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingViewControllerInfiniteDataSource.swift; sourceTree = "<group>"; };
+		9210279B24606E42001A7130 /* Tween.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tween.swift; sourceTree = "<group>"; };
+		9210279C24606E42001A7130 /* PagingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingItem.swift; sourceTree = "<group>"; };
+		9210279D24606E42001A7130 /* PagingViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingViewControllerDelegate.swift; sourceTree = "<group>"; };
+		9210279E24606E42001A7130 /* PagingViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingViewControllerDataSource.swift; sourceTree = "<group>"; };
+		9210279F24606E42001A7130 /* PagingLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingLayout.swift; sourceTree = "<group>"; };
 		92103F682339117B009EA34C /* BMLockScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMLockScreen.swift; sourceTree = "<group>"; };
 		9212DB9322E07ECA0053FC99 /* AddressTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressTableView.swift; sourceTree = "<group>"; };
 		9212DB9722E0990D0053FC99 /* BMEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BMEmptyView.swift; path = BeamWallet/Controls/BMEmptyView.swift; sourceTree = SOURCE_ROOT; };
@@ -1512,9 +1700,104 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		9210276B24606E42001A7130 /* Parchment */ = {
+			isa = PBXGroup;
+			children = (
+				9210276C24606E42001A7130 /* Classes */,
+				9210277E24606E42001A7130 /* Enums */,
+				9210278C24606E42001A7130 /* Extensions */,
+				9210279124606E42001A7130 /* Structs */,
+				9210279924606E42001A7130 /* Protocols */,
+			);
+			path = Parchment;
+			sourceTree = "<group>";
+		};
+		9210276C24606E42001A7130 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				9210276D24606E42001A7130 /* PagingViewController.swift */,
+				9210276E24606E42001A7130 /* PagingTitleCell.swift */,
+				9210276F24606E42001A7130 /* PagingIndicatorView.swift */,
+				9210277024606E42001A7130 /* PagingView.swift */,
+				9210277124606E42001A7130 /* PagingCellLayoutAttributes.swift */,
+				9210277224606E42001A7130 /* EMPageViewController.swift */,
+				9210277324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift */,
+				9210277424606E42001A7130 /* PagingCell.swift */,
+				9210277524606E42001A7130 /* PagingInvalidationContext.swift */,
+				9210277624606E42001A7130 /* PagingSizeCache.swift */,
+				9210277724606E42001A7130 /* PagingCollectionViewLayout.swift */,
+				9210277824606E42001A7130 /* FixedPagingViewController.swift */,
+				9210277924606E42001A7130 /* PagingStateMachine.swift */,
+				9210277A24606E42001A7130 /* PagingBorderView.swift */,
+				9210277B24606E42001A7130 /* IndexedPagingDataSource.swift */,
+				9210277C24606E42001A7130 /* PagingOptions.swift */,
+				9210277D24606E42001A7130 /* PagingBorderLayoutAttributes.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		9210277E24606E42001A7130 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				9210277F24606E42001A7130 /* PagingMenuInteraction.swift */,
+				9210278024606E42001A7130 /* PagingMenuItemSize.swift */,
+				9210278124606E42001A7130 /* PagingSelectedScrollPosition.swift */,
+				9210278224606E42001A7130 /* InvalidationState.swift */,
+				9210278324606E42001A7130 /* PagingMenuTransition.swift */,
+				9210278424606E42001A7130 /* PagingContentInteraction.swift */,
+				9210278524606E42001A7130 /* PagingMenuHorizontalAlignment.swift */,
+				9210278624606E42001A7130 /* PagingIndicatorOptions.swift */,
+				9210278724606E42001A7130 /* PagingEvent.swift */,
+				9210278824606E42001A7130 /* PagingDirection.swift */,
+				9210278924606E42001A7130 /* PagingBorderOptions.swift */,
+				9210278A24606E42001A7130 /* PagingState.swift */,
+				9210278B24606E42001A7130 /* PagingMenuItemSource.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		9210278C24606E42001A7130 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9210278D24606E42001A7130 /* UIScrollView+near.swift */,
+				9210278E24606E42001A7130 /* UIColor+interpolation.swift */,
+				9210278F24606E42001A7130 /* UIView+constraints.swift */,
+				9210279024606E42001A7130 /* UIEdgeInsets.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9210279124606E42001A7130 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				9210279224606E42001A7130 /* PagingDistance.swift */,
+				9210279324606E42001A7130 /* IndexedPagingItem.swift */,
+				9210279424606E42001A7130 /* PagingIndicatorMetric.swift */,
+				9210279524606E42001A7130 /* PagingDiff.swift */,
+				9210279624606E42001A7130 /* PagingItems.swift */,
+				9210279724606E42001A7130 /* PagingCellViewModel.swift */,
+				9210279824606E42001A7130 /* PagingTransition.swift */,
+			);
+			path = Structs;
+			sourceTree = "<group>";
+		};
+		9210279924606E42001A7130 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				9210279A24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift */,
+				9210279B24606E42001A7130 /* Tween.swift */,
+				9210279C24606E42001A7130 /* PagingItem.swift */,
+				9210279D24606E42001A7130 /* PagingViewControllerDelegate.swift */,
+				9210279E24606E42001A7130 /* PagingViewControllerDataSource.swift */,
+				9210279F24606E42001A7130 /* PagingLayout.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		9212DBC622E0CD720053FC99 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				9210276B24606E42001A7130 /* Parchment */,
 				92D6DB4A22DF63B40086DFF7 /* MaterialActivityIndicator */,
 				926F4B1722E0CDB7007755D9 /* LGSideMenuController */,
 			);
@@ -2883,6 +3166,7 @@
 				92FC611022295DC100AEABC1 /* BMWordField.swift in Sources */,
 				926A8579222EB7C600A3B747 /* BMTransaction.m in Sources */,
 				92F6B78922A541040055C3C3 /* SendAllCell.swift in Sources */,
+				921027AF24606E42001A7130 /* EMPageViewController.swift in Sources */,
 				92D6DB5E22DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				92365AD1222D3E79000D7064 /* AppModel.mm in Sources */,
 				926A8572222EA16000A3B747 /* String.swift in Sources */,
@@ -2892,12 +3176,15 @@
 				92BA7EC322520915002D9367 /* BMTextView.swift in Sources */,
 				9219595522821F9C007E9723 /* BMTableHeaderTitleView.swift in Sources */,
 				92480DAE22957C4D0084512A /* AppStoreReviewManager.swift in Sources */,
+				921027BB24606E42001A7130 /* PagingSizeCache.swift in Sources */,
 				927EDE1B22A66033005D5CEA /* NonDisappearingView.swift in Sources */,
 				92F8EFD6235091B500A20B1A /* OnboardManager.swift in Sources */,
 				92FC611F2229803700AEABC1 /* BMField.swift in Sources */,
 				929885F8222B32C40038C015 /* Field.swift in Sources */,
 				926A8575222EA54F00A3B747 /* WalletProgressCell.swift in Sources */,
 				9225D548229449010067B4EA /* BMFieldCell.swift in Sources */,
+				9210280924606E42001A7130 /* IndexedPagingItem.swift in Sources */,
+				9210280624606E42001A7130 /* PagingDistance.swift in Sources */,
 				92B7E4DD22AFBC6B001708E4 /* StatusViewModel.swift in Sources */,
 				92C5EBB3229BFD1100ABFFF7 /* BMDetailCell.swift in Sources */,
 				92227B002281B1B00070DC68 /* CategoryEditViewController.swift in Sources */,
@@ -2907,6 +3194,8 @@
 				9243C2E722970EF10018B52D /* BMAddressCell.swift in Sources */,
 				92BCEE7D22C382150062EE95 /* StringLocalize.m in Sources */,
 				92E179032357188A001C30A6 /* BMLogValue.m in Sources */,
+				921027D324606E42001A7130 /* PagingMenuInteraction.swift in Sources */,
+				921027BE24606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */,
 				92227AF92281981E0070DC68 /* BMCategory.m in Sources */,
 				927D2F8E22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
 				92365ADB222D3F5E000D7064 /* Settings.m in Sources */,
@@ -2930,35 +3219,47 @@
 				92790DAA224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78222A5278A0055C3C3 /* SendViewController.swift in Sources */,
 				9212DBB922E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
+				921027D624606E42001A7130 /* PagingMenuItemSize.swift in Sources */,
 				92F6B79222A558530055C3C3 /* FeeCell.swift in Sources */,
 				9243525A222E73FC00A0EF37 /* UTXOViewController.swift in Sources */,
 				92C00D2322A00E2A00DDB579 /* OwnerKeyViewController.swift in Sources */,
 				92C4F2E022B2474E001391FB /* BackgroundDownloader.swift in Sources */,
 				92435250222E73DC00A0EF37 /* WalletViewController.swift in Sources */,
 				92DBA6F524599DCD0013FB54 /* NotificationTableViewCell.swift in Sources */,
+				921027DC24606E42001A7130 /* InvalidationState.swift in Sources */,
 				92554D552289A77900FE6041 /* Image.swift in Sources */,
 				92D6DB5822DF63B40086DFF7 /* UIBezierPath+Circle.swift in Sources */,
 				92F68C7E2244E77500197D4D /* UTXODetailCell.swift in Sources */,
 				927D2F8A22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
+				921027A924606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E422B24F58001391FB /* RestoreManager.swift in Sources */,
 				92E4AECE2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
+				9210282724606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */,
 				9235EB0E2296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
 				92790D9A224E41E800F79D64 /* BMPaymentProof.m in Sources */,
 				92C5EBA2229BE48E00ABFFF7 /* PreviewQRViewController.swift in Sources */,
 				92D6DB5222DF63B40086DFF7 /* CGRect+Center.swift in Sources */,
 				925AD5FF22282AB500DDE66B /* View.swift in Sources */,
 				92538F61222B5F7E00792A25 /* OpenWalletProgressViewController.swift in Sources */,
+				921027DF24606E42001A7130 /* PagingMenuTransition.swift in Sources */,
 				92592CA52245296D00050A13 /* KeychainManager.swift in Sources */,
 				927F04EF245AED8B0058372E /* BMNotificationView.swift in Sources */,
+				9210280324606E42001A7130 /* UIEdgeInsets.swift in Sources */,
 				9261C277228BF55800D666E0 /* BMPickerCell.swift in Sources */,
 				9212DBA922E09E080053FC99 /* BMPagingViewController.swift in Sources */,
+				921027C424606E42001A7130 /* PagingStateMachine.swift in Sources */,
 				9219595922823639007E9723 /* LocalizableStrings.swift in Sources */,
 				92FC6121222990FE00AEABC1 /* BMStepView.swift in Sources */,
 				926F4B3522E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				92FC61262229C0C200AEABC1 /* BaseWizardViewController.swift in Sources */,
 				926EB47E231E843800D059BC /* WalletTransactionCell.swift in Sources */,
+				921027E524606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */,
+				921027B824606E42001A7130 /* PagingInvalidationContext.swift in Sources */,
+				921027F724606E42001A7130 /* PagingMenuItemSource.swift in Sources */,
 				92D6DB5522DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
+				921027D924606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */,
 				921AE99A229957F6008869EB /* ShortcutManager.swift in Sources */,
+				921027CA24606E42001A7130 /* IndexedPagingDataSource.swift in Sources */,
 				92365AD3222D3E79000D7064 /* WalletModel.mm in Sources */,
 				9227AEAF2282C80E00FB221F /* CategoryDetailViewController.swift in Sources */,
 				925AD5F3222827A500DDE66B /* WellcomeViewController.swift in Sources */,
@@ -2972,10 +3273,12 @@
 				922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
 				92E4AEC2235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				921027E824606E42001A7130 /* PagingIndicatorOptions.swift in Sources */,
 				92E4AEC623599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				929885F6222B2B1F0038C015 /* Label.swift in Sources */,
 				92837ED12457076500687A9F /* AlertController.swift in Sources */,
 				927EDE3422A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
+				9210282424606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */,
 				9212DB9422E07ECA0053FC99 /* AddressTableView.swift in Sources */,
 				92B7DA2222D6237600D4F88B /* RestoreOptionsViewController.swift in Sources */,
 				92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */,
@@ -2987,29 +3290,40 @@
 				92B7E4EB22B0001B001708E4 /* SendTransactionViewModel.swift in Sources */,
 				92F006E2229D44BB00333409 /* BMSnackBar.swift in Sources */,
 				92227B072281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */,
+				921027FD24606E42001A7130 /* UIColor+interpolation.swift in Sources */,
 				92D6DB5B22DF63B40086DFF7 /* CGSize+Min.swift in Sources */,
+				921027C124606E42001A7130 /* FixedPagingViewController.swift in Sources */,
 				92DEDD0C229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */,
+				921027EE24606E42001A7130 /* PagingDirection.swift in Sources */,
 				925AFBC32298457500B1C680 /* BMToast.swift in Sources */,
+				9210280C24606E42001A7130 /* PagingIndicatorMetric.swift in Sources */,
 				925AD5FC22282A7F00DDE66B /* BMButton.swift in Sources */,
+				921027E224606E42001A7130 /* PagingContentInteraction.swift in Sources */,
 				92F6B79922A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D522AF0067001708E4 /* UTXOViewModel.swift in Sources */,
+				9210281E24606E42001A7130 /* Tween.swift in Sources */,
 				92D577B622F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				92FC6118222978C400AEABC1 /* PasswordManager.swift in Sources */,
 				92FC612322299A4E00AEABC1 /* Device.swift in Sources */,
+				921027A624606E42001A7130 /* PagingIndicatorView.swift in Sources */,
 				9227AEEC2282F6F800FB221F /* BMDuration.m in Sources */,
 				926A8569222E7FD900A3B747 /* WalletStatusCell.swift in Sources */,
 				927EDE3C22A6B47C005D5CEA /* BMMultiLinesCell.swift in Sources */,
 				92B7E4D122AEE7FB001708E4 /* DetailTransactionViewModel.swift in Sources */,
 				9212DBAD22E0A1730053FC99 /* UTXOTableView.swift in Sources */,
+				9210281224606E42001A7130 /* PagingItems.swift in Sources */,
 				92FE263E22A11E4E00102DB4 /* BMExpandCell.swift in Sources */,
+				921027FA24606E42001A7130 /* UIScrollView+near.swift in Sources */,
 				924C762022D36F9300625B7C /* BMSegmentView.swift in Sources */,
 				92DBA7002459A17E0013FB54 /* NotificationViewModel.swift in Sources */,
 				92FC611522296F2700AEABC1 /* Color.swift in Sources */,
 				92B7E4C122AEA28C001708E4 /* AddressViewModel.swift in Sources */,
 				9261C265228BF55800D666E0 /* EditAddressViewController.swift in Sources */,
 				92DBA6FC2459A16F0013FB54 /* NotificationItem.swift in Sources */,
+				921027C724606E42001A7130 /* PagingBorderView.swift in Sources */,
 				92708DDC2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CD22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
+				9210281824606E42001A7130 /* PagingTransition.swift in Sources */,
 				926F4B2F22E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837522285D218002B385B /* Fonts.swift in Sources */,
 				927EDE4322A6C5DB005D5CEA /* SaveContactViewController.swift in Sources */,
@@ -3022,6 +3336,7 @@
 				92B7E4C522AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
 				92D3CBD12264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */,
 				92A2C5F8233918BC00766EA7 /* BMLockScreenValue.m in Sources */,
+				921027B524606E42001A7130 /* PagingCell.swift in Sources */,
 				92E17913235762F7001C30A6 /* BMDataPickerViewController.swift in Sources */,
 				92435246222DF9AE00A0EF37 /* BMAddress.mm in Sources */,
 				92C00D1B22A009F100DDB579 /* BMDoubleAuthViewController.swift in Sources */,
@@ -3032,28 +3347,36 @@
 				92365ADE222D3FAB000D7064 /* MnemonicModel.mm in Sources */,
 				92BA4B7822484DCB0044B721 /* Application.swift in Sources */,
 				926F4B3222E0CDB7007755D9 /* LGSideMenuView.m in Sources */,
+				9210281B24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift in Sources */,
 				9212DB9922E0990D0053FC99 /* BMEmptyView.swift in Sources */,
 				92BAC46422C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
 				92BCEE7722C37E0F0062EE95 /* BMLanguage.m in Sources */,
+				9210282A24606E42001A7130 /* PagingLayout.swift in Sources */,
 				923544892256019C00889C74 /* UnlockPasswordViewController.swift in Sources */,
 				92CC40E822E1DC7300006E5C /* BMGroupedCell.swift in Sources */,
 				9288DDA2223A5A550020C501 /* BaseCell.swift in Sources */,
+				921027F124606E42001A7130 /* PagingBorderOptions.swift in Sources */,
 				92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */,
 				9288DDA5223A5B430020C501 /* BaseView.swift in Sources */,
 				926A8580222ECD7600A3B747 /* Reachability.m in Sources */,
+				921027CD24606E42001A7130 /* PagingOptions.swift in Sources */,
+				9210280024606E42001A7130 /* UIView+constraints.swift in Sources */,
 				92B7DA3022D63EFB00D4F88B /* TrustedNodeViewController.swift in Sources */,
 				9246F761227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
 				923DB10D235DD2D60056ACDA /* BMInputViewController.swift in Sources */,
 				926F4B3E22E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179172357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,
+				921027D024606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
 				92790D96224CD8AE00F79D64 /* BMContact.m in Sources */,
+				921027AC24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */,
 				92F8EFDB23509FE800A20B1A /* OnboardCell.swift in Sources */,
 				92F68C782244E37200197D4D /* UTXODetailViewController.swift in Sources */,
 				926A857C222EC10C00A3B747 /* WalletTransactionSearchCell.swift in Sources */,
 				928848022243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
 				92FC933422538CE400555DE1 /* Double.swift in Sources */,
 				92A2C5FC23391DC500766EA7 /* main.swift in Sources */,
+				921027EB24606E42001A7130 /* PagingEvent.swift in Sources */,
 				92948EBC243B8EF00006FF71 /* BMCurrency.m in Sources */,
 				92B7E4D922AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				92ADED812229F213001D0A38 /* ViewController.swift in Sources */,
@@ -3066,17 +3389,24 @@
 				92480DA2229540280084512A /* BMAmountCell.swift in Sources */,
 				927EDE4822A7F6BF005D5CEA /* InputFeePopover.swift in Sources */,
 				925AFBBB2297ECCF00B1C680 /* LeftMenuViewController.swift in Sources */,
+				9210281524606E42001A7130 /* PagingCellViewModel.swift in Sources */,
+				9210282124606E42001A7130 /* PagingItem.swift in Sources */,
 				92D2426D22F85B6C000945A6 /* TransactionsTableView.swift in Sources */,
 				9280D0402458499100735C52 /* BMNotification.m in Sources */,
 				92435255222E73E900A0EF37 /* SettingsViewController.swift in Sources */,
+				921027F424606E42001A7130 /* PagingState.swift in Sources */,
 				92790DA4224E59E800F79D64 /* TransactionUTXOCell.swift in Sources */,
 				92AE366C22383D2300E0810B /* QRScannerViewController.swift in Sources */,
 				924C762522D4CC5700625B7C /* Color.m in Sources */,
 				92CF065922E112570021B9CF /* SearchTableView.swift in Sources */,
+				921027B224606E42001A7130 /* PagingIndicatorLayoutAttributes.swift in Sources */,
 				92B7E4C922AEC071001708E4 /* TransactionViewModel.swift in Sources */,
+				921027A024606E42001A7130 /* PagingViewController.swift in Sources */,
 				92F9C21622B8233A006FCC86 /* ReceiveAddressViewModel.swift in Sources */,
+				921027A324606E42001A7130 /* PagingTitleCell.swift in Sources */,
 				926D44042375776D00D34491 /* Image.m in Sources */,
 				923544752254C9A700889C74 /* BMAutoSecurityScreen.swift in Sources */,
+				9210280F24606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 				9225D5402294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
 				928B0AB222425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
@@ -3092,6 +3422,7 @@
 				9288DD2D223A55410020C501 /* BMWordField.swift in Sources */,
 				9288DD2E223A55410020C501 /* BMTransaction.m in Sources */,
 				92F6B78A22A541040055C3C3 /* SendAllCell.swift in Sources */,
+				921027B024606E42001A7130 /* EMPageViewController.swift in Sources */,
 				92D6DB5F22DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				9288DD2F223A55410020C501 /* AppModel.mm in Sources */,
 				9288DD30223A55410020C501 /* String.swift in Sources */,
@@ -3101,12 +3432,15 @@
 				92BA7EC422520915002D9367 /* BMTextView.swift in Sources */,
 				9219595622821F9C007E9723 /* BMTableHeaderTitleView.swift in Sources */,
 				92480DAF22957C4D0084512A /* AppStoreReviewManager.swift in Sources */,
+				921027BC24606E42001A7130 /* PagingSizeCache.swift in Sources */,
 				927EDE1C22A66033005D5CEA /* NonDisappearingView.swift in Sources */,
 				92F8EFD7235091B500A20B1A /* OnboardManager.swift in Sources */,
 				9288DD32223A55410020C501 /* BMField.swift in Sources */,
 				9288DD34223A55410020C501 /* Field.swift in Sources */,
 				9288DD35223A55410020C501 /* WalletProgressCell.swift in Sources */,
 				9225D549229449010067B4EA /* BMFieldCell.swift in Sources */,
+				9210280A24606E42001A7130 /* IndexedPagingItem.swift in Sources */,
+				9210280724606E42001A7130 /* PagingDistance.swift in Sources */,
 				92B7E4DE22AFBC6B001708E4 /* StatusViewModel.swift in Sources */,
 				92C5EBB4229BFD1100ABFFF7 /* BMDetailCell.swift in Sources */,
 				92227B012281B1B00070DC68 /* CategoryEditViewController.swift in Sources */,
@@ -3116,6 +3450,8 @@
 				9243C2E822970EF10018B52D /* BMAddressCell.swift in Sources */,
 				92BCEE7E22C382150062EE95 /* StringLocalize.m in Sources */,
 				92E179042357188A001C30A6 /* BMLogValue.m in Sources */,
+				921027D424606E42001A7130 /* PagingMenuInteraction.swift in Sources */,
+				921027BF24606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */,
 				92227AFA2281981E0070DC68 /* BMCategory.m in Sources */,
 				927D2F8F22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
 				9288DD37223A55410020C501 /* Settings.m in Sources */,
@@ -3139,35 +3475,47 @@
 				92790DAB224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78322A5278A0055C3C3 /* SendViewController.swift in Sources */,
 				9212DBBA22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
+				921027D724606E42001A7130 /* PagingMenuItemSize.swift in Sources */,
 				92F6B79322A558530055C3C3 /* FeeCell.swift in Sources */,
 				9288DD3D223A55410020C501 /* UTXOViewController.swift in Sources */,
 				92C00D2422A00E2A00DDB579 /* OwnerKeyViewController.swift in Sources */,
 				92C4F2E122B2474E001391FB /* BackgroundDownloader.swift in Sources */,
 				9288DD3E223A55410020C501 /* WalletViewController.swift in Sources */,
 				92DBA6F624599DCD0013FB54 /* NotificationTableViewCell.swift in Sources */,
+				921027DD24606E42001A7130 /* InvalidationState.swift in Sources */,
 				92554D562289A77900FE6041 /* Image.swift in Sources */,
 				92D6DB5922DF63B40086DFF7 /* UIBezierPath+Circle.swift in Sources */,
 				92F68C7F2244E77500197D4D /* UTXODetailCell.swift in Sources */,
 				927D2F8B22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
+				921027AA24606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E522B24F58001391FB /* RestoreManager.swift in Sources */,
 				92E4AECF2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
+				9210282824606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */,
 				9235EB0F2296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
 				92790D9B224E41E800F79D64 /* BMPaymentProof.m in Sources */,
 				92C5EBA3229BE48E00ABFFF7 /* PreviewQRViewController.swift in Sources */,
 				92D6DB5322DF63B40086DFF7 /* CGRect+Center.swift in Sources */,
 				9288DD3F223A55410020C501 /* View.swift in Sources */,
 				9288DD40223A55410020C501 /* OpenWalletProgressViewController.swift in Sources */,
+				921027E024606E42001A7130 /* PagingMenuTransition.swift in Sources */,
 				92592CA62245296D00050A13 /* KeychainManager.swift in Sources */,
 				927F04F0245AED8B0058372E /* BMNotificationView.swift in Sources */,
+				9210280424606E42001A7130 /* UIEdgeInsets.swift in Sources */,
 				9261C278228BF55800D666E0 /* BMPickerCell.swift in Sources */,
 				9212DBAA22E09E080053FC99 /* BMPagingViewController.swift in Sources */,
+				921027C524606E42001A7130 /* PagingStateMachine.swift in Sources */,
 				9219595A22823639007E9723 /* LocalizableStrings.swift in Sources */,
 				9288DD42223A55410020C501 /* BMStepView.swift in Sources */,
 				926F4B3622E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				9288DD43223A55410020C501 /* BaseWizardViewController.swift in Sources */,
 				926EB47F231E843800D059BC /* WalletTransactionCell.swift in Sources */,
+				921027E624606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */,
+				921027B924606E42001A7130 /* PagingInvalidationContext.swift in Sources */,
+				921027F824606E42001A7130 /* PagingMenuItemSource.swift in Sources */,
 				92D6DB5622DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
+				921027DA24606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */,
 				921AE99B229957F6008869EB /* ShortcutManager.swift in Sources */,
+				921027CB24606E42001A7130 /* IndexedPagingDataSource.swift in Sources */,
 				9288DD44223A55410020C501 /* WalletModel.mm in Sources */,
 				9227AEB02282C80E00FB221F /* CategoryDetailViewController.swift in Sources */,
 				9288DD45223A55410020C501 /* WellcomeViewController.swift in Sources */,
@@ -3181,10 +3529,12 @@
 				922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				9288DD47223A55410020C501 /* AppDelegate.swift in Sources */,
 				92E4AEC3235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				921027E924606E42001A7130 /* PagingIndicatorOptions.swift in Sources */,
 				92E4AEC723599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				9288DD48223A55410020C501 /* Label.swift in Sources */,
 				92837ED22457076500687A9F /* AlertController.swift in Sources */,
 				927EDE3522A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
+				9210282524606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */,
 				9212DB9522E07ECA0053FC99 /* AddressTableView.swift in Sources */,
 				92B7DA2322D6237600D4F88B /* RestoreOptionsViewController.swift in Sources */,
 				92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */,
@@ -3196,29 +3546,40 @@
 				92B7E4EC22B0001B001708E4 /* SendTransactionViewModel.swift in Sources */,
 				92F006E3229D44BB00333409 /* BMSnackBar.swift in Sources */,
 				92227B082281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */,
+				921027FE24606E42001A7130 /* UIColor+interpolation.swift in Sources */,
 				92D6DB5C22DF63B40086DFF7 /* CGSize+Min.swift in Sources */,
+				921027C224606E42001A7130 /* FixedPagingViewController.swift in Sources */,
 				92DEDD0D229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */,
+				921027EF24606E42001A7130 /* PagingDirection.swift in Sources */,
 				925AFBC42298457500B1C680 /* BMToast.swift in Sources */,
+				9210280D24606E42001A7130 /* PagingIndicatorMetric.swift in Sources */,
 				9288DD4C223A55410020C501 /* BMButton.swift in Sources */,
+				921027E324606E42001A7130 /* PagingContentInteraction.swift in Sources */,
 				92F6B79A22A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D622AF0067001708E4 /* UTXOViewModel.swift in Sources */,
+				9210281F24606E42001A7130 /* Tween.swift in Sources */,
 				92D577B722F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				9288DD4E223A55410020C501 /* PasswordManager.swift in Sources */,
 				9288DD4F223A55410020C501 /* Device.swift in Sources */,
+				921027A724606E42001A7130 /* PagingIndicatorView.swift in Sources */,
 				9227AEED2282F6F800FB221F /* BMDuration.m in Sources */,
 				9288DD50223A55410020C501 /* WalletStatusCell.swift in Sources */,
 				927EDE3D22A6B47C005D5CEA /* BMMultiLinesCell.swift in Sources */,
 				92B7E4D222AEE7FB001708E4 /* DetailTransactionViewModel.swift in Sources */,
 				9212DBAE22E0A1730053FC99 /* UTXOTableView.swift in Sources */,
+				9210281324606E42001A7130 /* PagingItems.swift in Sources */,
 				92FE263F22A11E4E00102DB4 /* BMExpandCell.swift in Sources */,
+				921027FB24606E42001A7130 /* UIScrollView+near.swift in Sources */,
 				924C762122D36F9300625B7C /* BMSegmentView.swift in Sources */,
 				92DBA7012459A17E0013FB54 /* NotificationViewModel.swift in Sources */,
 				9288DD51223A55410020C501 /* Color.swift in Sources */,
 				92B7E4C222AEA28C001708E4 /* AddressViewModel.swift in Sources */,
 				9261C266228BF55800D666E0 /* EditAddressViewController.swift in Sources */,
 				92DBA6FD2459A16F0013FB54 /* NotificationItem.swift in Sources */,
+				921027C824606E42001A7130 /* PagingBorderView.swift in Sources */,
 				92708DDD2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CE22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
+				9210281924606E42001A7130 /* PagingTransition.swift in Sources */,
 				926F4B3022E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837532285D218002B385B /* Fonts.swift in Sources */,
 				927EDE4422A6C5DB005D5CEA /* SaveContactViewController.swift in Sources */,
@@ -3231,6 +3592,7 @@
 				92B7E4C622AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
 				92D3CBD22264AB6D007E3C55 /* BiometricAuthorization.swift in Sources */,
 				92A2C5F9233918BC00766EA7 /* BMLockScreenValue.m in Sources */,
+				921027B624606E42001A7130 /* PagingCell.swift in Sources */,
 				92E17914235762F7001C30A6 /* BMDataPickerViewController.swift in Sources */,
 				9288DD52223A55410020C501 /* BMAddress.mm in Sources */,
 				92C00D1C22A009F100DDB579 /* BMDoubleAuthViewController.swift in Sources */,
@@ -3241,28 +3603,36 @@
 				9288DD53223A55410020C501 /* MnemonicModel.mm in Sources */,
 				92BA4B7922484DCB0044B721 /* Application.swift in Sources */,
 				926F4B3322E0CDB7007755D9 /* LGSideMenuView.m in Sources */,
+				9210281C24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift in Sources */,
 				9212DB9A22E0990D0053FC99 /* BMEmptyView.swift in Sources */,
 				92BAC46522C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
 				92BCEE7822C37E0F0062EE95 /* BMLanguage.m in Sources */,
+				9210282B24606E42001A7130 /* PagingLayout.swift in Sources */,
 				9235448A2256019C00889C74 /* UnlockPasswordViewController.swift in Sources */,
 				92CC40E922E1DC7300006E5C /* BMGroupedCell.swift in Sources */,
 				9288DDA3223A5A550020C501 /* BaseCell.swift in Sources */,
+				921027F224606E42001A7130 /* PagingBorderOptions.swift in Sources */,
 				9288DD54223A55410020C501 /* QRCodeView.swift in Sources */,
 				9288DDA6223A5B430020C501 /* BaseView.swift in Sources */,
 				9288DD55223A55410020C501 /* Reachability.m in Sources */,
+				921027CE24606E42001A7130 /* PagingOptions.swift in Sources */,
+				9210280124606E42001A7130 /* UIView+constraints.swift in Sources */,
 				92B7DA3122D63EFB00D4F88B /* TrustedNodeViewController.swift in Sources */,
 				9246F762227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
 				923DB10E235DD2D60056ACDA /* BMInputViewController.swift in Sources */,
 				926F4B3F22E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179182357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9288DD58223A55410020C501 /* Configurable.swift in Sources */,
+				921027D124606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
 				92790D97224CD8AE00F79D64 /* BMContact.m in Sources */,
+				921027AD24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */,
 				92F8EFDC23509FE800A20B1A /* OnboardCell.swift in Sources */,
 				92F68C792244E37200197D4D /* UTXODetailViewController.swift in Sources */,
 				9288DD59223A55410020C501 /* WalletTransactionSearchCell.swift in Sources */,
 				928848032243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
 				92FC933522538CE400555DE1 /* Double.swift in Sources */,
 				92A2C5FD23391DC500766EA7 /* main.swift in Sources */,
+				921027EC24606E42001A7130 /* PagingEvent.swift in Sources */,
 				92948EBD243B8EF00006FF71 /* BMCurrency.m in Sources */,
 				92B7E4DA22AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				9288DD5A223A55410020C501 /* ViewController.swift in Sources */,
@@ -3275,17 +3645,24 @@
 				92480DA3229540280084512A /* BMAmountCell.swift in Sources */,
 				927EDE4922A7F6BF005D5CEA /* InputFeePopover.swift in Sources */,
 				925AFBBC2297ECCF00B1C680 /* LeftMenuViewController.swift in Sources */,
+				9210281624606E42001A7130 /* PagingCellViewModel.swift in Sources */,
+				9210282224606E42001A7130 /* PagingItem.swift in Sources */,
 				92D2426E22F85B6C000945A6 /* TransactionsTableView.swift in Sources */,
 				9280D0412458499100735C52 /* BMNotification.m in Sources */,
 				9288DD5F223A55410020C501 /* SettingsViewController.swift in Sources */,
+				921027F524606E42001A7130 /* PagingState.swift in Sources */,
 				92790DA5224E59E800F79D64 /* TransactionUTXOCell.swift in Sources */,
 				9288DD60223A55410020C501 /* QRScannerViewController.swift in Sources */,
 				924C762622D4CC5700625B7C /* Color.m in Sources */,
 				92CF065A22E112570021B9CF /* SearchTableView.swift in Sources */,
+				921027B324606E42001A7130 /* PagingIndicatorLayoutAttributes.swift in Sources */,
 				92B7E4CA22AEC071001708E4 /* TransactionViewModel.swift in Sources */,
+				921027A124606E42001A7130 /* PagingViewController.swift in Sources */,
 				92F9C21722B8233A006FCC86 /* ReceiveAddressViewModel.swift in Sources */,
+				921027A424606E42001A7130 /* PagingTitleCell.swift in Sources */,
 				926D44052375776D00D34491 /* Image.m in Sources */,
 				923544762254C9A700889C74 /* BMAutoSecurityScreen.swift in Sources */,
+				9210281024606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 				9225D5412294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
 				928B0AB322425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
@@ -3301,6 +3678,7 @@
 				92E2EAD0226F21C700367928 /* BMWordField.swift in Sources */,
 				92E2EAD1226F21C700367928 /* BMTransaction.m in Sources */,
 				92F6B78B22A541040055C3C3 /* SendAllCell.swift in Sources */,
+				921027B124606E42001A7130 /* EMPageViewController.swift in Sources */,
 				92D6DB6022DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				92E2EAD2226F21C700367928 /* AppModel.mm in Sources */,
 				92E2EAD3226F21C700367928 /* String.swift in Sources */,
@@ -3310,12 +3688,15 @@
 				92E2EAD6226F21C700367928 /* BMTextView.swift in Sources */,
 				9219595722821F9C007E9723 /* BMTableHeaderTitleView.swift in Sources */,
 				92480DB022957C4D0084512A /* AppStoreReviewManager.swift in Sources */,
+				921027BD24606E42001A7130 /* PagingSizeCache.swift in Sources */,
 				927EDE1D22A66033005D5CEA /* NonDisappearingView.swift in Sources */,
 				92F8EFD8235091B500A20B1A /* OnboardManager.swift in Sources */,
 				92E2EAD8226F21C700367928 /* BMField.swift in Sources */,
 				92E2EAD9226F21C700367928 /* Field.swift in Sources */,
 				92E2EADA226F21C700367928 /* WalletProgressCell.swift in Sources */,
 				9225D54A229449010067B4EA /* BMFieldCell.swift in Sources */,
+				9210280B24606E42001A7130 /* IndexedPagingItem.swift in Sources */,
+				9210280824606E42001A7130 /* PagingDistance.swift in Sources */,
 				92B7E4DF22AFBC6B001708E4 /* StatusViewModel.swift in Sources */,
 				92C5EBB5229BFD1100ABFFF7 /* BMDetailCell.swift in Sources */,
 				92227B022281B1B00070DC68 /* CategoryEditViewController.swift in Sources */,
@@ -3325,6 +3706,8 @@
 				9243C2E922970EF10018B52D /* BMAddressCell.swift in Sources */,
 				92BCEE7F22C382150062EE95 /* StringLocalize.m in Sources */,
 				92E179052357188A001C30A6 /* BMLogValue.m in Sources */,
+				921027D524606E42001A7130 /* PagingMenuInteraction.swift in Sources */,
+				921027C024606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */,
 				92227AFB2281981E0070DC68 /* BMCategory.m in Sources */,
 				927D2F9022CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
 				92E2EADD226F21C700367928 /* Settings.m in Sources */,
@@ -3348,35 +3731,47 @@
 				92E2EAE7226F21C700367928 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78422A5278A0055C3C3 /* SendViewController.swift in Sources */,
 				9212DBBB22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
+				921027D824606E42001A7130 /* PagingMenuItemSize.swift in Sources */,
 				92F6B79422A558530055C3C3 /* FeeCell.swift in Sources */,
 				92E2EAE8226F21C700367928 /* UTXOViewController.swift in Sources */,
 				92C00D2522A00E2A00DDB579 /* OwnerKeyViewController.swift in Sources */,
 				92C4F2E222B2474E001391FB /* BackgroundDownloader.swift in Sources */,
 				92E2EAE9226F21C700367928 /* WalletViewController.swift in Sources */,
 				92DBA6F724599DCD0013FB54 /* NotificationTableViewCell.swift in Sources */,
+				921027DE24606E42001A7130 /* InvalidationState.swift in Sources */,
 				92554D572289A77900FE6041 /* Image.swift in Sources */,
 				92D6DB5A22DF63B40086DFF7 /* UIBezierPath+Circle.swift in Sources */,
 				92E2EAEA226F21C700367928 /* UTXODetailCell.swift in Sources */,
 				927D2F8C22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
+				921027AB24606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E622B24F58001391FB /* RestoreManager.swift in Sources */,
 				92E4AED02359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
+				9210282924606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */,
 				9235EB102296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
 				92E2EAEB226F21C700367928 /* BMPaymentProof.m in Sources */,
 				92C5EBA4229BE48E00ABFFF7 /* PreviewQRViewController.swift in Sources */,
 				92D6DB5422DF63B40086DFF7 /* CGRect+Center.swift in Sources */,
 				92E2EAEC226F21C700367928 /* View.swift in Sources */,
 				92E2EAED226F21C700367928 /* OpenWalletProgressViewController.swift in Sources */,
+				921027E124606E42001A7130 /* PagingMenuTransition.swift in Sources */,
 				92E2EAEE226F21C700367928 /* KeychainManager.swift in Sources */,
 				927F04F1245AED8B0058372E /* BMNotificationView.swift in Sources */,
+				9210280524606E42001A7130 /* UIEdgeInsets.swift in Sources */,
 				9261C279228BF55800D666E0 /* BMPickerCell.swift in Sources */,
 				9212DBAB22E09E080053FC99 /* BMPagingViewController.swift in Sources */,
+				921027C624606E42001A7130 /* PagingStateMachine.swift in Sources */,
 				9219595B22823639007E9723 /* LocalizableStrings.swift in Sources */,
 				92E2EAF0226F21C700367928 /* BMStepView.swift in Sources */,
 				926F4B3722E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				92E2EAF1226F21C700367928 /* BaseWizardViewController.swift in Sources */,
 				926EB480231E843800D059BC /* WalletTransactionCell.swift in Sources */,
+				921027E724606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */,
+				921027BA24606E42001A7130 /* PagingInvalidationContext.swift in Sources */,
+				921027F924606E42001A7130 /* PagingMenuItemSource.swift in Sources */,
 				92D6DB5722DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
+				921027DB24606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */,
 				921AE99C229957F6008869EB /* ShortcutManager.swift in Sources */,
+				921027CC24606E42001A7130 /* IndexedPagingDataSource.swift in Sources */,
 				92E2EAF2226F21C700367928 /* WalletModel.mm in Sources */,
 				9227AEB12282C80E00FB221F /* CategoryDetailViewController.swift in Sources */,
 				92E2EAF3226F21C700367928 /* WellcomeViewController.swift in Sources */,
@@ -3390,10 +3785,12 @@
 				922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				92E2EAF9226F21C700367928 /* AppDelegate.swift in Sources */,
 				92E4AEC4235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				921027EA24606E42001A7130 /* PagingIndicatorOptions.swift in Sources */,
 				92E4AEC823599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				92E2EAFB226F21C700367928 /* Label.swift in Sources */,
 				92837ED32457076500687A9F /* AlertController.swift in Sources */,
 				927EDE3622A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
+				9210282624606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */,
 				9212DB9622E07ECA0053FC99 /* AddressTableView.swift in Sources */,
 				92B7DA2422D6237600D4F88B /* RestoreOptionsViewController.swift in Sources */,
 				92E2EAFE226F21C700367928 /* UTXOCell.swift in Sources */,
@@ -3405,29 +3802,40 @@
 				92B7E4ED22B0001B001708E4 /* SendTransactionViewModel.swift in Sources */,
 				92F006E4229D44BB00333409 /* BMSnackBar.swift in Sources */,
 				92227B092281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */,
+				921027FF24606E42001A7130 /* UIColor+interpolation.swift in Sources */,
 				92D6DB5D22DF63B40086DFF7 /* CGSize+Min.swift in Sources */,
+				921027C324606E42001A7130 /* FixedPagingViewController.swift in Sources */,
 				92DEDD0E229EC81C00EA0226 /* BMPreparedTransaction.m in Sources */,
+				921027F024606E42001A7130 /* PagingDirection.swift in Sources */,
 				925AFBC52298457500B1C680 /* BMToast.swift in Sources */,
+				9210280E24606E42001A7130 /* PagingIndicatorMetric.swift in Sources */,
 				92E2EB01226F21C700367928 /* BMButton.swift in Sources */,
+				921027E424606E42001A7130 /* PagingContentInteraction.swift in Sources */,
 				92F6B79B22A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D722AF0067001708E4 /* UTXOViewModel.swift in Sources */,
+				9210282024606E42001A7130 /* Tween.swift in Sources */,
 				92D577B822F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				92E2EB03226F21C700367928 /* PasswordManager.swift in Sources */,
 				92E2EB05226F21C700367928 /* Device.swift in Sources */,
+				921027A824606E42001A7130 /* PagingIndicatorView.swift in Sources */,
 				9227AEEE2282F6F800FB221F /* BMDuration.m in Sources */,
 				92E2EB06226F21C700367928 /* WalletStatusCell.swift in Sources */,
 				927EDE3E22A6B47C005D5CEA /* BMMultiLinesCell.swift in Sources */,
 				92B7E4D322AEE7FB001708E4 /* DetailTransactionViewModel.swift in Sources */,
 				9212DBAF22E0A1730053FC99 /* UTXOTableView.swift in Sources */,
+				9210281424606E42001A7130 /* PagingItems.swift in Sources */,
 				92FE264022A11E4E00102DB4 /* BMExpandCell.swift in Sources */,
+				921027FC24606E42001A7130 /* UIScrollView+near.swift in Sources */,
 				924C762222D36F9300625B7C /* BMSegmentView.swift in Sources */,
 				92DBA7022459A17E0013FB54 /* NotificationViewModel.swift in Sources */,
 				92E2EB08226F21C700367928 /* Color.swift in Sources */,
 				92B7E4C322AEA28C001708E4 /* AddressViewModel.swift in Sources */,
 				9261C267228BF55800D666E0 /* EditAddressViewController.swift in Sources */,
 				92DBA6FE2459A16F0013FB54 /* NotificationItem.swift in Sources */,
+				921027C924606E42001A7130 /* PagingBorderView.swift in Sources */,
 				92708DDE2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CF22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
+				9210281A24606E42001A7130 /* PagingTransition.swift in Sources */,
 				926F4B3122E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837542285D218002B385B /* Fonts.swift in Sources */,
 				927EDE4522A6C5DB005D5CEA /* SaveContactViewController.swift in Sources */,
@@ -3440,6 +3848,7 @@
 				92B7E4C722AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
 				92E2EB0E226F21C700367928 /* BiometricAuthorization.swift in Sources */,
 				92A2C5FA233918BC00766EA7 /* BMLockScreenValue.m in Sources */,
+				921027B724606E42001A7130 /* PagingCell.swift in Sources */,
 				92E17915235762F8001C30A6 /* BMDataPickerViewController.swift in Sources */,
 				92E2EB0F226F21C700367928 /* BMAddress.mm in Sources */,
 				92C00D1D22A009F100DDB579 /* BMDoubleAuthViewController.swift in Sources */,
@@ -3450,28 +3859,36 @@
 				92E2EB12226F21C700367928 /* MnemonicModel.mm in Sources */,
 				92E2EB13226F21C700367928 /* Application.swift in Sources */,
 				926F4B3422E0CDB7007755D9 /* LGSideMenuView.m in Sources */,
+				9210281D24606E42001A7130 /* PagingViewControllerInfiniteDataSource.swift in Sources */,
 				9212DB9B22E0990D0053FC99 /* BMEmptyView.swift in Sources */,
 				92BAC46622C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
 				92BCEE7922C37E0F0062EE95 /* BMLanguage.m in Sources */,
+				9210282C24606E42001A7130 /* PagingLayout.swift in Sources */,
 				92E2EB14226F21C700367928 /* UnlockPasswordViewController.swift in Sources */,
 				92CC40EA22E1DC7300006E5C /* BMGroupedCell.swift in Sources */,
 				92E2EB15226F21C700367928 /* BaseCell.swift in Sources */,
+				921027F324606E42001A7130 /* PagingBorderOptions.swift in Sources */,
 				92E2EB16226F21C700367928 /* QRCodeView.swift in Sources */,
 				92E2EB17226F21C700367928 /* BaseView.swift in Sources */,
 				92E2EB18226F21C700367928 /* Reachability.m in Sources */,
+				921027CF24606E42001A7130 /* PagingOptions.swift in Sources */,
+				9210280224606E42001A7130 /* UIView+constraints.swift in Sources */,
 				92B7DA3222D63EFB00D4F88B /* TrustedNodeViewController.swift in Sources */,
 				9246F763227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
 				923DB10F235DD2D60056ACDA /* BMInputViewController.swift in Sources */,
 				926F4B4022E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179192357655D001C30A6 /* BMPickerData.swift in Sources */,
 				92E2EB1C226F21C700367928 /* Configurable.swift in Sources */,
+				921027D224606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
 				92E2EB1D226F21C700367928 /* BMContact.m in Sources */,
+				921027AE24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */,
 				92F8EFDD23509FE800A20B1A /* OnboardCell.swift in Sources */,
 				92E2EB1E226F21C700367928 /* UTXODetailViewController.swift in Sources */,
 				92E2EB1F226F21C700367928 /* WalletTransactionSearchCell.swift in Sources */,
 				92E2EB20226F21C700367928 /* BMCopyLabel.swift in Sources */,
 				92E2EB21226F21C700367928 /* Double.swift in Sources */,
 				92A2C5FE23391DC500766EA7 /* main.swift in Sources */,
+				921027ED24606E42001A7130 /* PagingEvent.swift in Sources */,
 				92948EBE243B8EF00006FF71 /* BMCurrency.m in Sources */,
 				92B7E4DB22AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				92E2EB23226F21C700367928 /* ViewController.swift in Sources */,
@@ -3484,17 +3901,24 @@
 				92480DA4229540280084512A /* BMAmountCell.swift in Sources */,
 				927EDE4A22A7F6BF005D5CEA /* InputFeePopover.swift in Sources */,
 				925AFBBD2297ECCF00B1C680 /* LeftMenuViewController.swift in Sources */,
+				9210281724606E42001A7130 /* PagingCellViewModel.swift in Sources */,
+				9210282324606E42001A7130 /* PagingItem.swift in Sources */,
 				92D2426F22F85B6C000945A6 /* TransactionsTableView.swift in Sources */,
 				9280D0422458499100735C52 /* BMNotification.m in Sources */,
 				92E2EB29226F21C700367928 /* SettingsViewController.swift in Sources */,
+				921027F624606E42001A7130 /* PagingState.swift in Sources */,
 				92E2EB2A226F21C700367928 /* TransactionUTXOCell.swift in Sources */,
 				92E2EB2B226F21C700367928 /* QRScannerViewController.swift in Sources */,
 				924C762722D4CC5700625B7C /* Color.m in Sources */,
 				92CF065B22E112570021B9CF /* SearchTableView.swift in Sources */,
+				921027B424606E42001A7130 /* PagingIndicatorLayoutAttributes.swift in Sources */,
 				92B7E4CB22AEC071001708E4 /* TransactionViewModel.swift in Sources */,
+				921027A224606E42001A7130 /* PagingViewController.swift in Sources */,
 				92F9C21822B8233A006FCC86 /* ReceiveAddressViewModel.swift in Sources */,
+				921027A524606E42001A7130 /* PagingTitleCell.swift in Sources */,
 				926D44062375776D00D34491 /* Image.m in Sources */,
 				92E2EB2C226F21C700367928 /* BMAutoSecurityScreen.swift in Sources */,
+				9210281124606E42001A7130 /* PagingDiff.swift in Sources */,
 				92E2EB2D226F21C700367928 /* ShareLogActivity.swift in Sources */,
 				9225D5422294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
 				92E2EB2E226F21C700367928 /* BMPopoverMenu.swift in Sources */,
