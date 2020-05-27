@@ -164,7 +164,7 @@ class WalletViewController: BaseTableViewController {
             
             if AppModel.sharedManager().isUpdating && AppModel.sharedManager().isOwnNode {
                 if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
-                    cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: strongSelf.statusViewModel.selectedState, avaiableMaturing: strongSelf.statusViewModel.isAvaiableMautring()))
+                    cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: strongSelf.statusViewModel.selectedState, avaiableMaturing: strongSelf.statusViewModel.isAvaiableMautring(), avaiableUnlink: strongSelf.statusViewModel.isAvaiableUnlink()))
                 }
 
                 if let cell = strongSelf.tableView.findCell(WalletProgressCell.self) as? WalletProgressCell {
@@ -237,10 +237,10 @@ extension WalletViewController: UITableViewDelegate {
                     return WalletAvailableCell.hideHeight()
                 }
                 else {
-                    var height = statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.singleHeight()
-                    if statusViewModel.isAvaiableBalance() {
-                        height = WalletAvailableCell.secondHeight()
-                    }
+                    let height = (statusViewModel.isAvaiableMautring() || statusViewModel.isAvaiableUnlink()) ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.secondHeight()
+//                    if statusViewModel.isAvaiableBalance() {
+//                        height = WalletAvailableCell.singleHeight()
+//                    }
                     return height
                 }
             }
@@ -336,7 +336,7 @@ extension WalletViewController: UITableViewDataSource {
             case .available:
                 let cell = tableView
                     .dequeueReusableCell(withType: WalletAvailableCell.self, for: indexPath)
-                cell.configure(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring()))
+                cell.configure(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring(), avaiableUnlink: statusViewModel.isAvaiableUnlink()))
                 cell.delegate = self
                 return cell
             case .progress:
@@ -386,6 +386,11 @@ extension WalletViewController: WalletStatusCellDelegate {
 }
 
 extension WalletViewController: WalletAvailableCellDelegate {
+   
+    func onDidSelectUnlink() {
+        pushViewController(vc: UnlinkViewController())
+    }
+    
     func onExpandAvailable() {
         if !Settings.sharedManager().isHideAmounts {
             expandAvailable = !expandAvailable
@@ -424,7 +429,7 @@ extension WalletViewController: SettingsModelDelegate {
         
         for cell in cells {
             if let availableCell = cell as? WalletAvailableCell {
-                availableCell.configure(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring()))
+                availableCell.configure(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring(), avaiableUnlink: statusViewModel.isAvaiableUnlink()))
             }
             else if let progressCell = cell as? WalletProgressCell {
                 progressCell.configure(with: (expand: expandProgress, status: AppModel.sharedManager().walletStatus))

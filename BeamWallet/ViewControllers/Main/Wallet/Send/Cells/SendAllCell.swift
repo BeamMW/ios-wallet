@@ -20,6 +20,7 @@
 import UIKit
 
 class SendAllCell: BaseCell {
+    
     @IBOutlet private weak var amountLabel: UILabel!
     @IBOutlet private weak var allButton: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
@@ -33,13 +34,10 @@ class SendAllCell: BaseCell {
         secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         secondAvailableLabel.font = RegularFont(size: 14)
         
-        titleLabel.text = Localizable.shared.strings.total_available.uppercased()
-        titleLabel.letterSpacing = 1.5
-
         selectionStyle = .none
         
-        allButton.setTitle(Localizable.shared.strings.add_all, for: .normal)
-        
+        allButton.setTitle(Localizable.shared.strings.add_all.lowercased(), for: .normal)
+
         if Settings.sharedManager().isDarkMode {
             titleLabel.textColor = UIColor.main.steel;
             amountLabel.textColor = UIColor.main.steel;
@@ -49,10 +47,14 @@ class SendAllCell: BaseCell {
     @IBAction func onSendAll(sender: UIButton) {
         delegate?.onRightButton?(self)
     }
+    
+    func sendUnlinkOnly(value:Bool)  {
+        
+    }
 }
 
 extension SendAllCell: Configurable {
-    func configure(with options: (realAmount: Double, isAll: Bool)) {
+    func configure(with options: (realAmount: Double, isAll: Bool, type: BMTransactionType, onlyUnlink: Bool )) {
         let total = String.currency(value: options.realAmount)
         
         amountLabel.text = total + Localizable.shared.strings.beam
@@ -69,6 +71,25 @@ extension SendAllCell: Configurable {
         else {
             allButton.isUserInteractionEnabled = true
             allButton.alpha = 1
+        }
+        
+        if options.type == BMTransactionTypeSimple {
+            titleLabel.text = Localizable.shared.strings.total_available.uppercased()
+        }
+        else {
+            amountLabel.textColor = UIColor.white
+            titleLabel.text = Localizable.shared.strings.available_unlink.uppercased()
+            allButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
+            allButton.setImage(IconSendPink()?.maskWithColor(color: UIColor.main.brightTeal), for: .normal)
+        }
+        
+        titleLabel.letterSpacing = 1.5
+        
+        if options.onlyUnlink {
+            allButton.setTitle(Localizable.shared.strings.add_all_unlinked.lowercased(), for: .normal)
+        }
+        else {
+            allButton.setTitle(Localizable.shared.strings.add_all.lowercased(), for: .normal)
         }
     }
 }

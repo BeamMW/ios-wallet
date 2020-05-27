@@ -50,7 +50,12 @@ extension UTXOTransactionCell: Configurable {
 
         dateLabel.text = options.transaction.formattedDate()
         
-        if !options.transaction.isIncome {
+        if (options.transaction.enumType == BMTransactionTypePushTransaction ||
+            options.transaction.enumType == BMTransactionTypePullTransaction) {
+            arrowImage.image = IconUnlinkedTransaction()
+            typeLabel.text = Localizable.shared.strings.unlink_beam
+        }
+        else if !options.transaction.isIncome {
             arrowImage.image = IconSent()
             typeLabel.text = Localizable.shared.strings.send_beam
         }

@@ -101,8 +101,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.isIncome = (item.m_sender == false);
         transaction.status = [GetTransactionStatusString(item) lowercaseString];
         transaction.enumStatus = (UInt64)item.m_status;
-        if (item.m_failureReason != TxFailureReason::Unknown)
-        {
+        transaction.enumType = (UInt64)item.m_txType;
+        if (item.m_failureReason != TxFailureReason::Unknown) {
             transaction.failureReason = GetTransactionFailurString(item.m_failureReason);
         }
         else{
@@ -235,6 +235,15 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
 void WalletModel::onChangeCalculated(beam::Amount change)
 {
     NSLog(@"onChangeCalculated");
+    
+    double amount = double(int64_t(change)) / Rules::Coin;
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onChangeCalculated:)]) {
+            [delegate onChangeCalculated:amount];
+        }
+    }
 }
 
 void WalletModel::onAllUtxoChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Coin>& utxos) {
@@ -330,57 +339,6 @@ void WalletModel::onAllUtxoChanged(beam::wallet::ChangeAction action, const std:
         }
     }
 }
-
-//void WalletModel::onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos)
-//{
-//    NSLog(@"onAllUtxoChanged");
-//
-//    NSMutableArray *bmUtxos = [[NSMutableArray alloc] init];
-//
-//    @autoreleasepool {
-//        for (const auto& coin : utxos)
-//        {
-//            BMUTXO *bmUTXO = [[BMUTXO alloc] init];
-//            bmUTXO.ID = coin.m_ID.m_Idx;
-//            bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
-//            bmUTXO.amount = coin.m_ID.m_Value;
-//            bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
-//            bmUTXO.status = (int)coin.m_status;
-//            bmUTXO.maturity = coin.m_maturity;
-//            bmUTXO.confirmHeight = coin.m_confirmHeight;
-//            bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
-//            bmUTXO.typeString = GetUTXOTypeString(coin);
-//
-//            if (coin.m_createTxId)
-//            {
-//                string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());
-//                bmUTXO.createTxId = [NSString stringWithUTF8String:createdTxId.c_str()];
-//            }
-//
-//            if (coin.m_spentTxId)
-//            {
-//                string spentTxId = to_hex(coin.m_spentTxId->data(), coin.m_spentTxId->size());
-//                bmUTXO.spentTxId = [NSString stringWithUTF8String:spentTxId.c_str()];
-//            }
-//
-//            [bmUtxos addObject:bmUTXO];
-//        }
-//    }
-//
-//
-//    [[[AppModel sharedManager]utxos] removeAllObjects];
-//    [[AppModel sharedManager] setUtxos:bmUtxos];
-//
-//    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-//    {
-//        if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
-//            [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
-//        }
-//    }
-////
-////    [bmUtxos removeAllObjects];
-////    bmUtxos = nil;
-//}
 
 void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs)
 {
@@ -945,27 +903,40 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
+            else if (transaction.m_txType == TxType::PullTransaction ||
+                     transaction.m_txType == TxType::PushTransaction ) {
+                return [[@"in_progress" localized] lowercaseString];
+            }
             return [[@"pending" localized] lowercaseString];
         }
         case TxStatus::InProgress:{
-            if (transaction.m_selfTx)
-            {
+            if (transaction.m_selfTx)   {
                 return [[@"sending_to_own" localized] lowercaseString];
+            }
+            else if (transaction.m_txType == TxType::PullTransaction ||
+                     transaction.m_txType == TxType::PushTransaction ) {
+                return [[@"in_progress" localized] lowercaseString];
             }
             return isIncome ? [[@"waiting_for_sender" localized]lowercaseString] : [[@"waiting_for_receiver" localized]lowercaseString];
         }
         case TxStatus::Registering:{
-            if (transaction.m_selfTx)
-            {
+            if (transaction.m_selfTx)  {
                 return [[@"sending_to_own" localized] lowercaseString];
+            }
+            else if (transaction.m_txType == TxType::PullTransaction ||
+                     transaction.m_txType == TxType::PushTransaction ) {
+                return [[@"in_progress" localized] lowercaseString];
             }
             return isIncome ? [[@"in_progress" localized]lowercaseString] : [[@"in_progress" localized] lowercaseString];
         }
         case TxStatus::Completed:
         {
-            if (transaction.m_selfTx)
-            {
+            if (transaction.m_selfTx)  {
                 return [[@"sent_to_own" localized] lowercaseString];
+            }
+            else if (transaction.m_txType == TxType::PullTransaction ||
+                     transaction.m_txType == TxType::PushTransaction ) {
+                return [[@"unlinked" localized] lowercaseString];
             }
             return isIncome ? [[@"received" localized] lowercaseString] : [[@"sent" localized] lowercaseString];
         }

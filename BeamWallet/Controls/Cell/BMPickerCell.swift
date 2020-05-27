@@ -51,7 +51,7 @@ class BMPickerCell: BaseCell {
 
         switchView?.onTintColor = UIColor.main.brightTeal
         switchView?.tintColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
-        switchView?.backgroundColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
+      //  switchView?.backgroundColor = (Settings.sharedManager().target == Testnet || Settings.sharedManager().isDarkMode) ? UIColor(hexString: "#0F0D17") : UIColor.main.marine
         
         detailLabel.textColor = UIColor.main.blueyGrey
     }

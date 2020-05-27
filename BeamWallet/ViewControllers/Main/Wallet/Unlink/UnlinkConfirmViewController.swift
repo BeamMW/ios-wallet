@@ -1,5 +1,5 @@
 //
-// SendConfirmViewController.swift
+// UnlinkConfirmViewController.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,14 +19,14 @@
 
 import UIKit
 
-class SendConfirmViewController: BaseTableViewController {
-
+class UnlinkConfirmViewController: BaseTableViewController {
+    
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
         
-        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope)
-        sendButton.setImage(IconSendBlue(), for: .normal)
-        sendButton.setTitle(Localizable.shared.strings.send.lowercased(), for: .normal)
+        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.brightTeal)
+        sendButton.setImage(IconUnlinkSmall(), for: .normal)
+        sendButton.setTitle(Localizable.shared.strings.unlink.lowercased(), for: .normal)
         sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         sendButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
         sendButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
@@ -38,9 +38,9 @@ class SendConfirmViewController: BaseTableViewController {
     
     private var items = [BMMultiLineItem]()
     
-    private var viewModel:SendTransactionViewModel!
+    private var viewModel:UnlinkTransactionViewModel!
     
-    init(viewModel:SendTransactionViewModel!) {
+    init(viewModel:UnlinkTransactionViewModel!) {
         super.init(nibName: nil, bundle: nil)
         
         self.viewModel = viewModel
@@ -51,13 +51,12 @@ class SendConfirmViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-  
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setGradientTopBar(mainColor: UIColor.main.heliotrope)
-        
+        setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
+
         title = Localizable.shared.strings.confirm.uppercased()
         
         tableView.register([BMMultiLinesCell.self, BMFieldCell.self])
@@ -67,15 +66,12 @@ class SendConfirmViewController: BaseTableViewController {
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
         
-        AppModel.sharedManager().addDelegate(self)
-        
-        viewModel.calculateChange()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        AppModel.sharedManager().removeDelegate(self)
+        self.viewModel.didChangeCalculated = {[weak self] item in
+            guard let strongSelf = self else { return }
+            strongSelf.items.insert(item, at: strongSelf.items.count-2)
+            strongSelf.tableView.reloadData()
+        }
+        self.viewModel.calculateChange()
     }
     
     
@@ -86,7 +82,7 @@ class SendConfirmViewController: BaseTableViewController {
             let modalViewController = UnlockPasswordPopover(event: .transaction)
             modalViewController.completion = { [weak self] obj in
                 if obj == true {
-                    self?.askForSaveContact()
+                    self?.onSend()
                 }
             }
             modalViewController.modalPresentationStyle = .overFullScreen
@@ -94,53 +90,27 @@ class SendConfirmViewController: BaseTableViewController {
             self.present(modalViewController, animated: true, completion: nil)
         }
         else{
-            askForSaveContact()
+            onSend()
         }
     }
     
-    private func askForSaveContact() {
-        viewModel.saveContact = true
-
-        if viewModel.isNeedSaveContact() {
-            if var controllers = self.navigationController?.viewControllers {
-                controllers.removeLast()
-                controllers.removeLast()
-                
-                let vc = SaveContactViewController(address: self.viewModel.toAddress)
-                controllers.append(vc)
-                self.navigationController?.setViewControllers(controllers, animated: true)
-            }
-            
-            self.onSend(needBack: false)
-        }
-        else{
-            self.onSend(needBack: true)
-        }
-    }
     
-    private func onSend(needBack:Bool) {
+    private func onSend() {
         viewModel.send()
         
-        if needBack {
-            if let viewControllers = self.navigationController?.viewControllers{
-                for vc in viewControllers {
-                    if vc is WalletViewController {
-                        self.navigationController?.popToViewController(vc, animated: true)
-                        return
-                    }
-                    else if vc is AddressViewController {
-                        self.navigationController?.popToViewController(vc, animated: true)
-                        return
-                    }
+        if let viewControllers = self.navigationController?.viewControllers{
+            for vc in viewControllers {
+                if vc is WalletViewController {
+                    self.navigationController?.popToViewController(vc, animated: true)
+                    return
                 }
             }
-            
-            self.navigationController?.popToRootViewController(animated: true)
         }
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }
 
-extension SendConfirmViewController : UITableViewDelegate {
+extension UnlinkConfirmViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
@@ -162,7 +132,7 @@ extension SendConfirmViewController : UITableViewDelegate {
 }
 
 
-extension SendConfirmViewController : UITableViewDataSource {
+extension UnlinkConfirmViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return items.count
@@ -182,13 +152,3 @@ extension SendConfirmViewController : UITableViewDataSource {
     }
 }
 
-extension SendConfirmViewController: WalletModelDelegate {
-    func onChangeCalculated(_ amount: Double) {
-        DispatchQueue.main.async {
-            let totalString = String.currency(value: amount) + Localizable.shared.strings.beam
-            let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
-            self.items.insert(item, at: self.items.count - 1)
-            self.tableView.reloadData()
-        }
-    }
-}

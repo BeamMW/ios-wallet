@@ -23,12 +23,14 @@ class InputFeePopover: BaseViewController {
 
     public var completion : ((String) -> Void)?
     public var mainFee:String!
+    public var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
 
     @IBOutlet weak private var feeField: BMField!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var grothTitleLabelY: NSLayoutConstraint!
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet private weak var secondAvailableLabel: UILabel!
+    @IBOutlet weak private var nextButton: BMButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +49,19 @@ class InputFeePopover: BaseViewController {
         
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
         
-        titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
+        if self.type == BMTransactionTypeSimple {
+            titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
+        }
+        else {
+            titleLabel.text = Localizable.shared.strings.unlinking_fee.uppercased()
+            feeField.textColor = UIColor.main.brightTeal
+            feeField.setNormalColor(color: UIColor.main.brightTeal)
+            nextButton.backgroundColor = UIColor.main.brightTeal
+            nextButton.awakeFromNib()
+        }
+        
+        titleLabel.letterSpacing = 1.5
+        
         if Settings.sharedManager().isDarkMode {
             titleLabel.textColor = UIColor.main.steel
             mainView.backgroundColor = UIColor.main.twilightBlue2
@@ -69,11 +83,12 @@ class InputFeePopover: BaseViewController {
         }
         
         let v = Int32(mainFee) ?? 0
+        let min = self.type == BMTransactionTypeSimple ? AppModel.sharedManager().getMinFeeInGroth() : AppModel.sharedManager().getMinUnlinkFeeInGroth()
         
-        if v < AppModel.sharedManager().getMinFeeInGroth() {
+        if v < min {
             grothTitleLabelY.constant = 5
             
-            feeField.error = Localizable.shared.strings.min_fee_error.replacingOccurrences(of: ("(value)"), with: String(AppModel.sharedManager().getMinFeeInGroth()))
+            feeField.error = Localizable.shared.strings.min_fee_error.replacingOccurrences(of: ("(value)"), with: String(min))
             feeField.status = .error
         }
         else{

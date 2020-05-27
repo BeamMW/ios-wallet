@@ -23,7 +23,7 @@ import UIKit
 class SecondCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
-        textLabel?.x = 15
+        textLabel?.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width - 30, height: 17)
     }
 }
 
@@ -84,6 +84,7 @@ class SendViewController: BaseTableViewController {
         }
         
         tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self])
+        tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
@@ -181,8 +182,13 @@ class SendViewController: BaseTableViewController {
             tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
         else {
-            let vc = SendConfirmViewController(viewModel: viewModel)
-            pushViewController(vc: vc)
+            if viewModel.unlinkOnly {
+                self.alert(message: "Sending unlinked funds has not yet been implemented")
+            }
+            else {
+                let vc = SendConfirmViewController(viewModel: viewModel)
+                pushViewController(vc: vc)
+            }
         }
     }
 }
@@ -190,7 +196,7 @@ class SendViewController: BaseTableViewController {
 extension SendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = (section == 5 || section == 6 || section == 7) ? UIColor.main.marineThree : UIColor.clear
+        view.backgroundColor = (section == 5 || section == 6 || section == 7 || section == 8) ? UIColor.main.marineThree : UIColor.clear
         return view
     }
     
@@ -198,15 +204,17 @@ extension SendViewController: UITableViewDelegate {
         switch section {
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 30
-        case 5, 7, 6:
+        case 6, 8, 7:
             return 10
+        case 5:
+            return viewModel.canUnlink() ? 10 : 0
         default:
             return (section > 0) ? 30 : 10
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 6 {
+        if indexPath.section == 7 {
             if indexPath.row == 2 || indexPath.row == 3 {
                 return 60
             }
@@ -221,7 +229,7 @@ extension SendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 6 {
+        if indexPath.section == 7 {
             switch indexPath.row {
             case 2:
                 onExpire()
@@ -236,7 +244,7 @@ extension SendViewController: UITableViewDelegate {
 
 extension SendViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return (showAdvanced ? 8 : 5)
+        return (showAdvanced ? 9 : 5)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -246,8 +254,10 @@ extension SendViewController: UITableViewDataSource {
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 1
         case 5:
-            return (viewModel.outgoindAdderss == nil) ? 0 : 1
+            return (viewModel.canUnlink()) ? 1 : 0
         case 6:
+            return (viewModel.outgoindAdderss == nil) ? 0 : 1
+        case 7:
             return (viewModel.outgoindAdderss == nil) ? 0 : (showEdit ? 4 : 1)
         default:
             return 1
@@ -318,7 +328,13 @@ extension SendViewController: UITableViewDataSource {
             }
         case 2:
             let cell = tableView
-                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath).configured(with: (realAmount:  AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll))
+                .dequeueReusableCell(withType: SendAllCell.self, for: indexPath)
+            if viewModel.unlinkOnly {
+                cell.configure(with: (realAmount:  AppModel.sharedManager().walletStatus?.realShilded ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: true))
+            }
+            else {
+                cell.configure(with: (realAmount:  AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: false))
+            }
             cell.delegate = self
             return cell
         case 3:
@@ -334,6 +350,12 @@ extension SendViewController: UITableViewDataSource {
             cell.delegate = self
             return cell
         case 5:
+            let cell = tableView
+                .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
+            cell.delegate = self
+            cell.configure(data: BMPickerData(title: Localizable.shared.strings.unlinked_funds_only, detail: nil, titleColor: nil, arrowType: viewModel.unlinkOnly ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+            return cell
+        case 6:
             var title = (viewModel.pickedOutgoingAddress == nil ? Localizable.shared.strings.outgoing : Localizable.shared.strings.outgoing_address.uppercased())
             
             if viewModel.pickedOutgoingAddress != nil {
@@ -348,7 +370,7 @@ extension SendViewController: UITableViewDataSource {
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.main.marineThree
             return cell
-        case 6:
+        case 7:
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
@@ -377,7 +399,7 @@ extension SendViewController: UITableViewDataSource {
                 cell.topOffset?.constant = 20
                 return cell
             }
-        case 7:
+        case 8:
             let cell = tableView
                 .dequeueReusableCell(withType: FeeCell.self, for: indexPath)
                 .configured(with: Double(viewModel.fee) ?? 0)
@@ -455,7 +477,7 @@ extension SendViewController: BMCellProtocol {
                 if input {
                     viewModel.sendAll = false
                     if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
-                        cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll))
+                        cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: false))
                     }
                 }
                 viewModel.amount = text
@@ -484,7 +506,7 @@ extension SendViewController: BMCellProtocol {
     
     func textValueDidReturn(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 6 {
+            if path.section == 7 {
                 AppModel.sharedManager().setWalletComment(viewModel.outgoindAdderss!.label, toAddress: viewModel.outgoindAdderss!.walletId)
             }
             else if path.section == 1 {
@@ -546,7 +568,7 @@ extension SendViewController: BMCellProtocol {
                 viewModel.checkFeeError()
                 tableView.reloadData()
             }
-            else if path.section == 5 {
+            else if path.section == 6 {
                 let vc = ReceiveListViewController()
                 vc.completion = { [weak self]
                     obj in
@@ -571,13 +593,13 @@ extension SendViewController: BMCellProtocol {
                 showAdvanced = !showAdvanced
                 
                 if showAdvanced {
-                    tableView.insertSections([5, 6, 7], with: .fade)
+                    tableView.insertSections([5, 6, 7, 8], with: .fade)
                 }
                 else {
-                    tableView.deleteSections([5, 6, 7], with: .fade)
+                    tableView.deleteSections([5, 6, 7, 8], with: .fade)
                 }
             }
-            else if path.section == 6 {
+            else if path.section == 7 {
                 showEdit = !showEdit
                 
                 if showEdit {
@@ -610,7 +632,7 @@ extension SendViewController: QRScannerViewControllerDelegate {
                 viewModel.sendAll = false
                 
                 if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
-                    cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll))
+                    cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: false))
                 }
             }
         }
@@ -645,7 +667,7 @@ extension SendViewController {
             
             AppModel.sharedManager().setExpires(Int32(selected), toAddress: strongSelf.viewModel.outgoindAdderss!.walletId)
             
-            strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 6)], with: .fade)
+            strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 7)], with: .fade)
         }
         pushViewController(vc: vc)
     }
@@ -681,7 +703,7 @@ extension SendViewController {
         
         AppModel.sharedManager().setWalletCategories(viewModel.outgoindAdderss!.categories, toAddress: viewModel.outgoindAdderss!.walletId)
         
-        tableView.reloadRows(at: [IndexPath(row: 3, section: 6)], with: .fade)
+        tableView.reloadRows(at: [IndexPath(row: 3, section: 7)], with: .fade)
     }
 }
 
@@ -720,5 +742,17 @@ extension SendViewController: SearchTableViewDelegate {
     func didSelectContact(contact: BMContact) {
         viewModel.selectedContact = contact
         didSelectAddress(value: contact.address.walletId)
+    }
+}
+
+extension SendViewController: BMPickerCellDelegate {
+    func onClickSwitch(value: Bool, cell: BMPickerCell) {
+        viewModel.unlinkOnly = value
+        viewModel.checkAmountError()
+        viewModel.checkFeeError()
+        
+        UIView.performWithoutAnimation {
+            tableView.reloadData()
+        }
     }
 }

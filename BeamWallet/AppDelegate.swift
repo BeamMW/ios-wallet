@@ -371,4 +371,3 @@ extension AppDelegate: SettingsModelDelegate {
         }
     }
 }
-

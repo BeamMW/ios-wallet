@@ -47,6 +47,10 @@
 
 #include "mnemonic/mnemonic.h"
 
+#include "wallet/transactions/lelantus/pull_transaction.h"
+#include "wallet/transactions/lelantus/push_transaction.h"
+#include "wallet/core/simple_transaction.h"
+
 #include "common.h"
 
 #include <sys/sysctl.h>
@@ -64,9 +68,12 @@ static NSString *categoriesKey = @"categoriesKey";
 static NSString *transactionCommentsKey = @"transaction_comment";
 static NSString *restoreFlowKey = @"restoreFlowKey";
 static NSString *currenciesKey = @"allCurrenciesKey";
+static NSString *unlinkAddressName = @"Unlink";
 
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
+
+const int kFeeInGroth_Unlink = 1100;
 
 const std::map<Notification::Type,bool> activeNotifications {
     { Notification::Type::SoftwareUpdateAvailable, true },
@@ -134,7 +141,15 @@ const bool isSecondCurrencyEnabled = true;
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
-    _currencies = [[NSMutableArray alloc] initWithArray:[self allCurrencies]];
+    //TODO:: 
+  //  _currencies = [[NSMutableArray alloc] initWithArray:[self allCurrencies]];
+    _currencies = [[NSMutableArray alloc] init];
+    
+    BMCurrency *c = [BMCurrency new];
+    c.code = @"USD";
+    c.type = BMCurrencyUSD;
+    c.value = 36000000;
+    [_currencies addObject:c];
     
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
         
@@ -191,6 +206,20 @@ const bool isSecondCurrencyEnabled = true;
     
     [[NSUserDefaults standardUserDefaults] setBool:_isRestoreFlow forKey:restoreFlowKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Status
+
+-(void)setWalletStatus:(BMWalletStatus *)walletStatus {
+    auto coins = walletDb->getShieldedCoins(Asset::s_BeamID);
+    _walletStatus = walletStatus;
+    for (int i=0; i<coins.size(); i++) {
+        auto coin = coins[i];
+        if (coin.m_assetID == Asset::s_BeamID) {
+            _walletStatus.shilded = _walletStatus.shilded + coin.m_value;
+        }
+    }
+    _walletStatus.realShilded = double(int64_t(_walletStatus.shilded)) / Rules::Coin;
 }
 
 #pragma mark - Exchange
@@ -353,8 +382,6 @@ const bool isSecondCurrencyEnabled = true;
     [self onWalledOpened:SecString(pass.string)];
     
     _categories = [[NSMutableArray alloc] initWithArray:[self allCategories]];
-
-
     
     return YES;
 }
@@ -446,7 +473,6 @@ const bool isSecondCurrencyEnabled = true;
     walletDb->createAddress(address);
     address.m_label = "Default";
     walletDb->saveAddress(address);
-    
     
     [self onWalledOpened:SecString(pass.string)];
     
@@ -677,11 +703,17 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
+        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(false);
+        auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(false);
+        
+        auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
+        additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
+        additionalTxCreators->emplace(TxType::PullTransaction, pullTxCreator);
+                
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
-        
-        wallet->start(activeNotifications, isSecondCurrencyEnabled);
-
+        wallet->start(activeNotifications, false, isSecondCurrencyEnabled, additionalTxCreators);
+   
         isRunning = YES;
         isStarted = YES;
     }
@@ -1470,9 +1502,52 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return realAmount;
 }
 
+-(double)remaining:(double)amount fee:(double)fee {
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    Amount remaining = _walletStatus.available - bTotal;
+    double realAmount = double(int64_t(remaining)) / Rules::Coin;
+    return realAmount;
+}
+
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
-   
-    NSString *errorString =  [self sendError:amount fee:fee to:to];
+    NSString *errorString = [self sendError:amount fee:fee to:to];
+    return errorString;
+}
+
+-(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    Amount bMax = round(MAX_AMOUNT * Rules::Coin);
+    
+    if (amount==0) {
+        return [@"amount_zero" localized];
+    }
+    else if(_walletStatus.shilded < bTotal)
+    {
+        double need = double(int64_t(bTotal - _walletStatus.shilded)) / Rules::Coin;
+        
+        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+        
+        NSString *s = [@"insufficient_funds" localized];
+        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
+    }
+    else if (bTotal > bMax)
+    {
+        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
+        
+        return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
+    }
+    else if(![self isValidAddress:to])
+    {
+        return [@"incorrect_address" localized];
+    }
+    
+    return nil;
+}
+
+-(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee {
+    NSString *errorString =  [self sendError:amount fee:fee checkMinAmount:YES];
     
     return errorString;
 }
@@ -1502,21 +1577,21 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
 }
 
--(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
+-(NSString*)sendError:(double)amount fee:(double)fee checkMinAmount:(BOOL)check {
     
     Amount bAmount = round(amount * Rules::Coin);
     Amount bTotal = bAmount + fee;
     Amount bMax = round(MAX_AMOUNT * Rules::Coin);
-
+    
     if (amount==0) {
         return [@"amount_zero" localized];
     }
     else if(_walletStatus.available < bTotal)
     {
         double need = double(int64_t(bTotal - _walletStatus.available)) / Rules::Coin;
-
+        
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-
+        
         NSString *s = [@"insufficient_funds" localized];
         return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
     }
@@ -1525,6 +1600,27 @@ bool OnProgress(uint64_t done, uint64_t total) {
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
         
         return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
+    }
+    else if (check) {
+        auto min = [self getMinUnlinkFeeInGroth] + 1;
+        if (bAmount < min) {
+            double need = double(min) / Rules::Coin;
+            NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+            if([[beam substringToIndex:1] isEqualToString:@"."]) {
+                beam = [NSString stringWithFormat:@"0%@",beam];
+            }
+            return [NSString stringWithFormat:@"%@ %@ BEAMS", [@"small_amount_unlink" localized], beam];
+        }
+    }
+ 
+    return nil;
+}
+
+-(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
+    NSString *error = [self sendError:amount fee:fee checkMinAmount:NO];
+    
+    if (error!=nil) {
+        return error;
     }
     else if(![self isValidAddress:to])
     {
@@ -1607,6 +1703,22 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(NSString*_Nonnull)allAmount:(double)fee {
     Amount bAmount = _walletStatus.available - fee;
+    
+    double d = double(int64_t(bAmount)) / Rules::Coin;
+    
+    NSString *allValue =  [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:d]];
+    allValue = [allValue stringByReplacingOccurrencesOfString:@"," withString:@""];
+    
+    if ([allValue hasPrefix:@"."])
+    {
+        allValue = [NSString stringWithFormat:@"0%@",allValue];
+    }
+    
+    return allValue;
+}
+
+-(NSString*_Nonnull)allUnlinkAmount:(double)fee {
+    Amount bAmount = _walletStatus.shilded - fee;
     
     double d = double(int64_t(bAmount)) / Rules::Coin;
     
@@ -1960,6 +2072,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     
     return NO;
+}
+
+-(void)calculateChange:(double)amount fee:(double)fee {
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount + fee;
+    wallet->getAsync()->calcChange(bTotal);
 }
 
 #pragma mark - UTXO
@@ -2340,6 +2458,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return [self isFork] ? kFeeInGroth_Fork1 : 0;
 }
 
+-(int)getMinUnlinkFeeInGroth {
+    return kFeeInGroth_Unlink;
+}
+
 bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 {
     Timestamp currentTime_s = getTimestamp();
@@ -2473,6 +2595,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         if(currency.type == Settings.sharedManager.currency) {
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
+            currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@",currency.code];
 
             double value = double(int64_t(currency.value)) / Rules::Coin;
             double rate = value * amount;
@@ -2606,6 +2729,51 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 -(void)clearNotifications {
     [_notifications removeAllObjects];
     [_presendedNotifications removeAllObjects];
+}
+
+#pragma mark - Unlink
+
+-(void)sendUnlink:(double)amount fee:(double)fee {
+    auto bAmount = round(amount * Rules::Coin);
+
+    WalletAddress senderAddress;
+    BOOL addressFound = NO;
+    
+    std::vector<WalletAddress> addresses = wallet->ownAddresses;
+    
+    for (int i=0; i<addresses.size(); i++){
+        NSString *name = [NSString stringWithUTF8String:addresses[i].m_label.c_str()];
+        if ([name isEqualToString:unlinkAddressName]) {
+            senderAddress = addresses[i];
+            addressFound = YES;
+            break;
+        }
+    }
+    
+    if (!addressFound) {
+        walletDb->createAddress(senderAddress);
+        senderAddress.m_label = [unlinkAddressName string];
+        senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+        walletDb->saveAddress(senderAddress);
+    }
+    else if (addressFound && senderAddress.isExpired()) {
+        senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+        walletDb->saveAddress(senderAddress);
+    }
+    
+    Asset::ID assetId = Asset::s_BeamID;
+        
+    auto txParams = lelantus::CreatePushTransactionParameters(senderAddress.m_walletID);
+        
+    Amount userFee = fee;
+    Amount userAmount = bAmount;
+
+    txParams.SetParameter(TxParameterID::Amount, userAmount)
+        .SetParameter(TxParameterID::Fee, userFee)
+        .SetParameter(TxParameterID::PeerID, senderAddress.m_walletID)
+        .SetParameter(TxParameterID::AssetID, assetId);
+
+    wallet->getAsync()->startTransaction(std::move(txParams));
 }
 
 

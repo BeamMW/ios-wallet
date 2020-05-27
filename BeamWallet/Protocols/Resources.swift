@@ -163,8 +163,16 @@ func SliderDot() -> UIImage? {
     return UIImage(named: "sliderDot")
 }
 
+func SliderDotGreen() -> UIImage? {
+    return UIImage(named: "sliderDotGreen")
+}
+
 func IconSendBlue() -> UIImage? {
     return UIImage(named: "iconSendBlue")
+}
+
+func IconUnlinkSmall() -> UIImage? {
+    return UIImage(named: "iconUnlinkSmall")
 }
 
 func IconDoneBlue() -> UIImage? {
@@ -255,16 +263,23 @@ func IconExpired() -> UIImage? {
 }
 
 func IconBeam() -> UIImage? {
-    return UIImage(named: "a")
+    return UIImage(named: "iconBeam")
 }
 
 func IconNotifictionsUpdate() -> UIImage? {
     return UIImage(named: "iconNotifictionsUpdate")
 }
 
-
 func IconUtxoEmpty() -> UIImage? {
     return UIImage(named: "iconUtxoEmptyState")
+}
+
+func IconUnlinkedTransaction() -> UIImage? {
+    return UIImage(named: "iconUnlinkedTransaction")
+}
+
+func IconStopUnlinking() -> UIImage? {
+    return UIImage(named: "iconStopUnlinking")
 }
 
 func IconNotifictionsExpired() -> UIImage? {

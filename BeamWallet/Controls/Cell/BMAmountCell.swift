@@ -35,6 +35,8 @@ class BMAmountCell: BaseCell {
     public var normalTextColor = UIColor.main.heliotrope
     public var normalLineColor = UIColor.main.heliotrope
 
+    private var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
+
     public var error:String?
     {
         didSet{
@@ -118,10 +120,27 @@ class BMAmountCell: BaseCell {
 
 extension BMAmountCell: Configurable {
     
+    func setType(type: BMTransactionType) {
+        self.type = type
+        
+        switch type {
+        case 1:
+            textField.textColor = UIColor.main.brightTeal
+            textField.setNormalColor(color: UIColor.main.brightTeal)
+            break
+        default:
+            return
+        }
+    }
+    
     func configure(with options: (name: String, value:String?)) {
-        if options.name == Localizable.shared.strings.amount.uppercased() || options.name == Localizable.shared.strings.you_send.uppercased() {
+        if (options.name == Localizable.shared.strings.amount.uppercased() || options.name == Localizable.shared.strings.you_send.uppercased()) && self.type != BMTransactionTypePushTransaction {
             textField.textColor = UIColor.main.heliotrope
             textField.setNormalColor(color: UIColor.main.heliotrope)
+        }
+        else if self.type == BMTransactionTypePushTransaction {
+            textField.textColor = UIColor.main.brightTeal
+            textField.setNormalColor(color: UIColor.main.brightTeal)
         }
         
         nameLabel.text = options.name
@@ -163,7 +182,13 @@ extension BMAmountCell : UITextFieldDelegate {
         
         let textFieldText: NSString = (textField.text ?? String.empty()) as NSString
         
-        let txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: String.coma(), with: String.dot())
+        var txtAfterUpdate = textFieldText.replacingCharacters(in: range, with: string).replacingOccurrences(of: String.coma(), with: String.dot())
+        
+        if textField.text == String.empty() && txtAfterUpdate == String.dot() {
+            txtAfterUpdate = "0."
+            textField.text = txtAfterUpdate
+            return false
+        }
         
         if !txtAfterUpdate.isCorrectAmount(fee: fee) {
             return false

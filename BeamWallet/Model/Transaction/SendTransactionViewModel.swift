@@ -39,6 +39,13 @@ class SendTransactionViewModel: NSObject {
 
     private var addresses = [BMAddress]()
     
+    public var unlinkOnly = false {
+        didSet {
+            amountError = nil
+            sendAll = false
+        }
+    }
+    
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
@@ -54,7 +61,12 @@ class SendTransactionViewModel: NSObject {
     public var fee = String(0) {
         didSet{
             if sendAll {
-                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+                if unlinkOnly {
+                    amount = AppModel.sharedManager().allUnlinkAmount(Double(fee) ?? 0)
+                }
+                else {
+                    amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+                }
             }
         }
     }
@@ -62,7 +74,12 @@ class SendTransactionViewModel: NSObject {
     public var sendAll = false {
         didSet{
             if sendAll {
-                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+                if unlinkOnly {
+                    amount = AppModel.sharedManager().allUnlinkAmount(Double(fee) ?? 0)
+                }
+                else {
+                    amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+                }
             }
         }
     }
@@ -103,7 +120,6 @@ class SendTransactionViewModel: NSObject {
         
         fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
         
-        
         generateOutgoindAddress()
     }
     
@@ -114,13 +130,25 @@ class SendTransactionViewModel: NSObject {
     }
     
     public func checkAmountError() {
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
-       
-        if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
-            amountError = canSend
+        if unlinkOnly {
+            let canSend = AppModel.sharedManager().canSendOnlyUnlink((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+            
+            if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
+                amountError = canSend
+            }
+            else{
+                amountError = nil
+            }
         }
-        else{
-            amountError = nil
+        else {
+            let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+            
+            if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
+                amountError = canSend
+            }
+            else{
+                amountError = nil
+            }
         }
     }
     
@@ -128,8 +156,14 @@ class SendTransactionViewModel: NSObject {
         if sendAll {
             if let a = Double(amount), let f = Double(fee) {
                 if a == 0 && f > 0  {
-                    amount = AppModel.sharedManager().allAmount(0)
-                    amountError = AppModel.sharedManager().feeError(f)
+                    if unlinkOnly {
+                        amount = AppModel.sharedManager().allUnlinkAmount(0)
+                        amountError = AppModel.sharedManager().feeError(f)
+                    }
+                    else {
+                        amount = AppModel.sharedManager().allAmount(0)
+                        amountError = AppModel.sharedManager().feeError(f)
+                    }
                 }
                 else if a == 0 {
                     amountError = Localizable.shared.strings.amount_zero
@@ -303,5 +337,13 @@ class SendTransactionViewModel: NSObject {
         let isContactFound = (AppModel.sharedManager().getContactFromId(toAddress) != nil)
         let isMyAddress = AppModel.sharedManager().isMyAddress(toAddress)
         return (selectedContact == nil && !isContactFound && !isMyAddress)
+    }
+    
+    public func calculateChange() {
+        AppModel.sharedManager().calculateChange(Double(amount) ?? 0, fee:  Double(fee) ?? 0)
+    }
+    
+    public func canUnlink() -> Bool {
+        return AppModel.sharedManager().walletStatus?.realShilded != 0
     }
 }

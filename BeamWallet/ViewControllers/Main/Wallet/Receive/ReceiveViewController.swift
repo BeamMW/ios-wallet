@@ -26,8 +26,7 @@ class ReceiveViewController: BaseTableViewController {
     private var showAdvanced = false
     private var showEdit = false
 
-  
-    
+
     override var tableStyle: UITableView.Style {
         get {
             return .grouped

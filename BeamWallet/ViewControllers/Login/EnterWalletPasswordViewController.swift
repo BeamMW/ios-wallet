@@ -96,6 +96,13 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+//        passField.text = "1"
+//        onLogin(sender: UIButton())
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -169,9 +176,14 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                 }
                 else {
                     _ = KeychainManager.addPassword(password: pass)
-                    
-                    let vc = OpenWalletProgressViewController(password: pass, phrase: nil)
-                    pushViewController(vc: vc)
+                    let opened = AppModel.sharedManager().openWallet(pass)
+                    if(!opened) {
+                        self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_opened) { (_ ) in
+                        }
+                    }
+                    else  {
+                        self.openMainPage()
+                    }
                 }
             }
         }
@@ -200,6 +212,34 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print, UIActivity.ActivityType.openInIBooks]
         
         present(vc, animated: true)
+    }
+    
+    private func openMainPage() {
+        AppModel.sharedManager().stopChangeWallet()
+        AppModel.sharedManager().refreshAddresses()
+        AppModel.sharedManager().getUTXO()
+        
+        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+        let menuViewController = LeftMenuViewController()
+        
+        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+                                                      leftViewController: menuViewController,
+                                                      rightViewController: nil)
+        
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
+        sideMenuController.leftViewPresentationStyle = .slideAbove;
+        sideMenuController.rootViewLayerShadowRadius = 0
+        sideMenuController.rootViewLayerShadowColor = UIColor.clear
+        sideMenuController.leftViewLayerShadowRadius = 0
+        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+        sideMenuController.rootViewCoverAlphaForRightView = 0.5
+        sideMenuController.leftViewCoverAlpha = 0.5
+        sideMenuController.rightViewCoverAlpha = 0.5
+        sideMenuController.modalTransitionStyle = .crossDissolve
+        
+        self.navigationController?.setViewControllers([sideMenuController], animated: true)
+        
+        BMLockScreen.shared.onTapEvent()
     }
 }
 

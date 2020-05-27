@@ -32,6 +32,7 @@ class StatusViewModel: NSObject {
     enum SelectedState: Int {
         case available = 0
         case maturing = 1
+        case unlink = 2
     }
     
     public var onDataChanged : (() -> Void)?
@@ -54,6 +55,14 @@ class StatusViewModel: NSObject {
     
     public func isAvaiableMautring() -> Bool {
         if AppModel.sharedManager().walletStatus?.maturing ?? 0 > 0 {
+            return true
+        }
+        
+        return false
+    }
+    
+    public func isAvaiableUnlink() -> Bool {
+        if AppModel.sharedManager().walletStatus?.shilded ?? 0 > 0 {
             return true
         }
         

@@ -68,6 +68,7 @@ typedef int BMRestoreType;
 -(void)onWalletCompleteVerefication;
 -(void)onExchangeRatesChange;
 -(void)onNotificationsChanged;
+-(void)onChangeCalculated:(double)amount;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -173,13 +174,17 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
+-(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
+-(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
 -(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
+-(NSString*_Nonnull)allUnlinkAmount:(double)fee;
 -(double)realTotal:(double)amount fee:(double)fee;
+-(double)remaining:(double)amount fee:(double)fee;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
@@ -202,6 +207,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
 -(BOOL)hasActiveTransactions;
 -(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID;
+-(void)calculateChange:(double)amount fee:(double)fee;
 
 // utxo
 -(void)getUTXO;
@@ -228,6 +234,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isFork;
 -(int)getDefaultFeeInGroth;
 -(int)getMinFeeInGroth;
+-(int)getMinUnlinkFeeInGroth;
 
 -(void)completeWalletVerification;
 
@@ -253,5 +260,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)deleteNotification:(NSString*_Nonnull) notifId;
 -(void)deleteAllNotifications;
 -(BMNotification*_Nullable)getLastVersionNotification;
+
+//unlink
+-(void)sendUnlink:(double)amount fee:(double)fee;
 
 @end

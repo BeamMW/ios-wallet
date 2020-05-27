@@ -512,7 +512,19 @@ class LocalizableStrings : NSObject {
     var new_version_available_notif_detail = "new_version_available_notif_detail".localized
     var notification = "notification".localized
     var update_now = "update_now".localized
-
+    var unlink = "unlink".localized
+    var available_unlink = "available_unlink".localized
+    var unlinking_fee = "unlinking_fee".localized
+    var remaining = "remaining".localized
+    var amount_to_unlink = "amount_to_unlink".localized
+    var unlink_notice = "unlink_notice".localized
+    var change = "change".localized
+    var unlinked = "unlinked".localized
+    var unlink_beam = "unlink_beam".localized
+    var change_locked = "change_locked".localized
+    var unlinked_funds_only = "unlinked_funds_only".localized
+    var add_all_unlinked = "add_all_unlinked".localized;
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

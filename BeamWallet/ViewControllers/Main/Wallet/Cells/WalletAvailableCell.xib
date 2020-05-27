@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,46 +34,6 @@
                                     <action selector="onExpandWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="YNI-BY-cfD"/>
                                 </connections>
                             </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-ta-Pco">
-                                <rect key="frame" x="15" y="10" width="175" height="29"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQa-GZ-HfB">
-                                        <rect key="frame" x="0.0" y="0.0" width="72" height="29"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                        <state key="normal" title="AVAILABLE">
-                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="0.49724422089999998" colorSpace="custom" customColorSpace="displayP3"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onStackButtonsWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="d2v-rB-bGu"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJG-jt-Uua">
-                                        <rect key="frame" x="102" y="0.0" width="73" height="29"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                        <state key="normal" title="MATURING">
-                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="0.49724422089999998" colorSpace="custom" customColorSpace="displayP3"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onStackButtonsWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="KDO-0k-ocg"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="29" id="xxM-uF-0YD"/>
-                                </constraints>
-                            </stackView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5e-tr-I4u">
                                 <rect key="frame" x="15" y="54" width="260" height="52"/>
                                 <subviews>
@@ -158,6 +118,48 @@
                                     <constraint firstItem="Vfu-72-uSx" firstAttribute="centerY" secondItem="Iqo-fR-cgG" secondAttribute="centerY" id="wSU-hN-kEs"/>
                                 </constraints>
                             </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0uc-Qz-goX">
+                                <rect key="frame" x="15" y="54" width="260" height="52"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="wOU-8w-kE5">
+                                        <rect key="frame" x="137.5" y="2" width="14" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="VWh-Be-T6R"/>
+                                            <constraint firstAttribute="width" constant="14" id="l8N-EC-mhu"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.221746" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="92K-Q9-PAl">
+                                        <rect key="frame" x="32" y="-3" width="100.5" height="28"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fyf-cg-Ffs">
+                                        <rect key="frame" x="34" y="28" width="41" height="16.5"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconBeam" translatesAutoresizingMaskIntoConstraints="NO" id="E68-4H-96F">
+                                        <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="STa-Dd-JFa"/>
+                                            <constraint firstAttribute="width" constant="22" id="Zxb-Sc-gDk"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="Fyf-cg-Ffs" firstAttribute="top" secondItem="92K-Q9-PAl" secondAttribute="bottom" constant="3" id="6jV-oe-q8D"/>
+                                    <constraint firstItem="92K-Q9-PAl" firstAttribute="centerY" secondItem="E68-4H-96F" secondAttribute="centerY" id="FWE-Y5-saD"/>
+                                    <constraint firstItem="E68-4H-96F" firstAttribute="top" secondItem="0uc-Qz-goX" secondAttribute="top" id="H69-DH-s68"/>
+                                    <constraint firstItem="92K-Q9-PAl" firstAttribute="leading" secondItem="E68-4H-96F" secondAttribute="trailing" constant="10" id="Hc3-ic-dPl"/>
+                                    <constraint firstItem="E68-4H-96F" firstAttribute="leading" secondItem="0uc-Qz-goX" secondAttribute="leading" id="IS7-S7-lmz"/>
+                                    <constraint firstItem="wOU-8w-kE5" firstAttribute="top" secondItem="0uc-Qz-goX" secondAttribute="top" constant="2" id="OC4-1c-sBi"/>
+                                    <constraint firstItem="wOU-8w-kE5" firstAttribute="leading" secondItem="92K-Q9-PAl" secondAttribute="trailing" constant="5" id="azv-5K-fRw"/>
+                                    <constraint firstItem="Fyf-cg-Ffs" firstAttribute="leading" secondItem="92K-Q9-PAl" secondAttribute="leading" constant="2" id="tfY-cs-g11"/>
+                                </constraints>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="zFZ-o9-rOz">
                                 <rect key="frame" x="262" y="20" width="13" height="8"/>
                                 <constraints>
@@ -171,22 +173,95 @@
                                     <action selector="onSelectPageWithSender:" destination="KGk-i7-Jjw" eventType="valueChanged" id="ux9-qG-AcY"/>
                                 </connections>
                             </pageControl>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-ta-Pco">
+                                <rect key="frame" x="15" y="10" width="239" height="29"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQa-GZ-HfB">
+                                        <rect key="frame" x="0.0" y="0.0" width="73" height="29"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                        <state key="normal" title="AVAILABLE">
+                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="0.49724422089999998" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onStackButtonsWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="d2v-rB-bGu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eMf-z3-M7Q">
+                                        <rect key="frame" x="83" y="0.0" width="73" height="29"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                        <state key="normal" title="UNLINKED">
+                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="0.49724422089999998" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onStackButtonsWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="lVf-mb-owN"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJG-jt-Uua">
+                                        <rect key="frame" x="166" y="0.0" width="73" height="29"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                        <state key="normal" title="MATURING">
+                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="0.49724422089999998" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onStackButtonsWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="KDO-0k-ocg"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="xxM-uF-0YD"/>
+                                </constraints>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="noZ-bA-1yW">
+                                <rect key="frame" x="231" y="53" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="32u-7Z-AFj"/>
+                                    <constraint firstAttribute="height" constant="44" id="fsP-Ut-g8V"/>
+                                </constraints>
+                                <state key="normal" image="iconUnlink"/>
+                                <connections>
+                                    <action selector="onUnlinkWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="PN2-RW-NIc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="zFZ-o9-rOz" secondAttribute="trailing" constant="15" id="1Su-YQ-hqR"/>
                             <constraint firstAttribute="bottom" secondItem="i5e-tr-I4u" secondAttribute="bottom" constant="24" id="1Tv-Nq-ZaS"/>
                             <constraint firstItem="Nd2-Bd-eXV" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" id="6kk-xU-d7F"/>
+                            <constraint firstItem="noZ-bA-1yW" firstAttribute="top" secondItem="zFZ-o9-rOz" secondAttribute="bottom" constant="25" id="8HH-YR-li9"/>
                             <constraint firstAttribute="trailing" secondItem="i5e-tr-I4u" secondAttribute="trailing" constant="15" id="9aB-ge-MJT"/>
                             <constraint firstAttribute="bottom" secondItem="Nd2-Bd-eXV" secondAttribute="bottom" id="9da-kH-70W"/>
                             <constraint firstAttribute="trailing" secondItem="Nd2-Bd-eXV" secondAttribute="trailing" id="Abg-je-ysI"/>
+                            <constraint firstItem="0uc-Qz-goX" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="II2-Ho-RsJ"/>
                             <constraint firstAttribute="bottom" secondItem="1qZ-Hb-en1" secondAttribute="bottom" constant="24" id="OIC-Hm-70X"/>
+                            <constraint firstAttribute="trailing" secondItem="0uc-Qz-goX" secondAttribute="trailing" constant="15" id="Qlp-Rb-fMB"/>
                             <constraint firstItem="Hmq-AX-eeV" firstAttribute="centerX" secondItem="ja7-ld-PUy" secondAttribute="centerX" id="Qnu-kd-cXY"/>
                             <constraint firstItem="i5e-tr-I4u" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="SeS-Xc-w5K"/>
                             <constraint firstAttribute="bottom" secondItem="Hmq-AX-eeV" secondAttribute="bottom" constant="-5" id="T3u-RC-wJR"/>
+                            <constraint firstAttribute="trailing" secondItem="noZ-bA-1yW" secondAttribute="trailing" constant="15" id="Tga-5s-Mgh"/>
                             <constraint firstItem="zFZ-o9-rOz" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="20" id="Vtm-dd-oqV"/>
+                            <constraint firstAttribute="bottom" secondItem="0uc-Qz-goX" secondAttribute="bottom" constant="24" id="Y5x-a4-CbI"/>
                             <constraint firstItem="hy8-ta-Pco" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="aul-DK-KXN"/>
                             <constraint firstItem="i5e-tr-I4u" firstAttribute="top" secondItem="1qZ-Hb-en1" secondAttribute="top" id="b3L-bp-08b"/>
+                            <constraint firstItem="0uc-Qz-goX" firstAttribute="top" secondItem="i5e-tr-I4u" secondAttribute="top" id="fqB-V5-ck1"/>
                             <constraint firstItem="hy8-ta-Pco" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="10" id="qMF-kD-0iQ"/>
                             <constraint firstItem="i5e-tr-I4u" firstAttribute="top" secondItem="hy8-ta-Pco" secondAttribute="bottom" constant="15" id="s6e-Uy-SK3"/>
                             <constraint firstAttribute="trailing" secondItem="1qZ-Hb-en1" secondAttribute="trailing" constant="15" id="tNP-MR-YtZ"/>
@@ -227,6 +302,12 @@
                 <outlet property="pageView" destination="Hmq-AX-eeV" id="ehA-nn-imL"/>
                 <outlet property="secondAvailableLabel" destination="CIF-Ek-MJq" id="ssQ-sD-jNn"/>
                 <outlet property="secondMaturingLabel" destination="Xig-AJ-TW9" id="7P4-nQ-2Yc"/>
+                <outlet property="secondUnlinkLabel" destination="Fyf-cg-Ffs" id="Rb5-8x-kba"/>
+                <outlet property="unkinkTopButtonButton" destination="eMf-z3-M7Q" id="2ZV-Hr-3Yo"/>
+                <outlet property="unlinkButton" destination="noZ-bA-1yW" id="LFr-Xu-Em1"/>
+                <outlet property="unlinkCurrencyIcon" destination="wOU-8w-kE5" id="B51-C8-azT"/>
+                <outlet property="unlinkLabel" destination="92K-Q9-PAl" id="DOy-eQ-DV5"/>
+                <outlet property="unlinkView" destination="0uc-Qz-goX" id="k1e-4E-lbL"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="86.806596701649184"/>
         </tableViewCell>
@@ -236,5 +317,6 @@
         <image name="iconDownArrow" width="13" height="8"/>
         <image name="iconMaturing" width="20" height="20"/>
         <image name="iconSymbol" width="16" height="24.5"/>
+        <image name="iconUnlink" width="22" height="22"/>
     </resources>
 </document>

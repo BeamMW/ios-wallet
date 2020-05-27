@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,6 +26,7 @@
                 <outlet property="feeField" destination="YOk-TX-DM6" id="TeB-k6-DB2"/>
                 <outlet property="grothTitleLabelY" destination="bbC-sr-h4m" id="IWv-w4-KcU"/>
                 <outlet property="mainView" destination="tFf-TN-Dqo" id="yEH-Tn-Tvm"/>
+                <outlet property="nextButton" destination="QhX-9d-901" id="h2p-p5-kGN"/>
                 <outlet property="secondAvailableLabel" destination="grc-RF-o7o" id="ecQ-eC-7cQ"/>
                 <outlet property="titleLabel" destination="6VT-6U-Hnp" id="yNc-wz-gBf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -37,7 +38,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view verifyAmbiguity="off" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tFf-TN-Dqo" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="20" y="242" width="374" height="292"/>
+                    <rect key="frame" x="20" y="241.5" width="374" height="293.5"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M0h-a5-hOs">
                             <rect key="frame" x="331" y="3" width="40" height="40"/>
@@ -51,7 +52,7 @@
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pEB-ZD-CPb">
-                            <rect key="frame" x="15" y="63" width="344" height="105"/>
+                            <rect key="frame" x="15" y="63" width="344" height="106.5"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRANSACTION FEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6VT-6U-Hnp">
                                     <rect key="frame" x="15" y="10" width="314" height="17"/>
@@ -66,7 +67,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GROTH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-v9-g43">
-                                    <rect key="frame" x="259" y="58" width="70" height="19.5"/>
+                                    <rect key="frame" x="259" y="58.5" width="70" height="19.5"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="70" id="csr-gL-HN4"/>
                                     </constraints>
@@ -81,7 +82,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YOk-TX-DM6" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
-                                    <rect key="frame" x="15" y="37" width="239" height="36"/>
+                                    <rect key="frame" x="15" y="37" width="239" height="37.5"/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <color key="textColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="30"/>
@@ -103,7 +104,7 @@
                                     </connections>
                                 </textField>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grc-RF-o7o">
-                                    <rect key="frame" x="15" y="78" width="38.5" height="17"/>
+                                    <rect key="frame" x="15" y="79.5" width="38.5" height="17"/>
                                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -125,7 +126,7 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QhX-9d-901" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="117" y="208" width="140" height="44"/>
+                            <rect key="frame" x="117" y="209.5" width="140" height="44"/>
                             <color key="backgroundColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="TU4-fI-zIF"/>

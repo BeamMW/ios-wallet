@@ -60,10 +60,19 @@ extension WalletTransactionCell: Configurable {
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
             typeLabel.text = Localizable.shared.strings.receive
         case false:
-            amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
-            amountLabel.textColor = UIColor.main.heliotrope
-            currencyIcon.tintColor = UIColor.main.heliotrope
-            typeLabel.text = Localizable.shared.strings.send
+            if (options.transaction.enumType == BMTransactionTypePushTransaction ||
+                options.transaction.enumType == BMTransactionTypePullTransaction) {
+                amountLabel.text = String.currency(value: options.transaction.realAmount)
+                amountLabel.textColor = UIColor.main.brightTeal
+                currencyIcon.tintColor = UIColor.main.brightTeal
+                typeLabel.text = Localizable.shared.strings.unlink
+            }
+            else {
+                amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
+                amountLabel.textColor = UIColor.main.heliotrope
+                currencyIcon.tintColor = UIColor.main.heliotrope
+                typeLabel.text = Localizable.shared.strings.send
+            }
         }
         
         
@@ -83,6 +92,10 @@ extension WalletTransactionCell: Configurable {
         
         if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
             statusLabel.textColor = UIColor.main.greyish
+        }
+        else if (options.transaction.enumType == BMTransactionTypePushTransaction ||
+            options.transaction.enumType == BMTransactionTypePullTransaction) {
+            statusLabel.textColor = UIColor.main.brightTeal
         }
         else if options.transaction.isSelf {
             statusLabel.textColor = UIColor.white

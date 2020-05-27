@@ -534,3 +534,16 @@
 "new_version_available_notif_detail" = "Please update to get the most of your Beam wallet.";
 "notification" = "Notification";
 "update_now" = "Update now";
+"unlink" = "Unlink";
+"available_unlink" = "Available to unlink";
+"unlinking_fee" = "Unlinking fee";
+"small_amount_unlink" = "Amount is too small. Minimal amount is";
+"remaining" = "Remaining";
+"amount_to_unlink" = "Amount to unlink";
+"unlink_notice" = "Please notice that unlinking funds may take up to few days to proceed.";
+"change" = "Change";
+"unlinked" = "Unlinked";
+"unlink_beam" = "Unlink BEAM";
+"change_locked" = "CHANGE (will be locked till the transaction will succeed or expire)";
+"unlinked_funds_only" = "Unlinked funds only";
+"add_all_unlinked" = "Add all unlinked ";

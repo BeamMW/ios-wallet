@@ -167,9 +167,16 @@
     return NO;
 }
 
+-(BOOL)isUnlink {
+    return self.enumType == BMTransactionTypePullTransaction || self.enumType == BMTransactionTypePushTransaction;
+}
+
 
 -(UIImage*)statusIcon {
-    if (self.isCancelled)
+    if (self.enumType == BMTransactionTypePullTransaction || self.enumType == BMTransactionTypePushTransaction) {
+        return [UIImage imageNamed:@"iconUnlinkedTransaction"];
+    }
+    else if (self.isCancelled)
     {
         if(_isIncome) {
             return [UIImage imageNamed:@"icnReceiveCanceled"];

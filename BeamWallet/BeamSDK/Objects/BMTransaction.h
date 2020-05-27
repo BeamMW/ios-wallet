@@ -28,9 +28,24 @@ enum {
     BMTransactionStatusFailed = 4,
     BMTransactionStatusRegistering = 5
 };
-
-
 typedef UInt64 BMTransactionStatus;
+
+enum {
+    BMTransactionTypeSimple = 0,
+    BMTransactionTypeAtomicSwap = 1,
+    BMTransactionTypeAssetIssue = 2,
+    BMTransactionTypeAssetConsume = 3,
+    BMTransactionTypeAssetReg = 4,
+    BMTransactionTypeAssetUnreg = 5,
+    BMTransactionTypeAssetInfo = 6,
+    BMTransactionTypePushTransaction = 7,
+    BMTransactionTypePullTransaction = 8,
+    BMTransactionTypeVoucherRequest = 9,
+    BMTransactionTypeVoucherResponse = 10,
+    BMTransactionTypeALL = 11
+};
+typedef UInt64 BMTransactionType;
+
 
 @interface BMTransaction : NSObject
 
@@ -51,6 +66,7 @@ typedef UInt64 BMTransactionStatus;
 @property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) UInt64 realFee;
 @property (nonatomic,assign) BMTransactionStatus enumStatus;
+@property (nonatomic,assign) BMTransactionType enumType;
 @property (nonatomic,strong) NSString *senderContactName;
 @property (nonatomic,strong) NSString *receiverContactName;
 
@@ -64,6 +80,7 @@ typedef UInt64 BMTransactionStatus;
 -(BOOL)isNew;
 -(BOOL)isExpired;
 -(BOOL)canSaveContact;
+-(BOOL)isUnlink;
 
 -(NSString*)details;
 -(NSString*)csvLine;
