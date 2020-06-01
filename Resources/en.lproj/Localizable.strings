@@ -546,4 +546,4 @@
 "unlink_beam" = "Unlink BEAM";
 "change_locked" = "CHANGE (will be locked till the transaction will succeed or expire)";
 "unlinked_funds_only" = "Unlinked funds only";
-"add_all_unlinked" = "Add all unlinked ";
+"add_all_unlinked" = "Add all unlinked";
