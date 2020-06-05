@@ -23,6 +23,8 @@
 @implementation NSString (Localization)
 
 -(NSString*)localized {
+    NSString *result = @"";
+    
     NSString *lang = [Settings sharedManager].language;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -33,14 +35,22 @@
         NSBundle *bundle = [NSBundle bundleWithPath:remotePath];
         
         if (bundle!=nil) {
-            return NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
+            result =  NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
         }
     }
     
     NSString *path = [[NSBundle mainBundle] pathForResource:lang ofType:@"lproj"];
     NSBundle * bundle = [[NSBundle alloc] initWithPath:path];
     
-    return NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
+    result =  NSLocalizedStringWithDefaultValue(self, nil, bundle, @"", @"");
+    
+    if ([result isEqualToString:self]) {
+        NSString *pathEn = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"];
+        NSBundle * bundleEn = [[NSBundle alloc] initWithPath:pathEn];
+        result =  NSLocalizedStringWithDefaultValue(self, nil, bundleEn, @"", @"");
+    }
+    
+    return result;
 }
 
 @end

@@ -237,10 +237,7 @@ extension WalletViewController: UITableViewDelegate {
                     return WalletAvailableCell.hideHeight()
                 }
                 else {
-                    var height = statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.singleHeight()
-                    if statusViewModel.isAvaiableBalance() {
-                        height = WalletAvailableCell.secondHeight()
-                    }
+                    let height = statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.secondHeight()
                     return height
                 }
             }

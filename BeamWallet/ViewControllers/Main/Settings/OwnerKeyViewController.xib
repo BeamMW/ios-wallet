@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,6 +23,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OwnerKeyViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
+                <outlet property="copyButton" destination="uvQ-zm-AzI" id="mEi-6A-fYK"/>
                 <outlet property="copyNextView" destination="PbD-6l-1Ad" id="bzy-J6-HxG"/>
                 <outlet property="copyView" destination="SEX-lg-7i7" id="dyX-z8-2IV"/>
                 <outlet property="noticeLabel" destination="ov3-aD-402" id="7Tp-ad-B96"/>
@@ -113,7 +113,7 @@
                     </constraints>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PbD-6l-1Ad">
-                    <rect key="frame" x="20" y="368" width="374" height="50"/>
+                    <rect key="frame" x="20" y="762" width="374" height="50"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jqH-FU-O5i">
                             <rect key="frame" x="1.5" y="0.0" width="371" height="44"/>
@@ -181,7 +181,7 @@
                 <constraint firstItem="ov3-aD-402" firstAttribute="top" secondItem="u5q-PR-C50" secondAttribute="bottom" constant="70" id="9AS-r8-xZa"/>
                 <constraint firstItem="u5q-PR-C50" firstAttribute="top" secondItem="d12-Nl-WeK" secondAttribute="top" constant="80" id="DXm-Bo-2kJ"/>
                 <constraint firstAttribute="trailing" secondItem="ov3-aD-402" secondAttribute="trailing" constant="20" id="FpL-Um-E9b"/>
-                <constraint firstItem="PbD-6l-1Ad" firstAttribute="top" secondItem="ov3-aD-402" secondAttribute="bottom" constant="70" id="dYg-uj-U3N"/>
+                <constraint firstItem="d12-Nl-WeK" firstAttribute="bottom" secondItem="PbD-6l-1Ad" secondAttribute="bottom" constant="50" id="dVI-GR-dXv"/>
                 <constraint firstItem="PbD-6l-1Ad" firstAttribute="leading" secondItem="d12-Nl-WeK" secondAttribute="leading" constant="20" id="e2G-Eu-oZN"/>
                 <constraint firstItem="d12-Nl-WeK" firstAttribute="trailing" secondItem="SEX-lg-7i7" secondAttribute="trailing" constant="20" id="huC-4B-OF9"/>
                 <constraint firstItem="ov3-aD-402" firstAttribute="leading" secondItem="eSk-Xs-FZ0" secondAttribute="leading" constant="20" id="lfE-IW-7NH"/>

@@ -680,7 +680,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
-        wallet->start(activeNotifications, isSecondCurrencyEnabled);
+        wallet->start(activeNotifications, false, isSecondCurrencyEnabled);
 
         isRunning = YES;
         isStarted = YES;
@@ -698,7 +698,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if(self.isInternetAvailable && isRunning == NO && ![[Settings sharedManager] isLocalNode])
         {
             isRunning = YES;
-            wallet->start(activeNotifications, isSecondCurrencyEnabled);
+            wallet->start(activeNotifications, false, isSecondCurrencyEnabled);
         }
     }
 }
@@ -752,12 +752,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block{
+    if(self->wallet == nil) {
+        [self start];
+    }
+    
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         auto pass = SecString(password.string);
-        
+
         const auto& ownerKey = self->wallet->exportOwnerKey(pass);
-        
+
         NSString *exportedKey = [NSString stringWithUTF8String:ownerKey.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             block(exportedKey);
@@ -1335,6 +1339,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
             }
             
             if(address.isNowExpired) {
+                [_presendedNotifications setValue:address.walletId forKey:address.walletId];
+                
                 wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
             }
             else if(address.isNowActive) {
@@ -1563,19 +1569,25 @@ bool OnProgress(uint64_t done, uint64_t total) {
         auto bAmount = round(amount * Rules::Coin);
         
         try{
-           __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
-            
+          // __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
+                        
+            __block auto address = walletDb->getAddress(walletID);
+
             wallet->getAsync()->sendMoney(fromID, walletID, comment.string, bAmount, fee);
             wallet->getAsync()->getWalletStatus();
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if ([[AppModel sharedManager] isMyAddress:to]) {
-                    [[AppModel sharedManager] setWalletComment:address.label toAddress:address.walletId];
-                }
-                else if (address != nil){
-                    [[AppModel sharedManager] setContactComment:address.label toAddress:address.walletId];
-                }
-            });
+            if(address) {
+                __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (address->isOwn()) {
+                        [[AppModel sharedManager] setWalletComment:name toAddress:to];
+                    }
+                    else {
+                        [[AppModel sharedManager] setContactComment:name toAddress:to];
+                    }
+                });
+            }
+        
         }
         catch(NSException *ex) {
             NSLog(@"%@",ex);
@@ -2469,8 +2481,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(NSString*_Nonnull)exchangeValue:(double)amount {
-    for (BMCurrency *currency in _currencies) {
-        if(currency.type == Settings.sharedManager.currency) {
+    if(Settings.sharedManager.currency == BMCurrencyOff) {
+        return @"";
+    }
+    if(amount == 0.0) {
+        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
+    }
+    for (BMCurrency *currency in [_currencies objectEnumerator].allObjects) {
+        if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
 
@@ -2480,15 +2498,18 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         }
     }
 
-    return @"";
+    return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
 }
 
 -(NSString*_Nonnull)exchangeValueFee:(double)amount {
+    if(Settings.sharedManager.currency == BMCurrencyOff) {
+        return @"";
+    }
     if(amount == 0) {
         return @"";
     }
     for (BMCurrency *currency in _currencies) {
-        if(currency.type == Settings.sharedManager.currency) {
+        if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
             
@@ -2507,7 +2528,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         }
     }
     
-    return @"";
+    return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
 }
 
 #pragma mark - Notifications
@@ -2608,6 +2629,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [_presendedNotifications removeAllObjects];
 }
 
+-(void)readAllNotifications {
+    NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+    for (BMNotification *notification in notifications) {
+        if(![notification isRead]) {
+            [self readNotification: notification.nId];
+        }
+    }
+}
 
 @end
 

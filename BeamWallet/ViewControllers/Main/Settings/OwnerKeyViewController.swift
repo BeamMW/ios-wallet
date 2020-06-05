@@ -28,8 +28,9 @@ class OwnerKeyViewController: BaseViewController {
     
     @IBOutlet private weak var copyView: UIView!
     @IBOutlet private weak var copyNextView: UIView!
-    @IBOutlet private weak var copyRestoreButton: UIButton!
-    
+    @IBOutlet private weak var copyRestoreButton: BMButton!
+    @IBOutlet private weak var copyButton: BMButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,13 +40,18 @@ class OwnerKeyViewController: BaseViewController {
         ownerKeyTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.key_code.uppercased())
         ownerKeyTitleLabel.letterSpacing = 1.5
         
+        if Settings.sharedManager().isDarkMode {
+            copyButton.setBackgroundColor(color: UIColor.main.marineThree, forState: .normal)
+            copyButton.setTitleColor(UIColor.white, for: .normal)
+        }
+        
         if AppModel.sharedManager().isRestoreFlow {
             title = Localizable.shared.strings.owner_key
             
             copyView.isHidden = true
             copyNextView.isHidden = false
             
-            noticeLabel.text = Localizable.shared.strings.paste_owner_key + "\n\n" + Localizable.shared.strings.after_paste_owner_key
+            noticeLabel.text = Localizable.shared.strings.paste_owner_key
         }
         else {
             title = Localizable.shared.strings.show_owner_key

@@ -253,5 +253,6 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)deleteNotification:(NSString*_Nonnull) notifId;
 -(void)deleteAllNotifications;
 -(BMNotification*_Nullable)getLastVersionNotification;
+-(void)readAllNotifications;
 
 @end

@@ -222,19 +222,9 @@ extension WalletAvailableCell: Configurable {
         if let status = options.status {
             balanceLabel.text = String.currency(value: status.realAmount)
             maturingLabel.text = String.currency(value: status.realMaturing)
-           
-            if status.realAmount == 0 {
-                secondAvailableLabel.isHidden = true
-            }
-            else {
-                secondAvailableLabel.isHidden = false
-                secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(status.realAmount)
-                
-                if secondAvailableLabel.text?.isEmpty == true {
-                    secondAvailableLabel.isHidden = true
-                }
-            }
-
+            secondAvailableLabel.isHidden = false
+            secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(status.realAmount)
+            
             if status.realMaturing == 0 {
                 secondMaturingLabel.isHidden = true
             }

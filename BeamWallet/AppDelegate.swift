@@ -134,9 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AppModel.sharedManager().connectionTimer = nil
         }
         
-        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
-            self.registerBackgroundTask()
-        }
+        self.registerBackgroundTask()
         
         if let transactions = AppModel.sharedManager().preparedTransactions as? [BMPreparedTransaction] {
             if transactions.count > 0, AppModel.sharedManager().isLoggedin {
@@ -164,9 +162,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
-            self.endBackgroundTask()
-        }
+        self.endBackgroundTask()
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {

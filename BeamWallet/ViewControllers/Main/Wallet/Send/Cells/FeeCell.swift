@@ -28,12 +28,21 @@ class FeeCell: BaseCell {
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var titleLabel: UILabel!
 
+    @IBOutlet weak private var minSecondLabel: UILabel!
+    @IBOutlet weak private var maxSecondLabel: UILabel!
+
     private let stepValue:Float = 10
     
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        maxSecondLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        maxSecondLabel.font = RegularFont(size: 14)
+        
+        minSecondLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        minSecondLabel.font = RegularFont(size: 14)
         
         feeSlider.maximumTrackTintColor = UIColor.main.marineThree
         feeSlider.isContinuous = true
@@ -44,7 +53,8 @@ class FeeCell: BaseCell {
         feeSlider.addTarget(self, action: #selector(onSliderValChanged(sender:event:)), for: .valueChanged)
 
         minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
-       
+        minSecondLabel.text = AppModel.sharedManager().exchangeValueFee(Double(feeSlider.minimumValue))
+
         titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
         if Settings.sharedManager().isDarkMode {
             titleLabel.textColor = UIColor.main.steel
@@ -76,6 +86,7 @@ class FeeCell: BaseCell {
             if nFee > Double(self.feeSlider.maximumValue) {
                 self.feeSlider.maximumValue = Float(nFee)
                 self.maxLabel.text = obj + Localizable.shared.strings.groth
+                self.maxSecondLabel.text = AppModel.sharedManager().exchangeValueFee(nFee)
             }
             
             self.configure(with: nFee)
@@ -132,7 +143,8 @@ extension FeeCell: Configurable {
             feeSlider.maximumValue = Float(fee)
             maxLabel.text = String(Int(fee)) + Localizable.shared.strings.groth
         }
-        
+        maxSecondLabel.text = AppModel.sharedManager().exchangeValueFee(fee)
+
         feeSlider.value = Float(fee)
         
         valueLabel.text = String(Int(fee)) + Localizable.shared.strings.groth

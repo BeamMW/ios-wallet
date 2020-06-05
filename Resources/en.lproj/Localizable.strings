@@ -51,8 +51,9 @@
 "no_internet" = "No internet connection";
 "wallet_not_created" = "Wallet not created";
 "wallet_not_opened" = "Wallet can not be opened";
-"restor_wallet_warning" = "Restoring your wallet may take a while. Please wait for synchronization to finish - do no close nor minimize the application.";
-"restor_wallet_info" = "Only the wallet balance (UTXOs) will be restored. Your transaction info is always private and never kept on the blockchain.";
+"restor_wallet_warning" = "Restoring the wallet may take a while.\n\nPlease wait till the node is fully synchronized with the blockchain, do not close or minimize the wallet app.";
+"restor_wallet_info" = "Only the wallet balance (UTXO) can be restored, transaction info is always private
+and never kept on the blockchain.";
 "receive" = "Receive";
 "send" = "Send";
 "available" = "Available";
@@ -385,14 +386,13 @@
 "utxo_empty_progress" = "You have no active UTXO";
 "transactions_empty" = "Your transaction list is empty";
 "transactions_empty_progress" = "You have no active transactions";
-"automatic_restore_title" = "Recommended restore";
-"automatic_restore_text" = "Beam Wallet will download a snapshot of the blockchain and restore your funds on the device";
-"manual_restore_title" = "Restore with trusted node";
-"manual_restore_text" = "Beam Wallet will connect to specific trusted node (configured with your owner key) and the node will restore your funds";
-"paste_owner_key" = "Paste this code in Beam Wallet on your desktop to proceed restore from the node.";
-"after_paste_owner_key" = "Once you’ll paste the code, run your node on desktop and click next on mobile app.";
-"enter_trusted_node" = "Enter trusted node address";
-"trusted_node_error" = "Node isn’t connectable. Try connect wallet to different node or use recommended restore.";
+"automatic_restore_title" = "AUTOMATIC RESTORE (recommended)";
+"automatic_restore_text" = "Beam Wallet will download a snapshot of the blockchain and restore your funds on the device.";
+"manual_restore_title" = "RESTORE WITH OWN NODE (advanced)";
+"manual_restore_text" = "Beam Wallet will connect to your trusted node and it will restore your funds. The node must be configured with your owner key.";
+"paste_owner_key" = "Сonfigure your wallet with your owner key, run the node to fully synchronize with the blockchain and click next.";
+"enter_trusted_node" = "Enter your trusted node IP address and port";
+"trusted_node_error" = "Could not connect to the node. Try a different node address or use an automatic restore.";
 "owner_key" = "Owner key";
 "new_transaction" = "Incoming transaction";
 "click_to_receive" = "Click to receive Beam";
@@ -411,8 +411,8 @@
 "date" = "Date";
 "downloading_blockchain" = "Downloading blockchain info";
 "and" = "and"; //example: addresses and contacts
-"auto_restore_warning" = "Please make sure that you have not done any transactions (from any device) in the past hour. If you did, please wait for at least one hour after the last transaction before proceeding with Restore. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
-"manual_restore_warning" = "Verify that your node is fully synchronised with the blockchain before starting the restore procedure. Otherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"auto_restore_warning" = "Please make sure that you have not done any transactions in the past hour from any wallet with the same seed phrase.\n\nIf you did, please wait for at least one hour after the last transaction was completed before restoring the wallet.\n\nOtherwise, your restored balance may be incorrect and additional restore procedure will be required.";
+"manual_restore_warning" = "Verify that your own node is fully synchonized with the blockchain before starting the restore procedure.\n\nOtherwise, your restored balance may be incorrect and additional restore procedure will be required.";
 "understand" = "I understand";
 "NSPhotoLibraryAddUsageDescription" = "Save transaction details and scan QR-codes from the photos";
 "NSPhotoLibraryUsageDescription" = "Provide gallery access to select QR code";
@@ -534,3 +534,4 @@
 "new_version_available_notif_detail" = "Please update to get the most of your Beam wallet.";
 "notification" = "Notification";
 "update_now" = "Update now";
+"off" = "Off";

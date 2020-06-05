@@ -363,7 +363,6 @@ class LocalizableStrings : NSObject {
     var manual_restore_title = "manual_restore_title".localized.uppercased()
     var manual_restore_text = "manual_restore_text".localized
     var paste_owner_key = "paste_owner_key".localized
-    var after_paste_owner_key = "after_paste_owner_key".localized
     var owner_key = "owner_key".localized
     var new_transaction = "new_transaction".localized
     var click_to_receive = "click_to_receive".localized
@@ -512,7 +511,8 @@ class LocalizableStrings : NSObject {
     var new_version_available_notif_detail = "new_version_available_notif_detail".localized
     var notification = "notification".localized
     var update_now = "update_now".localized
-
+    var off = "off".localized
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

@@ -21,7 +21,8 @@
 enum {
     BEAM = 0,
     BMCurrencyUSD = 1,
-    BMCurrencyBTC = 2
+    BMCurrencyBTC = 2,
+    BMCurrencyOff = 3
 };
 typedef int BMCurrencyType;
 
