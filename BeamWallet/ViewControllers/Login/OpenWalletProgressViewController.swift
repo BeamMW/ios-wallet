@@ -36,7 +36,8 @@ class OpenWalletProgressViewController: BaseViewController {
     private var phrase:String?
     private var isPresented = false
     private var start = Date.timeIntervalSinceReferenceDate;
-
+    private var stopRestore = false
+    
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
@@ -365,21 +366,28 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             }
       
             let percent = (Float64(done) / Float64(total)) * Float64(100)
-            
-            if done == total ||  percent >= 99.9 {
-                AppModel.sharedManager().isRestoreFlow = false
-                RestoreManager.shared.cancelRestore()
-                
-                if !AppModel.sharedManager().isInternetAvailable {
-                    strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+
+            if done == total ||  percent >= 99.9  {
+                if !strongSelf.stopRestore {
+                    strongSelf.stopRestore = true
+                    
+                    let deadlineTime = DispatchTime.now() + .seconds(4)
+                    DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                        AppModel.sharedManager().isRestoreFlow = false
+                        RestoreManager.shared.cancelRestore()
                         
-                        AppModel.sharedManager().resetWallet(false)
-                        
-                        strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
+                        if !AppModel.sharedManager().isInternetAvailable {
+                            strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+                                
+                                AppModel.sharedManager().resetWallet(false)
+                                
+                                strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
+                            }
+                        }
+                        else{
+                            strongSelf.startCreateWallet()
+                        }
                     }
-                }
-                else{
-                    strongSelf.startCreateWallet()
                 }
             }
         }

@@ -202,6 +202,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
 -(BOOL)hasActiveTransactions;
 -(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID;
+-(void)setTransactionStatusToFailed:(NSString*_Nonnull)ID;
 
 // utxo
 -(void)getUTXO;

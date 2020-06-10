@@ -867,6 +867,8 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                 d.reset(notification.m_content);
                 d& token;
                 beam::wallet::TxParameters transaction = token.UnpackParameters();
+                auto txStatus = transaction.GetParameter<wallet::TxStatus>(TxParameterID::Status);
+                    
                 std::string tx = to_hex(transaction.GetTxID()->data(), transaction.GetTxID()->size());
                 NSString *txId = [NSString stringWithUTF8String:tx.c_str()];
                 
@@ -875,6 +877,11 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                 if(bmTransaction == nil) {
                     NSLog(@"transaction not found");
                     [NSThread sleepForTimeInterval:1.5f];
+                }
+                else {
+                    if (bmTransaction.enumStatus != BMTransactionStatusFailed && txStatus == TxStatus::Failed) {
+                        [[AppModel sharedManager] setTransactionStatusToFailed:txId];
+                    }
                 }
                 
                 bmNotification = [BMNotification new];
@@ -959,6 +966,8 @@ NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
             return @"You are trying to connect to incompatible peer.";
             case wallet::ErrorType::ConnectionBase:
             return @"Connection error.";
+            case wallet::ErrorType::HostResolvedError:
+            return [NSString stringWithFormat:@"Unable to resolve node address: %@", [Settings sharedManager].nodeAddress] ;
             case wallet::ErrorType::ConnectionTimedOut:
             return @"Connection timed out.";
             case wallet::ErrorType::ConnectionRefused:

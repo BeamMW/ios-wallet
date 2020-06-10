@@ -78,11 +78,7 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
             if speed > 0 && avgTime >= 5 {
                 let sizeLeft = Double(totalBytesExpectedToWrite-totalBytesWritten)
                 var timeLeft = sizeLeft / speed
-                
-                print("-----------")
-                print(timeLeft.asTime(style: .abbreviated))
-                print("-----------")
-                
+                                
                 if timeLeft < 1 {
                     timeLeft = 1
                 }

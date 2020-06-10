@@ -170,9 +170,11 @@ const bool isSecondCurrencyEnabled = true;
     
     NSMutableArray *array = [NSMutableArray array];
     
-    for (const auto& item : peers)
-    {
-        [array addObject:[NSString stringWithUTF8String:item.c_str()]];
+    for (const auto& item : peers) {
+        NSString *address = [NSString stringWithUTF8String:item.c_str()];
+        if(![address containsString:@"shanghai"]) {
+            [array addObject:address];
+        }
     }
     
     srand([[NSDate date]  timeIntervalSince1970]);
@@ -1321,6 +1323,28 @@ bool OnProgress(uint64_t done, uint64_t total) {
         WalletID walletID(Zero);
         if (walletID.FromHex(address.walletId.string))
         {
+            [_presendedNotifications setValue:address.walletId forKey:address.walletId];
+//
+//            if(address.isNowExpired) {
+//                wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
+//            }
+//            else if(address.isNowActive) {
+//                if (address.isNowActiveDuration == 0){
+//                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Never);
+//                }
+//                else{
+//                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::OneDay);
+//                }
+//            }
+//            else{
+//                if (address.isExpired) {
+//                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
+//                }
+//                else  {
+//                    wallet->getAsync()->updateAddress(walletID, address.label.string, address.duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::AsIs);
+//                }
+//            }
+            
             std::vector<WalletAddress> addresses = wallet->ownAddresses;
             
             for (int i=0; i<addresses.size(); i++)
@@ -1329,34 +1353,39 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 
                 NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
                 
-                if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]])
+                if ([wAddress isEqualToString:address.walletId])
                 {
                     addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
+                    addresses[i].m_label = address.label.string;
+                    
+                    if(address.isNowExpired) {
+                        addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
+                    }
+                    else if(address.isNowActive) {
+                        if (address.isNowActiveDuration == 0){
+                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+                        }
+                        else{
+                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::OneDay);
+                        }
+                    }
+                    else{
+                        if (address.isExpired) {
+                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
+                        }
+                        else  {
+                            if (address.duration == 0) {
+                                addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+                            }
+                            else {
+                                addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::AsIs);
+                            }
+                        }
+                    }
+                    
                     wallet->getAsync()->saveAddress(addresses[i], true);
                     
                     break;
-                }
-            }
-            
-            if(address.isNowExpired) {
-                [_presendedNotifications setValue:address.walletId forKey:address.walletId];
-                
-                wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
-            }
-            else if(address.isNowActive) {
-                if (address.isNowActiveDuration == 0){
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Never);
-                }
-                else{
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::OneDay);
-                }
-            }
-            else{
-                if (address.isExpired) {
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
-                }
-                else  {
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, address.duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::AsIs);
                 }
             }
         }
@@ -1934,6 +1963,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     
     return nil;
+}
+
+-(void)setTransactionStatusToFailed:(NSString*_Nonnull)ID  {
+    NSMutableArray *transactions = [NSMutableArray arrayWithArray:_transactions];
+    
+    int i = 0;
+    for (BMTransaction *tr in transactions) {
+        if ([tr.ID isEqualToString:ID]) {
+            _transactions[i].enumStatus = BMTransactionStatusFailed;
+            _transactions[i].status = @"failed";
+        }
+        i ++;
+    }
 }
 
 -(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID {
