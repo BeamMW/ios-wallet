@@ -97,6 +97,7 @@ const bool isSecondCurrencyEnabled = true;
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
     Reactor::Ptr walletReactor;
+    beam::wallet::TxParameters _txParameters;
 
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
@@ -1667,6 +1668,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return;
     }
     
+    _txParameters = *txParameters;
+
     WalletID walletID(Zero);
     if (walletID.FromHex(to.string))
     {
@@ -1690,11 +1693,18 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return;
     }
 
+    _txParameters = *txParameters;
+
+    if (auto fee = _txParameters.GetParameter<beam::Amount>(beam::wallet::TxParameterID::Fee); fee)
+    {
+        NSLog(@"%d",fee);
+    }
+    
     auto messageString = comment.string;
     auto bAmount = round(amount * Rules::Coin);
 
     auto p = beam::wallet::CreateSimpleTransactionParameters()
-    .SetParameter(beam::wallet::TxParameterID::PeerID, *txParameters->GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID))
+    .SetParameter(beam::wallet::TxParameterID::PeerID, *_txParameters.GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID))
     .SetParameter(beam::wallet::TxParameterID::Amount, bAmount)
     .SetParameter(beam::wallet::TxParameterID::Fee, fee * 10)
     .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
@@ -1704,7 +1714,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         p.SetParameter(beam::wallet::TxParameterID::OriginalToken, to.string);
     }
 
-    auto identity = txParameters->GetParameter<beam::PeerID>(beam::wallet::TxParameterID::PeerWalletIdentity);
+    auto identity = _txParameters.GetParameter<beam::PeerID>(beam::wallet::TxParameterID::PeerWalletIdentity);
 
     if (identity)
     {
