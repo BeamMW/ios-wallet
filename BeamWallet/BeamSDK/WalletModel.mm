@@ -1090,8 +1090,17 @@ NSString* WalletModel::GetUTXOStatusString(Coin coin)
 }
 
 NSString* WalletModel::GetUTXOTypeString(beam::wallet::Coin coin) {
+    NSLog(@"%d",coin.m_ID.m_Type);
     switch (coin.m_ID.m_Type)
     {
+        case Key::Type::Asset:
+            return [[@"Asset" localized] lowercaseString];
+        case Key::Type::Decoy:
+            return [[@"Decoy" localized] lowercaseString];
+        case Key::Type::Bbs:
+            return [[@"BBS" localized] lowercaseString];
+        case Key::Type::ChildKey:
+            return [[@"ChildKey" localized] lowercaseString];
         case Key::Type::Comission:
             return [[@"transaction_fee" localized] lowercaseString];
         case Key::Type::Coinbase:
@@ -1100,6 +1109,7 @@ NSString* WalletModel::GetUTXOTypeString(beam::wallet::Coin coin) {
             return [[@"regular" localized] lowercaseString];
         case Key::Type::Change:
             return [[@"utxo_type_change" localized] lowercaseString];
+            
         case Key::Type::Treasury: {
             return [[@"treasury" localized] lowercaseString];
         }
