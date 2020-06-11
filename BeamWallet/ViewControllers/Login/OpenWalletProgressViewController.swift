@@ -366,13 +366,9 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             }
       
             let percent = (Float64(done) / Float64(total)) * Float64(100)
-
-            print(percent)
             
-            if done == total   {
+            if done == total ||  percent >= 99.9  {
                 if !strongSelf.stopRestore {
-                    print("stop")
-
                     strongSelf.stopRestore = true
                     
                     let deadlineTime = DispatchTime.now() + .seconds(4)
