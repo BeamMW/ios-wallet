@@ -630,18 +630,6 @@ void WalletModel::onImportRecoveryProgress(uint64_t done, uint64_t total){
     NSLog(@"onImportRecoveryProgress");
 }
 
-void WalletModel::onShowKeyKeeperMessage(){
-    NSLog(@"onShowKeyKeeperMessage");
-}
-
-void WalletModel::onHideKeyKeeperMessage(){
-    NSLog(@"onHideKeyKeeperMessage");
-}
-
-void WalletModel::onShowKeyKeeperError(const std::string& error){
-    NSLog(@"onShowKeyKeeperError");
-}
-
 void WalletModel::onSwapParamsLoaded(const beam::ByteBuffer& token) {
     NSLog(@"onSwapParamsLoaded");
 }

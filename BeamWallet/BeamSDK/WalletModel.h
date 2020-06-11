@@ -65,9 +65,7 @@ private:
     void onAddressChecked(const std::string& addr, bool isValid) override;
     void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
     void onNoDeviceConnected() override;
-    void onShowKeyKeeperMessage() override;
-    void onHideKeyKeeperMessage() override;
-    void onShowKeyKeeperError(const std::string&) override;
+
     
     void onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&) override;
     void onNotificationsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Notification>&) override;
