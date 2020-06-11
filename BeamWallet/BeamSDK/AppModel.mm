@@ -1038,6 +1038,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (walletID.FromHex(address.string))
     {
         wallet->getAsync()->deleteAddress(walletID);
+        
+        NSString *notificationId = [self getNotificationByObject:address];
+        if (notificationId!=nil) {
+            [self deleteNotification:notificationId];
+        }
     }
 }
 
@@ -1871,6 +1876,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     
     wallet->getAsync()->deleteTx([self txIDfromString:ID]);
+    
+    NSString *notificationId = [self getNotificationByObject:ID];
+    if (notificationId!=nil) {
+        [self deleteNotification:notificationId];
+    }
 }
     
 -(void)cancelDeleteTransaction:(NSString*_Nonnull)ID {
@@ -2656,6 +2666,17 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
             break;
         }
     }
+}
+
+-(NSString*_Nullable)getNotificationByObject:(NSString*_Nonnull) objectId {
+    NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+    for (BMNotification *notification in notifications) {
+        if([notification.pId isEqualToString:objectId]) {
+            return notification.nId;
+        }
+    }
+    
+    return nil;
 }
 
 -(void)deleteNotification:(NSString*_Nonnull) notifId {
