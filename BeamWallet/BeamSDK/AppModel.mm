@@ -130,7 +130,7 @@ const bool isSecondCurrencyEnabled = true;
     _contacts = [[NSMutableArray alloc] init];
     _notifications = [[NSMutableArray alloc] init];
     _presendedNotifications = [[NSMutableDictionary alloc] init];
-    
+     _deletedNotifications = [[NSMutableDictionary alloc] init];
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
@@ -820,7 +820,24 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
+#pragma mark - Token
+
+-(BOOL)isToken:(NSString*_Nullable)address {
+    if (address==nil) {
+        return NO;
+    }
+    auto params = beam::wallet::ParseParameters(address.string);
+    return params && params->GetParameter<beam::wallet::TxType>(beam::wallet::TxParameterID::TransactionType);
+}
+
 #pragma mark - Addresses
+
+-(BOOL)isAddress:(NSString*_Nullable)address {
+    if (address==nil) {
+        return NO;
+    }
+    return beam::wallet::check_receiver_address(address.string);
+}
 
 -(void)refreshAddresses{
     if (wallet != nil)  {
@@ -861,17 +878,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
     
 -(BOOL)isValidAddress:(NSString*_Nullable)address {
-    if (address==nil)
-    {
+    if (address==nil) {
         return NO;
     }
-    else if (address.length < 60)
-    {
-        return NO;
-    }
-        
-    WalletID walletID(Zero);
-    return walletID.FromHex(address.string);
+
+    return [self isAddress:address] || [self isToken:address];
 }
 
 -(void)editBotAddress:(NSString*_Nonnull)address {
@@ -1371,6 +1382,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                     }
                     else{
                         if (address.isExpired) {
+                            [_deletedNotifications setObject:wAddress forKey:wAddress];
                             addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
                         }
                         else  {
@@ -1749,6 +1761,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     return archivePath;
 }
+
+
 
 #pragma mark - Transactions
 

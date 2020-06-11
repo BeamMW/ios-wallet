@@ -845,10 +845,11 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
             else if(notification.m_type == beam::wallet::Notification::Type::AddressStatusChanged && Settings.sharedManager.isNotificationAddressON) {
                 beam::wallet::WalletAddress address;
                 if (beam::wallet::fromByteBuffer(notification.m_content, address))  {
-                    if(address.isExpired()) {
+                    NSString *pid = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
+                    if(address.isExpired() && ![[AppModel sharedManager].deletedNotifications valueForKey:pid]) {
                         bmNotification = [BMNotification new];
                         bmNotification.nId = nId;
-                        bmNotification.pId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
+                        bmNotification.pId = pid;
                         bmNotification.type = ADDRESS;
                         bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
                         bmNotification.createdTime = notification.m_createTime;
@@ -856,6 +857,11 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                         if(!bmNotification.isSended) {
                             bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:bmNotification.pId ] != nil);
                         }
+                    }
+                    else {
+                        [[[AppModel sharedManager] deletedNotifications] removeObjectForKey:pid];
+                        [[AppModel sharedManager] deleteNotification:nId];
+                        return;
                     }
                     NSLog(@"notification address: %@", bmNotification.pId);
                 }
