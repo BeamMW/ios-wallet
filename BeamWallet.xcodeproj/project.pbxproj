@@ -318,6 +318,15 @@
 		9243C2EA22970EF10018B52D /* BMAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9243C2E622970EF10018B52D /* BMAddressCell.xib */; };
 		9243C2EB22970EF10018B52D /* BMAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9243C2E622970EF10018B52D /* BMAddressCell.xib */; };
 		9243C2EC22970EF10018B52D /* BMAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9243C2E622970EF10018B52D /* BMAddressCell.xib */; };
+		92458DAA249245D90013E8E3 /* UnlinkConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DA8249245D90013E8E3 /* UnlinkConfirmViewController.swift */; };
+		92458DAB249245D90013E8E3 /* UnlinkConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DA8249245D90013E8E3 /* UnlinkConfirmViewController.swift */; };
+		92458DAC249245D90013E8E3 /* UnlinkConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DA8249245D90013E8E3 /* UnlinkConfirmViewController.swift */; };
+		92458DAD249245D90013E8E3 /* UnlinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DA9249245D90013E8E3 /* UnlinkViewController.swift */; };
+		92458DAE249245D90013E8E3 /* UnlinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DA9249245D90013E8E3 /* UnlinkViewController.swift */; };
+		92458DAF249245D90013E8E3 /* UnlinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DA9249245D90013E8E3 /* UnlinkViewController.swift */; };
+		92458DB1249245FD0013E8E3 /* UnlinkTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DB0249245FD0013E8E3 /* UnlinkTransactionViewModel.swift */; };
+		92458DB2249245FD0013E8E3 /* UnlinkTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DB0249245FD0013E8E3 /* UnlinkTransactionViewModel.swift */; };
+		92458DB3249245FD0013E8E3 /* UnlinkTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92458DB0249245FD0013E8E3 /* UnlinkTransactionViewModel.swift */; };
 		9246F75A227C48830091FB0B /* BMEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9246F758227C48830091FB0B /* BMEmptyCell.swift */; };
 		9246F75B227C48830091FB0B /* BMEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9246F758227C48830091FB0B /* BMEmptyCell.swift */; };
 		9246F75C227C48830091FB0B /* BMEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9246F758227C48830091FB0B /* BMEmptyCell.swift */; };
@@ -1277,6 +1286,9 @@
 		92435258222E73FC00A0EF37 /* UTXOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOViewController.swift; sourceTree = "<group>"; };
 		9243C2E522970EF10018B52D /* BMAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMAddressCell.swift; sourceTree = "<group>"; };
 		9243C2E622970EF10018B52D /* BMAddressCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMAddressCell.xib; sourceTree = "<group>"; };
+		92458DA8249245D90013E8E3 /* UnlinkConfirmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlinkConfirmViewController.swift; sourceTree = "<group>"; };
+		92458DA9249245D90013E8E3 /* UnlinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlinkViewController.swift; sourceTree = "<group>"; };
+		92458DB0249245FD0013E8E3 /* UnlinkTransactionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlinkTransactionViewModel.swift; sourceTree = "<group>"; };
 		9246F758227C48830091FB0B /* BMEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMEmptyCell.swift; sourceTree = "<group>"; };
 		9246F759227C48830091FB0B /* BMEmptyCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMEmptyCell.xib; sourceTree = "<group>"; };
 		9246F760227C6A290091FB0B /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -2009,6 +2021,7 @@
 				92AB832B223BC5B6000ADE86 /* Send */,
 				92AB832A223BC5A7000ADE86 /* Receive */,
 				92AB8329223BC59E000ADE86 /* Transaction */,
+				92458DA7249245D90013E8E3 /* Unlink */,
 				9243524E222E73DC00A0EF37 /* WalletViewController.swift */,
 			);
 			path = Wallet;
@@ -2035,6 +2048,15 @@
 				9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */,
 			);
 			path = UTXO;
+			sourceTree = "<group>";
+		};
+		92458DA7249245D90013E8E3 /* Unlink */ = {
+			isa = PBXGroup;
+			children = (
+				92458DA8249245D90013E8E3 /* UnlinkConfirmViewController.swift */,
+				92458DA9249245D90013E8E3 /* UnlinkViewController.swift */,
+			);
+			path = Unlink;
 			sourceTree = "<group>";
 		};
 		92480DAC229547180084512A /* Cells */ = {
@@ -2376,6 +2398,7 @@
 				92B7E4C822AEC071001708E4 /* TransactionViewModel.swift */,
 				92B7E4D022AEE7FB001708E4 /* DetailTransactionViewModel.swift */,
 				92B7E4EA22B0001B001708E4 /* SendTransactionViewModel.swift */,
+				92458DB0249245FD0013E8E3 /* UnlinkTransactionViewModel.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -3298,6 +3321,7 @@
 				92554D552289A77900FE6041 /* Image.swift in Sources */,
 				92D6DB5822DF63B40086DFF7 /* UIBezierPath+Circle.swift in Sources */,
 				92F68C7E2244E77500197D4D /* UTXODetailCell.swift in Sources */,
+				92458DAD249245D90013E8E3 /* UnlinkViewController.swift in Sources */,
 				927D2F8A22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
 				921027A924606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E422B24F58001391FB /* RestoreManager.swift in Sources */,
@@ -3370,6 +3394,7 @@
 				92F6B79922A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D522AF0067001708E4 /* UTXOViewModel.swift in Sources */,
 				9210281E24606E42001A7130 /* Tween.swift in Sources */,
+				92458DB1249245FD0013E8E3 /* UnlinkTransactionViewModel.swift in Sources */,
 				92D577B622F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				92FC6118222978C400AEABC1 /* PasswordManager.swift in Sources */,
 				92FC612322299A4E00AEABC1 /* Device.swift in Sources */,
@@ -3397,6 +3422,7 @@
 				927EDE4322A6C5DB005D5CEA /* SaveContactViewController.swift in Sources */,
 				927EDE2422A66A90005D5CEA /* BMSearchAddressCell.swift in Sources */,
 				9227AEDF2282EADA00FB221F /* TextView.swift in Sources */,
+				92458DAA249245D90013E8E3 /* UnlinkConfirmViewController.swift in Sources */,
 				92592CA82245309B00050A13 /* NotificationManager.swift in Sources */,
 				9261C25C228BF55800D666E0 /* AddressViewController.swift in Sources */,
 				92F68C8D2245070200197D4D /* UTXOTransactionCell.swift in Sources */,
@@ -3554,6 +3580,7 @@
 				92554D562289A77900FE6041 /* Image.swift in Sources */,
 				92D6DB5922DF63B40086DFF7 /* UIBezierPath+Circle.swift in Sources */,
 				92F68C7F2244E77500197D4D /* UTXODetailCell.swift in Sources */,
+				92458DAE249245D90013E8E3 /* UnlinkViewController.swift in Sources */,
 				927D2F8B22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
 				921027AA24606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E522B24F58001391FB /* RestoreManager.swift in Sources */,
@@ -3626,6 +3653,7 @@
 				92F6B79A22A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D622AF0067001708E4 /* UTXOViewModel.swift in Sources */,
 				9210281F24606E42001A7130 /* Tween.swift in Sources */,
+				92458DB2249245FD0013E8E3 /* UnlinkTransactionViewModel.swift in Sources */,
 				92D577B722F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				9288DD4E223A55410020C501 /* PasswordManager.swift in Sources */,
 				9288DD4F223A55410020C501 /* Device.swift in Sources */,
@@ -3653,6 +3681,7 @@
 				927EDE4422A6C5DB005D5CEA /* SaveContactViewController.swift in Sources */,
 				927EDE2522A66A90005D5CEA /* BMSearchAddressCell.swift in Sources */,
 				9227AEE02282EADA00FB221F /* TextView.swift in Sources */,
+				92458DAB249245D90013E8E3 /* UnlinkConfirmViewController.swift in Sources */,
 				92592CA92245309B00050A13 /* NotificationManager.swift in Sources */,
 				9261C25D228BF55800D666E0 /* AddressViewController.swift in Sources */,
 				92F68C8E2245070200197D4D /* UTXOTransactionCell.swift in Sources */,
@@ -3810,6 +3839,7 @@
 				92554D572289A77900FE6041 /* Image.swift in Sources */,
 				92D6DB5A22DF63B40086DFF7 /* UIBezierPath+Circle.swift in Sources */,
 				92E2EAEA226F21C700367928 /* UTXODetailCell.swift in Sources */,
+				92458DAF249245D90013E8E3 /* UnlinkViewController.swift in Sources */,
 				927D2F8C22CF6DDA00D4B439 /* CrowdinManager.swift in Sources */,
 				921027AB24606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E622B24F58001391FB /* RestoreManager.swift in Sources */,
@@ -3882,6 +3912,7 @@
 				92F6B79B22A588280055C3C3 /* BMSlider.swift in Sources */,
 				92B7E4D722AF0067001708E4 /* UTXOViewModel.swift in Sources */,
 				9210282024606E42001A7130 /* Tween.swift in Sources */,
+				92458DB3249245FD0013E8E3 /* UnlinkTransactionViewModel.swift in Sources */,
 				92D577B822F038EE003B50B3 /* TransactionDetailCell.swift in Sources */,
 				92E2EB03226F21C700367928 /* PasswordManager.swift in Sources */,
 				92E2EB05226F21C700367928 /* Device.swift in Sources */,
@@ -3909,6 +3940,7 @@
 				927EDE4522A6C5DB005D5CEA /* SaveContactViewController.swift in Sources */,
 				927EDE2622A66A90005D5CEA /* BMSearchAddressCell.swift in Sources */,
 				9227AEE12282EADA00FB221F /* TextView.swift in Sources */,
+				92458DAC249245D90013E8E3 /* UnlinkConfirmViewController.swift in Sources */,
 				92E2EB0B226F21C700367928 /* NotificationManager.swift in Sources */,
 				9261C25E228BF55800D666E0 /* AddressViewController.swift in Sources */,
 				92E2EB0C226F21C700367928 /* UTXOTransactionCell.swift in Sources */,

@@ -383,6 +383,10 @@ extension WalletViewController: WalletStatusCellDelegate {
 }
 
 extension WalletViewController: WalletAvailableCellDelegate {
+    func onDidSelectUnlink() {
+        pushViewController(vc: UnlinkViewController())
+    }
+    
     func onExpandAvailable() {
         if !Settings.sharedManager().isHideAmounts {
             expandAvailable = !expandAvailable
