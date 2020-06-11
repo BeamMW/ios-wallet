@@ -706,12 +706,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
             
-     //   auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(true);
-      //  auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(true);
+        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(true);
+        auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(true);
         
         auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-      //  additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
-     //   additionalTxCreators->emplace(TxType::PullTransaction, pullTxCreator);
+        additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
+        additionalTxCreators->emplace(TxType::PullTransaction, pullTxCreator);
                 
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
