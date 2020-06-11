@@ -2788,7 +2788,6 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [_presendedNotifications removeAllObjects];
 }
 
-<<<<<<< .merge_file_rbTnOp
 #pragma mark - Unlink
 
 -(void)sendUnlink:(double)amount fee:(double)fee {

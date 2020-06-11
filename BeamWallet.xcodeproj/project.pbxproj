@@ -4592,6 +4592,7 @@
 					"\"$(SRCROOT)/../include/wallet\"",
 					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
 					"\"$(SRCROOT)/../beam-master/keykeeper\"",
+					"\"$(SRCROOT)/../include/wallet/transactions/lelantus\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4671,6 +4672,7 @@
 					"\"$(SRCROOT)/../include/wallet\"",
 					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
 					"\"$(SRCROOT)/../beam-master/keykeeper\"",
+					"\"$(SRCROOT)/../include/wallet/transactions/lelantus\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
