@@ -882,7 +882,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return NO;
     }
 
-    return [self isAddress:address] || [self isToken:address];
+    //|| [self isToken:address]
+    return [self isAddress:address] ;
 }
 
 -(void)editBotAddress:(NSString*_Nonnull)address {
