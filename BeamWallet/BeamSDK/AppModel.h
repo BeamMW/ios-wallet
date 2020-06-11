@@ -101,6 +101,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) NSMutableArray<BMCurrency*>*_Nonnull currencies;
 @property (nonatomic,strong) NSMutableArray<BMNotification*>*_Nonnull notifications;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull presendedNotifications;
+@property (nonatomic,strong) NSMutableDictionary*_Nonnull deletedNotifications;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -145,7 +146,11 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)refreshAllInfo;
 -(void)getWalletNotifications;
 
+//token
+-(BOOL)isToken:(NSString*_Nullable)address;
+
 // addresses
+-(BOOL)isAddress:(NSString*_Nullable)address;
 -(NSString*_Nonnull)getTransactionComment:(NSString*_Nonnull)address;
 -(void)setTransactionComment:(NSString*_Nonnull)address comment:(NSString*_Nonnull)comment;
 -(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block;
@@ -208,6 +213,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)hasActiveTransactions;
 -(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID;
 -(void)calculateChange:(double)amount fee:(double)fee;
+-(void)setTransactionStatusToFailed:(NSString*_Nonnull)ID;
 
 // utxo
 -(void)getUTXO;
@@ -260,6 +266,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)deleteNotification:(NSString*_Nonnull) notifId;
 -(void)deleteAllNotifications;
 -(BMNotification*_Nullable)getLastVersionNotification;
+-(void)readAllNotifications;
 
 //unlink
 -(void)sendUnlink:(double)amount fee:(double)fee;

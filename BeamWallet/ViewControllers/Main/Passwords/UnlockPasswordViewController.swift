@@ -43,6 +43,7 @@ class UnlockPasswordViewController: BMInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        inputField.isSecureTextEntry = true
         inputField.placeholder = Localizable.shared.strings.enter_password
         inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         inputField.delegate = self

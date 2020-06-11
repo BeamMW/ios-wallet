@@ -36,7 +36,8 @@ class OpenWalletProgressViewController: BaseViewController {
     private var phrase:String?
     private var isPresented = false
     private var start = Date.timeIntervalSinceReferenceDate;
-
+    private var stopRestore = false
+    
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
@@ -74,7 +75,7 @@ class OpenWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
             restotingInfoLabel.isHidden = false
-            progressValueLabel.text = Localizable.shared.strings.restored + " 0%"
+            progressValueLabel.text = Localizable.shared.strings.restored + " 0%."
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
         }
@@ -153,7 +154,7 @@ class OpenWalletProgressViewController: BaseViewController {
     }
 
     private func downloadFile() {
-        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(0)%"
+        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(0)%."
         self.progressTitleLabel.text = Localizable.shared.strings.downloading_blockchain
         self.restotingInfoLabel.isHidden = true
 
@@ -178,10 +179,10 @@ class OpenWalletProgressViewController: BaseViewController {
                     self.progressView.progress = percent
                     
                     if let remaining = time {
-                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%" + "\n" + Localizable.shared.strings.estimted_time + " " + remaining
+                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%." + " " + Localizable.shared.strings.estimted_time + ": " + remaining + "."
                     }
                     else{
-                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%"
+                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%."
                     }
                 }
             }
@@ -261,7 +262,7 @@ class OpenWalletProgressViewController: BaseViewController {
             strongSelf.restotingInfoLabel.text = Localizable.shared.strings.restor_wallet_warning + "\n\n" + Localizable.shared.strings.restor_wallet_info
             strongSelf.restotingInfoLabel.isHidden = false
             strongSelf.progressView.progress = 0
-            strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(0)%"
+            strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(0)%."
         }
         
         DispatchQueue.global(qos: .background).async {
@@ -357,28 +358,36 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 
                 if time > 0 {
                     let asDouble = Double(time)
-                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " " + "\(progress_100)%" + "\n" + Localizable.shared.strings.estimted_time + " " + asDouble.asTime(style: .abbreviated)
+                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " " + "\(progress_100)%." + " " + Localizable.shared.strings.estimted_time + ": " + asDouble.asTime(style: .abbreviated) + "."
                 }
                 else{
-                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(progress_100)%"
+                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(progress_100)%."
                 }
             }
       
-            
-            if done == total {
-                AppModel.sharedManager().isRestoreFlow = false
-                RestoreManager.shared.cancelRestore()
-                
-                if !AppModel.sharedManager().isInternetAvailable {
-                    strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+            let percent = (Float64(done) / Float64(total)) * Float64(100)
+
+            if done == total ||  percent >= 99.9  {
+                if !strongSelf.stopRestore {
+                    strongSelf.stopRestore = true
+                    
+                    let deadlineTime = DispatchTime.now() + .seconds(4)
+                    DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                        AppModel.sharedManager().isRestoreFlow = false
+                        RestoreManager.shared.cancelRestore()
                         
-                        AppModel.sharedManager().resetWallet(false)
-                        
-                        strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
+                        if !AppModel.sharedManager().isInternetAvailable {
+                            strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+                                
+                                AppModel.sharedManager().resetWallet(false)
+                                
+                                strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
+                            }
+                        }
+                        else{
+                            strongSelf.startCreateWallet()
+                        }
                     }
-                }
-                else{
-                    strongSelf.startCreateWallet()
                 }
             }
         }

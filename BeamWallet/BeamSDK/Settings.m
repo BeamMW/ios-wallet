@@ -54,6 +54,7 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 -(id)init {
     self = [super init];
     
+    
     _delegates = [NSHashTable weakObjectsHashTable];
 
     NSString *target =  [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleExecutable"];
@@ -67,6 +68,8 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     else{
         _target = Mainnet;
     }
+
+   // [self copyOldDatabaseToGroup];
 
     _isLocalNode = NO;
     
@@ -147,20 +150,22 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
-        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
-    }
-    else{
-        _language = [[NSLocale currentLocale] languageCode];
-        
-        if ([_language isEqualToString:@"zh"]) {
-            _language = @"zh-Hans";
-        }
-        
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
-            _language = @"en";
-        }
-    }
+    _language = @"en";
+
+//    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+//        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
+//    }
+//    else{
+//        _language = [[NSLocale currentLocale] languageCode];
+//
+//        if ([_language isEqualToString:@"zh"]) {
+//            _language = @"zh-Hans";
+//        }
+//
+//        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+//            _language = @"en";
+//        }
+//    }
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:currenctKey]) {
         _currency = [[[NSUserDefaults standardUserDefaults] objectForKey:currenctKey] intValue];
@@ -336,17 +341,19 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 }
 
 -(void)setLanguage:(NSString *_Nonnull)language {
-    _language = language;
-    
-    [[NSUserDefaults standardUserDefaults] setObject:_language forKey:languageKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    for(id<SettingsModelDelegate> delegate in [Settings sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onChangeLanguage)]) {
-            [delegate onChangeLanguage];
-        }
-    }
+    _language = @"en";
+
+//    _language = language;
+//
+//    [[NSUserDefaults standardUserDefaults] setObject:_language forKey:languageKey];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//    for(id<SettingsModelDelegate> delegate in [Settings sharedManager].delegates)
+//    {
+//        if ([delegate respondsToSelector:@selector(onChangeLanguage)]) {
+//            [delegate onChangeLanguage];
+//        }
+//    }
 }
 
 
@@ -371,7 +378,7 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
         case BMCurrencyBTC:
             return @"BTC";
         default:
-            return @"";
+            return [@"off" localized];
     }
 }
 
@@ -466,8 +473,10 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 }
 
 -(void)copyOldDatabaseToGroup {
- //   [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
-   // [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet_old" ofType:@"uu"] toPath:[self walletStoragePath] error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
+    NSError *error;
+    [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet" ofType:@"db"] toPath:[self walletStoragePath] error:&error];
+    NSLog(@"%@", error);
     
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths objectAtIndex:0];

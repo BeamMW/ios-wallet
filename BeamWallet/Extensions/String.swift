@@ -29,23 +29,33 @@ extension String {
         let lang = Settings.sharedManager().language
         
         let remotePath = CrowdinManager.localizationPath.appendingPathComponent(lang)
+
+        var result = ""
         
         if FileManager.default.fileExists(atPath: remotePath.path) {
             if let bundle = Bundle(path: remotePath.path) {
-                return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+                result =  NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
             }
         }
-
-        let path = Bundle.main.path(forResource: lang, ofType: "lproj")
-        if(path == nil )
-        {
+        else {
+            let path = Bundle.main.path(forResource: lang, ofType: "lproj")
+            if(path == nil )
+            {
+                let bundle =  Bundle(path: Bundle.main.path(forResource: "en", ofType: "lproj")!)!
+                result = NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+            }
+            else{
+                let bundle = Bundle(path: path!)
+                result = NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
+            }
+        }
+        
+        if result == self {
             let bundle =  Bundle(path: Bundle.main.path(forResource: "en", ofType: "lproj")!)!
-            return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+            result = NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
         }
-        else{
-            let bundle = Bundle(path: path!)
-            return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
-        }
+        
+        return result
     }
 }
 

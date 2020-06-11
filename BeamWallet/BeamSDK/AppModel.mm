@@ -137,7 +137,7 @@ const bool isSecondCurrencyEnabled = true;
     _contacts = [[NSMutableArray alloc] init];
     _notifications = [[NSMutableArray alloc] init];
     _presendedNotifications = [[NSMutableDictionary alloc] init];
-    
+     _deletedNotifications = [[NSMutableDictionary alloc] init];
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
@@ -185,9 +185,11 @@ const bool isSecondCurrencyEnabled = true;
     
     NSMutableArray *array = [NSMutableArray array];
     
-    for (const auto& item : peers)
-    {
-        [array addObject:[NSString stringWithUTF8String:item.c_str()]];
+    for (const auto& item : peers) {
+        NSString *address = [NSString stringWithUTF8String:item.c_str()];
+        if(![address containsString:@"shanghai"]) {
+            [array addObject:address];
+        }
     }
     
     srand([[NSDate date]  timeIntervalSince1970]);
@@ -713,7 +715,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         wallet->start(activeNotifications, false, isSecondCurrencyEnabled, additionalTxCreators);
-   
+        
         isRunning = YES;
         isStarted = YES;
     }
@@ -730,7 +732,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if(self.isInternetAvailable && isRunning == NO && ![[Settings sharedManager] isLocalNode])
         {
             isRunning = YES;
-            wallet->start(activeNotifications, isSecondCurrencyEnabled);
+            wallet->start(activeNotifications, false, isSecondCurrencyEnabled);
         }
     }
 }
@@ -784,12 +786,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(void)exportOwnerKey:(NSString*_Nonnull)password result:(ExportOwnerKey _Nonnull)block{
+    if(self->wallet == nil) {
+        [self start];
+    }
+    
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         auto pass = SecString(password.string);
-        
+
         const auto& ownerKey = self->wallet->exportOwnerKey(pass);
-        
+
         NSString *exportedKey = [NSString stringWithUTF8String:ownerKey.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             block(exportedKey);
@@ -846,7 +852,24 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
+#pragma mark - Token
+
+-(BOOL)isToken:(NSString*_Nullable)address {
+    if (address==nil) {
+        return NO;
+    }
+    auto params = beam::wallet::ParseParameters(address.string);
+    return params && params->GetParameter<beam::wallet::TxType>(beam::wallet::TxParameterID::TransactionType);
+}
+
 #pragma mark - Addresses
+
+-(BOOL)isAddress:(NSString*_Nullable)address {
+    if (address==nil) {
+        return NO;
+    }
+    return beam::wallet::check_receiver_address(address.string);
+}
 
 -(void)refreshAddresses{
     if (wallet != nil)  {
@@ -887,17 +910,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
     
 -(BOOL)isValidAddress:(NSString*_Nullable)address {
-    if (address==nil)
-    {
+    if (address==nil) {
         return NO;
     }
-    else if (address.length < 60)
-    {
-        return NO;
-    }
-        
-    WalletID walletID(Zero);
-    return walletID.FromHex(address.string);
+
+    return [self isAddress:address] || [self isToken:address];
 }
 
 -(void)editBotAddress:(NSString*_Nonnull)address {
@@ -1349,6 +1366,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         WalletID walletID(Zero);
         if (walletID.FromHex(address.walletId.string))
         {
+            [_presendedNotifications setValue:address.walletId forKey:address.walletId];
+
             std::vector<WalletAddress> addresses = wallet->ownAddresses;
             
             for (int i=0; i<addresses.size(); i++)
@@ -1357,32 +1376,40 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 
                 NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
                 
-                if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]])
+                if ([wAddress isEqualToString:address.walletId])
                 {
                     addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
+                    addresses[i].m_label = address.label.string;
+                    
+                    if(address.isNowExpired) {
+                        addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
+                    }
+                    else if(address.isNowActive) {
+                        if (address.isNowActiveDuration == 0){
+                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+                        }
+                        else{
+                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::OneDay);
+                        }
+                    }
+                    else{
+                        if (address.isExpired) {
+                            [_deletedNotifications setObject:wAddress forKey:wAddress];
+                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
+                        }
+                        else  {
+                            if (address.duration == 0) {
+                                addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+                            }
+                            else {
+                                addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::AsIs);
+                            }
+                        }
+                    }
+                    
                     wallet->getAsync()->saveAddress(addresses[i], true);
                     
                     break;
-                }
-            }
-            
-            if(address.isNowExpired) {
-                wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
-            }
-            else if(address.isNowActive) {
-                if (address.isNowActiveDuration == 0){
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Never);
-                }
-                else{
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::OneDay);
-                }
-            }
-            else{
-                if (address.isExpired) {
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, WalletAddress::ExpirationStatus::Expired);
-                }
-                else  {
-                    wallet->getAsync()->updateAddress(walletID, address.label.string, address.duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::AsIs);
                 }
             }
         }
@@ -1659,19 +1686,25 @@ bool OnProgress(uint64_t done, uint64_t total) {
         auto bAmount = round(amount * Rules::Coin);
         
         try{
-           __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
-            
+          // __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
+                        
+            __block auto address = walletDb->getAddress(walletID);
+
             wallet->getAsync()->sendMoney(fromID, walletID, comment.string, bAmount, fee);
             wallet->getAsync()->getWalletStatus();
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if ([[AppModel sharedManager] isMyAddress:to]) {
-                    [[AppModel sharedManager] setWalletComment:address.label toAddress:address.walletId];
-                }
-                else if (address != nil){
-                    [[AppModel sharedManager] setContactComment:address.label toAddress:address.walletId];
-                }
-            });
+            if(address) {
+                __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (address->isOwn()) {
+                        [[AppModel sharedManager] setWalletComment:name toAddress:to];
+                    }
+                    else {
+                        [[AppModel sharedManager] setContactComment:name toAddress:to];
+                    }
+                });
+            }
+        
         }
         catch(NSException *ex) {
             NSLog(@"%@",ex);
@@ -1820,6 +1853,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     return archivePath;
 }
+
+
 
 #pragma mark - Transactions
 
@@ -2034,6 +2069,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     
     return nil;
+}
+
+-(void)setTransactionStatusToFailed:(NSString*_Nonnull)ID  {
+    NSMutableArray *transactions = [NSMutableArray arrayWithArray:_transactions];
+    
+    int i = 0;
+    for (BMTransaction *tr in transactions) {
+        if ([tr.ID isEqualToString:ID]) {
+            _transactions[i].enumStatus = BMTransactionStatusFailed;
+            _transactions[i].status = @"failed";
+        }
+        i ++;
+    }
 }
 
 -(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID {
@@ -2591,8 +2639,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(NSString*_Nonnull)exchangeValue:(double)amount {
-    for (BMCurrency *currency in _currencies) {
-        if(currency.type == Settings.sharedManager.currency) {
+    if(Settings.sharedManager.currency == BMCurrencyOff) {
+        return @"";
+    }
+    if(amount == 0.0) {
+        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
+    }
+    for (BMCurrency *currency in [_currencies objectEnumerator].allObjects) {
+        if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
             currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@",currency.code];
@@ -2603,15 +2657,18 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         }
     }
 
-    return @"";
+    return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
 }
 
 -(NSString*_Nonnull)exchangeValueFee:(double)amount {
+    if(Settings.sharedManager.currency == BMCurrencyOff) {
+        return @"";
+    }
     if(amount == 0) {
         return @"";
     }
     for (BMCurrency *currency in _currencies) {
-        if(currency.type == Settings.sharedManager.currency) {
+        if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
             
@@ -2630,7 +2687,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         }
     }
     
-    return @"";
+    return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
 }
 
 #pragma mark - Notifications
@@ -2731,6 +2788,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [_presendedNotifications removeAllObjects];
 }
 
+<<<<<<< .merge_file_rbTnOp
 #pragma mark - Unlink
 
 -(void)sendUnlink:(double)amount fee:(double)fee {
@@ -2776,6 +2834,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     wallet->getAsync()->startTransaction(std::move(txParams));
 }
 
+-(void)readAllNotifications {
+    NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+    for (BMNotification *notification in notifications) {
+        if(![notification isRead]) {
+            [self readNotification: notification.nId];
+        }
+    }
+}
 
 @end
 

@@ -60,6 +60,7 @@ class BMDoubleAuthViewController: BMInputViewController {
         }
         
         inputField.placeholder = Localizable.shared.strings.enter_password
+        inputField.isSecureTextEntry = true
         inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         inputField.delegate = self
         

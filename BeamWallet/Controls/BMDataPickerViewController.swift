@@ -255,13 +255,16 @@ class BMDataPickerViewController: BaseTableViewController {
             currencies.sort {
                 $0.type < $1.type
             }
+            
+            values.append(BMPickerData(title: Localizable.shared.strings.off, detail: nil, titleColor: UIColor.white, arrowType: (BMCurrencyOff == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(3)))
+
             for currency in currencies {
                 values.append(BMPickerData(title: currency.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (currency.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: currency.type))
-            }
+            }            
         case .notifications:
             values.append(BMPickerData(title: Localizable.shared.strings.wallet_updates, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationWalletON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.wallet_updates, multiplie: false, isSwitch: true))
             values.append(BMPickerData(title: Localizable.shared.strings.news, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationNewsON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.news, multiplie: false, isSwitch: true))
-            values.append(BMPickerData(title: Localizable.shared.strings.address_expiration, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationAddressON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.address_expiration, multiplie: false, isSwitch: true))
+          //  values.append(BMPickerData(title: Localizable.shared.strings.address_expiration, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationAddressON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.address_expiration, multiplie: false, isSwitch: true))
             values.append(BMPickerData(title: Localizable.shared.strings.transaction_status, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationTransactionON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.transaction_status, multiplie: false, isSwitch: true))
         
         default:

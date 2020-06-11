@@ -80,23 +80,29 @@ class NotificationManager : NSObject {
     //MARK: - Send
     
     public func scheduleNotification(notification: BMNotification){
+        print("-------- scheduleNotification ---------")
+
         if(notification.type == ADDRESS) {            
             scheduleNotification(title: Localizable.shared.strings.address_expired_notif, body: "", id: notification.pId)
         }
         else if (notification.type == TRANSACTION) {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
+                print("--------  ---------")
+                print(transaction.isCancelled())
+                print("--------  ---------")
+
                 var title: String = ""
                 var detail: String = ""
                 
                 if transaction.isIncome {
-                    if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
-                        title = Localizable.shared.strings.new_transaction
-                        detail = Localizable.shared.strings.click_to_receive
-                    }
-                    else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
+                    if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         title = Localizable.shared.strings.buy_transaction_failed_title
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
                         detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: true).string
+                    }
+                    else if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
+                        title = Localizable.shared.strings.new_transaction
+                        detail = Localizable.shared.strings.click_to_receive
                     }
                     else {
                         title = Localizable.shared.strings.transaction_received
@@ -118,6 +124,9 @@ class NotificationManager : NSObject {
                 }
                 
                 scheduleNotification(title: title, body: detail, id: NotificationManager.versionID)
+            }
+            else {
+                print("-------- not found ---------")
             }
         }
         else if (notification.type == VERSION) {
@@ -141,6 +150,9 @@ class NotificationManager : NSObject {
                 notif.pId = transaction.id
                 scheduleNotification(notification: notif)
             }
+        }
+        else {
+            print("cancel scheduleNotification")
         }
     }
         

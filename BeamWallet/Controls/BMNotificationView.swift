@@ -74,7 +74,7 @@ class BMNotificationView: UIView {
                     let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
                     detail = Localizable.shared.strings.transaction_receiving_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
                 }
-                else if transaction.isFailed() || transaction.isExpired() {
+                else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                     icon = UIImage.init(named: "iconNotifictionsFailedReceived")
                     title = Localizable.shared.strings.buy_transaction_failed_title
                     let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
@@ -88,7 +88,7 @@ class BMNotificationView: UIView {
                 }
             }
             else {
-                if transaction.isFailed() || transaction.isExpired() {
+                if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                     icon = UIImage.init(named: "iconNotifictionsFailed")
                     title = Localizable.shared.strings.buy_transaction_failed_title
                     let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)

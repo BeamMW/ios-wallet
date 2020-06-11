@@ -261,6 +261,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     cell?.textLabel?.textColor = UIColor.main.blueyGrey
                     cell?.textLabel?.font = RegularFont(size: 14)
                     
+                    cell?.backgroundColor = UIColor.clear
                     cell?.contentView.backgroundColor = UIColor.main.marineThree
                     cell?.selectionStyle = .none
                     cell?.separatorInset = UIEdgeInsets.zero

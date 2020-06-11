@@ -85,7 +85,8 @@ class RestoreOptionsViewController: BaseViewController {
             }) { _ in
                 Settings.sharedManager().connectToRandomNode = true
                 Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
-                
+                AppModel.sharedManager().changeNodeAddress()
+
                 let vc = OpenWalletProgressViewController(password: self.password, phrase: self.phrase)
                 self.pushViewController(vc: vc)
             }
@@ -108,15 +109,18 @@ class RestoreOptionsViewController: BaseViewController {
                     }
                 }
                 else {
+                    _ = KeychainManager.addPassword(password: self.password)
                     SVProgressHUD.show()
-                    AppModel.sharedManager().exportOwnerKey(self.password) { [weak self] key in
-                        SVProgressHUD.dismiss()
-                        
-                        guard let strongSelf = self else { return }
-                        
-                        let vc = OwnerKeyViewController()
-                        vc.ownerKey = key
-                        strongSelf.pushViewController(vc: vc)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        AppModel.sharedManager().exportOwnerKey(self.password) { [weak self] key in
+                            SVProgressHUD.dismiss()
+                            
+                            guard let strongSelf = self else { return }
+                            
+                            let vc = OwnerKeyViewController()
+                            vc.ownerKey = key
+                            strongSelf.pushViewController(vc: vc)
+                        }
                     }
                 }
             }

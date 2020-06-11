@@ -325,6 +325,9 @@ extension WalletAvailableCell: Configurable {
                 }
             }
 
+            secondAvailableLabel.isHidden = false
+            secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(status.realAmount)
+            
             if status.realMaturing == 0 {
                 secondMaturingLabel.isHidden = true
             }

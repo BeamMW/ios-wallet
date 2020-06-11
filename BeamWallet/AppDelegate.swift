@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         
-        UIApplication.shared.isIdleTimerDisabled = false
+        UIApplication.shared.isIdleTimerDisabled = true
         
 //        FirebaseConfiguration.shared.setLoggerLevel(.min)
 //        FirebaseApp.configure()
@@ -85,10 +85,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
-        Fabric.with([Crashlytics.self()])
         
         if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { _ in
+               
+                Fabric.with([Crashlytics.self()])
                 
                 Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
                 
@@ -134,9 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AppModel.sharedManager().connectionTimer = nil
         }
         
-        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
-            self.registerBackgroundTask()
-        }
+        self.registerBackgroundTask()
         
         if let transactions = AppModel.sharedManager().preparedTransactions as? [BMPreparedTransaction] {
             if transactions.count > 0, AppModel.sharedManager().isLoggedin {
@@ -164,9 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        if AppModel.sharedManager().isRestoreFlow || AppModel.sharedManager().isUpdating {
-            self.endBackgroundTask()
-        }
+        self.endBackgroundTask()
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
