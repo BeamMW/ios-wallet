@@ -32,7 +32,8 @@ class FeeCell: BaseCell {
     @IBOutlet weak private var maxSecondLabel: UILabel!
 
     private let stepValue:Float = 10
-    
+    private var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
+
     weak var delegate: BMCellProtocol?
 
     override func awakeFromNib() {
@@ -78,6 +79,7 @@ class FeeCell: BaseCell {
         modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: Localizable.shared.strings.groth, with: "")) ?? ""
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
+        modalViewController.type = self.type
         modalViewController.completion = {
             (obj : String) -> Void in
             
@@ -137,6 +139,33 @@ class FeeCell: BaseCell {
 }
 
 extension FeeCell: Configurable {
+    
+    func setType(type: BMTransactionType) {
+        self.type = type
+        
+        switch type {
+        case 1:
+            valueY = 45
+            
+            topOffset.constant = 40
+            
+            titleLabel.text = Localizable.shared.strings.unlinking_fee.uppercased()
+            titleLabel.letterSpacing = 1.5
+            
+            feeSlider.setThumbImage(SliderDotGreen(), for: .normal)
+            feeSlider.setThumbImage(SliderDotGreen(), for: .highlighted)
+            feeSlider.minimumValue = Float(AppModel.sharedManager().getMinUnlinkFeeInGroth())
+            feeSlider.minimumTrackTintColor = UIColor.main.brightTeal
+            
+            minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
+            
+            valueLabel.textColor = UIColor.main.brightTeal
+            
+            break
+        default:
+            return
+        }
+    }
     
     func configure(with fee:Double) {
         if fee > Double(feeSlider.maximumValue) {
