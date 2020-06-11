@@ -148,6 +148,7 @@
                 <outlet property="minLabel" destination="koK-pm-Nfk" id="Y9c-dR-BFN"/>
                 <outlet property="minSecondLabel" destination="coB-DO-UM4" id="2GV-JM-oMl"/>
                 <outlet property="titleLabel" destination="FB0-DL-Bg2" id="t4Y-DZ-Fm0"/>
+                <outlet property="topOffset" destination="f68-VT-S50" id="aAZ-dz-FBk"/>
                 <outlet property="valueLabel" destination="OEr-mN-SqI" id="asy-Dp-ZEj"/>
             </connections>
             <point key="canvasLocation" x="97.101449275362327" y="114.50892857142857"/>

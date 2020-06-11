@@ -26,11 +26,13 @@ class FeeCell: BaseCell {
     @IBOutlet weak private var maxLabel: UILabel!
     @IBOutlet weak private var feeSlider: BMSlider!
     @IBOutlet weak private var mainView: UIView!
-    @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak private var titleLabel: UILabel!    
+    @IBOutlet weak private var topOffset: NSLayoutConstraint!
 
     @IBOutlet weak private var minSecondLabel: UILabel!
     @IBOutlet weak private var maxSecondLabel: UILabel!
 
+    private var valueY:CGFloat = 35
     private let stepValue:Float = 10
     private var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
 
@@ -71,7 +73,7 @@ class FeeCell: BaseCell {
         super.layoutSubviews()
 
         let point = setUISliderThumbValueWithLabel(slider: feeSlider)
-        valueLabel.frame = CGRect(x: point.x, y: 35, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: valueY, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
     }
     
     @IBAction private func showPicker(_ sender: UIButton) {
@@ -107,7 +109,7 @@ class FeeCell: BaseCell {
         valueLabel.sizeToFit()
         
         let point = setUISliderThumbValueWithLabel(slider: sender)
-        valueLabel.frame = CGRect(x: point.x, y: 35, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
+        valueLabel.frame = CGRect(x: point.x, y: valueY, width: valueLabel.frame.size.width, height: valueLabel.frame.size.height)
         
         if let touchEvent = event.allTouches?.first {
             switch touchEvent.phase {
