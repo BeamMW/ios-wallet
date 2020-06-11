@@ -706,8 +706,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
             
-        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(true);
-        auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(true);
+        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(false);
+        auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(false);
         
         auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
         additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
@@ -715,7 +715,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
-        wallet->start(activeNotifications, true, isSecondCurrencyEnabled, additionalTxCreators);
+        wallet->start(activeNotifications, false, isSecondCurrencyEnabled, additionalTxCreators);
         
         isRunning = YES;
         isStarted = YES;
@@ -1689,32 +1689,30 @@ bool OnProgress(uint64_t done, uint64_t total) {
     {
         return;
     }
-    
+
     auto messageString = comment.string;
     auto bAmount = round(amount * Rules::Coin);
-    
+
     auto p = beam::wallet::CreateSimpleTransactionParameters()
     .SetParameter(beam::wallet::TxParameterID::PeerID, *txParameters->GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID))
     .SetParameter(beam::wallet::TxParameterID::Amount, bAmount)
-    .SetParameter(beam::wallet::TxParameterID::Fee, fee)
+    .SetParameter(beam::wallet::TxParameterID::Fee, fee * 10)
     .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
-    
+
     if ([self isToken:to])
     {
         p.SetParameter(beam::wallet::TxParameterID::OriginalToken, to.string);
     }
-    
+
     auto identity = txParameters->GetParameter<beam::PeerID>(beam::wallet::TxParameterID::PeerWalletIdentity);
-  
+
     if (identity)
     {
         p.SetParameter(beam::wallet::TxParameterID::PeerWalletIdentity, *identity);
     }
-    
+
     wallet->getAsync()->startTransaction(std::move(p));
-    
-  //  _walletModel.getAsync()->startTransaction(std::move(p));
-    
+        
 //    WalletID walletID(Zero);
 //    if (walletID.FromHex(to.string))
 //    {
