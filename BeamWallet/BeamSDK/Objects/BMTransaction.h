@@ -69,6 +69,7 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,assign) BMTransactionType enumType;
 @property (nonatomic,strong) NSString *senderContactName;
 @property (nonatomic,strong) NSString *receiverContactName;
+@property (nonatomic,strong) NSString *identity;
 
 -(UIImage*)statusIcon;
     

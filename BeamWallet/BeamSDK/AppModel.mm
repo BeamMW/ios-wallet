@@ -50,6 +50,7 @@
 #include "wallet/transactions/lelantus/pull_transaction.h"
 #include "wallet/transactions/lelantus/push_transaction.h"
 #include "wallet/core/simple_transaction.h"
+#include "wallet/core/common_utils.h"
 
 #include "common.h"
 
@@ -80,7 +81,7 @@ const std::map<Notification::Type,bool> activeNotifications {
     { Notification::Type::BeamNews, true },
     { Notification::Type::TransactionCompleted, true },
     { Notification::Type::TransactionFailed, true },
-    { Notification::Type::AddressStatusChanged, true }
+    { Notification::Type::AddressStatusChanged, false }
 };
 
 const bool isSecondCurrencyEnabled = true;
@@ -706,7 +707,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
-            
         auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(false);
         auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(false);
         
@@ -862,6 +862,32 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     auto params = beam::wallet::ParseParameters(address.string);
     return params && params->GetParameter<beam::wallet::TxType>(beam::wallet::TxParameterID::TransactionType);
+}
+
+-(void)generateToken {
+    WalletAddress address = GenerateNewAddress(walletDb, "token2");
+    
+    TxParameters params;
+    params.SetParameter(TxParameterID::PeerID, address.m_walletID);
+    params.SetParameter(TxParameterID::PeerWalletIdentity, address.m_Identity);
+
+    AddVoucherParameter(params, walletDb, address.m_OwnID);
+    
+//    if (!params.GetParameter(TxParameterID::TransactionType))
+//    {
+        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
+  //  }
+    
+    LOG_INFO() << "token: " << to_string(params);
+}
+
+void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID) {
+    auto kdf = db->get_MasterKdf();
+    auto vouchers = GenerateVoucherList(kdf, ownID, 2);
+    if (!vouchers.empty()){
+        params.SetParameter(TxParameterID::ShieldedVoucherList, vouchers);
+        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
+    }
 }
 
 #pragma mark - Addresses
@@ -1695,19 +1721,29 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
     _txParameters = *txParameters;
 
-    if (auto fee = _txParameters.GetParameter<beam::Amount>(beam::wallet::TxParameterID::Fee); fee)
-    {
-        NSLog(@"%d",fee);
-    }
-    
     auto messageString = comment.string;
-    auto bAmount = round(amount * Rules::Coin);
-
+    uint64_t bAmount = round(amount * Rules::Coin);
+    uint64_t _fee = fee;
+    beam::wallet::WalletID peer = *_txParameters.GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID);
+      
+    NSString *add = [NSString stringWithUTF8String:to_string(peer).c_str()];
+    
     auto p = beam::wallet::CreateSimpleTransactionParameters()
-    .SetParameter(beam::wallet::TxParameterID::PeerID, *_txParameters.GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID))
     .SetParameter(beam::wallet::TxParameterID::Amount, bAmount)
-    .SetParameter(beam::wallet::TxParameterID::Fee, fee * 10)
+    .SetParameter(beam::wallet::TxParameterID::Fee, _fee)
     .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
+    
+    if (auto fee = p.GetParameter<beam::Amount>(beam::wallet::TxParameterID::Fee); fee)
+    {
+        NSLog(@"%llu",*fee);
+    }
+
+    WalletID fromID(Zero);
+    fromID.FromHex(from.string);
+    p.SetParameter(beam::wallet::TxParameterID::PeerID, peer);
+    p.SetParameter(beam::wallet::TxParameterID::MyID, fromID);
+//    p.SetParameter(beam::wallet::TxParameterID::MyID, peer);
+//    p.SetParameter(beam::wallet::TxParameterID::MyAddressID, peer);
 
     if ([self isToken:to])
     {

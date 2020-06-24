@@ -108,6 +108,7 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         else{
             transaction.failureReason = @"";
         }
+        transaction.identity = [NSString stringWithUTF8String:item.getIdentity(item.m_sender).c_str()];
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
         transaction.isSelf = item.m_selfTx;
         transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
@@ -371,7 +372,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
                 address.label = [@"default" localized];
             }
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            
+                        
             [addresses addObject:address];
         }
         

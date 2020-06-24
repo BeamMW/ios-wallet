@@ -38,7 +38,7 @@ class ReceiveViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
         
         title = Localizable.shared.strings.receive.uppercased()

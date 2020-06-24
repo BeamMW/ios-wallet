@@ -510,6 +510,10 @@
     [details addObject:fee];
     [details addObject:trid];
 
+    if(_identity.length > 0){
+        NSString *identity = [NSString stringWithFormat:@"%@\n%@",[[@"wallet_id" localized]uppercaseString], _identity];
+        [details addObject:identity];
+    }
     
     NSString *kernel = [NSString stringWithFormat:@"%@\n%@",[[@"kernel_id" localized]uppercaseString], _ID];
 

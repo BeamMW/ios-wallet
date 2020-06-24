@@ -56,8 +56,13 @@ class TransactionShareView: UIView {
     @IBOutlet private weak var kernelStackView: UIStackView!
     @IBOutlet private weak var transactionKernelTitleLabel: UILabel!
     @IBOutlet private weak var transactionKernelValueLabel: UILabel!
+    
+    @IBOutlet private weak var walletIdStackView: UIStackView!
+    @IBOutlet private weak var walletIdTitleLabel: UILabel!
+    @IBOutlet private weak var walletIdValueLabel: UILabel!
 
     @IBOutlet private weak var height: NSLayoutConstraint!
+    @IBOutlet private weak var kernelOffset: NSLayoutConstraint!
 
     @IBOutlet weak private var secondAmountLabel: UILabel!
 
@@ -165,7 +170,18 @@ class TransactionShareView: UIView {
         transactionIDTitleLabel.text = transactionIDTitleLabel.text?.uppercased()
         transactionFeeTitleLabel.text = transactionFeeTitleLabel.text?.uppercased()
         transactionKernelTitleLabel.text = transactionKernelTitleLabel.text?.uppercased()
-                                
+        
+        if !transaction.identity.isEmpty {
+            walletIdTitleLabel.text = walletIdTitleLabel.text?.uppercased()
+            walletIdValueLabel.text = transaction.identity
+        }
+        else {
+            kernelOffset.constant = 0
+            walletIdTitleLabel.isHidden = true
+            walletIdValueLabel.isHidden = true
+            walletIdStackView.isHidden = true
+        }
+
         switch Settings.sharedManager().target {
         case Testnet:
             bgView.image = BackgroundTestnet()
