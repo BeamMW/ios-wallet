@@ -39,6 +39,8 @@ class BMDoubleAuthViewController: BMInputViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
+    private var isAuth = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,6 +83,8 @@ class BMDoubleAuthViewController: BMInputViewController {
             titleLabel.text = Localizable.shared.strings.enter_your_password
         }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+
         hideKeyboardWhenTappedAround()
     }
     
@@ -92,16 +96,33 @@ class BMDoubleAuthViewController: BMInputViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    @objc private func didBecomeActive() {
+        if UIApplication.shared.applicationState == .active {
+            viewWillAppear(false)
+        }
+    }
+    
     @objc private func biometricAuthorization() {
         view.endEditing(true)
         
-        if BiometricAuthorization.shared.canAuthenticate() {
+        if BiometricAuthorization.shared.canAuthenticate() && !self.isAuth {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
+                self.isAuth = true
                 self.titleLabel.text = Localizable.shared.strings.enter_your_password
                 self.nextButton.isHidden = false
                 self.inputField.isHidden = false
                 self.touchIdButton.isHidden = true
-            }, failure: {}, retry: {}, reasonText: Localizable.shared.strings.touch_id_ownerkey_verefication)
+            }, failure: {
+                
+            }, retry: {
+                
+            }, reasonText: Localizable.shared.strings.touch_id_ownerkey_verefication)
         }
     }
     

@@ -174,7 +174,7 @@ extension FeeCell: Configurable {
             feeSlider.maximumValue = Float(fee)
             maxLabel.text = String(Int(fee)) + Localizable.shared.strings.groth
         }
-        maxSecondLabel.text = AppModel.sharedManager().exchangeValueFee(fee)
+        maxSecondLabel.text = AppModel.sharedManager().exchangeValueFee(Double(feeSlider.maximumValue))
 
         feeSlider.value = Float(fee)
         

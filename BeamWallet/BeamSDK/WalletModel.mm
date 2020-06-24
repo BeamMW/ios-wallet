@@ -695,12 +695,25 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
         NSLog(@"onExchangeRates %@ -> %@ = %llu", GetCurrencyString(rate.m_currency), GetCurrencyString(rate.m_unit), rate.m_rate);
     }
     
+    if(rates.size() == 0) {
+        [[[AppModel sharedManager] currencies] removeAllObjects];
+    }
+    
     [[AppModel sharedManager] saveCurrencies];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
             [delegate onExchangeRatesChange];
+        }
+    }
+    
+    if([AppModel sharedManager].isConnected) {
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                [delegate onNetwotkStatusChange:YES];
+            }
         }
     }
 }

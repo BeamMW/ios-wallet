@@ -369,6 +369,15 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
             [delegate onExchangeRatesChange];
         }
     }
+    
+    if([AppModel sharedManager].currencies.count == 0 && [AppModel sharedManager].isConnected){
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
+                [delegate onNetwotkStatusChange:YES];
+            }
+        }
+    }
 }
 
 -(NSString*_Nonnull)currencyName {

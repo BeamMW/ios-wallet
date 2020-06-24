@@ -256,11 +256,25 @@ class BMDataPickerViewController: BaseTableViewController {
                 $0.type < $1.type
             }
             
-            values.append(BMPickerData(title: Localizable.shared.strings.off, detail: nil, titleColor: UIColor.white, arrowType: (BMCurrencyOff == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(3)))
+            if currencies.count == 0 {
+                values.append(BMPickerData(title: Localizable.shared.strings.off, detail: nil, titleColor: UIColor.white, arrowType: (BMCurrencyOff == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(3)))
+                let usd = BMCurrency()
+                usd.type = BMCurrencyType(BMCurrencyUSD)
+                
+                let btc = BMCurrency()
+                btc.type = BMCurrencyType(BMCurrencyBTC)
+                
+                values.append(BMPickerData(title: usd.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (usd.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: usd.type))
+                values.append(BMPickerData(title: btc.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (btc.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: btc.type))
+            }
+            else {
+                values.append(BMPickerData(title: Localizable.shared.strings.off, detail: nil, titleColor: UIColor.white, arrowType: (BMCurrencyOff == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(3)))
 
-            for currency in currencies {
-                values.append(BMPickerData(title: currency.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (currency.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: currency.type))
-            }            
+                for currency in currencies {
+                    values.append(BMPickerData(title: currency.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (currency.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: currency.type))
+                }
+            }
+                               
         case .notifications:
             values.append(BMPickerData(title: Localizable.shared.strings.wallet_updates, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationWalletON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.wallet_updates, multiplie: false, isSwitch: true))
             values.append(BMPickerData(title: Localizable.shared.strings.news, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationNewsON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.news, multiplie: false, isSwitch: true))

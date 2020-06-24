@@ -100,12 +100,22 @@ extension BMNetworkStatusView: WalletModelDelegate {
             self.statusLabel.x = self.fromNib ? 20 : 35
             
              if connected {
-                self.statusView.backgroundColor = UIColor.main.green
-                self.statusView.glow()
-                
-                self.statusLabel.text = Localizable.shared.strings.online.lowercased()
-
-                self.statusLabel.textColor = UIColor.main.blueyGrey
+                if AppModel.sharedManager().currencies.count == 0 && Settings.sharedManager().currency != BMCurrencyOff  {
+                    self.statusView.backgroundColor = UIColor.main.orange
+                    self.statusView.glow()
+                    
+                    self.statusLabel.text = "\(Localizable.shared.strings.online.lowercased()) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
+                    self.statusLabel.textColor = UIColor.main.blueyGrey
+                }
+                else {
+                    self.statusView.backgroundColor = UIColor.main.green
+                    self.statusView.glow()
+                    
+                    self.statusLabel.text = Localizable.shared.strings.online.lowercased()
+                    
+                    self.statusLabel.textColor = UIColor.main.blueyGrey
+                }
+ 
             }
             else{
                 self.statusView.backgroundColor = UIColor.main.red
