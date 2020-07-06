@@ -26,7 +26,6 @@ class ReceiveViewController: BaseTableViewController {
     private var showAdvanced = false
     private var showEdit = false
 
-
     override var tableStyle: UITableView.Style {
         get {
             return .grouped
@@ -43,11 +42,11 @@ class ReceiveViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.receive.uppercased()
         
-        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMPickedAddressCell.self, BMDetailCell.self])
+        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self])
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
-        tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 10))
+        tableView.tableHeaderView?.backgroundColor = UIColor.clear
         tableView.sectionHeaderHeight = 0.0
         tableView.sectionFooterHeight = 0.0
         
@@ -157,9 +156,6 @@ extension ReceiveViewController : UITableViewDelegate {
         switch indexPath.section {
         case 1:
             if indexPath.row == 2 {
-                viewModel.onExpire()
-            }
-            else if indexPath.row == 3 {
                 viewModel.onCategory()
             }
         default:
@@ -176,7 +172,7 @@ extension ReceiveViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            return showEdit ? 4 : 1
+            return showEdit ? 3 : 1
         }
         else if section == 3 {
             return showAdvanced ? 3 : 1
@@ -188,24 +184,19 @@ extension ReceiveViewController : UITableViewDataSource {
        
         switch indexPath.section {
         case 0:
-            var title = viewModel.pickedAddress == nil ? Localizable.shared.strings.auto_address : Localizable.shared.strings.address.uppercased()
-            if viewModel.pickedAddress != nil {
-                if viewModel.pickedAddress?.walletId == viewModel.startedAddress?.walletId {
-                    title = Localizable.shared.strings.auto_address
-                }
-            }
             let cell = tableView
-                .dequeueReusableCell(withType: BMPickedAddressCell.self, for: indexPath)
-                .configured(with: (hideLine: true, address: viewModel.address, title: title))
-            cell.delegate = self
+                .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
             cell.contentView.backgroundColor = UIColor.main.marineThree
+            cell.configure(with: (oneTime: viewModel.expire == .oneTime, wallet: viewModel.receive == .wallet, token: viewModel.receive == .pool ? viewModel.address.walletId : (viewModel.address.token ?? String.empty())))
+            cell.delegate = self
             return cell
         case 1:
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showEdit, title: Localizable.shared.strings.edit_address.uppercased()))
+                    .configured(with: (expand: showEdit, title: Localizable.shared.strings.edit_token.uppercased()))
                 cell.delegate = self
+                cell.setColor(UIColor.white)
                 return cell
             }
             else if indexPath.row == 1 {
@@ -214,13 +205,6 @@ extension ReceiveViewController : UITableViewDataSource {
                     .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
-                return cell
-            }
-            else if indexPath.row == 2 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.expires.uppercased(), value: (viewModel.address.duration > 0 ? Localizable.shared.strings.hours_24 : Localizable.shared.strings.never), valueColor: UIColor.white))
-                cell.space = 20
                 return cell
             }
             else{
@@ -243,6 +227,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
                     .configured(with: (expand: showAdvanced, title: Localizable.shared.strings.advanced.uppercased()))
                 cell.delegate = self
+                cell.setColor(UIColor.white)
                 return cell
             }
             else if indexPath.row == 1  {
@@ -357,10 +342,10 @@ extension ReceiveViewController : BMCellProtocol {
                 showEdit = !showEdit
                 
                 if showEdit {
-                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1), IndexPath(row: 3, section: 1)], with: .fade)
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .fade)
                 }
                 else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1), IndexPath(row: 3, section: 1)], with: .fade)
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .fade)
                 }
             }
             else{
@@ -378,8 +363,6 @@ extension ReceiveViewController : BMCellProtocol {
     
     func onRightButton(_ sender: UITableViewCell) {
         self.view.endEditing(true)
-
-        viewModel.onChangeAddress()
     }
     
     func onClickQRCode() {
@@ -398,5 +381,33 @@ extension ReceiveViewController : BMCellProtocol {
         self.view.endEditing(true)
 
         viewModel.isShared = true
+    }
+}
+
+extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
+    @objc func onWallet() {
+        viewModel.receive = .wallet
+        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+    }
+    
+    @objc func onPool() {
+        viewModel.receive = .pool
+        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+    }
+    
+    @objc func onOneTime() {
+        viewModel.expire = .oneTime
+        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+    }
+    
+    @objc func onPermament() {
+        viewModel.expire = .parmanent
+        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+    }
+    
+    @objc func onShowToken() {
+        let token =  viewModel.receive == .pool ? viewModel.address.walletId : (viewModel.address.token ?? String.empty())
+        let vc = ShowTokenViewController(token: token, send: false)
+        self.pushViewController(vc: vc)
     }
 }

@@ -344,6 +344,6 @@ class SendTransactionViewModel: NSObject {
     }
     
     public func canUnlink() -> Bool {
-        return AppModel.sharedManager().walletStatus?.realShilded != 0
+        return AppModel.sharedManager().walletStatus?.realShielded != 0
     }
 }

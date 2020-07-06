@@ -206,7 +206,7 @@ class AddressViewModel: NSObject {
     }
     
     public func onQRCodeAddress(address: BMAddress) {
-        let modalViewController = QRViewController(address: address, amount: nil)
+        let modalViewController = QRViewController(address: address, amount: nil, isToken: false)
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
         if let top = UIApplication.getTopMostViewController() {

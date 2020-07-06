@@ -309,7 +309,7 @@ extension WalletAvailableCell: Configurable {
         if let status = options.status {
             balanceLabel.text = String.currency(value: status.realAmount)
             maturingLabel.text = String.currency(value: status.realMaturing)
-            unlinkLabel.text = String.currency(value: status.realShilded)
+            unlinkLabel.text = String.currency(value: status.realShielded)
 
             if status.realAmount == 0 {
                 secondAvailableLabel.isHidden = true
@@ -340,12 +340,12 @@ extension WalletAvailableCell: Configurable {
                 }
             }
             
-            if status.realShilded == 0 {
+            if status.realShielded == 0 {
                 secondUnlinkLabel.isHidden = true
             }
             else {
                 secondUnlinkLabel.isHidden = false
-                secondUnlinkLabel.text = AppModel.sharedManager().exchangeValue(status.realShilded)
+                secondUnlinkLabel.text = AppModel.sharedManager().exchangeValue(status.realShielded)
                 
                 if secondUnlinkLabel.text?.isEmpty == true {
                     secondUnlinkLabel.isHidden = true

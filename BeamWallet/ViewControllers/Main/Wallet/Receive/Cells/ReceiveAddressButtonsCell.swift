@@ -49,3 +49,5 @@ class ReceiveAddressButtonsCell: BaseCell {
         delegate?.onClickQRCode?()
     }
 }
+
+

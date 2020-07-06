@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,11 +27,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BXu-Vf-2v4" id="urV-Oi-ihO">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="179.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oNw-yZ-Dcf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="179.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOCAL ANNOTATION (won't be shared)" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6HZ-x2-k1Y">
                                 <rect key="frame" x="15" y="10" width="290" height="17"/>
@@ -49,7 +46,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="u94-LP-jAs">
-                                <rect key="frame" x="15" y="32" width="249" height="132"/>
+                                <rect key="frame" x="15" y="32" width="249" height="132.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bvg-Ua-T50">
                                         <rect key="frame" x="0.0" y="0.0" width="249" height="71"/>
@@ -93,7 +90,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="MXg-eU-YPc">
-                                        <rect key="frame" x="0.0" y="76" width="249" height="56"/>
+                                        <rect key="frame" x="0.0" y="76" width="249" height="56.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rJf-ey-lGU">
                                                 <rect key="frame" x="0.0" y="0.0" width="16" height="20"/>
@@ -152,9 +149,24 @@
                                     <action selector="onRightButtonWithSender:" destination="BXu-Vf-2v4" eventType="touchUpInside" id="Jj9-3b-OfY"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GpA-La-Isg">
+                                <rect key="frame" x="187" y="32" width="77" height="32"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                <state key="normal" title="show token">
+                                    <color key="titleColor" red="0.92156862750000001" green="0.34509803919999998" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="show_token"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onShowTokenWithSender:" destination="BXu-Vf-2v4" eventType="touchUpInside" id="BC2-XE-OMq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="GpA-La-Isg" firstAttribute="top" secondItem="6HZ-x2-k1Y" secondAttribute="bottom" constant="5" id="0jQ-2v-bi3"/>
+                            <constraint firstItem="eOS-wq-7zC" firstAttribute="leading" secondItem="GpA-La-Isg" secondAttribute="trailing" constant="5" id="Nse-M9-Q5Z"/>
                             <constraint firstItem="eOS-wq-7zC" firstAttribute="top" secondItem="6HZ-x2-k1Y" secondAttribute="bottom" constant="12" id="QMm-jd-0bd"/>
                             <constraint firstItem="eOS-wq-7zC" firstAttribute="leading" secondItem="u94-LP-jAs" secondAttribute="trailing" constant="5" id="Xph-WU-nvv"/>
                             <constraint firstItem="u94-LP-jAs" firstAttribute="top" secondItem="6HZ-x2-k1Y" secondAttribute="bottom" constant="5" id="hxl-XP-0sX"/>
@@ -183,6 +195,7 @@
                 <outlet property="errorLabel" destination="TWr-4F-fIw" id="6tY-Ia-Udk"/>
                 <outlet property="nameLabel" destination="6HZ-x2-k1Y" id="zJg-V7-ZKt"/>
                 <outlet property="rightButton" destination="eOS-wq-7zC" id="ctS-BN-Rf8"/>
+                <outlet property="showTokenButton" destination="GpA-La-Isg" id="QVi-go-s2w"/>
                 <outlet property="textField" destination="Wna-Zc-MZ6" id="cN6-yt-xy8"/>
             </connections>
             <point key="canvasLocation" x="37.681159420289859" y="59.598214285714285"/>

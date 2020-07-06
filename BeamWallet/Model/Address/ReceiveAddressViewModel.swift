@@ -20,6 +20,16 @@
 import Foundation
 
 class ReceiveAddressViewModel: NSObject {
+    enum ReceiveOptions: Int {
+        case wallet = 0
+        case pool = 1
+    }
+    
+    enum ExpireOptions: Int {
+        case oneTime = 0
+        case parmanent = 1
+    }
+    
     enum ReceiveAddressViewModelSaveState: Int {
         case none = 0
         case new = 1
@@ -33,9 +43,18 @@ class ReceiveAddressViewModel: NSObject {
     public var onShared: (() -> Void)?
     
     public var address: BMAddress!
-    public var startedAddress: BMAddress!
-    public var pickedAddress: BMAddress?
-    
+    public var expire = ExpireOptions.parmanent {
+        didSet {
+            if address != nil {
+                let hours = expire == .oneTime ? 24 : 0
+                address.duration = hours == 24 ? 86400 : 0
+                
+                AppModel.sharedManager().setExpires(Int32(hours), toAddress: address.walletId)
+            }
+        }
+    }
+    public var receive = ReceiveOptions.wallet
+
     public var isShared = false
     
     public var amount: String?
@@ -45,42 +64,14 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     public func createAddress() {
-        AppModel.sharedManager().generateNewWalletAddress { address, error in
-            if let result = address {
-                DispatchQueue.main.async {
-                    self.address = result
-                    self.startedAddress = BMAddress.fromAddress(result)
-                    self.onAddressCreated?(error)
-                }
-            }
-            else if error != nil {
-                DispatchQueue.main.async {
-                    self.onAddressCreated?(error)
-                }
-            }
-        }
+        address = AppModel.sharedManager().generateToken()
+        self.onAddressCreated?(nil)
     }
     
     public func revertChanges() {
         var deleted = false
         
-        if pickedAddress != nil {
-            if !isShared {
-                if pickedAddress?.walletId == startedAddress?.walletId {
-                    deleted = true
-                    AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
-                }
-                else if pickedAddress?.label != address?.label || pickedAddress?.categories != address?.categories {
-                    AppModel.sharedManager().edit(pickedAddress!)
-                }
-            }
-            
-            if pickedAddress?.walletId != startedAddress?.walletId {
-                deleted = true
-                AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
-            }
-        }
-        else if !isShared {
+        if !isShared {
             deleted = true
             AppModel.sharedManager().deleteAddress(address?.walletId)
         }
@@ -93,40 +84,12 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     public func isNeedAskToSave() -> ReceiveAddressViewModelSaveState {
-        if pickedAddress != nil {
-            if !isShared {
-                if pickedAddress?.walletId == startedAddress?.walletId {
-                    return .new
-                }
-                else if pickedAddress?.label != address?.label || pickedAddress?.categories != address?.categories {
-                    return .edit
-                }
-            }
-        }
-        else if !isShared {
+        if !isShared {
             return .new
         }
-        
         return .none
     }
     
-    public func onExpire() {
-        if let top = UIApplication.getTopMostViewController() {
-            let vc = BMDataPickerViewController(type: .address_expire)
-            vc.completion = { [weak self]
-                obj in
-                
-                let selected = obj as! Int32
-                
-                self?.address?.duration = selected == 24 ? 86400 : 0
-                
-                AppModel.sharedManager().setExpires(Int32(selected), toAddress: self?.address?.walletId ?? String.empty())
-                
-                self?.onDataChanged?()
-            }
-            top.pushViewController(vc: vc)
-        }
-    }
     
     public func onCategory() {
         if let top = UIApplication.getTopMostViewController() {
@@ -165,30 +128,6 @@ class ReceiveAddressViewModel: NSObject {
         }
     }
     
-    public func onChangeAddress() {
-        if let top = UIApplication.getTopMostViewController() {
-            let vc = ReceiveListViewController()
-            vc.completion = { [weak self]
-                obj in
-                
-                self?.isShared = false
-                
-                self?.pickedAddress = BMAddress()
-                self?.pickedAddress?.label = obj.label
-                self?.pickedAddress?.categories = obj.categories
-                self?.pickedAddress?.walletId = obj.walletId
-                
-                self?.transactionComment = String.empty()
-                
-                self?.address = obj
-                
-                self?.onDataChanged?()
-            }
-            vc.excepted = startedAddress
-            vc.currenltyPicked = address
-            top.pushViewController(vc: vc)
-        }
-    }
     
     public func onQRCode() {
         if let top = UIApplication.getTopMostViewController() {
@@ -198,7 +137,7 @@ class ReceiveAddressViewModel: NSObject {
             else {
                 isShared = true
                 
-                let modalViewController = QRViewController(address: address, amount: amount)
+                let modalViewController = QRViewController(address: address, amount: amount, isToken: receive == .wallet)
                 modalViewController.onShared = { [weak self] in
                     self?.onShared?()
                 }
@@ -211,7 +150,8 @@ class ReceiveAddressViewModel: NSObject {
     
     public func onShare() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = UIActivityViewController(activityItems: [address.walletId], applicationActivities: [])
+            let share = (receive == .wallet ? address.token : address.walletId) ?? String.empty()
+            let vc = UIActivityViewController(activityItems: [share], applicationActivities: [])
             vc.completionWithItemsHandler = { [weak self] (activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {
                     self?.isShared = true

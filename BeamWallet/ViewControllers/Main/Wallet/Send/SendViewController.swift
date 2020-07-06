@@ -330,7 +330,7 @@ extension SendViewController: UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: SendAllCell.self, for: indexPath)
             if viewModel.unlinkOnly {
-                cell.configure(with: (realAmount:  AppModel.sharedManager().walletStatus?.realShilded ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: true))
+                cell.configure(with: (realAmount:  AppModel.sharedManager().walletStatus?.realShielded ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: true))
             }
             else {
                 cell.configure(with: (realAmount:  AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: viewModel.sendAll, type: 0, onlyUnlink: false))

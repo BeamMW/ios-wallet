@@ -42,7 +42,8 @@ enum {
     BMTransactionTypePullTransaction = 8,
     BMTransactionTypeVoucherRequest = 9,
     BMTransactionTypeVoucherResponse = 10,
-    BMTransactionTypeALL = 11
+    BMTransactionTypeUnlink = 11,
+    BMTransactionTypeALL = 12
 };
 typedef UInt64 BMTransactionType;
 

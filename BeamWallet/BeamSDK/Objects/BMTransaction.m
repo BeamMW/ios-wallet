@@ -168,12 +168,12 @@
 }
 
 -(BOOL)isUnlink {
-    return self.enumType == BMTransactionTypePullTransaction || self.enumType == BMTransactionTypePushTransaction;
+    return self.enumType == BMTransactionTypeUnlink;
 }
 
 
 -(UIImage*)statusIcon {
-    if (self.enumType == BMTransactionTypePullTransaction || self.enumType == BMTransactionTypePushTransaction) {
+    if (self.enumType == BMTransactionTypeUnlink) {
         return [UIImage imageNamed:@"iconUnlinkedTransaction"];
     }
     else if (self.isCancelled)

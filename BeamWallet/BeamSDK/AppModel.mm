@@ -49,9 +49,9 @@
 
 #include "wallet/transactions/lelantus/pull_transaction.h"
 #include "wallet/transactions/lelantus/push_transaction.h"
+#include "wallet/transactions/lelantus/unlink_transaction.h"
 #include "wallet/core/simple_transaction.h"
 #include "wallet/core/common_utils.h"
-
 #include "common.h"
 
 #include <sys/sysctl.h>
@@ -89,17 +89,17 @@ const bool isSecondCurrencyEnabled = true;
 @implementation AppModel  {
     BOOL isStarted;
     BOOL isRunning;
-
+    
     NSString *localPassword;
     NSTimer *utxoTimer;
     
     Reachability *internetReachableFoo;
-
+    
     IWalletDB::Ptr walletDb;
     WalletModel::Ptr wallet;
     Reactor::Ptr walletReactor;
     beam::wallet::TxParameters _txParameters;
-
+    
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
     NSString *pathLog;
@@ -129,38 +129,31 @@ const bool isSecondCurrencyEnabled = true;
     currencyFormatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
     currencyFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     
-     walletReactor = Reactor::create();
-     io::Reactor::Scope s(*walletReactor); // do it in main thread
-
+    walletReactor = Reactor::create();
+    io::Reactor::Scope s(*walletReactor); // do it in main thread
+    
     _delegates = [NSPointerArray weakObjectsPointerArray];
-
+    
     _transactions = [[NSMutableArray alloc] init];
     
     _contacts = [[NSMutableArray alloc] init];
     _notifications = [[NSMutableArray alloc] init];
     _presendedNotifications = [[NSMutableDictionary alloc] init];
-     _deletedNotifications = [[NSMutableDictionary alloc] init];
+    _deletedNotifications = [[NSMutableDictionary alloc] init];
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
-    //TODO:: 
-  //  _currencies = [[NSMutableArray alloc] initWithArray:[self allCurrencies]];
-    _currencies = [[NSMutableArray alloc] init];
     
-    BMCurrency *c = [BMCurrency new];
-    c.code = @"USD";
-    c.type = BMCurrencyUSD;
-    c.value = 36000000;
-    [_currencies addObject:c];
+    _currencies = [[NSMutableArray alloc] initWithArray:[self allCurrencies]];
     
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
-        
+    
     [self checkInternetConnection];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self loadRules];
-
+    
     
     return self;
 }
@@ -177,7 +170,7 @@ const bool isSecondCurrencyEnabled = true;
         Rules::get().Shielded.m_ProofMin.M = 2;
         Rules::get().Shielded.MaxWindowBacklog = 150;
     }
-
+    
     Rules::get().UpdateChecksum();
     LOG_INFO() << "Rules signature: " << Rules::get().get_SignatureStr();
 }
@@ -197,7 +190,7 @@ const bool isSecondCurrencyEnabled = true;
     srand([[NSDate date]  timeIntervalSince1970]);
     
     int inx =rand()%[array count];
-
+    
     return [array objectAtIndex:inx];
 }
 
@@ -215,15 +208,7 @@ const bool isSecondCurrencyEnabled = true;
 #pragma mark - Status
 
 -(void)setWalletStatus:(BMWalletStatus *)walletStatus {
-    auto coins = walletDb->getShieldedCoins(Asset::s_BeamID);
     _walletStatus = walletStatus;
-    for (int i=0; i<coins.size(); i++) {
-        auto coin = coins[i];
-        if (coin.m_assetID == Asset::s_BeamID) {
-            _walletStatus.shilded = _walletStatus.shilded + coin.m_value;
-        }
-    }
-    _walletStatus.realShilded = double(int64_t(_walletStatus.shilded)) / Rules::Coin;
 }
 
 #pragma mark - Exchange
@@ -245,7 +230,7 @@ const bool isSecondCurrencyEnabled = true;
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:currenciesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-    
+
 
 #pragma mark - Inetrnet
 
@@ -261,7 +246,7 @@ const bool isSecondCurrencyEnabled = true;
 
 -(void)checkInternetConnection{
     __weak typeof(self) weakSelf = self;
-
+    
     internetReachableFoo = [Reachability reachabilityWithHostName:@"www.google.com"];
     
     internetReachableFoo.reachableBlock = ^(Reachability*reach)
@@ -275,20 +260,20 @@ const bool isSecondCurrencyEnabled = true;
             if (weakSelf.isLoggedin == YES)
             {
                 for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
-                     if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
-                         [delegate onNodeStartChanging];
-                     }
-                 }
+                    if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                        [delegate onNodeStartChanging];
+                    }
+                }
                 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if([AppModel sharedManager].connectionAfterOnlineTimer==nil){
-                           [AppModel sharedManager].connectionAfterOnlineTimer = [NSTimer scheduledTimerWithTimeInterval:3 target: [AppModel sharedManager] selector: @selector(onOnline) userInfo: nil repeats: NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if([AppModel sharedManager].connectionAfterOnlineTimer==nil){
+                        [AppModel sharedManager].connectionAfterOnlineTimer = [NSTimer scheduledTimerWithTimeInterval:3 target: [AppModel sharedManager] selector: @selector(onOnline) userInfo: nil repeats: NO];
+                    }
+                });
             }
-            });
+            else{
+                [[AppModel sharedManager] setIsInternetAvailable:YES];
             }
-           else{
-               [[AppModel sharedManager] setIsInternetAvailable:YES];
-           }
         }
     };
     
@@ -324,7 +309,7 @@ const bool isSecondCurrencyEnabled = true;
     }
     _isConnected = isConnected;
 }
-    
+
 -(void)setIsConnecting:(BOOL)isConnecting {
     _isConnecting = isConnecting;
     
@@ -436,7 +421,7 @@ const bool isSecondCurrencyEnabled = true;
     }
     
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
-
+    
     //already created. restore wallet?
     if (WalletDB::isInitialized(dbFilePath)) {
         return NO;
@@ -461,9 +446,9 @@ const bool isSecondCurrencyEnabled = true;
     
     beam::SecString seed;
     seed.assign(buf.data(), buf.size());
-
+    
     //create wallet db
-     walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash());
+    walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash());
     
     if (!walletDb) {
         return NO;
@@ -494,13 +479,13 @@ const bool isSecondCurrencyEnabled = true;
     }
     wallet = nil;
 }
-    
+
 -(void)restartWallet {
     LOG_INFO() << "restart wallet";
     
     isStarted = NO;
     isRunning = NO;
-
+    
     if (wallet!=nil){
         wallet.reset();
     }
@@ -511,18 +496,18 @@ const bool isSecondCurrencyEnabled = true;
     if (walletDb!=nil){
         walletDb.reset();
     }
-        
+    
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
     
-   BOOL opened = [self canOpenWallet:localPassword];
+    BOOL opened = [self canOpenWallet:localPassword];
     if (opened) {
         [self openWallet:localPassword];
     }
 }
 
- 
+
 -(void)resetWallet:(BOOL)removeDatabase {
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
@@ -530,7 +515,7 @@ const bool isSecondCurrencyEnabled = true;
     
     isStarted = NO;
     isRunning = NO;
-
+    
     if (wallet!=nil){
         wallet.reset();
     }
@@ -541,14 +526,14 @@ const bool isSecondCurrencyEnabled = true;
     if (walletDb!=nil){
         walletDb.reset();
     }
-        
+    
     walletReactor = nil;
     wallet = nil;
     walletDb = nil;
-
+    
     if(removeDatabase) {
         NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
-
+        
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
     }
@@ -559,21 +544,21 @@ const bool isSecondCurrencyEnabled = true;
 -(void)startChangeWallet {
     NSString *oldPath = [Settings sharedManager].walletStoragePath;
     NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
-       
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
         [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
     }
-             
+    
     NSError *error;
     [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:recoverPath error:&error];
-             
+    
     if (error == nil) {
         [self resetWallet:YES];
     }
     
     [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
     [[NSUserDefaults standardUserDefaults] setObject:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
-        
+    
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.isRestoreFlow = YES;
@@ -582,7 +567,7 @@ const bool isSecondCurrencyEnabled = true;
 -(void)stopChangeWallet {
     NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
     if ([[NSFileManager defaultManager] fileExistsAtPath:recoverPath]) {
-          [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
     }
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"randomNodeKeyRecover"];
@@ -591,14 +576,14 @@ const bool isSecondCurrencyEnabled = true;
 }
 
 -(void)startChangeNode {
-   if(self.isInternetAvailable)
-   {
-       for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
-              if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
-                  [delegate onNodeStartChanging];
-              }
-          }
-   }
+    if(self.isInternetAvailable)
+    {
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+            if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
+                [delegate onNodeStartChanging];
+            }
+        }
+    }
 }
 
 -(void)checkRecoveryWallet {
@@ -637,7 +622,7 @@ const bool isSecondCurrencyEnabled = true;
     
     return NO;
 }
-    
+
 -(BOOL)isWalletRunning {
     if(wallet == nil) {
         return NO;
@@ -656,7 +641,7 @@ const bool isSecondCurrencyEnabled = true;
         [self start];
     }
 }
-    
+
 -(void)restore:(NSString*_Nonnull)path{
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         string recoveryPath = path.string;
@@ -670,7 +655,7 @@ const bool isSecondCurrencyEnabled = true;
             NSLog(@"ImportRecovery failed %s",e.what());
             
             NSString *erorString = [NSString stringWithUTF8String:e.what()];
-
+            
             for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
             {
                 if ([delegate respondsToSelector:@selector(onWalletError:)]) {
@@ -709,11 +694,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(false);
         auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(false);
+        auto unlinkTxCreator = std::make_shared<lelantus::UnlinkFundsTransaction::Creator>(false);
         
         auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
         additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
         additionalTxCreators->emplace(TxType::PullTransaction, pullTxCreator);
-                
+        additionalTxCreators->emplace(TxType::UnlinkFunds, unlinkTxCreator);
+        
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         wallet->start(activeNotifications, false, isSecondCurrencyEnabled, additionalTxCreators);
@@ -743,14 +730,14 @@ bool OnProgress(uint64_t done, uint64_t total) {
     auto password = SecString(pass.string);
     
     passwordHash = password.hash();
-
+    
     wallet->getAsync()->changeWalletPassword(password);
 }
 
 -(void)changeNodeAddress {
     if (wallet != nil) {
         self.isNodeChanging = YES;
-
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
             self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
@@ -795,9 +782,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         auto pass = SecString(password.string);
-
+        
         const auto& ownerKey = self->wallet->exportOwnerKey(pass);
-
+        
         NSString *exportedKey = [NSString stringWithUTF8String:ownerKey.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             block(exportedKey);
@@ -864,21 +851,31 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return params && params->GetParameter<beam::wallet::TxType>(beam::wallet::TxParameterID::TransactionType);
 }
 
--(void)generateToken {
-    WalletAddress address = GenerateNewAddress(walletDb, "token2");
+-(BMAddress*_Nonnull)generateToken {
+    WalletAddress address = GenerateNewAddress(walletDb, "", WalletAddress::ExpirationStatus::Never);
     
     TxParameters params;
     params.SetParameter(TxParameterID::PeerID, address.m_walletID);
     params.SetParameter(TxParameterID::PeerWalletIdentity, address.m_Identity);
-
-    AddVoucherParameter(params, walletDb, address.m_OwnID);
-    
+    params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
+//    AddVoucherParameter(params, walletDb, address.m_OwnID);
 //    if (!params.GetParameter(TxParameterID::TransactionType))
 //    {
-        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
-  //  }
+//    }
     
-    LOG_INFO() << "token: " << to_string(params);
+    auto token = to_string(params);
+    LOG_INFO() << "token: " << token;
+
+    BMAddress *bmAddress = [[BMAddress alloc] init];
+    bmAddress.duration = address.m_duration;
+    bmAddress.ownerId = address.m_OwnID;
+    bmAddress.createTime = address.m_createTime;
+    bmAddress.categories = [NSMutableArray new];
+    bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
+    bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
+    bmAddress.token = [NSString stringWithUTF8String:token.c_str()];
+    
+    return bmAddress;
 }
 
 void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID) {
@@ -936,14 +933,13 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     
     return NO;
 }
-    
+
 -(BOOL)isValidAddress:(NSString*_Nullable)address {
     if (address==nil) {
         return NO;
     }
-
-    //|| [self isToken:address]
-    return [self isAddress:address] ;
+    
+    return [self isAddress:address] || [self isToken:address];
 }
 
 -(void)editBotAddress:(NSString*_Nonnull)address {
@@ -1030,41 +1026,41 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         }
     }
 }
-    
--(void)setContactComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
-        WalletID walletID(Zero);
-        if (walletID.FromHex(address.string))
-        {
-            std::vector<WalletAddress> addresses = wallet->contacts;
-            
-            for (int i=0; i<addresses.size(); i++)
-            {
-                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
 
-                if ([wAddress isEqualToString:address])
-                {
-                    WalletAddress _address;
-                    _address.m_label = comment.string;
-                    _address.m_category = addresses[i].m_category;
-                    _address.m_walletID = walletID;
-                    _address.m_createTime = NSDate.date.timeIntervalSince1970;
-                    
-                    try{
-                        wallet->getAsync()->saveAddress(_address, false);
-                    }
-                    catch (const std::exception& e) {
-                        NSLog(@"setExpires failed");
-                    }
-                    catch (...) {
-                        NSLog(@"setExpires failed");
-                    }
-                    
-                    break;
+-(void)setContactComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
+    WalletID walletID(Zero);
+    if (walletID.FromHex(address.string))
+    {
+        std::vector<WalletAddress> addresses = wallet->contacts;
+        
+        for (int i=0; i<addresses.size(); i++)
+        {
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            
+            if ([wAddress isEqualToString:address])
+            {
+                WalletAddress _address;
+                _address.m_label = comment.string;
+                _address.m_category = addresses[i].m_category;
+                _address.m_walletID = walletID;
+                _address.m_createTime = NSDate.date.timeIntervalSince1970;
+                
+                try{
+                    wallet->getAsync()->saveAddress(_address, false);
                 }
+                catch (const std::exception& e) {
+                    NSLog(@"setExpires failed");
+                }
+                catch (...) {
+                    NSLog(@"setExpires failed");
+                }
+                
+                break;
             }
         }
+    }
 }
-    
+
 -(void)setWalletComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
     WalletID walletID(Zero);
     if (walletID.FromHex(address.string))
@@ -1118,13 +1114,13 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
             }
             
             [_preparedDeleteAddresses removeObjectAtIndex:i];
-
+            
             break;
         }
     }
     wallet->getAsync()->getAddresses(true);
     wallet->getAsync()->getAddresses(false);
-
+    
     if (isNeedRequestTransactions) {
         wallet->getAsync()->getWalletStatus();
         wallet->getAsync()->getTransactions();
@@ -1138,7 +1134,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
                 NSMutableArray *transactions = [[AppModel sharedManager] getPreparedTransactionsFromAddress:_preparedDeleteAddresses[i]];
                 
                 [_preparedDeleteTransactions removeAllObjects];
-
+                
                 for (BMTransaction *tr in transactions) {
                     [[AppModel sharedManager] deleteTransaction:tr.ID];
                 }
@@ -1161,7 +1157,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     if (removeTransactions)
     {
         NSMutableArray <BMTransaction*>*transactions = [[AppModel sharedManager] getCompletedTransactionsFromAddress:address];
-
+        
         NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
         
         for (int i=0; i<transactions.count; i++) {
@@ -1187,7 +1183,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
             }
         }
     }
-
+    
     for (int i=0; i<_walletAddresses.count; i++) {
         if ([_walletAddresses[i].walletId isEqualToString:address.walletId]) {
             [_walletAddresses removeObjectAtIndex:i];
@@ -1231,10 +1227,10 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     
     return @"";
 }
-    
+
 -(void)setTransactionComment:(NSString*_Nonnull)address comment:(NSString*_Nonnull)comment {
     NSMutableArray *array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:transactionCommentsKey]];
-
+    
     if(comment.length > 0)
     {
         for (int i=0; i<array.count; i++)
@@ -1250,14 +1246,14 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
-    
-    
+
+
 -(void)generateNewWalletAddress {
     if (wallet!=nil) {
         wallet->getAsync()->generateNewAddress();
     }
 }
-    
+
 -(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block{
     self.generatedNewAddressBlock = block;
     
@@ -1268,7 +1264,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses {
     std::vector<WalletAddress> addrs = walletDb->getAddresses(true);
-
+    
     wallet->ownAddresses.clear();
     
     for (int i=0; i<addrs.size(); i++)
@@ -1282,7 +1278,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         if ([categories isEqualToString:@"0"]) {
             categories = @"";
         }
-                
+        
         BMAddress *address = [[BMAddress alloc] init];
         address.duration = walletAddr.m_duration;
         address.ownerId = walletAddr.m_OwnID;
@@ -1329,8 +1325,8 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     
     return result;
 }
-    
-    
+
+
 -(NSMutableArray<BMTransaction*>*_Nonnull)getCompletedTransactionsFromAddress:(BMAddress*_Nonnull)address {
     
     NSMutableArray *result = [NSMutableArray array];
@@ -1365,18 +1361,18 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     }
     else{
         WalletID walletID(Zero);
-          if (walletID.FromHex(address.walletId.string)){
-              std::vector<WalletAddress> addresses = wallet->ownAddresses;
-              for (int i=0; i<addresses.size(); i++){
-                  NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-                  NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
-                  if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]]){
-                      addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
-                      wallet->getAsync()->saveAddress(addresses[i], true);
-                      break;
-                  }
-              }
-          }
+        if (walletID.FromHex(address.walletId.string)){
+            std::vector<WalletAddress> addresses = wallet->ownAddresses;
+            for (int i=0; i<addresses.size(); i++){
+                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+                NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+                if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]]){
+                    addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
+                    wallet->getAsync()->saveAddress(addresses[i], true);
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -1401,7 +1397,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         if (walletID.FromHex(address.walletId.string))
         {
             [_presendedNotifications setValue:address.walletId forKey:address.walletId];
-
+            
             std::vector<WalletAddress> addresses = wallet->ownAddresses;
             
             for (int i=0; i<addresses.size(); i++)
@@ -1485,10 +1481,10 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 
 -(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name {
     for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
-         if ([add.label isEqualToString:name]) {
-             return add;
-         }
-     }
+        if ([add.label isEqualToString:name]) {
+            return add;
+        }
+    }
     return nil;
 }
 
@@ -1530,7 +1526,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     [_delegates compact];
     
     void * objPtr = (__bridge void *)delegate;
-
+    
     for(NSUInteger i = 0; i < _delegates.count; i++) {
         void * ptr = [_delegates pointerAtIndex:i];
         if (ptr == objPtr) {
@@ -1584,9 +1580,9 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     if (amount==0) {
         return [@"amount_zero" localized];
     }
-    else if(_walletStatus.shilded < bTotal)
+    else if(_walletStatus.shielded < bTotal)
     {
-        double need = double(int64_t(bTotal - _walletStatus.shilded)) / Rules::Coin;
+        double need = double(int64_t(bTotal - _walletStatus.shielded)) / Rules::Coin;
         
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
         
@@ -1614,7 +1610,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 }
 
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee {
-
+    
     Amount bAmount = round(amount * Rules::Coin);
     Amount bTotal = bAmount + fee;
     Amount bMax = round(MAX_AMOUNT * Rules::Coin);
@@ -1622,7 +1618,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     if (bTotal > bMax || (amount == MAX_AMOUNT && fee > 0))
     {
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
-
+        
         return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
     }
     
@@ -1673,7 +1669,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
             return [NSString stringWithFormat:@"%@ %@ BEAMS", [@"small_amount_unlink" localized], beam];
         }
     }
- 
+    
     return nil;
 }
 
@@ -1693,15 +1689,6 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 }
 
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
-    
-    auto txParameters = beam::wallet::ParseParameters(to.string);
-    if (!txParameters)
-    {
-        return;
-    }
-    
-    _txParameters = *txParameters;
-
     WalletID walletID(Zero);
     if (walletID.FromHex(to.string))
     {
@@ -1724,84 +1711,70 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     {
         return;
     }
-
-    _txParameters = *txParameters;
-
-    auto messageString = comment.string;
-    uint64_t bAmount = round(amount * Rules::Coin);
-    uint64_t _fee = fee;
-    beam::wallet::WalletID peer = *_txParameters.GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID);
-      
-    NSString *add = [NSString stringWithUTF8String:to_string(peer).c_str()];
     
+    _txParameters = *txParameters;
+    
+    auto messageString = comment.string;
+    
+    uint64_t bAmount = round(amount * Rules::Coin);
+    uint64_t bfee = fee;
+    
+    beam::wallet::WalletID peer = *_txParameters.GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID);
+        
     auto p = beam::wallet::CreateSimpleTransactionParameters()
     .SetParameter(beam::wallet::TxParameterID::Amount, bAmount)
-    .SetParameter(beam::wallet::TxParameterID::Fee, _fee)
+    .SetParameter(beam::wallet::TxParameterID::Fee, bfee)
     .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
     
-    if (auto fee = p.GetParameter<beam::Amount>(beam::wallet::TxParameterID::Fee); fee)
-    {
-        NSLog(@"%llu",*fee);
-    }
-
+    
     WalletID fromID(Zero);
     fromID.FromHex(from.string);
     p.SetParameter(beam::wallet::TxParameterID::PeerID, peer);
     p.SetParameter(beam::wallet::TxParameterID::MyID, fromID);
-//    p.SetParameter(beam::wallet::TxParameterID::MyID, peer);
-//    p.SetParameter(beam::wallet::TxParameterID::MyAddressID, peer);
 
     if ([self isToken:to])
     {
         p.SetParameter(beam::wallet::TxParameterID::OriginalToken, to.string);
     }
-
+    
     auto identity = _txParameters.GetParameter<beam::PeerID>(beam::wallet::TxParameterID::PeerWalletIdentity);
-
+    
     if (identity)
     {
         p.SetParameter(beam::wallet::TxParameterID::PeerWalletIdentity, *identity);
     }
-
+    
     wallet->getAsync()->startTransaction(std::move(p));
+    
+    WalletID walletID(Zero);
+    if (walletID.FromHex(to.string))
+    {
+        WalletID fromID(Zero);
+        fromID.FromHex(from.string);
         
-//    WalletID walletID(Zero);
-//    if (walletID.FromHex(to.string))
-//    {
-//        WalletID fromID(Zero);
-//        fromID.FromHex(from.string);
-//
-//        auto bAmount = round(amount * Rules::Coin);
-//
-//        try{
-//          // __block BMAddress *address = [[AppModel sharedManager] findAddressByID:to];
-//
-//            __block auto address = walletDb->getAddress(walletID);
-//
-//            wallet->getAsync()->sendMoney(fromID, walletID, comment.string, bAmount, fee);
-//            wallet->getAsync()->getWalletStatus();
-//
-//            if(address) {
-//                __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                    if (address->isOwn()) {
-//                        [[AppModel sharedManager] setWalletComment:name toAddress:to];
-//                    }
-//                    else {
-//                        [[AppModel sharedManager] setContactComment:name toAddress:to];
-//                    }
-//                });
-//            }
-//
-//        }
-//        catch(NSException *ex) {
-//            NSLog(@"%@",ex);
-//        }
-//    }
+        try{
+            __block auto address = walletDb->getAddress(walletID);
+            
+            if(address) {
+                __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (address->isOwn()) {
+                        [[AppModel sharedManager] setWalletComment:name toAddress:to];
+                    }
+                    else {
+                        [[AppModel sharedManager] setContactComment:name toAddress:to];
+                    }
+                });
+            }
+        }
+        catch(NSException *ex) {
+            NSLog(@"%@",ex);
+        }
+    }
 }
 
 -(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact {
-
+    
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
     transaction.amount = amount;
@@ -1839,7 +1812,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 }
 
 -(NSString*_Nonnull)allUnlinkAmount:(double)fee {
-    Amount bAmount = _walletStatus.shilded - fee;
+    Amount bAmount = _walletStatus.shielded - fee;
     
     double d = double(int64_t(bAmount)) / Rules::Coin;
     
@@ -1866,7 +1839,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     int days = [Settings sharedManager].logDays;
     if (days > 0) {
         NSTimeInterval period = 60 * 60 * (24*days);
-
+        
         for (NSString *file in dirContents) {
             NSString *path = [dataPath stringByAppendingPathComponent:file];
             
@@ -1890,7 +1863,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     NSString *dataPath = [[Settings sharedManager] logPath];
     
     [self clearLogs];
-
+    
     
     static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string, dataPath.string);
     
@@ -1899,20 +1872,20 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-
+    
     NSString *ios = [NSString stringWithFormat:@"OS VERSION: iOS %@",[[UIDevice currentDevice] systemVersion]];
     NSString *model = [NSString stringWithFormat:@"DEVICE TYPE: %@",[[UIDevice currentDevice] model]];
     NSString *modelID = [NSString stringWithFormat:@"DEVICE MODEL ID: %@",[self modelIdentifier]];
     NSString *appVersion = [NSString stringWithFormat:@"APP VERSION: %@ BUILD %@",version, build];
     NSString *langCode = [NSString stringWithFormat:@"LANGUAGE CODE: %@",[[NSLocale currentLocale] languageCode]];
-
+    
     LOG_INFO() << "Application has started";
     LOG_INFO() << ios.string;
     LOG_INFO() << model.string;
     LOG_INFO() << modelID.string;
     LOG_INFO() << appVersion.string;
     LOG_INFO() << langCode.string;
-
+    
 }
 
 - (NSString *)modelIdentifier {
@@ -1969,7 +1942,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
             }
         }
     }
-        
+    
     return result;
 }
 
@@ -2007,7 +1980,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 -(void)getPaymentProof:(BMTransaction*_Nonnull)transaction {
     wallet->getAsync()->exportPaymentProof([self txIDfromString:transaction.ID]);
 }
-    
+
 -(void)prepareDeleteTransaction:(BMTransaction*_Nonnull)transaction {
     NSMutableArray <BMTransaction*> * _array = [NSMutableArray arrayWithArray:_transactions];
     
@@ -2056,7 +2029,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         [self deleteNotification:notificationId];
     }
 }
-    
+
 -(void)cancelDeleteTransaction:(NSString*_Nonnull)ID {
     NSLog(@"cancelDeleteTransaction");
     
@@ -2109,7 +2082,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         }
     }
 }
-    
+
 -(void)cancelTransactionByID:(NSString*_Nonnull)transaction {
     wallet->getAsync()->cancelTx([self txIDfromString:transaction]);
 }
@@ -2135,7 +2108,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     NSURL *url = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
     
     NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",Status,Sending address,Receiving address,\"Transaction fee, BEAM\",Transaction ID,Kernel ID\n";
-
+    
     for (BMTransaction *tr in transactions) {
         NSString *newLine = [tr csvLine];
         csvText = [csvText stringByAppendingString:newLine];
@@ -2287,7 +2260,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
             return cat;
         }
     }
-
+    
     return nil;
 }
 
@@ -2316,10 +2289,10 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
         
         NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
-
+        
         return array;
     }
-
+    
     return @[].mutableCopy;
 }
 
@@ -2330,7 +2303,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-   NSMutableArray *addresses = [NSMutableArray arrayWithArray:[[AppModel sharedManager] getAddressesFromCategory:category]];
+    NSMutableArray *addresses = [NSMutableArray arrayWithArray:[[AppModel sharedManager] getAddressesFromCategory:category]];
     for (BMAddress *address in addresses) {
         for (int i=0; i<address.categories.count; i++) {
             if ([address.categories[i] intValue] == category.ID) {
@@ -2358,9 +2331,9 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         [_categories addObject:category];
     }
     
-  NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
-  [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
@@ -2371,13 +2344,13 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 }
 
 -(void)editCategory:(BMCategory*_Nonnull)category {
-  NSUInteger index = [self findCategoryIndex:category.ID];
+    NSUInteger index = [self findCategoryIndex:category.ID];
     
-  [_categories replaceObjectAtIndex:index withObject:category];
+    [_categories replaceObjectAtIndex:index withObject:category];
     
-  NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
-  [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
@@ -2483,11 +2456,11 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:categoriesKey];
     
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-     {
-         if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
-             [delegate onCategoriesChange];
-         }
-     }
+    {
+        if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
+            [delegate onCategoriesChange];
+        }
+    }
 }
 
 -(NSArray *)partitionObjects:(NSArray *)array collationStringSelector:(SEL)selector
@@ -2495,13 +2468,13 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
     NSInteger sectionCount = [[collation sectionTitles] count]; //section count is take from sectionTitles and not sectionIndexTitles
     NSMutableArray *unsortedSections = [NSMutableArray arrayWithCapacity:sectionCount];
-
+    
     //create an array to hold the data for each section
     for(int i = 0; i < sectionCount; i++)
     {
         [unsortedSections addObject:[NSMutableArray array]];
     }
-
+    
     //put each object into a section
     for (id object in array)
     {
@@ -2509,7 +2482,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         [[unsortedSections objectAtIndex:index] addObject:object];
     }
     NSMutableArray *sections = [NSMutableArray arrayWithCapacity:sectionCount];
-
+    
     //sort each section
     for (NSMutableArray *section in unsortedSections)
     {
@@ -2518,7 +2491,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     return sections;
 }
 
--(NSMutableArray<BMCategory*>*_Nonnull)sortedCategories {    
+-(NSMutableArray<BMCategory*>*_Nonnull)sortedCategories {
     NSArray *sections = [self partitionObjects:_categories collationStringSelector:@selector(name)];
     
     NSMutableArray *sorted = [NSMutableArray array];
@@ -2527,7 +2500,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         if(arr.count > 0) {
             NSSortDescriptor *sortDescriptor;
             sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name"
-                                                       ascending:YES];
+                                                         ascending:YES];
             NSArray *sortedArray = [arr sortedArrayUsingDescriptors:@[sortDescriptor]];
             
             [sorted addObjectsFromArray:sortedArray];
@@ -2562,7 +2535,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     }
     
     NSMutableArray *contacts = [NSMutableArray arrayWithArray:_contacts];
-
+    
     for (BMContact *contact in contacts) {
         NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
         
@@ -2645,10 +2618,10 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         }
         
         self.connectionTimer =  [NSTimer scheduledTimerWithTimeInterval:seconds
-                                                             target: self
-                                                           selector: @selector(handleTimer)
-                                                           userInfo: nil
-                                                            repeats: NO];
+                                                                 target: self
+                                                               selector: @selector(handleTimer)
+                                                               userInfo: nil
+                                                                repeats: NO];
         
     });
 }
@@ -2674,10 +2647,10 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     
     auto _data = [jsonString string];
     bool result = storage::ImportDataFromJson(*walletDb, &_data[0], _data.size());
-
+    
     if (result) {
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers
-                         error:nil]];
+                                                                                                                          error:nil]];
         if ([dictionary objectForKey:@"Categories"]) {
             NSMutableArray *categories = [NSMutableArray arrayWithArray:[dictionary objectForKey:@"Categories"]];
             
@@ -2695,7 +2668,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     
     NSData *objectData = [result dataUsingEncoding:NSUTF8StringEncoding];
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers
-                     error:nil]];
+                                                                                                                      error:nil]];
     
     if (![items containsObject:@"transaction"]) {
         [dictionary removeObjectForKey:@"TransactionParameters"];
@@ -2706,7 +2679,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     else {
         NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
-         
+        
         NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
         
         NSMutableArray *categories = [NSMutableArray array];
@@ -2743,13 +2716,13 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
             currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@",currency.code];
-
+            
             double value = double(int64_t(currency.value)) / Rules::Coin;
             double rate = value * amount;
             return [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
         }
     }
-
+    
     return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
 }
 
@@ -2894,14 +2867,16 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
 #pragma mark - Unlink
 
+//https://github.com/BeamMW/beam/blob/master/wallet/unittests/lelantus_test.cpp
+
 -(void)sendUnlink:(double)amount fee:(double)fee {
     auto bAmount = round(amount * Rules::Coin);
-
+    
     WalletAddress senderAddress;
     BOOL addressFound = NO;
-
+    
     std::vector<WalletAddress> addresses = wallet->ownAddresses;
-
+    
     for (int i=0; i<addresses.size(); i++){
         NSString *name = [NSString stringWithUTF8String:addresses[i].m_label.c_str()];
         if ([name isEqualToString:unlinkAddressName]) {
@@ -2910,7 +2885,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
             break;
         }
     }
-
+    
     if (!addressFound) {
         walletDb->createAddress(senderAddress);
         senderAddress.m_label = [unlinkAddressName string];
@@ -2921,19 +2896,15 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
         walletDb->saveAddress(senderAddress);
     }
-
-    Asset::ID assetId = Asset::s_BeamID;
-
-    auto txParams = lelantus::CreatePushTransactionParameters(senderAddress.m_walletID);
-
+    
     Amount userFee = fee;
     Amount userAmount = bAmount;
-
-    txParams.SetParameter(TxParameterID::Amount, userAmount)
-        .SetParameter(TxParameterID::Fee, userFee)
-        .SetParameter(TxParameterID::PeerID, senderAddress.m_walletID)
-        .SetParameter(TxParameterID::AssetID, assetId);
-
+    
+    auto txParams = lelantus::CreateUnlinkFundsTransactionParameters(senderAddress.m_walletID)
+    .SetParameter(TxParameterID::Amount, userAmount)
+  //  .SetParameter(TxParameterID::PeerID, senderAddress.m_walletID)
+    .SetParameter(TxParameterID::Fee, userFee);
+    
     wallet->getAsync()->startTransaction(std::move(txParams));
 }
 

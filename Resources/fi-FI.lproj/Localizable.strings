@@ -2,7 +2,7 @@
 "restore_wallet_info" = "Olet palauttamassa vanhaa lompakkoa. Huomioithan, että jos olet jo käyttänyt lompakkoa toisella laitteella, tapahtumahistoria sekä tallentamasi osoitteet eivät siirry uudelle laitteelle palautuksen yhteydessä. Tapahtumat sekä osoitteet tallennetaan erikseen kullekin laitteelle. Lompakkosi saldo kuitenkin palautetaan ja on käytettävissä ajantasaisena uudessa laitteessa.";
 "no_space_title" = "Ei tarpeeksi tallennustilaa";
 "no_space_info" = "Vähintään 200 Mb vapaata tallennustilaa tarvitaan, jotta vanha lompakko voidaan palauttaa";
-"beam_title" = "Scalable confidential cryptocurrency";
+"beam_title" = "Confidential, fast, easy to use";
 "create_new_wallet" = "Luo uusi lompakko";
 "enter_password_title" = "Kirjoita salasanasi avataksesi lompakon";
 "empty_password" = "Salasanaa ei voi jättää tyhjäksi";

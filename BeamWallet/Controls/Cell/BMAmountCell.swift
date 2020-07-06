@@ -134,11 +134,11 @@ extension BMAmountCell: Configurable {
     }
     
     func configure(with options: (name: String, value:String?)) {
-        if (options.name == Localizable.shared.strings.amount.uppercased() || options.name == Localizable.shared.strings.you_send.uppercased()) && self.type != BMTransactionTypePushTransaction {
+        if (options.name == Localizable.shared.strings.amount.uppercased() || options.name == Localizable.shared.strings.you_send.uppercased()) && self.type != BMTransactionTypeUnlink {
             textField.textColor = UIColor.main.heliotrope
             textField.setNormalColor(color: UIColor.main.heliotrope)
         }
-        else if self.type == BMTransactionTypePushTransaction {
+        else if self.type == BMTransactionTypeUnlink {
             textField.textColor = UIColor.main.brightTeal
             textField.setNormalColor(color: UIColor.main.brightTeal)
         }

@@ -30,6 +30,7 @@ class QRViewController: BaseViewController {
 
     private var address:BMAddress!
     private var amount:String?
+    private var isToken = false
 
     @IBOutlet weak private var infoLabel: UILabel!
 
@@ -50,9 +51,10 @@ class QRViewController: BaseViewController {
 
     @IBOutlet weak private var secondAvailableLabel: UILabel!
 
-    init(address:BMAddress, amount:String?) {
+    init(address:BMAddress, amount:String?, isToken: Bool) {
         super.init(nibName: nil, bundle: nil)
         
+        self.isToken = isToken
         self.address = address
         self.amount = amount
     }
@@ -82,8 +84,14 @@ class QRViewController: BaseViewController {
         
         infoLabel.text = Localizable.shared.strings.send_qr_secure + "\n\n" + Localizable.shared.strings.receive_notice
         
-        addressTitleLabel.text = Localizable.shared.strings.address.uppercased()
-        addressLabel.text = address.walletId
+        addressTitleLabel.text = Localizable.shared.strings.transaction_token.uppercased()
+       
+        if isToken {
+            addressLabel.text = address.token
+        }
+        else {
+            addressLabel.text = address.walletId
+        }
         
         if address.categories.count > 0
         {
@@ -110,7 +118,7 @@ class QRViewController: BaseViewController {
             amountStack.isHidden = true
         }
         
-        let qrString = AppModel.sharedManager().generateQRCodeString(address.walletId, amount: amount)
+        let qrString = AppModel.sharedManager().generateQRCodeString((isToken ? address.token : address.walletId) ?? String.empty(), amount: amount)
         
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         

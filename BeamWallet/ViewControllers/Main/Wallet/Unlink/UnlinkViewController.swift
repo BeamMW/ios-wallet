@@ -126,7 +126,7 @@ extension UnlinkViewController: UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath)
-                cell.setType(type:  BMTransactionType(BMTransactionTypePushTransaction))
+                cell.setType(type:  BMTransactionType(BMTransactionTypeUnlink))
                 cell.delegate = self
                 cell.error = viewModel.amountError
                 cell.fee = Double(viewModel.fee) ?? 0

@@ -525,7 +525,15 @@ class LocalizableStrings : NSObject {
     var add_all_unlinked = "add_all_unlinked".localized;
     var off = "off".localized
     var wallet_id = "wallet_id".localized
-    
+    var show_token = "show_token".localized.lowercased()
+    var transaction_token = "transaction_token".localized.lowercased()
+    var general = "general".localized
+    var one_time = "one_time".localized
+    var permanent = "permanent".localized
+    var edit_token = "edit_token".localized
+    var receive_from = "receive_from".localized
+    var pool = "pool".localized
+
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

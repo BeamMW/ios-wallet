@@ -148,7 +148,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
--(void)generateToken;
+-(BMAddress*_Nonnull)generateToken;
 
 // addresses
 -(BOOL)isAddress:(NSString*_Nullable)address;

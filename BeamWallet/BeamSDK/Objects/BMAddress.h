@@ -28,6 +28,7 @@
 +(BMAddress*_Nonnull)emptyAddress;
 
 @property (nonatomic,strong) NSString * _Nonnull walletId;
+@property (nonatomic,strong) NSString * _Nullable token;
 @property (nonatomic,strong) NSString * _Nonnull label;
 @property (nonatomic,strong) NSMutableArray<NSString*> * _Nonnull categories;
 @property (nonatomic,assign) UInt64 createTime;

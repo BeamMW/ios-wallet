@@ -2,7 +2,7 @@
 "restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 "no_space_title" = "저장공간이 부족합니다.";
 "no_space_info" = "지갑을 복구하려면 최소한 200 Mb 의 저장공간이 필요합니다.";
-"beam_title" = "Scalable confidential cryptocurrency";
+"beam_title" = "Confidential, fast, easy to use";
 "create_new_wallet" = "새로운 지갑 만들기";
 "enter_password_title" = "지갑에 접근하려면 비밀번호를 입력하세요";
 "empty_password" = "비밀번호란이 공백입니다.";

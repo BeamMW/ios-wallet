@@ -26,10 +26,13 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var rightButton: UIButton!
-    
+    @IBOutlet private weak var showTokenButton: UIButton!
+
     @IBOutlet private weak var contactView: UIStackView!
     @IBOutlet private weak var contactName: UILabel!
     @IBOutlet private weak var contactCategory: UILabel!
+    
+    private var token = ""
     
     public var validateAddress = false
     
@@ -108,10 +111,12 @@ class BMSearchAddressCell: BaseCell {
     }
     
     private func checkAttributes(string: String?) {
+        showTokenButton.isHidden = true
         if let text = string {
+            token = text
             if AppModel.sharedManager().isValidAddress(text) {
                 let length = text.lengthOfBytes(using: .utf8)
-                if length > 12 {
+                if length > 12 && !AppModel.sharedManager().isToken(text) {
                     let att = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: RegularFont(size: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
                     att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: 0, length: 6))
                     att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length - 6, length: 6))
@@ -119,7 +124,8 @@ class BMSearchAddressCell: BaseCell {
                     textField.attributedText = att
                 }
                 else {
-                    textField.text = string
+                    textField.text = "\(text.prefix(6))...\(text.suffix(6))"
+                    showTokenButton.isHidden = false
                 }
             }
             else {
@@ -127,12 +133,20 @@ class BMSearchAddressCell: BaseCell {
             }
         }
         else {
+            token = ""
             textField.text = string
         }
     }
     
     @IBAction func onRightButton(sender: UIButton) {
         delegate?.onRightButton?(self)
+    }
+    
+    @IBAction func onShowToken(sender: UIButton) {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = ShowTokenViewController(token: token, send: true)
+            top.pushViewController(vc: vc)
+        }
     }
 }
 
@@ -172,7 +186,8 @@ extension BMSearchAddressCell: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.textValueDidBegin?(self)
-        
+        showTokenButton.isHidden = true
+
         if nameLabel.text == Localizable.shared.strings.send_to {
             textField.placeholder = Localizable.shared.strings.address_search
         }
@@ -182,6 +197,7 @@ extension BMSearchAddressCell: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        showTokenButton.isHidden = true
         delegate?.textValueDidChange?(self, textView.text ?? String.empty(), true)
     }
     

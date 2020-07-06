@@ -69,8 +69,7 @@ extension TransactionDetailCell: Configurable {
             amountLabel.textColor = UIColor.main.brightSkyBlue
             currencyIcon.tintColor = UIColor.main.brightSkyBlue
         case false:
-            if (transaction.enumType == BMTransactionTypePushTransaction ||
-                transaction.enumType == BMTransactionTypePullTransaction) {
+            if (transaction.enumType == BMTransactionTypeUnlink) {
                 amountLabel.textColor = UIColor.main.brightTeal
                 currencyIcon.tintColor = UIColor.main.brightTeal
             }
@@ -83,8 +82,7 @@ extension TransactionDetailCell: Configurable {
         if transaction.isFailed() || transaction.isCancelled() || transaction.isExpired() {
             statusLabel.textColor = UIColor.main.greyish
         }
-        else if (transaction.enumType == BMTransactionTypePushTransaction ||
-            transaction.enumType == BMTransactionTypePullTransaction) {
+        else if (transaction.enumType == BMTransactionTypeUnlink) {
             statusLabel.textColor = UIColor.main.brightTeal
         }
         else if transaction.isSelf {

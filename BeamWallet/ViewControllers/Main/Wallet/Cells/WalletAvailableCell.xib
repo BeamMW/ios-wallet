@@ -167,7 +167,7 @@
                                     <constraint firstAttribute="width" constant="13" id="Xd8-uv-GHH"/>
                                 </constraints>
                             </imageView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="Hmq-AX-eeV">
+                            <pageControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="Hmq-AX-eeV">
                                 <rect key="frame" x="133.5" y="98" width="23" height="37"/>
                                 <connections>
                                     <action selector="onSelectPageWithSender:" destination="KGk-i7-Jjw" eventType="valueChanged" id="ux9-qG-AcY"/>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -41,10 +40,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="150" translatesAutoresizingMaskIntoConstraints="NO" id="Prf-e9-uhW">
-                    <rect key="frame" x="55.5" y="143" width="264" height="181.5"/>
+                    <rect key="frame" x="55.5" y="143" width="264" height="181"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="XS3-jK-PB8">
-                            <rect key="frame" x="0.0" y="0.0" width="264" height="181.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="264" height="181"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="t3a-Bl-DlH">
                                     <rect key="frame" x="52.5" y="0.0" width="159" height="142"/>
@@ -53,8 +52,8 @@
                                         <constraint firstAttribute="width" constant="159" id="HG5-Od-VgI"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scalable confidential cryptocurrency" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
-                                    <rect key="frame" x="0.0" y="162" width="264" height="19.5"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confidential, fast, easy to use" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
+                                    <rect key="frame" x="0.0" y="162" width="264" height="19"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="264" id="z8M-cN-IIy"/>
                                     </constraints>
@@ -71,7 +70,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="qyg-x7-z6S">
-                    <rect key="frame" x="61" y="439.5" width="253" height="118"/>
+                    <rect key="frame" x="61" y="439" width="253" height="118"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Iu-PO-y9I" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="253" height="44"/>
@@ -148,7 +147,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 1.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSx-nV-P2m">
-                    <rect key="frame" x="160" y="642.5" width="55.5" height="14.5"/>
+                    <rect key="frame" x="158" y="643" width="59.5" height="14"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>

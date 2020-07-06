@@ -64,6 +64,10 @@ class BMExpandCell: BaseCell {
             self.delegate?.onExpandCell?(self)
         }
     }
+    
+    public func setColor(_ color: UIColor) {
+        nameLabel.textColor = color
+    }
 }
 
 extension BMExpandCell: Configurable {
