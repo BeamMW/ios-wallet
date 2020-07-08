@@ -297,11 +297,13 @@ class SendTransactionViewModel: NSObject {
         let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
         let totalString = String.currency(value: total) + Localizable.shared.strings.beam
         
+        let to = "\(toAddress.prefix(6))...\(toAddress.suffix(6))"
         var items = [BMMultiLineItem]()
-        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: toAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: to, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: outgoindAdderss!.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
         let amountString = amount + Localizable.shared.strings.beam + "\n"

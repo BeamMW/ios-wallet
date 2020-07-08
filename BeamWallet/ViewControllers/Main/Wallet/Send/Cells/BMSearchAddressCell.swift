@@ -115,18 +115,20 @@ class BMSearchAddressCell: BaseCell {
         if let text = string {
             token = text
             if AppModel.sharedManager().isValidAddress(text) {
-                let length = text.lengthOfBytes(using: .utf8)
-                if length > 12 && !AppModel.sharedManager().isToken(text) {
-                    let att = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: RegularFont(size: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
-                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: 0, length: 6))
-                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length - 6, length: 6))
-                    
-                    textField.attributedText = att
-                }
-                else {
-                    textField.text = "\(text.prefix(6))...\(text.suffix(6))"
-                    showTokenButton.isHidden = false
-                }
+                textField.text = "\(text.prefix(6))...\(text.suffix(6))"
+                showTokenButton.isHidden = false
+//                let length = text.lengthOfBytes(using: .utf8)
+//                if length > 12 && !AppModel.sharedManager().isToken(text) {
+//                    let att = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: RegularFont(size: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
+//                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: 0, length: 6))
+//                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length - 6, length: 6))
+//
+//                    textField.attributedText = att
+//                }
+//                else {
+//                    textField.text = "\(text.prefix(6))...\(text.suffix(6))"
+//                    showTokenButton.isHidden = false
+//                }
             }
             else {
                 textField.text = string

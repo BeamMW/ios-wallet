@@ -893,7 +893,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     if (address==nil) {
         return NO;
     }
-    return beam::wallet::check_receiver_address(address.string);
+    return beam::wallet::CheckReceiverAddress(address.string);
 }
 
 -(void)refreshAddresses{
