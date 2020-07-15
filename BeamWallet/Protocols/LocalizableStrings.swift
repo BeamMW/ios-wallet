@@ -533,7 +533,15 @@ class LocalizableStrings : NSObject {
     var edit_token = "edit_token".localized
     var receive_from = "receive_from".localized
     var pool = "pool".localized
+    var reconnect = "reconnect".localized.lowercased()
+    var max_privacy_title = "max_privacy_title".localized
+    var max_privacy_text = "max_privacy_text".localized
+    var max = "max".localized
+    var max_privacy_requested_title = "max_privacy_requested_title".localized
+    var max_privacy_request_title = "max_privacy_request_title".localized
+    var max_privacy_request_text = "max_privacy_request_text".localized
 
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

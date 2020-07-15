@@ -43,6 +43,7 @@ class ReceiveViewController: BaseTableViewController {
         title = Localizable.shared.strings.receive.uppercased()
         
         tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self])
+        tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 10))
@@ -177,6 +178,9 @@ extension ReceiveViewController : UITableViewDataSource {
         else if section == 3 {
             return showAdvanced ? 3 : 1
         }
+        else if section == 2 {
+            return 2
+        }
         return 1
     }
     
@@ -215,12 +219,31 @@ extension ReceiveViewController : UITableViewDataSource {
                 return cell
             }
         case 2:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.transactionComment))
-            cell.delegate = self
-            cell.contentView.backgroundColor = UIColor.clear
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
+                cell.delegate = self
+                cell.customBackgroundColor = true
+                cell.selectionStyle = .none
+                cell.mainView.backgroundColor = UIColor.clear
+                cell.detailLabel.font = ItalicFont(size: 14)
+                cell.contentView.backgroundColor = UIColor.clear
+                cell.backgroundColor = UIColor.clear
+//                cell.topOffset?.constant = 15
+//                cell.topSwitchOffset?.constant = 15
+//                cell.botOffset?.constant = 15
+                cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_request_title, detail: Localizable.shared.strings.max_privacy_request_text, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+
+                return cell
+            }
+            else {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                    .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.transactionComment))
+                cell.delegate = self
+                cell.contentView.backgroundColor = UIColor.clear
+                return cell
+            }
         case 3:
             if indexPath.row == 0 {
                 let cell = tableView
@@ -409,5 +432,11 @@ extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
         let token =  viewModel.receive == .pool ? viewModel.address.walletId : (viewModel.address.token ?? String.empty())
         let vc = ShowTokenViewController(token: token, send: false)
         self.pushViewController(vc: vc)
+    }
+}
+
+extension ReceiveViewController: BMPickerCellDelegate {
+    func onClickSwitch(value: Bool, cell: BMPickerCell) {
+        viewModel.maxPrivacy = value
     }
 }

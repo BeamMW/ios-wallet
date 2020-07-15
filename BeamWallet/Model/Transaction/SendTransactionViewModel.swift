@@ -46,6 +46,9 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
+    public var maxPrivacy = false
+    public var requestedMaxPrivacy = false
+
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
@@ -304,6 +307,10 @@ class SendTransactionViewModel: NSObject {
         if outgoindAdderss != nil {
             let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
             items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        }
+        
+        if maxPrivacy {
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.privacy.uppercased(), detail: Localizable.shared.strings.max, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
         let amountString = amount + Localizable.shared.strings.beam + "\n"

@@ -30,10 +30,16 @@ class BMPickerCell: BaseCell {
     weak var delegate: BMPickerCellDelegate?
 
     @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var detailLabel: UILabel!
-    @IBOutlet private weak var mainView: UIView!
+    @IBOutlet weak var detailLabel: UILabel!
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet private weak var arrowView: UIImageView!
-    @IBOutlet private weak var switchView: UISwitch!
+    @IBOutlet weak var switchView: UISwitch!
+
+    public var customBackgroundColor = false
+    
+    @IBOutlet var topOffset: NSLayoutConstraint?
+    @IBOutlet var topSwitchOffset: NSLayoutConstraint?
+    @IBOutlet var botOffset: NSLayoutConstraint?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -59,7 +65,9 @@ class BMPickerCell: BaseCell {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         
-        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
+        if !customBackgroundColor {
+            mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
+        }
     }
     
     func configure(data:BMPickerData) {

@@ -23,6 +23,8 @@ import Fabric
 import UIKit
 import UserNotifications
 
+public let IS_UNLIKED_ENABLED = false
+
 class BeamApplication: UIApplication {
     override func sendEvent(_ event: UIEvent) {
         super.sendEvent(event)

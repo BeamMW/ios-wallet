@@ -317,7 +317,9 @@ extension WalletAvailableCell: Configurable {
             }
             else {
                 secondAvailableLabel.isHidden = false
-                unlinkButton.isHidden = false
+                if IS_UNLIKED_ENABLED {
+                    unlinkButton.isHidden = false
+                }
                 secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(status.realAmount)
                 
                 if secondAvailableLabel.text?.isEmpty == true {

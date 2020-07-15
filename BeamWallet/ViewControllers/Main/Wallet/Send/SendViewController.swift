@@ -249,12 +249,14 @@ extension SendViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
+        case 0:
+            return 2
         case 1:
             return 2
         case 2:
             return Settings.sharedManager().isHideAmounts ? 0 : 1
         case 5:
-            return (viewModel.canUnlink()) ? 1 : 0
+            return (viewModel.canUnlink() && IS_UNLIKED_ENABLED) ? 1 : 0
         case 6:
             return (viewModel.outgoindAdderss == nil) ? 0 : 1
         case 7:
@@ -275,14 +277,43 @@ extension SendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
-            cell.delegate = self
-            cell.error = viewModel.toAddressError
-            cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon: IconScanQr()))
-            cell.contact = viewModel.selectedContact
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
+                cell.delegate = self
+                cell.error = viewModel.toAddressError
+                cell.copyText = viewModel.copyAddress
+                cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon: IconScanQr()))
+                cell.contact = viewModel.selectedContact
+                return cell
+            }
+            else {
+                let cell = tableView
+                    .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
+                cell.delegate = self
+                cell.customBackgroundColor = true
+                cell.selectionStyle = .none
+                cell.mainView.backgroundColor = UIColor.clear
+                cell.detailLabel.font = ItalicFont(size: 14)
+                cell.contentView.backgroundColor = UIColor.clear
+                cell.backgroundColor = UIColor.clear
+                cell.topOffset?.constant = 40
+                cell.topSwitchOffset?.constant = 15
+                cell.botOffset?.constant = 0
+                
+                if viewModel.requestedMaxPrivacy && viewModel.maxPrivacy {
+                    cell.switchView.isHidden = true
+                    
+                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_requested_title, detail: Localizable.shared.strings.max_privacy_text, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                }
+                else {
+                    cell.switchView.isHidden = false
+
+                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: Localizable.shared.strings.max_privacy_text, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                }
+                
+                return cell
+            }
         case 1:
             if indexPath.row == 0 {
                 let cell = tableView
@@ -624,8 +655,9 @@ extension SendViewController: BMCellProtocol {
 }
 
 extension SendViewController: QRScannerViewControllerDelegate {
-    func didScanQRCode(value: String, amount: String?) {
+    func didScanQRCode(value: String, amount: String?, privacy:Bool?) {
         viewModel.selectedContact = nil
+  
         if let a = amount {
             if Double(a) ?? 0 > 0 {
                 viewModel.amount = a
@@ -636,7 +668,16 @@ extension SendViewController: QRScannerViewControllerDelegate {
                 }
             }
         }
-        didSelectAddress(value: value)
+        
+        if privacy != nil && privacy == true {
+            viewModel.requestedMaxPrivacy = true
+            viewModel.maxPrivacy = true
+        }
+        else {
+            viewModel.requestedMaxPrivacy = false
+        }
+        
+        didSelectAddress(value: value)        
     }
 }
 
@@ -747,12 +788,19 @@ extension SendViewController: SearchTableViewDelegate {
 
 extension SendViewController: BMPickerCellDelegate {
     func onClickSwitch(value: Bool, cell: BMPickerCell) {
-        viewModel.unlinkOnly = value
-        viewModel.checkAmountError()
-        viewModel.checkFeeError()
-        
-        UIView.performWithoutAnimation {
-            tableView.reloadData()
+        if let path = tableView.indexPath(for: cell) {
+            if path.section == 0 {
+                viewModel.maxPrivacy = value
+            }
+        }
+        else {
+            viewModel.unlinkOnly = value
+            viewModel.checkAmountError()
+            viewModel.checkFeeError()
+            
+            UIView.performWithoutAnimation {
+                tableView.reloadData()
+            }
         }
     }
 }

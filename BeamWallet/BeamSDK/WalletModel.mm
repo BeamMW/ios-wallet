@@ -540,13 +540,33 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 
 void WalletModel::onWalletError(beam::wallet::ErrorType error)
 {
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onWalletError:)]) {
-            NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
-                                               code:NSUInteger(error)
-                                           userInfo:@{ NSLocalizedDescriptionKey:GetErrorString(error) }];
-            [delegate onWalletError:nativeError];
+    if([Settings sharedManager].connectToRandomNode) {
+        if(error == beam::wallet::ErrorType::ConnectionHostUnreach || error == beam::wallet::ErrorType::ConnectionRefused || error == beam::wallet::ErrorType::NodeProtocolIncompatible
+           || error == beam::wallet::ErrorType::NodeProtocolBase)
+        {
+            BOOL isReconnect = [[AppModel sharedManager] reconnect];
+            if (!isReconnect) {
+                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+                {
+                    if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+                        NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
+                                                                   code:NSUInteger(error)
+                                                               userInfo:@{ NSLocalizedDescriptionKey:GetErrorString(error) }];
+                        [delegate onWalletError:nativeError];
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onWalletError:)]) {
+                NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
+                                                           code:NSUInteger(error)
+                                                       userInfo:@{ NSLocalizedDescriptionKey:GetErrorString(error) }];
+                [delegate onWalletError:nativeError];
+            }
         }
     }
 }

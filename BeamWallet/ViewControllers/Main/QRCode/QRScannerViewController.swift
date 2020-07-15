@@ -22,7 +22,7 @@ import UIKit
 import AVFoundation
 
 protocol QRScannerViewControllerDelegate: AnyObject {
-    func didScanQRCode(value:String, amount:String?)
+    func didScanQRCode(value:String, amount:String?, privacy:Bool?)
 }
 
 class QRScannerViewController: BaseViewController {
@@ -183,7 +183,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                         if (json["_id"] as? u_quad_t) != nil {
                             back()
                             
-                            delegate?.didScanQRCode(value: scannedValue, amount: nil)
+                            delegate?.didScanQRCode(value: scannedValue, amount: nil, privacy: nil)
                         }
                     }
                     else{
@@ -203,7 +203,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                             address = String(address.split(separator: "?")[0])
                         }
                         back()
-                        delegate?.didScanQRCode(value:address , amount: nil)
+                        delegate?.didScanQRCode(value:address , amount: nil, privacy: nil)
                     }
                     else{
                         self.showError()
@@ -223,7 +223,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                             address = String(address.split(separator: "?")[0])
                         }
                         back()
-                        delegate?.didScanQRCode(value:address , amount: nil)
+                        delegate?.didScanQRCode(value:address , amount: nil, privacy: nil)
                     }
                     else{
                         self.showError()
@@ -231,7 +231,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                 }
                 else if(scannedValue.hasPrefix("0x"))
                 {
-                    delegate?.didScanQRCode(value: scannedValue, amount: nil)
+                    delegate?.didScanQRCode(value: scannedValue, amount: nil, privacy: nil)
                 }
                 else{
                     self.showError()
@@ -269,7 +269,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                 else{
                     back()
                     
-                    delegate?.didScanQRCode(value: address, amount: amount)
+                    delegate?.didScanQRCode(value: address, amount: amount, privacy: nil)
                 }
             }
         }

@@ -331,7 +331,7 @@ extension SaveContactViewController : BMCellProtocol {
 
 extension SaveContactViewController : QRScannerViewControllerDelegate
 {
-    func didScanQRCode(value:String, amount:String?) {
+    func didScanQRCode(value:String, amount:String?, privacy: Bool?) {
         addressError = nil
         address.walletId = value
         tableView.reloadData()

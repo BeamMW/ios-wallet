@@ -93,6 +93,9 @@ const bool isSecondCurrencyEnabled = true;
     NSString *localPassword;
     NSTimer *utxoTimer;
     
+    int reconnectAttempts;
+    NSMutableArray *reconnectNodes;
+
     Reachability *internetReachableFoo;
     
     IWalletDB::Ptr walletDb;
@@ -120,6 +123,9 @@ const bool isSecondCurrencyEnabled = true;
     self = [super init];
     
     [self createLogger];
+    
+    reconnectAttempts = 0;
+    reconnectNodes = [NSMutableArray new];
     
     currencyFormatter = [[NSNumberFormatter alloc] init];
     currencyFormatter.currencyCode = @"";
@@ -175,6 +181,34 @@ const bool isSecondCurrencyEnabled = true;
     LOG_INFO() << "Rules signature: " << Rules::get().get_SignatureStr();
 }
 
++(NSString*_Nonnull)chooseRandomNodeWithoutNodes:(NSArray*)nodes {
+    auto peers = getDefaultPeers();
+    
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (const auto& item : peers) {
+        BOOL found = NO;
+        NSString *address = [NSString stringWithUTF8String:item.c_str()];
+
+        for (NSString *node in nodes) {
+            if([address isEqualToString:node]) {
+                found = YES;
+            }
+        }
+        
+        if (!found) {
+            [array addObject:address];
+        }
+    }
+    
+    
+    if(array.count>0) {
+        return array[0];
+    }
+    
+    return @"";
+}
+
 +(NSString*_Nonnull)chooseRandomNode {
     auto peers = getDefaultPeers();
     
@@ -182,14 +216,12 @@ const bool isSecondCurrencyEnabled = true;
     
     for (const auto& item : peers) {
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        if(![address containsString:@"shanghai"]) {
-            [array addObject:address];
-        }
+        [array addObject:address];
     }
     
     srand([[NSDate date]  timeIntervalSince1970]);
     
-    int inx =rand()%[array count];
+    int inx = rand()%[array count];
     
     return [array objectAtIndex:inx];
 }
@@ -327,6 +359,29 @@ const bool isSecondCurrencyEnabled = true;
     if (_isNodeChanging) {
         [[AppModel sharedManager] startChangeNode];
     }
+}
+
+-(BOOL)reconnect {
+    if(Settings.sharedManager.connectToRandomNode && reconnectAttempts < 2) {
+        
+        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onNetwotkStartReconnecting)]) {
+                [delegate onNetwotkStartReconnecting];
+            }
+        }
+        
+        [reconnectNodes addObject:Settings.sharedManager.nodeAddress];
+        
+        reconnectAttempts = reconnectAttempts + 1;
+        
+        NSString *node = [AppModel chooseRandomNodeWithoutNodes:reconnectNodes];
+        if(node.length > 0) {
+            Settings.sharedManager.nodeAddress = node;
+            return YES;
+        }
+    }
+    return NO;
 }
 
 

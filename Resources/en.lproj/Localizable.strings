@@ -557,3 +557,12 @@ and never kept on the blockchain.";
 "edit_token" = "Edit token";
 "receive_from" = "Receive from";
 "pool" = "Exchange or mining pool";
+"reconnect" = "Reconnecting to another random node…";
+"max_privacy_title" = "Max privacy";
+"max_privacy_text" = "Transaction is slower, fees are higher.";
+"max" = "Max";
+"max_privacy_requested_title" = "Receiver requested Max privacy";
+"max_privacy_request_title" = "Request Max privacy transaction";
+"max_privacy_request_text" = "Transaction is slower, receiver pays fees.";
+
+

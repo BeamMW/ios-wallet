@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -74,10 +74,13 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="J7g-wL-DrK"/>
             <connections>
+                <outlet property="botOffset" destination="Fj1-Zt-WVC" id="2oA-Hx-Ve8"/>
                 <outlet property="detailLabel" destination="P0I-aH-DGR" id="d5e-w1-wNC"/>
                 <outlet property="mainView" destination="si6-ep-K1d" id="hvV-Xb-too"/>
                 <outlet property="switchView" destination="w5C-t8-UDP" id="sss-nB-nP1"/>
                 <outlet property="titleLabel" destination="Yjw-w2-kMT" id="WRo-Bv-bEz"/>
+                <outlet property="topOffset" destination="Zif-OU-tBF" id="Wu0-ri-rzh"/>
+                <outlet property="topSwitchOffset" destination="rw3-pf-AJA" id="7jz-86-khC"/>
             </connections>
             <point key="canvasLocation" x="176.81159420289856" y="110.49107142857143"/>
         </tableViewCell>

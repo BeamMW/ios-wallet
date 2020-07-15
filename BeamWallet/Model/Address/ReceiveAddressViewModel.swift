@@ -42,6 +42,8 @@ class ReceiveAddressViewModel: NSObject {
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
     
+    public var maxPrivacy = false
+    
     public var address: BMAddress!
     public var expire = ExpireOptions.parmanent {
         didSet {

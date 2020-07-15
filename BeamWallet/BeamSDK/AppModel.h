@@ -50,6 +50,7 @@ typedef int BMRestoreType;
 -(void)onWalletStatusChange:(BMWalletStatus*_Nonnull)status;
 -(void)onNetwotkStatusChange:(BOOL)connected;
 -(void)onNetwotkStartConnecting:(BOOL)connecting;
+-(void)onNetwotkStartReconnecting;
 -(void)onWalletAddresses:(NSArray<BMAddress*>*_Nonnull)walletAddresses;
 -(void)onGeneratedNewAddress:(BMAddress*_Nonnull)address;
 -(void)onReceivedTransactions:(NSArray<BMTransaction*>*_Nonnull)transactions;
@@ -139,6 +140,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(void)startChangeWallet;
 -(void)stopChangeWallet;
 -(void)startChangeNode;
+-(BOOL)reconnect;
 
 // updates
 -(void)getWalletStatus;

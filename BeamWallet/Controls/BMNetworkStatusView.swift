@@ -25,7 +25,9 @@ class BMNetworkStatusView: UIView {
     private var statusView: UIView!
     private var indicatorView:MaterialActivityIndicatorView!
     private var fromNib = false
-    
+    private var isPrevUpdate = false
+    private var isPrevRecconected = false
+
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 40))
         
@@ -84,64 +86,86 @@ class BMNetworkStatusView: UIView {
     deinit {
         AppModel.sharedManager().removeDelegate(self)
     }
+    
+    private func changeStatus(connected: Bool) {
+        if AppModel.sharedManager().isNodeChanging {
+            return
+        }
+        self.indicatorView.stopAnimating()
+        self.statusView.alpha = 1
+        self.statusView.layer.borderWidth = 0
+        
+        self.statusLabel.x = self.fromNib ? 20 : 35
+        
+        if connected {
+            if AppModel.sharedManager().currencies.count == 0 && Settings.sharedManager().currency != BMCurrencyOff  {
+                self.statusView.backgroundColor = UIColor.main.orange
+                self.statusView.glow()
+                
+                self.statusLabel.text = "\(Localizable.shared.strings.online.lowercased()) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
+                self.statusLabel.textColor = UIColor.main.blueyGrey
+            }
+            else {
+                self.statusView.backgroundColor = UIColor.main.green
+                self.statusView.glow()
+                
+                self.statusLabel.text = Localizable.shared.strings.online.lowercased()
+                
+                self.statusLabel.textColor = UIColor.main.blueyGrey
+            }
+            
+        }
+        else{
+            self.statusView.backgroundColor = UIColor.main.red
+            self.statusView.glow()
+            
+            if AppModel.sharedManager().isInternetAvailable == false {
+                self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
+            }
+            else{
+                if Settings.sharedManager().isChangedNode() {
+                    self.statusLabel.text = Localizable.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
+                }
+                else{
+                    self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
+                }
+            }
+            
+            self.statusLabel.textColor = UIColor.main.red
+            
+            if self.statusLabel.text == Localizable.shared.strings.offline.lowercased() {
+                self.statusLabel.textColor = UIColor.main.blueyGrey
+                self.statusView.backgroundColor = UIColor.clear
+                self.statusView.layer.borderWidth = 1
+                self.statusView.layer.borderColor = UIColor.main.blueyGrey.cgColor
+                self.statusView.glow()
+            }
+        }
+    }
 }
 
 extension BMNetworkStatusView: WalletModelDelegate {
-    func onNetwotkStatusChange(_ connected: Bool) {
-        
+    
+    func onNetwotkStartReconnecting() {
         DispatchQueue.main.async {
-            if AppModel.sharedManager().isNodeChanging {
-                return
-            }
-            self.indicatorView.stopAnimating()
-            self.statusView.alpha = 1
-            self.statusView.layer.borderWidth = 0
-
-            self.statusLabel.x = self.fromNib ? 20 : 35
+            self.isPrevRecconected = true
+            self.indicatorView.color = UIColor.main.orange
+            self.indicatorView.startAnimating()
             
-             if connected {
-                if AppModel.sharedManager().currencies.count == 0 && Settings.sharedManager().currency != BMCurrencyOff  {
-                    self.statusView.backgroundColor = UIColor.main.orange
-                    self.statusView.glow()
-                    
-                    self.statusLabel.text = "\(Localizable.shared.strings.online.lowercased()) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
-                    self.statusLabel.textColor = UIColor.main.blueyGrey
-                }
-                else {
-                    self.statusView.backgroundColor = UIColor.main.green
-                    self.statusView.glow()
-                    
-                    self.statusLabel.text = Localizable.shared.strings.online.lowercased()
-                    
-                    self.statusLabel.textColor = UIColor.main.blueyGrey
-                }
- 
-            }
-            else{
-                self.statusView.backgroundColor = UIColor.main.red
-                self.statusView.glow()
-
-                if AppModel.sharedManager().isInternetAvailable == false {
-                    self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
-                }
-                else{
-                    if Settings.sharedManager().isChangedNode() {
-                        self.statusLabel.text = Localizable.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
-                    }
-                    else{
-                        self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
-                    }
-                }
-                
-                self.statusLabel.textColor = UIColor.main.red
-                
-                if self.statusLabel.text == Localizable.shared.strings.offline.lowercased() {
-                    self.statusLabel.textColor = UIColor.main.blueyGrey
-                    self.statusView.backgroundColor = UIColor.clear
-                    self.statusView.layer.borderWidth = 1
-                    self.statusView.layer.borderColor = UIColor.main.blueyGrey.cgColor
-                    self.statusView.glow()
-                }
+            self.statusLabel.x = self.fromNib ? 22 : 37
+            self.statusLabel.text = Localizable.shared.strings.reconnect.lowercased()
+            self.statusView.alpha = 0
+            self.statusLabel.textColor = UIColor.main.blueyGrey
+        }
+    }
+    
+    func onNetwotkStatusChange(_ connected: Bool) {
+        DispatchQueue.main.async {
+            let time = (self.isPrevUpdate || self.isPrevRecconected) ? 1.5 : 0
+            DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+                self.isPrevUpdate = false
+                self.isPrevRecconected = false
+                self.changeStatus(connected: connected)
             }
         }
     }
@@ -150,6 +174,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
         
         DispatchQueue.main.async {
             if done != total  {
+                self.isPrevUpdate = true
                 self.indicatorView.color = UIColor.main.green
                 self.indicatorView.startAnimating()
                 
@@ -159,12 +184,17 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
-                if AppModel.sharedManager().isConnecting {
-                    self.onNetwotkStartConnecting(true)
-                }
-                else{
-                    self.indicatorView.stopAnimating()
-                    self.onNetwotkStatusChange(AppModel.sharedManager().isConnected)
+                let time = (self.isPrevUpdate || self.isPrevRecconected) ? 1.5 : 0
+                DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+                    self.isPrevUpdate = false
+                    self.isPrevRecconected = false
+                    if AppModel.sharedManager().isConnecting {
+                        self.onNetwotkStartConnecting(true)
+                    }
+                    else{
+                        self.indicatorView.stopAnimating()
+                        self.onNetwotkStatusChange(AppModel.sharedManager().isConnected)
+                    }
                 }
             }
         }
