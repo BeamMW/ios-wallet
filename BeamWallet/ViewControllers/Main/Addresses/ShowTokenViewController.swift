@@ -74,7 +74,7 @@ extension ShowTokenViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = BMMultiLineItem(title: Localizable.shared.strings.transaction_token, detail: token, detailFont: RegularFont(size: 16), detailColor: nil, copy: true)
+        let item = BMMultiLineItem(title: Localizable.shared.strings.transaction_token, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
         let cell = tableView
             .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
             .configured(with: item)

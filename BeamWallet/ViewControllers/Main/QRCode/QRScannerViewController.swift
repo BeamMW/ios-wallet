@@ -269,7 +269,13 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                 else{
                     back()
                     
-                    delegate?.didScanQRCode(value: address, amount: amount, privacy: nil)
+                    if(AppModel.sharedManager().isToken(address)) {
+                        let parameters = AppModel.sharedManager().getTransactionParameters(address)
+                        delegate?.didScanQRCode(value: address, amount: String.currency(value: parameters.amount), privacy: parameters.isMaxPrivacy)
+                    }
+                    else {
+                        delegate?.didScanQRCode(value: address, amount: amount, privacy: nil)
+                    }
                 }
             }
         }

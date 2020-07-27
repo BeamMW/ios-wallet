@@ -127,7 +127,7 @@ class SendTransactionViewModel: NSObject {
     }
     
     public func send() {
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: Double(fee) ?? 0, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact)
+        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: Double(fee) ?? 0, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, maxPrivacy: maxPrivacy)
         
         AppStoreReviewManager.incrementAppTransactions()
     }

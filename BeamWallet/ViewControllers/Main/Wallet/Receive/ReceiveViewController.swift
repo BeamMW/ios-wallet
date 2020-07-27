@@ -346,6 +346,7 @@ extension ReceiveViewController : BMCellProtocol {
             else if path.section == 3 {
                 viewModel.amount = text
                 tableView.reloadRows(at: [IndexPath(row: 2, section: 3)], with: .none)
+                tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
             }
         }
     }
@@ -354,6 +355,9 @@ extension ReceiveViewController : BMCellProtocol {
         if let path = tableView.indexPath(for: sender) {
             if path.section == 1 {
                 AppModel.sharedManager().setWalletComment(viewModel.address.label, toAddress: viewModel.address.walletId)
+            }
+            else if path.section == 3 {
+                
             }
         }
     }
@@ -438,5 +442,6 @@ extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
 extension ReceiveViewController: BMPickerCellDelegate {
     func onClickSwitch(value: Bool, cell: BMPickerCell) {
         viewModel.maxPrivacy = value
+        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
     }
 }

@@ -1,5 +1,5 @@
 //
-// BMPreparedTransaction.h
+// BMTransactionParameters.m
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,20 +17,8 @@
 // limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import "BMTransactionParameters.h"
 
-
-@interface BMPreparedTransaction : NSObject
-
-@property (nonatomic,assign) double amount;
-@property (nonatomic,assign) double fee;
-@property (nonatomic,assign) UInt64 date;
-@property (nonatomic,strong) NSString * _Nonnull address;
-@property (nonatomic,strong) NSString * _Nonnull comment;
-@property (nonatomic,strong) NSString * _Nonnull ID;
-@property (nonatomic,strong) NSString * _Nullable from;
-@property (nonatomic,assign) BOOL saveContact;
-@property (nonatomic,assign) BOOL maxPrivacy;
-
+@implementation BMTransactionParameters
 
 @end

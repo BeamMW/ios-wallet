@@ -1049,6 +1049,9 @@
 		92F9C21622B8233A006FCC86 /* ReceiveAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F9C21522B8233A006FCC86 /* ReceiveAddressViewModel.swift */; };
 		92F9C21722B8233A006FCC86 /* ReceiveAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F9C21522B8233A006FCC86 /* ReceiveAddressViewModel.swift */; };
 		92F9C21822B8233A006FCC86 /* ReceiveAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F9C21522B8233A006FCC86 /* ReceiveAddressViewModel.swift */; };
+		92FAAC8E24CEE46F00B3B56D /* BMTransactionParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FAAC8D24CEE46F00B3B56D /* BMTransactionParameters.m */; };
+		92FAAC8F24CEE46F00B3B56D /* BMTransactionParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FAAC8D24CEE46F00B3B56D /* BMTransactionParameters.m */; };
+		92FAAC9024CEE46F00B3B56D /* BMTransactionParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FAAC8D24CEE46F00B3B56D /* BMTransactionParameters.m */; };
 		92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610B22295A6E00AEABC1 /* InputWordCell.swift */; };
 		92FC610E22295A6E00AEABC1 /* InputWordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FC610C22295A6E00AEABC1 /* InputWordCell.xib */; };
 		92FC611022295DC100AEABC1 /* BMWordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610F22295DC100AEABC1 /* BMWordField.swift */; };
@@ -1562,6 +1565,8 @@
 		92F8EFD923509FE800A20B1A /* OnboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardCell.swift; sourceTree = "<group>"; };
 		92F8EFDA23509FE800A20B1A /* OnboardCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OnboardCell.xib; sourceTree = "<group>"; };
 		92F9C21522B8233A006FCC86 /* ReceiveAddressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveAddressViewModel.swift; sourceTree = "<group>"; };
+		92FAAC8C24CEE46F00B3B56D /* BMTransactionParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMTransactionParameters.h; sourceTree = "<group>"; };
+		92FAAC8D24CEE46F00B3B56D /* BMTransactionParameters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMTransactionParameters.m; sourceTree = "<group>"; };
 		92FC610B22295A6E00AEABC1 /* InputWordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputWordCell.swift; sourceTree = "<group>"; };
 		92FC610C22295A6E00AEABC1 /* InputWordCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputWordCell.xib; sourceTree = "<group>"; };
 		92FC610F22295DC100AEABC1 /* BMWordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMWordField.swift; sourceTree = "<group>"; };
@@ -1984,6 +1989,8 @@
 				92948EBB243B8EF00006FF71 /* BMCurrency.m */,
 				9280D03E2458499100735C52 /* BMNotification.h */,
 				9280D03F2458499100735C52 /* BMNotification.m */,
+				92FAAC8C24CEE46F00B3B56D /* BMTransactionParameters.h */,
+				92FAAC8D24CEE46F00B3B56D /* BMTransactionParameters.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -3236,6 +3243,7 @@
 				929885F8222B32C40038C015 /* Field.swift in Sources */,
 				926A8575222EA54F00A3B747 /* WalletProgressCell.swift in Sources */,
 				9225D548229449010067B4EA /* BMFieldCell.swift in Sources */,
+				92FAAC8E24CEE46F00B3B56D /* BMTransactionParameters.m in Sources */,
 				9210280924606E42001A7130 /* IndexedPagingItem.swift in Sources */,
 				9210280624606E42001A7130 /* PagingDistance.swift in Sources */,
 				92B7E4DD22AFBC6B001708E4 /* StatusViewModel.swift in Sources */,
@@ -3497,6 +3505,7 @@
 				9288DD34223A55410020C501 /* Field.swift in Sources */,
 				9288DD35223A55410020C501 /* WalletProgressCell.swift in Sources */,
 				9225D549229449010067B4EA /* BMFieldCell.swift in Sources */,
+				92FAAC8F24CEE46F00B3B56D /* BMTransactionParameters.m in Sources */,
 				9210280A24606E42001A7130 /* IndexedPagingItem.swift in Sources */,
 				9210280724606E42001A7130 /* PagingDistance.swift in Sources */,
 				92B7E4DE22AFBC6B001708E4 /* StatusViewModel.swift in Sources */,
@@ -3758,6 +3767,7 @@
 				92E2EAD9226F21C700367928 /* Field.swift in Sources */,
 				92E2EADA226F21C700367928 /* WalletProgressCell.swift in Sources */,
 				9225D54A229449010067B4EA /* BMFieldCell.swift in Sources */,
+				92FAAC9024CEE46F00B3B56D /* BMTransactionParameters.m in Sources */,
 				9210280B24606E42001A7130 /* IndexedPagingItem.swift in Sources */,
 				9210280824606E42001A7130 /* PagingDistance.swift in Sources */,
 				92B7E4DF22AFBC6B001708E4 /* StatusViewModel.swift in Sources */,

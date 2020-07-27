@@ -747,7 +747,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
         
-        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(false);
+        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(walletDb, false);
         auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(false);
         auto unlinkTxCreator = std::make_shared<lelantus::UnlinkFundsTransaction::Creator>(false);
         
@@ -906,20 +906,17 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return params && params->GetParameter<beam::wallet::TxType>(beam::wallet::TxParameterID::TransactionType);
 }
 
--(BMAddress*_Nonnull)generateToken {
+-(BMAddress*_Nonnull)generateAddress {
     WalletAddress address = GenerateNewAddress(walletDb, "", WalletAddress::ExpirationStatus::Never);
     
-    TxParameters params;
-    params.SetParameter(TxParameterID::PeerID, address.m_walletID);
-    params.SetParameter(TxParameterID::PeerWalletIdentity, address.m_Identity);
-    params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
-//    AddVoucherParameter(params, walletDb, address.m_OwnID);
-//    if (!params.GetParameter(TxParameterID::TransactionType))
-//    {
-//    }
-    
-    auto token = to_string(params);
-    LOG_INFO() << "token: " << token;
+//    TxParameters params;
+//    params.SetParameter(TxParameterID::PeerID, address.m_walletID);
+//    params.SetParameter(TxParameterID::PeerWalletIdentity, address.m_Identity);
+//    params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
+//
+//    auto token = to_string(params);
+//
+//    LOG_INFO() << "token: " << token;
 
     BMAddress *bmAddress = [[BMAddress alloc] init];
     bmAddress.duration = address.m_duration;
@@ -928,10 +925,38 @@ bool OnProgress(uint64_t done, uint64_t total) {
     bmAddress.categories = [NSMutableArray new];
     bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
     bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
-    bmAddress.token = [NSString stringWithUTF8String:token.c_str()];
-    
+    bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
+    bmAddress.token = [self token:NO amount:0 walleetId:bmAddress.walletId];
+
     return bmAddress;
 }
+
+-(NSString*_Nonnull)token:(BOOL)maxPrivacy amount:(double)amount walleetId:(NSString*_Nonnull)walleetId{
+    WalletID m_walletID(Zero);
+    m_walletID.FromHex(walleetId.string);
+    
+    PeerID m_Identity = m_walletID.m_Pk;
+    
+    TxParameters params;
+    params.SetParameter(TxParameterID::PeerID, m_walletID);
+    params.SetParameter(TxParameterID::PeerWalletIdentity, m_Identity);
+   
+    if (amount > 0) {
+        uint64_t bAmount = round(amount * Rules::Coin);
+        params.SetParameter(TxParameterID::Amount, bAmount);
+    }
+    
+    if (maxPrivacy) {
+        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
+    }
+    else {
+        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
+    }
+    
+    auto token = to_string(params);
+    return [NSString stringWithUTF8String:token.c_str()];
+}
+
 
 void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID) {
     auto kdf = db->get_MasterKdf();
@@ -1510,7 +1535,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 -(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount {
     
     NSString *qrString = [NSString stringWithFormat:@"beam:%@",address];
-    if (amount!=nil) {
+    if (amount!=nil && ![self isToken:address]) {
         NSString *trimmed = [amount stringByReplacingOccurrencesOfString:@"," withString:@"."];
         if (trimmed.doubleValue > 0) {
             qrString = [qrString stringByAppendingString:[NSString stringWithFormat:@"?amount=%@",trimmed]];
@@ -1759,7 +1784,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     }
 }
 
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from {
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from maxPrivacy:(BOOL)maxPrivacy {
     
     auto txParameters = beam::wallet::ParseParameters(to.string);
     if (!txParameters)
@@ -1781,7 +1806,6 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     .SetParameter(beam::wallet::TxParameterID::Fee, bfee)
     .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
     
-    
     WalletID fromID(Zero);
     fromID.FromHex(from.string);
     p.SetParameter(beam::wallet::TxParameterID::PeerID, peer);
@@ -1797,6 +1821,13 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     if (identity)
     {
         p.SetParameter(beam::wallet::TxParameterID::PeerWalletIdentity, *identity);
+    }
+    
+    if (maxPrivacy) {
+        p.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
+    }
+    else {
+        p.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
     }
     
     wallet->getAsync()->startTransaction(std::move(p));
@@ -1828,7 +1859,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     }
 }
 
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact {
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact maxPrivacy:(BOOL)maxPrivacy {
     
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
@@ -1839,6 +1870,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     transaction.date = [[NSDate date] timeIntervalSince1970];
     transaction.ID = [NSString randomAlphanumericStringWithLength:10];
     transaction.saveContact = saveContact;
+    transaction.maxPrivacy = maxPrivacy;
     
     [_preparedTransactions addObject:transaction];
     
@@ -1880,6 +1912,22 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     }
     
     return allValue;
+}
+
+-(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token {
+    auto params = beam::wallet::ParseParameters(token.string);
+    auto amount = params->GetParameter<Amount>(TxParameterID::Amount);
+    auto type = params->GetParameter<TxType>(TxParameterID::TransactionType);
+
+    BMTransactionParameters *p = [BMTransactionParameters new];
+    p.amount = 0.0;
+    p.isMaxPrivacy = type == TxType::PushTransaction;
+
+    if(amount) {
+        p.amount = double(uint64_t(*amount)) / Rules::Coin;
+    }
+    
+    return p;
 }
 
 #pragma mark - Logs
@@ -2125,7 +2173,7 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
                 [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
             }
             else{
-                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from];
+                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from maxPrivacy:_preparedTransactions[i].maxPrivacy];
             }
             
             if (!_preparedTransactions[i].saveContact) {

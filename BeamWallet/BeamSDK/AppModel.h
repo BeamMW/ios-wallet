@@ -35,6 +35,7 @@
 #import "BMLogValue.h"
 #import "BMCurrency.h"
 #import "BMNotification.h"
+#import "BMTransactionParameters.h"
 
 enum {
     BMRestoreManual = 0,
@@ -150,7 +151,8 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
--(BMAddress*_Nonnull)generateToken;
+-(BMAddress*_Nonnull)generateAddress;
+-(NSString*_Nonnull)token:(BOOL)maxPrivacy amount:(double)amount walleetId:(NSString*_Nonnull)walleetId;
 
 // addresses
 -(BOOL)isAddress:(NSString*_Nullable)address;
@@ -186,13 +188,14 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact;
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from maxPrivacy:(BOOL)maxPrivacy;
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact maxPrivacy:(BOOL)maxPrivacy;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
 -(NSString*_Nonnull)allUnlinkAmount:(double)fee;
 -(double)realTotal:(double)amount fee:(double)fee;
 -(double)remaining:(double)amount fee:(double)fee;
+-(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;

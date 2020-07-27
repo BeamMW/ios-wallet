@@ -30,6 +30,7 @@
 @property (nonatomic,strong) NSString * _Nonnull walletId;
 @property (nonatomic,strong) NSString * _Nullable token;
 @property (nonatomic,strong) NSString * _Nonnull label;
+@property (nonatomic,strong) NSString * _Nullable identity;
 @property (nonatomic,strong) NSMutableArray<NSString*> * _Nonnull categories;
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;

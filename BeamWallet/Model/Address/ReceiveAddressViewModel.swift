@@ -42,7 +42,14 @@ class ReceiveAddressViewModel: NSObject {
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
     
-    public var maxPrivacy = false
+    public var maxPrivacy = false {
+        didSet {
+            if address != nil {
+                let bmAmount = Double(amount ?? "0") ?? 0
+                address.token = AppModel.sharedManager().token(maxPrivacy, amount: bmAmount, walleetId: address.walletId)
+            }
+        }
+    }
     
     public var address: BMAddress!
     public var expire = ExpireOptions.parmanent {
@@ -59,14 +66,26 @@ class ReceiveAddressViewModel: NSObject {
 
     public var isShared = false
     
-    public var amount: String?
+    public var amount: String? {
+        didSet {
+            let bmAmount = Double(amount ?? "0") ?? 0
+            address.token = AppModel.sharedManager().token(maxPrivacy, amount: bmAmount, walleetId: address.walletId)
+        }
+    }
     
     override init() {
         super.init()
     }
     
     public func createAddress() {
-        address = AppModel.sharedManager().generateToken()
+        address = AppModel.sharedManager().generateAddress()
+        
+        let bmAmount = Double(amount ?? "0") ?? 0
+        
+        if(maxPrivacy || bmAmount > 0) {
+            address.token = AppModel.sharedManager().token(maxPrivacy, amount: bmAmount, walleetId: address.walletId)
+        }
+        
         self.onAddressCreated?(nil)
     }
     
