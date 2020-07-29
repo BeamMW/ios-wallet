@@ -9,141 +9,92 @@
 import UIKit
 
 @objc protocol ReceiveAddressOptionsCellDelegate: AnyObject {
-    @objc optional func onWallet()
-    @objc optional func onPool()
+    @objc optional func onRegular()
+    @objc optional func onMaxPrivacy()
     @objc optional func onOneTime()
     @objc optional func onPermament()
-    @objc optional func onShowToken()
 }
 
 class ReceiveAddressOptionsCell: BaseCell {
     weak var delegate: ReceiveAddressOptionsCellDelegate?
 
-    @IBOutlet private var generalLabel: UILabel!
-    @IBOutlet private var fromLabel: UILabel!
-    @IBOutlet private var tokenLabel: UILabel!
-    @IBOutlet private var tokenValueLabel: UILabel!
-
-    @IBOutlet private var oneTimeWidth: NSLayoutConstraint!
-    @IBOutlet private var walletWidth: NSLayoutConstraint!
-
-    @IBOutlet private var oneTimeButton: UIButton!
-    @IBOutlet private var permButton: UIButton!
-    @IBOutlet private var walletButton: UIButton!
-    @IBOutlet private var poolButton: UIButton!
-
-    private var oneTime = false
-    private var wallet = false
-    private var token = ""
+    @IBOutlet weak var transactionTypeSegment: MASegmentedControl! {
+        didSet {
+            transactionTypeSegment.itemsWithText = true
+            transactionTypeSegment.fillEqually = true
+            transactionTypeSegment.roundedControl = true
+            
+            transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.max_privacy_title])
+            transactionTypeSegment.padding = 2
+            transactionTypeSegment.textColor = UIColor.main.blueyGrey
+            transactionTypeSegment.selectedTextColor = UIColor.main.brightTeal
+            transactionTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
+            transactionTypeSegment.titlesFont = SemiboldFont(size: 14)
+            transactionTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
+            transactionTypeSegment.customBorderColor = UIColor.red
+        }
+    }
+    
+    @IBOutlet weak var expireTypeSegment: MASegmentedControl! {
+        didSet {
+            expireTypeSegment.itemsWithText = true
+            expireTypeSegment.fillEqually = true
+            expireTypeSegment.roundedControl = true
+            
+            expireTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.one_time, Localizable.shared.strings.permanent])
+            expireTypeSegment.padding = 2
+            expireTypeSegment.textColor = UIColor.main.blueyGrey
+            expireTypeSegment.selectedTextColor = UIColor.main.brightTeal
+            expireTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
+            expireTypeSegment.titlesFont = SemiboldFont(size: 14)
+            expireTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
+            expireTypeSegment.customBorderColor = UIColor.red
+        }
+    }
+    
+    @IBOutlet private var transactionTypeLabel: UILabel!
+    @IBOutlet private var expirationLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        permButton.setTitle(Localizable.shared.strings.permanent, for: .normal)
-        oneTimeButton.setTitle(Localizable.shared.strings.one_time, for: .normal)
-        walletButton.setTitle(Localizable.shared.strings.wallet, for: .normal)
-        poolButton.setTitle(Localizable.shared.strings.pool, for: .normal)
-
         if Settings.sharedManager().isDarkMode {
-            fromLabel.textColor = UIColor.main.steel;
-            tokenLabel.textColor = UIColor.main.steel;
-            generalLabel.textColor = UIColor.main.steel;
+            transactionTypeLabel.textColor = UIColor.main.steel;
+            expirationLabel.textColor = UIColor.main.steel;
         }
         
-        generalLabel.text = Localizable.shared.strings.general.uppercased()
-        generalLabel.letterSpacing = 2
-        
-        fromLabel.text = Localizable.shared.strings.receive_from.uppercased()
-        fromLabel.letterSpacing = 2
-        
-        tokenLabel.text = Localizable.shared.strings.transaction_token.uppercased()
-        tokenLabel.letterSpacing = 2
+        expirationLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.token_expiration.uppercased(), letter: Localizable.shared.strings.token_expiration.uppercased())
+
+        transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.transaction_type.uppercased(), letter: Localizable.shared.strings.transaction_type.uppercased())
         
         selectionStyle = .none
     }
     
-    @IBAction func onWallet(sender: UIButton) {
-        delegate?.onWallet?()
+    @IBAction func onExpire(sender: MASegmentedControl) {
+        if(sender.selectedSegmentIndex == 0) {
+            self.delegate?.onOneTime?()
+        }
+        else {
+            self.delegate?.onPermament?()
+        }
     }
     
-    @IBAction func onPool(sender: UIButton) {
-        delegate?.onPool?()
-    }
-    
-    @IBAction func onOneTime(sender: UIButton) {
-        delegate?.onOneTime?()
-    }
-    
-    @IBAction func onPerm(sender: UIButton) {
-        delegate?.onPermament?()
-    }
-    
-    @IBAction func onShowToken(sender: UIButton) {
-        delegate?.onShowToken?()
+    @IBAction func onTransaction(sender: MASegmentedControl) {
+        if(sender.selectedSegmentIndex == 0) {
+            self.delegate?.onRegular?()
+        }
+        else {
+            self.delegate?.onMaxPrivacy?()
+        }
     }
 }
 
 extension ReceiveAddressOptionsCell: Configurable {
     
-    func configure(with options: (oneTime: Bool, wallet: Bool, token: String)) {
-        oneTime = options.oneTime
-        wallet = options.wallet
-        token = options.token
-        
-        if options.oneTime {
-            oneTimeWidth.constant = 120
-            oneTimeButton.setBackgroundColor(color: UIColor.main.brightTeal.withAlphaComponent(0.1), forState: .normal)
-            oneTimeButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
-            oneTimeButton.borderWidth = 1
-            oneTimeButton.borderColor = UIColor.main.brightTeal
-            oneTimeButton.contentHorizontalAlignment = .center
-            
-            permButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
-            permButton.setTitleColor(UIColor.white, for: .normal)
-            permButton.borderWidth = 0
-            permButton.borderColor = UIColor.clear
+    func configure(with options: (oneTime: Bool, maxPrivacy: Bool, needReload: Bool)) {
+        if options.needReload {
+            transactionTypeSegment.selectedSegmentIndex = options.maxPrivacy ? 1 : 0
+            expireTypeSegment.selectedSegmentIndex = options.oneTime ? 0 : 1
         }
-        else {
-            permButton.setBackgroundColor(color: UIColor.main.brightTeal.withAlphaComponent(0.1), forState: .normal)
-            permButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
-            permButton.borderWidth = 1
-            permButton.borderColor = UIColor.main.brightTeal
-            
-            oneTimeButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
-            oneTimeButton.setTitleColor(UIColor.white, for: .normal)
-            oneTimeButton.borderWidth = 0
-            oneTimeButton.borderColor = UIColor.clear
-            oneTimeButton.contentHorizontalAlignment = .left
-            oneTimeWidth.constant = 100
-        }
-        
-        if options.wallet {
-            walletWidth.constant = 120
-            walletButton.setBackgroundColor(color: UIColor.main.brightTeal.withAlphaComponent(0.1), forState: .normal)
-            walletButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
-            walletButton.borderWidth = 1
-            walletButton.borderColor = UIColor.main.brightTeal
-            walletButton.contentHorizontalAlignment = .center
-
-            poolButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
-            poolButton.setTitleColor(UIColor.white, for: .normal)
-            poolButton.borderWidth = 0
-            poolButton.borderColor = UIColor.clear
-        }
-        else {
-            poolButton.setBackgroundColor(color: UIColor.main.brightTeal.withAlphaComponent(0.1), forState: .normal)
-            poolButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
-            poolButton.borderWidth = 1
-            poolButton.borderColor = UIColor.main.brightTeal
-            
-            walletButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
-            walletButton.setTitleColor(UIColor.white, for: .normal)
-            walletButton.borderWidth = 0
-            walletButton.borderColor = UIColor.clear
-            walletButton.contentHorizontalAlignment = .left
-            walletWidth.constant = 60
-        }
-        
-        tokenValueLabel.text = options.token
     }
 }

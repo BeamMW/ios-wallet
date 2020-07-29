@@ -49,15 +49,15 @@ class InputFeePopover: BaseViewController {
         
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
         
-        if self.type == BMTransactionTypeSimple {
-            titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
-        }
-        else {
+        if self.type == BMTransactionTypeUnlink {
             titleLabel.text = Localizable.shared.strings.unlinking_fee.uppercased()
             feeField.textColor = UIColor.main.brightTeal
             feeField.setNormalColor(color: UIColor.main.brightTeal)
             nextButton.backgroundColor = UIColor.main.brightTeal
             nextButton.awakeFromNib()
+        }
+        else {
+            titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
         }
         
         titleLabel.letterSpacing = 1.5
@@ -83,8 +83,18 @@ class InputFeePopover: BaseViewController {
         }
         
         let v = Int32(mainFee) ?? 0
-        let min = self.type == BMTransactionTypeSimple ? AppModel.sharedManager().getMinFeeInGroth() : AppModel.sharedManager().getMinUnlinkFeeInGroth()
+        var min = Int32(0)
         
+        if(self.type == BMTransactionTypeSimple) {
+            min = AppModel.sharedManager().getMinFeeInGroth()
+        }
+        else if(self.type == BMTransactionTypePushTransaction) {
+            min = AppModel.sharedManager().getMinMaxPrivacyFeeInGroth()
+        }
+        else if(self.type == BMTransactionTypeUnlink) {
+            min = AppModel.sharedManager().getMinUnlinkFeeInGroth()
+        }
+                
         if v < min {
             grothTitleLabelY.constant = 5
             

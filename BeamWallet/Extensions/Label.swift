@@ -52,6 +52,14 @@ extension UILabel {
 
 extension UILabel {
         
+    public func setLetterSpacingOnly(value:CGFloat, title:String, letter:String)
+    {
+        let attributedString = NSMutableAttributedString(string: title)
+        attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(value), range: NSRange(location: 0, length: letter.count))
+        
+        self.attributedText = attributedString
+    }
+    
     private func setLetterSpacing(value:CGFloat, title:String? = nil)
     {
         if let titleString = title, titleString.isEmpty == false {

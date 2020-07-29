@@ -20,9 +20,9 @@
 import Foundation
 
 class ReceiveAddressViewModel: NSObject {
-    enum ReceiveOptions: Int {
-        case wallet = 0
-        case pool = 1
+    enum TransactionOptions: Int {
+        case regular = 0
+        case privacy = 1
     }
     
     enum ExpireOptions: Int {
@@ -36,40 +36,38 @@ class ReceiveAddressViewModel: NSObject {
         case edit = 2
     }
     
+    public var needReloadButtons = false
+
     public var transactionComment = String.empty()
     
     public var onAddressCreated: ((Error?) -> Void)?
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
     
-    public var maxPrivacy = false {
-        didSet {
-            if address != nil {
-                let bmAmount = Double(amount ?? "0") ?? 0
-                address.token = AppModel.sharedManager().token(maxPrivacy, amount: bmAmount, walleetId: address.walletId)
-            }
-        }
-    }
-    
     public var address: BMAddress!
-    public var expire = ExpireOptions.parmanent {
+    public var expire = ExpireOptions.oneTime {
         didSet {
             if address != nil {
-                let hours = expire == .oneTime ? 24 : 0
-                address.duration = hours == 24 ? 86400 : 0
+                let hours = expire == .oneTime ? Settings.sharedManager().maxAddressDurationHours : 0
+                address.duration = UInt64(hours == Settings.sharedManager().maxAddressDurationHours ? Settings.sharedManager().maxAddressDurationSeconds : 0)
                 
                 AppModel.sharedManager().setExpires(Int32(hours), toAddress: address.walletId)
+                
+                generateTokens()
             }
         }
     }
-    public var receive = ReceiveOptions.wallet
+    public var transaction = TransactionOptions.regular {
+        didSet {
+            generateTokens()
+        }
+    }
 
     public var isShared = false
     
     public var amount: String? {
         didSet {
-            let bmAmount = Double(amount ?? "0") ?? 0
-            address.token = AppModel.sharedManager().token(maxPrivacy, amount: bmAmount, walleetId: address.walletId)
+            generateTokens()
         }
     }
     
@@ -77,14 +75,14 @@ class ReceiveAddressViewModel: NSObject {
         super.init()
     }
     
+    private func generateTokens() {
+        address.token = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: false, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, ownId: Int64(address.ownerId))
+        address.offlineToken = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: true, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, ownId: Int64(address.ownerId))
+    }
+    
     public func createAddress() {
         address = AppModel.sharedManager().generateAddress()
-        
-        let bmAmount = Double(amount ?? "0") ?? 0
-        
-        if(maxPrivacy || bmAmount > 0) {
-            address.token = AppModel.sharedManager().token(maxPrivacy, amount: bmAmount, walleetId: address.walletId)
-        }
+        generateTokens()
         
         self.onAddressCreated?(nil)
     }
@@ -150,28 +148,47 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     
-    public func onQRCode() {
-        if let top = UIApplication.getTopMostViewController() {
-            if amount == Localizable.shared.strings.zero {
-                top.alert(title: Localizable.shared.strings.wrong_requested_amount_title, message: Localizable.shared.strings.wrong_requested_amount_text, handler: nil)
-            }
-            else {
-                isShared = true
-                
-                let modalViewController = QRViewController(address: address, amount: amount, isToken: receive == .wallet)
-                modalViewController.onShared = { [weak self] in
-                    self?.onShared?()
-                }
-                modalViewController.modalPresentationStyle = .overFullScreen
-                modalViewController.modalTransitionStyle = .crossDissolve
-                top.present(modalViewController, animated: true, completion: nil)
-            }
+    public func onShare() {
+        if transaction == .regular && expire == .oneTime, let token = address.token {
+            self.showShareDialog(token)
+        }
+        else if (transaction == .privacy && expire == .oneTime) || (transaction == .privacy && expire == .parmanent) {
+            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased())", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.offline_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_offline_token)]
+            self.showPopoverMenu(items)
+        }
+        else if transaction == .regular && expire == .parmanent {
+            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased())", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_pool.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_pool_token)]
+            self.showPopoverMenu(items)
         }
     }
     
-    public func onShare() {
+    private func showPopoverMenu(_ items:[BMPopoverMenu.BMPopoverMenuItem]) {
+        BMPopoverMenu.show(menuArray: items, done: { selectedItem in
+            if let item = selectedItem {
+                switch item.action {
+                case .share_online_token:
+                    if let token = self.address.token {
+                        self.showShareDialog(token)
+                    }
+                    break
+                case .share_offline_token:
+                    if let token = self.address.offlineToken {
+                        self.showShareDialog(token)
+                    }
+                    break
+                case .share_pool_token:
+                    self.showShareDialog(self.address.walletId)
+                    break
+                default:
+                    return
+                }
+            }
+        }) {}
+    }
+    
+    private func showShareDialog(_ token:String) {
         if let top = UIApplication.getTopMostViewController() {
-            let share = (receive == .wallet ? address.token : address.walletId) ?? String.empty()
+            let share = token
             let vc = UIActivityViewController(activityItems: [share], applicationActivities: [])
             vc.completionWithItemsHandler = { [weak self] (activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {

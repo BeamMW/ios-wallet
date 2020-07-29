@@ -1037,6 +1037,30 @@
 		92F6B79922A588280055C3C3 /* BMSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F6B79822A588280055C3C3 /* BMSlider.swift */; };
 		92F6B79A22A588280055C3C3 /* BMSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F6B79822A588280055C3C3 /* BMSlider.swift */; };
 		92F6B79B22A588280055C3C3 /* BMSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F6B79822A588280055C3C3 /* BMSlider.swift */; };
+		92F78B9D24CF12B300489229 /* AddressTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78B9B24CF12B300489229 /* AddressTypeCell.swift */; };
+		92F78B9E24CF12B300489229 /* AddressTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78B9B24CF12B300489229 /* AddressTypeCell.swift */; };
+		92F78B9F24CF12B300489229 /* AddressTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78B9B24CF12B300489229 /* AddressTypeCell.swift */; };
+		92F78BA024CF12B300489229 /* AddressTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78B9C24CF12B300489229 /* AddressTypeCell.xib */; };
+		92F78BA124CF12B300489229 /* AddressTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78B9C24CF12B300489229 /* AddressTypeCell.xib */; };
+		92F78BA224CF12B300489229 /* AddressTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78B9C24CF12B300489229 /* AddressTypeCell.xib */; };
+		92F78BAA24D0322900489229 /* MASegmentedControl+actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BA824D0322900489229 /* MASegmentedControl+actions.swift */; };
+		92F78BAB24D0322900489229 /* MASegmentedControl+actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BA824D0322900489229 /* MASegmentedControl+actions.swift */; };
+		92F78BAC24D0322900489229 /* MASegmentedControl+actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BA824D0322900489229 /* MASegmentedControl+actions.swift */; };
+		92F78BAD24D0322900489229 /* MASegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BA924D0322900489229 /* MASegmentedControl.swift */; };
+		92F78BAE24D0322900489229 /* MASegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BA924D0322900489229 /* MASegmentedControl.swift */; };
+		92F78BAF24D0322900489229 /* MASegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BA924D0322900489229 /* MASegmentedControl.swift */; };
+		92F78BB224D04C6000489229 /* ReceiveAddressTokensCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BB024D04C5F00489229 /* ReceiveAddressTokensCell.swift */; };
+		92F78BB324D04C6000489229 /* ReceiveAddressTokensCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BB024D04C5F00489229 /* ReceiveAddressTokensCell.swift */; };
+		92F78BB424D04C6000489229 /* ReceiveAddressTokensCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BB024D04C5F00489229 /* ReceiveAddressTokensCell.swift */; };
+		92F78BB524D04C6000489229 /* ReceiveAddressTokensCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78BB124D04C6000489229 /* ReceiveAddressTokensCell.xib */; };
+		92F78BB624D04C6000489229 /* ReceiveAddressTokensCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78BB124D04C6000489229 /* ReceiveAddressTokensCell.xib */; };
+		92F78BB724D04C6000489229 /* ReceiveAddressTokensCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78BB124D04C6000489229 /* ReceiveAddressTokensCell.xib */; };
+		92F78BBC24D06D2200489229 /* QRCodeSmallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BBA24D06D2200489229 /* QRCodeSmallViewController.swift */; };
+		92F78BBD24D06D2200489229 /* QRCodeSmallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BBA24D06D2200489229 /* QRCodeSmallViewController.swift */; };
+		92F78BBE24D06D2200489229 /* QRCodeSmallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F78BBA24D06D2200489229 /* QRCodeSmallViewController.swift */; };
+		92F78BBF24D06D2200489229 /* QRCodeSmallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78BBB24D06D2200489229 /* QRCodeSmallViewController.xib */; };
+		92F78BC024D06D2200489229 /* QRCodeSmallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78BBB24D06D2200489229 /* QRCodeSmallViewController.xib */; };
+		92F78BC124D06D2200489229 /* QRCodeSmallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F78BBB24D06D2200489229 /* QRCodeSmallViewController.xib */; };
 		92F8EFD6235091B500A20B1A /* OnboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8EFD5235091B500A20B1A /* OnboardManager.swift */; };
 		92F8EFD7235091B500A20B1A /* OnboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8EFD5235091B500A20B1A /* OnboardManager.swift */; };
 		92F8EFD8235091B500A20B1A /* OnboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8EFD5235091B500A20B1A /* OnboardManager.swift */; };
@@ -1560,6 +1584,14 @@
 		92F6B79022A558530055C3C3 /* FeeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeCell.swift; sourceTree = "<group>"; };
 		92F6B79122A558530055C3C3 /* FeeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeeCell.xib; sourceTree = "<group>"; };
 		92F6B79822A588280055C3C3 /* BMSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSlider.swift; sourceTree = "<group>"; };
+		92F78B9B24CF12B300489229 /* AddressTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTypeCell.swift; sourceTree = "<group>"; };
+		92F78B9C24CF12B300489229 /* AddressTypeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddressTypeCell.xib; sourceTree = "<group>"; };
+		92F78BA824D0322900489229 /* MASegmentedControl+actions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MASegmentedControl+actions.swift"; sourceTree = "<group>"; };
+		92F78BA924D0322900489229 /* MASegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MASegmentedControl.swift; sourceTree = "<group>"; };
+		92F78BB024D04C5F00489229 /* ReceiveAddressTokensCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveAddressTokensCell.swift; sourceTree = "<group>"; };
+		92F78BB124D04C6000489229 /* ReceiveAddressTokensCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceiveAddressTokensCell.xib; sourceTree = "<group>"; };
+		92F78BBA24D06D2200489229 /* QRCodeSmallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeSmallViewController.swift; sourceTree = "<group>"; };
+		92F78BBB24D06D2200489229 /* QRCodeSmallViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRCodeSmallViewController.xib; sourceTree = "<group>"; };
 		92F82512222C33F6000D34F7 /* BeamWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BeamWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		92F8EFD5235091B500A20B1A /* OnboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardManager.swift; sourceTree = "<group>"; };
 		92F8EFD923509FE800A20B1A /* OnboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardCell.swift; sourceTree = "<group>"; };
@@ -1850,6 +1882,7 @@
 		9212DBC622E0CD720053FC99 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				92F78BA724D0322900489229 /* MASegmentedControl */,
 				9210276B24606E42001A7130 /* Parchment */,
 				92D6DB4A22DF63B40086DFF7 /* MaterialActivityIndicator */,
 				926F4B1722E0CDB7007755D9 /* LGSideMenuController */,
@@ -2063,6 +2096,8 @@
 				9225D557229455CA0067B4EA /* ReceiveAddressButtonsCell.xib */,
 				926BCD3A24AC842700688165 /* ReceiveAddressOptionsCell.swift */,
 				926BCD3B24AC842700688165 /* ReceiveAddressOptionsCell.xib */,
+				92F78BB024D04C5F00489229 /* ReceiveAddressTokensCell.swift */,
+				92F78BB124D04C6000489229 /* ReceiveAddressTokensCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2244,6 +2279,8 @@
 			children = (
 				9261C255228BF55800D666E0 /* AddressExpiresCell.swift */,
 				9261C252228BF55800D666E0 /* AddressExpiresCell.xib */,
+				92F78B9B24CF12B300489229 /* AddressTypeCell.swift */,
+				92F78B9C24CF12B300489229 /* AddressTypeCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -2579,6 +2616,8 @@
 		92F6B79C22A5B6C60055C3C3 /* QRCode */ = {
 			isa = PBXGroup;
 			children = (
+				92F78BBA24D06D2200489229 /* QRCodeSmallViewController.swift */,
+				92F78BBB24D06D2200489229 /* QRCodeSmallViewController.xib */,
 				92A1BA012236920C008135B5 /* QRViewController.swift */,
 				92A1BA022236920C008135B5 /* QRViewController.xib */,
 				92AE366A22383D2300E0810B /* QRScannerViewController.swift */,
@@ -2586,6 +2625,15 @@
 				92C5EBA1229BE48E00ABFFF7 /* PreviewQRViewController.swift */,
 			);
 			path = QRCode;
+			sourceTree = "<group>";
+		};
+		92F78BA724D0322900489229 /* MASegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				92F78BA824D0322900489229 /* MASegmentedControl+actions.swift */,
+				92F78BA924D0322900489229 /* MASegmentedControl.swift */,
+			);
+			path = MASegmentedControl;
 			sourceTree = "<group>";
 		};
 		92FC6111222964E900AEABC1 /* Model */ = {
@@ -2796,6 +2844,7 @@
 			files = (
 				926A857D222EC10C00A3B747 /* WalletTransactionSearchCell.xib in Resources */,
 				92194FCE236C498F005A1315 /* BMPickerCell2.xib in Resources */,
+				92F78BA024CF12B300489229 /* AddressTypeCell.xib in Resources */,
 				92480DA5229540280084512A /* BMAmountCell.xib in Resources */,
 				92790DA6224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */,
 				92FE263B22A11E4E00102DB4 /* BMPickedAddressCell.xib in Resources */,
@@ -2804,6 +2853,7 @@
 				92E4AECA23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92B39D6E2260CB97006D27A5 /* phrases.txt in Resources */,
 				925AD5E62228254F00DDE66B /* LaunchScreen.storyboard in Resources */,
+				92F78BB524D04C6000489229 /* ReceiveAddressTokensCell.xib in Resources */,
 				924727BC235A254700E8AF2B /* CreateWalletPasswordViewController.xib in Resources */,
 				92365B07222D743A000D7064 /* EnterWalletPasswordViewController.xib in Resources */,
 				9231E3FB225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */,
@@ -2828,6 +2878,7 @@
 				92F6B78C22A541040055C3C3 /* SendAllCell.xib in Resources */,
 				9280D0482458631000735C52 /* BMPickerCell3.xib in Resources */,
 				9212DB9C22E0990D0053FC99 /* BMEmptyView.xib in Resources */,
+				92F78BBF24D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
 				92CC40EB22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				9246F75D227C48830091FB0B /* BMEmptyCell.xib in Resources */,
 				92538F62222B5F7E00792A25 /* OpenWalletProgressViewController.xib in Resources */,
@@ -2910,6 +2961,7 @@
 				927EDE4C22A7F6BF005D5CEA /* InputFeePopover.xib in Resources */,
 				927F04F8245B1F790058372E /* NotificationVersionViewController.xib in Resources */,
 				9288DD81223A55410020C501 /* QRScannerViewController.xib in Resources */,
+				92F78BB624D04C6000489229 /* ReceiveAddressTokensCell.xib in Resources */,
 				927993C522F424D300FF8ECC /* InfoPlist.strings in Resources */,
 				9288DD82223A55410020C501 /* SF-Pro-Display-Bold.otf in Resources */,
 				9246F75E227C48830091FB0B /* BMEmptyCell.xib in Resources */,
@@ -2917,6 +2969,7 @@
 				92F6B78D22A541040055C3C3 /* SendAllCell.xib in Resources */,
 				92FE263C22A11E4E00102DB4 /* BMPickedAddressCell.xib in Resources */,
 				927D2F8722CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
+				92F78BA124CF12B300489229 /* AddressTypeCell.xib in Resources */,
 				92790DAD224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */,
 				92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */,
 				9225D53522941F940067B4EA /* SFProText-Regular.ttf in Resources */,
@@ -2930,6 +2983,7 @@
 				9261C269228BF55800D666E0 /* BMPickerCell.xib in Resources */,
 				9288DD8A223A55410020C501 /* QRViewController.xib in Resources */,
 				9212DBBE22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
+				92F78BC024D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
 				9261C281228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
 				9288DD8B223A55410020C501 /* WalletAvailableCell.xib in Resources */,
 				9288DD8C223A55410020C501 /* WalletStatusCell.xib in Resources */,
@@ -2970,6 +3024,7 @@
 				92E2EB46226F21C700367928 /* TransactionUTXOCell.xib in Resources */,
 				924727BE235A254700E8AF2B /* CreateWalletPasswordViewController.xib in Resources */,
 				92E2EB47226F21C700367928 /* phrases.txt in Resources */,
+				92F78BA224CF12B300489229 /* AddressTypeCell.xib in Resources */,
 				92E2EB48226F21C700367928 /* LaunchScreen.storyboard in Resources */,
 				92E2EB49226F21C700367928 /* EnterWalletPasswordViewController.xib in Resources */,
 				92E2EB4B226F21C700367928 /* SF-Pro-Display-RegularItalic.otf in Resources */,
@@ -3006,6 +3061,7 @@
 				92E2EB57226F21C700367928 /* WordCell.xib in Resources */,
 				92E2EB59226F21C700367928 /* UTXOTransactionCell.xib in Resources */,
 				92CC40ED22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
+				92F78BC124D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
 				92E2EB5A226F21C700367928 /* QRScannerViewController.xib in Resources */,
 				92E2EB5B226F21C700367928 /* SF-Pro-Display-Bold.otf in Resources */,
 				9261C282228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
@@ -3034,6 +3090,7 @@
 				92E2EB74226F21C700367928 /* ProximaNova-Regular.ttf in Resources */,
 				92E2EB75226F21C700367928 /* SF-Pro-Display-Semibold.otf in Resources */,
 				92E2EB76226F21C700367928 /* WellcomeViewController.xib in Resources */,
+				92F78BB724D04C6000489229 /* ReceiveAddressTokensCell.xib in Resources */,
 				92E4AED42359A055004062A1 /* CollectionButtonFooter.xib in Resources */,
 				92E2EB78226F21C700367928 /* ProximaNova-Bold.ttf in Resources */,
 				92E2EB79226F21C700367928 /* LaunchScreenTestNet.storyboard in Resources */,
@@ -3259,6 +3316,7 @@
 				921027BE24606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */,
 				92227AF92281981E0070DC68 /* BMCategory.m in Sources */,
 				927D2F8E22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
+				92F78BAD24D0322900489229 /* MASegmentedControl.swift in Sources */,
 				92365ADB222D3F5E000D7064 /* Settings.m in Sources */,
 				927D2F8222CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
 				92AC9EBA22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
@@ -3311,6 +3369,7 @@
 				9212DBA922E09E080053FC99 /* BMPagingViewController.swift in Sources */,
 				921027C424606E42001A7130 /* PagingStateMachine.swift in Sources */,
 				9219595922823639007E9723 /* LocalizableStrings.swift in Sources */,
+				92F78B9D24CF12B300489229 /* AddressTypeCell.swift in Sources */,
 				92FC6121222990FE00AEABC1 /* BMStepView.swift in Sources */,
 				926F4B3522E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				92FC61262229C0C200AEABC1 /* BaseWizardViewController.swift in Sources */,
@@ -3342,6 +3401,7 @@
 				92837ED12457076500687A9F /* AlertController.swift in Sources */,
 				927EDE3422A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
 				9210282424606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */,
+				92F78BB224D04C6000489229 /* ReceiveAddressTokensCell.swift in Sources */,
 				9212DB9422E07ECA0053FC99 /* AddressTableView.swift in Sources */,
 				92B7DA2222D6237600D4F88B /* RestoreOptionsViewController.swift in Sources */,
 				92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */,
@@ -3434,11 +3494,13 @@
 				92E179172357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,
 				921027D024606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
+				92F78BAA24D0322900489229 /* MASegmentedControl+actions.swift in Sources */,
 				92790D96224CD8AE00F79D64 /* BMContact.m in Sources */,
 				921027AC24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */,
 				92F8EFDB23509FE800A20B1A /* OnboardCell.swift in Sources */,
 				92F68C782244E37200197D4D /* UTXODetailViewController.swift in Sources */,
 				926A857C222EC10C00A3B747 /* WalletTransactionSearchCell.swift in Sources */,
+				92F78BBC24D06D2200489229 /* QRCodeSmallViewController.swift in Sources */,
 				928848022243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
 				92FC933422538CE400555DE1 /* Double.swift in Sources */,
 				92A2C5FC23391DC500766EA7 /* main.swift in Sources */,
@@ -3521,6 +3583,7 @@
 				921027BF24606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */,
 				92227AFA2281981E0070DC68 /* BMCategory.m in Sources */,
 				927D2F8F22CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
+				92F78BAE24D0322900489229 /* MASegmentedControl.swift in Sources */,
 				9288DD37223A55410020C501 /* Settings.m in Sources */,
 				927D2F8322CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
 				92AC9EBB22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
@@ -3573,6 +3636,7 @@
 				9212DBAA22E09E080053FC99 /* BMPagingViewController.swift in Sources */,
 				921027C524606E42001A7130 /* PagingStateMachine.swift in Sources */,
 				9219595A22823639007E9723 /* LocalizableStrings.swift in Sources */,
+				92F78B9E24CF12B300489229 /* AddressTypeCell.swift in Sources */,
 				9288DD42223A55410020C501 /* BMStepView.swift in Sources */,
 				926F4B3622E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				9288DD43223A55410020C501 /* BaseWizardViewController.swift in Sources */,
@@ -3604,6 +3668,7 @@
 				92837ED22457076500687A9F /* AlertController.swift in Sources */,
 				927EDE3522A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
 				9210282524606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */,
+				92F78BB324D04C6000489229 /* ReceiveAddressTokensCell.swift in Sources */,
 				9212DB9522E07ECA0053FC99 /* AddressTableView.swift in Sources */,
 				92B7DA2322D6237600D4F88B /* RestoreOptionsViewController.swift in Sources */,
 				92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */,
@@ -3696,11 +3761,13 @@
 				92E179182357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9288DD58223A55410020C501 /* Configurable.swift in Sources */,
 				921027D124606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
+				92F78BAB24D0322900489229 /* MASegmentedControl+actions.swift in Sources */,
 				92790D97224CD8AE00F79D64 /* BMContact.m in Sources */,
 				921027AD24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */,
 				92F8EFDC23509FE800A20B1A /* OnboardCell.swift in Sources */,
 				92F68C792244E37200197D4D /* UTXODetailViewController.swift in Sources */,
 				9288DD59223A55410020C501 /* WalletTransactionSearchCell.swift in Sources */,
+				92F78BBD24D06D2200489229 /* QRCodeSmallViewController.swift in Sources */,
 				928848032243B66500DFC2AD /* BMCopyLabel.swift in Sources */,
 				92FC933522538CE400555DE1 /* Double.swift in Sources */,
 				92A2C5FD23391DC500766EA7 /* main.swift in Sources */,
@@ -3783,6 +3850,7 @@
 				921027C024606E42001A7130 /* PagingCollectionViewLayout.swift in Sources */,
 				92227AFB2281981E0070DC68 /* BMCategory.m in Sources */,
 				927D2F9022CF6E6700D4B439 /* CrowdinCredentials.swift in Sources */,
+				92F78BAF24D0322900489229 /* MASegmentedControl.swift in Sources */,
 				92E2EADD226F21C700367928 /* Settings.m in Sources */,
 				927D2F8422CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
 				92AC9EBC22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
@@ -3835,6 +3903,7 @@
 				9212DBAB22E09E080053FC99 /* BMPagingViewController.swift in Sources */,
 				921027C624606E42001A7130 /* PagingStateMachine.swift in Sources */,
 				9219595B22823639007E9723 /* LocalizableStrings.swift in Sources */,
+				92F78B9F24CF12B300489229 /* AddressTypeCell.swift in Sources */,
 				92E2EAF0226F21C700367928 /* BMStepView.swift in Sources */,
 				926F4B3722E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				92E2EAF1226F21C700367928 /* BaseWizardViewController.swift in Sources */,
@@ -3866,6 +3935,7 @@
 				92837ED32457076500687A9F /* AlertController.swift in Sources */,
 				927EDE3622A6AC5F005D5CEA /* SendConfirmViewController.swift in Sources */,
 				9210282624606E42001A7130 /* PagingViewControllerDelegate.swift in Sources */,
+				92F78BB424D04C6000489229 /* ReceiveAddressTokensCell.swift in Sources */,
 				9212DB9622E07ECA0053FC99 /* AddressTableView.swift in Sources */,
 				92B7DA2422D6237600D4F88B /* RestoreOptionsViewController.swift in Sources */,
 				92E2EAFE226F21C700367928 /* UTXOCell.swift in Sources */,
@@ -3958,11 +4028,13 @@
 				92E179192357655D001C30A6 /* BMPickerData.swift in Sources */,
 				92E2EB1C226F21C700367928 /* Configurable.swift in Sources */,
 				921027D224606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
+				92F78BAC24D0322900489229 /* MASegmentedControl+actions.swift in Sources */,
 				92E2EB1D226F21C700367928 /* BMContact.m in Sources */,
 				921027AE24606E42001A7130 /* PagingCellLayoutAttributes.swift in Sources */,
 				92F8EFDD23509FE800A20B1A /* OnboardCell.swift in Sources */,
 				92E2EB1E226F21C700367928 /* UTXODetailViewController.swift in Sources */,
 				92E2EB1F226F21C700367928 /* WalletTransactionSearchCell.swift in Sources */,
+				92F78BBE24D06D2200489229 /* QRCodeSmallViewController.swift in Sources */,
 				92E2EB20226F21C700367928 /* BMCopyLabel.swift in Sources */,
 				92E2EB21226F21C700367928 /* Double.swift in Sources */,
 				92A2C5FE23391DC500766EA7 /* main.swift in Sources */,

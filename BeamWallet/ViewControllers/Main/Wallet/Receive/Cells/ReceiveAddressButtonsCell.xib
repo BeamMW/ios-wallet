@@ -41,32 +41,10 @@ For the transaction to complete, you should get online during the 12 hours after
                         </userDefinedRuntimeAttributes>
                     </label>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wAG-wz-QgD">
-                        <rect key="frame" x="15" y="158" width="290" height="44"/>
+                        <rect key="frame" x="80" y="158" width="160" height="44"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vqb-dl-gV4" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="140" height="44"/>
-                                <color key="backgroundColor" red="0.10980392156862745" green="0.2627450980392157" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="NXe-gj-NLF"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                <state key="normal" title="show QR" image="iconQr">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="22"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="show_qr"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onQRCodeWithSender:" destination="KuL-Jr-XfQ" eventType="touchUpInside" id="ynR-yq-Yab"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BIb-3V-fCK" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="150" y="0.0" width="140" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="160" height="44"/>
                                 <color key="backgroundColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="lls-ye-uJh"/>
@@ -88,15 +66,17 @@ For the transaction to complete, you should get online during the 12 hours after
                                 </connections>
                             </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="160" id="5UW-dQ-SlQ"/>
+                        </constraints>
                     </stackView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="wAG-wz-QgD" secondAttribute="bottom" constant="33" id="1dw-Hf-1rc"/>
-                    <constraint firstItem="wAG-wz-QgD" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" constant="15" id="8BJ-ri-XHb"/>
                     <constraint firstItem="ZnL-da-miM" firstAttribute="top" secondItem="cgk-y0-vp1" secondAttribute="top" id="AOI-VP-xVu"/>
                     <constraint firstItem="ZnL-da-miM" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" id="Nz9-oi-8cU"/>
                     <constraint firstAttribute="trailing" secondItem="ZnL-da-miM" secondAttribute="trailing" id="PtQ-Fo-frc"/>
-                    <constraint firstAttribute="trailing" secondItem="wAG-wz-QgD" secondAttribute="trailing" constant="15" id="WOG-c5-qgI"/>
+                    <constraint firstItem="wAG-wz-QgD" firstAttribute="centerX" secondItem="cgk-y0-vp1" secondAttribute="centerX" id="bWc-c0-3oV"/>
                     <constraint firstAttribute="bottom" secondItem="ZnL-da-miM" secondAttribute="bottom" id="egt-qR-mlJ"/>
                     <constraint firstItem="NVr-Vl-UQM" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" constant="15" id="h7x-yN-UQq"/>
                     <constraint firstAttribute="trailing" secondItem="NVr-Vl-UQM" secondAttribute="trailing" constant="15" id="hlw-FK-uwJ"/>
@@ -108,13 +88,11 @@ For the transaction to complete, you should get online during the 12 hours after
             <viewLayoutGuide key="safeArea" id="ST6-m8-Wr2"/>
             <connections>
                 <outlet property="infoLabel" destination="NVr-Vl-UQM" id="APT-vE-lO9"/>
-                <outlet property="showQRButton" destination="Vqb-dl-gV4" id="a30-Wg-IIs"/>
             </connections>
             <point key="canvasLocation" x="24.637681159420293" y="98.772321428571431"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="iconQr" width="16" height="16"/>
         <image name="iconShareNew" width="16" height="16"/>
     </resources>
 </document>

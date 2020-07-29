@@ -686,6 +686,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
 
 
 void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
+
     for (int i=0; i<rates.size(); i++) {
         auto rate = rates[i];
         

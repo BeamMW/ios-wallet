@@ -193,6 +193,7 @@
                 <outlet property="contactName" destination="V79-mi-3wI" id="qTh-z3-HF1"/>
                 <outlet property="contactView" destination="MXg-eU-YPc" id="Xis-Di-r1o"/>
                 <outlet property="errorLabel" destination="TWr-4F-fIw" id="6tY-Ia-Udk"/>
+                <outlet property="iconView" destination="rJf-ey-lGU" id="4aD-Ud-Bmi"/>
                 <outlet property="nameLabel" destination="6HZ-x2-k1Y" id="zJg-V7-ZKt"/>
                 <outlet property="rightButton" destination="eOS-wq-7zC" id="ctS-BN-Rf8"/>
                 <outlet property="showTokenButton" destination="GpA-La-Isg" id="QVi-go-s2w"/>

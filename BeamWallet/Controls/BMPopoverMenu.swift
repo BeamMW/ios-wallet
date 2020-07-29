@@ -91,6 +91,10 @@ class BMPopoverMenu: NSObject {
         case share = 15
         case copy = 16
         case save_contact = 17
+        case share_offline_token = 18
+        case share_online_token = 19
+        case share_pool_token = 20
+
     }
     
     class BMPopoverMenuItem {

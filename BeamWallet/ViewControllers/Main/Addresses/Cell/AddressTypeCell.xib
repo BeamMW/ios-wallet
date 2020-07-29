@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-LightItalic.otf">
+            <string>SFProDisplay-LightItalic</string>
+        </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="183" id="o9c-Mt-b20" customClass="AddressTypeCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="o9c-Mt-b20" id="NLt-xA-ku9">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtH-JI-o0v">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A2-7z-vA4">
+                                <rect key="frame" x="15" y="15" width="290" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                        <real key="value" value="1.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="type"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Permanent outgoing address" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="48H-Z2-he8" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="37" width="226" height="19.5"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="This address will be used for sending to specific receiver token." lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="k7k-6V-fe3" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="61.5" width="226" height="33.5"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y9z-re-UHJ">
+                                <rect key="frame" x="256" y="26" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onSwitchWithSender:" destination="o9c-Mt-b20" eventType="valueChanged" id="uvT-Y1-HW5"/>
+                                </connections>
+                            </switch>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="k7k-6V-fe3" secondAttribute="bottom" constant="15" id="8KN-TN-0ZJ"/>
+                            <constraint firstAttribute="trailing" secondItem="y9z-re-UHJ" secondAttribute="trailing" constant="15" id="G2L-sy-RkW"/>
+                            <constraint firstItem="48H-Z2-he8" firstAttribute="leading" secondItem="vtH-JI-o0v" secondAttribute="leading" constant="15" id="Hgc-j4-6Ly"/>
+                            <constraint firstItem="6A2-7z-vA4" firstAttribute="top" secondItem="vtH-JI-o0v" secondAttribute="top" constant="15" id="JB0-3h-fhW"/>
+                            <constraint firstItem="k7k-6V-fe3" firstAttribute="leading" secondItem="vtH-JI-o0v" secondAttribute="leading" constant="15" id="Oou-53-xXe"/>
+                            <constraint firstItem="y9z-re-UHJ" firstAttribute="leading" secondItem="48H-Z2-he8" secondAttribute="trailing" constant="15" id="YnG-Dh-3rB"/>
+                            <constraint firstItem="y9z-re-UHJ" firstAttribute="leading" secondItem="k7k-6V-fe3" secondAttribute="trailing" constant="15" id="a2m-fc-Lal"/>
+                            <constraint firstItem="48H-Z2-he8" firstAttribute="top" secondItem="6A2-7z-vA4" secondAttribute="bottom" constant="5" id="feL-7T-k27"/>
+                            <constraint firstAttribute="trailing" secondItem="6A2-7z-vA4" secondAttribute="trailing" constant="15" id="kun-e1-TTK"/>
+                            <constraint firstItem="k7k-6V-fe3" firstAttribute="top" secondItem="48H-Z2-he8" secondAttribute="bottom" constant="5" id="mBx-nQ-YGj"/>
+                            <constraint firstItem="6A2-7z-vA4" firstAttribute="leading" secondItem="vtH-JI-o0v" secondAttribute="leading" constant="15" id="tNh-8x-Et4"/>
+                            <constraint firstItem="y9z-re-UHJ" firstAttribute="top" secondItem="vtH-JI-o0v" secondAttribute="top" constant="26" id="tob-z0-dEU"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="vtH-JI-o0v" firstAttribute="leading" secondItem="NLt-xA-ku9" secondAttribute="leading" id="KFZ-E7-cCo"/>
+                    <constraint firstAttribute="trailing" secondItem="vtH-JI-o0v" secondAttribute="trailing" id="O2a-yb-Mt7"/>
+                    <constraint firstItem="vtH-JI-o0v" firstAttribute="top" secondItem="NLt-xA-ku9" secondAttribute="top" id="nIX-Y1-jNi"/>
+                    <constraint firstAttribute="bottom" secondItem="vtH-JI-o0v" secondAttribute="bottom" id="u5a-nV-gmP"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <viewLayoutGuide key="safeArea" id="IVv-dy-aXt"/>
+            <connections>
+                <outlet property="descriptionLabel" destination="k7k-6V-fe3" id="xbW-lM-kAA"/>
+                <outlet property="detailLabel" destination="48H-Z2-he8" id="xka-gQ-w2s"/>
+                <outlet property="switchView" destination="y9z-re-UHJ" id="H2n-Ar-Mt4"/>
+                <outlet property="titleLabel" destination="6A2-7z-vA4" id="itm-1b-bdT"/>
+            </connections>
+            <point key="canvasLocation" x="105.79710144927537" y="84.375"/>
+        </tableViewCell>
+    </objects>
+</document>

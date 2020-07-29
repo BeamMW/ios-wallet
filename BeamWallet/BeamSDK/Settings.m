@@ -202,6 +202,9 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
         _isNotificationTransactionON = YES;
     }
     
+    _maxAddressDurationHours = 24;
+    _maxAddressDurationSeconds = 24 * 60 * 60;
+    
     return self;
 }
 

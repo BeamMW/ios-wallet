@@ -95,8 +95,8 @@
     int m = (totalSeconds / 60) % 60;
     int h = totalSeconds / 3600;
     
-    if(h == 23 && m > 55) {
-        return [NSString stringWithFormat:@"%d %@", 24, [@"h" localized]];
+    if(h == (Settings.sharedManager.maxAddressDurationHours - 1) && m > 55) {
+        return [NSString stringWithFormat:@"%d %@", Settings.sharedManager.maxAddressDurationHours , [@"h" localized]];
     }
     else if (m <= 1 && h > 0) {
         return [NSString stringWithFormat:@"%d %@", h, [@"h" localized]];

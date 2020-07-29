@@ -31,7 +31,8 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var contactView: UIStackView!
     @IBOutlet private weak var contactName: UILabel!
     @IBOutlet private weak var contactCategory: UILabel!
-    
+    @IBOutlet private weak var iconView: UIView!
+
     private var token = ""
     
     public var validateAddress = false
@@ -68,6 +69,18 @@ class BMSearchAddressCell: BaseCell {
         _ = textField.becomeFirstResponder()
     }
     
+    public var isPermanentAddress: Bool = false {
+        didSet {
+            if(contact == nil && isPermanentAddress) {
+                contactView.isHidden = false
+                contactName.text = Localizable.shared.strings.perm_token
+                contactName.font = ItalicFont(size: 14)
+                contactCategory.text = nil
+                iconView.isHidden = true
+            }
+        }
+    }
+    
     public var contact: BMContact? {
         didSet {
             if contact == nil {
@@ -75,8 +88,10 @@ class BMSearchAddressCell: BaseCell {
             }
             else {
                 contactView.isHidden = false
+                contactName.font = ProMediumFont(size: 14)
                 contactName.text = contact?.address.label
-                
+                iconView.isHidden = false
+
                 if contactName.text?.isEmpty ?? true {
                     contactName.text = Localizable.shared.strings.no_name
                 }
@@ -178,7 +193,7 @@ extension BMSearchAddressCell: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         delegate?.textValueDidReturn?(self)
         
-        if nameLabel.text == Localizable.shared.strings.send_to {
+        if nameLabel.text!.lowercased() == Localizable.shared.strings.send_to.lowercased() || nameLabel.text!.lowercased() == Localizable.shared.strings.transaction_info.lowercased() {
             textField.placeholder = String.empty()
         }
         else {
@@ -190,7 +205,7 @@ extension BMSearchAddressCell: UITextViewDelegate {
         delegate?.textValueDidBegin?(self)
         showTokenButton.isHidden = true
 
-        if nameLabel.text == Localizable.shared.strings.send_to {
+        if nameLabel.text!.lowercased() == Localizable.shared.strings.send_to.lowercased() || nameLabel.text!.lowercased() == Localizable.shared.strings.transaction_info.lowercased() {
             textField.placeholder = Localizable.shared.strings.address_search
         }
         else {

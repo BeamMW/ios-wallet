@@ -24,6 +24,11 @@
 
 @property (nonatomic,assign) double amount;
 @property (nonatomic,assign) BOOL isMaxPrivacy;
+@property (nonatomic,assign) BOOL isOffline;
+@property (nonatomic,assign) BOOL isPermanentAddress;
+
+@property (nonatomic,strong) NSString *address;
+@property (nonatomic,strong) NSString *identity;
 
 @end
 

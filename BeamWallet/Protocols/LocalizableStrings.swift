@@ -540,8 +540,28 @@ class LocalizableStrings : NSObject {
     var max_privacy_requested_title = "max_privacy_requested_title".localized
     var max_privacy_request_title = "max_privacy_request_title".localized
     var max_privacy_request_text = "max_privacy_request_text".localized
+    var offline_transaction = "offline_transaction".localized
+    var transaction_type = "transaction_type".localized
+    var transaction_info = "transaction_info".localized
+    var type = "type".localized
+    var perm_out_address_title = "perm_out_address_title".localized
+    var perm_out_address_text = "perm_out_address_text".localized
+    var perm_token = "perm_token".localized
+    var token_type = "token_type".localized
+    var regular = "regular".localized
+    var identity = "identity".localized
+    var token_expiration = "token_expiration".localized
+    var online_token = "online_token".localized
+    var offline_token = "offline_token".localized
+    var for_wallet = "for_wallet".localized
+    var for_pool = "for_pool".localized
+    var for_pool_permanent = "for_pool_permanent".localized
+    var for_pool_regular = "for_pool_regular".localized
+    var receive_notice_max_privacy = "receive_notice_max_privacy".localized
+    var switch_to_permanent = "switch_to_permanent".localized
+    var switch_to_regular = "switch_to_regular".localized
 
-    
+
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

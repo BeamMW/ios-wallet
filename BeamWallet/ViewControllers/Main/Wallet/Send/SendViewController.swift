@@ -83,7 +83,7 @@ class SendViewController: BaseTableViewController {
             viewModel.transaction = repeatTransaction
         }
         
-        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self])
+        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self, AddressTypeCell.self])
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.delegate = self
         tableView.dataSource = self
@@ -215,7 +215,7 @@ extension SendViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 7 {
-            if indexPath.row == 2 || indexPath.row == 3 {
+            if indexPath.row == 3 {
                 return 60
             }
         }
@@ -231,8 +231,6 @@ extension SendViewController: UITableViewDelegate {
         
         if indexPath.section == 7 {
             switch indexPath.row {
-            case 2:
-                onExpire()
             case 3:
                 onCategory()
             default:
@@ -283,33 +281,37 @@ extension SendViewController: UITableViewDataSource {
                 cell.delegate = self
                 cell.error = viewModel.toAddressError
                 cell.copyText = viewModel.copyAddress
-                cell.configure(with: (name: Localizable.shared.strings.send_to, value: viewModel.toAddress, rightIcon: IconScanQr()))
+                cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcon: IconScanQr()))
                 cell.contact = viewModel.selectedContact
+                cell.isPermanentAddress = viewModel.isPermanentAddress
                 return cell
             }
             else {
                 let cell = tableView
                     .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
                 cell.delegate = self
-                cell.customBackgroundColor = true
+               // cell.customBackgroundColor = true
                 cell.selectionStyle = .none
-                cell.mainView.backgroundColor = UIColor.clear
+                //cell.mainView.backgroundColor = UIColor.clear
                 cell.detailLabel.font = ItalicFont(size: 14)
-                cell.contentView.backgroundColor = UIColor.clear
-                cell.backgroundColor = UIColor.clear
-                cell.topOffset?.constant = 40
-                cell.topSwitchOffset?.constant = 15
-                cell.botOffset?.constant = 0
+               // cell.contentView.backgroundColor = UIColor.clear
+               // cell.backgroundColor = UIColor.clear
+                cell.topOffset?.constant = 10
+               // cell.topSwitchOffset?.constant = -5
                 
                 if viewModel.requestedMaxPrivacy && viewModel.maxPrivacy {
                     cell.switchView.isHidden = true
+                    cell.botOffset?.constant = 15
+
+                    let detail = viewModel.requestedOffline ? "\(Localizable.shared.strings.max_privacy_text)\n\(Localizable.shared.strings.offline_transaction)" : Localizable.shared.strings.max_privacy_text
                     
-                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_requested_title, detail: Localizable.shared.strings.max_privacy_text, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_requested_title, detail: detail, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
                 }
                 else {
                     cell.switchView.isHidden = false
+                    cell.botOffset?.constant = viewModel.maxPrivacy ? 15 : 25
 
-                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: Localizable.shared.strings.max_privacy_text, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: viewModel.maxPrivacy ? Localizable.shared.strings.max_privacy_text : nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
                 }
                 
                 return cell
@@ -411,8 +413,10 @@ extension SendViewController: UITableViewDataSource {
             }
             else if indexPath.row == 2 {
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                    .configured(with: (title: Localizable.shared.strings.expires.uppercased(), value: viewModel.outgoindAdderss!.duration > 0 ? Localizable.shared.strings.hours_24 : Localizable.shared.strings.never, valueColor: UIColor.white))
+                    .dequeueReusableCell(withType: AddressTypeCell.self, for: indexPath)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
+                cell.setIsPermanent(viewModel.outgoindAdderss!.duration <= 0 )
+                cell.delegate = self
                 return cell
             }
             else if indexPath.row == 3 {
@@ -433,8 +437,10 @@ extension SendViewController: UITableViewDataSource {
         case 8:
             let cell = tableView
                 .dequeueReusableCell(withType: FeeCell.self, for: indexPath)
-                .configured(with: Double(viewModel.fee) ?? 0)
             cell.delegate = self
+            cell.setMaxPrivacy(isMax: viewModel.maxPrivacy)
+            cell.configure(with: Double(viewModel.fee) ?? 0)
+            cell.setType(type: viewModel.maxPrivacy ? BMTransactionType(BMTransactionTypePushTransaction) : BMTransactionType(BMTransactionTypeSimple))
             return cell
         default:
             return BaseCell()
@@ -501,6 +507,7 @@ extension SendViewController: BMCellProtocol {
                     }
                 }
                 else {
+                    tableView.reloadData()
                     isSearch = false
                 }
             }
@@ -655,7 +662,7 @@ extension SendViewController: BMCellProtocol {
 }
 
 extension SendViewController: QRScannerViewControllerDelegate {
-    func didScanQRCode(value: String, amount: String?, privacy:Bool?) {
+    func didScanQRCode(value: String, amount: String?, privacy:Bool?, offline: Bool?) {
         viewModel.selectedContact = nil
   
         if let a = amount {
@@ -677,6 +684,13 @@ extension SendViewController: QRScannerViewControllerDelegate {
             viewModel.requestedMaxPrivacy = false
         }
         
+        if offline != nil && offline == true {
+            viewModel.requestedOffline = true
+        }
+        else {
+            viewModel.requestedOffline = false
+        }
+        
         didSelectAddress(value: value)        
     }
 }
@@ -695,24 +709,6 @@ extension SendViewController: SettingsModelDelegate {
 }
 
 extension SendViewController {
-    private func onExpire() {
-        let vc = BMDataPickerViewController(type: .address_expire)
-        vc.completion = { [weak self]
-            obj in
-            
-            guard let strongSelf = self else { return }
-            
-            let selected = obj as! Int32
-            
-            strongSelf.viewModel.outgoindAdderss!.duration = selected == 24 ? 86400 : 0
-            
-            AppModel.sharedManager().setExpires(Int32(selected), toAddress: strongSelf.viewModel.outgoindAdderss!.walletId)
-            
-            strongSelf.tableView.reloadRows(at: [IndexPath(row: 2, section: 7)], with: .fade)
-        }
-        pushViewController(vc: vc)
-    }
-    
     private func onCategory() {
         if AppModel.sharedManager().categories.count == 0 {
             let vc = CategoryEditViewController(category: nil)
@@ -791,6 +787,9 @@ extension SendViewController: BMPickerCellDelegate {
         if let path = tableView.indexPath(for: cell) {
             if path.section == 0 {
                 viewModel.maxPrivacy = value
+                UIView.performWithoutAnimation {
+                    tableView.reloadData()
+                }
             }
         }
         else {
@@ -802,5 +801,13 @@ extension SendViewController: BMPickerCellDelegate {
                 tableView.reloadData()
             }
         }
+    }
+}
+
+extension SendViewController: AddressTypeCellDelegate {
+    func onAddressType(permanent: Bool) {
+        viewModel.outgoindAdderss!.duration = UInt64(permanent ? 0 : Settings.sharedManager().maxAddressDurationHours)
+
+        AppModel.sharedManager().setExpires(Int32(permanent ? 0 : Settings.sharedManager().maxAddressDurationHours), toAddress: viewModel.outgoindAdderss!.walletId)
     }
 }

@@ -10,28 +10,25 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
-        <array key="SF-Pro-Display-Regular.otf">
-            <string>SFProDisplay-Regular</string>
-        </array>
-        <array key="SF-Pro-Display-Semibold.otf">
-            <string>SFProDisplay-Semibold</string>
-        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="260" id="Vda-WY-c0W" customClass="ReceiveAddressOptionsCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="-63" id="Vda-WY-c0W" customClass="ReceiveAddressOptionsCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="181"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vda-WY-c0W" id="6ns-hs-JKK">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="181"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xyQ-aU-fbe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="181"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yM-dN-fx2">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TRANSACTION TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yM-dN-fx2">
                                 <rect key="frame" x="15" y="15" width="290" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="17" id="Ogi-bi-2m1"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -42,48 +39,11 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UFr-0O-sFT">
-                                <rect key="frame" x="15" y="42" width="81" height="32"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOKEN EXPIRATION" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hlj-Yx-xuF">
+                                <rect key="frame" x="15" y="112" width="290" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="81" id="3pl-ae-lwm"/>
-                                    <constraint firstAttribute="height" constant="32" id="Jki-gq-a5B"/>
+                                    <constraint firstAttribute="height" constant="17" id="leQ-mt-cCs"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="14"/>
-                                <state key="normal" title="One time use"/>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="16"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onOneTimeWithSender:" destination="Vda-WY-c0W" eventType="touchUpInside" id="dDe-u5-hGi"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JfX-DC-CuD">
-                                <rect key="frame" x="96" y="42" width="100" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="XUr-tJ-9z2"/>
-                                    <constraint firstAttribute="width" constant="100" id="qtg-Ll-Ggg"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="14"/>
-                                <state key="normal" title="Permanent"/>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="16"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onPermWithSender:" destination="Vda-WY-c0W" eventType="touchUpInside" id="Rfq-8D-WTm"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="RECEIVE FROM" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hlj-Yx-xuF">
-                                <rect key="frame" x="15" y="104" width="290" height="17"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -94,106 +54,42 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5BL-n0-QoH">
-                                <rect key="frame" x="15" y="131" width="60" height="32"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7uY-S4-c7P" customClass="MASegmentedControl" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="42" width="258" height="40"/>
+                                <color key="backgroundColor" red="0.25490197539999998" green="0.27450981740000002" blue="0.30196079609999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="PMv-ZP-And"/>
-                                    <constraint firstAttribute="height" constant="32" id="gES-7G-KQ4"/>
+                                    <constraint firstAttribute="width" constant="258" id="06q-mp-2Zb"/>
+                                    <constraint firstAttribute="height" constant="40" id="vLp-Xs-rno"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="14"/>
-                                <state key="normal" title="Wallet"/>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="16"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="onWalletWithSender:" destination="Vda-WY-c0W" eventType="touchUpInside" id="Oic-Xe-ghw"/>
+                                    <action selector="onTransactionWithSender:" destination="Vda-WY-c0W" eventType="valueChanged" id="bYx-LA-dXA"/>
                                 </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2be-4U-pGP">
-                                <rect key="frame" x="75" y="131" width="190" height="32"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCL-ff-oUd" customClass="MASegmentedControl" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="139" width="258" height="40"/>
+                                <color key="backgroundColor" red="0.25490197539999998" green="0.27450981740000002" blue="0.30196079609999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="oGi-Yr-NLk"/>
-                                    <constraint firstAttribute="width" constant="190" id="wZq-Du-k8q"/>
+                                    <constraint firstAttribute="height" constant="40" id="Yjg-SS-5hZ"/>
+                                    <constraint firstAttribute="width" constant="258" id="vzY-Ps-4fF"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="14"/>
-                                <state key="normal" title="Exchange or mining pool"/>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="16"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="onPoolWithSender:" destination="Vda-WY-c0W" eventType="touchUpInside" id="Nno-6A-r3F"/>
+                                    <action selector="onExpireWithSender:" destination="Vda-WY-c0W" eventType="valueChanged" id="0cm-VA-dLA"/>
                                 </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TRANSACTION TOKEN" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IO6-bA-ya5">
-                                <rect key="frame" x="15" y="193" width="290" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
-                                        <real key="value" value="1.5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sj1-f2-zeI">
-                                <rect key="frame" x="185" y="220" width="120" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="EmX-RV-cnq"/>
-                                    <constraint firstAttribute="height" constant="25" id="MyQ-wP-W1X"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="16"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="3" maxX="10" maxY="0.0"/>
-                                <state key="normal" title="show token" image="iconEyeBlue">
-                                    <color key="titleColor" red="0.043137254901960784" green="0.80000000000000004" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="onShowTokenWithSender:" destination="Vda-WY-c0W" eventType="touchUpInside" id="zfb-Vl-G82"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="176aw49q7g7…6daffr9j1k7" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EdU-1n-JLu">
-                                <rect key="frame" x="15" y="223" width="150" height="20"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="sj1-f2-zeI" firstAttribute="top" secondItem="IO6-bA-ya5" secondAttribute="bottom" constant="10" id="2d2-NK-LPr"/>
                             <constraint firstAttribute="trailing" secondItem="8yM-dN-fx2" secondAttribute="trailing" constant="15" id="31R-hq-oR7"/>
-                            <constraint firstAttribute="bottom" secondItem="EdU-1n-JLu" secondAttribute="bottom" constant="17" id="61u-Xv-ted"/>
-                            <constraint firstItem="EdU-1n-JLu" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="6N8-U8-C0w"/>
-                            <constraint firstItem="2be-4U-pGP" firstAttribute="leading" secondItem="5BL-n0-QoH" secondAttribute="trailing" id="98k-Qq-LJi"/>
+                            <constraint firstItem="bCL-ff-oUd" firstAttribute="top" secondItem="hlj-Yx-xuF" secondAttribute="bottom" constant="10" id="3qS-NU-vrF"/>
                             <constraint firstItem="hlj-Yx-xuF" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="AVx-6g-ewB"/>
-                            <constraint firstItem="2be-4U-pGP" firstAttribute="top" secondItem="hlj-Yx-xuF" secondAttribute="bottom" constant="10" id="BJB-qT-ayO"/>
-                            <constraint firstItem="IO6-bA-ya5" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="E4G-7A-qLj"/>
-                            <constraint firstItem="hlj-Yx-xuF" firstAttribute="top" secondItem="UFr-0O-sFT" secondAttribute="bottom" constant="30" id="I6o-9j-bHE"/>
-                            <constraint firstItem="5BL-n0-QoH" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="JnI-VH-jwf"/>
+                            <constraint firstAttribute="bottom" secondItem="bCL-ff-oUd" secondAttribute="bottom" constant="2" id="CGB-UR-zLN"/>
                             <constraint firstAttribute="trailing" secondItem="hlj-Yx-xuF" secondAttribute="trailing" constant="15" id="Jrr-Yw-TmD"/>
-                            <constraint firstItem="EdU-1n-JLu" firstAttribute="top" secondItem="IO6-bA-ya5" secondAttribute="bottom" constant="13" id="QKr-IP-Q2X"/>
-                            <constraint firstAttribute="trailing" secondItem="IO6-bA-ya5" secondAttribute="trailing" constant="15" id="Wqs-Tt-cUm"/>
-                            <constraint firstItem="JfX-DC-CuD" firstAttribute="leading" secondItem="UFr-0O-sFT" secondAttribute="trailing" id="YSb-dQ-TSN"/>
-                            <constraint firstItem="UFr-0O-sFT" firstAttribute="top" secondItem="8yM-dN-fx2" secondAttribute="bottom" constant="10" id="Ydo-ix-eKv"/>
-                            <constraint firstItem="JfX-DC-CuD" firstAttribute="top" secondItem="8yM-dN-fx2" secondAttribute="bottom" constant="10" id="c5X-2b-6Fp"/>
+                            <constraint firstItem="7uY-S4-c7P" firstAttribute="top" secondItem="8yM-dN-fx2" secondAttribute="bottom" constant="10" id="OF2-TB-sNi"/>
+                            <constraint firstItem="7uY-S4-c7P" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="Ubo-q9-51E"/>
+                            <constraint firstItem="bCL-ff-oUd" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="cPM-So-5kz"/>
                             <constraint firstItem="8yM-dN-fx2" firstAttribute="top" secondItem="xyQ-aU-fbe" secondAttribute="top" constant="15" id="eIC-Nr-j5K"/>
-                            <constraint firstAttribute="trailing" secondItem="sj1-f2-zeI" secondAttribute="trailing" constant="15" id="laO-Rf-v8F"/>
-                            <constraint firstItem="sj1-f2-zeI" firstAttribute="leading" secondItem="EdU-1n-JLu" secondAttribute="trailing" constant="20" id="mAm-1p-z1Q"/>
-                            <constraint firstAttribute="bottom" secondItem="sj1-f2-zeI" secondAttribute="bottom" constant="15" id="rHC-32-S1O"/>
+                            <constraint firstItem="hlj-Yx-xuF" firstAttribute="top" secondItem="7uY-S4-c7P" secondAttribute="bottom" constant="30" id="mDD-9X-jOo"/>
                             <constraint firstItem="8yM-dN-fx2" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="vWX-DB-KsI"/>
-                            <constraint firstItem="IO6-bA-ya5" firstAttribute="top" secondItem="5BL-n0-QoH" secondAttribute="bottom" constant="30" id="xzL-rd-X8c"/>
-                            <constraint firstItem="5BL-n0-QoH" firstAttribute="top" secondItem="hlj-Yx-xuF" secondAttribute="bottom" constant="10" id="z8z-TW-YBr"/>
-                            <constraint firstItem="UFr-0O-sFT" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="zim-oH-0uT"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -207,21 +103,12 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="TYd-F7-TkI"/>
             <connections>
-                <outlet property="fromLabel" destination="hlj-Yx-xuF" id="C3V-g6-Vzh"/>
-                <outlet property="generalLabel" destination="8yM-dN-fx2" id="IjG-iY-7yR"/>
-                <outlet property="oneTimeButton" destination="UFr-0O-sFT" id="amO-Vx-Dea"/>
-                <outlet property="oneTimeWidth" destination="3pl-ae-lwm" id="NtU-3p-qW7"/>
-                <outlet property="permButton" destination="JfX-DC-CuD" id="6YD-EE-SXf"/>
-                <outlet property="poolButton" destination="2be-4U-pGP" id="Wh9-IT-WWW"/>
-                <outlet property="tokenLabel" destination="IO6-bA-ya5" id="oB9-5b-g9M"/>
-                <outlet property="tokenValueLabel" destination="EdU-1n-JLu" id="EXh-y9-xug"/>
-                <outlet property="walletButton" destination="5BL-n0-QoH" id="T6y-P7-CPn"/>
-                <outlet property="walletWidth" destination="PMv-ZP-And" id="qPA-2x-MSU"/>
+                <outlet property="expirationLabel" destination="hlj-Yx-xuF" id="YBN-JC-EzJ"/>
+                <outlet property="expireTypeSegment" destination="bCL-ff-oUd" id="3yf-OE-WFL"/>
+                <outlet property="transactionTypeLabel" destination="8yM-dN-fx2" id="Fti-m7-dSh"/>
+                <outlet property="transactionTypeSegment" destination="7uY-S4-c7P" id="q17-gX-QmV"/>
             </connections>
-            <point key="canvasLocation" x="39" y="45"/>
+            <point key="canvasLocation" x="37.681159420289859" y="-63.28125"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="iconEyeBlue" width="16" height="16"/>
-    </resources>
 </document>

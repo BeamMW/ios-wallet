@@ -73,6 +73,9 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, strong) NSString * _Nonnull whereBuyAddress;
 @property (nonatomic, strong) NSString * _Nonnull language;
 
+@property (nonatomic, assign) int maxAddressDurationHours;
+@property (nonatomic, assign) int maxAddressDurationSeconds;
+
 -(void)setDefaultDarkMode:(BOOL)isSystemMode;
 
 -(BOOL)isChangedNode;

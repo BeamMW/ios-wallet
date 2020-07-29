@@ -42,7 +42,7 @@ class ReceiveViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.receive.uppercased()
         
-        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self])
+        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self, ReceiveAddressTokensCell.self])
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
@@ -173,12 +173,18 @@ extension ReceiveViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            return showEdit ? 3 : 1
+            if viewModel.expire == .parmanent {
+                return showEdit ? 3 : 1
+            }
+            return 0
         }
         else if section == 3 {
             return showAdvanced ? 3 : 1
         }
         else if section == 2 {
+            return 1
+        }
+        else if section == 0 {
             return 2
         }
         return 1
@@ -188,12 +194,22 @@ extension ReceiveViewController : UITableViewDataSource {
        
         switch indexPath.section {
         case 0:
-            let cell = tableView
-                .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
-            cell.contentView.backgroundColor = UIColor.main.marineThree
-            cell.configure(with: (oneTime: viewModel.expire == .oneTime, wallet: viewModel.receive == .wallet, token: viewModel.receive == .pool ? viewModel.address.walletId : (viewModel.address.token ?? String.empty())))
-            cell.delegate = self
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
+                cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
+                cell.delegate = self
+                return cell
+            }
+            else {
+                let cell = tableView
+                    .dequeueReusableCell(withType: ReceiveAddressTokensCell.self, for: indexPath)
+                cell.contentView.backgroundColor = UIColor.main.marineThree
+                cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, address: viewModel.address))
+                cell.delegate = self
+                return cell
+            }
         case 1:
             if indexPath.row == 0 {
                 let cell = tableView
@@ -219,31 +235,12 @@ extension ReceiveViewController : UITableViewDataSource {
                 return cell
             }
         case 2:
-            if indexPath.row == 0 {
-                let cell = tableView
-                    .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
-                cell.delegate = self
-                cell.customBackgroundColor = true
-                cell.selectionStyle = .none
-                cell.mainView.backgroundColor = UIColor.clear
-                cell.detailLabel.font = ItalicFont(size: 14)
-                cell.contentView.backgroundColor = UIColor.clear
-                cell.backgroundColor = UIColor.clear
-//                cell.topOffset?.constant = 15
-//                cell.topSwitchOffset?.constant = 15
-//                cell.botOffset?.constant = 15
-                cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_request_title, detail: Localizable.shared.strings.max_privacy_request_text, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
-
-                return cell
-            }
-            else {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.transactionComment))
-                cell.delegate = self
-                cell.contentView.backgroundColor = UIColor.clear
-                return cell
-            }
+            let cell = tableView
+                .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.transactionComment))
+            cell.delegate = self
+            cell.contentView.backgroundColor = UIColor.clear
+            return cell
         case 3:
             if indexPath.row == 0 {
                 let cell = tableView
@@ -296,6 +293,7 @@ extension ReceiveViewController : UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: ReceiveAddressButtonsCell.self, for: indexPath)
             cell.delegate = self
+            cell.setMaxPrivacy(viewModel.transaction == .privacy)
             return cell
         default:
             return BaseCell()
@@ -388,16 +386,7 @@ extension ReceiveViewController : BMCellProtocol {
         }
     }
     
-    func onRightButton(_ sender: UITableViewCell) {
-        self.view.endEditing(true)
-    }
-    
-    func onClickQRCode() {
-        self.view.endEditing(true)
 
-        viewModel.onQRCode()
-    }
-    
     func onClickShare() {
         self.view.endEditing(true)
         
@@ -411,37 +400,59 @@ extension ReceiveViewController : BMCellProtocol {
     }
 }
 
-extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
-    @objc func onWallet() {
-        viewModel.receive = .wallet
-        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
+    
+    @objc func onSwitchToPool() {
+        viewModel.transaction = .regular
+        viewModel.expire = .parmanent
+        viewModel.needReloadButtons = true
+        self.tableView.reloadData()
     }
     
-    @objc func onPool() {
-        viewModel.receive = .pool
-        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+    @objc func onShowToken(token: String) {
+        let vc = ShowTokenViewController(token: token, send: false)
+        self.pushViewController(vc: vc)
+    }
+    
+    @objc func onShowQR(token: String) {
+        if let top = UIApplication.getTopMostViewController() {
+            viewModel.isShared = true
+            
+            let qrString = AppModel.sharedManager().generateQRCodeString(token, amount: nil)
+
+            let modalViewController = QRCodeSmallViewController(qrString: qrString)
+            modalViewController.onShared = { [weak self] in
+                self?.onBack()
+            }
+            modalViewController.modalPresentationStyle = .overFullScreen
+            modalViewController.modalTransitionStyle = .crossDissolve
+            top.present(modalViewController, animated: true, completion: nil)
+        }
+    }
+}
+
+extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
+    @objc func onRegular() {
+        viewModel.transaction = .regular
+        viewModel.needReloadButtons = false
+        self.tableView.reloadData()
+    }
+    
+    @objc func onMaxPrivacy() {
+        viewModel.transaction = .privacy
+        viewModel.needReloadButtons = false
+        self.tableView.reloadData()
     }
     
     @objc func onOneTime() {
         viewModel.expire = .oneTime
-        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+        viewModel.needReloadButtons = false
+        self.tableView.reloadData()
     }
     
     @objc func onPermament() {
         viewModel.expire = .parmanent
-        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
-    }
-    
-    @objc func onShowToken() {
-        let token =  viewModel.receive == .pool ? viewModel.address.walletId : (viewModel.address.token ?? String.empty())
-        let vc = ShowTokenViewController(token: token, send: false)
-        self.pushViewController(vc: vc)
-    }
-}
-
-extension ReceiveViewController: BMPickerCellDelegate {
-    func onClickSwitch(value: Bool, cell: BMPickerCell) {
-        viewModel.maxPrivacy = value
-        self.tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+        viewModel.needReloadButtons = false
+        self.tableView.reloadData()
     }
 }

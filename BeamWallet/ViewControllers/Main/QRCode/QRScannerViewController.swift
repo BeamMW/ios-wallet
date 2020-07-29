@@ -22,7 +22,7 @@ import UIKit
 import AVFoundation
 
 protocol QRScannerViewControllerDelegate: AnyObject {
-    func didScanQRCode(value:String, amount:String?, privacy:Bool?)
+    func didScanQRCode(value:String, amount:String?, privacy:Bool?, offline: Bool?)
 }
 
 class QRScannerViewController: BaseViewController {
@@ -183,7 +183,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                         if (json["_id"] as? u_quad_t) != nil {
                             back()
                             
-                            delegate?.didScanQRCode(value: scannedValue, amount: nil, privacy: nil)
+                            delegate?.didScanQRCode(value: scannedValue, amount: nil, privacy: nil, offline: nil)
                         }
                     }
                     else{
@@ -203,7 +203,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                             address = String(address.split(separator: "?")[0])
                         }
                         back()
-                        delegate?.didScanQRCode(value:address , amount: nil, privacy: nil)
+                        delegate?.didScanQRCode(value:address , amount: nil, privacy: nil, offline: nil)
                     }
                     else{
                         self.showError()
@@ -223,7 +223,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                             address = String(address.split(separator: "?")[0])
                         }
                         back()
-                        delegate?.didScanQRCode(value:address , amount: nil, privacy: nil)
+                        delegate?.didScanQRCode(value:address , amount: nil, privacy: nil, offline: nil)
                     }
                     else{
                         self.showError()
@@ -231,7 +231,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                 }
                 else if(scannedValue.hasPrefix("0x"))
                 {
-                    delegate?.didScanQRCode(value: scannedValue, amount: nil, privacy: nil)
+                    delegate?.didScanQRCode(value: scannedValue, amount: nil, privacy: nil, offline: nil)
                 }
                 else{
                     self.showError()
@@ -271,10 +271,10 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
                     
                     if(AppModel.sharedManager().isToken(address)) {
                         let parameters = AppModel.sharedManager().getTransactionParameters(address)
-                        delegate?.didScanQRCode(value: address, amount: String.currency(value: parameters.amount), privacy: parameters.isMaxPrivacy)
+                        delegate?.didScanQRCode(value: address, amount: String.currency(value: parameters.amount), privacy: parameters.isMaxPrivacy, offline: parameters.isOffline)
                     }
                     else {
-                        delegate?.didScanQRCode(value: address, amount: amount, privacy: nil)
+                        delegate?.didScanQRCode(value: address, amount: amount, privacy: nil, offline: nil)
                     }
                 }
             }

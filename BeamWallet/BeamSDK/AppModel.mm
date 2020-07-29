@@ -75,6 +75,7 @@ const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
 
 const int kFeeInGroth_Unlink = 1100;
+const int kFeeInGroth_MaxPrivacy = 1200000;
 
 const std::map<Notification::Type,bool> activeNotifications {
     { Notification::Type::SoftwareUpdateAvailable, true },
@@ -909,15 +910,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(BMAddress*_Nonnull)generateAddress {
     WalletAddress address = GenerateNewAddress(walletDb, "", WalletAddress::ExpirationStatus::Never);
     
-//    TxParameters params;
-//    params.SetParameter(TxParameterID::PeerID, address.m_walletID);
-//    params.SetParameter(TxParameterID::PeerWalletIdentity, address.m_Identity);
-//    params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
-//
-//    auto token = to_string(params);
-//
-//    LOG_INFO() << "token: " << token;
-
     BMAddress *bmAddress = [[BMAddress alloc] init];
     bmAddress.duration = address.m_duration;
     bmAddress.ownerId = address.m_OwnID;
@@ -926,12 +918,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
     bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
     bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
     bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
-    bmAddress.token = [self token:NO amount:0 walleetId:bmAddress.walletId];
-
+    bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:YES amount:0 walleetId:bmAddress.walletId ownId:bmAddress.ownerId];
+    
     return bmAddress;
 }
 
--(NSString*_Nonnull)token:(BOOL)maxPrivacy amount:(double)amount walleetId:(NSString*_Nonnull)walleetId{
+-(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId ownId:(int64_t)ownId {
+    
     WalletID m_walletID(Zero);
     m_walletID.FromHex(walleetId.string);
     
@@ -940,7 +933,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     TxParameters params;
     params.SetParameter(TxParameterID::PeerID, m_walletID);
     params.SetParameter(TxParameterID::PeerWalletIdentity, m_Identity);
-   
+    params.SetParameter(TxParameterID::IsPermanentPeerID, isPermanentAddress);
+
     if (amount > 0) {
         uint64_t bAmount = round(amount * Rules::Coin);
         params.SetParameter(TxParameterID::Amount, bAmount);
@@ -951,6 +945,14 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     else {
         params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
+    }
+    
+    if(nonInteractive) {
+        auto vouchers = wallet->generateVouchers(ownId, 20);
+        if (!vouchers.empty())
+        {
+            params.SetParameter(TxParameterID::ShieldedVoucherList, vouchers);
+        }
     }
     
     auto token = to_string(params);
@@ -1918,13 +1920,47 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     auto params = beam::wallet::ParseParameters(token.string);
     auto amount = params->GetParameter<Amount>(TxParameterID::Amount);
     auto type = params->GetParameter<TxType>(TxParameterID::TransactionType);
+    auto vouchers = params->GetParameter<ShieldedVoucherList>(TxParameterID::ShieldedVoucherList);
+    auto isPermanentAddress = params->GetParameter<BOOL>(TxParameterID::IsPermanentPeerID);
 
     BMTransactionParameters *p = [BMTransactionParameters new];
     p.amount = 0.0;
     p.isMaxPrivacy = type == TxType::PushTransaction;
-
+    
     if(amount) {
         p.amount = double(uint64_t(*amount)) / Rules::Coin;
+    }
+    
+    if(vouchers) {
+        p.isOffline = YES;
+    }
+    else {
+        p.isOffline = NO;
+    }
+    
+    if (auto isPermanentAddress = params->GetParameter<bool>(TxParameterID::IsPermanentPeerID); isPermanentAddress) {
+        p.isPermanentAddress = *isPermanentAddress;
+    }
+    else {
+        p.isPermanentAddress = NO;
+    }
+    
+    if (auto walletIdentity = params->GetParameter<beam::PeerID>(TxParameterID::PeerID); walletIdentity)
+    {
+        auto s = std::to_string(*walletIdentity);
+        p.identity = [NSString stringWithUTF8String:s.c_str()];
+    }
+    else {
+        p.identity = @"";
+    }
+    
+    if (auto peerIdentity = params->GetParameter<beam::PeerID>(TxParameterID::PeerWalletIdentity); peerIdentity)
+    {
+        auto s = std::to_string(*peerIdentity);
+        p.address = [NSString stringWithUTF8String:s.c_str()];
+    }
+    else {
+        p.address = @"";
     }
     
     return p;
@@ -2677,6 +2713,10 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
 
 -(int)getMinUnlinkFeeInGroth {
     return kFeeInGroth_Unlink;
+}
+
+-(int)getMinMaxPrivacyFeeInGroth {
+    return kFeeInGroth_MaxPrivacy;
 }
 
 bool IsValidTimeStamp(Timestamp currentBlockTime_s)

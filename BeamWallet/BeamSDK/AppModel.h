@@ -152,7 +152,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(BMAddress*_Nonnull)generateAddress;
--(NSString*_Nonnull)token:(BOOL)maxPrivacy amount:(double)amount walleetId:(NSString*_Nonnull)walleetId;
+-(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId ownId:(int64_t)ownId;
 
 // addresses
 -(BOOL)isAddress:(NSString*_Nullable)address;
@@ -247,6 +247,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(int)getDefaultFeeInGroth;
 -(int)getMinFeeInGroth;
 -(int)getMinUnlinkFeeInGroth;
+-(int)getMinMaxPrivacyFeeInGroth;
 
 -(void)completeWalletVerification;
 

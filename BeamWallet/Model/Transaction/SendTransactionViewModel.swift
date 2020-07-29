@@ -46,12 +46,46 @@ class SendTransactionViewModel: NSObject {
         }
     }
     
-    public var maxPrivacy = false
+    public var maxPrivacy = false {
+        didSet {
+            if(maxPrivacy) {
+                fee = String(AppModel.sharedManager().getMinMaxPrivacyFeeInGroth())
+            }
+            else {
+                fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+            }
+        }
+    }
+    
     public var requestedMaxPrivacy = false
-
+    public var requestedOffline = false
+    public var isPermanentAddress = false
+    
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
+            isPermanentAddress = false
+            
+            if(AppModel.sharedManager().isToken(toAddress)) {
+                let params = AppModel.sharedManager().getTransactionParameters(toAddress)
+                maxPrivacy = params.isMaxPrivacy
+                requestedMaxPrivacy = params.isMaxPrivacy
+                requestedOffline = params.isOffline
+                isPermanentAddress = params.isPermanentAddress
+                
+                if(params.amount > 0) {
+                   amount = String.currency(value: params.amount)
+                }
+                
+                if(maxPrivacy) {
+                    fee = String(AppModel.sharedManager().getMinMaxPrivacyFeeInGroth())
+                }
+                else {
+                    fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+                }
+                
+                checkAmountError()
+            }
         }
     }
     
@@ -305,12 +339,15 @@ class SendTransactionViewModel: NSObject {
         items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: to, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         if outgoindAdderss != nil {
-            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
+            let out = outgoindAdderss!.walletId //"\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
             items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        if maxPrivacy {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.privacy.uppercased(), detail: Localizable.shared.strings.max, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        if maxPrivacy && !requestedOffline {
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.max_privacy_title, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        }
+        else if maxPrivacy && requestedOffline {
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: "\(Localizable.shared.strings.max_privacy_title),\(Localizable.shared.strings.offline.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
         let amountString = amount + Localizable.shared.strings.beam + "\n"

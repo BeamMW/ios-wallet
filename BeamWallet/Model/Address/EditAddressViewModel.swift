@@ -21,7 +21,7 @@ import UIKit
 
 class EditAddressViewModel: DetailAddressViewModel {
     public var newAddress: BMAddress!
-    public let hours_24: UInt64 = 86400
+    public let hours_24: UInt64 = UInt64(Settings.sharedManager().maxAddressDurationSeconds)
     
     override init(address: BMAddress) {
         super.init(address: address)
@@ -68,7 +68,7 @@ class EditAddressViewModel: DetailAddressViewModel {
                 
                 self.newAddress.isChangedDate = true
                 
-                if selected == 24 {
+                if selected == Settings.sharedManager().maxAddressDurationHours {
                     self.newAddress.isNowActive = true
                     self.newAddress.isNowActiveDuration = self.hours_24
                     

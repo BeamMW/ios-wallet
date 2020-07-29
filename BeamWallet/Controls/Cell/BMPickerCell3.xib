@@ -59,7 +59,7 @@
                             <constraint firstAttribute="bottom" secondItem="gQs-Rr-cAd" secondAttribute="bottom" constant="15" id="Fj1-Zt-WVC"/>
                             <constraint firstItem="gQs-Rr-cAd" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="15" id="Zif-OU-tBF"/>
                             <constraint firstItem="gQs-Rr-cAd" firstAttribute="leading" secondItem="si6-ep-K1d" secondAttribute="leading" constant="15" id="e2g-bc-sPE"/>
-                            <constraint firstItem="w5C-t8-UDP" firstAttribute="centerY" secondItem="si6-ep-K1d" secondAttribute="centerY" id="rw3-pf-AJA"/>
+                            <constraint firstItem="w5C-t8-UDP" firstAttribute="top" secondItem="si6-ep-K1d" secondAttribute="top" constant="9.5" id="spJ-wr-SsQ"/>
                             <constraint firstAttribute="trailing" secondItem="w5C-t8-UDP" secondAttribute="trailing" constant="15" id="wAN-Tt-fxm"/>
                         </constraints>
                     </view>
@@ -80,7 +80,6 @@
                 <outlet property="switchView" destination="w5C-t8-UDP" id="sss-nB-nP1"/>
                 <outlet property="titleLabel" destination="Yjw-w2-kMT" id="WRo-Bv-bEz"/>
                 <outlet property="topOffset" destination="Zif-OU-tBF" id="Wu0-ri-rzh"/>
-                <outlet property="topSwitchOffset" destination="rw3-pf-AJA" id="7jz-86-khC"/>
             </connections>
             <point key="canvasLocation" x="176.81159420289856" y="110.49107142857143"/>
         </tableViewCell>

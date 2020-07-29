@@ -142,6 +142,21 @@ class FeeCell: BaseCell {
 
 extension FeeCell: Configurable {
     
+    func setMaxPrivacy(isMax: Bool) {
+        if(isMax) {
+            feeSlider.minimumValue = Float(AppModel.sharedManager().getMinMaxPrivacyFeeInGroth())
+            feeSlider.maximumValue = Float(10000000)
+        }
+        else {
+            feeSlider.maximumValue = Float(2000)
+            feeSlider.minimumValue = Float(AppModel.sharedManager().getMinFeeInGroth())
+        }
+        
+        minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
+        maxLabel.text = String(Int(feeSlider.maximumValue)) + Localizable.shared.strings.groth
+        
+    }
+    
     func setType(type: BMTransactionType) {
         self.type = type
         
