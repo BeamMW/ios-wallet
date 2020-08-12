@@ -53,7 +53,7 @@
 
 -(NSString*)shortDate {
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
-
+    
     NSDateFormatter *f = [NSDateFormatter new];
     
     if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
@@ -63,7 +63,7 @@
         [f setDateFormat:@"dd MMM"];
     }
     [f setLocale:locale];
-
+    
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
     
     return [f stringFromDate:date];
@@ -71,7 +71,7 @@
 
 -(NSString*)formattedDate {
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];
-
+    
     NSDateFormatter *f = [NSDateFormatter new];
     
     if ([[Settings sharedManager].language isEqualToString:@"zh-Hans"]) {
@@ -92,12 +92,12 @@
     }
     
     [f setLocale:locale];
-
+    
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:_createdTime];
     
     return [f stringFromDate:date];
 }
-    
+
 -(BOOL)isExpired {
     return  [self.status isEqualToString:[[@"expired" localized] lowercaseString]];
 }
@@ -132,7 +132,7 @@
     return detail;
 }
 
--(NSString*)csvLine {    
+-(NSString*)csvLine {
     NSNumberFormatter *formatter = [NSNumberFormatter new];
     formatter.currencyCode = @"";
     formatter.currencySymbol = @"";
@@ -176,6 +176,54 @@
 -(UIImage*)statusIcon {
     if (self.enumType == BMTransactionTypeUnlink) {
         return [UIImage imageNamed:@"iconUnlinkedTransaction"];
+    }
+    else if (self.enumType == BMTransactionTypePushTransaction) {
+        if(_isIncome) {
+            if(self.isCancelled) {
+                return _isOffline ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
+            }
+            else if(self.isFailed) {
+                return _isOffline ? [UIImage imageNamed:@"icon-failed-max-offline"] : [UIImage imageNamed:@"icon-failed-max-online"];
+            }
+            else {
+                switch (_enumStatus) {
+                        
+                    case BMTransactionStatusPending:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                    case BMTransactionStatusInProgress:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                    case BMTransactionStatusRegistering:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                    case BMTransactionStatusCompleted:
+                        return _isOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
+                    default:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                }
+            }
+        }
+        else{
+            if(self.isCancelled) {
+                return _isOffline ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
+            }
+            else if(self.isFailed) {
+                return _isOffline ? [UIImage imageNamed:@"icon-failed-max-offline"] : [UIImage imageNamed:@"icon-failed-max-online"];
+            }
+            else {
+                switch (_enumStatus) {
+                        
+                    case BMTransactionStatusPending:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                    case BMTransactionStatusInProgress:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                    case BMTransactionStatusRegistering:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                    case BMTransactionStatusCompleted:
+                        return _isOffline ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
+                    default:
+                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                }
+            }
+        }
     }
     else if (self.isCancelled)
     {
@@ -244,7 +292,7 @@
 
 -(NSMutableAttributedString*)searchString:(NSString*)searchText{
     NSMutableArray *strings = [NSMutableArray array];
-            
+    
     NSRange idRange = NSMakeRange(NSNotFound, NSNotFound);
     NSRange kernelRange = NSMakeRange(NSNotFound, NSNotFound);
     NSRange senderAddressRange = NSMakeRange(NSNotFound, NSNotFound);
@@ -252,7 +300,7 @@
     NSRange commentRange = NSMakeRange(NSNotFound, NSNotFound);
     NSRange senderNameRange = NSMakeRange(NSNotFound, NSNotFound);
     NSRange receiverNameRange = NSMakeRange(NSNotFound, NSNotFound);
-
+    
     if ([_ID.lowercaseString hasPrefix:searchText.lowercaseString]) {
         idRange = [_ID.lowercaseString rangeOfString:searchText.lowercaseString];
     }
@@ -280,7 +328,7 @@
     if ([_receiverContactName.lowercaseString hasPrefix:searchText.lowercaseString]) {
         receiverNameRange = [_receiverContactName.lowercaseString rangeOfString:searchText.lowercaseString];
     }
-
+    
     CGFloat fontsize = 14;
     
     if ([UIScreen mainScreen].bounds.size.height < 600) {
@@ -290,7 +338,7 @@
         fontsize = fontsize + 1;
     }
     
-
+    
     UIFont *font = [UIFont fontWithName:@"SFProDisplay-Bold" size:fontsize];
     
     if (_comment.length > 0) {
@@ -301,11 +349,11 @@
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"”%@”",_comment]];
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
         [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"SFProDisplay-Italic" size:fontsize] range:NSMakeRange(0, string.string.length)];
-
+        
         if (commentRange.location!=NSNotFound) {
             [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:NSMakeRange(commentRange.location+1, commentRange.length)];
         }
-
+        
         NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
         [commentString appendAttributedString:[NSMutableAttributedString attributedStringWithAttachment:attach]];
         [commentString appendAttributedString:[[NSAttributedString alloc]initWithString:@"   "]];
@@ -328,7 +376,7 @@
         NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
         [result appendAttributedString:localizableString];
         [result appendAttributedString:string];
-
+        
         [strings addObject:result];
     }
     
@@ -390,12 +438,12 @@
         NSTextAttachment *attach = [[NSTextAttachment alloc] init];
         attach.image = [UIImage imageNamed:@"iconContact"];
         attach.bounds = CGRectMake(0, -3, 16, 16);
-
+        
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_senderContactName]];
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:senderNameRange];
         [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.string.length)];
-
+        
         NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
         [commentString appendAttributedString:[NSMutableAttributedString attributedStringWithAttachment:attach]];
         [commentString appendAttributedString:[[NSAttributedString alloc]initWithString:@"    "]];
@@ -408,7 +456,7 @@
         NSTextAttachment *attach = [[NSTextAttachment alloc] init];
         attach.image = [UIImage imageNamed:@"iconContact"];
         attach.bounds = CGRectMake(0, -3, 16, 16);
-
+        
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_receiverContactName]];
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:receiverNameRange];
@@ -484,7 +532,7 @@
     
     NSString *sender;
     NSString *receiver;
-
+    
     if (_isSelf) {
         sender = [NSString stringWithFormat:@"%@\n%@",[[@"my_send_address" localized]uppercaseString], _senderAddress];
         receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_rec_address" localized]uppercaseString], _receiverAddress];
@@ -498,11 +546,11 @@
         sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _receiverAddress];
         receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _senderAddress];
     }
-
+    
     NSString *fee = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_fee" localized]uppercaseString], [NSString stringWithFormat:@"%llu GROTH",_realFee]];
-                      
+    
     NSString *trid = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_id" localized]uppercaseString], _ID];
-
+    
     [details addObject:date];
     [details addObject:status];
     [details addObject:amount];
@@ -510,25 +558,26 @@
     [details addObject:receiver];
     [details addObject:fee];
     [details addObject:trid];
-
+    
     if(_identity.length > 0){
         NSString *identity = [NSString stringWithFormat:@"%@\n%@",[[@"wallet_id" localized]uppercaseString], _identity];
         [details addObject:identity];
     }
     
     NSString *kernel = [NSString stringWithFormat:@"%@\n%@",[[@"kernel_id" localized]uppercaseString], _ID];
-
+    
     if (!self.isExpired && !self.isFailed && ![_kernelId hasPrefix:@"00000"]) {
         [details addObject:kernel];
     }
-
+    
     
     if ([self isFailed]) {
         NSString *failed = [NSString stringWithFormat:@"%@\n%@",[[@"failure_reason" localized]uppercaseString], _failureReason];
         [details addObject:failed];
     }
-           
+    
     return [details componentsJoinedByString:@"\n\n"];
 }
 
 @end
+

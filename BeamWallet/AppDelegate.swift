@@ -18,7 +18,6 @@
 //
 
 import CrashEye
-import Crashlytics
 import UIKit
 import UserNotifications
 import FirebaseCore
@@ -86,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
         
-        if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
+        if let crash = UserDefaults.standard.string(forKey: "crash"), let crash_name = UserDefaults.standard.string(forKey: "crash_name") {
 
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { _ in
                
@@ -109,10 +108,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
                 
-                Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
+                let ex = ExceptionModel.init(name:crash_name, reason:crash)
+                ex.stackTrace = []
                 
-                Answers.logCustomEvent(withName: "CRASH", customAttributes: ["stackTrace": crash])
-                
+                Crashlytics.crashlytics().record(exceptionModel:ex)
+                                                
                 UserDefaults.standard.set(nil, forKey: "crash")
                 UserDefaults.standard.synchronize()
                 

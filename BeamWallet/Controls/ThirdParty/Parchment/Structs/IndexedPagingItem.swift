@@ -15,7 +15,7 @@ public struct PagingIndexItem: PagingTitleItem, Equatable, Hashable, Comparable 
   public var hashValue: Int {
     return index
   }
-  
+    
   /// Creates an instance of `PagingIndexItem`
   ///
   /// Parameter index: The index of the `PagingItem`.

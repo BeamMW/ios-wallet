@@ -59,6 +59,7 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,strong) NSString *receiverAddress;
 @property (nonatomic,strong) NSString *comment;
 @property (nonatomic,assign) BOOL isIncome;
+@property (nonatomic,assign) BOOL isOffline;
 @property (nonatomic,assign) BOOL isSelf;
 @property (nonatomic,assign) BOOL canCancel;
 @property (nonatomic,assign) BOOL canResume;

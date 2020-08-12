@@ -25,7 +25,7 @@ public struct PagingItems<T: PagingItem> where T: Hashable & Comparable {
   /// - Parameter pagingItem: A `PagingItem` instance
   /// - Returns: The `IndexPath` for the given `PagingItem`
   public func indexPath(for pagingItem: T) -> IndexPath? {
-    guard let index = items.index(of: pagingItem) else { return nil }
+    guard let index = items.firstIndex(of: pagingItem) else { return nil }
     return IndexPath(item: index, section: 0)
   }
   

@@ -139,6 +139,14 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
             transaction.receiverAddress = [NSString stringWithUTF8String:to_string(item.m_myId).c_str()];
         }
         
+        if(transaction.enumType == BMTransactionTypePushTransaction) {
+            auto vouchers = item.GetParameter<ShieldedVoucherList>(wallet::TxParameterID::ShieldedVoucherList);
+            transaction.isOffline =  (vouchers && !vouchers->empty());
+        }
+        else {
+            transaction.isOffline = NO;
+        }
+        
         [transactions addObject:transaction];      
     }
     

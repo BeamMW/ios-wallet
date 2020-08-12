@@ -9,7 +9,7 @@ class IndexedPagingDataSource<T: PagingItem>:
   func pagingViewController<U>(
     _ pagingViewController: PagingViewController<U>,
     viewControllerForPagingItem item: U) -> UIViewController {
-    guard let index = items.index(of: item as! T) else {
+    guard let index = items.firstIndex(of: item as! T) else {
       fatalError("pagingViewController:viewControllerForPagingItem: PagingItem does not exist")
     }
     guard let viewController = viewControllerForIndex?(index) else {
@@ -22,7 +22,7 @@ class IndexedPagingDataSource<T: PagingItem>:
   func pagingViewController<U>(
     _ pagingViewController: PagingViewController<U>,
     pagingItemBeforePagingItem item: U) -> U? {
-    guard let index = items.index(of: item as! T) else { return nil }
+    guard let index = items.firstIndex(of: item as! T) else { return nil }
     if index > 0 {
       return items[index - 1] as? U
     }
@@ -32,7 +32,7 @@ class IndexedPagingDataSource<T: PagingItem>:
   func pagingViewController<U>(
     _ pagingViewController: PagingViewController<U>,
     pagingItemAfterPagingItem item: U) -> U? {
-    guard let index = items.index(of: item as! T) else { return nil }
+    guard let index = items.firstIndex(of: item as! T) else { return nil }
     if index < items.count - 1 {
       return items[index + 1] as? U
     }
