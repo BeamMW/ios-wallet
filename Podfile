@@ -13,14 +13,14 @@ end
 def shared_pods
     use_frameworks!
     
-    pod 'Fabric'
     pod 'Crashlytics'
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
    # pod 'Parchment'
     pod 'SwipeTransition'
     pod 'CrashEye'
-  #  pod 'Firebase/Analytics'
+    pod 'Firebase/Crashlytics'    
+    pod 'Firebase/Analytics'
 
 end
 

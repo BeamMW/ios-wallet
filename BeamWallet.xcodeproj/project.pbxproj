@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C58997BBD95511DB5847C74 /* Pods_BeamWalletMasterNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86B5F9A14B76D84596BA8C8C /* Pods_BeamWalletMasterNet.framework */; };
-		575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */; };
+		7109A01C7BBE02EE27AF8A0F /* Pods_BeamWalletMasterNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9F8271C97E240807CECE653 /* Pods_BeamWalletMasterNet.framework */; };
 		9207FF4222293341009D931B /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF4122293341009D931B /* SF-Pro-Display-Regular.otf */; };
 		9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9207FF432229336E009D931B /* SF-Pro-Display-Semibold.otf */; };
 		9207FF4C22294394009D931B /* WordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207FF4A22294394009D931B /* WordCell.swift */; };
@@ -218,6 +217,9 @@
 		922393A2235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922393A1235D1579002ADA27 /* RestoreOptionsViewController.xib */; };
 		922393A3235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922393A1235D1579002ADA27 /* RestoreOptionsViewController.xib */; };
 		922393A4235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922393A1235D1579002ADA27 /* RestoreOptionsViewController.xib */; };
+		9224750124E3EC5A006FE2B2 /* GoogleServiceMaster.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9224750024E3EC5A006FE2B2 /* GoogleServiceMaster.plist */; };
+		9224750324E3EC61006FE2B2 /* GoogleServiceMain.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9224750224E3EC61006FE2B2 /* GoogleServiceMain.plist */; };
+		9224750524E3EC6C006FE2B2 /* GoogleServiceTest.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9224750424E3EC6C006FE2B2 /* GoogleServiceTest.plist */; };
 		9225D53422941F940067B4EA /* SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9225D53222941F900067B4EA /* SFProText-Regular.ttf */; };
 		9225D53522941F940067B4EA /* SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9225D53222941F900067B4EA /* SFProText-Regular.ttf */; };
 		9225D53622941F940067B4EA /* SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9225D53222941F900067B4EA /* SFProText-Regular.ttf */; };
@@ -1098,7 +1100,8 @@
 		92FE264122A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264222A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
-		B204B190DA4B48994EBAD225 /* Pods_BeamWalletTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E96237C4102DE036679EDC41 /* Pods_BeamWalletTestNet.framework */; };
+		9A0C2F37891F69B356AE9802 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFDBA62826E1C4F987459346 /* Pods_BeamWallet.framework */; };
+		A958A216A16A843343DEFEE0 /* Pods_BeamWalletTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4623D302B43A34F39928A4E /* Pods_BeamWalletTestNet.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1168,15 +1171,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		127B5665205F7EEBFAA3D532 /* Pods-BeamWalletMasterNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.debug.xcconfig"; sourceTree = "<group>"; };
-		3507D319FDB9B8876886EFE4 /* Pods-BeamWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.release.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet.release.xcconfig"; sourceTree = "<group>"; };
-		4100BD71ACF439F2247FD578 /* Pods-BeamWalletMasterNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.release.xcconfig"; sourceTree = "<group>"; };
-		50BD6E0647EEF6BBB5042F95 /* Pods-BeamWalletNotificationViewTestNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletNotificationViewTestNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWalletNotificationViewTestNet/Pods-BeamWalletNotificationViewTestNet.debug.xcconfig"; sourceTree = "<group>"; };
-		60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		73E46FE834043C1C71A80847 /* Pods-BeamWalletTestNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.debug.xcconfig"; sourceTree = "<group>"; };
-		7BFB7F991044E9C6718DE261 /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
-		806FA090202F1A0731331665 /* Pods_BeamWalletNotificationView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletNotificationView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		86B5F9A14B76D84596BA8C8C /* Pods_BeamWalletMasterNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletMasterNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24D405A6388AA914C2CF264A /* Pods-BeamWalletMasterNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.debug.xcconfig"; sourceTree = "<group>"; };
+		5D6D01E03853C2F68057349C /* Pods-BeamWalletMasterNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.release.xcconfig"; sourceTree = "<group>"; };
 		9205284B237B11F0001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		9205284C237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/LaunchScreenTestNet.strings; sourceTree = "<group>"; };
 		9205284D237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/LaunchScreenMasterNet.strings; sourceTree = "<group>"; };
@@ -1264,6 +1260,9 @@
 		92227AFE2281B1B00070DC68 /* CategoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditViewController.swift; sourceTree = "<group>"; };
 		92227B062281C28D0070DC68 /* BMCategoryColorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMCategoryColorsView.swift; sourceTree = "<group>"; };
 		922393A1235D1579002ADA27 /* RestoreOptionsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RestoreOptionsViewController.xib; sourceTree = "<group>"; };
+		9224750024E3EC5A006FE2B2 /* GoogleServiceMaster.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GoogleServiceMaster.plist; sourceTree = "<group>"; };
+		9224750224E3EC61006FE2B2 /* GoogleServiceMain.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GoogleServiceMain.plist; sourceTree = "<group>"; };
+		9224750424E3EC6C006FE2B2 /* GoogleServiceTest.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GoogleServiceTest.plist; sourceTree = "<group>"; };
 		9225D53222941F900067B4EA /* SFProText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProText-Regular.ttf"; sourceTree = "<group>"; };
 		9225D53322941F940067B4EA /* SFProText-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProText-Medium.ttf"; sourceTree = "<group>"; };
 		9225D53E2294458D0067B4EA /* BMPickedAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPickedAddressCell.swift; sourceTree = "<group>"; };
@@ -1614,10 +1613,13 @@
 		92FE263822A11E4900102DB4 /* BMPickedAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMPickedAddressCell.xib; sourceTree = "<group>"; };
 		92FE263922A11E4B00102DB4 /* BMExpandCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMExpandCell.swift; sourceTree = "<group>"; };
 		92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMExpandCell.xib; sourceTree = "<group>"; };
-		A43E62DF067EE6B06B21FBF4 /* Pods-BeamWalletNotificationViewTestNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletNotificationViewTestNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWalletNotificationViewTestNet/Pods-BeamWalletNotificationViewTestNet.release.xcconfig"; sourceTree = "<group>"; };
-		B29895BC324085C75D90BBC9 /* Pods_BeamWalletNotificationViewTestNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletNotificationViewTestNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E6DDCFF67C9F2E7CBD5EB4AA /* Pods-BeamWalletTestNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.release.xcconfig"; sourceTree = "<group>"; };
-		E96237C4102DE036679EDC41 /* Pods_BeamWalletTestNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletTestNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BDF670E71740AE97BF7921B /* Pods-BeamWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.release.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.release.xcconfig"; sourceTree = "<group>"; };
+		9EFF88BBA30128E42A99B198 /* Pods-BeamWalletTestNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.debug.xcconfig"; sourceTree = "<group>"; };
+		D4623D302B43A34F39928A4E /* Pods_BeamWalletTestNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletTestNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E613AC2831AEE729335D79C6 /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
+		EFA1C6793545883514E87B6B /* Pods-BeamWalletTestNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.release.xcconfig"; sourceTree = "<group>"; };
+		F9F8271C97E240807CECE653 /* Pods_BeamWalletMasterNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletMasterNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFDBA62826E1C4F987459346 /* Pods_BeamWallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1644,10 +1646,10 @@
 				92458DF22492525A0013E8E3 /* libkeykeeper.a in Frameworks */,
 				92458DC82492525A0013E8E3 /* libcli.a in Frameworks */,
 				92458DD12492525A0013E8E3 /* libutility.a in Frameworks */,
-				575CFF43C23FF5D78D61B080 /* Pods_BeamWallet.framework in Frameworks */,
 				92458DFB2492525A0013E8E3 /* libmnemonic.a in Frameworks */,
 				92458DFE2492525A0013E8E3 /* libassets.a in Frameworks */,
 				92458DCE2492525A0013E8E3 /* libhttp.a in Frameworks */,
+				9A0C2F37891F69B356AE9802 /* Pods_BeamWallet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1674,10 +1676,10 @@
 				92458DF32492525A0013E8E3 /* libkeykeeper.a in Frameworks */,
 				92458DC92492525A0013E8E3 /* libcli.a in Frameworks */,
 				92458DD22492525A0013E8E3 /* libutility.a in Frameworks */,
-				B204B190DA4B48994EBAD225 /* Pods_BeamWalletTestNet.framework in Frameworks */,
 				92458DFC2492525A0013E8E3 /* libmnemonic.a in Frameworks */,
 				92458DFF2492525A0013E8E3 /* libassets.a in Frameworks */,
 				92458DCF2492525A0013E8E3 /* libhttp.a in Frameworks */,
+				A958A216A16A843343DEFEE0 /* Pods_BeamWalletTestNet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1704,31 +1706,16 @@
 				92458DF42492525A0013E8E3 /* libkeykeeper.a in Frameworks */,
 				92458DCA2492525A0013E8E3 /* libcli.a in Frameworks */,
 				92458DD32492525A0013E8E3 /* libutility.a in Frameworks */,
-				4C58997BBD95511DB5847C74 /* Pods_BeamWalletMasterNet.framework in Frameworks */,
 				92458DFD2492525A0013E8E3 /* libmnemonic.a in Frameworks */,
 				92458E002492525A0013E8E3 /* libassets.a in Frameworks */,
 				92458DD02492525A0013E8E3 /* libhttp.a in Frameworks */,
+				7109A01C7BBE02EE27AF8A0F /* Pods_BeamWalletMasterNet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		22A30D11A4655B31D781F6DD /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7BFB7F991044E9C6718DE261 /* Pods-BeamWallet.debug.xcconfig */,
-				3507D319FDB9B8876886EFE4 /* Pods-BeamWallet.release.xcconfig */,
-				73E46FE834043C1C71A80847 /* Pods-BeamWalletTestNet.debug.xcconfig */,
-				E6DDCFF67C9F2E7CBD5EB4AA /* Pods-BeamWalletTestNet.release.xcconfig */,
-				127B5665205F7EEBFAA3D532 /* Pods-BeamWalletMasterNet.debug.xcconfig */,
-				4100BD71ACF439F2247FD578 /* Pods-BeamWalletMasterNet.release.xcconfig */,
-				50BD6E0647EEF6BBB5042F95 /* Pods-BeamWalletNotificationViewTestNet.debug.xcconfig */,
-				A43E62DF067EE6B06B21FBF4 /* Pods-BeamWalletNotificationViewTestNet.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		9207FF3B2229327F009D931B /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -1949,13 +1936,11 @@
 				92D3CBF02264B56D007E3C55 /* testnet */,
 				92D3CBD32264B562007E3C55 /* mainnet */,
 				923544712254C6CE00889C74 /* openssl.framework */,
-				60CB149AE31B7B21CD7FD15E /* Pods_BeamWallet.framework */,
-				E96237C4102DE036679EDC41 /* Pods_BeamWalletTestNet.framework */,
 				927367212277AB330060CB67 /* UserNotifications.framework */,
 				927367232277AB340060CB67 /* UserNotificationsUI.framework */,
-				806FA090202F1A0731331665 /* Pods_BeamWalletNotificationView.framework */,
-				86B5F9A14B76D84596BA8C8C /* Pods_BeamWalletMasterNet.framework */,
-				B29895BC324085C75D90BBC9 /* Pods_BeamWalletNotificationViewTestNet.framework */,
+				FFDBA62826E1C4F987459346 /* Pods_BeamWallet.framework */,
+				F9F8271C97E240807CECE653 /* Pods_BeamWalletMasterNet.framework */,
+				D4623D302B43A34F39928A4E /* Pods_BeamWalletTestNet.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -2122,7 +2107,7 @@
 				925AD5ED2228260C00DDE66B /* Resources */,
 				92365AC8222D3E16000D7064 /* Frameworks */,
 				925AD5D92228254E00DDE66B /* Products */,
-				22A30D11A4655B31D781F6DD /* Pods */,
+				C6D82AD1A49FFCFF7CECE71C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2165,6 +2150,9 @@
 				925AD5E72228254F00DDE66B /* Info.plist */,
 				92B1326F227B2CA50099B86C /* InfoTestnet.plist */,
 				92B13271227B2CAC0099B86C /* InfoMasternet.plist */,
+				9224750024E3EC5A006FE2B2 /* GoogleServiceMaster.plist */,
+				9224750224E3EC61006FE2B2 /* GoogleServiceMain.plist */,
+				9224750424E3EC6C006FE2B2 /* GoogleServiceTest.plist */,
 				925AD5E22228254F00DDE66B /* Assets.xcassets */,
 				92E2EA9D226DE5F500367928 /* Localizable.strings */,
 				92B13273227B2CDC0099B86C /* BeamWallet.entitlements */,
@@ -2679,6 +2667,19 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
+		C6D82AD1A49FFCFF7CECE71C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E613AC2831AEE729335D79C6 /* Pods-BeamWallet.debug.xcconfig */,
+				9BDF670E71740AE97BF7921B /* Pods-BeamWallet.release.xcconfig */,
+				24D405A6388AA914C2CF264A /* Pods-BeamWalletMasterNet.debug.xcconfig */,
+				5D6D01E03853C2F68057349C /* Pods-BeamWalletMasterNet.release.xcconfig */,
+				9EFF88BBA30128E42A99B198 /* Pods-BeamWalletTestNet.debug.xcconfig */,
+				EFA1C6793545883514E87B6B /* Pods-BeamWalletTestNet.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2686,13 +2687,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 925AD5EA2228254F00DDE66B /* Build configuration list for PBXNativeTarget "BeamWallet" */;
 			buildPhases = (
-				405A29B2F4F7A5D0E1E97D58 /* [CP] Check Pods Manifest.lock */,
+				DD3C4F929948A4069CAEC668 /* [CP] Check Pods Manifest.lock */,
 				925AD5D42228254E00DDE66B /* Sources */,
 				925AD5D52228254E00DDE66B /* Frameworks */,
 				925AD5D62228254E00DDE66B /* Resources */,
 				92365AE2222D4039000D7064 /* Embed Frameworks */,
 				928E78152237B33D0099AD20 /* ShellScript */,
-				849EB582CFC3EDB4F752313F /* [CP] Embed Pods Frameworks */,
+				5A7EA2FD90C9E74B1DB01892 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2707,15 +2708,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9288DD99223A55410020C501 /* Build configuration list for PBXNativeTarget "BeamWalletTestNet" */;
 			buildPhases = (
-				CBCB747DB827C9EAA1978C71 /* [CP] Check Pods Manifest.lock */,
+				BDF353BF84BD24E3DC2FA21D /* [CP] Check Pods Manifest.lock */,
 				9288DD2C223A55410020C501 /* Sources */,
 				9288DD61223A55410020C501 /* Frameworks */,
 				9288DD75223A55410020C501 /* Resources */,
 				9288DD93223A55410020C501 /* Embed Frameworks */,
 				9288DD97223A55410020C501 /* ShellScript */,
-				03BF8A03F20DD829D1381CA5 /* [CP] Embed Pods Frameworks */,
 				92E2EACC226F102100367928 /* Embed Watch Content */,
 				92C4DBDF227906800073AEED /* Embed App Extensions */,
+				E486210D4B28E3C92A7744F0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2730,14 +2731,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92E2EB82226F21C700367928 /* Build configuration list for PBXNativeTarget "BeamWalletMasterNet" */;
 			buildPhases = (
-				9044F828D7961A96A53B78FD /* [CP] Check Pods Manifest.lock */,
+				254AE3CD7AFE5E7B8CAE42AF /* [CP] Check Pods Manifest.lock */,
 				92E2EACF226F21C700367928 /* Sources */,
 				92E2EB2F226F21C700367928 /* Frameworks */,
 				92E2EB41226F21C700367928 /* Resources */,
 				92E2EB7D226F21C700367928 /* Embed Frameworks */,
-				92E2EB7F226F21C700367928 /* ShellScript */,
 				92E2EB81226F21C700367928 /* Embed Watch Content */,
-				80EA97D97337B09A6CCA9045 /* [CP] Embed Pods Frameworks */,
+				922474FD24E3E694006FE2B2 /* ShellScript */,
+				0CA93FD80DF3024FF5487867 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2907,6 +2908,7 @@
 				925AD5F72228299500DDE66B /* ProximaNova-Regular.ttf in Resources */,
 				9207FF442229336E009D931B /* SF-Pro-Display-Semibold.otf in Resources */,
 				92E1790F235735BD001C30A6 /* UnlockPasswordPopover.xib in Resources */,
+				9224750324E3EC61006FE2B2 /* GoogleServiceMain.plist in Resources */,
 				927F04F7245B1F790058372E /* NotificationVersionViewController.xib in Resources */,
 				927993C422F424D300FF8ECC /* InfoPlist.strings in Resources */,
 				925AD5F4222827A500DDE66B /* WellcomeViewController.xib in Resources */,
@@ -2976,6 +2978,7 @@
 				92A0404C225813CE00C42081 /* SFProText-Semibold.otf in Resources */,
 				92DBA6F924599DCD0013FB54 /* NotificationTableViewCell.xib in Resources */,
 				9288DD89223A55410020C501 /* WalletProgressCell.xib in Resources */,
+				9224750524E3EC6C006FE2B2 /* GoogleServiceTest.plist in Resources */,
 				92D577B422F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				92CC40EC22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				922393A3235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */,
@@ -3020,6 +3023,7 @@
 				92D577B522F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				92C00D2822A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
 				9246F75F227C48830091FB0B /* BMEmptyCell.xib in Resources */,
+				9224750124E3EC5A006FE2B2 /* GoogleServiceMaster.plist in Resources */,
 				92C00D3022A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */,
 				92E2EB46226F21C700367928 /* TransactionUTXOCell.xib in Resources */,
 				924727BE235A254700E8AF2B /* CreateWalletPasswordViewController.xib in Resources */,
@@ -3102,46 +3106,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		03BF8A03F20DD829D1381CA5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		405A29B2F4F7A5D0E1E97D58 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BeamWallet-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		80EA97D97337B09A6CCA9045 /* [CP] Embed Pods Frameworks */ = {
+		0CA93FD80DF3024FF5487867 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3158,24 +3123,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		849EB582CFC3EDB4F752313F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9044F828D7961A96A53B78FD /* [CP] Check Pods Manifest.lock */ = {
+		254AE3CD7AFE5E7B8CAE42AF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3196,6 +3144,42 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		5A7EA2FD90C9E74B1DB01892 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BeamWallet/Pods-BeamWallet-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		922474FD24E3E694006FE2B2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		9288DD97223A55410020C501 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3233,25 +3217,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" a1b807ba21d77b7a801d4c9674b93d0e4f26b21d 2c256993692a8b7b4d88caf2930889f1e0721fa30c6fe73c85e6aaf11c9a9b66\n";
 		};
-		92E2EB7F226F21C700367928 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/Resources/Info.plist",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" a1b807ba21d77b7a801d4c9674b93d0e4f26b21d 2c256993692a8b7b4d88caf2930889f1e0721fa30c6fe73c85e6aaf11c9a9b66\n";
-		};
-		CBCB747DB827C9EAA1978C71 /* [CP] Check Pods Manifest.lock */ = {
+		BDF353BF84BD24E3DC2FA21D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3271,6 +3237,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD3C4F929948A4069CAEC668 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BeamWallet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E486210D4B28E3C92A7744F0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -4278,7 +4283,7 @@
 		};
 		925AD5EB2228254F00DDE66B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BFB7F991044E9C6718DE261 /* Pods-BeamWallet.debug.xcconfig */;
+			baseConfigurationReference = E613AC2831AEE729335D79C6 /* Pods-BeamWallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMain;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -4359,7 +4364,7 @@
 		};
 		925AD5EC2228254F00DDE66B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3507D319FDB9B8876886EFE4 /* Pods-BeamWallet.release.xcconfig */;
+			baseConfigurationReference = 9BDF670E71740AE97BF7921B /* Pods-BeamWallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMain;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -4438,7 +4443,7 @@
 		};
 		9288DD9A223A55410020C501 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 73E46FE834043C1C71A80847 /* Pods-BeamWalletTestNet.debug.xcconfig */;
+			baseConfigurationReference = 9EFF88BBA30128E42A99B198 /* Pods-BeamWalletTestNet.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -4521,7 +4526,7 @@
 		};
 		9288DD9B223A55410020C501 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6DDCFF67C9F2E7CBD5EB4AA /* Pods-BeamWalletTestNet.release.xcconfig */;
+			baseConfigurationReference = EFA1C6793545883514E87B6B /* Pods-BeamWalletTestNet.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -4612,7 +4617,7 @@
 		};
 		92E2EB83226F21C700367928 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 127B5665205F7EEBFAA3D532 /* Pods-BeamWalletMasterNet.debug.xcconfig */;
+			baseConfigurationReference = 24D405A6388AA914C2CF264A /* Pods-BeamWalletMasterNet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMaster;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -4621,7 +4626,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4692,7 +4697,7 @@
 		};
 		92E2EB84226F21C700367928 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4100BD71ACF439F2247FD578 /* Pods-BeamWalletMasterNet.release.xcconfig */;
+			baseConfigurationReference = 5D6D01E03853C2F68057349C /* Pods-BeamWalletMasterNet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMaster;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -4701,7 +4706,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

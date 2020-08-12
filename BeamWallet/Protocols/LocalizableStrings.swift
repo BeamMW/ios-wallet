@@ -387,8 +387,8 @@ class LocalizableStrings : NSObject {
     var search_transactions = "search_transactions".localized
     var random_node = "random_node".localized
     var generate_seed = "generate_seed".localized
+    var one_time_expire_text = "one_time_expire_text".localized
 
-    
     var restore_create_title = "restore_create_title".localized
     var restore_create_text = "restore_create_text".localized
     var proceed = "proceed".localized
@@ -560,7 +560,7 @@ class LocalizableStrings : NSObject {
     var receive_notice_max_privacy = "receive_notice_max_privacy".localized
     var switch_to_permanent = "switch_to_permanent".localized
     var switch_to_regular = "switch_to_regular".localized
-
+    var address_not_supported_max_privacy = "address_not_supported_max_privacy".localized
 
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

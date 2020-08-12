@@ -60,12 +60,14 @@ class SendTransactionViewModel: NSObject {
     public var requestedMaxPrivacy = false
     public var requestedOffline = false
     public var isPermanentAddress = false
-    
+    public var maxPrivacyDisabled = false
+
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
             isPermanentAddress = false
-            
+            maxPrivacyDisabled = false;
+
             if(AppModel.sharedManager().isToken(toAddress)) {
                 let params = AppModel.sharedManager().getTransactionParameters(toAddress)
                 maxPrivacy = params.isMaxPrivacy
@@ -85,6 +87,12 @@ class SendTransactionViewModel: NSObject {
                 }
                 
                 checkAmountError()
+            }
+            else if(AppModel.sharedManager().isValidAddress(toAddress)) {
+                maxPrivacyDisabled = true;
+                requestedMaxPrivacy = false;
+                maxPrivacy = false
+                fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
             }
         }
     }

@@ -47,11 +47,13 @@
 
 #include "mnemonic/mnemonic.h"
 
-#include "wallet/transactions/lelantus/pull_transaction.h"
-#include "wallet/transactions/lelantus/push_transaction.h"
 #include "wallet/transactions/lelantus/unlink_transaction.h"
+#include "wallet/transactions/lelantus/push_transaction.h"
+#include "wallet/transactions/lelantus/pull_transaction.h"
+
 #include "wallet/core/simple_transaction.h"
 #include "wallet/core/common_utils.h"
+#include "wallet/core/common.h"
 #include "common.h"
 
 #include <sys/sysctl.h>
@@ -208,6 +210,19 @@ const bool isSecondCurrencyEnabled = true;
     }
     
     return @"";
+}
+
++(NSArray*_Nonnull)randomNodes {
+    auto peers = getDefaultPeers();
+    
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (const auto& item : peers) {
+        NSString *address = [NSString stringWithUTF8String:item.c_str()];
+        [array addObject:address];
+    }
+    
+    return array;
 }
 
 +(NSString*_Nonnull)chooseRandomNode {
@@ -747,19 +762,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(void)start {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-        
-        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(walletDb, false);
-        auto pullTxCreator = std::make_shared<lelantus::PullTransaction::Creator>(false);
-        auto unlinkTxCreator = std::make_shared<lelantus::UnlinkFundsTransaction::Creator>(false);
-        
+                
         auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-        additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
-        additionalTxCreators->emplace(TxType::PullTransaction, pullTxCreator);
-        additionalTxCreators->emplace(TxType::UnlinkFunds, unlinkTxCreator);
+        additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
+        additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
+        additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
         
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
-        wallet->start(activeNotifications, false, isSecondCurrencyEnabled, additionalTxCreators);
+        wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
         
         isRunning = YES;
         isStarted = YES;
@@ -777,7 +788,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if(self.isInternetAvailable && isRunning == NO && ![[Settings sharedManager] isLocalNode])
         {
             isRunning = YES;
-            wallet->start(activeNotifications, false, isSecondCurrencyEnabled);
+            
+            auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
+            additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
+            additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
+            additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
+            
+            wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
         }
     }
 }
@@ -908,7 +925,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(BMAddress*_Nonnull)generateAddress {
-    WalletAddress address = GenerateNewAddress(walletDb, "", WalletAddress::ExpirationStatus::Never);
+    WalletAddress address = GenerateNewAddress(walletDb, "", WalletAddress::ExpirationStatus::OneDay);
     
     BMAddress *bmAddress = [[BMAddress alloc] init];
     bmAddress.duration = address.m_duration;
@@ -918,18 +935,33 @@ bool OnProgress(uint64_t done, uint64_t total) {
     bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
     bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
     bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
-    bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:YES amount:0 walleetId:bmAddress.walletId ownId:bmAddress.ownerId];
+    bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:NO amount:0 walleetId:bmAddress.walletId identity:bmAddress.identity ownId:bmAddress.ownerId];
     
     return bmAddress;
 }
 
--(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId ownId:(int64_t)ownId {
+//boost::optional<PeerID> GetPeerIDFromHex(const std::string& s)
+//{
+//    //boost::optional<PeerID> res;
+////    bool isValid = false;
+////    auto buf = from_hex(s, &isValid);
+////
+////    PeerID pid = Blob(buf);
+//   // res.emplace();
+//   // *res = pid;
+//
+//    return pid;
+//}
+
+-(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId {
     
     WalletID m_walletID(Zero);
     m_walletID.FromHex(walleetId.string);
-    
-    PeerID m_Identity = m_walletID.m_Pk;
-    
+        
+    bool isValid = false;
+    auto buf = from_hex(identity.string, &isValid);
+    PeerID m_Identity = Blob(buf);
+        
     TxParameters params;
     params.SetParameter(TxParameterID::PeerID, m_walletID);
     params.SetParameter(TxParameterID::PeerWalletIdentity, m_Identity);
@@ -959,15 +991,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return [NSString stringWithUTF8String:token.c_str()];
 }
 
-
-void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID) {
-    auto kdf = db->get_MasterKdf();
-    auto vouchers = GenerateVoucherList(kdf, ownID, 2);
-    if (!vouchers.empty()){
-        params.SetParameter(TxParameterID::ShieldedVoucherList, vouchers);
-        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
-    }
-}
 
 #pragma mark - Addresses
 
@@ -1801,35 +1824,22 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     uint64_t bAmount = round(amount * Rules::Coin);
     uint64_t bfee = fee;
     
-    beam::wallet::WalletID peer = *_txParameters.GetParameter<beam::wallet::WalletID>(beam::wallet::TxParameterID::PeerID);
-        
     auto p = beam::wallet::CreateSimpleTransactionParameters()
     .SetParameter(beam::wallet::TxParameterID::Amount, bAmount)
     .SetParameter(beam::wallet::TxParameterID::Fee, bfee)
     .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
     
-    WalletID fromID(Zero);
-    fromID.FromHex(from.string);
-    p.SetParameter(beam::wallet::TxParameterID::PeerID, peer);
-    p.SetParameter(beam::wallet::TxParameterID::MyID, fromID);
-
+    CopyParameter(TxParameterID::PeerID, _txParameters, p);
+    CopyParameter(TxParameterID::PeerWalletIdentity, _txParameters, p);
+    if (maxPrivacy)
+    {
+        CopyParameter(TxParameterID::TransactionType, _txParameters, p);
+    }
+    CopyParameter(TxParameterID::ShieldedVoucherList, _txParameters, p);
+    
     if ([self isToken:to])
     {
-        p.SetParameter(beam::wallet::TxParameterID::OriginalToken, to.string);
-    }
-    
-    auto identity = _txParameters.GetParameter<beam::PeerID>(beam::wallet::TxParameterID::PeerWalletIdentity);
-    
-    if (identity)
-    {
-        p.SetParameter(beam::wallet::TxParameterID::PeerWalletIdentity, *identity);
-    }
-    
-    if (maxPrivacy) {
-        p.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
-    }
-    else {
-        p.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
+        p.SetParameter(TxParameterID::OriginalToken, to.string);
     }
     
     wallet->getAsync()->startTransaction(std::move(p));
@@ -1839,10 +1849,10 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
     {
         WalletID fromID(Zero);
         fromID.FromHex(from.string);
-        
+
         try{
             __block auto address = walletDb->getAddress(walletID);
-            
+
             if(address) {
                 __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1858,6 +1868,15 @@ void AddVoucherParameter(TxParameters& params, IWalletDB::Ptr db, uint64_t ownID
         catch(NSException *ex) {
             NSLog(@"%@",ex);
         }
+    }
+}
+
+void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxParameters& input, beam::wallet::TxParameters& dest)
+{
+    beam::wallet::ByteBuffer buf;
+    if (input.GetParameter(paramID, buf))
+    {
+        dest.SetParameter(paramID, buf);
     }
 }
 
@@ -3013,42 +3032,42 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 //https://github.com/BeamMW/beam/blob/master/wallet/unittests/lelantus_test.cpp
 
 -(void)sendUnlink:(double)amount fee:(double)fee {
-    auto bAmount = round(amount * Rules::Coin);
-    
-    WalletAddress senderAddress;
-    BOOL addressFound = NO;
-    
-    std::vector<WalletAddress> addresses = wallet->ownAddresses;
-    
-    for (int i=0; i<addresses.size(); i++){
-        NSString *name = [NSString stringWithUTF8String:addresses[i].m_label.c_str()];
-        if ([name isEqualToString:unlinkAddressName]) {
-            senderAddress = addresses[i];
-            addressFound = YES;
-            break;
-        }
-    }
-    
-    if (!addressFound) {
-        walletDb->createAddress(senderAddress);
-        senderAddress.m_label = [unlinkAddressName string];
-        senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
-        walletDb->saveAddress(senderAddress);
-    }
-    else if (addressFound && senderAddress.isExpired()) {
-        senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
-        walletDb->saveAddress(senderAddress);
-    }
-    
-    Amount userFee = fee;
-    Amount userAmount = bAmount;
-    
-    auto txParams = lelantus::CreateUnlinkFundsTransactionParameters(senderAddress.m_walletID)
-    .SetParameter(TxParameterID::Amount, userAmount)
-  //  .SetParameter(TxParameterID::PeerID, senderAddress.m_walletID)
-    .SetParameter(TxParameterID::Fee, userFee);
-    
-    wallet->getAsync()->startTransaction(std::move(txParams));
+//    auto bAmount = round(amount * Rules::Coin);
+//    
+//    WalletAddress senderAddress;
+//    BOOL addressFound = NO;
+//    
+//    std::vector<WalletAddress> addresses = wallet->ownAddresses;
+//    
+//    for (int i=0; i<addresses.size(); i++){
+//        NSString *name = [NSString stringWithUTF8String:addresses[i].m_label.c_str()];
+//        if ([name isEqualToString:unlinkAddressName]) {
+//            senderAddress = addresses[i];
+//            addressFound = YES;
+//            break;
+//        }
+//    }
+//    
+//    if (!addressFound) {
+//        walletDb->createAddress(senderAddress);
+//        senderAddress.m_label = [unlinkAddressName string];
+//        senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+//        walletDb->saveAddress(senderAddress);
+//    }
+//    else if (addressFound && senderAddress.isExpired()) {
+//        senderAddress.setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+//        walletDb->saveAddress(senderAddress);
+//    }
+//    
+//    Amount userFee = fee;
+//    Amount userAmount = bAmount;
+//    
+//    auto txParams = lelantus::CreateUnlinkFundsTransactionParameters(senderAddress.m_walletID)
+//    .SetParameter(TxParameterID::Amount, userAmount)
+//  //  .SetParameter(TxParameterID::PeerID, senderAddress.m_walletID)
+//    .SetParameter(TxParameterID::Fee, userFee);
+//    
+//    wallet->getAsync()->startTransaction(std::move(txParams));
 }
 
 -(void)readAllNotifications {

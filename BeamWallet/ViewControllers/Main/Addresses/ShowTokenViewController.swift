@@ -28,13 +28,13 @@ class ShowTokenViewController: BaseTableViewController {
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
         
-        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.brightSkyBlue)
-        sendButton.setImage(IconCopyBlue(), for: .normal)
-        sendButton.setTitle(Localizable.shared.strings.copy.lowercased(), for: .normal)
-        sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-        sendButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        sendButton.addTarget(self, action: #selector(onCopy), for: .touchUpInside)
-        view.addSubview(sendButton)
+        var copyButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.brightSkyBlue)
+        copyButton.setImage(IconCopyBlue(), for: .normal)
+        copyButton.setTitle(Localizable.shared.strings.copy.lowercased(), for: .normal)
+        copyButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+        copyButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+        copyButton.addTarget(self, action: #selector(onCopy), for: .touchUpInside)
+        view.addSubview(copyButton)
         
         
         return view

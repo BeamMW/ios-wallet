@@ -166,6 +166,7 @@ class SendViewController: BaseTableViewController {
         viewModel.toAddress = value
         
         tableView.reloadData()
+        tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .none)
         
         if viewModel.amount.isEmpty {
             if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
@@ -310,8 +311,20 @@ extension SendViewController: UITableViewDataSource {
                 else {
                     cell.switchView.isHidden = false
                     cell.botOffset?.constant = viewModel.maxPrivacy ? 15 : 25
+                    
+                    if viewModel.maxPrivacyDisabled {
+                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: Localizable.shared.strings.address_not_supported_max_privacy, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
 
-                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: viewModel.maxPrivacy ? Localizable.shared.strings.max_privacy_text : nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                        
+                        cell.switchView.alpha = 0.5
+                        cell.switchView.isUserInteractionEnabled = false
+                    }
+                    else {
+                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: viewModel.maxPrivacy ? Localizable.shared.strings.max_privacy_text : nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+
+                        cell.switchView.alpha = 1
+                        cell.switchView.isUserInteractionEnabled = true
+                    }
                 }
                 
                 return cell

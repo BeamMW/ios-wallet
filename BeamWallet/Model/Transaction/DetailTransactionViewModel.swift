@@ -55,7 +55,9 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_rec_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         else if transaction.isIncome {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            if transaction.senderAddress != "0" {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            }
             
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
@@ -65,7 +67,9 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String(transaction.realFee) + " GROTH", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        if transaction.realFee > 0 {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String(transaction.realFee) + " GROTH", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        }
         
         if transaction.isIncome {
             if let last = AppModel.sharedManager().getFirstTransactionId(forAddress: transaction.receiverAddress) {

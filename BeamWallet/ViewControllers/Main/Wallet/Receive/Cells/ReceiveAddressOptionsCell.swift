@@ -31,7 +31,6 @@ class ReceiveAddressOptionsCell: BaseCell {
             transactionTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
             transactionTypeSegment.titlesFont = SemiboldFont(size: 14)
             transactionTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
-            transactionTypeSegment.customBorderColor = UIColor.red
         }
     }
     
@@ -48,12 +47,13 @@ class ReceiveAddressOptionsCell: BaseCell {
             expireTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
             expireTypeSegment.titlesFont = SemiboldFont(size: 14)
             expireTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
-            expireTypeSegment.customBorderColor = UIColor.red
         }
     }
     
     @IBOutlet private var transactionTypeLabel: UILabel!
     @IBOutlet private var expirationLabel: UILabel!
+    @IBOutlet private var errorLabel: UILabel!
+    @IBOutlet private var offset: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -68,6 +68,15 @@ class ReceiveAddressOptionsCell: BaseCell {
         transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.transaction_type.uppercased(), letter: Localizable.shared.strings.transaction_type.uppercased())
         
         selectionStyle = .none
+        
+        if Settings.sharedManager().isOwnNode() {
+            errorLabel.isHidden = true
+        }
+        else {
+            offset.constant = 25
+            transactionTypeSegment.isUserInteractionEnabled = false
+            transactionTypeSegment.textColor = UIColor.main.blueyGrey.withAlphaComponent(0.2)
+        }
     }
     
     @IBAction func onExpire(sender: MASegmentedControl) {

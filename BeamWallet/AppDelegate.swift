@@ -19,9 +19,10 @@
 
 import CrashEye
 import Crashlytics
-import Fabric
 import UIKit
 import UserNotifications
+import FirebaseCore
+import FirebaseCrashlytics
 
 public let IS_UNLIKED_ENABLED = false
 
@@ -49,10 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = true
-        
-//        FirebaseConfiguration.shared.setLoggerLevel(.min)
-//        FirebaseApp.configure()
-        
+                
         Localizable.shared.reset()
         Settings.sharedManager()
         
@@ -89,9 +87,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         if let crash = UserDefaults.standard.string(forKey: "crash"), let name = UserDefaults.standard.string(forKey: "crash_name") {
+
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { _ in
                
-                Fabric.with([Crashlytics.self()])
+                
+                var name = "";
+                
+                if Settings.sharedManager().target == Mainnet {
+                    name = "GoogleServiceMain"
+                }
+                else if Settings.sharedManager().target == Testnet {
+                    name = "GoogleServiceTest"
+                }
+                else if Settings.sharedManager().target == Masternet {
+                    name = "GoogleServiceMaster"
+                }
+                
+                if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
+                    if let options = FirebaseOptions(contentsOfFile: filePath) {
+                        FirebaseApp.configure(options: options)
+                    }
+                }
                 
                 Crashlytics.sharedInstance().recordCustomExceptionName(name, reason: crash, frameArray: [])
                 

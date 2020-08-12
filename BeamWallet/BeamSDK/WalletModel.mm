@@ -64,18 +64,18 @@ void WalletModel::onStatus(const WalletStatus& status)
     NSLog(@"onStatus");
 
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
-    walletStatus.available = status.available;
+    walletStatus.available = status.available + status.shielded;
     walletStatus.receiving = status.receiving;
     walletStatus.maturing = status.maturing;
     walletStatus.sending = status.sending;
     walletStatus.linked = 0;//status.linked;
     walletStatus.unlinked = 0; //status.unlinked;
-    walletStatus.shielded = status.shielded;
-    walletStatus.realAmount = double(int64_t(status.available)) / Rules::Coin;
+    walletStatus.shielded = 0;//status.shielded;
+    walletStatus.realAmount = (double(int64_t(status.available)) / Rules::Coin) + (double(int64_t(status.shielded)) / Rules::Coin);
     walletStatus.realMaturing = double(int64_t(status.maturing)) / Rules::Coin;
     walletStatus.realSending = double(int64_t(status.sending)) / Rules::Coin;
     walletStatus.realReceiving = double(int64_t(status.receiving)) / Rules::Coin;
-    walletStatus.realShielded = double(int64_t(status.shielded)) / Rules::Coin;
+    walletStatus.realShielded = 0; //double(int64_t(status.shielded)) / Rules::Coin;
     walletStatus.realUnlinked = 0; // double(int64_t(status.unlinked)) / Rules::Coin;
     walletStatus.realLinked = 0; //double(int64_t(status.linked)) / Rules::Coin;
     walletStatus.currentHeight = [NSString stringWithUTF8String:to_string(status.stateID.m_Height).c_str()];
@@ -380,7 +380,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
                 address.label = [@"default" localized];
             }
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-                        
+            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+
             [addresses addObject:address];
         }
         
@@ -990,30 +991,30 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-            else if (transaction.m_txType == TxType::PullTransaction ||
-                     transaction.m_txType == TxType::PushTransaction ) {
-                return [[@"in_progress" localized] lowercaseString];
-            }
+//            else if (transaction.m_txType == TxType::PullTransaction ||
+//                     transaction.m_txType == TxType::PushTransaction ) {
+//                return [[@"in_progress" localized] lowercaseString];
+//            }
             return [[@"pending" localized] lowercaseString];
         }
         case TxStatus::InProgress:{
             if (transaction.m_selfTx)   {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-            else if (transaction.m_txType == TxType::PullTransaction ||
-                     transaction.m_txType == TxType::PushTransaction ) {
-                return [[@"in_progress" localized] lowercaseString];
-            }
+//            else if (transaction.m_txType == TxType::PullTransaction ||
+//                     transaction.m_txType == TxType::PushTransaction ) {
+//                return [[@"in_progress" localized] lowercaseString];
+//            }
             return isIncome ? [[@"waiting_for_sender" localized]lowercaseString] : [[@"waiting_for_receiver" localized]lowercaseString];
         }
         case TxStatus::Registering:{
             if (transaction.m_selfTx)  {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-            else if (transaction.m_txType == TxType::PullTransaction ||
-                     transaction.m_txType == TxType::PushTransaction ) {
-                return [[@"in_progress" localized] lowercaseString];
-            }
+//            else if (transaction.m_txType == TxType::PullTransaction ||
+//                     transaction.m_txType == TxType::PushTransaction ) {
+//                return [[@"in_progress" localized] lowercaseString];
+//            }
             return isIncome ? [[@"in_progress" localized]lowercaseString] : [[@"in_progress" localized] lowercaseString];
         }
         case TxStatus::Completed:
@@ -1021,10 +1022,10 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             if (transaction.m_selfTx)  {
                 return [[@"sent_to_own" localized] lowercaseString];
             }
-            else if (transaction.m_txType == TxType::PullTransaction ||
-                     transaction.m_txType == TxType::PushTransaction ) {
-                return [[@"unlinked" localized] lowercaseString];
-            }
+//            else if (transaction.m_txType == TxType::PullTransaction ||
+//                     transaction.m_txType == TxType::PushTransaction ) {
+//                return [[@"unlinked" localized] lowercaseString];
+//            }
             return isIncome ? [[@"received" localized] lowercaseString] : [[@"sent" localized] lowercaseString];
         }
         case TxStatus::Canceled:

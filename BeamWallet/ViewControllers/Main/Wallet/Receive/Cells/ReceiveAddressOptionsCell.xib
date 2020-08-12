@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -10,19 +10,22 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="-63" id="Vda-WY-c0W" customClass="ReceiveAddressOptionsCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="181"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="-97" id="Vda-WY-c0W" customClass="ReceiveAddressOptionsCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="206"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vda-WY-c0W" id="6ns-hs-JKK">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="181"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="206"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xyQ-aU-fbe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="181"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="206"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TRANSACTION TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yM-dN-fx2">
                                 <rect key="frame" x="15" y="15" width="290" height="17"/>
@@ -40,7 +43,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOKEN EXPIRATION" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hlj-Yx-xuF">
-                                <rect key="frame" x="15" y="112" width="290" height="17"/>
+                                <rect key="frame" x="15" y="137" width="290" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="17" id="leQ-mt-cCs"/>
                                 </constraints>
@@ -66,7 +69,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCL-ff-oUd" customClass="MASegmentedControl" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="139" width="258" height="40"/>
+                                <rect key="frame" x="15" y="164" width="258" height="40"/>
                                 <color key="backgroundColor" red="0.25490197539999998" green="0.27450981740000002" blue="0.30196079609999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Yjg-SS-5hZ"/>
@@ -76,6 +79,12 @@
                                     <action selector="onExpireWithSender:" destination="Vda-WY-c0W" eventType="valueChanged" id="0cm-VA-dLA"/>
                                 </connections>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Connect to integrated or own node to enable sending max privacy transactions" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qTg-Eo-gW5">
+                                <rect key="frame" x="15" y="87" width="290" height="33.5"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -83,13 +92,16 @@
                             <constraint firstItem="bCL-ff-oUd" firstAttribute="top" secondItem="hlj-Yx-xuF" secondAttribute="bottom" constant="10" id="3qS-NU-vrF"/>
                             <constraint firstItem="hlj-Yx-xuF" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="AVx-6g-ewB"/>
                             <constraint firstAttribute="bottom" secondItem="bCL-ff-oUd" secondAttribute="bottom" constant="2" id="CGB-UR-zLN"/>
+                            <constraint firstItem="qTg-Eo-gW5" firstAttribute="top" secondItem="7uY-S4-c7P" secondAttribute="bottom" constant="5" id="CjV-GG-LpN"/>
                             <constraint firstAttribute="trailing" secondItem="hlj-Yx-xuF" secondAttribute="trailing" constant="15" id="Jrr-Yw-TmD"/>
                             <constraint firstItem="7uY-S4-c7P" firstAttribute="top" secondItem="8yM-dN-fx2" secondAttribute="bottom" constant="10" id="OF2-TB-sNi"/>
                             <constraint firstItem="7uY-S4-c7P" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="Ubo-q9-51E"/>
+                            <constraint firstItem="qTg-Eo-gW5" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="ZFt-SA-9cR"/>
                             <constraint firstItem="bCL-ff-oUd" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="cPM-So-5kz"/>
+                            <constraint firstAttribute="trailing" secondItem="qTg-Eo-gW5" secondAttribute="trailing" constant="15" id="cSS-Yj-pnQ"/>
                             <constraint firstItem="8yM-dN-fx2" firstAttribute="top" secondItem="xyQ-aU-fbe" secondAttribute="top" constant="15" id="eIC-Nr-j5K"/>
-                            <constraint firstItem="hlj-Yx-xuF" firstAttribute="top" secondItem="7uY-S4-c7P" secondAttribute="bottom" constant="30" id="mDD-9X-jOo"/>
                             <constraint firstItem="8yM-dN-fx2" firstAttribute="leading" secondItem="xyQ-aU-fbe" secondAttribute="leading" constant="15" id="vWX-DB-KsI"/>
+                            <constraint firstItem="hlj-Yx-xuF" firstAttribute="top" secondItem="qTg-Eo-gW5" secondAttribute="bottom" constant="16.5" id="wkS-Ed-f2y"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -103,12 +115,14 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="TYd-F7-TkI"/>
             <connections>
+                <outlet property="errorLabel" destination="qTg-Eo-gW5" id="r9C-mv-Gd6"/>
                 <outlet property="expirationLabel" destination="hlj-Yx-xuF" id="YBN-JC-EzJ"/>
                 <outlet property="expireTypeSegment" destination="bCL-ff-oUd" id="3yf-OE-WFL"/>
+                <outlet property="offset" destination="wkS-Ed-f2y" id="RVt-qr-x04"/>
                 <outlet property="transactionTypeLabel" destination="8yM-dN-fx2" id="Fti-m7-dSh"/>
                 <outlet property="transactionTypeSegment" destination="7uY-S4-c7P" id="q17-gX-QmV"/>
             </connections>
-            <point key="canvasLocation" x="37.681159420289859" y="-63.28125"/>
+            <point key="canvasLocation" x="37.681159420289859" y="-75"/>
         </tableViewCell>
     </objects>
 </document>

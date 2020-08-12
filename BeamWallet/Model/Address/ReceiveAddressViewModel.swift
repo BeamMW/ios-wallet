@@ -76,8 +76,8 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     private func generateTokens() {
-        address.token = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: false, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, ownId: Int64(address.ownerId))
-        address.offlineToken = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: true, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, ownId: Int64(address.ownerId))
+        address.token = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: false, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, identity: address.identity ?? "", ownId: Int64(address.ownerId))
+        address.offlineToken = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: true, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, identity: address.identity ?? "", ownId: Int64(address.ownerId))
     }
     
     public func createAddress() {

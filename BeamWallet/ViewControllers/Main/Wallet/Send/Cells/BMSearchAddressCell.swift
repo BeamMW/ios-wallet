@@ -71,9 +71,10 @@ class BMSearchAddressCell: BaseCell {
     
     public var isPermanentAddress: Bool = false {
         didSet {
-            if(contact == nil && isPermanentAddress) {
+            if(contact == nil && !textField.text.isEmpty) {
                 contactView.isHidden = false
-                contactName.text = Localizable.shared.strings.perm_token
+                contactName.numberOfLines = 2
+                contactName.text =  isPermanentAddress ? Localizable.shared.strings.perm_token : Localizable.shared.strings.one_time_expire_text
                 contactName.font = ItalicFont(size: 14)
                 contactCategory.text = nil
                 iconView.isHidden = true
@@ -87,6 +88,7 @@ class BMSearchAddressCell: BaseCell {
                 contactView.isHidden = true
             }
             else {
+                contactName.numberOfLines = 1
                 contactView.isHidden = false
                 contactName.font = ProMediumFont(size: 14)
                 contactName.text = contact?.address.label

@@ -240,12 +240,14 @@ extension SaveContactViewController : UITableViewDataSource {
         switch indexPath.section {
         case 0:
             if isAddContact {
+                let trim = "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))";
+
                 let cell = tableView
                     .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
                 cell.delegate = self
                 cell.error = addressError
                 cell.contact = nil
-                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: address.walletId, rightIcon: nil))
+                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: trim, rightIcon: nil))
                 cell.backgroundColor = UIColor.clear
                 cell.contentView.backgroundColor = UIColor.clear
                 cell.copyText = copyAddress
@@ -253,7 +255,9 @@ extension SaveContactViewController : UITableViewDataSource {
                 return cell
             }
             else{
-                let item = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail: self.address.walletId, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+                let trim = "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))";
+
+                let item = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail: trim, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
                 let cell =  tableView
                     .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
                     .configured(with: item)

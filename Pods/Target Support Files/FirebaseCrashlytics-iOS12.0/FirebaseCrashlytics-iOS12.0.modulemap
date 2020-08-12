@@ -1,0 +1,6 @@
+framework module FirebaseCrashlytics {
+  umbrella header "FirebaseCrashlytics-iOS12.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

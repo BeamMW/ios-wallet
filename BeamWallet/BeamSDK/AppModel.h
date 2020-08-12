@@ -114,6 +114,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 +(AppModel*_Nonnull)sharedManager;
 
 +(NSString*_Nonnull)chooseRandomNode;
++(NSArray*_Nonnull)randomNodes;
 
 // delegates
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;
@@ -152,7 +153,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(BMAddress*_Nonnull)generateAddress;
--(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId ownId:(int64_t)ownId;
+-(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId;
 
 // addresses
 -(BOOL)isAddress:(NSString*_Nullable)address;

@@ -111,7 +111,8 @@
 }
 
 -(BOOL)hasPaymentProof {
-    return (self.isIncome == NO && self.enumStatus == BMTransactionStatusCompleted && self.isSelf == NO);
+    return (self.isIncome == NO && self.enumStatus == BMTransactionStatusCompleted && self.isSelf == NO
+            && self.enumType == BMTransactionTypeSimple);
 }
 
 -(NSString*)details {
