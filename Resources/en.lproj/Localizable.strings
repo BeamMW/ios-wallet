@@ -586,3 +586,5 @@ the min transaction fee will be 1200000 GROTH.\n\nFor the transaction to complet
 "switch_to_regular" = "Switch to regular";
 "one_time_expire_text" = "One-time use token (expire in 2 hours after succesfull transaction).";
 "address_not_supported_max_privacy" = "This type of address does not support max privacy transactions";
+"offline_transactions" = "Offline transactions";
+"cant_sent_max_to_my_address" = "Can not sent max privacy transaction to own address";

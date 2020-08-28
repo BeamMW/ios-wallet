@@ -561,7 +561,10 @@ class LocalizableStrings : NSObject {
     var switch_to_permanent = "switch_to_permanent".localized
     var switch_to_regular = "switch_to_regular".localized
     var address_not_supported_max_privacy = "address_not_supported_max_privacy".localized
+    var offline_transactions = "offline_transactions".localized
+    var cant_sent_max_to_my_address = "cant_sent_max_to_my_address".localized
 
+        
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

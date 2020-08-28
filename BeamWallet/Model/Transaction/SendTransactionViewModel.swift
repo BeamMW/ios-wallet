@@ -19,7 +19,7 @@
 
 import Foundation
 
-class SendTransactionViewModel: NSObject {
+class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
     private var isFocused = false
     public var copyAddress:String?
@@ -54,6 +54,18 @@ class SendTransactionViewModel: NSObject {
             else {
                 fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
             }
+                        
+            if(maxPrivacy) {
+                if(AppModel.sharedManager().isToken(toAddress)) {
+                    let params = AppModel.sharedManager().getTransactionParameters(toAddress)
+                    if(AppModel.sharedManager().isMyAddress(params.address)) {
+                        toAddressError = Localizable.shared.strings.cant_sent_max_to_my_address
+                    }
+                }
+            }
+            else if (toAddressError == Localizable.shared.strings.cant_sent_max_to_my_address) {
+                toAddressError = nil
+            }
         }
     }
     
@@ -61,15 +73,29 @@ class SendTransactionViewModel: NSObject {
     public var requestedOffline = false
     public var isPermanentAddress = false
     public var maxPrivacyDisabled = false
+    public var offlineTokensCount = -1
+    public var isMyAddress = false
+    
+    public var onDataChanged: (() -> Void)?
 
+    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
+        DispatchQueue.main.async {
+            self.offlineTokensCount = Int(tokens)
+            self.onDataChanged?()
+        }
+    }
+    
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
             isPermanentAddress = false
             maxPrivacyDisabled = false;
-
+            offlineTokensCount = -1
+            isMyAddress = false
+            
             if(AppModel.sharedManager().isToken(toAddress)) {
                 let params = AppModel.sharedManager().getTransactionParameters(toAddress)
+                
                 maxPrivacy = params.isMaxPrivacy
                 requestedMaxPrivacy = params.isMaxPrivacy
                 requestedOffline = params.isOffline
@@ -84,6 +110,12 @@ class SendTransactionViewModel: NSObject {
                 }
                 else {
                     fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+                }
+                
+                isMyAddress = AppModel.sharedManager().isMyAddress(params.address)
+                
+                if(isMyAddress && maxPrivacy) {
+                    toAddressError = "Can not sent max privacy transaction to own address"
                 }
                 
                 checkAmountError()
@@ -163,9 +195,15 @@ class SendTransactionViewModel: NSObject {
     override init() {
         super.init()
         
+        AppModel.sharedManager().addDelegate(self)
+        
         fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
         
         generateOutgoindAddress()
+    }
+    
+    deinit {
+        AppModel.sharedManager().removeDelegate(self)
     }
     
     public func send() {

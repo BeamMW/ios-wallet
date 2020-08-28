@@ -54,6 +54,7 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 -(id)init {
     self = [super init];
     
+    _maxTokens = 10;
     
     _delegates = [NSHashTable weakObjectsHashTable];
 

@@ -66,7 +66,10 @@ private:
     void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
     void onNoDeviceConnected() override;
 
-    
+    void onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) override;
+    void onShieldedCoinChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::ShieldedCoin>& items) override;
+    void onNeedExtractShieldedCoins(bool val) override;
+
     void onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&) override;
     void onNotificationsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Notification>&) override;
 

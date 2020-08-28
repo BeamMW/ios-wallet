@@ -53,6 +53,8 @@ class ShowTokenViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        AppModel.sharedManager().addDelegate(self)
+        
         if AppModel.sharedManager().isToken(token) {
             let params = AppModel.sharedManager().getTransactionParameters(token)
             
@@ -61,13 +63,13 @@ class ShowTokenViewController: BaseTableViewController {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.token_type.uppercased(), detail: params.isPermanentAddress ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.token_expiration.uppercased(), detail: params.isPermanentAddress ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             
             if params.isMaxPrivacy && !params.isOffline {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.max_privacy_title, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             else if params.isMaxPrivacy && params.isOffline {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: "\(Localizable.shared.strings.max_privacy_title),\(Localizable.shared.strings.offline.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: "\(Localizable.shared.strings.max_privacy_title), \(Localizable.shared.strings.offline.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             else {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
@@ -97,6 +99,12 @@ class ShowTokenViewController: BaseTableViewController {
         }
         
         title = Localizable.shared.strings.show_token
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().removeDelegate(self)
     }
     
     @objc private func onCopy() {
@@ -135,5 +143,28 @@ extension ShowTokenViewController : UITableViewDataSource {
             .configured(with: items[indexPath.row])
         cell.increaseSpace = true
         return cell
+    }
+}
+
+extension ShowTokenViewController: WalletModelDelegate {
+    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
+        DispatchQueue.main.async {
+            if tokens >= 0 {
+                let detail = Localizable.shared.strings.offline + ": " + "\(tokens)/\(Settings.sharedManager().maxTokens)"
+                
+                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.transaction_type.uppercased()})
+
+                let item = BMMultiLineItem(title: Localizable.shared.strings.token_type.uppercased(), detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
+                
+                if let i = index, i > 0 {
+                    self.items.insert(item, at: i+1)
+                }
+                else {
+                    self.items.append(item)
+                }
+                
+                self.tableView.reloadData()
+            }
+        }
     }
 }

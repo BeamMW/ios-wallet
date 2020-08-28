@@ -76,6 +76,8 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) int maxAddressDurationHours;
 @property (nonatomic, assign) int maxAddressDurationSeconds;
 
+@property (nonatomic, assign) int maxTokens;
+
 -(void)setDefaultDarkMode:(BOOL)isSystemMode;
 
 -(BOOL)isChangedNode;

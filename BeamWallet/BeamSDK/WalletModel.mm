@@ -500,7 +500,9 @@ void WalletModel::onNewAddressFailed()
                                                code:1
                                            userInfo:@{ NSLocalizedDescriptionKey:@"Failed to genereate new address" }];
     
-    [AppModel sharedManager].generatedNewAddressBlock(nil, nativeError);
+    if([AppModel sharedManager].generatedNewAddressBlock != nil) {
+        [AppModel sharedManager].generatedNewAddressBlock(nil, nativeError);
+    }
 }
 
 void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
@@ -939,6 +941,26 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
             [delegate onNotificationsChanged];
         }
     }
+}
+
+void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) {
+    
+    NSLog(@"onGetAddress");
+        
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
+            [delegate onMaxPrivacyTokensLeft:(int)offlinePayments];
+        }
+    }
+}
+
+void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::ShieldedCoin>& items) {
+    NSLog(@"onShieldedCoinChanged");
+}
+
+void WalletModel::onNeedExtractShieldedCoins(bool val){
+    NSLog(@"onNeedExtractShieldedCoins");
 }
 
 NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)

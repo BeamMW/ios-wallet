@@ -79,6 +79,10 @@ class SendViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.onDataChanged = { [weak self] in
+            self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+        }
+        
         if let repeatTransaction = transaction {
             viewModel.transaction = repeatTransaction
         }
@@ -306,7 +310,13 @@ extension SendViewController: UITableViewDataSource {
 
                     let detail = viewModel.requestedOffline ? "\(Localizable.shared.strings.max_privacy_text)\n\(Localizable.shared.strings.offline_transaction)" : Localizable.shared.strings.max_privacy_text
                     
-                    cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_requested_title, detail: detail, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                    var title = Localizable.shared.strings.max_privacy_requested_title
+                    
+                    if(viewModel.offlineTokensCount >= 0) {
+                        title = title + ". \(Localizable.shared.strings.offline_transactions): \(viewModel.offlineTokensCount)/\(Settings.sharedManager().maxTokens)"
+                    }
+                    
+                    cell.configure(data: BMPickerData(title:title, detail: detail, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
                 }
                 else {
                     cell.switchView.isHidden = false

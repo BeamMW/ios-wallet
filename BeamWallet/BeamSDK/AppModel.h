@@ -71,6 +71,7 @@ typedef int BMRestoreType;
 -(void)onExchangeRatesChange;
 -(void)onNotificationsChanged;
 -(void)onChangeCalculated:(double)amount;
+-(void)onMaxPrivacyTokensLeft:(int)tokens;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);

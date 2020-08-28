@@ -1964,7 +1964,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         p.isPermanentAddress = NO;
     }
     
-    if (auto walletIdentity = params->GetParameter<beam::PeerID>(TxParameterID::PeerID); walletIdentity)
+    if (auto walletIdentity = params->GetParameter<beam::PeerID>(TxParameterID::PeerWalletIdentity); walletIdentity)
     {
         auto s = std::to_string(*walletIdentity);
         p.identity = [NSString stringWithUTF8String:s.c_str()];
@@ -1973,13 +1973,23 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         p.identity = @"";
     }
     
-    if (auto peerIdentity = params->GetParameter<beam::PeerID>(TxParameterID::PeerWalletIdentity); peerIdentity)
+    if (auto peerIdentity = params->GetParameter<WalletID>(TxParameterID::PeerID); peerIdentity)
     {
         auto s = std::to_string(*peerIdentity);
         p.address = [NSString stringWithUTF8String:s.c_str()];
     }
     else {
         p.address = @"";
+    }
+    
+    if (auto peerId = params->GetParameter<WalletID>(TxParameterID::PeerID); peerId)
+    {
+        ShieldedVoucherList trVouchers;
+        if (params->GetParameter(TxParameterID::ShieldedVoucherList, trVouchers))
+        {
+            wallet->getAsync()->getAddress(*peerId);
+            wallet->getAsync()->saveVouchers(trVouchers, *peerId);
+        }
     }
     
     return p;
