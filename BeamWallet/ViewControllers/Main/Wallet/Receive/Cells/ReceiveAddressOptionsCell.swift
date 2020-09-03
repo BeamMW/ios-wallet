@@ -61,6 +61,7 @@ class ReceiveAddressOptionsCell: BaseCell {
         if Settings.sharedManager().isDarkMode {
             transactionTypeLabel.textColor = UIColor.main.steel;
             expirationLabel.textColor = UIColor.main.steel;
+            errorLabel.textColor = UIColor.main.steel;
         }
         
         expirationLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.token_expiration.uppercased(), letter: Localizable.shared.strings.token_expiration.uppercased())

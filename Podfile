@@ -13,7 +13,7 @@ end
 def shared_pods
     use_frameworks!
     
-    pod 'Crashlytics'
+   # pod 'Crashlytics'
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
    # pod 'Parchment'

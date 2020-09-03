@@ -1,8 +1,5 @@
 PODS:
   - CrashEye (1.2.0)
-  - Crashlytics (3.14.0):
-    - Fabric (~> 1.10.2)
-  - Fabric (1.10.2)
   - Firebase/Analytics (6.28.1):
     - Firebase/Core
   - Firebase/Core (6.28.1):
@@ -81,7 +78,6 @@ PODS:
 
 DEPENDENCIES:
   - CrashEye
-  - Crashlytics
   - Firebase/Analytics
   - Firebase/Crashlytics
   - SSZipArchive
@@ -91,8 +87,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - CrashEye
-    - Crashlytics
-    - Fabric
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -110,8 +104,6 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   CrashEye: 89d1ca174f0ef3ceeb27152f578c0a61667ba799
-  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
-  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: ed042590caa0029392257529a8003c25ee82bc18
   FirebaseAnalytics: 5fa308e1b13f838d0f6dc74719ac2a72e8c5afc4
   FirebaseCore: 687b8e6a0a4337b898a6326d68254c2f80c143af
@@ -127,6 +119,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwipeTransition: 03f6f995646bdff37946af75c442692b011cb348
 
-PODFILE CHECKSUM: e208d15bd586d97da130a4201a9b3ec00b6001f2
+PODFILE CHECKSUM: 4a2260c69fe1b7831c905e8447ded0555c11c741
 
 COCOAPODS: 1.9.1
