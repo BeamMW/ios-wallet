@@ -21,6 +21,8 @@ import UIKit
 
 class ShowTokenViewController: BaseTableViewController {
 
+    public var didCopyToken : (() -> Void)?
+
     private var token = ""
     private var send = false
     private var items = [BMMultiLineItem]()
@@ -111,6 +113,7 @@ class ShowTokenViewController: BaseTableViewController {
         if let token = items.last?.detail {
             UIPasteboard.general.string = token
             ShowCopied()
+            didCopyToken?()
             back()
         }
     }

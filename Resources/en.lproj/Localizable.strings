@@ -588,3 +588,6 @@ the min transaction fee will be 1200000 GROTH.\n\nFor the transaction to complet
 "address_not_supported_max_privacy" = "This type of address does not support max privacy transactions";
 "offline_transactions" = "Offline transactions";
 "cant_sent_max_to_my_address" = "Can not sent max privacy transaction to own address";
+"withdraw" = "Withdraw";
+"withdraw_cofirm" = "Please confirm the withdrawal.\nStay online until funds arrive.";
+"confirm_2" = "Confirm";

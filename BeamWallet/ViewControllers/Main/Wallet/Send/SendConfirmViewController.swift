@@ -51,8 +51,6 @@ class SendConfirmViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
-  
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         

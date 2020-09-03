@@ -940,6 +940,30 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return bmAddress;
 }
 
+-(BMAddress*_Nonnull)generateWithdrawAddress {
+    for (int i=0; i<_walletAddresses.count; i++) {
+        if ([_walletAddresses[i].label isEqualToString:@"Beam Runner"]
+            && _walletAddresses[i].duration == 0
+            && !_walletAddresses[i].isExpired) {
+            return _walletAddresses[i];
+        }
+    }
+    
+    WalletAddress address = GenerateNewAddress(walletDb, "Beam Runner", WalletAddress::ExpirationStatus::Never);
+    
+    BMAddress *bmAddress = [[BMAddress alloc] init];
+    bmAddress.duration = address.m_duration;
+    bmAddress.ownerId = address.m_OwnID;
+    bmAddress.createTime = address.m_createTime;
+    bmAddress.categories = [NSMutableArray new];
+    bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
+    bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
+    bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
+    bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:NO amount:0 walleetId:bmAddress.walletId identity:bmAddress.identity ownId:bmAddress.ownerId];
+    
+    return bmAddress;
+}
+
 //boost::optional<PeerID> GetPeerIDFromHex(const std::string& s)
 //{
 //    //boost::optional<PeerID> res;

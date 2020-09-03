@@ -342,6 +342,9 @@
 		924C762522D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
 		924C762622D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
 		924C762722D4CC5700625B7C /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C762422D4CC5700625B7C /* Color.m */; };
+		9252C0C624FE696300D42536 /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252C0C524FE696300D42536 /* WithdrawViewController.swift */; };
+		9252C0C724FE696300D42536 /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252C0C524FE696300D42536 /* WithdrawViewController.swift */; };
+		9252C0C824FE696300D42536 /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252C0C524FE696300D42536 /* WithdrawViewController.swift */; };
 		92538F61222B5F7E00792A25 /* OpenWalletProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92538F5F222B5F7E00792A25 /* OpenWalletProgressViewController.swift */; };
 		92538F62222B5F7E00792A25 /* OpenWalletProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92538F60222B5F7E00792A25 /* OpenWalletProgressViewController.xib */; };
 		92554D512289A34000FE6041 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92554D502289A34000FE6041 /* BaseTableViewController.swift */; };
@@ -1322,6 +1325,7 @@
 		924C761F22D36F9300625B7C /* BMSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSegmentView.swift; sourceTree = "<group>"; };
 		924C762322D4CC5700625B7C /* Color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		924C762422D4CC5700625B7C /* Color.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
+		9252C0C524FE696300D42536 /* WithdrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
 		92538F5F222B5F7E00792A25 /* OpenWalletProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWalletProgressViewController.swift; sourceTree = "<group>"; };
 		92538F60222B5F7E00792A25 /* OpenWalletProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpenWalletProgressViewController.xib; sourceTree = "<group>"; };
 		92554D502289A34000FE6041 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
@@ -2032,6 +2036,7 @@
 		9243524D222E73CD00A0EF37 /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				9252C0C424FE693700D42536 /* Withdraw */,
 				926A8566222E7FBD00A3B747 /* Cells */,
 				92AB832B223BC5B6000ADE86 /* Send */,
 				92AB832A223BC5A7000ADE86 /* Receive */,
@@ -2085,6 +2090,14 @@
 				92F78BB124D04C6000489229 /* ReceiveAddressTokensCell.xib */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		9252C0C424FE693700D42536 /* Withdraw */ = {
+			isa = PBXGroup;
+			children = (
+				9252C0C524FE696300D42536 /* WithdrawViewController.swift */,
+			);
+			path = Withdraw;
 			sourceTree = "<group>";
 		};
 		92554D1622896BE600FE6041 /* Addresses */ = {
@@ -3435,6 +3448,7 @@
 				92FC612322299A4E00AEABC1 /* Device.swift in Sources */,
 				921027A624606E42001A7130 /* PagingIndicatorView.swift in Sources */,
 				9227AEEC2282F6F800FB221F /* BMDuration.m in Sources */,
+				9252C0C624FE696300D42536 /* WithdrawViewController.swift in Sources */,
 				926A8569222E7FD900A3B747 /* WalletStatusCell.swift in Sources */,
 				927EDE3C22A6B47C005D5CEA /* BMMultiLinesCell.swift in Sources */,
 				92B7E4D122AEE7FB001708E4 /* DetailTransactionViewModel.swift in Sources */,
@@ -3702,6 +3716,7 @@
 				9288DD4F223A55410020C501 /* Device.swift in Sources */,
 				921027A724606E42001A7130 /* PagingIndicatorView.swift in Sources */,
 				9227AEED2282F6F800FB221F /* BMDuration.m in Sources */,
+				9252C0C724FE696300D42536 /* WithdrawViewController.swift in Sources */,
 				9288DD50223A55410020C501 /* WalletStatusCell.swift in Sources */,
 				927EDE3D22A6B47C005D5CEA /* BMMultiLinesCell.swift in Sources */,
 				92B7E4D222AEE7FB001708E4 /* DetailTransactionViewModel.swift in Sources */,
@@ -3969,6 +3984,7 @@
 				92E2EB05226F21C700367928 /* Device.swift in Sources */,
 				921027A824606E42001A7130 /* PagingIndicatorView.swift in Sources */,
 				9227AEEE2282F6F800FB221F /* BMDuration.m in Sources */,
+				9252C0C824FE696300D42536 /* WithdrawViewController.swift in Sources */,
 				92E2EB06226F21C700367928 /* WalletStatusCell.swift in Sources */,
 				927EDE3E22A6B47C005D5CEA /* BMMultiLinesCell.swift in Sources */,
 				92B7E4D322AEE7FB001708E4 /* DetailTransactionViewModel.swift in Sources */,

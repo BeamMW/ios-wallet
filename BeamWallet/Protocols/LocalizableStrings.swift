@@ -563,8 +563,10 @@ class LocalizableStrings : NSObject {
     var address_not_supported_max_privacy = "address_not_supported_max_privacy".localized
     var offline_transactions = "offline_transactions".localized
     var cant_sent_max_to_my_address = "cant_sent_max_to_my_address".localized
-
-        
+    var withdraw = "withdraw".localized
+    var withdraw_cofirm = "withdraw_cofirm".localized
+    var confirm_2 = "confirm_2".localized
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

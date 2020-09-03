@@ -411,6 +411,9 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
     
     @objc func onShowToken(token: String) {
         let vc = ShowTokenViewController(token: token, send: false)
+        vc.didCopyToken = { [weak self] in
+            self?.viewModel.isShared = true
+        }
         self.pushViewController(vc: vc)
     }
     

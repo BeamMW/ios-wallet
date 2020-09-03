@@ -231,7 +231,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {        
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        if let params = url.queryParameters {
+            let vc = WithdrawViewController(amount: "10", userId: "")
+            if let top = UIApplication.getTopMostViewController() {
+                top.navigationController?.pushViewController(vc, animated: false)
+            }
+        }
         return true
     }
     

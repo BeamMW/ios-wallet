@@ -154,6 +154,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(BMAddress*_Nonnull)generateAddress;
+-(BMAddress*_Nonnull)generateWithdrawAddress;
 -(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId;
 
 // addresses
