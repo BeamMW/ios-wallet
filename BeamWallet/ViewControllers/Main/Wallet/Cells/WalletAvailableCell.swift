@@ -47,13 +47,10 @@ class WalletAvailableCell: BaseCell {
 
     @IBOutlet weak private var balanceLabel: UILabel!
     @IBOutlet weak private var balanceIcon: UIImageView!
-    @IBOutlet weak private var currencyIcon: UIImageView!
     
     @IBOutlet weak private var maturingLabel: UILabel!
-    @IBOutlet weak private var maturingCurrencyIcon: UIImageView!
     
     @IBOutlet weak private var unlinkLabel: UILabel!
-    @IBOutlet weak private var unlinkCurrencyIcon: UIImageView!
     
     @IBOutlet weak private var secondAvailableLabel: UILabel!
     @IBOutlet weak private var secondMaturingLabel: UILabel!
@@ -95,15 +92,6 @@ class WalletAvailableCell: BaseCell {
         secondMaturingLabel.font = RegularFont(size: 14)
         secondAvailableLabel.font = RegularFont(size: 14)
         secondUnlinkLabel.font = RegularFont(size: 14)
-
-        unlinkCurrencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        unlinkCurrencyIcon.tintColor = UIColor.white
-        
-        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintColor = UIColor.white
-        
-        maturingCurrencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        maturingCurrencyIcon.tintColor = UIColor.white
         
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
@@ -307,9 +295,9 @@ extension WalletAvailableCell: Configurable {
         }
         
         if let status = options.status {
-            balanceLabel.text = String.currency(value: status.realAmount)
-            maturingLabel.text = String.currency(value: status.realMaturing)
-            unlinkLabel.text = String.currency(value: status.realShielded)
+            balanceLabel.text = String.currency(value: status.realAmount) + " BEAM"
+            maturingLabel.text = String.currency(value: status.realMaturing) + " BEAM"
+            unlinkLabel.text = String.currency(value: status.realShielded) + " BEAM"
 
             if status.realAmount == 0 {
                 secondAvailableLabel.isHidden = true

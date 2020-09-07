@@ -959,9 +959,9 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction, const std::v
     NSLog(@"onShieldedCoinChanged");
 }
 
-void WalletModel::onNeedExtractShieldedCoins(bool val){
-    NSLog(@"onNeedExtractShieldedCoins");
-}
+//void WalletModel::onNeedExtractShieldedCoins(bool val){
+//    NSLog(@"onNeedExtractShieldedCoins");
+//}
 
 NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)
 {
