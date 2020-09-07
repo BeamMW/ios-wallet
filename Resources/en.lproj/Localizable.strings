@@ -436,7 +436,7 @@ and never kept on the blockchain.";
 "a_15" = "After 15 seconds"; //lock screen after 15 seconds
 "a_30" = "After 30 seconds"; //lock screen after 30 seconds
 "a_60" = "After 1 minute"; //lock screen after 1 minute
-"a_15_1" = "15 seconds"; 
+"a_15_1" = "15 seconds";
 "a_30_1" = "30 seconds";
 "a_60_1" = "1 minute";
 "lock_screen" = "Lock screen";

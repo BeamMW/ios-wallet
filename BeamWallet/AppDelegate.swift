@@ -232,12 +232,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-//        if url.queryParameters != nil {
-//            let vc = WithdrawViewController(amount: "10", userId: "")
-//            if let top = UIApplication.getTopMostViewController() {
-//                top.navigationController?.pushViewController(vc, animated: false)
-//            }
-//        }
+        if let params = url.queryParameters, params.count == 2,
+            let amount = params["amount"],
+            let userId = params["userId"] {
+            let vc = WithdrawViewController(amount: amount, userId: userId)
+            if let top = UIApplication.getTopMostViewController() {
+                top.navigationController?.pushViewController(vc, animated: false)
+            }
+        }
         return true
     }
     

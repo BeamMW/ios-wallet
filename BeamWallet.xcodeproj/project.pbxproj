@@ -1006,6 +1006,9 @@
 		92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
 		92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
 		92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
+		92EB420B25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */; };
+		92EB420C25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */; };
+		92EB420D25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */; };
 		92EF8956233B73BA009BDDA1 /* CategoryEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */; };
 		92EF8957233B73BA009BDDA1 /* CategoryEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */; };
 		92EF8958233B73BA009BDDA1 /* CategoryEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */; };
@@ -1577,6 +1580,7 @@
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
 		92E884C2223FADCD0003D6BB /* UTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOCell.swift; sourceTree = "<group>"; };
 		92E884C3223FADCD0003D6BB /* UTXOCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOCell.xib; sourceTree = "<group>"; };
+		92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewModel.swift; sourceTree = "<group>"; };
 		92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryEditViewController.xib; sourceTree = "<group>"; };
 		92F006E1229D44BB00333409 /* BMSnackBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSnackBar.swift; sourceTree = "<group>"; };
 		92F006E5229D4E1800333409 /* BMCountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMCountdownView.swift; sourceTree = "<group>"; };
@@ -2096,6 +2100,7 @@
 			isa = PBXGroup;
 			children = (
 				9252C0C524FE696300D42536 /* WithdrawViewController.swift */,
+				92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */,
 			);
 			path = Withdraw;
 			sourceTree = "<group>";
@@ -3341,6 +3346,7 @@
 				926A856F222E97DF00A3B747 /* WalletAvailableCell.swift in Sources */,
 				9261C295228BF55900D666E0 /* AddressesViewController.swift in Sources */,
 				9225D558229455CA0067B4EA /* ReceiveAddressButtonsCell.swift in Sources */,
+				92EB420B25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */,
 				92D6DB6122DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3B22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD82271FA5100B30613 /* SettingsViewModel.swift in Sources */,
@@ -3609,6 +3615,7 @@
 				9288DD38223A55410020C501 /* WalletAvailableCell.swift in Sources */,
 				9261C296228BF55900D666E0 /* AddressesViewController.swift in Sources */,
 				9225D559229455CA0067B4EA /* ReceiveAddressButtonsCell.swift in Sources */,
+				92EB420C25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */,
 				92D6DB6222DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3C22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD92271FA5100B30613 /* SettingsViewModel.swift in Sources */,
@@ -3877,6 +3884,7 @@
 				92E2EADE226F21C700367928 /* WalletAvailableCell.swift in Sources */,
 				9261C297228BF55900D666E0 /* AddressesViewController.swift in Sources */,
 				9225D55A229455CA0067B4EA /* ReceiveAddressButtonsCell.swift in Sources */,
+				92EB420D25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */,
 				92D6DB6322DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3D22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DDA2271FA5100B30613 /* SettingsViewModel.swift in Sources */,
@@ -4633,7 +4641,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4711,7 +4719,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
