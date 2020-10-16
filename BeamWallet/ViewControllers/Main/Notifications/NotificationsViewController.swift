@@ -34,6 +34,10 @@ class NotificationsViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
+        if let status = self.view.viewWithTag(11) as? BMNetworkStatusView {
+            status.numberOfLines = 2
+        }
+        
         title = Localizable.shared.strings.notifications
         
         tableView.delegate = self

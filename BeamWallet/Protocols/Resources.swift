@@ -203,6 +203,15 @@ func IconRowCopy() -> UIImage? {
     return UIImage(named: "iconRowCopy")
 }
 
+func IconSendAddress() -> UIImage? {
+    return UIImage(named: "iconSendAddress")
+}
+
+func IconReceiveAddress() -> UIImage? {
+    return UIImage(named: "iconReceiveAddress")
+}
+
+
 func IconRowDelete() -> UIImage? {
     return UIImage(named: "iconRowDelete")
 }

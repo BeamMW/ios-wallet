@@ -205,6 +205,25 @@ class AddressViewModel: NSObject {
         }
     }
     
+    public func onSendToAddress(address: BMAddress) {
+        let vc = SendViewController()
+        vc.transaction = BMTransaction()
+        vc.transaction?.receiverAddress = address.walletId
+
+        if let top = UIApplication.getTopMostViewController() {
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    public func onReceiveToAddress(address: BMAddress) {
+        let vc = ReceiveViewController()
+        vc.address = address
+        
+        if let top = UIApplication.getTopMostViewController() {
+            top.pushViewController(vc: vc)
+        }
+    }
+    
     public func onQRCodeAddress(address: BMAddress) {
         let modalViewController = QRViewController(address: address, amount: nil, isToken: false)
         modalViewController.modalPresentationStyle = .overFullScreen
@@ -242,6 +261,33 @@ class AddressViewModel: NSObject {
         }
         edit.image = IconRowEdit()
         edit.backgroundColor = UIColor.main.cerulean
+        
+        var send:UIContextualAction!
+        
+        if selectedState != .contacts && !address.isExpired() {
+            send = UIContextualAction(style: .normal, title: nil) { _, _, handler in
+                handler(true)
+                self.onReceiveToAddress(address: address)
+            }
+            send.image = IconReceiveAddress()
+            send.backgroundColor = UIColor.main.brightSkyBlue
+            
+            let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit, send])
+            configuration.performsFirstActionWithFullSwipe = false
+            return configuration
+        }
+        else if selectedState == .contacts {
+            send = UIContextualAction(style: .normal, title: nil) { _, _, handler in
+                handler(true)
+                self.onSendToAddress(address: address)
+            }
+            send.image = IconSendAddress()
+            send.backgroundColor = UIColor.main.heliotrope
+            
+            let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit, send])
+            configuration.performsFirstActionWithFullSwipe = false
+            return configuration
+        }
         
         let configuration = UISwipeActionsConfiguration(actions: [delete, copy, edit])
         configuration.performsFirstActionWithFullSwipe = false

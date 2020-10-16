@@ -138,7 +138,7 @@ class OpenWalletProgressViewController: BaseViewController {
                                                       rightViewController: nil)
         
         sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-        sideMenuController.leftViewPresentationStyle = .slideAbove;
+        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
         sideMenuController.rootViewLayerShadowRadius = 0
         sideMenuController.rootViewLayerShadowColor = UIColor.clear
         sideMenuController.leftViewLayerShadowRadius = 0

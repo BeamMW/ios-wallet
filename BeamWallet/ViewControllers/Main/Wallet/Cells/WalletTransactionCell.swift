@@ -26,7 +26,6 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var balanceView: UIView!
     @IBOutlet weak private var statusIcon: UIImageView!
 
@@ -35,10 +34,7 @@ class WalletTransactionCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintAdjustmentMode = .normal
-        
+                
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
@@ -52,33 +48,28 @@ extension WalletTransactionCell: Configurable {
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
         statusIcon.image = options.transaction.statusIcon()
+        typeLabel.text = options.transaction.statusName()
         
         switch options.transaction.isIncome {
         case true:
             amountLabel.text = "+ " + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
-            currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            typeLabel.text = Localizable.shared.strings.receive
         case false:
             if (options.transaction.enumType == BMTransactionTypeUnlink) {
                 amountLabel.text = String.currency(value: options.transaction.realAmount)
                 amountLabel.textColor = UIColor.main.brightTeal
-                currencyIcon.tintColor = UIColor.main.brightTeal
-                typeLabel.text = Localizable.shared.strings.unlink
             }
             else {
                 amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
                 amountLabel.textColor = UIColor.main.heliotrope
-                currencyIcon.tintColor = UIColor.main.heliotrope
-                typeLabel.text = Localizable.shared.strings.send
             }
         }
         
         
         dateLabel.text = options.transaction.formattedDate()
         dateLabel.isHidden = !options.additionalInfo
-        statusLabel.text = options.transaction.status
-        
+        statusLabel.text = options.transaction.statusType()
+
         balanceView.isHidden = Settings.sharedManager().isHideAmounts
         
         if options.additionalInfo && !options.transaction.comment.isEmpty {
@@ -90,7 +81,12 @@ extension WalletTransactionCell: Configurable {
         }
         
         if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
-            statusLabel.textColor = UIColor.main.greyish
+            if options.transaction.isFailed() && !options.transaction.isCancelled() && !options.transaction.isExpired() {
+                statusLabel.textColor = UIColor.main.failed
+            }
+            else {
+                statusLabel.textColor = UIColor.main.greyish
+            }
         }
         else if (options.transaction.enumType == BMTransactionTypeUnlink) {
             statusLabel.textColor = UIColor.main.brightTeal

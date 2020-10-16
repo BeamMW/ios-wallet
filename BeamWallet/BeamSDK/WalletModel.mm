@@ -68,14 +68,14 @@ void WalletModel::onStatus(const WalletStatus& status)
     walletStatus.receiving = status.receiving;
     walletStatus.maturing = status.maturing;
     walletStatus.sending = status.sending;
-    walletStatus.linked = 0;//status.linked;
-    walletStatus.unlinked = 0; //status.unlinked;
-    walletStatus.shielded = 0;//status.shielded;
+//    walletStatus.linked = 0;//status.linked;
+//    walletStatus.unlinked = 0; //status.unlinked;
+    walletStatus.shielded = status.shielded;
     walletStatus.realAmount = (double(int64_t(status.available)) / Rules::Coin) + (double(int64_t(status.shielded)) / Rules::Coin);
     walletStatus.realMaturing = double(int64_t(status.maturing)) / Rules::Coin;
     walletStatus.realSending = double(int64_t(status.sending)) / Rules::Coin;
     walletStatus.realReceiving = double(int64_t(status.receiving)) / Rules::Coin;
-    walletStatus.realShielded = 0; //double(int64_t(status.shielded)) / Rules::Coin;
+    walletStatus.realShielded = double(int64_t(status.shielded)) / Rules::Coin;
     walletStatus.realUnlinked = 0; // double(int64_t(status.unlinked)) / Rules::Coin;
     walletStatus.realLinked = 0; //double(int64_t(status.linked)) / Rules::Coin;
     walletStatus.currentHeight = [NSString stringWithUTF8String:to_string(status.stateID.m_Height).c_str()];
@@ -229,6 +229,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
             [delegate onReceivedTransactions:[[AppModel sharedManager]transactions]];
         }
     }
+    
+    [[AppModel sharedManager] changeTransactions];
         
     NSLog(@"onTxStatus");
 }
@@ -488,7 +490,8 @@ void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walle
     address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
     address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
     address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-    
+    address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+
     getAsync()->saveAddress(walletAddr, true);
     
     [AppModel sharedManager].generatedNewAddressBlock(address, nil);
@@ -508,6 +511,15 @@ void WalletModel::onNewAddressFailed()
 void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 {
     NSLog(@"onNodeConnectionChanged %d",isNodeConnected);
+
+    if (isNodeConnected) {
+        auto trusted = this->isConnectionTrusted();
+        NSLog(@"IS TRUSTED NODE OWN %d", trusted);
+        
+        auto own = [[AppModel sharedManager] checkIsOwnNode];
+        NSLog(@"IS TRUSTED NODE %d", own);
+    }
+
     
     if ([AppModel sharedManager].connectionTimer!=nil) {
         [[AppModel sharedManager].connectionTimer invalidate];
@@ -546,6 +558,12 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
                 [delegate onNetwotkStatusChange:isNodeConnected];
             }
         }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            if ([[AppModel sharedManager] isInternetAvailable] && !isNodeConnected) {
+                [[AppModel sharedManager] reconnect];
+            }
+        }); 
     }
 }
 
@@ -682,8 +700,15 @@ void WalletModel::onExportDataToJson(const std::string& data) {
     NSLog(@"onExportDataToJson");
 }
 
+void WalletModel::doFunction(const std::function<void()>& func)
+{
+    func();
+}
+
 void WalletModel::onPostFunctionToClientContext(MessageFunction&& func) {
     NSLog(@"onPostFunctionToClientContext");
+        
+    doFunction(func);
 }
 
 void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
@@ -941,6 +966,8 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
             [delegate onNotificationsChanged];
         }
     }
+    
+    [[AppModel sharedManager] changeNotifications];
 }
 
 void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) {
@@ -955,13 +982,135 @@ void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::o
     }
 }
 
-void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::ShieldedCoin>& items) {
+void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::ShieldedCoin>& items) {
     NSLog(@"onShieldedCoinChanged");
+    
+    NSMutableArray *bmUtxos = [[NSMutableArray alloc] init];
+    
+    @autoreleasepool {
+        for (const auto& coin : items)
+        {
+            BMUTXO *bmUTXO = [[BMUTXO alloc] init];
+            bmUTXO.isShilded = YES;
+            bmUTXO.ID = coin.m_spentHeight;
+            bmUTXO.stringID = [NSString stringWithFormat:@"%llu", bmUTXO.ID];
+            bmUTXO.amount = coin.m_CoinID.m_Value;
+            bmUTXO.realAmount = double(int64_t(coin.m_CoinID.m_Value)) / Rules::Coin;
+            bmUTXO.status = (int)coin.m_Status;
+            switch (coin.m_Status)
+            {
+                case ShieldedCoin::Available:
+                    bmUTXO.status = BMUTXOAvailable;
+                    bmUTXO.statusString = [[@"available" localized] lowercaseString];
+                    break;
+                case ShieldedCoin::Maturing:
+                    bmUTXO.status = BMUTXOMaturing;
+                    bmUTXO.statusString = [[@"maturing" localized] lowercaseString];
+                    break;
+                case ShieldedCoin::Unavailable:
+                    bmUTXO.status = BMUTXOUnavailable;
+                    bmUTXO.statusString = [[@"unavailable" localized] lowercaseString];
+                    break;
+                case ShieldedCoin::Outgoing:
+                    bmUTXO.status = BMUTXOOutgoing;
+                    bmUTXO.statusString = [[@"in_progress_out" localized] lowercaseString];
+                    break;
+                case ShieldedCoin::Incoming:
+                    bmUTXO.status = BMUTXOIncoming;
+                    bmUTXO.statusString = [[@"in_progress_in" localized] lowercaseString];
+                    break;
+                case ShieldedCoin::Spent:
+                    bmUTXO.status = BMUTXOSpent;
+                    bmUTXO.statusString = [[@"spent" localized] lowercaseString];
+                    break;
+                default:
+                    break;
+            }
+            bmUTXO.maturity = coin.m_confirmHeight;
+            bmUTXO.confirmHeight = coin.m_confirmHeight;
+            bmUTXO.typeString = @"Shielded";
+
+            const auto* message = ShieldedTxo::User::ToPackedMessage(coin.m_CoinID.m_User);
+            TxID txID;
+            std::copy_n(message->m_TxID.m_pData, 16, txID.begin());
+            auto trId = txIDToString(txID);            
+            bmUTXO.spentTxId = [NSString stringWithUTF8String:trId.c_str()];
+            
+        
+            [bmUtxos addObject:bmUTXO];
+        }
+    }
+    
+    switch (action) {
+        case ChangeAction::Added:
+        {
+            [[[AppModel sharedManager] shildedUtxos]addObjectsFromArray:bmUtxos];
+            break;
+        }
+        case ChangeAction::Removed:
+        {
+            NSMutableIndexSet *set = [NSMutableIndexSet new];
+            
+            for (int i=0;i<[[AppModel sharedManager]shildedUtxos].count; i++) {
+                BMUTXO *tr_1 = [[[AppModel sharedManager]shildedUtxos] objectAtIndex:i];
+                for (int j=0;j<bmUtxos.count; j++) {
+                    BMUTXO *tr_2 = [bmUtxos objectAtIndex:j];
+                    if(tr_1.ID == tr_2.ID)
+                    {
+                        [set addIndex:i];
+                    }
+                }
+            }
+            
+            [[[AppModel sharedManager]shildedUtxos] removeObjectsAtIndexes:set];
+            
+            break;
+        }
+        case ChangeAction::Updated:
+        {
+            for (int i=0;i<[[AppModel sharedManager]shildedUtxos].count; i++) {
+                BMUTXO *tr_1 = [[[AppModel sharedManager]shildedUtxos] objectAtIndex:i];
+                for (int j=0;j<bmUtxos.count; j++) {
+                    BMUTXO *tr_2 = [bmUtxos objectAtIndex:j];
+                    if(tr_1.ID == tr_2.ID)
+                    {
+                        [[[AppModel sharedManager]shildedUtxos] replaceObjectAtIndex:i withObject:tr_2];
+                    }
+                }
+            }
+            break;
+        }
+        case ChangeAction::Reset:
+        {
+            [[[AppModel sharedManager] shildedUtxos] removeAllObjects];
+            [[[AppModel sharedManager] shildedUtxos]addObjectsFromArray:bmUtxos];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    
+    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
+            [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
+        }
+    }
 }
 
-//void WalletModel::onNeedExtractShieldedCoins(bool val){
-//    NSLog(@"onNeedExtractShieldedCoins");
-//}
+void WalletModel::onShieldedCoinsSelectionCalculated(const ShieldedCoinsSelectionInfo& selectionRes)
+{
+    auto result = selectionRes.minimalFee;
+    [AppModel sharedManager].feecalculatedBlock(result);
+
+    NSLog(@"onShieldedCoinsSelectionCalculated");
+}
+
+void WalletModel::onNeedExtractShieldedCoins(bool val)
+{
+    NSLog(@"onNeedExtractShieldedCoins");
+}
 
 NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)
 {
@@ -1091,6 +1240,35 @@ NSString* WalletModel::GetTransactionFailurString(TxFailureReason reason)
                          [[@"tx_status_not_signed" localized] lowercaseString]];
 
     return reasons[reason];
+}
+
+NSString* WalletModel::GetShildedUTXOStatusString(beam::wallet::ShieldedCoin coin)
+{
+    switch (coin.m_Status)
+    {
+        case ShieldedCoin::Available:
+            return [[@"available" localized] lowercaseString];
+        case ShieldedCoin::Maturing:
+            return [[@"maturing" localized] lowercaseString];
+        case ShieldedCoin::Unavailable:
+            return [[@"unavailable" localized] lowercaseString];
+        case ShieldedCoin::Outgoing:
+            return [[@"in_progress_out" localized] lowercaseString];
+        case ShieldedCoin::Incoming: {
+            return [[@"in_progress_in" localized] lowercaseString];
+        }
+            
+        case ShieldedCoin::Spent:
+            return [[@"spent" localized] lowercaseString];
+        default:
+            break;
+    }
+    
+    return @"unknown";
+}
+
+NSString* WalletModel::GetShildedUTXOTypeString(beam::wallet::ShieldedCoin coin) {
+    return @"unknown";
 }
 
 NSString* WalletModel::GetUTXOStatusString(Coin coin)

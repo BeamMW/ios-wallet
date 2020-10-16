@@ -20,7 +20,7 @@ public class MASegmentedControl: UIControl {
     static let bottomLineThumbViewHeight: CGFloat = 5.0
     
     //Private UI properties
-    internal var buttons = [UIButton]()
+    public var buttons = [UIButton]()
     internal var thumbView: UIView = {
         return UIView()
     }()
@@ -239,6 +239,10 @@ public class MASegmentedControl: UIControl {
         resetViews()
         self.clipsToBounds = false
         addSubview(thumbView)
+        
+        thumbView.layer.borderWidth = 2
+        thumbView.layer.borderColor = UIColor.main.brightTeal.cgColor
+        
         if itemsWithDynamicColor {
             setButtonsWithDynamicColors()
         } else {

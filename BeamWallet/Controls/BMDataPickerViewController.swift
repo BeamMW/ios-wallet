@@ -102,6 +102,26 @@ class BMDataPickerViewController: BaseTableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
+        
+        if type == .category {
+            let label = UILabel(frame: CGRect.zero)
+            label.font = RegularFont(size: 16)
+            if Settings.sharedManager().isDarkMode {
+                label.textColor = UIColor.main.steel;
+            }
+            else {
+                label.textColor = UIColor.main.blueyGrey
+            }
+            label.numberOfLines = 0
+            label.text = Localizable.shared.strings.create_categories_in_settings
+            label.textAlignment = .center
+            let size = label.sizeThatFits(CGSize(width: 260, height: 99999))
+            label.frame = CGRect(x: (UIScreen.main.bounds.width - size.width)/2,y: 30, width: size.width, height: size.height)
+
+            let footer = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: size.height+40))
+            footer.addSubview(label)
+            self.tableView.tableFooterView = footer
+        }
     }
     
     @objc private func onRightButton() {
@@ -221,9 +241,9 @@ class BMDataPickerViewController: BaseTableViewController {
                 values.append(BMPickerData(title: log.name, detail: nil, titleColor: UIColor.white, arrowType: (log.days == Settings.sharedManager().logDays) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: log.days))
             }
         case .address_expire:
-            values.append(BMPickerData(title: Localizable.shared.strings.as_set, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: selectedValue))
-            values.append(BMPickerData(title: Localizable.shared.strings.in_24_hours_now, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: Int32(24)))
-            values.append(BMPickerData(title: Localizable.shared.strings.never, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: Int32(0)))
+          //  values.append(BMPickerData(title: Localizable.shared.strings.as_set, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: selectedValue))
+            values.append(BMPickerData(title: Localizable.shared.strings.in_24_hours_now, detail: nil, titleColor: UIColor.white, arrowType: selectedValue as! Int32 == 24 ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(24)))
+            values.append(BMPickerData(title: Localizable.shared.strings.never, detail: nil, titleColor: UIColor.white, arrowType: selectedValue as! Int32 == 0 ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(0)))
         case .clear:
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 1, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 2, multiplie: true))
@@ -277,7 +297,7 @@ class BMDataPickerViewController: BaseTableViewController {
                                
         case .notifications:
             values.append(BMPickerData(title: Localizable.shared.strings.wallet_updates, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationWalletON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.wallet_updates, multiplie: false, isSwitch: true))
-            values.append(BMPickerData(title: Localizable.shared.strings.news, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationNewsON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.news, multiplie: false, isSwitch: true))
+          //  values.append(BMPickerData(title: Localizable.shared.strings.news, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationNewsON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.news, multiplie: false, isSwitch: true))
           //  values.append(BMPickerData(title: Localizable.shared.strings.address_expiration, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationAddressON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.address_expiration, multiplie: false, isSwitch: true))
             values.append(BMPickerData(title: Localizable.shared.strings.transaction_status, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationTransactionON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.transaction_status, multiplie: false, isSwitch: true))
         

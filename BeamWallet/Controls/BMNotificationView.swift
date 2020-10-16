@@ -69,10 +69,22 @@ class BMNotificationView: UIView {
             
             if transaction.isIncome {
                 if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
-                    icon = UIImage.init(named: "iconNotifictionsReceived")
-                    title = Localizable.shared.strings.new_transaction
+         
                     let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                    detail = Localizable.shared.strings.transaction_receiving_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+                    
+                    if transaction.senderAddress == "0" || transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
+                        || transaction.enumType == BMTransactionTypePushTransaction {
+                        
+                        title = "Transaction receiving from offline"
+                        icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
+                        detail = Localizable.shared.strings.transaction_receiving_notif_body(beam: beam, address: "shielded pool", failed: false)
+                    }
+                    else {
+                        icon = UIImage.init(named: "iconNotifictionsReceived")
+                        title = Localizable.shared.strings.new_transaction
+                        detail = Localizable.shared.strings.transaction_receiving_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+                    }
+                    
                 }
                 else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                     icon = UIImage.init(named: "iconNotifictionsFailedReceived")
@@ -81,10 +93,20 @@ class BMNotificationView: UIView {
                     detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: true)
                 }
                 else {
-                    icon = UIImage.init(named: "iconNotifictionsReceived")
-                    title = Localizable.shared.strings.transaction_received
                     let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                    detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+
+                    if transaction.senderAddress == "0" || transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
+                        || transaction.enumType == BMTransactionTypePushTransaction {
+                        title = "Transaction received from offline"
+                        icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: "shielded pool", failed: false)
+                    }
+                    else {
+                        icon = UIImage.init(named: "iconNotifictionsReceived")
+                        title = Localizable.shared.strings.transaction_received
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+                    }
+              
                 }
             }
             else {
@@ -95,10 +117,21 @@ class BMNotificationView: UIView {
                     detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true)
                 }
                 else {
-                    icon = UIImage.init(named: "iconNotifictionsSent")
-                    title = Localizable.shared.strings.transaction_sent
                     let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                    detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam: beam, address: transaction.receiverAddress, failed: false)
+
+                    if transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
+                        || transaction.enumType == BMTransactionTypePushTransaction
+                     {
+                        icon = UIImage.init(named: "iconNotifictionsSendedOffline")
+                        title = "Transaction sent to offline"
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam: beam, address: transaction.receiverAddress, failed: false)
+                    }
+                    else {
+                        icon = UIImage.init(named: "iconNotifictionsSent")
+                        title = Localizable.shared.strings.transaction_sent
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam: beam, address: transaction.receiverAddress, failed: false)
+                    }
+               
                 }
             }
             

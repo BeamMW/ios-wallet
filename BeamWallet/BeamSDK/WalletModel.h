@@ -44,8 +44,11 @@ private:
     NSString *GetTransactionFailurString(beam::wallet::TxFailureReason reason);
     NSString *GetUTXOStatusString(beam::wallet::Coin coin);
     NSString *GetUTXOTypeString(beam::wallet::Coin coin);
+    NSString *GetShildedUTXOStatusString(beam::wallet::ShieldedCoin coin);
+    NSString *GetShildedUTXOTypeString(beam::wallet::ShieldedCoin coin);
     NSString* GetCurrencyString(beam::wallet::ExchangeRate::Currency type);
-    
+    void doFunction(const std::function<void()>& func);
+
     void onStatus(const beam::wallet::WalletStatus& status) override;
     void onTxStatus(beam::wallet::ChangeAction, const std::vector<beam::wallet::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;
@@ -67,9 +70,11 @@ private:
     void onNoDeviceConnected() override;
 
     void onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) override;
-    void onShieldedCoinChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::ShieldedCoin>& items) override;
-   // void onNeedExtractShieldedCoins(bool val) override;
+    void onShieldedCoinChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::ShieldedCoin>& items) override;
 
+    void onShieldedCoinsSelectionCalculated(const beam::wallet::ShieldedCoinsSelectionInfo& selectionRes) override;
+    void onNeedExtractShieldedCoins(bool val) override;
+    
     void onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&) override;
     void onNotificationsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Notification>&) override;
 

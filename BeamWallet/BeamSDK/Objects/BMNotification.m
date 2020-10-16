@@ -22,6 +22,39 @@
 
 @implementation BMNotification
 
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.nId forKey: @"nId"];
+    [encoder encodeObject:self.pId forKey: @"pId"];
+    [encoder encodeObject:self.text forKey: @"text"];
+
+    [encoder encodeObject:[NSNumber numberWithBool:self.isRead] forKey: @"isRead"];
+    [encoder encodeObject:[NSNumber numberWithBool:self.isSended] forKey: @"isSended"];
+
+    [encoder encodeObject:[NSNumber numberWithInteger:self.type] forKey: @"type"];
+
+    [encoder encodeObject:[NSNumber numberWithLongLong:self.createdTime] forKey: @"createdTime"];
+}
+
+-(id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if(self)
+    {
+        self.nId = [decoder decodeObjectForKey: @"nId"];
+        self.pId = [decoder decodeObjectForKey: @"pId"];
+        self.text = [decoder decodeObjectForKey: @"text"];
+
+        self.isRead = [[decoder decodeObjectForKey:@"isRead"] boolValue];
+        self.isSended = [[decoder decodeObjectForKey:@"isSended"] boolValue];
+
+        self.type = [[decoder decodeObjectForKey:@"type"] integerValue];
+
+        self.createdTime = [[decoder decodeObjectForKey:@"createdTime"] longLongValue];
+        
+    }
+    return self;
+}
 
 -(NSString *_Nonnull)formattedDate {
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:[Settings sharedManager].language];

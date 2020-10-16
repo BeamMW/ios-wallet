@@ -26,6 +26,7 @@ class BMMultiLineItem {
     public var detailColor:UIColor?
     public var detailAttributedString:NSMutableAttributedString?
     public var canCopy = false
+    public var copiedText: String? = nil
     
     required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
         self.title = title
@@ -40,5 +41,15 @@ class BMMultiLineItem {
         self.detailFont = detailFont
         self.detailColor = detailColor
         self.canCopy = copy
+    }
+    
+    required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?, copy:Bool, copiedText:String?) {
+        self.title = title
+        self.detail = detail
+        self.detailFont = detailFont
+        self.detailColor = detailColor
+        self.canCopy = copy
+        self.copiedText = copiedText
+
     }
 }

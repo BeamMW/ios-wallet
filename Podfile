@@ -6,6 +6,7 @@ post_install do |installer|
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
             config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf'
+            config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
         end
     end
 end
@@ -21,7 +22,7 @@ def shared_pods
     pod 'CrashEye'
     pod 'Firebase/Crashlytics'    
     pod 'Firebase/Analytics'
-
+    
 end
 
 #def extension
@@ -43,6 +44,8 @@ end
 target 'BeamWalletMasterNet' do
     shared_pods
 end
+
+
 
 #target 'BeamWalletNotificationViewTestNet' do
 #    extension

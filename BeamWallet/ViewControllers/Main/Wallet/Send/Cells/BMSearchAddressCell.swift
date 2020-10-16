@@ -27,6 +27,7 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var rightButton: UIButton!
     @IBOutlet private weak var showTokenButton: UIButton!
+    @IBOutlet private weak var additionalErrorLabel: UILabel!
 
     @IBOutlet private weak var contactView: UIStackView!
     @IBOutlet private weak var contactName: UILabel!
@@ -55,6 +56,7 @@ class BMSearchAddressCell: BaseCell {
         
         if Settings.sharedManager().isDarkMode {
             nameLabel.textColor = UIColor.main.steel;
+            additionalErrorLabel.textColor = UIColor.main.steel;
         }
         
         contentView.backgroundColor = UIColor.main.marineThree
@@ -74,7 +76,15 @@ class BMSearchAddressCell: BaseCell {
             if(contact == nil && !textField.text.isEmpty) {
                 contactView.isHidden = false
                 contactName.numberOfLines = 2
-                contactName.text =  isPermanentAddress ? Localizable.shared.strings.perm_token : Localizable.shared.strings.one_time_expire_text
+                if !AppModel.sharedManager().isToken(token) && AppModel.sharedManager().isValidAddress(token) {
+                    contactName.text = Localizable.shared.strings.address_not_supported_max_privacy
+                }
+                else if AppModel.sharedManager().isValidAddress(token)  {
+                    contactName.text =  isPermanentAddress ? Localizable.shared.strings.perm_token : Localizable.shared.strings.one_time_expire_text
+                }
+                else {
+                    contactName.text = nil
+                }
                 contactName.font = ItalicFont(size: 14)
                 contactCategory.text = nil
                 iconView.isHidden = true
@@ -123,6 +133,18 @@ class BMSearchAddressCell: BaseCell {
                 errorLabel.text = nil
                 errorLabel.textColor = UIColor.main.red
                 errorLabel.isHidden = true
+            }
+        }
+    }
+    
+    public var additionalError: String? {
+        didSet {
+            if additionalError != nil {
+                additionalErrorLabel.text = additionalError
+                additionalErrorLabel.isHidden = false
+            }
+            else {
+                additionalErrorLabel.isHidden = true
             }
         }
     }

@@ -79,6 +79,7 @@ class FeeCell: BaseCell {
     @IBAction private func showPicker(_ sender: UIButton) {
         let modalViewController = InputFeePopover()
         modalViewController.mainFee = (valueLabel.text?.replacingOccurrences(of: Localizable.shared.strings.groth, with: "")) ?? ""
+        modalViewController.minFee = UInt64(self.feeSlider.minimumValue)
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
         modalViewController.type = self.type
@@ -142,10 +143,12 @@ class FeeCell: BaseCell {
 
 extension FeeCell: Configurable {
     
-    func setMaxPrivacy(isMax: Bool) {
-        if(isMax) {
-            feeSlider.minimumValue = Float(AppModel.sharedManager().getMinMaxPrivacyFeeInGroth())
-            feeSlider.maximumValue = Float(10000000)
+    func setMinFee(minFee: UInt64) {
+        if(minFee > 300) {
+            feeSlider.minimumValue = Float(minFee)
+            if feeSlider.maximumValue <= Float(minFee) {
+                feeSlider.maximumValue = Float(minFee+minFee)
+            }
         }
         else {
             feeSlider.maximumValue = Float(2000)

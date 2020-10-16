@@ -26,6 +26,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
     public var amountError:String?
     public var toAddressError:String?
+    public var newVersionError:String?
 
     public var comment = String.empty()
     
@@ -38,6 +39,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var selectedContact:BMContact?
 
     private var addresses = [BMAddress]()
+    public var isToken = false
     
     public var unlinkOnly = false {
         didSet {
@@ -66,6 +68,28 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             else if (toAddressError == Localizable.shared.strings.cant_sent_max_to_my_address) {
                 toAddressError = nil
             }
+            
+            calculateFee()
+        }
+    }
+    
+    public func calculateFee() {
+        if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
+            AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: 0, isShielded: maxPrivacy) { (result) in
+                DispatchQueue.main.async {
+                    let current = UInt64(self.fee) ?? 0
+                    if result > current {
+                        self.fee = String(result)
+                        self.minFee = self.fee
+                        self.onFeeChanged?()
+                    }
+                    else if result != current {
+                        self.fee = String(result)
+                        self.minFee = self.fee
+                        self.onFeeChanged?()
+                    }
+                }
+            }
         }
     }
     
@@ -77,6 +101,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var isMyAddress = false
     
     public var onDataChanged: (() -> Void)?
+    public var onFeeChanged: (() -> Void)?
 
     func onMaxPrivacyTokensLeft(_ tokens: Int32) {
         DispatchQueue.main.async {
@@ -94,6 +119,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             isMyAddress = false
             
             if(AppModel.sharedManager().isToken(toAddress)) {
+                isToken = true
+                
                 let params = AppModel.sharedManager().getTransactionParameters(toAddress)
                 
                 maxPrivacy = params.isMaxPrivacy
@@ -115,16 +142,29 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 isMyAddress = AppModel.sharedManager().isMyAddress(params.address)
                 
                 if(isMyAddress && maxPrivacy) {
-                    toAddressError = "Can not sent max privacy transaction to own address"
+                    toAddressError = "Can not sent offline transaction to own address"
                 }
+               
+                newVersionError = params.verionError
                 
+                calculateFee()
                 checkAmountError()
             }
             else if(AppModel.sharedManager().isValidAddress(toAddress)) {
+                newVersionError = nil
+
+                isToken = false
+
                 maxPrivacyDisabled = true;
                 requestedMaxPrivacy = false;
                 maxPrivacy = false
                 fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+                calculateFee()
+            }
+            else {
+                isToken = false
+                
+                newVersionError = nil
             }
         }
     }
@@ -132,9 +172,13 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var amount = String.empty() {
         didSet {
             amountError = nil
+            if !sendAll {
+                calculateFee()
+            }
         }
     }
     
+    public var minFee = ""
     public var fee = String(0) {
         didSet{
             if sendAll {
@@ -157,6 +201,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 else {
                     amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
                 }
+                calculateFee()
             }
         }
     }
@@ -165,9 +210,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         didSet{
             if let repeatTransaction = transaction{
                 toAddress = repeatTransaction.receiverAddress
-                amount = String.currency(value: repeatTransaction.realAmount)
-                fee = String(repeatTransaction.realFee)
-                comment = repeatTransaction.comment
+                if repeatTransaction.realAmount > 0 {
+                    amount = String.currency(value: repeatTransaction.realAmount).replacingOccurrences(of: " BEAM", with: "")
+                    fee = String(repeatTransaction.realFee)
+                    comment = repeatTransaction.comment ?? ""
+                }
+
             }
         }
     }
@@ -378,7 +426,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public func buildBMMultiLineItems() -> [BMMultiLineItem]{
         let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-        let totalString = String.currency(value: total) + Localizable.shared.strings.beam
+        let totalString = String.currency(value: total) //+ Localizable.shared.strings.beam
         
         let to = "\(toAddress.prefix(6))...\(toAddress.suffix(6))"
         var items = [BMMultiLineItem]()
@@ -393,10 +441,10 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.max_privacy_title, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         else if maxPrivacy && requestedOffline {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: "\(Localizable.shared.strings.max_privacy_title),\(Localizable.shared.strings.offline.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: (Localizable.shared.strings.max_privacy_title), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
-        let amountString = amount + Localizable.shared.strings.beam + "\n"
+        let amountString = amount + "\n" //+ Localizable.shared.strings.beam + "\n"
         let secondString = AppModel.sharedManager().exchangeValue(Double(amount) ?? 0)
         let attributedString = amountString + "space\n" + secondString
 
@@ -420,19 +468,32 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
               
         items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: fee + Localizable.shared.strings.groth, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope))
         items.append(BMMultiLineItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white))
-        items.append(BMMultiLineItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
+     
+        if !maxPrivacy {
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
+        }
         
         return items
     }
     
     public func isNeedSaveContact() -> Bool {
-        let isContactFound = (AppModel.sharedManager().getContactFromId(toAddress) != nil)
-        let isMyAddress = AppModel.sharedManager().isMyAddress(toAddress)
+        var address = toAddress
+        if (AppModel.sharedManager().isToken(address)) {
+            let params = AppModel.sharedManager().getTransactionParameters(address)
+            address = params.address
+        }
+        
+        let isContactFound = (AppModel.sharedManager().getContactFromId(address) != nil)
+        let isMyAddress = AppModel.sharedManager().isMyAddress(address)
         return (selectedContact == nil && !isContactFound && !isMyAddress)
     }
     
     public func calculateChange() {
         AppModel.sharedManager().calculateChange(Double(amount) ?? 0, fee:  Double(fee) ?? 0)
+        
+        if AppModel.sharedManager().isToken(toAddress) {
+            _ = AppModel.sharedManager().getTransactionParameters(toAddress)
+        }
     }
     
     public func canUnlink() -> Bool {

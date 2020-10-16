@@ -23,7 +23,30 @@ extension MASegmentedControl {
     
     /// Button tap event on segmented control
     /// - Parameter button: button at the index that was tapped
-    @objc internal func buttonTapped(button: UIButton) {
+    @objc public func buttonTappedWithoutAction(button: UIButton) {
+        
+        for (btnIndex, btn) in self.buttons.enumerated() {
+            
+            btn.setTitleColor(textColor, for: .normal)
+            if !itemsWithDynamicColor {
+                if !buttonsWithDynamicImages {
+                    btn.tintColor = buttonColorForNormal
+                }
+            }
+            if btn == button {
+                selectedSegmentIndex = btnIndex
+                fillEqually ?  moveThumbView(at: btnIndex) : moveThumbViewFillEquallyFalse(at: btnIndex)
+                btn.setTitleColor(selectedTextColor, for: .normal)
+                if !itemsWithDynamicColor {
+                    if !buttonsWithDynamicImages {
+                        btn.tintColor = buttonColorForSelected
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc public func buttonTapped(button: UIButton) {
         
         for (btnIndex, btn) in self.buttons.enumerated() {
             
@@ -53,9 +76,7 @@ extension MASegmentedControl {
     public func moveThumbView(at index: Int) {
         
         let selectedStartPosition = index == 0 ? self.padding : bounds.width / CGFloat(buttons.count) *  CGFloat(index) + self.padding
-        UIView.animate(withDuration: TimeInterval(self.animationDuration), animations: {
-            self.thumbView.frame.origin.x = selectedStartPosition
-        })
+        self.thumbView.frame.origin.x = selectedStartPosition
     }
     
     //Movement of thumbview if fillEqually = false

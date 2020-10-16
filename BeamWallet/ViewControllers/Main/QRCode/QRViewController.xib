@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -47,7 +48,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </scrollView>
                 <view verifyAmbiguity="off" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="soS-x3-QUu" customClass="BaseView" customModule="BeamWallet" customModuleProvider="target">
-                    <rect key="frame" x="15" y="12" width="345" height="643.5"/>
+                    <rect key="frame" x="15" y="14.5" width="345" height="638.5"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T3j-3U-bV4">
                             <rect key="frame" x="302" y="3" width="40" height="40"/>
@@ -79,13 +80,13 @@
                             </constraints>
                         </view>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="oJj-Q6-fXL">
-                            <rect key="frame" x="15" y="260" width="315" height="272.5"/>
+                            <rect key="frame" x="15" y="260" width="315" height="267.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Ybu-4e-f8u">
-                                    <rect key="frame" x="0.0" y="0.0" width="315" height="76"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="315" height="74.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ADDRESS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kiX-gk-GjC">
-                                            <rect key="frame" x="0.0" y="0.0" width="315" height="17"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="315" height="16.5"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -97,7 +98,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="176dan89jksasdg21skaw9q7g176dan89jksasdg21skaw9q7g" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q11-bp-JzA">
-                                            <rect key="frame" x="0.0" y="27" width="315" height="19.5"/>
+                                            <rect key="frame" x="0.0" y="26.5" width="315" height="19"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -106,7 +107,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I11-5Y-Uqc">
-                                            <rect key="frame" x="0.0" y="56.5" width="315" height="19.5"/>
+                                            <rect key="frame" x="0.0" y="55.5" width="315" height="19"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -117,10 +118,10 @@
                                     </subviews>
                                 </stackView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qj7-5i-6Ks">
-                                    <rect key="frame" x="0.0" y="106" width="315" height="46.5"/>
+                                    <rect key="frame" x="0.0" y="104.5" width="315" height="45.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REQUESTED AMOUNT" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pw5-rx-QXF">
-                                            <rect key="frame" x="0.0" y="0.0" width="315" height="17"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="315" height="16.5"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -132,7 +133,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 BEAM" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpH-WK-u6D">
-                                            <rect key="frame" x="0.0" y="27" width="315" height="19.5"/>
+                                            <rect key="frame" x="0.0" y="26.5" width="315" height="19"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                             <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -141,13 +142,13 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QfU-hq-gbA">
-                                            <rect key="frame" x="0.0" y="46.5" width="315" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="45.5" width="315" height="0.0"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aLx-hp-fFq">
-                                            <rect key="frame" x="0.0" y="46.5" width="315" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="45.5" width="315" height="0.0"/>
                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -158,7 +159,7 @@
                                     </subviews>
                                 </stackView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cWq-Ih-hVQ">
-                                    <rect key="frame" x="0.0" y="182.5" width="315" height="90"/>
+                                    <rect key="frame" x="0.0" y="180" width="315" height="87.5"/>
                                     <string key="text">Show this QR code to the sender or send it over an external secure channel.
 
 Please notice, that both you and sender should be online to succeed transaction!</string>
@@ -172,7 +173,7 @@ Please notice, that both you and sender should be online to succeed transaction!
                             </subviews>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="loc-1l-wZa" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="94.5" y="562.5" width="156" height="44"/>
+                            <rect key="frame" x="94.5" y="557.5" width="156" height="44"/>
                             <color key="backgroundColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="156" id="0VP-sY-hap"/>
@@ -228,6 +229,11 @@ Please notice, that both you and sender should be online to succeed transaction!
             <point key="canvasLocation" x="53.600000000000001" y="59.820089955022496"/>
         </view>
     </objects>
+    <designables>
+        <designable name="loc-1l-wZa">
+            <size key="intrinsicContentSize" width="95" height="17"/>
+        </designable>
+    </designables>
     <resources>
         <image name="iconCancelBig" width="16" height="16"/>
         <image name="iconShareNew" width="16" height="16"/>

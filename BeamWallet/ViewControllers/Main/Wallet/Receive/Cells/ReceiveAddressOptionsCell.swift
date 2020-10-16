@@ -25,7 +25,7 @@ class ReceiveAddressOptionsCell: BaseCell {
             transactionTypeSegment.roundedControl = true
             
             transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.max_privacy_title])
-            transactionTypeSegment.padding = 2
+            transactionTypeSegment.padding = 0
             transactionTypeSegment.textColor = UIColor.main.blueyGrey
             transactionTypeSegment.selectedTextColor = UIColor.main.brightTeal
             transactionTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
@@ -41,7 +41,7 @@ class ReceiveAddressOptionsCell: BaseCell {
             expireTypeSegment.roundedControl = true
             
             expireTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.one_time, Localizable.shared.strings.permanent])
-            expireTypeSegment.padding = 2
+            expireTypeSegment.padding = 0
             expireTypeSegment.textColor = UIColor.main.blueyGrey
             expireTypeSegment.selectedTextColor = UIColor.main.brightTeal
             expireTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
@@ -64,20 +64,23 @@ class ReceiveAddressOptionsCell: BaseCell {
             errorLabel.textColor = UIColor.main.steel;
         }
         
-        expirationLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.token_expiration.uppercased(), letter: Localizable.shared.strings.token_expiration.uppercased())
+        expirationLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.address_expiration.uppercased(), letter: Localizable.shared.strings.address_expiration.uppercased())
 
         transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.transaction_type.uppercased(), letter: Localizable.shared.strings.transaction_type.uppercased())
         
         selectionStyle = .none
         
-        if Settings.sharedManager().isOwnNode() {
+        if AppModel.sharedManager().checkIsOwnNode() {
             errorLabel.isHidden = true
+            offset.constant = -5
         }
         else {
             offset.constant = 25
             transactionTypeSegment.isUserInteractionEnabled = false
             transactionTypeSegment.textColor = UIColor.main.blueyGrey.withAlphaComponent(0.2)
         }
+        
+        errorLabel.text = Localizable.shared.strings.connect_node_offline
     }
     
     @IBAction func onExpire(sender: MASegmentedControl) {

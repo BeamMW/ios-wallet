@@ -29,6 +29,7 @@ class BMCopyLabel: UILabel {
 
     public var copyText:String?
     public var displayCopyAlert = true
+    public var copiedText:String?
 
     override public var canBecomeFirstResponder: Bool {
         get {
@@ -60,7 +61,17 @@ class BMCopyLabel: UILabel {
         UIMenuController.shared.setMenuVisible(false, animated: true)
         
         if displayCopyAlert {
-            ShowCopied()
+            if let text = copiedText {
+                ShowCopied(text: text)
+            }
+            else {
+                if AppModel.sharedManager().isValidAddress(self.copyText) {
+                    ShowCopied(text: Localizable.shared.strings.address_copied)
+                }
+                else {
+                    ShowCopied()
+                }
+            }
         }
         
         self.delegate?.onCopied()

@@ -28,6 +28,17 @@ class BMNetworkStatusView: UIView {
     private var isPrevUpdate = false
     private var isPrevRecconected = false
 
+    public var numberOfLines = 1 {
+        didSet {
+            statusLabel.numberOfLines = numberOfLines
+            if numberOfLines > 1 {
+                statusLabel.width = statusLabel.width - 100
+                statusLabel.h = 36
+                statusLabel.y = statusLabel.y - (statusLabel.y/2) - 3
+            }
+        }
+    }
+    
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 40))
         

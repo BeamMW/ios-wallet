@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,10 +32,10 @@
                         <rect key="frame" x="15" y="45" width="290" height="137.5"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GIP-fu-pjn">
-                                <rect key="frame" x="110.5" y="40" width="69.5" height="24"/>
+                                <rect key="frame" x="117.5" y="40" width="55" height="24"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ubL-pw-5FK">
-                                        <rect key="frame" x="0.0" y="0.0" width="50.5" height="24"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="55" height="24"/>
                                         <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -42,22 +43,13 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="5av-9X-tme">
-                                        <rect key="frame" x="55.5" y="5" width="14" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="9UI-RO-M8z"/>
-                                            <constraint firstAttribute="width" constant="14" id="b7D-3J-C9l"/>
-                                        </constraints>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="ubL-pw-5FK" secondAttribute="bottom" id="2om-KP-pOI"/>
-                                    <constraint firstItem="5av-9X-tme" firstAttribute="leading" secondItem="ubL-pw-5FK" secondAttribute="trailing" constant="5" id="72p-8h-d9S"/>
-                                    <constraint firstAttribute="trailing" secondItem="5av-9X-tme" secondAttribute="trailing" id="Ffa-eu-B6l"/>
-                                    <constraint firstItem="5av-9X-tme" firstAttribute="top" secondItem="GIP-fu-pjn" secondAttribute="top" constant="5" id="Vk1-xY-7rM"/>
                                     <constraint firstItem="ubL-pw-5FK" firstAttribute="top" secondItem="GIP-fu-pjn" secondAttribute="top" id="kZ0-d3-gEs"/>
                                     <constraint firstItem="ubL-pw-5FK" firstAttribute="leading" secondItem="GIP-fu-pjn" secondAttribute="leading" id="kg7-UQ-Z21"/>
+                                    <constraint firstAttribute="trailing" secondItem="ubL-pw-5FK" secondAttribute="trailing" id="vzY-9w-bnH"/>
                                 </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.55000000000000004" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icEyeCrossedBig" translatesAutoresizingMaskIntoConstraints="NO" id="lCf-d5-5pB">
@@ -74,7 +66,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="spent" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BoK-WT-fzr">
-                                <rect key="frame" x="125" y="94" width="40.5" height="19"/>
+                                <rect key="frame" x="126" y="94" width="38" height="19"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -106,7 +98,7 @@
                         <rect key="frame" x="137" y="21" width="46" height="46"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-received" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Qs-rn-M2r">
-                                <rect key="frame" x="1" y="1" width="44" height="44"/>
+                                <rect key="frame" x="12" y="12" width="22" height="22"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -145,7 +137,6 @@
                 <outlet property="amountLabel" destination="ubL-pw-5FK" id="VNz-OM-EO5"/>
                 <outlet property="arrowIcon" destination="8Qs-rn-M2r" id="Pak-j9-mVT"/>
                 <outlet property="circleView" destination="wUI-ZL-prr" id="pAK-SC-oxZ"/>
-                <outlet property="currencyIcon" destination="5av-9X-tme" id="8hZ-5c-jVt"/>
                 <outlet property="mainView" destination="yio-1z-dxj" id="vBc-vf-TcL"/>
                 <outlet property="secondAmountLabel" destination="uYk-Ni-S8g" id="27e-P5-kmb"/>
                 <outlet property="securityIcon" destination="lCf-d5-5pB" id="4ln-pv-CyP"/>
@@ -157,6 +148,5 @@
     <resources>
         <image name="icEyeCrossedBig" width="60" height="61"/>
         <image name="icon-received" width="22" height="22"/>
-        <image name="iconSymbol" width="16" height="24.5"/>
     </resources>
 </document>

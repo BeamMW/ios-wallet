@@ -62,9 +62,9 @@ class StatusViewModel: NSObject {
     }
     
     public func isAvaiableUnlink() -> Bool {
-        if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
-            return true
-        }
+//        if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
+//            return true
+//        }
         
         return false
     }

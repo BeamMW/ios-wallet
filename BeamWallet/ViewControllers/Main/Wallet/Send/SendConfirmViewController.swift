@@ -181,9 +181,36 @@ extension SendConfirmViewController : UITableViewDataSource {
 }
 
 extension SendConfirmViewController: WalletModelDelegate {
+    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
+        DispatchQueue.main.async {
+            if tokens >= 0 {
+                
+                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.transaction_type.uppercased()})
+                
+                let foundIndex = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.transactions_remaining.uppercased()})
+                
+                if let found = foundIndex, found > 0 {
+                    self.items[found].detail = "\(tokens)"
+                }
+                else {
+                    let item = BMMultiLineItem(title: Localizable.shared.strings.transactions_remaining.uppercased(), detail: "\(tokens)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
+                    
+                    if let i = index, i > 0 {
+                        self.items.insert(item, at: i+1)
+                    }
+                    else {
+                        self.items.append(item)
+                    }
+                }
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     func onChangeCalculated(_ amount: Double) {
         DispatchQueue.main.async {
-            let totalString = String.currency(value: amount) + Localizable.shared.strings.beam
+            let totalString = String.currency(value: amount) //+ Localizable.shared.strings.beam
             let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
             self.items.insert(item, at: self.items.count - 1)
             self.tableView.reloadData()

@@ -76,10 +76,12 @@ typedef int BMRestoreType;
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
 typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
+typedef void(^FeecalculatedBlock)(uint64_t fee);
 
 @interface AppModel : NSObject
 
 @property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
+@property (nonatomic) FeecalculatedBlock _Nullable feecalculatedBlock;
 @property (nonatomic,readwrite) NSPointerArray * _Nonnull delegates;
 
 @property (nonatomic,assign) BOOL isConnected;
@@ -95,6 +97,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable utxos;
+@property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable shildedUtxos;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nullable walletAddresses;
 @property (nonatomic,strong) NSMutableArray<BMContact*>*_Nonnull contacts;
 @property (nonatomic,strong) NSMutableArray<BMCategory*>*_Nonnull categories;
@@ -120,6 +123,9 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 // delegates
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;
 -(void)removeDelegate:(id<WalletModelDelegate>_Nullable) delegate;
+
+-(void)changeTransactions;
+-(void)changeNotifications;
 
 // create, open
 -(BOOL)canRestoreWallet;
@@ -153,7 +159,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
--(BMAddress*_Nonnull)generateAddress;
+//-(BMAddress*_Nonnull)generateAddress;
 -(BMAddress*_Nonnull)generateWithdrawAddress;
 -(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId;
 
@@ -177,6 +183,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(BOOL)isMyAddress:(NSString*_Nullable)address;
 -(void)clearAllAddresses;
 -(void)refreshAddresses;
+-(void)refreshAddressesFrom;
 -(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount;
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
@@ -199,6 +206,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(double)realTotal:(double)amount fee:(double)fee;
 -(double)remaining:(double)amount fee:(double)fee;
 -(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token;
+-(void)calculateFee:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
@@ -262,7 +270,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 -(NSString*_Nonnull)exchangeValue:(double)amount;
 -(NSString*_Nonnull)exchangeValueFee:(double)amount;
 -(void)saveCurrencies;
-
+-(BOOL)checkIsOwnNode;
 
 //notifications
 -(int)getUnreadNotificationsCount;
@@ -280,5 +288,7 @@ typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 
 //unlink
 -(void)sendUnlink:(double)amount fee:(double)fee;
+
+-(BOOL)isCurrenciesAvailable;
 
 @end

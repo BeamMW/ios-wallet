@@ -48,6 +48,7 @@ typedef int BMUTXOStatus;
 @property (nonatomic,strong) NSString * _Nullable spentTxId;
 @property (nonatomic,strong) BMTransaction * _Nullable transaction;
 @property (nonatomic,assign) UInt64 transactionDate;
+@property (nonatomic,assign) BOOL isShilded;
 
 -(NSMutableAttributedString*_Nonnull)attributedStatus;
 

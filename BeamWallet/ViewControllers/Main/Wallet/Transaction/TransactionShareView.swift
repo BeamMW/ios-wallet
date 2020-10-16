@@ -35,7 +35,6 @@ class TransactionShareView: UIView {
     
     @IBOutlet private weak var amountLabel: UILabel!
     @IBOutlet private weak var typeLabel: UILabel!
-    @IBOutlet private weak var currencyIcon: UIImageView!
     @IBOutlet private weak var statusIcon: UIImageView!
     
     @IBOutlet private weak var centeredTypeLabel: UILabel!
@@ -98,9 +97,6 @@ class TransactionShareView: UIView {
         
         statusIcon.image = transaction.statusIcon()
         centeredStatusIcon.image = transaction.statusIcon()
-
-        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintAdjustmentMode = .normal
         
         titleLabel.text = Localizable.shared.strings.transaction_details.uppercased()
         titleLabel.letterSpacing = 1.5
@@ -110,8 +106,8 @@ class TransactionShareView: UIView {
         senderValueLabel.text = transaction.senderAddress
         receiverValueLabel.text = transaction.receiverAddress
         
-        typeLabel.text = transaction.status.capitalizingFirstLetter()
-        centeredTypeLabel.text = transaction.status.capitalizingFirstLetter()
+        typeLabel.text = transaction.statusType().capitalizingFirstLetter()
+        centeredTypeLabel.text = transaction.statusType().capitalizingFirstLetter()
 
         if transaction.isSelf {
             senderTitleLabel.text = Localizable.shared.strings.my_send_address
@@ -153,11 +149,9 @@ class TransactionShareView: UIView {
         case true:
             amountLabel.text = "+" + String.currency(value: transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
-            currencyIcon.tintColor = UIColor.main.brightSkyBlue
         case false:
             amountLabel.text = "-" + String.currency(value: transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
-            currencyIcon.tintColor = UIColor.main.heliotrope
         }
         
         transactionKernelValueLabel.text = transaction.kernelId

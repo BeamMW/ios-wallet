@@ -23,6 +23,20 @@ import CommonCrypto
 
 
 extension String {
+    func convertStringToDictionary() -> [String:AnyObject]? {
+        if let data = self.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+                return json
+            } catch {
+                print("Something went wrong")
+            }
+        }
+        return nil
+    }
+}
+
+extension String {
     var md5Value: String {
         let length = Int(CC_MD5_DIGEST_LENGTH)
         var digest = [UInt8](repeating: 0, count: length)
@@ -144,7 +158,7 @@ extension String {
     }()
     
     static func currency(value:Double) -> String {
-        return formatter.string(from: NSNumber(value: value)) ?? "0.00"
+        return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " BEAM"
     }
     
     func isValidUrl() -> Bool {

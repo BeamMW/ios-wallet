@@ -62,7 +62,8 @@ class WalletViewController: BaseTableViewController {
         subscribeToUpdates()
         
         AppModel.sharedManager().fixCategories()
-        
+        AppModel.sharedManager().refreshAddressesFrom()
+
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
@@ -73,7 +74,14 @@ class WalletViewController: BaseTableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
+        if WithdrawViewModel.isOpenFromGame
+        {
+            WithdrawViewModel.isOpenFromGame = false
+            
+            let vc = WithdrawViewController(amount: WithdrawViewModel.amount, userId: WithdrawViewModel.userId)
+            pushViewController(vc: vc)
+        }
+        else if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
             if let transaction = viewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
                 let vc = TransactionViewController(transaction: transaction)
                 pushViewController(vc: vc)
@@ -237,7 +245,7 @@ extension WalletViewController: UITableViewDelegate {
                     return WalletAvailableCell.hideHeight()
                 }
                 else {
-                    let height = statusViewModel.isAvaiableMautring() ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.secondHeight()
+                    let height = (statusViewModel.isAvaiableMautring() || statusViewModel.isAvaiableUnlink()) ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.secondHeight()
                     return height
                 }
             }

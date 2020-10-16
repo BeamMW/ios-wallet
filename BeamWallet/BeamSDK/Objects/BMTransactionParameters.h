@@ -29,6 +29,7 @@
 
 @property (nonatomic,strong) NSString *address;
 @property (nonatomic,strong) NSString *identity;
+@property (nonatomic,strong) NSString *verionError;
 
 @end
 

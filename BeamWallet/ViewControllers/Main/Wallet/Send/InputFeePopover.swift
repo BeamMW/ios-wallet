@@ -24,7 +24,8 @@ class InputFeePopover: BaseViewController {
     public var completion : ((String) -> Void)?
     public var mainFee:String!
     public var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
-
+    public var minFee:UInt64 = 0
+    
     @IBOutlet weak private var feeField: BMField!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var grothTitleLabelY: NSLayoutConstraint!
@@ -83,22 +84,18 @@ class InputFeePopover: BaseViewController {
         }
         
         let v = Int32(mainFee) ?? 0
-        var min = Int32(0)
         
-        if(self.type == BMTransactionTypeSimple) {
-            min = AppModel.sharedManager().getMinFeeInGroth()
-        }
-        else if(self.type == BMTransactionTypePushTransaction) {
-            min = AppModel.sharedManager().getMinMaxPrivacyFeeInGroth()
-        }
-        else if(self.type == BMTransactionTypeUnlink) {
-            min = AppModel.sharedManager().getMinUnlinkFeeInGroth()
-        }
                 
-        if v < min {
+        if v < minFee {
             grothTitleLabelY.constant = 5
             
-            feeField.error = Localizable.shared.strings.min_fee_error.replacingOccurrences(of: ("(value)"), with: String(min))
+            if (self.type == BMTransactionTypePushTransaction)
+            {
+                feeField.error = Localizable.shared.strings.min_fee_error_offline
+            }
+            else {
+                feeField.error = Localizable.shared.strings.min_fee_error.replacingOccurrences(of: ("(value)"), with: String(minFee))
+            }
             feeField.status = .error
         }
         else{

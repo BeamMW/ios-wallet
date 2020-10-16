@@ -47,7 +47,7 @@ class BMAddressCell: BaseCell {
         
         if(Settings.sharedManager().isDarkMode) {
             idLabel.textColor =  UIColor.main.steel
-            expiredLabel.textColor =  UIColor.main.steel
+           // expiredLabel.textColor =  UIColor.main.steel
             transactionCommentLabel.textColor =  UIColor.main.steel
             transactionCommentDate.textColor =  UIColor.main.steel
         }
@@ -121,25 +121,25 @@ extension BMAddressCell: Configurable {
             }
         }
         
-        if options.address.createTime == 0 {
-            expiredLabel.text = String.empty()
-        }
-        else{
-            let expired:String = (options.address.isExpired()) ? (Localizable.shared.strings.expired.lowercased() + " " + options.address.expiredFormattedDate()) : (options.address.duration == 0 ? Localizable.shared.strings.never_expires.lowercased() : (Localizable.shared.strings.expires_in.lowercased() + " " + options.address.agoDate().lowercased()))
-            
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = (options.address.isExpired() ? IconExpired() : (options.address.duration == 0 ? IconInfinity() : IconExpires()))
-            imageAttachment.bounds = CGRect(x: 0, y: options.address.duration == 0 ? (-4) : (-3), width: 16, height: 16)
-            
-            let imageString = NSAttributedString(attachment: imageAttachment)
-            
-            let attributedString = NSMutableAttributedString()
-            attributedString.append(imageString)
-            attributedString.append(NSAttributedString(string: "   "))
-            attributedString.append(NSAttributedString(string: expired))
-            
-            expiredLabel.attributedText = attributedString
-        }
+//        if options.address.createTime == 0 {
+//            expiredLabel.text = String.empty()
+//        }
+//        else{
+//            let expired:String = (options.address.isExpired()) ? (Localizable.shared.strings.expired.lowercased() + " " + options.address.expiredFormattedDate()) : (options.address.duration == 0 ? Localizable.shared.strings.never_expires.lowercased() : (Localizable.shared.strings.expires_in.lowercased() + " " + options.address.agoDate().lowercased()))
+//
+//            let imageAttachment = NSTextAttachment()
+//            imageAttachment.image = (options.address.isExpired() ? IconExpired() : (options.address.duration == 0 ? IconInfinity() : IconExpires()))
+//            imageAttachment.bounds = CGRect(x: 0, y: options.address.duration == 0 ? (-4) : (-3), width: 16, height: 16)
+//
+//            let imageString = NSAttributedString(attachment: imageAttachment)
+//
+//            let attributedString = NSMutableAttributedString()
+//            attributedString.append(imageString)
+//            attributedString.append(NSAttributedString(string: "   "))
+//            attributedString.append(NSAttributedString(string: expired))
+//
+//            expiredLabel.attributedText = attributedString
+//        }
         
         if options.displayCategory {
             if options.address.categories.count > 0 {
@@ -153,5 +153,7 @@ extension BMAddressCell: Configurable {
         else{
             categoryLabel.isHidden = true
         }
+        
+        expiredLabel.isHidden = true
     }
 }

@@ -140,12 +140,17 @@ class TransactionViewModel: NSObject {
         cancel.image = transaction.isUnlink() ? IconStopUnlinking(): IconRowCancel()
         cancel.backgroundColor = transaction.isUnlink() ? UIColor.main.deepSeaBlue : UIColor.main.cerulean
         
-        let rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
-            handler(true)
-            self.repeatTransation(transaction: transaction)
+        var rep:UIContextualAction? = nil
+        
+        if !transaction.isOffline && (transaction.enumType != BMTransactionTypePullTransaction
+            && transaction.enumType != BMTransactionTypePushTransaction) {
+            rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+                handler(true)
+                self.repeatTransation(transaction: transaction)
+            }
+            rep!.image = IconRowRepeat()
+            rep!.backgroundColor = UIColor.main.deepSeaBlue
         }
-        rep.image = IconRowRepeat()
-        rep.backgroundColor = UIColor.main.deepSeaBlue
         
         let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
             handler(true)
@@ -160,8 +165,8 @@ class TransactionViewModel: NSObject {
             actions.append(cancel)
         }
         
-        if !transaction.isIncome && !transaction.isUnlink() {
-            actions.append(rep)
+        if !transaction.isIncome && !transaction.isUnlink() && rep != nil {
+            actions.append(rep!)
         }
         
         if transaction.canDelete {

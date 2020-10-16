@@ -58,9 +58,16 @@ class DetailAddressViewModel: AddressViewModel {
         idItem.canCopy = true
         details.append(idItem)
         
-        if !isContact {
-            details.append(BMMultiLineItem(title: (self.address!.isExpired() ? Localizable.shared.strings.expired : Localizable.shared.strings.exp_date), detail:self.address!.formattedDate() , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        if self.address?.identity != nil && self.address?.identity?.isEmpty == false {
+            let identityItem = BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail:self.address!.identity , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+            identityItem.canCopy = true
+            identityItem.copiedText = Localizable.shared.strings.copied_to_clipboard
+            details.append(identityItem)
         }
+        
+//        if !isContact {
+//            details.append(BMMultiLineItem(title: (self.address!.isExpired() ? Localizable.shared.strings.expired : Localizable.shared.strings.exp_date), detail:self.address!.formattedDate() , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+//        }
         
         if self.address?.categories.count ?? 0 > 0 {
             let title = (self.address?.categories.count ?? 0 <= 1 ? Localizable.shared.strings.tag : Localizable.shared.strings.categories)

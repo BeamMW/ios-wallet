@@ -66,7 +66,8 @@ extension ReceiveAddressTokensCell: Configurable {
             offlineTokenValueLabel.text = options.address.offlineToken
             offlineTokenView.isHidden = true
             exchangeTokenView.isHidden = false
-            
+            onlineTokenView.isHidden = false
+
             exchangeTokenLabel.setLetterSpacingOnly(value: 2, title: "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_pool.lowercased()))", letter: Localizable.shared.strings.online_token.uppercased())
             exchangeTokenValueLabel.text = Localizable.shared.strings.for_pool_permanent
         }
@@ -90,7 +91,8 @@ extension ReceiveAddressTokensCell: Configurable {
         }
         else if(options.maxPrivacy && !options.oneTime) {
             offlineTokenValueLabel.text = options.address.offlineToken
-            exchangeTokenView.isHidden = false
+            exchangeTokenView.isHidden = true
+            onlineTokenView.isHidden = true
             offlineTokenView.isHidden = false
             
             offlineTokenLabel.setLetterSpacingOnly(value: 2, title: "\(Localizable.shared.strings.offline_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))", letter: Localizable.shared.strings.offline_token.uppercased())
@@ -98,6 +100,8 @@ extension ReceiveAddressTokensCell: Configurable {
             exchangeTokenValueLabel.text = Localizable.shared.strings.for_pool_regular
             switchButton.setTitle(Localizable.shared.strings.switch_to_regular, for: .normal)
         }
+        
+        exchangeTokenView.isHidden = true
     }
     
     @IBAction func onShowToken_1(sender: UIButton) {

@@ -64,6 +64,7 @@ class SettingsViewController: BaseTableViewController {
             tableView.tableFooterView = versionView()
         }
         
+        AppModel.sharedManager().addDelegate(self)
         Settings.sharedManager().addDelegate(self)        
     }
     
@@ -78,6 +79,7 @@ class SettingsViewController: BaseTableViewController {
         
         if isMovingFromParent {
             Settings.sharedManager().removeDelegate(self)
+            AppModel.sharedManager().removeDelegate(self)
         }
     }
     
@@ -220,9 +222,17 @@ extension SettingsViewController : SettingsCellDelegate {
     }
 }
 
+extension SettingsViewController : WalletModelDelegate {
+    func onNetwotkStartReconnecting() {
+        if self.type == SettingsViewModel.SettingsType.node {
+            viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
+            tableView.reloadData()
+        }
+    }
+}
 
 extension SettingsViewController : SettingsModelDelegate {
-    
+
     func onChangeLanguage() {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: self.navigationController?.viewControllers.first == self)
         title = viewModel.title()

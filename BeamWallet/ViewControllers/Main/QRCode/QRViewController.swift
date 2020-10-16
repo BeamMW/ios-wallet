@@ -82,9 +82,10 @@ class QRViewController: BaseViewController {
         
         amountTitleLabel.text = Localizable.shared.strings.requested_amount.uppercased()
         
-        infoLabel.text = Localizable.shared.strings.send_qr_secure + "\n\n" + Localizable.shared.strings.receive_notice
+        infoLabel.text = Localizable.shared.strings.send_qr_secure
+            //+ "\n\n" + Localizable.shared.strings.receive_notice
         
-        addressTitleLabel.text = Localizable.shared.strings.transaction_token.uppercased()
+        addressTitleLabel.text = Localizable.shared.strings.address.uppercased()
        
         if isToken {
             addressLabel.text = address.token

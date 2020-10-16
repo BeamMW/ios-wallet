@@ -47,13 +47,10 @@ class WalletAvailableCell: BaseCell {
 
     @IBOutlet weak private var balanceLabel: UILabel!
     @IBOutlet weak private var balanceIcon: UIImageView!
-    @IBOutlet weak private var currencyIcon: UIImageView!
     
     @IBOutlet weak private var maturingLabel: UILabel!
-    @IBOutlet weak private var maturingCurrencyIcon: UIImageView!
     
     @IBOutlet weak private var unlinkLabel: UILabel!
-    @IBOutlet weak private var unlinkCurrencyIcon: UIImageView!
     
     @IBOutlet weak private var secondAvailableLabel: UILabel!
     @IBOutlet weak private var secondMaturingLabel: UILabel!
@@ -80,7 +77,7 @@ class WalletAvailableCell: BaseCell {
     }
     
     public static func maturingHeight() -> CGFloat {
-        return 166.0
+        return 170.0
     }
         
     override func awakeFromNib() {
@@ -96,14 +93,6 @@ class WalletAvailableCell: BaseCell {
         secondAvailableLabel.font = RegularFont(size: 14)
         secondUnlinkLabel.font = RegularFont(size: 14)
 
-        unlinkCurrencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        unlinkCurrencyIcon.tintColor = UIColor.white
-        
-        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintColor = UIColor.white
-        
-        maturingCurrencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        maturingCurrencyIcon.tintColor = UIColor.white
         
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
@@ -117,7 +106,7 @@ class WalletAvailableCell: BaseCell {
         maturingString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: maturingString.string.count))
         maturingString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey, range: NSRange(location: 0, length: maturingString.string.count))
 
-        let unlinkString = NSMutableAttributedString(string: Localizable.shared.strings.unlinked.uppercased())
+        let unlinkString = NSMutableAttributedString(string: Localizable.shared.strings.shielded.uppercased())
         unlinkString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: unlinkString.string.count))
         unlinkString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey, range: NSRange(location: 0, length: unlinkString.string.count))
         

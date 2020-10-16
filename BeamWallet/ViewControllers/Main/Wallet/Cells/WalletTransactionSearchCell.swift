@@ -26,7 +26,6 @@ class WalletTransactionSearchCell: UITableViewCell {
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var balanceView: UIView!
     @IBOutlet weak private var statusIcon: UIImageView!
 
@@ -34,9 +33,6 @@ class WalletTransactionSearchCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        currencyIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintAdjustmentMode = .normal
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.main.selectedColor
@@ -62,24 +58,21 @@ extension WalletTransactionSearchCell: Configurable {
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
         statusIcon.image = options.transaction.statusIcon()
-        
+        typeLabel.text = options.transaction.statusName()
+        statusLabel.text = options.transaction.statusType()
+
         switch options.transaction.isIncome {
         case true:
             amountLabel.text = "+ " + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.brightSkyBlue
-            currencyIcon.tintColor = UIColor.main.brightSkyBlue
-            typeLabel.text = Localizable.shared.strings.receive
         case false:
             amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
             amountLabel.textColor = UIColor.main.heliotrope
-            currencyIcon.tintColor = UIColor.main.heliotrope
-            typeLabel.text = Localizable.shared.strings.send
         }
         
         
         dateLabel.text = options.transaction.formattedDate()
         dateLabel.isHidden = !options.additionalInfo
-        statusLabel.text = options.transaction.status
         
         balanceView.isHidden = Settings.sharedManager().isHideAmounts
         
