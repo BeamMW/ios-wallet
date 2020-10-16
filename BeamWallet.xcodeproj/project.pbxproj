@@ -252,9 +252,6 @@
 		9227AEEC2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
 		9227AEED2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
 		9227AEEE2282F6F800FB221F /* BMDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9227AEEB2282F6F800FB221F /* BMDuration.m */; };
-		92288C942506559D00239E7F /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92288C932506559D00239E7F /* WithdrawViewController.swift */; };
-		92288C952506559D00239E7F /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92288C932506559D00239E7F /* WithdrawViewController.swift */; };
-		92288C962506559D00239E7F /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92288C932506559D00239E7F /* WithdrawViewController.swift */; };
 		922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
@@ -1016,9 +1013,6 @@
 		92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
 		92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
 		92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
-		92EB420B25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */; };
-		92EB420C25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */; };
-		92EB420D25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */; };
 		92EF8956233B73BA009BDDA1 /* CategoryEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */; };
 		92EF8957233B73BA009BDDA1 /* CategoryEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */; };
 		92EF8958233B73BA009BDDA1 /* CategoryEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */; };
@@ -1292,7 +1286,6 @@
 		9227AEDE2282EADA00FB221F /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		9227AEEA2282F6F800FB221F /* BMDuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMDuration.h; sourceTree = "<group>"; };
 		9227AEEB2282F6F800FB221F /* BMDuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDuration.m; sourceTree = "<group>"; };
-		92288C932506559D00239E7F /* WithdrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
 		922EE89222F18C5800BBFDEF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMMultiLineItem.swift; sourceTree = "<group>"; };
 		922FB15D22B3E134007AD689 /* BMSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSearchView.swift; sourceTree = "<group>"; };
@@ -1631,7 +1624,6 @@
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
 		92E884C2223FADCD0003D6BB /* UTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOCell.swift; sourceTree = "<group>"; };
 		92E884C3223FADCD0003D6BB /* UTXOCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOCell.xib; sourceTree = "<group>"; };
-		92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewModel.swift; sourceTree = "<group>"; };
 		92EF8955233B73BA009BDDA1 /* CategoryEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryEditViewController.xib; sourceTree = "<group>"; };
 		92F006E1229D44BB00333409 /* BMSnackBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSnackBar.swift; sourceTree = "<group>"; };
 		92F006E5229D4E1800333409 /* BMCountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMCountdownView.swift; sourceTree = "<group>"; };
@@ -2153,8 +2145,6 @@
 		9252C0C424FE693700D42536 /* Withdraw */ = {
 			isa = PBXGroup;
 			children = (
-				92EB420A25025EFD00ED97A6 /* WithdrawViewModel.swift */,
-				92288C932506559D00239E7F /* WithdrawViewController.swift */,
 			);
 			path = Withdraw;
 			sourceTree = "<group>";
@@ -3444,7 +3434,6 @@
 				926A856F222E97DF00A3B747 /* WalletAvailableCell.swift in Sources */,
 				9261C295228BF55900D666E0 /* AddressesViewController.swift in Sources */,
 				9225D558229455CA0067B4EA /* ReceiveAddressButtonsCell.swift in Sources */,
-				92EB420B25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */,
 				92D6DB6122DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3B22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD82271FA5100B30613 /* SettingsViewModel.swift in Sources */,
@@ -3599,7 +3588,6 @@
 				9212DB9922E0990D0053FC99 /* BMEmptyView.swift in Sources */,
 				92BAC46422C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
 				92BCEE7722C37E0F0062EE95 /* BMLanguage.m in Sources */,
-				92288C942506559D00239E7F /* WithdrawViewController.swift in Sources */,
 				9210282A24606E42001A7130 /* PagingLayout.swift in Sources */,
 				923544892256019C00889C74 /* UnlockPasswordViewController.swift in Sources */,
 				92CC40E822E1DC7300006E5C /* BMGroupedCell.swift in Sources */,
@@ -3715,7 +3703,6 @@
 				9288DD38223A55410020C501 /* WalletAvailableCell.swift in Sources */,
 				9261C296228BF55900D666E0 /* AddressesViewController.swift in Sources */,
 				9225D559229455CA0067B4EA /* ReceiveAddressButtonsCell.swift in Sources */,
-				92EB420C25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */,
 				92D6DB6222DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3C22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD92271FA5100B30613 /* SettingsViewModel.swift in Sources */,
@@ -3870,7 +3857,6 @@
 				9212DB9A22E0990D0053FC99 /* BMEmptyView.swift in Sources */,
 				92BAC46522C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
 				92BCEE7822C37E0F0062EE95 /* BMLanguage.m in Sources */,
-				92288C952506559D00239E7F /* WithdrawViewController.swift in Sources */,
 				9210282B24606E42001A7130 /* PagingLayout.swift in Sources */,
 				9235448A2256019C00889C74 /* UnlockPasswordViewController.swift in Sources */,
 				92CC40E922E1DC7300006E5C /* BMGroupedCell.swift in Sources */,
@@ -3986,7 +3972,6 @@
 				92E2EADE226F21C700367928 /* WalletAvailableCell.swift in Sources */,
 				9261C297228BF55900D666E0 /* AddressesViewController.swift in Sources */,
 				9225D55A229455CA0067B4EA /* ReceiveAddressButtonsCell.swift in Sources */,
-				92EB420D25025EFD00ED97A6 /* WithdrawViewModel.swift in Sources */,
 				92D6DB6322DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3D22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DDA2271FA5100B30613 /* SettingsViewModel.swift in Sources */,
@@ -4141,7 +4126,6 @@
 				9212DB9B22E0990D0053FC99 /* BMEmptyView.swift in Sources */,
 				92BAC46622C6D7CD0076CC6F /* RecoveryProgress.mm in Sources */,
 				92BCEE7922C37E0F0062EE95 /* BMLanguage.m in Sources */,
-				92288C962506559D00239E7F /* WithdrawViewController.swift in Sources */,
 				9210282C24606E42001A7130 /* PagingLayout.swift in Sources */,
 				92E2EB14226F21C700367928 /* UnlockPasswordViewController.swift in Sources */,
 				92CC40EA22E1DC7300006E5C /* BMGroupedCell.swift in Sources */,
