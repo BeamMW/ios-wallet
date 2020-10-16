@@ -296,3 +296,4 @@ Pods/Target Support Files/SwipeTransition-iOS12.0/SwipeTransition-iOS12.0-umbrel
 Pods/Target Support Files/SwipeTransition-iOS12.0/SwipeTransition-iOS12.0.debug.xcconfig
 Pods/Target Support Files/SwipeTransition-iOS12.0/SwipeTransition-iOS12.0.modulemap
 Pods/Target Support Files/SwipeTransition-iOS12.0/SwipeTransition-iOS12.0.release.xcconfig
+BeamWallet/ViewControllers/Main/Wallet/Withdraw/WithdrawViewModel.swift

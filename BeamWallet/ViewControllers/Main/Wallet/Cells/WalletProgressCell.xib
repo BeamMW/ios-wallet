@@ -91,6 +91,16 @@
                                                                 <color key="textColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
+<<<<<<< HEAD
+=======
+                                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="Ccv-X7-xeS">
+                                                                <rect key="frame" x="32" y="6.5" width="14" height="21"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="14" id="0Vl-da-CKA"/>
+                                                                    <constraint firstAttribute="height" constant="21" id="HaA-Of-UoT"/>
+                                                                </constraints>
+                                                            </imageView>
+>>>>>>> beam_game
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BcS-EM-zM9">
                                                                 <rect key="frame" x="2" y="33" width="46" height="17"/>
                                                                 <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="14"/>
@@ -148,6 +158,16 @@
                                                                 <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
+<<<<<<< HEAD
+=======
+                                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="KAF-xz-dMa">
+                                                                <rect key="frame" x="32" y="6.5" width="14" height="21"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="14" id="30A-56-uCA"/>
+                                                                    <constraint firstAttribute="height" constant="21" id="MLc-bi-AK4"/>
+                                                                </constraints>
+                                                            </imageView>
+>>>>>>> beam_game
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NJb-XI-LGz">
                                                                 <rect key="frame" x="2" y="33" width="46" height="17"/>
                                                                 <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="14"/>

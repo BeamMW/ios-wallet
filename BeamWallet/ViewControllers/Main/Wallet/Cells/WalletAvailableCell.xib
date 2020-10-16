@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+=======
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+>>>>>>> beam_game
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -142,7 +150,7 @@
                                 </constraints>
                             </imageView>
                             <pageControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="Hmq-AX-eeV">
-                                <rect key="frame" x="133.5" y="98" width="23" height="37"/>
+                                <rect key="frame" x="93.5" y="102.5" width="103.5" height="27.5"/>
                                 <connections>
                                     <action selector="onSelectPageWithSender:" destination="KGk-i7-Jjw" eventType="valueChanged" id="ux9-qG-AcY"/>
                                 </connections>
@@ -169,7 +177,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eMf-z3-M7Q">
                                         <rect key="frame" x="83" y="0.0" width="73" height="29"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                        <state key="normal" title="UNLINKED">
+                                        <state key="normal" title="SHIELDED">
                                             <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <state key="highlighted">
@@ -229,7 +237,7 @@
                             <constraint firstAttribute="trailing" secondItem="0uc-Qz-goX" secondAttribute="trailing" constant="15" id="Qlp-Rb-fMB"/>
                             <constraint firstItem="Hmq-AX-eeV" firstAttribute="centerX" secondItem="ja7-ld-PUy" secondAttribute="centerX" id="Qnu-kd-cXY"/>
                             <constraint firstItem="i5e-tr-I4u" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="SeS-Xc-w5K"/>
-                            <constraint firstAttribute="bottom" secondItem="Hmq-AX-eeV" secondAttribute="bottom" constant="-5" id="T3u-RC-wJR"/>
+                            <constraint firstAttribute="bottom" secondItem="Hmq-AX-eeV" secondAttribute="bottom" id="T3u-RC-wJR"/>
                             <constraint firstAttribute="trailing" secondItem="noZ-bA-1yW" secondAttribute="trailing" constant="15" id="Tga-5s-Mgh"/>
                             <constraint firstItem="zFZ-o9-rOz" firstAttribute="top" secondItem="ja7-ld-PUy" secondAttribute="top" constant="20" id="Vtm-dd-oqV"/>
                             <constraint firstAttribute="bottom" secondItem="0uc-Qz-goX" secondAttribute="bottom" constant="24" id="Y5x-a4-CbI"/>
@@ -257,8 +265,8 @@
                     <constraint firstAttribute="trailing" secondItem="ja7-ld-PUy" secondAttribute="trailing" constant="15" id="i1h-Vh-gnl"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="arrowIcon" destination="zFZ-o9-rOz" id="7zN-bD-PT7"/>
                 <outlet property="availableButton" destination="aQa-GZ-HfB" id="68C-7H-rvO"/>

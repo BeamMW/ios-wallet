@@ -55,7 +55,11 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_rec_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         else if transaction.isIncome {
-            if transaction.senderAddress != "0" {
+            if transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
+                || transaction.enumType == BMTransactionTypePushTransaction {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: Localizable.shared.strings.shielded_pool, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            }
+            else {
                 details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
@@ -89,11 +93,11 @@ class DetailTransactionViewModel: TransactionViewModel {
         details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
 
         if !transaction.identity.isEmpty {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.wallet_id.uppercased(), detail: transaction.identity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.wallet_id.uppercased(), detail: transaction.identity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, copiedText: Localizable.shared.strings.copied_to_clipboard))
         }
         
         if !transaction.isExpired() && !transaction.isFailed() && !transaction.kernelId.contains("000000000") {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.isExpired() ? "0000000000000000000000000000000000000000000000000000000000000000" :  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail:  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
          
      
@@ -124,7 +128,7 @@ class DetailTransactionViewModel: TransactionViewModel {
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
 
         
-        if !transaction.isIncome && !transaction.isUnlink() {
+        if !transaction.isIncome && !transaction.isUnlink() && !transaction.isOffline && (transaction.enumType != BMTransactionTypePullTransaction && transaction.enumType != BMTransactionTypePushTransaction) {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
         }
         

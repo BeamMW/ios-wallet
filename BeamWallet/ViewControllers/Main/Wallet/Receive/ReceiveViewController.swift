@@ -22,7 +22,8 @@ import UIKit
 class ReceiveViewController: BaseTableViewController {
 
     private let viewModel = ReceiveAddressViewModel()
-    
+    public var address: BMAddress?
+
     private var showAdvanced = false
     private var showEdit = false
 
@@ -42,7 +43,7 @@ class ReceiveViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.receive.uppercased()
         
-        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self, ReceiveAddressTokensCell.self])
+        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self, ReceiveAddressTokensCell.self, ReceiveAddressOptionsCell_2.self])
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
@@ -61,19 +62,32 @@ class ReceiveViewController: BaseTableViewController {
         
         viewModel.onAddressCreated = {[weak self]
             error in
-            
-            if let reason = error?.localizedDescription {
-                self?.alert(title: Localizable.shared.strings.error, message: reason, handler: { (_ ) in
-                    self?.back()
-                })
-            }
-            else{
-                self?.tableView.delegate = self
-                self?.tableView.dataSource = self
-                self?.tableView.reloadData()
+            DispatchQueue.main.async {
+                if let reason = error?.localizedDescription {
+                    self?.alert(title: Localizable.shared.strings.error, message: reason, handler: { (_ ) in
+                        self?.back()
+                    })
+                }
+                else{
+                    self?.tableView.delegate = self
+                    self?.tableView.dataSource = self
+                    self?.tableView.reloadData()
+                }
             }
         }
-        viewModel.createAddress()
+        
+        if let a = address {
+            viewModel.isShared = true
+            viewModel.address = a
+            viewModel.generateTokens()
+            tableView.delegate = self
+            tableView.dataSource = self
+            tableView.reloadData()
+        }
+        else {
+            viewModel.createAddress()
+        }
+        
         
         addCustomBackButton(target: self, selector: #selector(onBack))
     }
@@ -141,12 +155,14 @@ extension ReceiveViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 3 && indexPath.row == 2 {
             let amount = Double(viewModel.amount ?? "0") ?? 0
-            if amount > 0 {
-                return 17
-            }
-            else {
-                return 0
-            }
+            return 17
+
+//            if amount > 0 {
+//                return 17
+//            }
+//            else {
+//                return 0
+//            }
         }
         return UITableView.automaticDimension
     }
@@ -195,12 +211,22 @@ extension ReceiveViewController : UITableViewDataSource {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
-                cell.contentView.backgroundColor = UIColor.main.marineThree
-                cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
-                cell.delegate = self
-                return cell
+                if(viewModel.transaction == .regular) {
+                    let cell = tableView
+                        .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
+                    cell.contentView.backgroundColor = UIColor.main.marineThree
+                    cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
+                    cell.delegate = self
+                    return cell
+                }
+                else {
+                    let cell = tableView
+                        .dequeueReusableCell(withType: ReceiveAddressOptionsCell_2.self, for: indexPath)
+                    cell.contentView.backgroundColor = UIColor.main.marineThree
+                    cell.delegate = self
+                    cell.configure()
+                    return cell
+                }
             }
             else {
                 let cell = tableView
@@ -328,9 +354,9 @@ extension ReceiveViewController : UITableViewDataSource {
 extension ReceiveViewController : BMCellProtocol {
     
     func textValueDidBegin(_ sender: UITableViewCell) {
-        if let path = tableView.indexPath(for: sender)  {
-            tableView.scrollToRow(at: path, at: .middle, animated: true)
-        }
+//        if let path = tableView.indexPath(for: sender)  {
+//            tableView.scrollToRow(at: path, at: .middle, animated: true)
+//        }
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
@@ -343,8 +369,32 @@ extension ReceiveViewController : BMCellProtocol {
             }
             else if path.section == 3 {
                 viewModel.amount = text
-                tableView.reloadRows(at: [IndexPath(row: 2, section: 3)], with: .none)
-                tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
+                
+                for cell in tableView.visibleCells {
+                    if let options1 = cell as? ReceiveAddressOptionsCell {
+                        options1.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
+                    }
+                    else if let options2 = cell as? ReceiveAddressTokensCell {
+                        options2.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, address: viewModel.address))
+                    }
+                    else if let options3 = cell as? SecondCell {
+                        let amount = Double(viewModel.amount ?? "0") ?? 0
+                        let second = AppModel.sharedManager().exchangeValue(amount)
+
+                        if amount > 0 {
+                            options3.textLabel?.text = second
+                        }
+                        else {
+                            options3.textLabel?.text = nil
+                        }
+                        //tableView.reloadRow(SecondCell.self)
+                    }
+                }
+                
+//                tableView.reloadRows(at: [IndexPath(row: 0, section: 0),
+//                                          IndexPath(row: 1, section: 0),
+//                                          IndexPath(row: 2, section: 3)], with: .none)
+              //  tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
             }
         }
     }
@@ -437,13 +487,15 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
 extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
     @objc func onRegular() {
         viewModel.transaction = .regular
-        viewModel.needReloadButtons = false
+        viewModel.expire = .oneTime
+        viewModel.needReloadButtons = true
         self.tableView.reloadData()
     }
     
     @objc func onMaxPrivacy() {
         viewModel.transaction = .privacy
-        viewModel.needReloadButtons = false
+        viewModel.expire = .parmanent
+        viewModel.needReloadButtons = true
         self.tableView.reloadData()
     }
     

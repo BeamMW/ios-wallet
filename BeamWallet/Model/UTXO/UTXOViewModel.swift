@@ -59,42 +59,32 @@ class UTXOViewModel: NSObject {
             
             guard let strongSelf = self else { return }
             
+            var allUtxos = [BMUTXO]()
+            if let utxos = AppModel.sharedManager().utxos {
+                allUtxos.append(contentsOf: utxos as! [BMUTXO])
+            }
+            
+            if let utxos = AppModel.sharedManager().shildedUtxos {
+                allUtxos.append(contentsOf: utxos as! [BMUTXO])
+            }
+            
+            strongSelf.utxos = allUtxos
+            
             switch strongSelf.selectedState {
             case .available:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 1}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == BMUTXOAvailable}
             case .spent:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 6}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == BMUTXOSpent}
             case .unavailable:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 0}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == BMUTXOUnavailable}
             case .progress:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3 || $0.status == 4 || $0.status == 2}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3 || $0.status == 4 || $0.status == 2}
             case .incoming:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 4}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == BMUTXOIncoming}
             case .outgoing:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 3}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == BMUTXOOutgoing}
             case .maturing:
-                if let utxos = AppModel.sharedManager().utxos {
-                    strongSelf.utxos = utxos as! [BMUTXO]
-                    strongSelf.utxos = strongSelf.utxos.filter { $0.status == 2}
-                }
+                strongSelf.utxos = strongSelf.utxos.filter { $0.status == BMUTXOMaturing}
             }
             
             var sortByDate = false

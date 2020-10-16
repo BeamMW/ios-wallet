@@ -57,7 +57,7 @@ extension SendAllCell: Configurable {
     func configure(with options: (realAmount: Double, isAll: Bool, type: BMTransactionType, onlyUnlink: Bool )) {
         let total = String.currency(value: options.realAmount)
         
-        amountLabel.text = total + Localizable.shared.strings.beam
+        amountLabel.text = total //+ Localizable.shared.strings.beam
         secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.realAmount)
 
         if options.realAmount == 0 {
@@ -74,7 +74,7 @@ extension SendAllCell: Configurable {
         }
         
         if options.type == BMTransactionTypeSimple {
-            titleLabel.text = Localizable.shared.strings.total_available.uppercased()
+            titleLabel.text = Localizable.shared.strings.available.uppercased()
         }
         else {
             amountLabel.textColor = UIColor.white

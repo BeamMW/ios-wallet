@@ -23,7 +23,6 @@ class TransactionDetailCell: UITableViewCell {
     
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var statusLabel: UILabel!
     @IBOutlet weak private var circleView: UIView!
     @IBOutlet weak private var arrowIcon: UIImageView!
@@ -38,10 +37,6 @@ class TransactionDetailCell: UITableViewCell {
         secondAmountLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         secondAmountLabel.font = RegularFont(size: 14)
         
-        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintColor = UIColor.white
-        currencyIcon.tintAdjustmentMode = .normal
-
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         circleView.backgroundColor = UIColor.main.marine
 
@@ -57,30 +52,30 @@ extension TransactionDetailCell: Configurable {
         secondAmountLabel.text = AppModel.sharedManager().exchangeValue(transaction.realAmount)
         
         amountLabel.isHidden = Settings.sharedManager().isHideAmounts
-        currencyIcon.isHidden = Settings.sharedManager().isHideAmounts
         secondAmountLabel.isHidden = Settings.sharedManager().isHideAmounts
         securityIcon.isHidden = !Settings.sharedManager().isHideAmounts
 
         amountLabel.text = String.currency(value: transaction.realAmount)
-        statusLabel.text = transaction.status.capitalizingFirstLetter()
+        statusLabel.text = transaction.statusType().capitalizingFirstLetter()
 
         switch transaction.isIncome {
         case true:
             amountLabel.textColor = UIColor.main.brightSkyBlue
-            currencyIcon.tintColor = UIColor.main.brightSkyBlue
         case false:
             if (transaction.enumType == BMTransactionTypeUnlink) {
                 amountLabel.textColor = UIColor.main.brightTeal
-                currencyIcon.tintColor = UIColor.main.brightTeal
             }
             else {
                 amountLabel.textColor = UIColor.main.heliotrope
-                currencyIcon.tintColor = UIColor.main.heliotrope
             }
         }
         
-        if transaction.isFailed() || transaction.isCancelled() || transaction.isExpired() {
-            statusLabel.textColor = UIColor.main.greyish
+        if transaction.isFailed() || transaction.isCancelled() || transaction.isExpired() {            
+            if transaction.isFailed() && !transaction.isCancelled() && !transaction.isExpired() {                statusLabel.textColor = UIColor.main.failed
+            }
+            else {
+                statusLabel.textColor = UIColor.main.greyish
+            }
         }
         else if (transaction.enumType == BMTransactionTypeUnlink) {
             statusLabel.textColor = UIColor.main.brightTeal

@@ -77,7 +77,7 @@ class WalletAvailableCell: BaseCell {
     }
     
     public static func maturingHeight() -> CGFloat {
-        return 166.0
+        return 170.0
     }
         
     override func awakeFromNib() {
@@ -92,6 +92,10 @@ class WalletAvailableCell: BaseCell {
         secondMaturingLabel.font = RegularFont(size: 14)
         secondAvailableLabel.font = RegularFont(size: 14)
         secondUnlinkLabel.font = RegularFont(size: 14)
+<<<<<<< HEAD
+=======
+
+>>>>>>> beam_game
         
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
@@ -105,7 +109,7 @@ class WalletAvailableCell: BaseCell {
         maturingString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: maturingString.string.count))
         maturingString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey, range: NSRange(location: 0, length: maturingString.string.count))
 
-        let unlinkString = NSMutableAttributedString(string: Localizable.shared.strings.unlinked.uppercased())
+        let unlinkString = NSMutableAttributedString(string: Localizable.shared.strings.shielded.uppercased())
         unlinkString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: unlinkString.string.count))
         unlinkString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.blueyGrey, range: NSRange(location: 0, length: unlinkString.string.count))
         

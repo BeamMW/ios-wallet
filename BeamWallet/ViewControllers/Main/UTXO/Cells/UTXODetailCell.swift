@@ -23,14 +23,11 @@ class UTXODetailCell: UITableViewCell {
     
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var currencyIcon: UIImageView!
     @IBOutlet weak private var statusLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        currencyIcon.image = UIImage.init(named: "iconSymbol")?.withRenderingMode(.alwaysTemplate)
-        currencyIcon.tintColor = UIColor.white
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
 
         selectionStyle = .none

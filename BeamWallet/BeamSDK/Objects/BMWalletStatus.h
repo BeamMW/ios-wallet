@@ -27,8 +27,8 @@
 @property (nonatomic,assign) UInt64 receiving;
 @property (nonatomic,assign) UInt64 sending;
 @property (nonatomic,assign) UInt64 maturing;
-@property (nonatomic,assign) UInt64 linked;
-@property (nonatomic,assign) UInt64 unlinked;
+//@property (nonatomic,assign) UInt64 linked;
+//@property (nonatomic,assign) UInt64 unlinked;
 @property (nonatomic,assign) UInt64 shielded;
 
 

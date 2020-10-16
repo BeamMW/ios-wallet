@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -84,14 +85,19 @@ For the transaction to complete, you should get online during the 12 hours after
                     <constraint firstItem="NVr-Vl-UQM" firstAttribute="top" secondItem="cgk-y0-vp1" secondAttribute="top" constant="10" id="rQw-ZF-jcS"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="ST6-m8-Wr2"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
                 <outlet property="infoLabel" destination="NVr-Vl-UQM" id="APT-vE-lO9"/>
             </connections>
             <point key="canvasLocation" x="24.637681159420293" y="98.772321428571431"/>
         </tableViewCell>
     </objects>
+    <designables>
+        <designable name="BIb-3V-fCK">
+            <size key="intrinsicContentSize" width="125" height="17"/>
+        </designable>
+    </designables>
     <resources>
         <image name="iconShareNew" width="16" height="16"/>
     </resources>

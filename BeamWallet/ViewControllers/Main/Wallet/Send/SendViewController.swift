@@ -80,7 +80,24 @@ class SendViewController: BaseTableViewController {
         super.viewDidLoad()
         
         viewModel.onDataChanged = { [weak self] in
-            self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+            guard let strongSelf = self else { return }
+
+            strongSelf.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+        }
+        
+        viewModel.onFeeChanged = {[weak self] in
+            guard let strongSelf = self else { return }
+
+            for cell in strongSelf.tableView.visibleCells {
+                if let feeCell = cell as? FeeCell {
+                    feeCell.setMinFee(minFee: UInt64(strongSelf.viewModel.minFee) ?? 200)
+                    feeCell.configure(with: Double(strongSelf.viewModel.fee) ?? 0)
+                }
+            }
+            
+            if strongSelf.tableView.cellForRow(at: IndexPath(row: 1, section: 1)) != nil {
+                strongSelf.tableView.reloadRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+            }
         }
         
         if let repeatTransaction = transaction {
@@ -226,7 +243,13 @@ extension SendViewController: UITableViewDelegate {
         }
         else if indexPath.section == 1, indexPath.row == 1 {
             let amount = (Double(viewModel.amount) ?? 0)
-            return ((viewModel.sendAll || amount > 0) ? 17 : 0)
+            return ((amount > 0) ? 17 : 0)
+        }
+        else if indexPath.section == 0 && indexPath.row == 1 {
+            if (viewModel.isToken && viewModel.maxPrivacy) {
+                return UITableView.automaticDimension
+            }
+            return 0
         }
         return UITableView.automaticDimension
     }
@@ -253,7 +276,7 @@ extension SendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 2
+            return 2 //(viewModel.isToken && viewModel.maxPrivacy) ? 2 : 1
         case 1:
             return 2
         case 2:
@@ -269,13 +292,13 @@ extension SendViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cellHeights[indexPath] = cell.frame.size.height
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeights[indexPath] ?? UITableView.automaticDimension
-    }
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        cellHeights[indexPath] = cell.frame.size.height
+//    }
+//
+//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return cellHeights[indexPath] ?? UITableView.automaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
@@ -285,6 +308,7 @@ extension SendViewController: UITableViewDataSource {
                     .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
                 cell.delegate = self
                 cell.error = viewModel.toAddressError
+                cell.additionalError = viewModel.newVersionError
                 cell.copyText = viewModel.copyAddress
                 cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcon: IconScanQr()))
                 cell.contact = viewModel.selectedContact
@@ -303,17 +327,18 @@ extension SendViewController: UITableViewDataSource {
                // cell.backgroundColor = UIColor.clear
                 cell.topOffset?.constant = 10
                // cell.topSwitchOffset?.constant = -5
-                
+
                 if viewModel.requestedMaxPrivacy && viewModel.maxPrivacy {
                     cell.switchView.isHidden = true
                     cell.botOffset?.constant = 15
+                    cell.topOffset?.constant = 0
 
-                    let detail = viewModel.requestedOffline ? "\(Localizable.shared.strings.max_privacy_text)\n\(Localizable.shared.strings.offline_transaction)" : Localizable.shared.strings.max_privacy_text
-                    
-                    var title = Localizable.shared.strings.max_privacy_requested_title
-                    
+                    let detail:String? = nil
+                    var title: String? = nil
+                                        
                     if(viewModel.offlineTokensCount >= 0) {
-                        title = title + ". \(Localizable.shared.strings.offline_transactions): \(viewModel.offlineTokensCount)/\(Settings.sharedManager().maxTokens)"
+                        //title = "\(Localizable.shared.strings.offline_transactions): \(viewModel.offlineTokensCount)/\(Settings.sharedManager().maxTokens)"
+                        title = "\(Localizable.shared.strings.offline_transactions): \(viewModel.offlineTokensCount)"
                     }
                     
                     cell.configure(data: BMPickerData(title:title, detail: detail, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
@@ -330,13 +355,21 @@ extension SendViewController: UITableViewDataSource {
                         cell.switchView.isUserInteractionEnabled = false
                     }
                     else {
-                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: viewModel.maxPrivacy ? Localizable.shared.strings.max_privacy_text : nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
 
                         cell.switchView.alpha = 1
                         cell.switchView.isUserInteractionEnabled = true
                     }
                 }
+                cell.switchView.isHidden = true
                 
+                if (viewModel.isToken && viewModel.maxPrivacy) {
+                    cell.mainView.isHidden = false
+                }
+                else {
+                    cell.mainView.isHidden = true
+                }
+
                 return cell
             }
         case 1:
@@ -366,11 +399,8 @@ extension SendViewController: UITableViewDataSource {
                 let fee = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
                 let second = AppModel.sharedManager().exchangeValue(Double(viewModel.amount) ?? 0)
                 
-                if viewModel.sendAll {
+                if (Double(viewModel.amount) ?? 0) > 0 {
                     cell?.textLabel?.text = second + " (" + fee + ")"
-                }
-                else if (Double(viewModel.amount) ?? 0) > 0 {
-                    cell?.textLabel?.text = second
                 }
                 else {
                     cell?.textLabel?.text = nil
@@ -461,7 +491,7 @@ extension SendViewController: UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: FeeCell.self, for: indexPath)
             cell.delegate = self
-            cell.setMaxPrivacy(isMax: viewModel.maxPrivacy)
+            cell.setMinFee(minFee: UInt64(viewModel.minFee) ?? 200)
             cell.configure(with: Double(viewModel.fee) ?? 0)
             cell.setType(type: viewModel.maxPrivacy ? BMTransactionType(BMTransactionTypePushTransaction) : BMTransactionType(BMTransactionTypeSimple))
             return cell
@@ -489,7 +519,7 @@ extension SendViewController: BMCellProtocol {
     
     func textValueDidBegin(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender) {
-            tableView.scrollToRow(at: path, at: .middle, animated: true)
+           // tableView.scrollToRow(at: path, at: .middle, animated: true)
             
             if path.section == 0 {
                 isSearch = true
@@ -548,7 +578,7 @@ extension SendViewController: BMCellProtocol {
                 isNeedReload = false
                 viewModel.comment = text
             }
-            else if path.section == 6 {
+            else if path.section == 7 {
                 isNeedReload = false
                 viewModel.outgoindAdderss!.label = text
             }
@@ -557,7 +587,19 @@ extension SendViewController: BMCellProtocol {
         if isNeedReload {
             UIView.performWithoutAnimation {
                 tableView.beginUpdates()
+                tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+                
+                if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
+                    cell.error = viewModel.toAddressError
+                    cell.additionalError = viewModel.newVersionError
+                    cell.copyText = viewModel.copyAddress
+                    cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcon: IconScanQr()))
+                    cell.contact = viewModel.selectedContact
+                    cell.isPermanentAddress = viewModel.isPermanentAddress
+                }
+                
                 tableView.endUpdates()
+                
                 if isSearch {
                     layoutSearchTableView()
                 }
@@ -575,6 +617,9 @@ extension SendViewController: BMCellProtocol {
                 if viewModel.amountError != nil {
                     tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
                 }
+            }
+            else if path.section == 3 && path.row == 0 {
+                
             }
             else {
                 if path.section == 0 {
@@ -763,7 +808,7 @@ extension SendViewController {
         
         AppModel.sharedManager().setWalletCategories(viewModel.outgoindAdderss!.categories, toAddress: viewModel.outgoindAdderss!.walletId)
         
-        tableView.reloadRows(at: [IndexPath(row: 3, section: 7)], with: .fade)
+        tableView.reloadData()
     }
 }
 

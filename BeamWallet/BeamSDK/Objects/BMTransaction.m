@@ -34,6 +34,24 @@
     [encoder encodeObject:[NSNumber numberWithBool:self.isSelf] forKey: @"isSelf"];
     [encoder encodeObject:[NSNumber numberWithDouble:self.realAmount] forKey: @"realAmount"];
     [encoder encodeObject:[NSNumber numberWithInteger:self.enumStatus] forKey: @"enumStatus"];
+    [encoder encodeObject:[NSNumber numberWithInteger:self.enumType] forKey: @"enumType"];
+    [encoder encodeObject:[NSNumber numberWithLongLong:self.createdTime] forKey: @"createdTime"];
+
+    [encoder encodeObject:[NSNumber numberWithDouble:self.fee] forKey: @"fee"];
+    [encoder encodeObject:[NSNumber numberWithLongLong:self.realFee] forKey: @"realFee"];
+
+    [encoder encodeObject:self.senderAddress forKey: @"senderAddress"];
+    [encoder encodeObject:self.receiverAddress forKey: @"receiverAddress"];
+    
+    [encoder encodeObject:self.comment forKey: @"comment"];
+    [encoder encodeObject:self.failureReason forKey: @"failureReason"];
+    [encoder encodeObject:self.kernelId forKey: @"kernelId"];
+
+    [encoder encodeObject:self.senderContactName forKey: @"senderContactName"];
+    [encoder encodeObject:self.receiverContactName forKey: @"receiverContactName"];
+    [encoder encodeObject:self.identity forKey: @"identity"];
+    
+    [encoder encodeObject:[NSNumber numberWithBool:self.isOffline] forKey: @"isOffline"];
 }
 
 -(id)initWithCoder:(NSCoder *)decoder
@@ -47,6 +65,25 @@
         self.isSelf = [[decoder decodeObjectForKey:@"isSelf"] boolValue];
         self.realAmount = [[decoder decodeObjectForKey:@"realAmount"] boolValue];
         self.enumStatus = [[decoder decodeObjectForKey:@"enumStatus"] integerValue];
+        self.enumType = [[decoder decodeObjectForKey:@"enumType"] integerValue];
+        self.createdTime = [[decoder decodeObjectForKey:@"createdTime"] longLongValue];
+
+        self.fee = [[decoder decodeObjectForKey:@"fee"] doubleValue];
+        self.realFee = [[decoder decodeObjectForKey:@"realFee"] longLongValue];
+
+        self.senderAddress = [decoder decodeObjectForKey: @"senderAddress"];
+        self.receiverAddress = [decoder decodeObjectForKey: @"receiverAddress"];
+
+        self.comment = [decoder decodeObjectForKey: @"comment"];
+        self.failureReason = [decoder decodeObjectForKey: @"failureReason"];
+        self.kernelId = [decoder decodeObjectForKey: @"kernelId"];
+
+        self.senderContactName = [decoder decodeObjectForKey: @"senderContactName"];
+        self.receiverContactName = [decoder decodeObjectForKey: @"receiverContactName"];
+        self.identity = [decoder decodeObjectForKey: @"identity"];
+        
+        self.isOffline = [[decoder decodeObjectForKey:@"isOffline"] boolValue];
+
     }
     return self;
 }
@@ -172,6 +209,25 @@
     return self.enumType == BMTransactionTypeUnlink;
 }
 
+-(NSString*)statusType {
+    if (_isOffline || _enumType == BMTransactionTypePushTransaction){
+        return [NSString stringWithFormat:@"%@ (%@)", _status, [[@"offline" localized]lowercaseString]];
+    }
+    return  _status;
+}
+
+-(NSString*)statusName {
+    NSString *status = @"";
+    
+    if(_isIncome) {
+       status = [@"receive" localized];
+    }
+    else {
+        status = [@"send" localized];
+    }
+    
+    return status;
+}
 
 -(UIImage*)statusIcon {
     if (self.enumType == BMTransactionTypeUnlink) {
@@ -195,7 +251,8 @@
                     case BMTransactionStatusRegistering:
                         return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                     case BMTransactionStatusCompleted:
-                        return _isOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
+                        return [UIImage imageNamed:@"icon-received-max-privacy-offline"];
+                        //_isOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     default:
                         return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                 }
@@ -234,9 +291,14 @@
             return [UIImage imageNamed:@"icnSendCanceled"];
         }
     }
-    else if (self.isFailed)
+    else if (self.isFailed && !self.isExpired && !self.isCancelled)
     {
-        return [UIImage imageNamed:@"icon-failed"];
+        if (_isIncome) {
+            return [UIImage imageNamed:@"icon-received-failed"];
+        }
+        else {
+            return [UIImage imageNamed:@"icon-send-failed"];
+        }
     }
     else if(self.isExpired)
     {

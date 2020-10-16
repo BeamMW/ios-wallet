@@ -116,8 +116,18 @@ class UTXOViewController: BaseTableViewController {
     }
     
     private func checkIsEmpty() {
-        let count = AppModel.sharedManager().utxos?.count ?? 0
+        var allUtxos = [BMUTXO]()
         
+        if let utxos = AppModel.sharedManager().utxos {
+            allUtxos.append(contentsOf: utxos as! [BMUTXO])
+        }
+        
+        if let utxos = AppModel.sharedManager().shildedUtxos {
+            allUtxos.append(contentsOf: utxos as! [BMUTXO])
+        }
+        
+        let count = allUtxos.count
+
         if count == 0 {
             pagingViewController.view.alpha = 0
             emptyView.isHidden = false

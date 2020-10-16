@@ -19,10 +19,39 @@
 
 import UIKit
 import Network
+import CommonCrypto
 
-//protocol Localizable {
-//    var localized: String { get }
-//}
+
+extension String {
+    func convertStringToDictionary() -> [String:AnyObject]? {
+        if let data = self.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+                return json
+            } catch {
+                print("Something went wrong")
+            }
+        }
+        return nil
+    }
+}
+
+extension String {
+    var md5Value: String {
+        let length = Int(CC_MD5_DIGEST_LENGTH)
+        var digest = [UInt8](repeating: 0, count: length)
+        
+        if let d = self.data(using: .utf8) {
+            _ = d.withUnsafeBytes { body -> String in
+                CC_MD5(body.baseAddress, CC_LONG(d.count), &digest)
+                return ""
+            }
+        }
+        return (0 ..< length).reduce("") {
+            $0 + String(format: "%02x", digest[$1])
+        }
+    }
+}
 
 extension String {
     var localized: String {
@@ -129,7 +158,7 @@ extension String {
     }()
     
     static func currency(value:Double) -> String {
-        return formatter.string(from: NSNumber(value: value)) ?? "0.00"
+        return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " BEAM"
     }
     
     func isValidUrl() -> Bool {

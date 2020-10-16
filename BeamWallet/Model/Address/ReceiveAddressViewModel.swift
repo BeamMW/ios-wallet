@@ -75,16 +75,20 @@ class ReceiveAddressViewModel: NSObject {
         super.init()
     }
     
-    private func generateTokens() {
+    public func generateTokens() {
         address.token = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: false, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, identity: address.identity ?? "", ownId: Int64(address.ownerId))
         address.offlineToken = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: true, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, identity: address.identity ?? "", ownId: Int64(address.ownerId))
     }
     
     public func createAddress() {
-        address = AppModel.sharedManager().generateAddress()
-        generateTokens()
+        AppModel.sharedManager().generateNewWalletAddress({ (address, error) in
+            if let result = address {
+                self.address = result
+                self.generateTokens()
+            }
+            self.onAddressCreated?(error)
+        })
         
-        self.onAddressCreated?(nil)
     }
     
     public func revertChanges() {
@@ -153,11 +157,14 @@ class ReceiveAddressViewModel: NSObject {
             self.showShareDialog(token)
         }
         else if (transaction == .privacy && expire == .oneTime) || (transaction == .privacy && expire == .parmanent) {
-            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased())", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.offline_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_offline_token)]
-            self.showPopoverMenu(items)
+            if let token = address.offlineToken {
+                self.showShareDialog(token)
+            }
+//            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased())", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.offline_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_offline_token)]
+//            self.showPopoverMenu(items)
         }
         else if transaction == .regular && expire == .parmanent {
-            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased())", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_pool.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_pool_token)]
+            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_pool.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_pool_token)]
             self.showPopoverMenu(items)
         }
     }

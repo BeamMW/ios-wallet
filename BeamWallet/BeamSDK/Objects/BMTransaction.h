@@ -74,7 +74,9 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,strong) NSString *identity;
 
 -(UIImage*)statusIcon;
-    
+-(NSString*)statusName;
+-(NSString*)statusType;
+
 -(NSString*)formattedDate;
 -(NSString*)shortDate;
 -(BOOL)isFailed;

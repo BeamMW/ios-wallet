@@ -58,11 +58,14 @@ class UnlockPasswordViewController: BMInputViewController {
         default:
             break
         }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+
         _ = inputField.becomeFirstResponder()
     }
     
@@ -70,6 +73,14 @@ class UnlockPasswordViewController: BMInputViewController {
         super.viewDidDisappear(animated)
         
         completion?(isUnlocked)
+        
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    
+    @objc private func didBecomeActive() {
+        if UIApplication.shared.applicationState == .active {
+        }
     }
     
     override func onNext() {

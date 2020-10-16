@@ -60,7 +60,7 @@ class EditAddressViewModel: DetailAddressViewModel {
     
     public func pickExpire() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = BMDataPickerViewController(type: .address_expire)
+            let vc = BMDataPickerViewController(type: .address_expire, selectedValue: self.newAddress.durationInHours())
             vc.completion = {
                 obj in
                 

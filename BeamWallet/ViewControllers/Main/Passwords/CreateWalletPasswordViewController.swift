@@ -176,32 +176,35 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             else {
                 OnboardManager.shared.saveSeed(seed: phrase)
                 _ = KeychainManager.addPassword(password: pass)
-                            
-                AppModel.sharedManager().stopChangeWallet()
-                AppModel.sharedManager().refreshAddresses()
-                AppModel.sharedManager().getUTXO()
                 
-                let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
-                let menuViewController = LeftMenuViewController()
-                
-                let sideMenuController = LGSideMenuController(rootViewController: mainVC,
-                                                              leftViewController: menuViewController,
-                                                              rightViewController: nil)
-                
-                sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-                sideMenuController.leftViewPresentationStyle = .slideAbove;
-                sideMenuController.rootViewLayerShadowRadius = 0
-                sideMenuController.rootViewLayerShadowColor = UIColor.clear
-                sideMenuController.leftViewLayerShadowRadius = 0
-                sideMenuController.rootViewCoverAlphaForLeftView = 0.5
-                sideMenuController.rootViewCoverAlphaForRightView = 0.5
-                sideMenuController.leftViewCoverAlpha = 0.5
-                sideMenuController.rightViewCoverAlpha = 0.5
-                sideMenuController.modalTransitionStyle = .crossDissolve
-                
-                self.navigationController?.setViewControllers([sideMenuController], animated: true)
-                
-                BMLockScreen.shared.onTapEvent()
+                let vc = OpenWalletProgressViewController(password: pass, phrase: phrase)
+                self.pushViewController(vc: vc)
+//
+//                AppModel.sharedManager().stopChangeWallet()
+//                AppModel.sharedManager().refreshAddresses()
+//                AppModel.sharedManager().getUTXO()
+//
+//                let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+//                let menuViewController = LeftMenuViewController()
+//
+//                let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+//                                                              leftViewController: menuViewController,
+//                                                              rightViewController: nil)
+//
+//                sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
+//                sideMenuController.leftViewPresentationStyle = .slideAbove;
+//                sideMenuController.rootViewLayerShadowRadius = 0
+//                sideMenuController.rootViewLayerShadowColor = UIColor.clear
+//                sideMenuController.leftViewLayerShadowRadius = 0
+//                sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+//                sideMenuController.rootViewCoverAlphaForRightView = 0.5
+//                sideMenuController.leftViewCoverAlpha = 0.5
+//                sideMenuController.rightViewCoverAlpha = 0.5
+//                sideMenuController.modalTransitionStyle = .crossDissolve
+//
+//                self.navigationController?.setViewControllers([sideMenuController], animated: true)
+//
+//                BMLockScreen.shared.onTapEvent()
             }
         }
     }

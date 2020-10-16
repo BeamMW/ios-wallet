@@ -133,7 +133,7 @@ class LocalizableStrings : NSObject {
     var delete_address_only = "delete_address_only".localized
     var category = "category".localized
     var in_24_hours = "in_24_hours".localized
-    var in_24_hours_now = "in_24_hours".localized
+    var in_24_hours_now = "in_24_hours_now".localized
     var transaction_history = "transaction_history".localized
     var min_fee_error = "min_fee_error".localized
     var never = "never".localized
@@ -236,7 +236,7 @@ class LocalizableStrings : NSObject {
     var send_to = "send_to".localized.uppercased()
     var amount_to_send = "amount_to_send".localized
     var total_utxo = "total_utxo".localized
-    var send_notice = "send_notice".localized
+    var send_notice = "send_notice".localized    
     var save_address_title = "save_address_title".localized
     var save_contact_text = "save_contact_text".localized
     var save_address_text = "save_address_text".localized
@@ -535,9 +535,7 @@ class LocalizableStrings : NSObject {
     var pool = "pool".localized
     var reconnect = "reconnect".localized.lowercased()
     var max_privacy_title = "max_privacy_title".localized
-    var max_privacy_text = "max_privacy_text".localized
     var max = "max".localized
-    var max_privacy_requested_title = "max_privacy_requested_title".localized
     var max_privacy_request_title = "max_privacy_request_title".localized
     var max_privacy_request_text = "max_privacy_request_text".localized
     var offline_transaction = "offline_transaction".localized
@@ -566,6 +564,15 @@ class LocalizableStrings : NSObject {
     var withdraw = "withdraw".localized
     var withdraw_cofirm = "withdraw_cofirm".localized
     var confirm_2 = "confirm_2".localized
+    var sbbs_address = "sbbs_address".localized
+    var address_type = "address_type".localized
+    var shielded_pool = "shielded_pool".localized
+    var min_fee_error_offline = "min_fee_error_offline".localized
+    var maturity = "maturity".localized
+    var connect_node_offline = "connect_node_offline".localized
+    var transactions_remaining = "transactions_remaining".localized
+    var shielded = "shielded".localized
+
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
@@ -586,7 +593,7 @@ class LocalizableStrings : NSObject {
     public func transaction_receiving_notif_body(beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
         let string = !failed ? "transaction_receiving_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_received_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
         
-        let rangeBeam = (string as NSString).range(of: String(beam + " BEAM"))
+        let rangeBeam = (string as NSString).range(of: String(beam))
         let rangeAddress = (string as NSString).range(of: String(address))
         
         let attributedText = NSMutableAttributedString(string: string)
@@ -596,10 +603,14 @@ class LocalizableStrings : NSObject {
     }
     
     public func muttableTransaction_received_notif_body(beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
-        let string = !failed ? "transaction_received_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_received_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
+        var addressString = address
+        if address == "0" {
+            addressString = "shielded pool"
+        }
+        let string = !failed ? "transaction_received_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: addressString) : "transaction_received_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: addressString).replacingOccurrences(of: "  ", with: " ")
         
-        let rangeBeam = (string as NSString).range(of: String(beam + " BEAM"))
-        let rangeAddress = (string as NSString).range(of: String(address))
+        let rangeBeam = (string as NSString).range(of: String(beam))
+        let rangeAddress = (string as NSString).range(of: String(addressString))
         
         let attributedText = NSMutableAttributedString(string: string)
         attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeBeam)
@@ -611,7 +622,7 @@ class LocalizableStrings : NSObject {
         let string = !failed ? "transaction_sent_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address) : "transaction_sent_notif_body_failed".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address).replacingOccurrences(of: "  ", with: " ")
         
         
-        let rangeBeam = (string as NSString).range(of: String(beam + " BEAM"))
+        let rangeBeam = (string as NSString).range(of: String(beam))
         let rangeAddress = (string as NSString).range(of: String(address))
         
         let attributedText = NSMutableAttributedString(string: string)
@@ -640,7 +651,7 @@ class LocalizableStrings : NSObject {
     }
     
     public func beam_amount(_ str:String) -> String {
-        return str + " BEAM"
+        return str // + " BEAM"
     }
     
     public func cannot_connect_node(_ node:String) -> String {

@@ -104,7 +104,7 @@ class BMDoubleAuthViewController: BMInputViewController {
     
     @objc private func didBecomeActive() {
         if UIApplication.shared.applicationState == .active {
-            viewWillAppear(false)
+            viewDidAppear(false)
         }
     }
     

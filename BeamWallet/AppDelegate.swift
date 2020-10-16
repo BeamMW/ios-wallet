@@ -89,7 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { _ in
                
-                
                 var name = "";
                 
                 if Settings.sharedManager().target == Mainnet {
@@ -101,12 +100,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 else if Settings.sharedManager().target == Masternet {
                     name = "GoogleServiceMaster"
                 }
-                
-                if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
-                    if let options = FirebaseOptions(contentsOfFile: filePath) {
-                        FirebaseApp.configure(options: options)
-                    }
-                }
+//
+//                if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
+//                    if let options = FirebaseOptions(contentsOfFile: filePath) {
+//                        FirebaseApp.configure(options: options)
+//                    }
+//                }
                 
                 let ex = ExceptionModel.init(name:crash_name, reason:crash)
                 ex.stackTrace = []
@@ -126,6 +125,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.overrideUserInterfaceStyle = Settings.sharedManager().isDarkMode ? .dark : .light
         }
         
+        var name = "";
+        
+        if Settings.sharedManager().target == Mainnet {
+            name = "GoogleServiceMain"
+        }
+        else if Settings.sharedManager().target == Testnet {
+            name = "GoogleServiceTest"
+        }
+        else if Settings.sharedManager().target == Masternet {
+            name = "GoogleServiceMaster"
+        }
+        
+        
+        if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
+            if let options = FirebaseOptions(contentsOfFile: filePath) {
+                FirebaseApp.configure(options: options)
+            }
+        }
         
         return true
     }
@@ -231,13 +248,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-//        if url.queryParameters != nil {
-//            let vc = WithdrawViewController(amount: "10", userId: "")
-//            if let top = UIApplication.getTopMostViewController() {
-//                top.navigationController?.pushViewController(vc, animated: false)
-//            }
-//        }
+        
+        //options[.sourceApplication] as? String == "com.beam.runner"
+        
+        if let params = url.queryParameters, params.count == 2,
+           let amount = params["amount"],
+           let userId = params["user_id"] {
+            
+            if AppModel.sharedManager().isLoggedin {
+                let vc = WithdrawViewController(amount: amount, userId: userId)
+                if let top = UIApplication.getTopMostViewController() {
+                    top.navigationController?.pushViewController(vc, animated: false)
+                }
+            }
+            else {
+                WithdrawViewModel.isOpenFromGame = true
+                WithdrawViewModel.amount = amount
+                WithdrawViewModel.userId = userId
+            }
+        }
+
         return true
     }
     
@@ -329,7 +361,7 @@ extension AppDelegate: WalletModelDelegate {
         DispatchQueue.main.async {
             var oldTransactions = [BMTransaction]()
             
-            if let data = UserDefaults.standard.data(forKey: Localizable.shared.strings.transactions) {
+            if let data = UserDefaults.standard.data(forKey: "transactions") {
                 if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
                     oldTransactions = array
                 }
@@ -343,7 +375,7 @@ extension AppDelegate: WalletModelDelegate {
                 }
             }
             
-            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: Localizable.shared.strings.transactions)
+            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: "transactions")
             UserDefaults.standard.synchronize()
             
             self.completionHandler?(.newData)

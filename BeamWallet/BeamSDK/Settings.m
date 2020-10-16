@@ -230,16 +230,6 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     return @"";
 }
 
--(BOOL)isOwnNode {
-    NSArray *nodes = [AppModel randomNodes];
-    for (int i=0; i < nodes.count; i++) {
-        if([nodes[i] isEqualToString:_nodeAddress]) {
-            return NO;
-        }
-    }
-    
-    return YES;
-}
 
 -(void)setIsHideAmounts:(BOOL)isHideAmounts {
     _isHideAmounts = isHideAmounts;

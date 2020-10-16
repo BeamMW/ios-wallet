@@ -215,6 +215,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     private func openMainPage() {
+        
+        AppModel.sharedManager().getNetworkStatus()
         AppModel.sharedManager().stopChangeWallet()
         AppModel.sharedManager().refreshAddresses()
         AppModel.sharedManager().getUTXO()
@@ -227,7 +229,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                                                       rightViewController: nil)
         
         sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-        sideMenuController.leftViewPresentationStyle = .slideAbove;
+        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
         sideMenuController.rootViewLayerShadowRadius = 0
         sideMenuController.rootViewLayerShadowColor = UIColor.clear
         sideMenuController.leftViewLayerShadowRadius = 0

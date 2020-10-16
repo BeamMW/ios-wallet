@@ -59,7 +59,14 @@ class SaveContactViewController: BaseTableViewController {
         
         self.address = BMAddress.empty()
         if address != nil {
-            self.address.walletId = address!
+            if(AppModel.sharedManager().isToken(address!)) {
+                let params = AppModel.sharedManager().getTransactionParameters(address!)
+                self.address.walletId = params.address
+            }
+            else {
+                self.address.walletId = address!
+            }
+            
         }
         else{
             self.isAddContact = true
@@ -240,7 +247,7 @@ extension SaveContactViewController : UITableViewDataSource {
         switch indexPath.section {
         case 0:
             if isAddContact {
-                let trim = "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))";
+                let trim = self.address.walletId.count > 0 ? "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))" : "";
 
                 let cell = tableView
                     .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)

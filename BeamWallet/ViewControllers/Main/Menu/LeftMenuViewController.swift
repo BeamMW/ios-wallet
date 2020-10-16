@@ -71,6 +71,13 @@ class LeftMenuViewController: BaseTableViewController {
 
         addBackgroundView()
         addFooterView()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(openWallet), name: NSNotification.Name(rawValue: "open_wallet"), object: nil)
+    }
+    
+    @objc private func openWallet() {
+        let navigationController = sideMenuController!.rootViewController as! UINavigationController
+        navigationController.setViewControllers([WalletViewController()], animated: false)
     }
     
     private func addBackgroundView() {
@@ -137,29 +144,29 @@ class LeftMenuViewController: BaseTableViewController {
             item.selected = false
         }
         
-        let navigationController = sideMenuController!.rootViewController as! UINavigationController
-
-        if navigationController.viewControllers.first is WalletViewController{
-            items[0].selected = true
-            self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
+        if let navigationController = sideMenuController?.rootViewController as? UINavigationController
+        {
+            if navigationController.viewControllers.first is WalletViewController{
+                items[0].selected = true
+                self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
+            }
+            else if navigationController.viewControllers.first is NotificationsViewController{
+                items[2].selected = true
+                self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
+            }
+            else if navigationController.viewControllers.first is AddressesViewController{
+                items[1].selected = true
+                self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
+            }
+            else if navigationController.viewControllers.first is UTXOViewController{
+                items[3].selected = true
+                self.tableView.selectRow(at: IndexPath(row: 2, section: 0), animated: false, scrollPosition: .top)
+            }
+            else if navigationController.viewControllers.first is SettingsViewController{
+                items[4].selected = true
+                self.tableView.selectRow(at: IndexPath(row: 3, section: 0), animated: false, scrollPosition: .top)
+            }
         }
-        else if navigationController.viewControllers.first is NotificationsViewController{
-            items[2].selected = true
-            self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
-        }
-        else if navigationController.viewControllers.first is AddressesViewController{
-            items[1].selected = true
-            self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
-        }
-        else if navigationController.viewControllers.first is UTXOViewController{
-            items[3].selected = true
-            self.tableView.selectRow(at: IndexPath(row: 2, section: 0), animated: false, scrollPosition: .top)
-        }
-        else if navigationController.viewControllers.first is SettingsViewController{
-            items[4].selected = true
-            self.tableView.selectRow(at: IndexPath(row: 3, section: 0), animated: false, scrollPosition: .top)
-        }
-        
     }
     
     @objc private func onBuy() {

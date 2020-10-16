@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,13 +35,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconBeam" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mdl-WO-PTo">
-                                <rect key="frame" x="15" y="25" width="44" height="44"/>
+                                <rect key="frame" x="15" y="25" width="22" height="22"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jaT-Ww-ivO">
-                                <rect key="frame" x="69" y="25" width="103" height="40.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jaT-Ww-ivO">
+                                <rect key="frame" x="47" y="25" width="125" height="41.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfi-41-SbP">
-                                        <rect key="frame" x="0.0" y="0.0" width="64" height="19"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfi-41-SbP">
+                                        <rect key="frame" x="0.0" y="0.0" width="64" height="19.5"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -49,8 +49,8 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwt-9z-uRX">
-                                        <rect key="frame" x="0.0" y="24" width="69.5" height="16.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in progress" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwt-9z-uRX">
+                                        <rect key="frame" x="0.0" y="24.5" width="66.5" height="17"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
                                         <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -59,7 +59,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 Jun 2018   |   3:46 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ho-1u-9fd">
-                                        <rect key="frame" x="0.0" y="40.5" width="134" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="41.5" width="125" height="0.0"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -76,7 +76,7 @@
                                     <constraint firstAttribute="width" constant="8" id="wAW-8M-PUd"/>
                                 </constraints>
                             </imageView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibY-g7-kSP">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibY-g7-kSP">
                                 <rect key="frame" x="47" y="72" width="243" height="0.0"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -92,7 +92,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="aBt-ab-epn">
-                                                <rect key="frame" x="0.0" y="0.0" width="72" height="29"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="29" id="xGs-FE-S6B"/>
                                                 </constraints>
@@ -100,22 +100,13 @@
                                                 <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="rMc-aT-mO8">
-                                                <rect key="frame" x="77" y="8" width="11" height="16"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="11" id="NMu-Md-vFL"/>
-                                                    <constraint firstAttribute="height" constant="16" id="YGB-za-lcb"/>
-                                                </constraints>
-                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="rMc-aT-mO8" firstAttribute="leading" secondItem="aBt-ab-epn" secondAttribute="trailing" constant="5" id="3s3-qX-q5s"/>
                                             <constraint firstItem="aBt-ab-epn" firstAttribute="leading" secondItem="Sx6-PN-EDm" secondAttribute="leading" id="4Oz-B2-5ip"/>
                                             <constraint firstAttribute="height" constant="29" id="EK7-sU-RaH"/>
                                             <constraint firstItem="aBt-ab-epn" firstAttribute="top" secondItem="Sx6-PN-EDm" secondAttribute="top" id="WR4-dG-jGG"/>
-                                            <constraint firstItem="rMc-aT-mO8" firstAttribute="top" secondItem="Sx6-PN-EDm" secondAttribute="top" constant="8" id="uq8-7i-jIU"/>
-                                            <constraint firstAttribute="trailing" secondItem="rMc-aT-mO8" secondAttribute="trailing" id="zbP-yP-bNe"/>
+                                            <constraint firstAttribute="trailing" secondItem="aBt-ab-epn" secondAttribute="trailing" id="mBy-Yn-Syc"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -151,7 +142,6 @@
             <connections>
                 <outlet property="amountLabel" destination="aBt-ab-epn" id="1w6-GU-Uea"/>
                 <outlet property="balanceView" destination="Sx6-PN-EDm" id="qmv-re-NFw"/>
-                <outlet property="currencyIcon" destination="rMc-aT-mO8" id="8da-2S-iAN"/>
                 <outlet property="dateLabel" destination="4ho-1u-9fd" id="G6S-NY-L8Y"/>
                 <outlet property="mainView" destination="fKt-Vb-Zkz" id="sq1-M0-hYG"/>
                 <outlet property="searchLabel" destination="ibY-g7-kSP" id="f9v-BU-6im"/>
@@ -165,6 +155,5 @@
     <resources>
         <image name="iconBeam" width="22" height="22"/>
         <image name="iconNextArrow" width="8" height="13"/>
-        <image name="iconSymbol" width="16" height="24.5"/>
     </resources>
 </document>

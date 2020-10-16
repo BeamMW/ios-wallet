@@ -61,6 +61,10 @@ extension UIColor {
     }
     
     enum main {
+        static var failed: UIColor {
+            return .init(hexString: "#ff746b") ?? UIColor.red
+        }
+        
         static var veryLightPink50: UIColor {
             return .init(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 0.5)
         }

@@ -97,7 +97,6 @@ typedef enum Target : NSUInteger {
 -(NSString*_Nonnull)shortLanguageName;
 
 -(NSString*_Nonnull)customNode;
--(BOOL)isOwnNode;
 
 -(NSArray <BMLockScreenValue*> * _Nonnull)lockScreenValues;
 -(BMLockScreenValue*_Nonnull)currentLocedValue;
@@ -106,5 +105,6 @@ typedef enum Target : NSUInteger {
 -(BMLogValue*_Nonnull)currentLogValue;
 
 -(NSString*_Nonnull)currencyName;
+
 
 @end

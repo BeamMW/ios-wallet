@@ -113,11 +113,11 @@ class UnlinkTransactionViewModel: NSObject {
     
     public func buildBMMultiLineItems() -> [BMMultiLineItem]{
         let totalReal = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-        let totalString = String.currency(value: totalReal) + Localizable.shared.strings.beam
+        let totalString = String.currency(value: totalReal) //+ Localizable.shared.strings.beam
         
         var items = [BMMultiLineItem]()
 
-        let amountString = amount + Localizable.shared.strings.beam + "\n"
+        let amountString = amount + "\n" //+ Localizable.shared.strings.beam + "\n"
         let amountSecondString = AppModel.sharedManager().exchangeValue(Double(amount) ?? 0)
         
         let feeString = fee + Localizable.shared.strings.groth + "\n"
@@ -127,7 +127,7 @@ class UnlinkTransactionViewModel: NSObject {
         let amountTotalSecondString = AppModel.sharedManager().exchangeValue(Double(totalReal) )
         
         let remaining = AppModel.sharedManager().remaining(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-        let remainingString = String.currency(value: remaining) + Localizable.shared.strings.beam + "\n"
+        let remainingString = String.currency(value: remaining) + "\n" //+ Localizable.shared.strings.beam + "\n"
         let remainingSecondString = AppModel.sharedManager().exchangeValue(Double(remaining))
         
         items.append(detailAttributed(title: Localizable.shared.strings.amount_to_unlink, amountString: amountString, secondString: amountSecondString, color: UIColor.main.brightTeal))
@@ -167,7 +167,7 @@ extension UnlinkTransactionViewModel : WalletModelDelegate {
     
     func onChangeCalculated(_ amount: Double) {
         DispatchQueue.main.async {
-            let totalString = String.currency(value: amount) + Localizable.shared.strings.beam
+            let totalString = String.currency(value: amount) //+ Localizable.shared.strings.beam
             let totalSecondString = AppModel.sharedManager().exchangeValue(Double(amount))
             let item = self.detailAttributed(title: Localizable.shared.strings.change, amountString: totalString, secondString: totalSecondString, color: UIColor.white)
             self.didChangeCalculated?(item)

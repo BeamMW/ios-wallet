@@ -58,6 +58,10 @@ class DetailUTXOViewModel: UTXOViewModel {
         
         details.append(BMMultiLineItem(title: Localizable.shared.strings.id.uppercased(), detail:String(utxo.id), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
+        if (utxo.maturity > 0) {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.maturity.uppercased(), detail:String(utxo.maturity), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        }
+        
         details.append(BMMultiLineItem(title: Localizable.shared.strings.utxo_type.uppercased().replacingOccurrences(of: Localizable.shared.strings.utxo.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: ""), detail:utxo.typeString.capitalizingFirstLetter(), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         
         self.onDataChanged?()
@@ -76,7 +80,16 @@ extension DetailUTXOViewModel {
     
     override func onReceivedUTXOs(_ utxos: [BMUTXO]) {
         DispatchQueue.main.async {
-            if let utxo = utxos.first(where: { $0.id == self.utxo.id }) {
+            var allUtxos = [BMUTXO]()
+            if let utxos = AppModel.sharedManager().utxos {
+                allUtxos.append(contentsOf: utxos as! [BMUTXO])
+            }
+            
+            if let utxos = AppModel.sharedManager().shildedUtxos {
+                allUtxos.append(contentsOf: utxos as! [BMUTXO])
+            }
+            
+            if let utxo = allUtxos.first(where: { $0.id == self.utxo.id }) {
                 self.utxo = utxo
             }
         }
