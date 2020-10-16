@@ -485,8 +485,7 @@
 "paste" = "Coller";
 "status" = "Status"; // transaction status
 "remove_wallet" = "Remove wallet";
-<<<<<<< HEAD
-=======
+
 "export_wallet_data" = "Export wallet data";
 "import_wallet_data" = "Import wallet data";
 "utilities" = "Utilities";
@@ -502,4 +501,4 @@
 "block_height" = "block height";
 "dark_mode" = "Dark mode";
 "delete_all_tags" = "Delete all tags";
->>>>>>> sprint_4
+

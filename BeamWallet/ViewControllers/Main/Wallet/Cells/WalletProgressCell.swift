@@ -41,6 +41,9 @@ class WalletProgressCell: BaseCell {
     @IBOutlet weak private var sentStack: UIStackView!
     @IBOutlet weak private var mainStackView: UIStackView!
 
+    @IBOutlet weak private var currencyReceivingIcon: UIImageView!
+    @IBOutlet weak private var currencySendingIcon: UIImageView!
+
     @IBOutlet weak private var mainButton: UIButton!
     
     @IBOutlet weak private var secondSendLabel: UILabel!
@@ -69,6 +72,14 @@ class WalletProgressCell: BaseCell {
         secondReceiveLabel.font = RegularFont(size: 14)
         
         mainButton.setBackgroundImage(UIImage.fromColor(color: UIColor.black.withAlphaComponent(0.3)), for: .highlighted)
+
+        currencyReceivingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
+        currencyReceivingIcon.tintColor = receivingLabel.textColor
+        currencyReceivingIcon.tintAdjustmentMode = .normal
+
+        currencySendingIcon.image = IconSymbolBeam()?.withRenderingMode(.alwaysTemplate)
+        currencySendingIcon.tintColor = sentLabel.textColor
+        currencySendingIcon.tintAdjustmentMode = .normal
 
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
@@ -99,8 +110,8 @@ extension WalletProgressCell: Configurable {
     
     func configure(with options: (expand: Bool, status:BMWalletStatus?)) {
         if let status = options.status {
-            receivingLabel.text = "+ " + String.currency(value: status.realReceiving) + " BEAM"
-            sentLabel.text = "- " + String.currency(value: status.realSending) + " BEAM"
+            receivingLabel.text = "+ " + String.currency(value: status.realReceiving)
+            sentLabel.text = "- " + String.currency(value: status.realSending)
             
             let secondReceive = AppModel.sharedManager().exchangeValue(status.realReceiving)
             let secondSent = AppModel.sharedManager().exchangeValue(status.realSending)

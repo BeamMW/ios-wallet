@@ -452,7 +452,7 @@
 "faucet_text" = "Wilt u de wallet in actie zien? Ontvang een heel kleine hoeveelheid Beam's van de community faucet.";
 =======
 "faucet_text" = "De wallet in gebruik zien. Ontvang een heel klein aantal Beam's van de community faucet.";
->>>>>>> sprint_4
+
 "faucet_ok" = "Ja, graag";
 "faucet_no" = "Nee, dank u";
 "show_seed_phrase" = "Herstelzin weergeven";
@@ -465,7 +465,7 @@
 "make_wallet_secure_text" = "Versterk de beveiliging van de wallet door het opslaan van uw herstelzin zodat u uw saldo niet verliest.";
 =======
 "make_wallet_secure_text" = "Schrijf uw herstelzin op en valideer deze zodat u uw saldo altijd kunt herstellen.";
->>>>>>> sprint_4
+
 "complete_verification" = "Verificatie voltooien";
 "yes_please" = "ja, graag";
 "i_will_later" = "ik zal het later doen";
@@ -493,8 +493,7 @@
 "paste" = "Plakken";
 "status" = "Status"; // transaction status
 "remove_wallet" = "Wallet verwijderen";
-<<<<<<< HEAD
-=======
+
 "export_wallet_data" = "Exporteer wallet data";
 "import_wallet_data" = "Importeer wallet data";
 "utilities" = "Utilities";
@@ -510,4 +509,4 @@
 "block_height" = "block height";
 "dark_mode" = "Dark mode";
 "delete_all_tags" = "Delete all tags";
->>>>>>> sprint_4
+

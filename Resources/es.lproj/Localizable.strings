@@ -452,7 +452,7 @@
 "faucet_text" = "¿Quieres ver la wallet en acción? Obtén una pequeña cantidad de Beams del grifo de la comunidad.";
 =======
 "faucet_text" = "Vea la wallet en acción. Obtenga una pequeña cantidad de Beams del grifo de la comunidad.";
->>>>>>> sprint_4
+
 "faucet_ok" = "Sí, por favor";
 "faucet_no" = "No, estoy bien";
 "show_seed_phrase" = "Mostrar frase semilla";
@@ -465,7 +465,7 @@
 "make_wallet_secure_text" = "Por favor, aumente la seguridad de la wallet guardando su frase semilla para que no pierda sus fondos.";
 =======
 "make_wallet_secure_text" = "Escribe y valida tu frase semilla para que siempre puedas recuperar tus fondos.";
->>>>>>> sprint_4
+
 "complete_verification" = "Verificación completa";
 "yes_please" = "sí, por favor";
 "i_will_later" = "lo haré más tarde";
@@ -493,8 +493,7 @@
 "paste" = "Pegar";
 "status" = "Estado"; // transaction status
 "remove_wallet" = "Eliminar wallet";
-<<<<<<< HEAD
-=======
+
 "export_wallet_data" = "Exportar datos del wallet";
 "import_wallet_data" = "Importar datos del wallet";
 "utilities" = "Utilidades";
@@ -510,4 +509,4 @@
 "block_height" = "block height";
 "dark_mode" = "Dark mode";
 "delete_all_tags" = "Delete all tags";
->>>>>>> sprint_4
+

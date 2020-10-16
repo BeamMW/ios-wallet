@@ -92,10 +92,7 @@ class WalletAvailableCell: BaseCell {
         secondMaturingLabel.font = RegularFont(size: 14)
         secondAvailableLabel.font = RegularFont(size: 14)
         secondUnlinkLabel.font = RegularFont(size: 14)
-<<<<<<< HEAD
-=======
 
->>>>>>> beam_game
         
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
@@ -299,9 +296,9 @@ extension WalletAvailableCell: Configurable {
         }
         
         if let status = options.status {
-            balanceLabel.text = String.currency(value: status.realAmount) + " BEAM"
-            maturingLabel.text = String.currency(value: status.realMaturing) + " BEAM"
-            unlinkLabel.text = String.currency(value: status.realShielded) + " BEAM"
+            balanceLabel.text = String.currency(value: status.realAmount)
+            maturingLabel.text = String.currency(value: status.realMaturing)
+            unlinkLabel.text = String.currency(value: status.realShielded)
 
             if status.realAmount == 0 {
                 secondAvailableLabel.isHidden = true

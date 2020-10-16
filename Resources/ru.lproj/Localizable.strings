@@ -3,7 +3,7 @@
 "restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 =======
 "restore_wallet_info" = "Вы пытаетесь восстановить существующий кошелек Beam. Пожалуйста, обратите внимание, что если вы используете кошелек на другом устройстве, ваш баланс будет обновлен, но история транзакций и адреса будут храниться отдельно на каждом устройстве.";
->>>>>>> sprint_4
+
 "no_space_title" = "Недостаточно места в памяти";
 "no_space_info" = "На устройстве требуется не менее 200 МБ свободного места для восстановления кошелька";
 "beam_title" = "Масштабируемая, приватная криптовалюта";
@@ -61,7 +61,7 @@
 =======
 "restor_wallet_warning" = "Восстановление вашего кошелька может занять некоторое время. Пожалуйста, подождите, пока закончится синхронизация - не закрывайте и не минимизируйте приложение.";
 "restor_wallet_info" = "Восстановится только баланс кошелька (UTXOs). Информация о транзакции всегда конфиденциальна и никогда не хранится в блокчейне.";
->>>>>>> sprint_4
+
 "receive" = "Получить";
 "send" = "Отправить";
 "available" = "Доступно";
@@ -375,7 +375,7 @@
 =======
 "my_expired" = "Просроченные"; // addresses
 "general_settings" = "Общее";
->>>>>>> sprint_4
+
 "unavailable" = "Недоступно";
 "in_progress_out" = "В процессе (исходящий)";
 "in_progress_in" = "В процессе (входящий)";
@@ -495,7 +495,7 @@
 "last_15_days" = "Последние 15 дней";
 "last_30_days" = "Последние 30 дней";
 "clear_wallet" = "Удалить текущий кошелек";
->>>>>>> sprint_4
+
 "clear_wallet_text" = "All data will be erased. Make sure you’ve saved your seed phrase if you want to restore this wallet later on! Are you sure you want to remove your wallet?";
 "clear_wallet_password" = "Enter your password to remove your wallet";
 "change_node_text_1" = "Use Face ID or enter your password to change node settings";
@@ -525,4 +525,4 @@
 "block_height" = "block height";
 "dark_mode" = "Dark mode";
 "delete_all_tags" = "Delete all tags";
->>>>>>> sprint_4
+

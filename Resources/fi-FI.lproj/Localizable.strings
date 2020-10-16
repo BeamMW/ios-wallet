@@ -452,7 +452,7 @@
 "faucet_text" = "Haluatko testata lompakon toimintoja? Ota vastaan pieni summa Beamiä yhteisön testikäyttöön tarkoitetusta kassasta.";
 =======
 "faucet_text" = "Näe lompakko toiminnassa. Ota vastaan pieni summa Beamiä yhteisön testikäyttöön tarkoitetusta kassasta.";
->>>>>>> sprint_4
+
 "faucet_ok" = "Kyllä kiitos";
 "faucet_no" = "Ei kiitos";
 "show_seed_phrase" = "Näytä seed phrase";
@@ -465,7 +465,7 @@
 "make_wallet_secure_text" = "Lisää lompakon turvallisuutta pitämällä seed phrase tallessa, jotta et hukkaa varojasi.";
 =======
 "make_wallet_secure_text" = "Kirjoita ylös ja tarkista seed phrasesi, jotta voit palauttaa saldosi tarvittaessa.";
->>>>>>> sprint_4
+
 "complete_verification" = "Suorita varmennus";
 "yes_please" = "kyllä kiitos";
 "i_will_later" = "myöhemmin";
@@ -493,8 +493,7 @@
 "paste" = "Liitä";
 "status" = "Tila"; // transaction status
 "remove_wallet" = "Poista lompakko";
-<<<<<<< HEAD
-=======
+
 "export_wallet_data" = "Vie lompakon tiedot";
 "import_wallet_data" = "Tuo lompakon tiedot";
 "utilities" = "Ominaisuudet";
@@ -510,4 +509,4 @@
 "block_height" = "block height";
 "dark_mode" = "Dark mode";
 "delete_all_tags" = "Delete all tags";
->>>>>>> sprint_4
+

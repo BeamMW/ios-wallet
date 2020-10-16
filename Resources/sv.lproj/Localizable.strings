@@ -3,7 +3,7 @@
 "restore_wallet_info" = "You are trying to restore an existing Beam Wallet. Please notice that if you use your wallet on another device, your balance will be up to date, but transaction history and addresses will be kept separately on each device.";
 =======
 "restore_wallet_info" = "Du försöker nu återställa en befintlig Beam-plånbok. Notera att om du använder din plånbok på en annan enhet kommer beloppet vara uppdaterat men transaktionshistorik och adresser kommer hållas separat per enhet.";
->>>>>>> sprint_4
+
 "no_space_title" = "Otillräckligt lagringsutrymme";
 "no_space_info" = "Åtminstone 200 MB ledigt utrymme behövs på enheten för att återställa plånboken";
 "beam_title" = "Skalbar konfidentiell kryptovaluta";
@@ -61,7 +61,7 @@
 =======
 "restor_wallet_warning" = "Det kan ta en stund att återställa din plånbok. Vänta tills synkroniseringen är klar - stäng inte och minimera inte applikationen.";
 "restor_wallet_info" = "Endast plånbokens saldo(UTXO) kommer återställas. Din transaktionsinformation är alltid privata och lagras aldrig i block-kedjan.";
->>>>>>> sprint_4
+
 "receive" = "Ta emot";
 "send" = "Skicka";
 "available" = "Tillgängligt";
@@ -374,7 +374,7 @@
 "general_settings" = "General";
 =======
 "general_settings" = "Generell";
->>>>>>> sprint_4
+
 "unavailable" = "Otillgängligt";
 "in_progress_out" = "Pågår(utgående)";
 "in_progress_in" = "Pågår(inkommande)";
@@ -441,7 +441,7 @@
 "info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
 =======
 "info_restore_text" = "Om du kör två plånböcker med samma seed, synkroniseras inte saldona. För att hålla saldona synkroniserade använder du din egen betrodda nod konfigurerad med din ägarnyckel. Observera också att transaktionshistoriken inte synkroniseras mellan plånböcker i alla fall.";
->>>>>>> sprint_4
+
 "crash_title" = "Beam-plånboken krashade oväntat";
 "crash_message" = "Skulle du godkänna att rapportera din begränsade mängd information till oss? Insamlandet av krash-informationen skulle möjliggöra att vi upptäcker fixar och buggar mycket snabbare. Detta är endast en krash-relaterad rapport, vi kommer inte att samla in några av dina data senare.";
 "crash_negative" = "Nej tack";
@@ -472,7 +472,7 @@
 "use_face_id" = "Använd ditt Face ID";
 "enter_your_password" = "Ange ditt lösenord";
 "share_details" = "Dela Detaljer";
->>>>>>> sprint_4
+
 "faucet_title" = "Börja använda din plånbok";
 "faucet_text" = "Vill du se plånboken \"in action\"? Tillgodose en liten mängd Beam från community-fauceten.";
 "faucet_ok" = "Ja, tack";
@@ -487,7 +487,7 @@
 "make_wallet_secure_text" = "Vänligen öka plånbokssäkerheten genom att spara din seed phrase så att du inte blir av med dina medel.";
 =======
 "make_wallet_secure_text" = "Skriv ner och validera din seed phrase så att du alltid kan återställa dina medel.";
->>>>>>> sprint_4
+
 "complete_verification" = "Komplettera verifieringen";
 "yes_please" = "ja, tack";
 "i_will_later" = "jag gör det senare";
@@ -515,7 +515,7 @@
 "clear_wallet" = "Ta bort aktuell plånbok";
 "clear_wallet_text" = "All data kommer att raderas. Säkerställ att du har sparat ditt seed phrase om du vill återställa din plånbok vid ett senare tillfälle. Är du säker på att du vill ta bort plånboken?";
 "clear_wallet_password" = "Ange ditt lösenord för att ta bort plånboken";
->>>>>>> sprint_4
+
 "change_node_text_1" = "Använd Ansikts-ID eller mata in ditt lösenord för att ändra nod-inställningar";
 "change_node_text_2" = "Använd Touch-ID eller mata in ditt lösenord för att ändra nod-inställningar";
 "change_node_text_3" = "Ange ditt lösenord för att ändra nod-inställningar";
@@ -543,4 +543,4 @@
 "block_height" = "block height";
 "dark_mode" = "Dark mode";
 "delete_all_tags" = "Delete all tags";
->>>>>>> sprint_4
+
