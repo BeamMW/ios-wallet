@@ -28,11 +28,15 @@ class WalletTransactionSearchCell: UITableViewCell {
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var balanceView: UIView!
     @IBOutlet weak private var statusIcon: UIImageView!
+    @IBOutlet weak private var secondAvailableLabel: UILabel!
 
     @IBOutlet weak private var searchLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAvailableLabel.font = RegularFont(size: 14)
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.main.selectedColor
@@ -56,7 +60,8 @@ extension WalletTransactionSearchCell: Configurable {
     func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
      
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
-                
+        secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.transaction.realAmount)
+
         statusIcon.image = options.transaction.statusIcon()
         typeLabel.text = options.transaction.statusName()
         statusLabel.text = options.transaction.statusType()

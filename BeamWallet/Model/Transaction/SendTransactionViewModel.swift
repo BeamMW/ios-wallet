@@ -29,6 +29,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var newVersionError:String?
 
     public var comment = String.empty()
+    public var shieldedInputsFee:UInt64 = 0
     
     public var outgoindAdderss:BMAddress?
     public var pickedOutgoingAddress:BMAddress?
@@ -75,8 +76,9 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public func calculateFee() {
         if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
-            AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: 0, isShielded: maxPrivacy) { (result) in
+            AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: 0, isShielded: maxPrivacy) { (result, changed, shieldedInputsFee) in
                 DispatchQueue.main.async {
+                    self.shieldedInputsFee = shieldedInputsFee
                     let current = UInt64(self.fee) ?? 0
                     if result > current {
                         self.fee = String(result)
@@ -110,6 +112,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
     }
     
+    public var onCalculateChanged : ((Double) -> Void)?
+
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
@@ -255,7 +259,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func send() {
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: Double(fee) ?? 0, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, maxPrivacy: maxPrivacy)
+        var sendedFee = Double(fee) ?? 0
+        if shieldedInputsFee > 0 {
+            sendedFee = sendedFee - Double(shieldedInputsFee)
+        }
+        
+        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, maxPrivacy: maxPrivacy)
         
         AppStoreReviewManager.incrementAppTransactions()
     }
@@ -307,13 +316,22 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let valid = AppModel.sharedManager().isValidAddress(toAddress)
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
         let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
-        let isError = (!valid || expired || canSend != nil)
+        var isError = (!valid || expired || canSend != nil)
+       
+        let isMyAddress = AppModel.sharedManager().isMyAddress(toAddress)
+        
+        if(isMyAddress && maxPrivacy) {
+            isError = true
+        }
         
         if isError {
             amountError = nil
             toAddressError = nil
             
-            if !valid {
+            if(isMyAddress && maxPrivacy) {
+                toAddressError = "Can not sent offline transaction to own address"
+            }
+            else if !valid {
                 toAddressError = Localizable.shared.strings.incorrect_address
             }
             else if expired {
@@ -489,7 +507,14 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func calculateChange() {
-        AppModel.sharedManager().calculateChange(Double(amount) ?? 0, fee:  Double(fee) ?? 0)
+        if (AppModel.sharedManager().walletStatus?.shielded ?? 0) > 0 {
+            AppModel.sharedManager().calculateFee2((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: maxPrivacy || requestedMaxPrivacy) { (fee, change, shieldedInputsFee) in
+                self.onCalculateChanged?(change)
+            }
+        }
+        else {
+            AppModel.sharedManager().calculateChange(Double(amount) ?? 0, fee:  Double(fee) ?? 0)
+        }
         
         if AppModel.sharedManager().isToken(toAddress) {
             _ = AppModel.sharedManager().getTransactionParameters(toAddress)

@@ -439,6 +439,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
             address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
+            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
 
             BMContact *contact = [[BMContact alloc] init];
             contact.address = address;
@@ -1102,7 +1103,15 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
 void WalletModel::onShieldedCoinsSelectionCalculated(const ShieldedCoinsSelectionInfo& selectionRes)
 {
     auto result = selectionRes.minimalFee;
-    [AppModel sharedManager].feecalculatedBlock(result);
+    auto change = selectionRes.change;
+    auto shieldedInputsFee = selectionRes.shieldedInputsFee;
+
+//    if (change > 0) {
+//        change = change + selectionRes.selectedFee; //+ selectionRes.requestedFee;
+//    }
+    double amount = double(int64_t(change)) / Rules::Coin;
+
+    [AppModel sharedManager].feecalculatedBlock(result, amount, shieldedInputsFee);
 
     NSLog(@"onShieldedCoinsSelectionCalculated");
 }

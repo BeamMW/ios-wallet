@@ -296,10 +296,8 @@ const bool isSecondCurrencyEnabled = true;
 -(void)setWalletStatus:(BMWalletStatus *)walletStatus {
     _walletStatus = walletStatus;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self->_walletStatus] forKey:walletStatusKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    });
+    [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self->_walletStatus] forKey:walletStatusKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Exchange
@@ -868,6 +866,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(BOOL)isMyAddress:(NSString*_Nullable)address {
+    if ([self isToken:address])
+    {
+        BMTransactionParameters *params = [self getTransactionParameters:address];
+        address = params.address;
+    }
+    
     for (BMAddress *add in _walletAddresses) {
         if ([add.walletId isEqualToString:address]) {
             return YES;
@@ -1127,6 +1131,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return NO;
     }
     
+    if (address.length < 15) {
+        return NO;
+    }
+    
     return [self isAddress:address] || [self isToken:address];
 }
 
@@ -1232,7 +1240,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 _address.m_category = addresses[i].m_category;
                 _address.m_walletID = walletID;
                 _address.m_createTime = NSDate.date.timeIntervalSince1970;
-                
+                _address.m_Identity = addresses[i].m_Identity;
+
                 try{
                     wallet->getAsync()->saveAddress(_address, false);
                 }
@@ -1571,11 +1580,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
         WalletID walletID(Zero);
         if (walletID.FromHex(address.walletId.string))
         {
+            bool isValid = false;
+            auto buf = from_hex(contact.address.identity.string, &isValid);
+            PeerID m_Identity = Blob(buf);
+            
             WalletAddress _address;
             _address.m_label = address.label.string;
             _address.m_category = [address.categories componentsJoinedByString:@","].string;
             _address.m_walletID = walletID;
             _address.m_createTime = NSDate.date.timeIntervalSince1970;
+            _address.m_Identity = m_Identity;
             walletDb->saveAddress(_address);
         }
     }
@@ -1604,10 +1618,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
         WalletID walletID(Zero);
         if (walletID.FromHex(address.walletId.string))
         {
+            bool isValid = false;
+            auto buf = from_hex(contact.address.identity.string, &isValid);
+            PeerID m_Identity = Blob(buf);
+            
             WalletAddress _address;
             _address.m_label = address.label.string;
             _address.m_category = [address.categories componentsJoinedByString:@","].string;
             _address.m_walletID = walletID;
+            _address.m_Identity = m_Identity;
             _address.m_createTime = NSDate.date.timeIntervalSince1970;
             walletDb->saveAddress(_address);
         }
@@ -1657,6 +1676,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
                         }
                     }
                     
+//                    NSString *s = [NSString stringWithUTF8String:to_string(addresses[i].m_Identity).c_str()];
+                    
                     wallet->getAsync()->saveAddress(addresses[i], true);
                     
                     break;
@@ -1685,15 +1706,21 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return  qrString;
 }
 
--(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories {
+-(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy {
     
     WalletID walletID(Zero);
     if (walletID.FromHex(addressId.string))
-    {
+    {        
         WalletAddress address;
         address.m_label = name.string;
         address.m_category = [categories componentsJoinedByString:@","].string;
         address.m_walletID = walletID;
+        if (identidy!=nil) {
+            bool isValid = false;
+            auto buf = from_hex(identidy.string, &isValid);
+            PeerID m_Identity = Blob(buf);
+            address.m_Identity = m_Identity;
+        }
         address.m_createTime = NSDate.date.timeIntervalSince1970;
         walletDb->saveAddress(address);
     }
@@ -1856,6 +1883,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)calculateFee:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
    
+    self.feecalculatedBlock = block;
+    
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bFee = fee;
+    
+    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, bFee, isShielded);
+}
+
+-(void)calculateFee2:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
+    
     self.feecalculatedBlock = block;
     
     Amount bAmount = round(amount * Rules::Coin);

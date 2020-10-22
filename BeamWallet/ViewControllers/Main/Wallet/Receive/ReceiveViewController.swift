@@ -510,4 +510,8 @@ extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
         viewModel.needReloadButtons = false
         self.tableView.reloadData()
     }
+    
+    func onShareToken() {
+        viewModel.isShared = true
+    }
 }

@@ -31,10 +31,14 @@ class WalletTransactionCell: UITableViewCell {
 
     @IBOutlet weak private var commentView: UIStackView!
     @IBOutlet weak private var commentLabel: UILabel!
+    @IBOutlet weak private var secondAvailableLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
                 
+        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        secondAvailableLabel.font = RegularFont(size: 14)
+        
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
@@ -44,7 +48,8 @@ class WalletTransactionCell: UITableViewCell {
 extension WalletTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
-     
+        secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.transaction.realAmount)
+
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
         statusIcon.image = options.transaction.statusIcon()

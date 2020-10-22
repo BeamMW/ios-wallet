@@ -76,7 +76,7 @@ typedef int BMRestoreType;
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
 typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
-typedef void(^FeecalculatedBlock)(uint64_t fee);
+typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shieldedInputsFee);
 
 @interface AppModel : NSObject
 
@@ -188,7 +188,7 @@ typedef void(^FeecalculatedBlock)(uint64_t fee);
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
--(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories;
+-(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy;
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 -(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name;
 
@@ -207,6 +207,7 @@ typedef void(^FeecalculatedBlock)(uint64_t fee);
 -(double)remaining:(double)amount fee:(double)fee;
 -(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token;
 -(void)calculateFee:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
+-(void)calculateFee2:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;

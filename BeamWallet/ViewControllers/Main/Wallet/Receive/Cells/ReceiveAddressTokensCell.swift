@@ -12,9 +12,10 @@ import UIKit
     @objc optional func onShowToken(token:String)
     @objc optional func onShowQR(token:String)
     @objc optional func onSwitchToPool()
+    @objc optional func onShareToken()
 }
 
-class ReceiveAddressTokensCell: BaseCell {
+class ReceiveAddressTokensCell: BaseCell, BMCopyLabelDelegate {
 
     weak var delegate: ReceiveAddressTokensCellDelegate?
 
@@ -26,16 +27,19 @@ class ReceiveAddressTokensCell: BaseCell {
     @IBOutlet private var exchangeTokenView: UIView!
     
     @IBOutlet private var onlineTokenLabel: UILabel!
-    @IBOutlet private var onlineTokenValueLabel: UILabel!
+    @IBOutlet private var onlineTokenValueLabel: BMCopyLabel!
     
     @IBOutlet private var offlineTokenLabel: UILabel!
-    @IBOutlet private var offlineTokenValueLabel: UILabel!
+    @IBOutlet private var offlineTokenValueLabel: BMCopyLabel!
     
     @IBOutlet private var exchangeTokenLabel: UILabel!
     @IBOutlet private var exchangeTokenValueLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        offlineTokenValueLabel.delegate = self
+        onlineTokenValueLabel.delegate = self
         
         if Settings.sharedManager().isDarkMode {
             onlineTokenLabel.textColor = UIColor.main.steel;
@@ -58,7 +62,9 @@ extension ReceiveAddressTokensCell: Configurable {
     
     func configure(with options: (oneTime: Bool, maxPrivacy: Bool, address: BMAddress)) {
         onlineTokenValueLabel.text = options.address.token
-                
+        onlineTokenValueLabel.copiedText = Localizable.shared.strings.address_copied
+        offlineTokenValueLabel.copiedText = Localizable.shared.strings.address_copied
+
         switchButton.setTitle(Localizable.shared.strings.switch_to_permanent, for: .normal)
         qrButton2.isHidden = true
         
@@ -130,5 +136,9 @@ extension ReceiveAddressTokensCell: Configurable {
     
     @IBAction func onSwitch(sender: UIButton) {
         self.delegate?.onSwitchToPool?()
+    }
+    
+    func onCopied() {
+        self.delegate?.onShareToken?()
     }
 }

@@ -40,19 +40,21 @@ class SendViewController: BaseTableViewController {
         }
     }
     
+    private let nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
+
+    
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
         
-        let button = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
-        button.setImage(IconNextPink(), for: .normal)
-        button.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.main.heliotrope.cgColor
-        button.setTitleColor(UIColor.main.heliotrope, for: .normal)
-        button.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-        view.addSubview(button)
+        nextButton.setImage(IconNextPink(), for: .normal)
+        nextButton.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
+        nextButton.layer.borderWidth = 1
+        nextButton.layer.borderColor = UIColor.main.heliotrope.cgColor
+        nextButton.setTitleColor(UIColor.main.heliotrope, for: .normal)
+        nextButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+        view.addSubview(nextButton)
         
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: button.frame.origin.y + button.frame.size.height + 40)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: nextButton.frame.origin.y + nextButton.frame.size.height + 40)
         
         return view
     }()
@@ -83,6 +85,15 @@ class SendViewController: BaseTableViewController {
             guard let strongSelf = self else { return }
 
             strongSelf.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+            
+            if strongSelf.viewModel.offlineTokensCount == 0 {
+                strongSelf.nextButton.alpha = 0.5
+                strongSelf.nextButton.isUserInteractionEnabled = false
+            }
+            else {
+                strongSelf.nextButton.alpha = 1
+                strongSelf.nextButton.isUserInteractionEnabled = true
+            }
         }
         
         viewModel.onFeeChanged = {[weak self] in

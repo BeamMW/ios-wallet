@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -49,7 +49,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="176aw49q7g7…6daffr9j1k7" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k7T-Hq-QJm">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="176aw49q7g7…6daffr9j1k7" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k7T-Hq-QJm" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="50.5" width="120" height="19.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="120" id="FbE-ez-KBJ"/>
@@ -61,7 +61,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="8aa-8C-UJx">
                                                 <rect key="frame" x="166" y="47" width="139" height="25"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-LZ-4uO">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-LZ-4uO">
                                                         <rect key="frame" x="0.0" y="0.0" width="100" height="25"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="100" id="P9l-mv-3lS"/>
@@ -119,7 +119,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="176aw49q7g7…6daffr9j1k7" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JtQ-a9-6QP">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="176aw49q7g7…6daffr9j1k7" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JtQ-a9-6QP" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="50.5" width="120" height="19.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="120" id="BVe-YN-pmx"/>
@@ -131,7 +131,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="cbh-oQ-2rm">
                                                 <rect key="frame" x="166" y="46.5" width="139" height="25"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A8u-fP-CKc">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A8u-fP-CKc">
                                                         <rect key="frame" x="0.0" y="0.0" width="100" height="25"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="100" id="2T4-Rh-j51"/>
@@ -195,7 +195,7 @@
                                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nci-oz-7Iu">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nci-oz-7Iu">
                                                 <rect key="frame" x="237.5" y="47" width="67.5" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="25" id="YuO-Pj-p9r"/>
@@ -241,8 +241,8 @@
                     <constraint firstAttribute="trailing" secondItem="3NF-hB-Mr5" secondAttribute="trailing" id="sG5-M0-k2x"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="Ror-vx-KD6"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
                 <outlet property="exchangeTokenLabel" destination="0sj-6c-V2W" id="0Mh-89-yFM"/>
                 <outlet property="exchangeTokenValueLabel" destination="1s0-Ug-LAy" id="IPe-lk-9kb"/>

@@ -601,7 +601,12 @@
     }
     else if(_isIncome)
     {
-        sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _senderAddress];
+        if (self.enumType == BMTransactionTypePushTransaction) {
+            sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], [@"shielded_pool" localized]];
+        }
+        else {
+            sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _senderAddress];
+        }
         receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _receiverAddress];
     }
     else{
@@ -618,7 +623,9 @@
     [details addObject:amount];
     [details addObject:sender];
     [details addObject:receiver];
-    [details addObject:fee];
+    if (_realFee > 0) {
+        [details addObject:fee];
+    }
     [details addObject:trid];
     
     if(_identity.length > 0){

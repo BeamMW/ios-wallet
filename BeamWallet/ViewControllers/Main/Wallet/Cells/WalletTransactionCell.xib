@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-Light.otf">
+            <string>SFProDisplay-Light</string>
         </array>
         <array key="SF-Pro-Display-LightItalic.otf">
             <string>SFProDisplay-LightItalic</string>
@@ -101,10 +104,10 @@
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="dhp-eX-Z1e">
-                                <rect key="frame" x="194" y="20.5" width="88" height="29"/>
+                                <rect key="frame" x="194" y="20.5" width="88" height="50"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sx6-PN-EDm">
-                                        <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="88" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="aBt-ab-epn">
                                                 <rect key="frame" x="0.0" y="0.0" width="88" height="29"/>
@@ -115,16 +118,27 @@
                                                 <color key="textColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pes-DW-9X4">
+                                                <rect key="frame" x="50" y="29" width="38" height="17"/>
+                                                <fontDescription key="fontDescription" name="SFProDisplay-Light" family="SF Pro Display" pointSize="14"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="aBt-ab-epn" firstAttribute="leading" secondItem="Sx6-PN-EDm" secondAttribute="leading" id="4Oz-B2-5ip"/>
-                                            <constraint firstAttribute="height" constant="29" id="EK7-sU-RaH"/>
+                                            <constraint firstAttribute="trailing" secondItem="pes-DW-9X4" secondAttribute="trailing" id="7BL-sJ-jRd"/>
                                             <constraint firstAttribute="trailing" secondItem="aBt-ab-epn" secondAttribute="trailing" id="RIT-lM-yve"/>
                                             <constraint firstItem="aBt-ab-epn" firstAttribute="top" secondItem="Sx6-PN-EDm" secondAttribute="top" id="WR4-dG-jGG"/>
+                                            <constraint firstItem="pes-DW-9X4" firstAttribute="top" secondItem="aBt-ab-epn" secondAttribute="bottom" id="lLE-S0-Mtp"/>
+                                            <constraint firstAttribute="height" constant="50" id="ulE-W9-L26"/>
                                         </constraints>
                                     </view>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Sx6-PN-EDm" secondAttribute="bottom" id="HsB-1l-dlj"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -149,8 +163,8 @@
                     <constraint firstAttribute="trailing" secondItem="fKt-Vb-Zkz" secondAttribute="trailing" id="gkQ-Uv-XzF"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="amountLabel" destination="aBt-ab-epn" id="1w6-GU-Uea"/>
                 <outlet property="balanceView" destination="Sx6-PN-EDm" id="qmv-re-NFw"/>
@@ -158,6 +172,7 @@
                 <outlet property="commentView" destination="kUM-IP-cGg" id="XJa-IJ-e4g"/>
                 <outlet property="dateLabel" destination="4ho-1u-9fd" id="G6S-NY-L8Y"/>
                 <outlet property="mainView" destination="fKt-Vb-Zkz" id="sq1-M0-hYG"/>
+                <outlet property="secondAvailableLabel" destination="pes-DW-9X4" id="Oq9-aJ-eRa"/>
                 <outlet property="statusIcon" destination="Mdl-WO-PTo" id="5Z8-Sk-bT2"/>
                 <outlet property="statusLabel" destination="Jwt-9z-uRX" id="9tg-pS-q6I"/>
                 <outlet property="typeLabel" destination="cfi-41-SbP" id="Q8I-4B-jjr"/>

@@ -62,6 +62,7 @@ class SaveContactViewController: BaseTableViewController {
             if(AppModel.sharedManager().isToken(address!)) {
                 let params = AppModel.sharedManager().getTransactionParameters(address!)
                 self.address.walletId = params.address
+                self.address.identity = params.identity
             }
             else {
                 self.address.walletId = address!
@@ -121,15 +122,20 @@ class SaveContactViewController: BaseTableViewController {
     }
     
     @objc private func onSave() {
-        if isAddContact {
-            if !AppModel.sharedManager().isValidAddress(address.walletId) {
+        var walletId = address.walletId
+        if(AppModel.sharedManager().isToken(address.walletId)) {
+            walletId = AppModel.sharedManager().getTransactionParameters(address.walletId).address
+        }
+        
+        if isAddContact {            
+            if !AppModel.sharedManager().isValidAddress(walletId) {
                 addressError = Localizable.shared.strings.incorrect_address
                 tableView.reloadData()
                 return
             }
             
-            let isContactFound = (AppModel.sharedManager().getContactFromId(address.walletId) != nil)
-            let isMyAddress = AppModel.sharedManager().isMyAddress(address.walletId)
+            let isContactFound = (AppModel.sharedManager().getContactFromId(walletId) != nil)
+            let isMyAddress = AppModel.sharedManager().isMyAddress(walletId)
             
             if isContactFound {
                 alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.address_already_exist_1, handler: nil)
@@ -142,7 +148,7 @@ class SaveContactViewController: BaseTableViewController {
             }
         }
         
-        AppModel.sharedManager().addContact(address.walletId, name: address.label, categories: address.categories as! [Any])
+        AppModel.sharedManager().addContact(walletId, name: address.label, categories: address.categories as! [Any], identidy: address.identity)
         
         goBack()
     }

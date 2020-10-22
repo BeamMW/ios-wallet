@@ -86,27 +86,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         if let crash = UserDefaults.standard.string(forKey: "crash"), let crash_name = UserDefaults.standard.string(forKey: "crash_name") {
-
+            
+            var name = "";
+            
+            if Settings.sharedManager().target == Mainnet {
+                name = "GoogleServiceMain"
+            }
+            else if Settings.sharedManager().target == Testnet {
+                name = "GoogleServiceTest"
+            }
+            else if Settings.sharedManager().target == Masternet {
+                name = "GoogleServiceMaster"
+            }
+            
+            if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
+                if let options = FirebaseOptions(contentsOfFile: filePath) {
+                    FirebaseApp.configure(options: options)
+                }
+            }
+            
             self.window?.rootViewController?.confirmAlert(title: Localizable.shared.strings.crash_title, message: Localizable.shared.strings.crash_message, cancelTitle: Localizable.shared.strings.crash_positive, confirmTitle: Localizable.shared.strings.crash_negative, cancelHandler: { _ in
-               
-                var name = "";
-                
-                if Settings.sharedManager().target == Mainnet {
-                    name = "GoogleServiceMain"
-                }
-                else if Settings.sharedManager().target == Testnet {
-                    name = "GoogleServiceTest"
-                }
-                else if Settings.sharedManager().target == Masternet {
-                    name = "GoogleServiceMaster"
-                }
-//
-//                if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
-//                    if let options = FirebaseOptions(contentsOfFile: filePath) {
-//                        FirebaseApp.configure(options: options)
-//                    }
-//                }
-                
+                               
                 let ex = ExceptionModel.init(name:crash_name, reason:crash)
                 ex.stackTrace = []
                 
@@ -124,25 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = Settings.sharedManager().isDarkMode ? .dark : .light
         }
-        
-        var name = "";
-        
-        if Settings.sharedManager().target == Mainnet {
-            name = "GoogleServiceMain"
-        }
-        else if Settings.sharedManager().target == Testnet {
-            name = "GoogleServiceTest"
-        }
-        else if Settings.sharedManager().target == Masternet {
-            name = "GoogleServiceMaster"
-        }
-        
-        
-        if let filePath = Bundle.main.path(forResource: name, ofType: "plist") {
-            if let options = FirebaseOptions(contentsOfFile: filePath) {
-                FirebaseApp.configure(options: options)
-            }
-        }
+    
         
         return true
     }

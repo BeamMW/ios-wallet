@@ -29,6 +29,7 @@ class TrustedNodeViewController: BMInputViewController {
     
     private var isPresented = false
     private var timer = Timer()
+    private var timeoutTimer = Timer()
     private var event: EventType!
     
     private var oldAddress: String!
@@ -109,7 +110,7 @@ class TrustedNodeViewController: BMInputViewController {
             }
         }
         else if let fullAddress = inputField.text, let password = KeychainManager.getPassword() {
-            if AppModel.sharedManager().isValidNodeAddress(fullAddress) {
+            if AppModel.sharedManager().isValidNodeAddress(fullAddress) && !fullAddress.isEmpty {
                 SVProgressHUD.show()
                 
                 AppModel.sharedManager().resetOnlyWallet()
@@ -162,42 +163,31 @@ class TrustedNodeViewController: BMInputViewController {
     }
     
     private func openMainPage() {
-        if let password = KeychainManager.getPassword() {
-
+        if KeychainManager.getPassword() != nil {
             AppModel.sharedManager().stopChangeWallet()
-            
-            AppModel.sharedManager().removeDelegate(self)
             AppModel.sharedManager().isRestoreFlow = false
             AppModel.sharedManager().isOwnNode = true
-            
-            AppModel.sharedManager().refreshAddresses()
-            AppModel.sharedManager().getUTXO()
-            AppModel.sharedManager().getWalletStatus()
-            AppModel.sharedManager().getNetworkStatus()
-            
-            let vc = OpenWalletProgressViewController(password: password, phrase: nil)
-            self.pushViewController(vc: vc)
-        }        
-//
-//        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
-//        let menuViewController = LeftMenuViewController()
-//
-//        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
-//                                                      leftViewController: menuViewController,
-//                                                      rightViewController: nil)
-//
-//        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
-//        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
-//        sideMenuController.rootViewLayerShadowRadius = 0
-//        sideMenuController.rootViewLayerShadowColor = UIColor.clear
-//        sideMenuController.leftViewLayerShadowRadius = 0
-//        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
-//        sideMenuController.rootViewCoverAlphaForRightView = 0.5
-//        sideMenuController.leftViewCoverAlpha = 0.5
-//        sideMenuController.rightViewCoverAlpha = 0.5
-//        sideMenuController.modalTransitionStyle = .crossDissolve
-//
-//        navigationController?.setViewControllers([sideMenuController], animated: true)
+        }
+
+        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+        let menuViewController = LeftMenuViewController()
+
+        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+                                                      leftViewController: menuViewController,
+                                                      rightViewController: nil)
+
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
+        sideMenuController.rootViewLayerShadowRadius = 0
+        sideMenuController.rootViewLayerShadowColor = UIColor.clear
+        sideMenuController.leftViewLayerShadowRadius = 0
+        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+        sideMenuController.rootViewCoverAlphaForRightView = 0.5
+        sideMenuController.leftViewCoverAlpha = 0.5
+        sideMenuController.rightViewCoverAlpha = 0.5
+        sideMenuController.modalTransitionStyle = .crossDissolve
+
+        navigationController?.setViewControllers([sideMenuController], animated: true)
     }
 }
 
@@ -246,8 +236,32 @@ extension TrustedNodeViewController: UITextFieldDelegate {
 }
 
 extension TrustedNodeViewController: WalletModelDelegate {
-    @objc private func timerAction() {
+    
+    func onWalletStatusChange(_ status: BMWalletStatus) {
+        if status.available > 0 {
+            DispatchQueue.main.async { [weak self] in
+                guard let strongSelf = self else { return }
+                if !strongSelf.isPresented {
+                    strongSelf.isPresented = true
+                    strongSelf.timer.invalidate()
+                    SVProgressHUD.dismiss()
+                    strongSelf.openMainPage()
+                }
+            }
+        }
+    }
+    
+    @objc private func timeout() {
         SVProgressHUD.dismiss()
+        if !isPresented {
+            isPresented = true
+            timer.invalidate()
+            timeoutTimer.invalidate()
+            openMainPage()
+        }
+    }
+    
+    @objc private func timerAction() {
         
         let connected = AppModel.sharedManager().isConnected
         
@@ -256,11 +270,20 @@ extension TrustedNodeViewController: WalletModelDelegate {
             inputField.status = .normal
             
             if !isPresented {
-                isPresented = true
-                openMainPage()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    AppModel.sharedManager().getWalletStatus()
+                }
+                timer.invalidate()
+                
+                timeoutTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(timeout), userInfo: nil, repeats: false)
+            }
+            else {
+                SVProgressHUD.dismiss()
             }
         }
         else {
+            SVProgressHUD.dismiss()
+
             inputField.status = .error
             errorLabel.isHidden = false
         }
