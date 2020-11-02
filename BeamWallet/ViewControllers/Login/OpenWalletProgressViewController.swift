@@ -80,10 +80,15 @@ class OpenWalletProgressViewController: BaseViewController {
             cancelButton.isHidden = false
         }
         else if phrase == nil {
+            timeoutTimer?.invalidate()
             timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
             
             progressTitleLabel.text = Localizable.shared.strings.loading_wallet
             cancelButton.isHidden = true
+        }
+        else if phrase != nil {
+            timeoutTimer?.invalidate()
+            timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(openMainPage), userInfo: nil, repeats: false)
         }
 
         if let base = self.navigationController as? BaseNavigationController {
@@ -110,7 +115,12 @@ class OpenWalletProgressViewController: BaseViewController {
         }
     }
     
-    private func openMainPage() {
+    @objc private func openMainPage() {
+        if isPresented {
+            return
+        }
+        
+        
         isPresented = true
 
         if phrase != nil {
@@ -306,11 +316,7 @@ class OpenWalletProgressViewController: BaseViewController {
     
     @objc private func onTimeOut() {
         if Settings.sharedManager().isChangedNode() {
-            if !self.isPresented {
-                self.isPresented = true
-                
-                self.openMainPage()
-            }
+            self.openMainPage()
         }
     }
 }
@@ -321,8 +327,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             
-            if connected && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
-                strongSelf.isPresented = true
+            if connected && !AppModel.sharedManager().isRestoreFlow {
                 strongSelf.progressView.progress = 1
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -416,16 +421,11 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             let error = _error as NSError
             
             if error.code == 2 && Settings.sharedManager().isChangedNode() {
-                if !strongSelf.isPresented {
-                    strongSelf.isPresented = true
-                    strongSelf.openMainPage()
-                }
+                strongSelf.openMainPage()
             }
             else if error.code == 1 {
-                if !strongSelf.isPresented {
-                    strongSelf.isPresented = true
-                    strongSelf.openMainPage()
-                }
+                strongSelf.openMainPage()
+
 //                if strongSelf.navigationController?.viewControllers.last is OpenWalletProgressViewController {
 //                    strongSelf.confirmAlert(title: Localizable.shared.strings.incompatible_node_title, message: Localizable.shared.strings.incompatible_node_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.change_settings, cancelHandler: { (_ ) in
 //
@@ -438,10 +438,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
 //                }
             }
             else if error.code == 4 {
-                if !strongSelf.isPresented {
-                    strongSelf.isPresented = true
-                    strongSelf.openMainPage()
-                }
+                strongSelf.openMainPage()
             }
             else if !strongSelf.isPresented {
                 if let controllers = strongSelf.navigationController?.viewControllers {

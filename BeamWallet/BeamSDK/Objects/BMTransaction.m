@@ -24,6 +24,7 @@
 #import "BMAddress.h"
 #import "AppModel.h"
 
+
 @implementation BMTransaction
 
 - (void)encodeWithCoder:(NSCoder *)encoder
@@ -647,6 +648,7 @@
     
     return [details componentsJoinedByString:@"\n\n"];
 }
+
 
 @end
 

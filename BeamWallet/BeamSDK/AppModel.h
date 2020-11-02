@@ -93,6 +93,7 @@ typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shielded
 @property (nonatomic,assign) BOOL isNodeChanging;
 @property (nonatomic,assign) BOOL isOwnNode;
 @property (nonatomic,assign) BMRestoreType restoreType;
+@property (nonatomic,assign) BOOL isMaxPrivacyRequest;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;

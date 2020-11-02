@@ -215,13 +215,13 @@ extension SendConfirmViewController: WalletModelDelegate {
     
     func onChangeCalculated(_ amount: Double) {
         DispatchQueue.main.async {
-            let am = amount
-//            let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0)
-//            let left = (AppModel.sharedManager().walletStatus?.realAmount ?? 0) - total
-//
-//            if left < am {
-//                am = 0
-//            }
+            var am = amount
+            let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0)
+            let left = (AppModel.sharedManager().walletStatus?.realAmount ?? 0) - total
+
+            if left < am {
+                am = 0
+            }
             
             let totalString = String.currency(value: am) //+ Localizable.shared.strings.beam
             let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)

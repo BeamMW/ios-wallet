@@ -214,15 +214,16 @@ const bool isSecondCurrencyEnabled = true;
     for (const auto& item : peers) {
         BOOL found = NO;
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-
-        for (NSString *node in nodes) {
-            if([address isEqualToString:node]) {
-                found = YES;
+        if ([address rangeOfString:@"shanghai"].location == NSNotFound) {
+            for (NSString *node in nodes) {
+                if([address isEqualToString:node]) {
+                    found = YES;
+                }
             }
-        }
-        
-        if (!found) {
-            [array addObject:address];
+            
+            if (!found) {
+                [array addObject:address];
+            }
         }
     }
     
@@ -241,7 +242,9 @@ const bool isSecondCurrencyEnabled = true;
     
     for (const auto& item : peers) {
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        [array addObject:address];
+        if([address rangeOfString:@"shanghai"].location == NSNotFound) {
+            [array addObject:address];
+        }
     }
     
     return array;
@@ -254,7 +257,9 @@ const bool isSecondCurrencyEnabled = true;
     
     for (const auto& item : peers) {
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        [array addObject:address];
+        if([address rangeOfString:@"shanghai"].location == NSNotFound) {
+            [array addObject:address];
+        }
     }
     
     srand([[NSDate date]  timeIntervalSince1970]);
@@ -1883,15 +1888,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)calculateFee:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
    
+    self.isMaxPrivacyRequest = isShielded;
+
     self.feecalculatedBlock = block;
     
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
     
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, bFee, isShielded);
+    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount + bFee, 0, isShielded);
 }
 
 -(void)calculateFee2:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
+    
+    self.isMaxPrivacyRequest = isShielded;
     
     self.feecalculatedBlock = block;
     

@@ -75,8 +75,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func calculateFee() {
-        if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
-            AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: 0, isShielded: maxPrivacy) { (result, changed, shieldedInputsFee) in
+      //  if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
+            AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: (Double(fee) ?? 0), isShielded: maxPrivacy) { (result, changed, shieldedInputsFee) in
                 DispatchQueue.main.async {
                     self.shieldedInputsFee = shieldedInputsFee
                     let current = UInt64(self.fee) ?? 0
@@ -92,7 +92,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                     }
                 }
             }
-        }
+       // }
     }
     
     public var requestedMaxPrivacy = false
@@ -507,15 +507,19 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func calculateChange() {
-        if (AppModel.sharedManager().walletStatus?.shielded ?? 0) > 0 {
+//        AppModel.sharedManager().calculateFee2((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: maxPrivacy || requestedMaxPrivacy) { (fee, change, shieldedInputsFee) in
+//            self.onCalculateChanged?(change)
+//        }
+        
+    //    if (AppModel.sharedManager().walletStatus?.shielded ?? 0) > 0 {
             AppModel.sharedManager().calculateFee2((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: maxPrivacy || requestedMaxPrivacy) { (fee, change, shieldedInputsFee) in
                 self.onCalculateChanged?(change)
             }
-        }
-        else {
-            AppModel.sharedManager().calculateChange(Double(amount) ?? 0, fee:  Double(fee) ?? 0)
-        }
-        
+//        }
+//        else {
+//            AppModel.sharedManager().calculateChange(Double(amount) ?? 0, fee:  Double(fee) ?? 0)
+//        }
+//
         if AppModel.sharedManager().isToken(toAddress) {
             _ = AppModel.sharedManager().getTransactionParameters(toAddress)
         }

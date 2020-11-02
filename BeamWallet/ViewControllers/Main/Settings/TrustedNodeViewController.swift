@@ -31,7 +31,8 @@ class TrustedNodeViewController: BMInputViewController {
     private var timer = Timer()
     private var timeoutTimer = Timer()
     private var event: EventType!
-    
+    private var isConnected = false
+
     private var oldAddress: String!
         
     init(event: EventType) {
@@ -238,22 +239,17 @@ extension TrustedNodeViewController: UITextFieldDelegate {
 extension TrustedNodeViewController: WalletModelDelegate {
     
     func onWalletStatusChange(_ status: BMWalletStatus) {
-        if status.available > 0 {
+        if status.available > 0 && event == .restore && !Settings.sharedManager().connectToRandomNode {
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return }
-                if !strongSelf.isPresented {
-                    strongSelf.isPresented = true
-                    strongSelf.timer.invalidate()
-                    SVProgressHUD.dismiss()
-                    strongSelf.openMainPage()
-                }
+                strongSelf.timeout()
             }
         }
     }
     
     @objc private func timeout() {
         SVProgressHUD.dismiss()
-        if !isPresented {
+        if !isPresented && !Settings.sharedManager().connectToRandomNode {
             isPresented = true
             timer.invalidate()
             timeoutTimer.invalidate()
@@ -264,6 +260,7 @@ extension TrustedNodeViewController: WalletModelDelegate {
     @objc private func timerAction() {
         
         let connected = AppModel.sharedManager().isConnected
+        isConnected = connected
         
         if connected {
             errorLabel.isHidden = true
@@ -275,6 +272,7 @@ extension TrustedNodeViewController: WalletModelDelegate {
                 }
                 timer.invalidate()
                 
+                timeoutTimer.invalidate()
                 timeoutTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(timeout), userInfo: nil, repeats: false)
             }
             else {
