@@ -55,8 +55,7 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_rec_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         else if transaction.isIncome {
-            if transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
-                || transaction.enumType == BMTransactionTypePushTransaction {
+            if transaction.isShielded {
                 details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: Localizable.shared.strings.shielded_pool, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
             }
             else {
@@ -128,7 +127,7 @@ class DetailTransactionViewModel: TransactionViewModel {
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
 
         
-        if !transaction.isIncome && !transaction.isUnlink() && !transaction.isOffline && (transaction.enumType != BMTransactionTypePullTransaction && transaction.enumType != BMTransactionTypePushTransaction) {
+        if !transaction.isIncome && !transaction.isUnlink() && !transaction.isShielded {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
         }
         

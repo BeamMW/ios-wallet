@@ -572,6 +572,10 @@ class LocalizableStrings : NSObject {
     var connect_node_offline = "connect_node_offline".localized
     var transactions_remaining = "transactions_remaining".localized
     var shielded = "shielded".localized
+    var show_public_offline = "show_public_offline".localized
+//    var offline_address = "offline_address".localized
+    var offline_address = "offline_address".localized
+    var public_offline_address_info = "public_offline_address_info".localized
 
     
     public func new_version_available_title(version: String) -> String {

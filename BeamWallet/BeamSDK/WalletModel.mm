@@ -101,17 +101,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         auto kernelId = to_hex(item.m_kernelID.m_pData, item.m_kernelID.nBytes);
         std::string comment(item.m_message.begin(), item.m_message.end());
         
-        Amount fee = item.m_fee;
-        
-        std::vector<TxKernel::Ptr> shieldedInputs;
-        item.GetParameter(TxParameterID::InputsShielded, shieldedInputs);
-        if (shieldedInputs.size())
-        {
-            Transaction::FeeSettings fs;
-            Amount shieldedFee = shieldedInputs.size() * (fs.m_Kernel + fs.m_ShieldedInput);
-            fee = shieldedFee + item.m_fee;
-        }
-                
+        Amount shieldedFee = GetShieldedFee(item);
+           
         BMTransaction *transaction = [BMTransaction new];
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
@@ -128,8 +119,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.identity = [NSString stringWithUTF8String:item.getIdentity(item.m_sender).c_str()];
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
         transaction.isSelf = item.m_selfTx;
-        transaction.fee = double(int64_t(fee)) / Rules::Coin;
-        transaction.realFee = int64_t(fee);
+        transaction.fee = double(int64_t(shieldedFee)) / Rules::Coin;
+        transaction.realFee = int64_t(shieldedFee);
         transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
         transaction.canCancel = item.canCancel();
         transaction.canResume = item.canResume();
@@ -151,11 +142,36 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         }
         
         if(item.m_txType == wallet::TxType::PushTransaction) {
-            auto vouchers = item.GetParameter<ShieldedVoucherList>(wallet::TxParameterID::ShieldedVoucherList);
-            transaction.isOffline =  (vouchers && !vouchers->empty());
-        }
-        else {
-            transaction.isOffline = NO;
+            auto token = item.getToken();
+            if (token.size() > 0) { //send
+                auto p = wallet::ParseParameters(token);
+                
+                auto voucher = p->GetParameter<ShieldedTxo::Voucher>(TxParameterID::Voucher);
+                transaction.isMaxPrivacy = !!voucher;
+                
+                auto vouchers = p->GetParameter<ShieldedVoucherList>(TxParameterID::ShieldedVoucherList);
+                if (vouchers && !vouchers->empty())
+                {
+                    transaction.isShielded = true;
+                }
+                else
+                {
+                    auto gen = p->GetParameter<ShieldedTxo::PublicGen>(TxParameterID::PublicAddreessGen);
+                    if (gen)
+                    {
+                        transaction.isPublicOffline = true;
+                    }
+                }
+            }
+            else { //recieved
+                auto storedType = item.GetParameter<TxAddressType>(TxParameterID::AddressType);
+                if (storedType)
+                {
+                    if(storedType == TxAddressType::PublicOffline) {
+                        transaction.isPublicOffline = true;
+                    }
+                }
+            }
         }
         
         [transactions addObject:transaction];      
@@ -1132,6 +1148,12 @@ void WalletModel::onShieldedCoinsSelectionCalculated(const ShieldedCoinsSelectio
 void WalletModel::onNeedExtractShieldedCoins(bool val)
 {
     NSLog(@"onNeedExtractShieldedCoins");
+}
+
+void WalletModel::onPublicAddress(const std::string& publicAddr)
+{
+    NSString * address = [NSString stringWithUTF8String:publicAddr.c_str()];
+    [AppModel sharedManager].getPublicAddressBlock(address);
 }
 
 NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)

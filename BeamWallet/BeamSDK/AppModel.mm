@@ -1464,6 +1464,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
+-(void)getPublicAddress:(PublicAddressBlock _Nonnull )block {
+    self.getPublicAddressBlock = block;
+    wallet->getAsync()->getPublicAddress();
+}
+
 -(NSMutableArray<BMContact*>*_Nonnull)getWalletContacts {
     std::vector<WalletAddress> addrs = walletDb->getAddresses(false);
     
@@ -1980,7 +1985,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from maxPrivacy:(BOOL)maxPrivacy {
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from  {
+    
+    BOOL isShieldedTx = false;
+    BOOL isMaxPrivacy = false;
     
     if([[AppModel sharedManager] isToken:from]) {
         BMTransactionParameters* params = [[AppModel sharedManager] getTransactionParameters:from];
@@ -1995,6 +2003,20 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     _txParameters = *txParameters;
     
+    beam::wallet::PeerID _receiverIdentity = beam::Zero;
+
+    if (auto peerIdentity = _txParameters.GetParameter<beam::PeerID>(TxParameterID::PeerWalletIdentity); peerIdentity) {
+        _receiverIdentity = *peerIdentity;
+    }
+    
+    if (auto txType = _txParameters.GetParameter<TxType>(TxParameterID::TransactionType); txType && *txType == TxType::PushTransaction)
+    {
+        isShieldedTx = true;
+        
+        ShieldedTxo::Voucher voucher;
+        isMaxPrivacy = _txParameters.GetParameter(TxParameterID::Voucher, voucher) && _receiverIdentity != beam::Zero;
+    }
+    
     auto messageString = comment.string;
     
     uint64_t bAmount = round(amount * Rules::Coin);
@@ -2003,36 +2025,36 @@ bool OnProgress(uint64_t done, uint64_t total) {
     WalletID m_walletID(Zero);
     m_walletID.FromHex(from.string);
     
-    auto p = beam::wallet::CreateSimpleTransactionParameters()
-    .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
-    .SetParameter(beam::wallet::TxParameterID::Amount, bAmount)
-    .SetParameter(beam::wallet::TxParameterID::Fee, bfee)
-    .SetParameter(beam::wallet::TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
+    auto params = CreateSimpleTransactionParameters();
+    LoadReceiverParams(_txParameters, params);
+   
+    params.SetParameter(TxParameterID::Amount, bAmount)
+        .SetParameter(TxParameterID::Fee, bfee)
+        .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
+       // .SetParameter(beam::wallet::TxParameterID::AssetID, beam::Asset::s_BeamID)
+        .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
     
-    CopyParameter(TxParameterID::PeerID, _txParameters, p);
-    CopyParameter(TxParameterID::PeerWalletIdentity, _txParameters, p);
-    if (maxPrivacy)
+    if (isShieldedTx)
     {
-        CopyParameter(TxParameterID::TransactionType, _txParameters, p);
+        params.SetParameter(TxParameterID::TransactionType, TxType::PushTransaction);
     }
-    CopyParameter(TxParameterID::ShieldedVoucherList, _txParameters, p);
+    if (isMaxPrivacy)
+    {
+        CopyParameter(TxParameterID::Voucher, _txParameters, params);
+        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, uint8_t(64));
+    }
+    if (isShieldedTx)
+    {
+        CopyParameter(TxParameterID::PeerOwnID, _txParameters, params);
+    }
     
     if ([self isToken:to])
     {
-        p.SetParameter(TxParameterID::OriginalToken, to.string);
-        
-        auto type = p.GetParameter<TxType>(TxParameterID::TransactionType);
-
-        if(maxPrivacy && type) {
-            if(*type != beam::wallet::TxType::PushTransaction)
-            {
-                p.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
-            }
-        }
+        params.SetParameter(TxParameterID::OriginalToken, to.string);
     }
     
-    wallet->getAsync()->startTransaction(std::move(p));
-    
+    wallet->getAsync()->startTransaction(std::move(params));
+        
     NSString *toString = to;
     if([[AppModel sharedManager] isToken:toString]) {
         BMTransactionParameters* params = [[AppModel sharedManager] getTransactionParameters:toString];
@@ -2141,23 +2163,25 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     p.amount = 0.0;
     p.isMaxPrivacy = type == TxType::PushTransaction;
     
-    if (auto libVersion = params->GetParameter(TxParameterID::LibraryVersion); libVersion)
-    {
-        std::string libVersionStr;
-        beam::wallet::fromByteBuffer(*libVersion, libVersionStr);
-        std::string myLibVersionStr = BEAM_LIB_VERSION;
-        std::regex libVersionRegex("\\d{1,}\\.\\d{1,}\\.\\d{4,}");
-        if (std::regex_match(libVersionStr, libVersionRegex) &&
-            std::lexicographical_compare(
-                                         myLibVersionStr.begin(),
-                                         myLibVersionStr.end(),
-                                         libVersionStr.begin(),
-                                         libVersionStr.end(),
-                                         std::less<char>{}))
-        {
-            p.verionError = [NSString stringWithFormat:@"This address generated by newer Beam library version %@. Your version is: %@. Please, check for updates.", [NSString stringWithUTF8String:libVersionStr.c_str()], [NSString stringWithUTF8String:myLibVersionStr.c_str()]];
-        }
-    }
+//    ProcessLibraryVersion(params, ((const std::string& version, const std::string& myVersion))
+//    });
+//    if (auto libVersion = params->GetParameter(TxParameterID::LibraryVersion); libVersion)
+//    {
+//        std::string libVersionStr;
+//        beam::wallet::fromByteBuffer(*libVersion, libVersionStr);
+//        std::string myLibVersionStr = BEAM_LIB_VERSION;
+//        std::regex libVersionRegex("\\d{1,}\\.\\d{1,}\\.\\d{4,}");
+//        if (std::regex_match(libVersionStr, libVersionRegex) &&
+//            std::lexicographical_compare(
+//                                         myLibVersionStr.begin(),
+//                                         myLibVersionStr.end(),
+//                                         libVersionStr.begin(),
+//                                         libVersionStr.end(),
+//                                         std::less<char>{}))
+//        {
+//            p.verionError = [NSString stringWithFormat:@"This address generated by newer Beam library version %@. Your version is: %@. Please, check for updates.", [NSString stringWithUTF8String:libVersionStr.c_str()], [NSString stringWithUTF8String:myLibVersionStr.c_str()]];
+//        }
+//    }
         
     if(amount) {
         p.amount = double(uint64_t(*amount)) / Rules::Coin;
@@ -2458,7 +2482,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
                 [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
             }
             else{
-                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from maxPrivacy:_preparedTransactions[i].maxPrivacy];
+                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from];
             }
             
             if (!_preparedTransactions[i].saveContact) {

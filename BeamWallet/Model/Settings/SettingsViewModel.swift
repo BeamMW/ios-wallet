@@ -62,6 +62,7 @@ class SettingsViewModel: NSObject {
         case random_node = 28
         case currency = 29
         case notifications = 30
+        case offline_address = 31
     }
     
     class SettingsItem {
@@ -177,6 +178,7 @@ class SettingsViewModel: NSObject {
             items.append(section_0)
         case .utilites:
             var section_0 = [SettingsItem]()
+            section_0.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
@@ -281,6 +283,9 @@ class SettingsViewModel: NSObject {
             onCurrencyScreen()
         case .notifications:
             onNotifications()
+        case .offline_address:
+            onOfflineAddress()
+            break
         default:
             return
         }
@@ -421,6 +426,13 @@ extension SettingsViewModel {
     func onNotifications() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .notifications)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onOfflineAddress() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = OfflineAddressViewController()
             top.pushViewController(vc: vc)
         }
     }

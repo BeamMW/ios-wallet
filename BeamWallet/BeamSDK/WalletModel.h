@@ -84,4 +84,5 @@ private:
     void onPostFunctionToClientContext(MessageFunction&& func) override;
     void onExportTxHistoryToCsv(const std::string& data) override;
     void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
+    void onPublicAddress(const std::string& publicAddr) override;
 };

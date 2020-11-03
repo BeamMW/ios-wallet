@@ -77,11 +77,13 @@ typedef int BMRestoreType;
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
 typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shieldedInputsFee);
+typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 
 @interface AppModel : NSObject
 
 @property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
 @property (nonatomic) FeecalculatedBlock _Nullable feecalculatedBlock;
+@property (nonatomic) PublicAddressBlock _Nullable getPublicAddressBlock;
 @property (nonatomic,readwrite) NSPointerArray * _Nonnull delegates;
 
 @property (nonatomic,assign) BOOL isConnected;
@@ -192,6 +194,7 @@ typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shielded
 -(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy;
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 -(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name;
+-(void)getPublicAddress:(PublicAddressBlock _Nonnull )block;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
@@ -199,7 +202,7 @@ typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shielded
 -(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from maxPrivacy:(BOOL)maxPrivacy;
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from;
 -(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact maxPrivacy:(BOOL)maxPrivacy;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;

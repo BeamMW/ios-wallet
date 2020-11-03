@@ -55,8 +55,7 @@ class NotificationItem {
                     else {
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
 
-                        if transaction.senderAddress == "0" || transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
-                            || transaction.enumType == BMTransactionTypePushTransaction {
+                        if transaction.isShielded {
                             name = "Transaction received from offline"
                             icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
                             detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: "shielded pool", failed: false)
@@ -78,8 +77,7 @@ class NotificationItem {
                     else {
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
 
-                        if transaction.isOffline || transaction.enumType == BMTransactionTypePullTransaction
-                        || transaction.enumType == BMTransactionTypePushTransaction {
+                        if transaction.isShielded  {
                             icon = UIImage.init(named: "iconNotifictionsSendedOffline")
                             name = "Transaction sent to offline"
                         }

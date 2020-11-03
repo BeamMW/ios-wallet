@@ -142,8 +142,7 @@ class TransactionViewModel: NSObject {
         
         var rep:UIContextualAction? = nil
         
-        if !transaction.isOffline && (transaction.enumType != BMTransactionTypePullTransaction
-            && transaction.enumType != BMTransactionTypePushTransaction) {
+        if !transaction.isShielded {
             rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
                 handler(true)
                 self.repeatTransation(transaction: transaction)

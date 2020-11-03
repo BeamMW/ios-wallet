@@ -595,3 +595,8 @@ and never kept on the blockchain.";
 "maturity" = "Maturity";
 "connect_node_offline" = "Connect to integrated or own node to enable sending offline transactions";
 "shielded" = "Shielded";
+"public_offline_address_info" = "Publishing this address will allow you to be identified";
+"offline_address" = "Offline address";
+"show_public_offline" = "Show public offline address";
+"public" = "public";
+"max_privacy" = "Max Privacy";

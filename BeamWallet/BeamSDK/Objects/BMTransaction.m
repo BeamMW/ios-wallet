@@ -52,7 +52,10 @@
     [encoder encodeObject:self.receiverContactName forKey: @"receiverContactName"];
     [encoder encodeObject:self.identity forKey: @"identity"];
     
-    [encoder encodeObject:[NSNumber numberWithBool:self.isOffline] forKey: @"isOffline"];
+    [encoder encodeObject:[NSNumber numberWithBool:self.isMaxPrivacy] forKey: @"isMaxPrivacy"];
+    [encoder encodeObject:[NSNumber numberWithBool:self.isPublicOffline] forKey: @"isPublicOffline"];
+    [encoder encodeObject:[NSNumber numberWithBool:self.isShielded] forKey: @"isShielded"];
+    [encoder encodeObject:self.token forKey: @"token"];
 }
 
 -(id)initWithCoder:(NSCoder *)decoder
@@ -83,8 +86,11 @@
         self.receiverContactName = [decoder decodeObjectForKey: @"receiverContactName"];
         self.identity = [decoder decodeObjectForKey: @"identity"];
         
-        self.isOffline = [[decoder decodeObjectForKey:@"isOffline"] boolValue];
+        self.isMaxPrivacy = [[decoder decodeObjectForKey:@"isMaxPrivacy"] boolValue];
+        self.isPublicOffline = [[decoder decodeObjectForKey:@"isPublicOffline"] boolValue];
+        self.isShielded = [[decoder decodeObjectForKey:@"isShielded"] boolValue];
 
+        self.token = [decoder decodeObjectForKey: @"token"];
     }
     return self;
 }
@@ -211,10 +217,16 @@
 }
 
 -(NSString*)statusType {
-    if (_isOffline || _enumType == BMTransactionTypePushTransaction){
+    if (_isPublicOffline) {
+        return [NSString stringWithFormat:@"%@ (%@ %@)", _status, [[@"public" localized]lowercaseString], [[@"offline" localized]lowercaseString]];
+    }
+    else if (_isMaxPrivacy) {
+        return [NSString stringWithFormat:@"%@ (%@)", _status, [[@"max_privacy" localized]lowercaseString]];
+    }
+    else if (_isShielded || _enumType == BMTransactionTypePushTransaction){
         return [NSString stringWithFormat:@"%@ (%@)", _status, [[@"offline" localized]lowercaseString]];
     }
-    return  _status;
+    return _status;
 }
 
 -(NSString*)statusName {
@@ -237,48 +249,78 @@
     else if (self.enumType == BMTransactionTypePushTransaction) {
         if(_isIncome) {
             if(self.isCancelled) {
-                return _isOffline ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
+                return _isShielded ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
             }
             else if(self.isFailed) {
-                return _isOffline ? [UIImage imageNamed:@"icon-failed-max-offline"] : [UIImage imageNamed:@"icon-failed-max-online"];
+                return _isShielded ? [UIImage imageNamed:@"icon-failed-max-offline"] : [UIImage imageNamed:@"icon-failed-max-online"];
+            }
+            else if (_isPublicOffline || _isMaxPrivacy) {
+                switch (_enumStatus) {
+                    case BMTransactionStatusCompleted:
+                        return [UIImage imageNamed:@"icon-received-max-privacy-online"];
+                    default:
+                        return [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                }
             }
             else {
                 switch (_enumStatus) {
-                        
                     case BMTransactionStatusPending:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                     case BMTransactionStatusInProgress:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                     case BMTransactionStatusRegistering:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                     case BMTransactionStatusCompleted:
                         return [UIImage imageNamed:@"icon-received-max-privacy-offline"];
                         //_isOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     default:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                 }
             }
         }
         else{
             if(self.isCancelled) {
-                return _isOffline ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
+                if (_isPublicOffline || _isMaxPrivacy) {
+                    return [UIImage imageNamed:@"icon-canceled-max-online"];
+                }
+                else {
+                    return _isShielded ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
+                }
             }
             else if(self.isFailed) {
-                return _isOffline ? [UIImage imageNamed:@"icon-failed-max-offline"] : [UIImage imageNamed:@"icon-failed-max-online"];
+                if (_isPublicOffline || _isMaxPrivacy) {
+                    return [UIImage imageNamed:@"icon-failed-max-online"];
+                }
+                else {
+                    return _isShielded ? [UIImage imageNamed:@"icon-failed-max-offline"] : [UIImage imageNamed:@"icon-failed-max-online"];
+                }
+            }
+            else if (_isPublicOffline || _isMaxPrivacy) {
+                switch (_enumStatus) {
+                    case BMTransactionStatusPending:
+                        return [UIImage imageNamed:@"icon-in-progress-max-online"];
+                    case BMTransactionStatusInProgress:
+                        return [UIImage imageNamed:@"icon-in-progress-max-online"];
+                    case BMTransactionStatusRegistering:
+                        return [UIImage imageNamed:@"icon-in-progress-max-online"];
+                    case BMTransactionStatusCompleted:
+                        return [UIImage imageNamed:@"icon-send-max-online"];
+                    default:
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                }
             }
             else {
                 switch (_enumStatus) {
-                        
                     case BMTransactionStatusPending:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusInProgress:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusRegistering:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusCompleted:
-                        return _isOffline ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
                     default:
-                        return _isOffline ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                 }
             }
         }
