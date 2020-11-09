@@ -55,17 +55,25 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_rec_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
         else if transaction.isIncome {
-            if transaction.isShielded {
-                details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: Localizable.shared.strings.shielded_pool, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            if transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.sender_identity.uppercased(), detail: transaction.senderIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             else {
                 details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            
+            if transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiver_identity.uppercased(), detail: transaction.receiverIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            }
         }
         else{
             details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            
+            if transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiver_identity.uppercased(), detail: transaction.receiverIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            }
             
             details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
@@ -73,6 +81,9 @@ class DetailTransactionViewModel: TransactionViewModel {
         if transaction.realFee > 0 {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String(transaction.realFee) + " GROTH", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
+        
+        details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+
         
         if transaction.isIncome {
             if let last = AppModel.sharedManager().getFirstTransactionId(forAddress: transaction.receiverAddress) {

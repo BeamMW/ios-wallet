@@ -40,7 +40,10 @@
 
     [encoder encodeObject:[NSNumber numberWithDouble:self.fee] forKey: @"fee"];
     [encoder encodeObject:[NSNumber numberWithLongLong:self.realFee] forKey: @"realFee"];
-
+    
+    [encoder encodeObject:self.senderIdentity forKey: @"senderIdentity"];
+    [encoder encodeObject:self.receiverIdentity forKey: @"receiverIdentity"];
+    
     [encoder encodeObject:self.senderAddress forKey: @"senderAddress"];
     [encoder encodeObject:self.receiverAddress forKey: @"receiverAddress"];
     
@@ -77,7 +80,10 @@
 
         self.senderAddress = [decoder decodeObjectForKey: @"senderAddress"];
         self.receiverAddress = [decoder decodeObjectForKey: @"receiverAddress"];
-
+        
+        self.senderIdentity = [decoder decodeObjectForKey: @"senderIdentity"];
+        self.receiverIdentity = [decoder decodeObjectForKey: @"receiverIdentity"];
+        
         self.comment = [decoder decodeObjectForKey: @"comment"];
         self.failureReason = [decoder decodeObjectForKey: @"failureReason"];
         self.kernelId = [decoder decodeObjectForKey: @"kernelId"];
@@ -188,14 +194,23 @@
     NSString *_type =  self.isIncome ? @"Receive BEAM" : @"Send BEAM";
     NSString *_date =  [self formattedDate];
     NSString *_amount =  [[formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *_secondAmount = [[AppModel sharedManager] exchangeValue:_realAmount];
+
     NSString *_status = self.status;
     NSString *_sending = self.senderAddress;
     NSString *_receiving = self.receiverAddress;
+    NSString *_addresstype = [self getAddressType];
+    if (_isIncome && (_isPublicOffline || _isShielded)) {
+        _sending = @"Shielded pool";
+    }
+    else if (_isIncome && (_isPublicOffline || _isShielded)) {
+        _receiving = @"Shielded pool";
+    }
     NSString *_fee =  [[formatter stringFromNumber:[NSNumber numberWithDouble:self.fee]] stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *_id = self.ID;
     NSString *_kernel = self.kernelId;
     
-    NSArray *array = @[_type,_date,_amount,_status,_sending,_receiving,_fee,_id,_kernel];
+    NSArray *array = @[_type,_date,_amount, _secondAmount, _status,_sending,_receiving, _addresstype, _fee, _id, _kernel];
     
     return [[array componentsJoinedByString:@","] stringByAppendingString:@"\n"];
 }
@@ -228,6 +243,20 @@
     }
     return _status;
 }
+
+-(NSString*)getAddressType {
+    if (_isPublicOffline) {
+        return [@"public_offline" localized];
+    }
+    else if (_isMaxPrivacy) {
+        return [@"max_privacy" localized];
+    }
+    else if (_isShielded || _enumType == BMTransactionTypePushTransaction){
+        return [@"offline" localized];
+    }
+    return [@"regular" localized];
+}
+
 
 -(NSString*)statusName {
     NSString *status = @"";
@@ -644,8 +673,8 @@
     }
     else if(_isIncome)
     {
-        if (self.enumType == BMTransactionTypePushTransaction) {
-            sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], [@"shielded_pool" localized]];
+        if (self.isShielded || self.isMaxPrivacy || self.isPublicOffline) {
+            sender = [NSString stringWithFormat:@"%@\n%@",[[@"sender_identity" localized]uppercaseString], _senderIdentity];
         }
         else {
             sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _senderAddress];
@@ -659,6 +688,8 @@
     
     NSString *fee = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_fee" localized]uppercaseString], [NSString stringWithFormat:@"%llu GROTH",_realFee]];
     
+    NSString *addressType = [NSString stringWithFormat:@"%@\n%@",[[@"address_type" localized]uppercaseString], [self getAddressType]];
+    
     NSString *trid = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_id" localized]uppercaseString], _ID];
     
     [details addObject:date];
@@ -669,6 +700,7 @@
     if (_realFee > 0) {
         [details addObject:fee];
     }
+    [details addObject:addressType];
     [details addObject:trid];
     
     if(_identity.length > 0){

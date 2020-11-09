@@ -36,7 +36,8 @@ class BaseViewController: UIViewController {
     public var disableMenu = false
     
     private var alpha:CGFloat = 1.0
-    
+    public let statusView = BMNetworkStatusView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -128,7 +129,6 @@ class BaseViewController: UIViewController {
         if addedStatusView {
             self.isAddStatusView = true
             
-            let statusView = BMNetworkStatusView()
             statusView.tag = 11
             statusView.y = Device.isXDevice ? 110 : 80
             statusView.x = 5

@@ -43,7 +43,8 @@ class ReceiveViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.receive.uppercased()
         
-        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self, ReceiveAddressTokensCell.self, ReceiveAddressOptionsCell_2.self])
+        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self, ReceiveTokenCell.self, ReceiveAddressOptionsCell_2.self])
+        
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
@@ -201,7 +202,7 @@ extension ReceiveViewController : UITableViewDataSource {
             return 1
         }
         else if section == 0 {
-            return 2
+            return viewModel.values.count + 1
         }
         return 1
     }
@@ -229,10 +230,12 @@ extension ReceiveViewController : UITableViewDataSource {
                 }
             }
             else {
+                let value = viewModel.values[indexPath.row-1]
+                
                 let cell = tableView
-                    .dequeueReusableCell(withType: ReceiveAddressTokensCell.self, for: indexPath)
+                    .dequeueReusableCell(withType: ReceiveTokenCell.self, for: indexPath)
                 cell.contentView.backgroundColor = UIColor.main.marineThree
-                cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, address: viewModel.address))
+                cell.configure(with: (title: value.name, value: value.value, index: indexPath.row-1, info: value.info))
                 cell.delegate = self
                 return cell
             }
@@ -374,9 +377,9 @@ extension ReceiveViewController : BMCellProtocol {
                     if let options1 = cell as? ReceiveAddressOptionsCell {
                         options1.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
                     }
-                    else if let options2 = cell as? ReceiveAddressTokensCell {
-                        options2.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, address: viewModel.address))
-                    }
+//                    else if let options2 = cell as? ReceiveAddressTokensCell {
+//                        options2.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, address: viewModel.address))
+//                    }
                     else if let options3 = cell as? SecondCell {
                         let amount = Double(viewModel.amount ?? "0") ?? 0
                         let second = AppModel.sharedManager().exchangeValue(amount)
@@ -437,11 +440,6 @@ extension ReceiveViewController : BMCellProtocol {
     }
     
 
-    func onClickShare() {
-        self.view.endEditing(true)
-        
-        viewModel.onShare()
-    }
     
     func onClickCopy() {
         self.view.endEditing(true)
@@ -464,6 +462,7 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
         vc.didCopyToken = { [weak self] in
             self?.viewModel.isShared = true
         }
+        vc.isMiningPool = !AppModel.sharedManager().isToken(token)
         self.pushViewController(vc: vc)
     }
     
@@ -482,19 +481,21 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
             top.present(modalViewController, animated: true, completion: nil)
         }
     }
+    
+    func onShareToken(token: String) {
+        viewModel.onShare(token: token)
+    }
 }
 
 extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
     @objc func onRegular() {
         viewModel.transaction = .regular
-        viewModel.expire = .oneTime
         viewModel.needReloadButtons = true
         self.tableView.reloadData()
     }
     
     @objc func onMaxPrivacy() {
         viewModel.transaction = .privacy
-        viewModel.expire = .parmanent
         viewModel.needReloadButtons = true
         self.tableView.reloadData()
     }

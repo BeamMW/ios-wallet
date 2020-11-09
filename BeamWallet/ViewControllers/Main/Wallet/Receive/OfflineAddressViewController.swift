@@ -52,7 +52,7 @@ class OfflineAddressViewController: BaseViewController {
 
     @IBAction private func onCopy() {
         UIPasteboard.general.string = address
-        ShowCopied()
+        ShowCopied(text: Localizable.shared.strings.address_copied)
     }
     
     override func viewDidAppear(_ animated: Bool) {

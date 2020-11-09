@@ -40,7 +40,6 @@ class SendAllCell: BaseCell {
 
         if Settings.sharedManager().isDarkMode {
             titleLabel.textColor = UIColor.main.steel;
-            amountLabel.textColor = UIColor.main.steel;
         }
     }
 

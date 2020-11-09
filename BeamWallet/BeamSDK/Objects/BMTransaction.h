@@ -71,14 +71,20 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,assign) UInt64 realFee;
 @property (nonatomic,assign) BMTransactionStatus enumStatus;
 @property (nonatomic,assign) BMTransactionType enumType;
+
 @property (nonatomic,strong) NSString *senderContactName;
 @property (nonatomic,strong) NSString *receiverContactName;
+
 @property (nonatomic,strong) NSString *identity;
 @property (nonatomic,strong) NSString *token;
+
+@property (nonatomic,strong) NSString *senderIdentity;
+@property (nonatomic,strong) NSString *receiverIdentity;
 
 -(UIImage*)statusIcon;
 -(NSString*)statusName;
 -(NSString*)statusType;
+-(NSString*)getAddressType;
 
 -(NSString*)formattedDate;
 -(NSString*)shortDate;

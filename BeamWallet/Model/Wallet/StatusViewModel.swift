@@ -32,7 +32,7 @@ class StatusViewModel: NSObject {
     enum SelectedState: Int {
         case available = 0
         case maturing = 1
-        case unlink = 2
+        case maxPrivacy = 2
     }
     
     public var onDataChanged : (() -> Void)?
@@ -61,11 +61,10 @@ class StatusViewModel: NSObject {
         return false
     }
     
-    public func isAvaiableUnlink() -> Bool {
-//        if AppModel.sharedManager().walletStatus?.shielded ?? 0 > 0 {
-//            return true
-//        }
-        
+    public func isAvaiableMaxPrivacy() -> Bool {
+        if AppModel.sharedManager().walletStatus?.maxPrivacy ?? 0 > 0 {
+            return true
+        }
         return false
     }
     

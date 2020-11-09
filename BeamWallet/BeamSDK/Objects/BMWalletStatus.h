@@ -27,18 +27,16 @@
 @property (nonatomic,assign) UInt64 receiving;
 @property (nonatomic,assign) UInt64 sending;
 @property (nonatomic,assign) UInt64 maturing;
-//@property (nonatomic,assign) UInt64 linked;
-//@property (nonatomic,assign) UInt64 unlinked;
 @property (nonatomic,assign) UInt64 shielded;
+@property (nonatomic,assign) UInt64 maxPrivacy;
 
 
 @property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) double realReceiving;
 @property (nonatomic,assign) double realSending;
 @property (nonatomic,assign) double realMaturing;
-@property (nonatomic,assign) double realLinked;
-@property (nonatomic,assign) double realUnlinked;
 @property (nonatomic,assign) double realShielded;
+@property (nonatomic,assign) double realMaxPrivacy;
 
 @property (nonatomic,strong) NSString *currentHeight;
 @property (nonatomic,strong) NSString *currentStateHash;

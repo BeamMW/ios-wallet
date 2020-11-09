@@ -28,7 +28,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xyQ-aU-fbe">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="206"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TRANSACTION TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yM-dN-fx2">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="ADDRESS TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yM-dN-fx2">
                                 <rect key="frame" x="15" y="15" width="290" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="17" id="Ogi-bi-2m1"/>
@@ -116,12 +116,12 @@
             <viewLayoutGuide key="safeArea" id="TYd-F7-TkI"/>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
+                <outlet property="addressTypeLabel" destination="8yM-dN-fx2" id="7zA-Lp-nHu"/>
+                <outlet property="addressTypeSegment" destination="7uY-S4-c7P" id="TPQ-cO-upm"/>
                 <outlet property="errorLabel" destination="qTg-Eo-gW5" id="r9C-mv-Gd6"/>
                 <outlet property="expirationLabel" destination="hlj-Yx-xuF" id="YBN-JC-EzJ"/>
                 <outlet property="expireTypeSegment" destination="bCL-ff-oUd" id="3yf-OE-WFL"/>
                 <outlet property="offset" destination="wkS-Ed-f2y" id="RVt-qr-x04"/>
-                <outlet property="transactionTypeLabel" destination="8yM-dN-fx2" id="Fti-m7-dSh"/>
-                <outlet property="transactionTypeSegment" destination="7uY-S4-c7P" id="q17-gX-QmV"/>
             </connections>
             <point key="canvasLocation" x="37.681159420289859" y="-75"/>
         </tableViewCell>

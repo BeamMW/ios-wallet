@@ -49,12 +49,17 @@ class TransactionShareView: UIView {
     @IBOutlet private weak var transactionIDTitleLabel: UILabel!
     @IBOutlet private weak var transactionIDValueLabel: UILabel!
     
+    @IBOutlet private weak var feeStackView: UIStackView!
     @IBOutlet private weak var transactionFeeTitleLabel: UILabel!
     @IBOutlet private weak var transactionFeeValueLabel: UILabel!
     
     @IBOutlet private weak var kernelStackView: UIStackView!
     @IBOutlet private weak var transactionKernelTitleLabel: UILabel!
     @IBOutlet private weak var transactionKernelValueLabel: UILabel!
+    
+    @IBOutlet private weak var addressTypeStackView: UIStackView!
+    @IBOutlet private weak var addressTypeTitleLabel: UILabel!
+    @IBOutlet private weak var addressTypeValueLabel: UILabel!
     
     @IBOutlet private weak var walletIdStackView: UIStackView!
     @IBOutlet private weak var walletIdTitleLabel: UILabel!
@@ -122,8 +127,14 @@ class TransactionShareView: UIView {
             receiverTitleLabel.text = Localizable.shared.strings.my_address
         }
         
-        transactionFeeTitleLabel.text = Localizable.shared.strings.transaction_fee
-        transactionFeeValueLabel.text = String(transaction.realFee) + " GROTH"
+        
+        if transaction.realFee == 0 {
+            feeStackView.isHidden = true
+        }
+        else {
+            transactionFeeTitleLabel.text = Localizable.shared.strings.transaction_fee
+            transactionFeeValueLabel.text = String(transaction.realFee) + " GROTH"
+        }
         
         transactionIDTitleLabel.text  = Localizable.shared.strings.transaction_id
         transactionIDValueLabel.text = transaction.id
@@ -154,6 +165,8 @@ class TransactionShareView: UIView {
             amountLabel.textColor = UIColor.main.heliotrope
         }
         
+        addressTypeValueLabel.text = transaction.getAddressType();
+        
         transactionKernelValueLabel.text = transaction.kernelId
         if transaction.kernelId.contains("000000") || transaction.isExpired() || transaction.isFailed() {
             kernelStackView.isHidden = true
@@ -164,7 +177,8 @@ class TransactionShareView: UIView {
         transactionIDTitleLabel.text = transactionIDTitleLabel.text?.uppercased()
         transactionFeeTitleLabel.text = transactionFeeTitleLabel.text?.uppercased()
         transactionKernelTitleLabel.text = transactionKernelTitleLabel.text?.uppercased()
-        
+        addressTypeTitleLabel.text = Localizable.shared.strings.address_type.uppercased()
+
         if !transaction.identity.isEmpty {
             walletIdTitleLabel.text = walletIdTitleLabel.text?.uppercased()
             walletIdValueLabel.text = transaction.identity

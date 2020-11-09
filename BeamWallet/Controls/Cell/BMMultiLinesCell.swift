@@ -41,6 +41,15 @@ class BMMultiLinesCell: BaseCell {
         }
     }
     
+    public var maxLines = 0 {
+        didSet {
+            valueLabel.numberOfLines = maxLines
+            valueLabel.adjustsFontSizeToFitWidth = false
+            valueLabel.adjustFontSize = false
+            valueLabel.lineBreakMode = .byTruncatingMiddle
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         

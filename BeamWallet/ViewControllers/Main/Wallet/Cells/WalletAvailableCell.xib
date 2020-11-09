@@ -3,7 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -271,14 +271,14 @@
                 <outlet property="maturingButton" destination="cJG-jt-Uua" id="iun-cG-9cp"/>
                 <outlet property="maturingLabel" destination="Vfu-72-uSx" id="3Pm-Qw-bR2"/>
                 <outlet property="maturingView" destination="1qZ-Hb-en1" id="mCX-f4-UIn"/>
+                <outlet property="maxPrivactTopButtonButton" destination="eMf-z3-M7Q" id="HWd-I7-feW"/>
+                <outlet property="maxPrivacyLabel" destination="92K-Q9-PAl" id="EBv-Lr-WF0"/>
+                <outlet property="maxPrivacyView" destination="0uc-Qz-goX" id="YxP-z7-xaX"/>
                 <outlet property="pageView" destination="Hmq-AX-eeV" id="ehA-nn-imL"/>
                 <outlet property="secondAvailableLabel" destination="CIF-Ek-MJq" id="ssQ-sD-jNn"/>
                 <outlet property="secondMaturingLabel" destination="Xig-AJ-TW9" id="7P4-nQ-2Yc"/>
-                <outlet property="secondUnlinkLabel" destination="Fyf-cg-Ffs" id="Rb5-8x-kba"/>
-                <outlet property="unkinkTopButtonButton" destination="eMf-z3-M7Q" id="2ZV-Hr-3Yo"/>
+                <outlet property="secondMaxPrivacyLabel" destination="Fyf-cg-Ffs" id="u1E-dU-WZz"/>
                 <outlet property="unlinkButton" destination="noZ-bA-1yW" id="LFr-Xu-Em1"/>
-                <outlet property="unlinkLabel" destination="92K-Q9-PAl" id="DOy-eQ-DV5"/>
-                <outlet property="unlinkView" destination="0uc-Qz-goX" id="k1e-4E-lbL"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="86.806596701649184"/>
         </tableViewCell>

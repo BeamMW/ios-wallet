@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,22 +11,19 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
-        <array key="SF-Pro-Display-Regular.otf">
-            <string>SFProDisplay-Regular</string>
-        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReceiveAddressOptionsCell_2" rowHeight="-186" id="073-jm-iBu" customClass="ReceiveAddressOptionsCell_2" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="073-jm-iBu" id="jKB-gO-h6p">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LIs-2V-53p">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TRANSACTION TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kU4-ci-51R">
                                 <rect key="frame" x="15" y="15" width="290" height="17"/>
@@ -54,24 +51,15 @@
                                     <action selector="onTransactionWithSender:" destination="073-jm-iBu" eventType="valueChanged" id="yWj-FW-jzj"/>
                                 </connections>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="The receiver pays fees." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jqQ-Z2-zI5">
-                                <rect key="frame" x="15" y="92" width="290" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="sqH-s7-2GE" firstAttribute="leading" secondItem="LIs-2V-53p" secondAttribute="leading" constant="15" id="7Cg-7U-PHe"/>
                             <constraint firstAttribute="trailing" secondItem="kU4-ci-51R" secondAttribute="trailing" constant="15" id="7yE-15-8EY"/>
-                            <constraint firstAttribute="bottom" secondItem="jqQ-Z2-zI5" secondAttribute="bottom" constant="6" id="Kz9-zx-Jc9"/>
+                            <constraint firstAttribute="height" constant="100" id="A9p-wh-9RS"/>
                             <constraint firstItem="sqH-s7-2GE" firstAttribute="top" secondItem="kU4-ci-51R" secondAttribute="bottom" constant="10" id="L2E-ze-HOF"/>
-                            <constraint firstItem="jqQ-Z2-zI5" firstAttribute="top" secondItem="sqH-s7-2GE" secondAttribute="bottom" constant="10" id="Lsv-IC-Anr"/>
                             <constraint firstItem="kU4-ci-51R" firstAttribute="leading" secondItem="LIs-2V-53p" secondAttribute="leading" constant="15" id="M8M-5B-MED"/>
-                            <constraint firstItem="jqQ-Z2-zI5" firstAttribute="leading" secondItem="LIs-2V-53p" secondAttribute="leading" constant="15" id="gR4-7o-86L"/>
                             <constraint firstItem="kU4-ci-51R" firstAttribute="top" secondItem="LIs-2V-53p" secondAttribute="top" constant="15" id="nRN-JD-bzk"/>
-                            <constraint firstAttribute="trailing" secondItem="jqQ-Z2-zI5" secondAttribute="trailing" constant="15" id="s2Y-R4-53n"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -85,7 +73,6 @@
             <viewLayoutGuide key="safeArea" id="Jg9-g0-r5g"/>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
-                <outlet property="infoLabel" destination="jqQ-Z2-zI5" id="LRR-ue-Zmz"/>
                 <outlet property="transactionTypeLabel" destination="kU4-ci-51R" id="Nag-SY-XHx"/>
                 <outlet property="transactionTypeSegment" destination="sqH-s7-2GE" id="cxJ-JR-Z0z"/>
             </connections>

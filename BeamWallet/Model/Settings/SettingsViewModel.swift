@@ -21,7 +21,7 @@ import Foundation
 import MobileCoreServices
 
 class SettingsViewModel: NSObject {
-    enum SettingsType: Int {
+    public enum SettingsType: Int {
         case main = 0
         case general = 1
         case node = 2
@@ -431,10 +431,19 @@ extension SettingsViewModel {
     }
     
     func onOfflineAddress() {
-        if let top = UIApplication.getTopMostViewController() {
-            let vc = OfflineAddressViewController()
-            top.pushViewController(vc: vc)
+        let isOwn = AppModel.sharedManager().checkIsOwnNode()
+        if isOwn {
+            if let top = UIApplication.getTopMostViewController() {
+                let vc = OfflineAddressViewController()
+                top.pushViewController(vc: vc)
+            }
         }
+        else {
+            if let top = UIApplication.getTopMostViewController() {
+                top.alert(title: Localizable.shared.strings.show_public_offline, message: Localizable.shared.strings.connect_node_offline_public, handler: nil)
+            }
+        }
+  
     }
     
     func onLockScreen() {

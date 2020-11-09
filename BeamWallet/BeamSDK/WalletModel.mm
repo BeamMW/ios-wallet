@@ -63,21 +63,23 @@ void WalletModel::onStatus(const WalletStatus& status)
 {
     NSLog(@"onStatus");
 
+    auto wstatus = status.GetBeamStatus();
+
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
-    walletStatus.available = status.available + status.shielded;
-    walletStatus.receiving = status.receiving;
-    walletStatus.maturing = status.maturing;
-    walletStatus.sending = status.sending;
-//    walletStatus.linked = 0;//status.linked;
-//    walletStatus.unlinked = 0; //status.unlinked;
-    walletStatus.shielded = status.shielded;
-    walletStatus.realAmount = (double(int64_t(status.available)) / Rules::Coin) + (double(int64_t(status.shielded)) / Rules::Coin);
-    walletStatus.realMaturing = double(int64_t(status.maturing)) / Rules::Coin;
-    walletStatus.realSending = double(int64_t(status.sending)) / Rules::Coin;
-    walletStatus.realReceiving = double(int64_t(status.receiving)) / Rules::Coin;
-    walletStatus.realShielded = double(int64_t(status.shielded)) / Rules::Coin;
-    walletStatus.realUnlinked = 0; // double(int64_t(status.unlinked)) / Rules::Coin;
-    walletStatus.realLinked = 0; //double(int64_t(status.linked)) / Rules::Coin;
+    walletStatus.available = wstatus.available + wstatus.shielded;
+    walletStatus.receiving = wstatus.receiving;
+    walletStatus.maturing = wstatus.maturing;
+    walletStatus.sending = wstatus.sending;
+    walletStatus.shielded = wstatus.shielded;
+    walletStatus.maxPrivacy = wstatus.maturingMP;
+
+    walletStatus.realAmount = (double(int64_t(wstatus.available)) / Rules::Coin) + (double(int64_t(wstatus.shielded)) / Rules::Coin);
+    walletStatus.realMaturing = double(int64_t(wstatus.maturing)) / Rules::Coin;
+    walletStatus.realSending = double(int64_t(wstatus.sending)) / Rules::Coin;
+    walletStatus.realReceiving = double(int64_t(wstatus.receiving)) / Rules::Coin;
+    walletStatus.realShielded = double(int64_t(wstatus.shielded)) / Rules::Coin;
+    walletStatus.realMaxPrivacy = double(int64_t(wstatus.maturingMP)) / Rules::Coin;
+
     walletStatus.currentHeight = [NSString stringWithUTF8String:to_string(status.stateID.m_Height).c_str()];
     walletStatus.currentStateHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, 15).c_str()];;
     walletStatus.currentStateFullHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, status.stateID.m_Hash.nBytes).c_str()];;
@@ -90,6 +92,32 @@ void WalletModel::onStatus(const WalletStatus& status)
             [delegate onWalletStatusChange:walletStatus];
         }
     }
+}
+
+NSString* WalletModel::GetAddressTo(TxDescription transaction)
+{
+    if (transaction.m_sender)
+    {
+        NSString *token = [NSString stringWithUTF8String:transaction.getToken().c_str()];
+        if([[AppModel sharedManager] isToken:token]) {
+            BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:token];
+            return params.address;
+        }
+        if (token.length == 0)
+            return [NSString stringWithUTF8String:to_string(transaction.m_peerId).c_str()];
+        return token;
+    }
+    return [NSString stringWithUTF8String:to_string(transaction.m_myId).c_str()];
+}
+
+NSString* WalletModel::GetAddressFrom(TxDescription transaction)
+{
+    if (transaction.m_txType == wallet::TxType::PushTransaction && !transaction.m_sender)
+    {
+        return [NSString stringWithUTF8String:transaction.getSenderIdentity().c_str()];
+    }
+    
+    return transaction.m_sender ? [NSString stringWithUTF8String:to_string(transaction.m_myId).c_str()] : [NSString stringWithUTF8String:to_string(transaction.m_peerId).c_str()];
 }
 
 void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vector<beam::wallet::TxDescription>& items)
@@ -126,21 +154,12 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.canResume = item.canResume();
         transaction.canDelete = item.canDelete();
         transaction.comment = [NSString stringWithUTF8String:comment.c_str()];
-        
-        if (item.m_sender) {
-            transaction.senderAddress = [NSString stringWithUTF8String:to_string(item.m_myId).c_str()];
-        }
-        else{
-            transaction.senderAddress = [NSString stringWithUTF8String:to_string(item.m_peerId).c_str()];
-        }
-        
-        if (item.m_sender) {
-            transaction.receiverAddress = [NSString stringWithUTF8String:to_string(item.m_peerId).c_str()];
-        }
-        else{
-            transaction.receiverAddress = [NSString stringWithUTF8String:to_string(item.m_myId).c_str()];
-        }
-        
+        transaction.senderIdentity = [NSString stringWithUTF8String:item.getSenderIdentity().c_str()];
+        transaction.receiverIdentity = [NSString stringWithUTF8String:item.getReceiverIdentity().c_str()];
+
+        transaction.senderAddress = GetAddressFrom(item);
+        transaction.receiverAddress = GetAddressTo(item);
+
         if(item.m_txType == wallet::TxType::PushTransaction) {
             auto token = item.getToken();
             if (token.size() > 0) { //send
@@ -169,6 +188,12 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
                 {
                     if(storedType == TxAddressType::PublicOffline) {
                         transaction.isPublicOffline = true;
+                    }
+                    else if(storedType == TxAddressType::MaxPrivacy) {
+                        transaction.isMaxPrivacy = true;
+                    }
+                    else if(storedType == TxAddressType::Offline) {
+                        transaction.isShielded = true;
                     }
                 }
             }
@@ -276,19 +301,6 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
     }
 }
 
-void WalletModel::onChangeCalculated(beam::Amount change)
-{
-    NSLog(@"onChangeCalculated");
-    
-    double amount = double(int64_t(change)) / Rules::Coin;
-    
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onChangeCalculated:)]) {
-            [delegate onChangeCalculated:amount];
-        }
-    }
-}
 
 void WalletModel::onAllUtxoChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Coin>& utxos) {
 
@@ -521,8 +533,10 @@ void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walle
     address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
 
     getAsync()->saveAddress(walletAddr, true);
-    
-    [AppModel sharedManager].generatedNewAddressBlock(address, nil);
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [AppModel sharedManager].generatedNewAddressBlock(address, nil);
+    });
 }
 
 void WalletModel::onNewAddressFailed()
@@ -1130,11 +1144,10 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
 void WalletModel::onShieldedCoinsSelectionCalculated(const ShieldedCoinsSelectionInfo& selectionRes)
 {
     auto result = selectionRes.minimalFee;
-    auto change = selectionRes.change;
+    auto change = selectionRes.changeBeam;
     if ([AppModel sharedManager].isMaxPrivacyRequest) {
-        change = selectionRes.change + selectionRes.shieldedInputsFee;
+        change = selectionRes.changeBeam + selectionRes.shieldedInputsFee;
     }
-    
     
     auto shieldedInputsFee = selectionRes.shieldedInputsFee;
 

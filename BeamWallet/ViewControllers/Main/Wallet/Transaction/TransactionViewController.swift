@@ -263,6 +263,7 @@ extension TransactionViewController: UITableViewDataSource {
                 .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
                 .configured(with: viewModel.details[indexPath.row])
             cell.increaseSpace = true
+            cell.maxLines = 2
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
             return cell

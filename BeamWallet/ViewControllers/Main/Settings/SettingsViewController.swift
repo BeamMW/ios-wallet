@@ -46,6 +46,10 @@ class SettingsViewController: BaseTableViewController {
         
         title = viewModel.title()
         
+        if(self.type == .node) {
+            statusView.changeButton.removeFromSuperview()
+        }
+        
         viewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()
         }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -159,14 +159,14 @@
                                     <action selector="onRightButtonWithSender:" destination="BXu-Vf-2v4" eventType="touchUpInside" id="Jj9-3b-OfY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GpA-La-Isg">
-                                <rect key="frame" x="171" y="32" width="93" height="32"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GpA-La-Isg">
+                                <rect key="frame" x="182" y="32" width="82" height="32"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                                <state key="normal" title="show address">
+                                <state key="normal" title="more details">
                                     <color key="titleColor" red="0.92156862750000001" green="0.34509803919999998" blue="0.99215686270000003" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="show_token"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="more_details"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onShowTokenWithSender:" destination="BXu-Vf-2v4" eventType="touchUpInside" id="BC2-XE-OMq"/>
@@ -196,8 +196,8 @@
                     <constraint firstItem="oNw-yZ-Dcf" firstAttribute="top" secondItem="urV-Oi-ihO" secondAttribute="top" id="ahP-56-Y7c"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="538-rw-ddG"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
                 <outlet property="additionalErrorLabel" destination="TNv-Qh-fC8" id="bRK-ga-Kkq"/>
                 <outlet property="contactCategory" destination="KvQ-Du-29Z" id="TgC-Oh-vZ2"/>

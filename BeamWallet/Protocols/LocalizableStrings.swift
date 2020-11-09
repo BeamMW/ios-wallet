@@ -534,7 +534,6 @@ class LocalizableStrings : NSObject {
     var receive_from = "receive_from".localized
     var pool = "pool".localized
     var reconnect = "reconnect".localized.lowercased()
-    var max_privacy_title = "max_privacy_title".localized
     var max = "max".localized
     var max_privacy_request_title = "max_privacy_request_title".localized
     var max_privacy_request_text = "max_privacy_request_text".localized
@@ -576,7 +575,23 @@ class LocalizableStrings : NSObject {
 //    var offline_address = "offline_address".localized
     var offline_address = "offline_address".localized
     var public_offline_address_info = "public_offline_address_info".localized
-
+    var public_offline = "public_offline".localized
+    var max_privacy = "max_privacy".localized
+    var sender_identity = "sender_identity".localized
+    var receiver_identity = "receiver_identity".localized
+    var tr_sent_public_offline = "tr_sent_public_offline".localized
+    var tr_sent_offline = "tr_sent_offline".localized
+    var tr_received_public_offline = "tr_received_public_offline".localized
+    var tr_received_offline = "tr_received_offline".localized
+    var support_10_payments = "support_10_payments".localized
+    var max_privacy_address = "max_privacy_address".localized
+    var payments = "payments".localized
+    var address_details = "address_details".localized
+    var connect_node_offline_public = "connect_node_offline_public".localized
+    var public_offline_address = "public_offline_address".localized
+    var payments_left = "payments_left".localized
+    var send_address_placholder = "send_address_placholder".localized
+    var local_comment = "local_comment".localized
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

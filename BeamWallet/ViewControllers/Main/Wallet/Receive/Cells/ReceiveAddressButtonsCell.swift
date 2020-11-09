@@ -38,6 +38,13 @@ class ReceiveAddressButtonsCell: BaseCell {
         else {
             infoLabel.text = Localizable.shared.strings.receive_notice
         }
+        
+        if Settings.sharedManager().isDarkMode {
+            infoLabel.textColor = UIColor.main.steel;
+        }
+        else {
+            infoLabel.textColor = UIColor.main.blueyGrey
+        }
     }
 
     @IBAction func onShare(sender: UIButton) {

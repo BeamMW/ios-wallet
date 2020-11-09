@@ -18,19 +18,19 @@ import UIKit
 class ReceiveAddressOptionsCell: BaseCell {
     weak var delegate: ReceiveAddressOptionsCellDelegate?
 
-    @IBOutlet weak var transactionTypeSegment: MASegmentedControl! {
+    @IBOutlet weak var addressTypeSegment: MASegmentedControl! {
         didSet {
-            transactionTypeSegment.itemsWithText = true
-            transactionTypeSegment.fillEqually = true
-            transactionTypeSegment.roundedControl = true
+            addressTypeSegment.itemsWithText = true
+            addressTypeSegment.fillEqually = true
+            addressTypeSegment.roundedControl = true
             
-            transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.max_privacy_title])
-            transactionTypeSegment.padding = 0
-            transactionTypeSegment.textColor = UIColor.main.blueyGrey
-            transactionTypeSegment.selectedTextColor = UIColor.main.brightTeal
-            transactionTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
-            transactionTypeSegment.titlesFont = SemiboldFont(size: 14)
-            transactionTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
+            addressTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.max_privacy])
+            addressTypeSegment.padding = 0
+            addressTypeSegment.textColor = UIColor.main.blueyGrey
+            addressTypeSegment.selectedTextColor = UIColor.main.brightTeal
+            addressTypeSegment.thumbViewColor = UIColor.main.brightTeal.withAlphaComponent(0.2)
+            addressTypeSegment.titlesFont = SemiboldFont(size: 14)
+            addressTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
         }
     }
     
@@ -50,7 +50,7 @@ class ReceiveAddressOptionsCell: BaseCell {
         }
     }
     
-    @IBOutlet private var transactionTypeLabel: UILabel!
+    @IBOutlet private var addressTypeLabel: UILabel!
     @IBOutlet private var expirationLabel: UILabel!
     @IBOutlet private var errorLabel: UILabel!
     @IBOutlet private var offset: NSLayoutConstraint!
@@ -59,14 +59,14 @@ class ReceiveAddressOptionsCell: BaseCell {
         super.awakeFromNib()
         
         if Settings.sharedManager().isDarkMode {
-            transactionTypeLabel.textColor = UIColor.main.steel;
+            addressTypeLabel.textColor = UIColor.main.steel;
             expirationLabel.textColor = UIColor.main.steel;
             errorLabel.textColor = UIColor.main.steel;
         }
         
-        expirationLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.address_expiration.uppercased(), letter: Localizable.shared.strings.address_expiration.uppercased())
+        expirationLabel.setLetterSpacingOnly(value: 1.5, title: Localizable.shared.strings.address_expiration.uppercased(), letter: Localizable.shared.strings.address_expiration.uppercased())
 
-        transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.transaction_type.uppercased(), letter: Localizable.shared.strings.transaction_type.uppercased())
+        addressTypeLabel.setLetterSpacingOnly(value: 1.5, title: Localizable.shared.strings.address_type.uppercased(), letter: Localizable.shared.strings.address_type.uppercased())
         
         selectionStyle = .none
         
@@ -76,8 +76,8 @@ class ReceiveAddressOptionsCell: BaseCell {
         }
         else {
             offset.constant = 25
-            transactionTypeSegment.isUserInteractionEnabled = false
-            transactionTypeSegment.textColor = UIColor.main.blueyGrey.withAlphaComponent(0.2)
+            addressTypeSegment.isUserInteractionEnabled = false
+            addressTypeSegment.textColor = UIColor.main.blueyGrey.withAlphaComponent(0.2)
         }
         
         errorLabel.text = Localizable.shared.strings.connect_node_offline
@@ -106,7 +106,7 @@ extension ReceiveAddressOptionsCell: Configurable {
     
     func configure(with options: (oneTime: Bool, maxPrivacy: Bool, needReload: Bool)) {
         if options.needReload {
-            transactionTypeSegment.selectedSegmentIndex = options.maxPrivacy ? 1 : 0
+            addressTypeSegment.selectedSegmentIndex = options.maxPrivacy ? 1 : 0
             expireTypeSegment.selectedSegmentIndex = options.oneTime ? 0 : 1
         }
     }

@@ -56,7 +56,7 @@ extension TransactionDetailCell: Configurable {
         securityIcon.isHidden = !Settings.sharedManager().isHideAmounts
 
         amountLabel.text = String.currency(value: transaction.realAmount)
-        statusLabel.text = transaction.statusType().capitalizingFirstLetter()
+        statusLabel.text = transaction.statusType().capitalizingFirstLetter().replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
 
         switch transaction.isIncome {
         case true:

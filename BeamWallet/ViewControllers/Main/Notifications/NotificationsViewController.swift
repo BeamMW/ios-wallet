@@ -34,10 +34,6 @@ class NotificationsViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
-        if let status = self.view.viewWithTag(11) as? BMNetworkStatusView {
-            status.numberOfLines = 2
-        }
-        
         title = Localizable.shared.strings.notifications
         
         tableView.delegate = self
@@ -60,6 +56,7 @@ class NotificationsViewController: BaseTableViewController {
         buttonClear.setTitleColor(UIColor.main.brightTeal.withAlphaComponent(0.5), for: .highlighted)
         buttonClear.addTarget(self, action: #selector(onClear), for: .touchUpInside)
         buttonClear.isHidden = (viewModel.unreads.count == 0 && viewModel.reads.count == 0)
+        checkStatusView()
         view.addSubview(buttonClear)
         
         emptyView.text = Localizable.shared.strings.no_notifications
@@ -69,11 +66,19 @@ class NotificationsViewController: BaseTableViewController {
         view.addSubview(emptyView)
         
         subscribeToUpdates()
+        
+        if let view = self.view.viewWithTag(11) as? BMNetworkStatusView {
+            view.numberOfLines = 3
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         emptyView.frame = tableView.frame
+    }
+    
+    private func checkStatusView() {
+
     }
     
     private func subscribeToUpdates() {
@@ -85,6 +90,7 @@ class NotificationsViewController: BaseTableViewController {
                 strongSelf.tableView.reloadData()
                 strongSelf.emptyView.isHidden = !(strongSelf.viewModel.unreads.count == 0 && strongSelf.viewModel.reads.count == 0)
                 strongSelf.buttonClear.isHidden = (strongSelf.viewModel.unreads.count == 0 && strongSelf.viewModel.reads.count == 0)
+                strongSelf.checkStatusView()
             }
         }
         

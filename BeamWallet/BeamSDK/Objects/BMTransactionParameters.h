@@ -18,18 +18,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "BMAddress.h"
 
 
 @interface BMTransactionParameters : NSObject
 
 @property (nonatomic,assign) double amount;
 @property (nonatomic,assign) BOOL isMaxPrivacy;
+@property (nonatomic,assign) BOOL isTrueMaxPrivacy;
 @property (nonatomic,assign) BOOL isOffline;
 @property (nonatomic,assign) BOOL isPermanentAddress;
+@property (nonatomic,assign) BOOL isPublicOffline;
 
 @property (nonatomic,strong) NSString *address;
 @property (nonatomic,strong) NSString *identity;
 @property (nonatomic,strong) NSString *verionError;
+
+-(BMAddressType)getAddressType;
 
 @end
 

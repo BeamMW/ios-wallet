@@ -20,6 +20,13 @@
 import Foundation
 
 class ReceiveAddressViewModel: NSObject {
+    
+    struct TokenValue {
+        let name: String
+        let value: String
+        let info: String
+    }
+    
     enum TransactionOptions: Int {
         case regular = 0
         case privacy = 1
@@ -43,6 +50,8 @@ class ReceiveAddressViewModel: NSObject {
     public var onAddressCreated: ((Error?) -> Void)?
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
+    
+    public var values = [TokenValue]()
     
     public var address: BMAddress!
     public var expire = ExpireOptions.oneTime {
@@ -76,8 +85,35 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     public func generateTokens() {
-        address.token = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: false, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, identity: address.identity ?? "", ownId: Int64(address.ownerId))
-        address.offlineToken = AppModel.sharedManager().token(transaction == .privacy, nonInteractive: true, isPermanentAddress: (expire == ExpireOptions.parmanent), amount: Double(amount ?? "0") ?? 0, walleetId: address.walletId, identity: address.identity ?? "", ownId: Int64(address.ownerId))
+        let isOwn = AppModel.sharedManager().checkIsOwnNode()
+        
+        let bamount = Double(amount ?? "0") ?? 0
+        let isPermanentAddress = (expire == ExpireOptions.parmanent)
+        
+        address.onlineToken = AppModel.sharedManager().generateRegularAddress(address.walletId, amount: bamount, isPermanentAddress: isPermanentAddress)
+        
+        if isOwn {
+            AppModel.sharedManager().generateMaxPrivacyAddress(address.walletId, amount: bamount) { (token) in
+                self.address.maxPrivacyToken = token;
+            }
+            address.offlineToken = AppModel.sharedManager().generateOfflineAddress(address.walletId, amount: bamount)
+        }
+                
+        values.removeAll()
+
+        if transaction == .privacy {
+            if isOwn {
+                values.append(TokenValue(name: Localizable.shared.strings.max_privacy_address.uppercased(), value: address.maxPrivacyToken ?? "", info: String.empty()))
+            }
+        }
+        else {
+            values.append(TokenValue(name: "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))", value: address.onlineToken ?? "", info: String.empty()))
+            values.append(TokenValue(name: "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_pool.lowercased()))", value: address.walletId, info: String.empty()))
+            
+            if isOwn {
+                values.append(TokenValue(name: "\(Localizable.shared.strings.offline_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))", value: address.offlineToken ?? "", info: Localizable.shared.strings.support_10_payments))
+            }
+        } 
     }
     
     public func createAddress() {
@@ -152,21 +188,8 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     
-    public func onShare() {
-        if transaction == .regular && expire == .oneTime, let token = address.token {
-            self.showShareDialog(token)
-        }
-        else if (transaction == .privacy && expire == .oneTime) || (transaction == .privacy && expire == .parmanent) {
-            if let token = address.offlineToken {
-                self.showShareDialog(token)
-            }
-//            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased())", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.offline_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_offline_token)]
-//            self.showPopoverMenu(items)
-        }
-        else if transaction == .regular && expire == .parmanent {
-            let items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token), BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_pool.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_pool_token)]
-            self.showPopoverMenu(items)
-        }
+    public func onShare(token: String) {
+        self.showShareDialog(token)
     }
     
     private func showPopoverMenu(_ items:[BMPopoverMenu.BMPopoverMenuItem]) {
@@ -174,9 +197,9 @@ class ReceiveAddressViewModel: NSObject {
             if let item = selectedItem {
                 switch item.action {
                 case .share_online_token:
-                    if let token = self.address.token {
-                        self.showShareDialog(token)
-                    }
+//                    if let token = self.address.token {
+//
+//                    }
                     break
                 case .share_offline_token:
                     if let token = self.address.offlineToken {
@@ -202,7 +225,7 @@ class ReceiveAddressViewModel: NSObject {
                     self?.isShared = true
                     
                     if activityType == UIActivity.ActivityType.copyToPasteboard {
-                        ShowCopied()
+                        ShowCopied(text: Localizable.shared.strings.address_copied)
                     }
                     
                     self?.onShared?()

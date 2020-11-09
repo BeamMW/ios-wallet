@@ -19,6 +19,16 @@
 
 #import <Foundation/Foundation.h>
 
+enum {
+    BMAddressTypeRegular = 0,
+    BMAddressTypeMaxPrivacy = 1,
+    BMAddressTypeShielded = 2,
+    BMAddressTypeOfflinePublic = 3,
+    BMAddressTypeRegularPermanent = 4,
+    BMAddressTypeUnknown = 5
+};
+typedef int BMAddressType;
+
 @interface BMAddress : NSObject {
     NSDateFormatter *_formatter;
     NSDateFormatter *_shortFormatter;
@@ -28,16 +38,18 @@
 +(BMAddress*_Nonnull)emptyAddress;
 
 @property (nonatomic,strong) NSString * _Nonnull walletId;
-@property (nonatomic,strong) NSString * _Nullable token;
+@property (nonatomic,strong) NSString * _Nullable onlineToken;
 @property (nonatomic,strong) NSString * _Nullable offlineToken;
+@property (nonatomic,strong) NSString * _Nullable maxPrivacyToken;
+
 @property (nonatomic,strong) NSString * _Nonnull label;
 @property (nonatomic,strong) NSString * _Nullable identity;
+
 @property (nonatomic,strong) NSMutableArray<NSString*> * _Nonnull categories;
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
 @property (nonatomic,assign) BOOL isDefault;
-
 
 //edit
 @property (nonatomic,assign) BOOL isNowExpired;

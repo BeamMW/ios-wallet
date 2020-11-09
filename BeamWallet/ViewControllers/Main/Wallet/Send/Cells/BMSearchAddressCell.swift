@@ -50,6 +50,7 @@ class BMSearchAddressCell: BaseCell {
         
         textField.placholderFont = ItalicFont(size: 16)
         textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
+        textField.placeholder = Localizable.shared.strings.send_address_placholder
         textField.allowsEditingTextAttributes = true
         textField.defaultOffset = 4
         textField.lineColor = UIColor.white.withAlphaComponent(0.1)
@@ -71,16 +72,35 @@ class BMSearchAddressCell: BaseCell {
         _ = textField.becomeFirstResponder()
     }
     
-    public var isPermanentAddress: Bool = false {
+    public var offlineTokensCount = 0 {
+        didSet {
+            if let text = contactName.text {
+                if (addressType == BMAddressTypeShielded && offlineTokensCount >= 0 && text.contains(Localizable.shared.strings.offline_address)) {
+                    contactName.text = Localizable.shared.strings.offline_address + ". " + Localizable.shared.strings.payments_left + ": \(offlineTokensCount)"
+                }
+            }
+        }
+    }
+    
+    public var addressType: BMAddressType = BMAddressType(BMAddressTypeRegular) {
         didSet {
             if(contact == nil && !textField.text.isEmpty) {
                 contactView.isHidden = false
                 contactName.numberOfLines = 2
-                if !AppModel.sharedManager().isToken(token) && AppModel.sharedManager().isValidAddress(token) {
-                    contactName.text = Localizable.shared.strings.address_not_supported_max_privacy
+                if addressType == BMAddressTypeMaxPrivacy {
+                    contactName.text = Localizable.shared.strings.max_privacy_address
                 }
-                else if AppModel.sharedManager().isValidAddress(token)  {
-                    contactName.text =  isPermanentAddress ? Localizable.shared.strings.perm_token : Localizable.shared.strings.one_time_expire_text
+                else if addressType == BMAddressTypeRegular {
+                    contactName.text = Localizable.shared.strings.one_time_expire_text
+                }
+                else if addressType == BMAddressTypeOfflinePublic {
+                    contactName.text = Localizable.shared.strings.public_offline_address
+                }
+                else if addressType == BMAddressTypeRegularPermanent {
+                    contactName.text = Localizable.shared.strings.perm_token.replacingOccurrences(of: ".", with: "")
+                }
+                else if addressType == BMAddressTypeShielded {
+                    contactName.text = Localizable.shared.strings.offline_address
                 }
                 else {
                     contactName.text = nil
@@ -216,25 +236,11 @@ extension BMSearchAddressCell: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         delegate?.textValueDidReturn?(self)
-        
-        if nameLabel.text!.lowercased() == Localizable.shared.strings.send_to.lowercased() || nameLabel.text!.lowercased() == Localizable.shared.strings.transaction_info.lowercased() {
-            textField.placeholder = String.empty()
-        }
-        else {
-            textField.placeholder = "  "
-        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.textValueDidBegin?(self)
         showTokenButton.isHidden = true
-
-        if nameLabel.text!.lowercased() == Localizable.shared.strings.send_to.lowercased() || nameLabel.text!.lowercased() == Localizable.shared.strings.transaction_info.lowercased() {
-            textField.placeholder = Localizable.shared.strings.address_search
-        }
-        else {
-            textField.placeholder = "  "
-        }
     }
     
     func textViewDidChange(_ textView: UITextView) {

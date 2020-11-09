@@ -17,7 +17,7 @@ class ReceiveAddressOptionsCell_2: BaseCell {
             transactionTypeSegment.itemsWithText = true
             transactionTypeSegment.fillEqually = true
             transactionTypeSegment.roundedControl = true
-            transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.max_privacy_title])
+            transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.max_privacy])
             transactionTypeSegment.padding = 2
             transactionTypeSegment.textColor = UIColor.main.blueyGrey
             transactionTypeSegment.selectedTextColor = UIColor.main.brightTeal
@@ -41,7 +41,7 @@ class ReceiveAddressOptionsCell_2: BaseCell {
         }
         
         
-        transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.transaction_type.uppercased(), letter: Localizable.shared.strings.transaction_type.uppercased())
+        transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.address_type.uppercased(), letter: Localizable.shared.strings.address_type.uppercased())
         
         selectionStyle = .none        
     }

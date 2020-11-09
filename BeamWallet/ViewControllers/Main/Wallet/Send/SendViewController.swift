@@ -84,7 +84,7 @@ class SendViewController: BaseTableViewController {
         viewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
 
-            strongSelf.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+          //  strongSelf.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
             
             if strongSelf.viewModel.offlineTokensCount == 0 {
                 strongSelf.nextButton.alpha = 0.5
@@ -93,6 +93,16 @@ class SendViewController: BaseTableViewController {
             else {
                 strongSelf.nextButton.alpha = 1
                 strongSelf.nextButton.isUserInteractionEnabled = true
+            }
+            
+            if let cell = strongSelf.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
+                cell.error = strongSelf.viewModel.toAddressError
+                cell.additionalError = strongSelf.viewModel.newVersionError
+                cell.copyText = strongSelf.viewModel.copyAddress
+                cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: strongSelf.viewModel.toAddress, rightIcon: IconScanQr()))
+                cell.contact = strongSelf.viewModel.selectedContact
+                cell.addressType = BMAddressType(strongSelf.viewModel.addressType)
+                cell.offlineTokensCount = strongSelf.viewModel.offlineTokensCount
             }
         }
         
@@ -145,6 +155,8 @@ class SendViewController: BaseTableViewController {
         title = Localizable.shared.strings.send.uppercased()
         
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
+        
+        Settings.sharedManager().addDelegate(self)
     }
     
     override func viewDidLayoutSubviews() {
@@ -166,7 +178,6 @@ class SendViewController: BaseTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        Settings.sharedManager().addDelegate(self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -178,9 +189,10 @@ class SendViewController: BaseTableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        Settings.sharedManager().removeDelegate(self)
         
         if isMovingFromParent {
+            Settings.sharedManager().removeDelegate(self)
+
             viewModel.revertOutgoingAddress()
         }
     }
@@ -287,7 +299,7 @@ extension SendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 2 //(viewModel.isToken && viewModel.maxPrivacy) ? 2 : 1
+            return 1 //(viewModel.isToken && viewModel.maxPrivacy) ? 2 : 1
         case 1:
             return 2
         case 2:
@@ -323,21 +335,17 @@ extension SendViewController: UITableViewDataSource {
                 cell.copyText = viewModel.copyAddress
                 cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcon: IconScanQr()))
                 cell.contact = viewModel.selectedContact
-                cell.isPermanentAddress = viewModel.isPermanentAddress
+                cell.addressType = BMAddressType(viewModel.addressType)
+                cell.offlineTokensCount = viewModel.offlineTokensCount
                 return cell
             }
             else {
                 let cell = tableView
                     .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
                 cell.delegate = self
-               // cell.customBackgroundColor = true
                 cell.selectionStyle = .none
-                //cell.mainView.backgroundColor = UIColor.clear
                 cell.detailLabel.font = ItalicFont(size: 14)
-               // cell.contentView.backgroundColor = UIColor.clear
-               // cell.backgroundColor = UIColor.clear
                 cell.topOffset?.constant = 10
-               // cell.topSwitchOffset?.constant = -5
 
                 if viewModel.requestedMaxPrivacy && viewModel.maxPrivacy {
                     cell.switchView.isHidden = true
@@ -348,7 +356,6 @@ extension SendViewController: UITableViewDataSource {
                     var title: String? = nil
                                         
                     if(viewModel.offlineTokensCount >= 0) {
-                        //title = "\(Localizable.shared.strings.offline_transactions): \(viewModel.offlineTokensCount)/\(Settings.sharedManager().maxTokens)"
                         title = "\(Localizable.shared.strings.offline_transactions): \(viewModel.offlineTokensCount)"
                     }
                     
@@ -359,14 +366,14 @@ extension SendViewController: UITableViewDataSource {
                     cell.botOffset?.constant = viewModel.maxPrivacy ? 15 : 25
                     
                     if viewModel.maxPrivacyDisabled {
-                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: Localizable.shared.strings.address_not_supported_max_privacy, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.offline, detail: Localizable.shared.strings.address_not_supported_max_privacy, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
 
                         
                         cell.switchView.alpha = 0.5
                         cell.switchView.isUserInteractionEnabled = false
                     }
                     else {
-                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.max_privacy_title, detail: nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
+                        cell.configure(data: BMPickerData(title: Localizable.shared.strings.offline, detail: nil, titleColor: nil, arrowType: viewModel.maxPrivacy ? .selected : .unselected, unique: nil, multiplie: false, isSwitch: true))
 
                         cell.switchView.alpha = 1
                         cell.switchView.isUserInteractionEnabled = true
@@ -437,8 +444,10 @@ extension SendViewController: UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.transaction_comment, value: viewModel.comment))
+                .configured(with: (name: Localizable.shared.strings.comment, value: viewModel.comment))
             cell.delegate = self
+            cell.placholder = Localizable.shared.strings.local_comment.capitalizingFirstLetter()
+            cell.isItalicPlacholder = true
             return cell
         case 4:
             let cell = tableView
@@ -496,6 +505,8 @@ extension SendViewController: UITableViewDataSource {
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.topOffset?.constant = 20
+                cell.placholder = Localizable.shared.strings.no_name.capitalizingFirstLetter()
+                cell.isItalicPlacholder = true
                 return cell
             }
         case 8:
@@ -598,7 +609,7 @@ extension SendViewController: BMCellProtocol {
         if isNeedReload {
             UIView.performWithoutAnimation {
                 tableView.beginUpdates()
-                tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+              //  tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
                 
                 if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
                     cell.error = viewModel.toAddressError
@@ -606,7 +617,8 @@ extension SendViewController: BMCellProtocol {
                     cell.copyText = viewModel.copyAddress
                     cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcon: IconScanQr()))
                     cell.contact = viewModel.selectedContact
-                    cell.isPermanentAddress = viewModel.isPermanentAddress
+                    cell.addressType = BMAddressType(viewModel.addressType)
+                    cell.offlineTokensCount = viewModel.offlineTokensCount
                 }
                 
                 tableView.endUpdates()

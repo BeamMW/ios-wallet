@@ -88,7 +88,7 @@ class QRViewController: BaseViewController {
         addressTitleLabel.text = Localizable.shared.strings.address.uppercased()
        
         if isToken {
-            addressLabel.text = address.token
+            addressLabel.text = "token" //address.token
         }
         else {
             addressLabel.text = address.walletId
@@ -119,9 +119,11 @@ class QRViewController: BaseViewController {
             amountStack.isHidden = true
         }
         
-        let qrString = AppModel.sharedManager().generateQRCodeString((isToken ? address.token : address.walletId) ?? String.empty(), amount: amount)
+        //TODO: TOKEN
         
-        codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
+     //   let qrString = AppModel.sharedManager().generateQRCodeString((isToken ? address.token : address.walletId) ?? String.empty(), amount: amount)
+        
+       // codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         
         addSwipeToDismiss()
     }

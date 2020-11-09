@@ -39,6 +39,8 @@ public:
     std::vector<beam::wallet::WalletAddress> contacts;
 
 private:
+    NSString *GetAddressTo(beam::wallet::TxDescription transaction);
+    NSString *GetAddressFrom(beam::wallet::TxDescription transaction);
     NSString *GetErrorString(beam::wallet::ErrorType type);
     NSString *GetTransactionStatusString(beam::wallet::TxDescription transaction);
     NSString *GetTransactionFailurString(beam::wallet::TxFailureReason reason);
@@ -52,7 +54,6 @@ private:
     void onStatus(const beam::wallet::WalletStatus& status) override;
     void onTxStatus(beam::wallet::ChangeAction, const std::vector<beam::wallet::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;
-    void onChangeCalculated(beam::Amount change) override;
   //  void onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos) override;
     void onAllUtxoChanged(beam::wallet::ChangeAction , const std::vector<beam::wallet::Coin>& utxos) override;
     void onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs) override;

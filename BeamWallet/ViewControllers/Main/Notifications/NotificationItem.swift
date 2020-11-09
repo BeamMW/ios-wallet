@@ -55,10 +55,22 @@ class NotificationItem {
                     else {
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
 
-                        if transaction.isShielded {
-                            name = "Transaction received from offline"
+                        if transaction.isMaxPrivacy {
+                            icon = UIImage(named: "iconNotifictionsReceivedMaxPrivacy")
+                            name = Localizable.shared.strings.transaction_received
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+                        }
+                        else if transaction.isShielded || transaction.isPublicOffline {
+                            
+                            if transaction.isPublicOffline {
+                                name = Localizable.shared.strings.tr_received_public_offline
+                            }
+                            else {
+                                name = Localizable.shared.strings.tr_received_offline
+                            }
+                            
                             icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
-                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: "shielded pool", failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: Localizable.shared.strings.shielded_pool.lowercased(), failed: false)
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsReceived")
@@ -69,17 +81,41 @@ class NotificationItem {
                 }
                 else {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        icon = UIImage.init(named: "iconNotifictionsFailed")
-                        name = Localizable.shared.strings.buy_transaction_failed_title
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true)
+                        if transaction.isMaxPrivacy {
+                            icon = UIImage.init(named: "iconNotifictionsFailedSentMaxPrivacy")
+                            name = Localizable.shared.strings.buy_transaction_failed_title
+                            let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true)
+                        }
+                        else if transaction.isShielded || transaction.isPublicOffline {
+                            icon = UIImage.init(named: "iconNotifictionsFailedSentOffline")
+                            name = Localizable.shared.strings.buy_transaction_failed_title
+                            let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: "shielded pool", failed: true)
+                        }
+                        else {
+                            icon = UIImage.init(named: "iconNotifictionsFailed")
+                            name = Localizable.shared.strings.buy_transaction_failed_title
+                            let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true)
+                        }
                     }
                     else {
                         let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
 
-                        if transaction.isShielded  {
+                        if transaction.isMaxPrivacy  {
+                            icon = UIImage.init(named: "iconNotifictionsSentMaxPrivacy")
+                            name = Localizable.shared.strings.transaction_sent
+                        }
+                        else if transaction.isShielded || transaction.isPublicOffline {
                             icon = UIImage.init(named: "iconNotifictionsSendedOffline")
-                            name = "Transaction sent to offline"
+           
+                            if transaction.isPublicOffline {
+                                name = Localizable.shared.strings.tr_sent_public_offline
+                            }
+                            else {
+                                name = Localizable.shared.strings.tr_sent_offline
+                            }
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsSent")

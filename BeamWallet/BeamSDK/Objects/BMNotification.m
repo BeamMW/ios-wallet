@@ -48,7 +48,7 @@
         self.isRead = [[decoder decodeObjectForKey:@"isRead"] boolValue];
         self.isSended = [[decoder decodeObjectForKey:@"isSended"] boolValue];
 
-        self.type = [[decoder decodeObjectForKey:@"type"] integerValue];
+        self.type = [[decoder decodeObjectForKey:@"type"] intValue];
 
         self.createdTime = [[decoder decodeObjectForKey:@"createdTime"] longLongValue];
         

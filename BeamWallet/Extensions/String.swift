@@ -294,3 +294,8 @@ extension String {
     }
 }
 
+extension String {
+    func splitAddress() -> String {
+        return "\(self.prefix(6))...\(self.suffix(6))"
+    }
+}

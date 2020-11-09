@@ -27,14 +27,28 @@ class BMNetworkStatusView: UIView {
     private var fromNib = false
     private var isPrevUpdate = false
     private var isPrevRecconected = false
+    public let changeButton = UIButton()
 
     public var numberOfLines = 1 {
         didSet {
-            statusLabel.numberOfLines = numberOfLines
-            if numberOfLines > 1 {
-                statusLabel.width = statusLabel.width - 100
+            statusLabel.backgroundColor = UIColor.clear
+            if numberOfLines == 3 {
+                statusLabel.numberOfLines = 2
+                statusLabel.width = UIScreen.main.bounds.size.width - 180
                 statusLabel.h = 36
-                statusLabel.y = statusLabel.y - (statusLabel.y/2) - 3
+                statusLabel.y = 0
+            }
+            else if numberOfLines > 1 {
+                statusLabel.numberOfLines = 2
+                statusLabel.width = UIScreen.main.bounds.size.width - 130
+                statusLabel.h = 36
+                statusLabel.y = 0
+            }
+            else {
+                statusLabel.numberOfLines = 1
+                statusLabel.width = UIScreen.main.bounds.size.width - 50
+                statusLabel.h = 18
+                statusLabel.y = !fromNib ? 13 : -2
             }
         }
     }
@@ -65,8 +79,7 @@ class BMNetworkStatusView: UIView {
         
         statusLabel = UILabel(frame: CGRect(x: !fromNib ? 35 : 20, y: !fromNib ? 13 : -2, width: UIScreen.main.bounds.size.width-50, height: 18))
         statusLabel.font = RegularFont(size: 14)
-        statusLabel.adjustsFontSizeToFitWidth = true
-        statusLabel.minimumScaleFactor = 0.5
+        statusLabel.numberOfLines = 2
         statusLabel.adjustFontSize = true
         addSubview(statusLabel)
         
@@ -74,7 +87,13 @@ class BMNetworkStatusView: UIView {
         indicatorView.color = UIColor.main.green
         addSubview(indicatorView)
         
-        
+        changeButton.isHidden = true
+        changeButton.addTarget(self, action: #selector(onChangeNode), for: .touchUpInside)
+        changeButton.setTitleColor(UIColor.main.green, for: .normal)
+        changeButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        changeButton.setTitle("change", for: .normal)
+        addSubview(changeButton)
+
         if (AppModel.sharedManager().isUpdating && AppModel.sharedManager().isConnected)
         {
             onSyncProgressUpdated(0, total: 1)
@@ -94,21 +113,44 @@ class BMNetworkStatusView: UIView {
         AppModel.sharedManager().addDelegate(self)
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        changeButton.frame = CGRect(x: UIScreen.main.bounds.width-75, y: statusView.y - 5, width: 60, height: 18)
+        
+        statusLabel.y = (statusView.y - (statusLabel.h/2) + 5)
+    }
+    
     deinit {
         AppModel.sharedManager().removeDelegate(self)
     }
     
+    @objc private func onChangeNode() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = SettingsViewController(type: SettingsViewModel.SettingsType.node)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
     private func changeStatus(connected: Bool) {
+        self.changeButton.isHidden = true
+
         if AppModel.sharedManager().isNodeChanging {
             return
         }
+
         self.indicatorView.stopAnimating()
         self.statusView.alpha = 1
         self.statusView.layer.borderWidth = 0
         
         self.statusLabel.x = self.fromNib ? 20 : 35
         
+        if self.numberOfLines != 3 {
+            self.numberOfLines = 1
+        }
+
         if connected {
+            
             if AppModel.sharedManager().currencies.count == 0 && Settings.sharedManager().currency != BMCurrencyOff  {
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusView.glow()
@@ -135,7 +177,14 @@ class BMNetworkStatusView: UIView {
             }
             else{
                 if Settings.sharedManager().isChangedNode() {
+                    
                     self.statusLabel.text = Localizable.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
+                    
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 2
+                    }
+
+                    self.changeButton.isHidden = false
                 }
                 else{
                     self.statusLabel.text = Localizable.shared.strings.offline.lowercased()

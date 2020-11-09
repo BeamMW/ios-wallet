@@ -22,7 +22,8 @@ import UIKit
 class ShowTokenViewController: BaseTableViewController {
 
     public var didCopyToken : (() -> Void)?
-
+    public var isMiningPool = false
+    
     private var token = ""
     private var send = false
     private var items = [BMMultiLineItem]()
@@ -57,7 +58,6 @@ class ShowTokenViewController: BaseTableViewController {
 
         AppModel.sharedManager().addDelegate(self)
         
-
         if AppModel.sharedManager().isToken(token) {
             let params = AppModel.sharedManager().getTransactionParameters(token)
 
@@ -66,21 +66,27 @@ class ShowTokenViewController: BaseTableViewController {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: params.isPermanentAddress ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            
-            if params.isMaxPrivacy && !params.isOffline {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.max_privacy_title, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            if params.isTrueMaxPrivacy {
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.max_privacy, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            }
+            else if params.isPublicOffline {
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.public_offline, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            }
+            else if params.isMaxPrivacy && !params.isOffline {
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.offline, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             else if params.isMaxPrivacy && params.isOffline {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: (Localizable.shared.strings.max_privacy_title), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: (Localizable.shared.strings.offline), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             else {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             
-          //  items = rearrange(array: items, fromIndex: 0, toIndex: 1)
-            
-            if !params.isMaxPrivacy {
+            if  !params.isMaxPrivacy {
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: params.isPermanentAddress ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            }
+                        
+            if !params.address.isEmpty {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.sbbs_address.uppercased(), detail: params.address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
@@ -92,11 +98,17 @@ class ShowTokenViewController: BaseTableViewController {
         }
         else {
             let address = AppModel.sharedManager().findAddress(byID: token)
+ 
+            var detail = Localizable.shared.strings.regular
+            if isMiningPool {
+                detail = detail + " (\(Localizable.shared.strings.for_pool.lowercased()))"
+            }
+
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type, detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            
             if address != nil && address?.isContact == false {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: address?.duration == 0 ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
-            
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type, detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
 
             items.append(BMMultiLineItem(title: Localizable.shared.strings.sbbs_address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
@@ -116,7 +128,7 @@ class ShowTokenViewController: BaseTableViewController {
             tableView.tableFooterView = footerView
         }
         
-        title = Localizable.shared.strings.show_token
+        title = Localizable.shared.strings.address_details
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -169,19 +181,19 @@ extension ShowTokenViewController: WalletModelDelegate {
     func onMaxPrivacyTokensLeft(_ tokens: Int32) {
         DispatchQueue.main.async {
             if tokens >= 0 {
-                let detail = "\(Localizable.shared.strings.offline)" + " (" + "\(tokens)" + ")"
+                let detail = "\(tokens)"
                 
-                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.transaction_type.uppercased()})
+                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.address_type.uppercased()})
                
-                let foundIndex = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.address_type.uppercased()})
+                let foundIndex = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.payments.uppercased()})
 
                 if let found = foundIndex, found > 0 {
                     self.items[found].detail = detail
                 }
                 else {
-                    let item = BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
+                    let item = BMMultiLineItem(title: Localizable.shared.strings.payments.uppercased(), detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
                     
-                    if let i = index, i > 0 {
+                    if let i = index {
                         self.items.insert(item, at: i+1)
                     }
                     else {

@@ -74,7 +74,7 @@ extension UITextField {
             return self.placeHolderFont
         }
         set {
-            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : String.empty(), attributes:[NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.2), NSAttributedString.Key.font : ItalicFont(size: 16)])
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : String.empty(), attributes:[NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.2), NSAttributedString.Key.font : newValue ?? ItalicFont(size: 16)])
         }
     }
     

@@ -60,23 +60,23 @@ class BMAmountCell: BaseCell {
         didSet{
             if currency != nil {
                 
-                currencyLabel.isUserInteractionEnabled = true
-                
-                let text = currency!
-                
-                let imageAttachment = NSTextAttachment()
-                imageAttachment.image = IconNextArrow()
-               
-                let imageString = NSAttributedString(attachment: imageAttachment)
-                
-                let attributedString = NSMutableAttributedString(string:text)                
-                attributedString.append(NSAttributedString(string: "  "))
-                attributedString.append(imageString)
-                
-                currencyLabel.attributedText = attributedString
-                
-                textField.placeholder = Localizable.shared.strings.enter_amount_in_currency + " " + currency!
-                textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
+//                currencyLabel.isUserInteractionEnabled = true
+//
+//                let text = currency!
+//
+//                let imageAttachment = NSTextAttachment()
+//                imageAttachment.image = IconNextArrow()
+//
+//                let imageString = NSAttributedString(attachment: imageAttachment)
+//
+//                let attributedString = NSMutableAttributedString(string:text)
+//                attributedString.append(NSAttributedString(string: "  "))
+//                attributedString.append(imageString)
+//
+//                currencyLabel.attributedText = attributedString
+//
+//                textField.placeholder = Localizable.shared.strings.enter_amount_in_currency + " " + currency!
+//                textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
             }
         }
     }
@@ -98,7 +98,9 @@ class BMAmountCell: BaseCell {
         nameLabel.isUserInteractionEnabled = true
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         
+        textField.placeholder = Localizable.shared.strings.zero
         textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        textField.placeHolderFont = RegularFont(size: 30)
         
         if Settings.sharedManager().isDarkMode {
             nameLabel.textColor = UIColor.main.steel;
@@ -156,19 +158,10 @@ extension BMAmountCell: Configurable {
 extension BMAmountCell : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.placeholder == nil || textField.placeholder == Localizable.shared.strings.zero {
-            textField.placeholder = String.empty()
-            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
-        }
-
         self.delegate?.textValueDidReturn?(self)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.placeholder == nil || textField.placeholder == String.empty() {
-            textField.placeholder = Localizable.shared.strings.zero
-            textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
-        }
         self.delegate?.textValueDidBegin?(self)
     }
     

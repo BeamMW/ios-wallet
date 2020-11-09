@@ -63,14 +63,12 @@ class SendConfirmViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.confirm.uppercased()
         
-        tableView.register([BMMultiLinesCell.self, BMFieldCell.self])
+        tableView.register([BMMultiLinesCell2.self, BMFieldCell.self])
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = footerView
-        
-        AppModel.sharedManager().addDelegate(self)
         
         viewModel.calculateChange()
     }
@@ -78,9 +76,18 @@ class SendConfirmViewController: BaseTableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        Settings.sharedManager().removeDelegate(self)
         AppModel.sharedManager().removeDelegate(self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
+
+        AppModel.sharedManager().addDelegate(self)
+        Settings.sharedManager().addDelegate(self)
+    }
     
     @objc private func onNext() {
         view.endEditing(true)
@@ -178,7 +185,7 @@ extension SendConfirmViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell =  tableView
-            .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+            .dequeueReusableCell(withType: BMMultiLinesCell2.self, for: indexPath)
             .configured(with: items[indexPath.section])
         
         return cell
@@ -190,22 +197,10 @@ extension SendConfirmViewController: WalletModelDelegate {
         DispatchQueue.main.async {
             if tokens >= 0 {
                 
-                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.transaction_type.uppercased()})
+                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.address_type.uppercased()})
                 
-                let foundIndex = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.transactions_remaining.uppercased()})
-                
-                if let found = foundIndex, found > 0 {
-                    self.items[found].detail = "\(tokens)"
-                }
-                else {
-                    let item = BMMultiLineItem(title: Localizable.shared.strings.transactions_remaining.uppercased(), detail: "\(tokens)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
-                    
-                    if let i = index, i > 0 {
-                        self.items.insert(item, at: i+1)
-                    }
-                    else {
-                        self.items.append(item)
-                    }
+                if let i = index {
+                    self.items[i].detail = "\(Localizable.shared.strings.offline), \(Localizable.shared.strings.payments_left.lowercased()):  \(tokens)"
                 }
                 
                 self.tableView.reloadData()
@@ -214,19 +209,36 @@ extension SendConfirmViewController: WalletModelDelegate {
     }
     
     func onChangeCalculated(_ amount: Double) {
-        DispatchQueue.main.async {
-            var am = amount
-            let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0)
-            let left = (AppModel.sharedManager().walletStatus?.realAmount ?? 0) - total
-
-            if left < am {
-                am = 0
+        DispatchQueue.main.async { [self] in
+            if !Settings.sharedManager().isHideAmounts {
+                var am = amount
+                let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0)
+                let left = (AppModel.sharedManager().walletStatus?.realAmount ?? 0) - total
+                
+                if left < am {
+                    am = 0
+                }
+                
+                let totalString = String.currency(value: am) //+ Localizable.shared.strings.beam
+                let totalDetail = self.viewModel.amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""))
+                
+                let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
+                item.detailAttributedString = totalDetail
+                self.items.append(item)
+                self.tableView.reloadData()
             }
-            
-            let totalString = String.currency(value: am) //+ Localizable.shared.strings.beam
-            let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalString, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
-            self.items.insert(item, at: self.items.count - 1)
-            self.tableView.reloadData()
         }
+    }
+}
+
+extension SendConfirmViewController: SettingsModelDelegate {
+    func onChangeHideAmounts() {
+        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
+
+        self.items.removeAll()
+        self.items.append(contentsOf: self.viewModel.buildBMMultiLineItems())
+        self.tableView.reloadData()
+        
+        self.viewModel.calculateChange()
     }
 }

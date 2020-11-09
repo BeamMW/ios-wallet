@@ -93,6 +93,17 @@ const std::map<Notification::Type,bool> activeNotifications {
 };
 
 const bool isSecondCurrencyEnabled = true;
+typedef void(^NewGenerateVaucherBlock)(ShieldedVoucherList v);
+
+struct GenerateVaucherFunc
+{
+    NewGenerateVaucherBlock newGenerateVaucherBlock;
+
+    void operator() (ShieldedVoucherList v){
+        NSLog(@"v");
+        newGenerateVaucherBlock(v);
+    }
+};
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -125,6 +136,10 @@ const bool isSecondCurrencyEnabled = true;
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
+}
+
+-(void)didGenerateVauchers:(ShieldedVoucherList) v {
+    
 }
 
 -(id)init{
@@ -1017,23 +1032,69 @@ bool OnProgress(uint64_t done, uint64_t total) {
     bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
     bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
     bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
-    bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:NO amount:0 walleetId:bmAddress.walletId identity:bmAddress.identity ownId:bmAddress.ownerId];
+   // bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:NO amount:0 walleetId:bmAddress.walletId identity:bmAddress.identity ownId:bmAddress.ownerId];
     
     return bmAddress;
 }
 
-//boost::optional<PeerID> GetPeerIDFromHex(const std::string& s)
-//{
-//    //boost::optional<PeerID> res;
-////    bool isValid = false;
-////    auto buf = from_hex(s, &isValid);
-////
-////    PeerID pid = Blob(buf);
-//   // res.emplace();
-//   // *res = pid;
-//
-//    return pid;
-//}
+
+-(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId amount:(double)amount {
+    
+    uint64_t bAmount = round(amount * Rules::Coin);
+
+    auto address = walletDb->getAddress(walleetId.string);
+
+    auto vouchers = wallet->generateVouchers(address->m_OwnID, 10);
+
+    TxParameters offlineParameters;
+    offlineParameters.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
+    offlineParameters.SetParameter(TxParameterID::ShieldedVoucherList, vouchers);
+    offlineParameters.SetParameter(TxParameterID::PeerID, address->m_walletID);
+    offlineParameters.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
+    offlineParameters.SetParameter(TxParameterID::PeerOwnID, address->m_OwnID);
+    offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, address->isPermanent());
+    if (bAmount > 0)
+    {
+        offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
+    }
+    auto token = to_string(offlineParameters);
+    return [NSString stringWithUTF8String:token.c_str()];
+}
+
+-(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
+    uint64_t bAmount = round(amount * Rules::Coin);
+        
+    auto address = walletDb->getAddress(walleetId.string);
+    
+    TxParameters params;
+    params.SetParameter(TxParameterID::LibraryVersion, std::string(BEAM_LIB_VERSION));
+    if (bAmount > 0) {
+        params.SetParameter(TxParameterID::Amount, bAmount);
+    }
+    params.SetParameter(TxParameterID::PeerID, address->m_walletID);
+    params.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
+    params.SetParameter(TxParameterID::IsPermanentPeerID, isPermanentAddress);
+    params.SetParameter(TxParameterID::TransactionType, TxType::Simple);
+    params.DeleteParameter(TxParameterID::Voucher);
+    
+    auto token = to_string(params);
+    return [NSString stringWithUTF8String:token.c_str()];
+}
+
+
+-(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+    uint64_t bAmount = round(amount * Rules::Coin);
+    
+    auto address = walletDb->getAddress(walleetId.string);
+    
+    auto func = GenerateVaucherFunc();
+    func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
+        auto token = beam::wallet::GenerateMaxPrivacyAddress(*address,bAmount, list[0], std::string(BEAM_LIB_VERSION));
+        block([NSString stringWithUTF8String:token.c_str()]);
+    };
+    
+    wallet->getAsync()->generateVouchers(address->m_OwnID, 1, func);
+}
 
 -(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId {
     
@@ -1900,7 +1961,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
     
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount + bFee, 0, isShielded);
+    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount + bFee, 0, beam::Asset::s_BeamID, isShielded);
 }
 
 -(void)calculateFee2:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
@@ -1912,7 +1973,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
     
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, bFee, isShielded);
+    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, bFee, beam::Asset::s_BeamID, isShielded);
 }
 
 -(NSString*)sendError:(double)amount fee:(double)fee checkMinAmount:(BOOL)check {
@@ -2152,16 +2213,29 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     return allValue;
 }
 
--(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token {
+-(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token {    
     auto params = beam::wallet::ParseParameters(token.string);
     auto amount = params->GetParameter<Amount>(TxParameterID::Amount);
     auto type = params->GetParameter<TxType>(TxParameterID::TransactionType);
     auto vouchers = params->GetParameter<ShieldedVoucherList>(TxParameterID::ShieldedVoucherList);
     auto isPermanentAddress = params->GetParameter<BOOL>(TxParameterID::IsPermanentPeerID);
+    auto storedType = params->GetParameter<TxAddressType>(TxParameterID::AddressType);
 
     BMTransactionParameters *p = [BMTransactionParameters new];
     p.amount = 0.0;
     p.isMaxPrivacy = type == TxType::PushTransaction;
+    
+    auto gen = params->GetParameter<ShieldedTxo::PublicGen>(TxParameterID::PublicAddreessGen);
+    if (gen)
+    {
+        p.isPublicOffline = true;
+    }
+    
+    if(type == TxType::PushTransaction) {
+        auto voucher = params->GetParameter<ShieldedTxo::Voucher>(TxParameterID::Voucher);
+        p.isTrueMaxPrivacy = !!voucher;
+    }
+
     
 //    ProcessLibraryVersion(params, ((const std::string& version, const std::string& myVersion))
 //    });
@@ -2334,6 +2408,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction {
     
     NSMutableArray *utxos = [NSMutableArray arrayWithArray:_utxos];
+    [utxos addObjectsFromArray:_shildedUtxos];
     
     NSMutableArray *result = [NSMutableArray array];
     
@@ -2519,7 +2594,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     NSString *fileName = [NSString stringWithFormat:@"transactions_%d.csv",(int)date];
     NSURL *url = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
     
-    NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",Status,Sending address,Receiving address,\"Transaction fee, BEAM\",Transaction ID,Kernel ID\n";
+    NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",Second Amount,Status,Sending address,Receiving address,Address type,\"Transaction fee, BEAM\",Transaction ID,Kernel ID\n";
     
     for (BMTransaction *tr in transactions) {
         NSString *newLine = [tr csvLine];
@@ -2602,8 +2677,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 
 -(void)calculateChange:(double)amount fee:(double)fee {
     Amount bAmount = round(amount * Rules::Coin);
-    Amount bTotal = bAmount + fee;
-    wallet->getAsync()->calcChange(bTotal);
+    Amount bFee = fee;
+    wallet->getAsync()->calcChange(bAmount, bFee, beam::Asset::s_BeamID);
 }
 
 #pragma mark - UTXO

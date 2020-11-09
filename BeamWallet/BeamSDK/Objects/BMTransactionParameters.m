@@ -21,4 +21,20 @@
 
 @implementation BMTransactionParameters
 
+-(BMAddressType)getAddressType {
+    if (_isTrueMaxPrivacy) {
+        return BMAddressTypeMaxPrivacy;
+    }
+    else if (_isPublicOffline) {
+        return BMAddressTypeOfflinePublic;
+    }
+    else if (_isOffline) {
+        return BMAddressTypeShielded;
+    }
+    else if (_isPermanentAddress) {
+        return BMAddressTypeRegularPermanent;
+    }
+    return BMAddressTypeRegular;
+}
+
 @end
