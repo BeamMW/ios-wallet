@@ -393,10 +393,12 @@ extension SendViewController: UITableViewDataSource {
         case 1:
             if indexPath.row == 0 {
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.amount))
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.inputAmount))
                 cell.delegate = self
                 cell.error = viewModel.amountError
                 cell.fee = Double(viewModel.fee) ?? 0
+                cell.currency = viewModel.selectedCurrencyString
+
                 return cell
             }
             else {
@@ -415,9 +417,15 @@ extension SendViewController: UITableViewDataSource {
                 }
                 
                 let fee = "+ \(viewModel.fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
-                let second = AppModel.sharedManager().exchangeValue(Double(viewModel.amount) ?? 0)
+                var second = ""
+                if viewModel.selectedCurrency == BEAM  {
+                    second = AppModel.sharedManager().exchangeValue(Double(viewModel.inputAmount) ?? 0)
+                }
+                else {
+                    second = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(viewModel.selectedCurrency), to: 1, amount: Double(viewModel.inputAmount) ?? 0)
+                }
                 
-                if (Double(viewModel.amount) ?? 0) > 0 {
+                if (Double(viewModel.inputAmount) ?? 0) > 0 {
                     cell?.textLabel?.text = second + " (" + fee + ")"
                 }
                 else {
@@ -686,7 +694,17 @@ extension SendViewController: BMCellProtocol {
     
     func onRightButton(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 0 {
+            if path.section == 1 {
+                let vc = BMDataPickerViewController(type: .sendCurrency)
+                vc.selectedValue = viewModel.selectedCurrency
+                vc.isAutoSelect = false
+                vc.completion = { [weak self] obj in
+                    self?.viewModel.selectedCurrency = Int(obj as! BMCurrencyType)
+                    self?.tableView.reloadData()
+                }
+                pushViewController(vc: vc)
+            }
+            else if path.section == 0 {
                 let vc = QRScannerViewController()
                 vc.delegate = self
                 pushViewController(vc: vc)

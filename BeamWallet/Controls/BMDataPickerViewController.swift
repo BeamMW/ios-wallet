@@ -30,13 +30,15 @@ class BMDataPickerViewController: BaseTableViewController {
         case export_data
         case currency
         case notifications
+        case sendCurrency
     }
     
     private var type: DataType!
     private var values = [BMPickerData]()
-    private var selectedValue: Any?
-    
+   
+    public var selectedValue: Any?
     public var completion: ((Any?) -> Void)?
+    public var isAutoSelect = true
     
     init(type: DataType, selectedValue: Any? = nil) {
         super.init(nibName: nil, bundle: nil)
@@ -83,6 +85,8 @@ class BMDataPickerViewController: BaseTableViewController {
             addRightButton(title: Localizable.shared.strings.export, target: self, selector: #selector(onRightButton), enabled: true)
         case .currency:
             title = Localizable.shared.strings.second_currency
+        case .sendCurrency:
+            title = Localizable.shared.strings.choose_currency
         case .notifications:
             title = Localizable.shared.strings.notifications
         default:
@@ -270,6 +274,22 @@ class BMDataPickerViewController: BaseTableViewController {
             values.append(BMPickerData(title: Localizable.shared.strings.categories, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "category", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "address", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "contact", multiplie: true))
+        case .sendCurrency:
+            let beam = BMCurrency()
+            beam.type = BMCurrencyType(BEAM)
+            
+            let usd = BMCurrency()
+            usd.type = BMCurrencyType(BMCurrencyUSD)
+            
+            let btc = BMCurrency()
+            btc.type = BMCurrencyType(BMCurrencyBTC)
+            
+            let selected = selectedValue as! Int
+            
+            values.append(BMPickerData(title: beam.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (beam.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: beam.type))
+            values.append(BMPickerData(title: usd.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (usd.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: usd.type))
+            values.append(BMPickerData(title: btc.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (btc.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: btc.type))
+            
         case .currency:
             var currencies = AppModel.sharedManager().currencies as! [BMCurrency]
             currencies.sort {
@@ -386,7 +406,12 @@ class BMDataPickerViewController: BaseTableViewController {
             }
             enableRightButton(enabled: sorted1 != sorted2)
         case .currency:
-            Settings.sharedManager().currency = data.unique as! BMCurrencyType
+            if isAutoSelect {
+                Settings.sharedManager().currency = data.unique as! BMCurrencyType
+            }
+            completion?(data.unique)
+            back()
+        case .sendCurrency:
             completion?(data.unique)
             back()
         default:

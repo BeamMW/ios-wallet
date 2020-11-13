@@ -50,6 +50,24 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
     }
     
+    public var selectedCurrency = BEAM
+    public var selectedCurrencyString: String {
+        get {
+            if selectedCurrency == BEAM {
+                return "BEAM"
+            }
+            else if selectedCurrency == BMCurrencyUSD {
+                return "USD"
+            }
+            else if selectedCurrency == BMCurrencyBTC {
+                return "BTC"
+            }
+            else {
+                return ""
+            }
+        }
+    }
+    
     public var maxPrivacy = false {
         didSet {
             if(maxPrivacy) {
@@ -168,7 +186,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
     }
     
-    public var amount = String.empty() {
+    public var inputAmount = String.empty() {
         didSet {
             amountError = nil
             if !sendAll {
@@ -176,6 +194,25 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             }
         }
     }
+    public var amount: String {
+        set {
+            inputAmount = newValue
+        }
+        get {
+            return getAmount
+        }
+    }
+    
+    public var getAmount: String {
+        if selectedCurrency == BEAM {
+            return inputAmount
+        }
+        else {
+            let result = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 1, amount: Double(inputAmount) ?? 0).replacingOccurrences(of: " BEAM", with: "")
+            return result
+        }
+    }
+    
     
     public var minFee = ""
     public var fee = String(0) {

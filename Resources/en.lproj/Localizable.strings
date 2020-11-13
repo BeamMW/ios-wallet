@@ -616,3 +616,4 @@ and never kept on the blockchain.";
 "payments_left" = "Payments left";
 "send_address_placholder" = "Paste address or search by address, tag or name";
 "local_comment" = "Comments are local and won't be shared";
+"choose_currency" = "Choose crrency";

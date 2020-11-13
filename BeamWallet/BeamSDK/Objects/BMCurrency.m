@@ -45,6 +45,8 @@
             return @"USD (United States Dollar)";
         case BMCurrencyBTC:
             return @"BTC (Bitcoin)";
+        case BEAM:
+            return @"BEAM";
         default:
             return @"";
     }

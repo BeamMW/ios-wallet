@@ -592,7 +592,9 @@ class LocalizableStrings : NSObject {
     var payments_left = "payments_left".localized
     var send_address_placholder = "send_address_placholder".localized
     var local_comment = "local_comment".localized
-    
+    var choose_currency = "choose_currency".localized
+
+
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

@@ -2047,7 +2047,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from  {
-    
+        
     BOOL isShieldedTx = false;
     BOOL isMaxPrivacy = false;
     
@@ -2113,9 +2113,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     {
         params.SetParameter(TxParameterID::OriginalToken, to.string);
     }
-    
-    wallet->getAsync()->startTransaction(std::move(params));
-        
+            
     NSString *toString = to;
     if([[AppModel sharedManager] isToken:toString]) {
         BMTransactionParameters* params = [[AppModel sharedManager] getTransactionParameters:toString];
@@ -2125,12 +2123,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
     WalletID walletID(Zero);
     if (walletID.FromHex(toString.string))
     {
-        WalletID fromID(Zero);
-        fromID.FromHex(from.string);
-
         try{
             __block auto address = walletDb->getAddress(walletID);
-
+            
             if(address) {
                 __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -2147,6 +2142,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
             NSLog(@"%@",ex);
         }
     }
+    
+    wallet->getAsync()->startTransaction(std::move(params));
 }
 
 void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxParameters& input, beam::wallet::TxParameters& dest)
@@ -3217,6 +3214,60 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
+}
+
+-(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount {
+    if(Settings.sharedManager.currency == BMCurrencyOff || [self isCurrenciesAvailable] == NO) {
+        return @"";
+    }
+    if(amount == 0) {
+        return @"";
+    }
+    
+    if(from == BEAM) {
+        for (BMCurrency *currency in _currencies) {
+            if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
+                currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
+                currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
+                
+                double value = double(int64_t(currency.value)) / Rules::Coin;
+                double rate = value * (amount / Rules::Coin);
+                if(rate < 0.01 && currency.type == BMCurrencyUSD) {
+                    return @"< 1 cent";
+                }
+                NSString *result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
+                if([result isEqualToString:@"0 BTC"]) {
+                    rate = rate * 100000000;
+                    currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",@"satoshis"];
+                    result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
+                }
+                return result;
+            }
+        }
+        
+        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
+    }
+    else  {
+        for (BMCurrency *currency in _currencies) {
+            if(currency.type == from && currency.value > 0) {
+      
+                NSNumberFormatter *formatter = [NSNumberFormatter new];
+                formatter.currencyCode = @"";
+                formatter.currencySymbol = @"";
+                formatter.minimumFractionDigits = 0;
+                formatter.maximumFractionDigits = 10;
+                formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+                formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+                
+                double value = double(int64_t(currency.value)) / Rules::Coin;
+                double rate = (amount) / value;
+                NSString *result = [NSString stringWithFormat:@"%@ BEAM",[formatter stringFromNumber:[NSNumber numberWithDouble:rate]]];
+                return result;
+            }
+        }
+        
+        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
+    }
 }
 
 -(NSString*_Nonnull)exchangeValueFee:(double)amount {

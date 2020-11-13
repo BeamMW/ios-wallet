@@ -58,25 +58,22 @@ class BMAmountCell: BaseCell {
     public var currency:String?
     {
         didSet{
-            if currency != nil {
+            if currency != nil && AppModel.sharedManager().isCurrenciesAvailable() {
                 
-//                currencyLabel.isUserInteractionEnabled = true
-//
-//                let text = currency!
-//
-//                let imageAttachment = NSTextAttachment()
-//                imageAttachment.image = IconNextArrow()
-//
-//                let imageString = NSAttributedString(attachment: imageAttachment)
-//
-//                let attributedString = NSMutableAttributedString(string:text)
-//                attributedString.append(NSAttributedString(string: "  "))
-//                attributedString.append(imageString)
-//
-//                currencyLabel.attributedText = attributedString
-//
-//                textField.placeholder = Localizable.shared.strings.enter_amount_in_currency + " " + currency!
-//                textField.placeHolderColor = UIColor.main.blueyGrey.withAlphaComponent(0.7)
+                currencyLabel.isUserInteractionEnabled = true
+
+                let text = currency!
+
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = IconNextArrow()
+
+                let imageString = NSAttributedString(attachment: imageAttachment)
+
+                let attributedString = NSMutableAttributedString(string:text)
+                attributedString.append(NSAttributedString(string: "  "))
+                attributedString.append(imageString)
+
+                currencyLabel.attributedText = attributedString
             }
         }
     }

@@ -279,6 +279,7 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 //exchange
 -(NSString*_Nonnull)exchangeValue:(double)amount;
 -(NSString*_Nonnull)exchangeValueFee:(double)amount;
+-(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount;
 -(void)saveCurrencies;
 -(BOOL)checkIsOwnNode;
 
