@@ -31,6 +31,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case currency
         case notifications
         case sendCurrency
+        case max_privacy_lock
     }
     
     private var type: DataType!
@@ -89,6 +90,8 @@ class BMDataPickerViewController: BaseTableViewController {
             title = Localizable.shared.strings.choose_currency
         case .notifications:
             title = Localizable.shared.strings.notifications
+        case .max_privacy_lock:
+            title = Localizable.shared.strings.lock_time_limit
         default:
             title = String.empty()
         }
@@ -320,7 +323,11 @@ class BMDataPickerViewController: BaseTableViewController {
           //  values.append(BMPickerData(title: Localizable.shared.strings.news, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationNewsON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.news, multiplie: false, isSwitch: true))
           //  values.append(BMPickerData(title: Localizable.shared.strings.address_expiration, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationAddressON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.address_expiration, multiplie: false, isSwitch: true))
             values.append(BMPickerData(title: Localizable.shared.strings.transaction_status, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationTransactionON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.transaction_status, multiplie: false, isSwitch: true))
-        
+        case .max_privacy_lock:
+            let locks = Settings.sharedManager().maxPrivacyLockValues()
+            for lock in locks {
+                values.append(BMPickerData(title: lock.name, detail: nil, titleColor: UIColor.white, arrowType: (lock.hours == Settings.sharedManager().lockMaxPrivacyValue) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: lock.hours))
+            }
         default:
             break
         }
@@ -413,6 +420,13 @@ class BMDataPickerViewController: BaseTableViewController {
             back()
         case .sendCurrency:
             completion?(data.unique)
+            back()
+        case .max_privacy_lock:
+            Settings.sharedManager().lockMaxPrivacyValue = data.unique as! Int32
+            AppModel.sharedManager().setMaxPrivacyLockTime(data.unique as! Int32)
+            
+            completion?(data.unique)
+            
             back()
         default:
             break

@@ -37,10 +37,11 @@ typedef int BMAddressType;
 +(BMAddress*_Nonnull)fromAddress:(BMAddress*_Nonnull)address;
 +(BMAddress*_Nonnull)emptyAddress;
 
-@property (nonatomic,strong) NSString * _Nonnull walletId;
+@property (nonatomic,strong, getter = getWalletId) NSString * _Nonnull walletId;
 @property (nonatomic,strong) NSString * _Nullable onlineToken;
 @property (nonatomic,strong) NSString * _Nullable offlineToken;
 @property (nonatomic,strong) NSString * _Nullable maxPrivacyToken;
+@property (nonatomic,strong) NSString * _Nullable address;
 
 @property (nonatomic,strong) NSString * _Nonnull label;
 @property (nonatomic,strong) NSString * _Nullable identity;
@@ -58,6 +59,8 @@ typedef int BMAddressType;
 @property (nonatomic,assign) BOOL isChangedDate;
 @property (nonatomic,assign) BOOL isNeedRemoveTransactions;
 @property (nonatomic,assign) BOOL isContact;
+
+
 
 -(NSMutableAttributedString*_Nonnull)categoriesName;
 

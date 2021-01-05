@@ -12,7 +12,7 @@ import UIKit
     @objc optional func onRegular()
     @objc optional func onMaxPrivacy()
     @objc optional func onOneTime()
-    @objc optional func onPermament()
+    @objc optional func onPermament()    
 }
 
 class ReceiveAddressOptionsCell: BaseCell {
@@ -55,8 +55,15 @@ class ReceiveAddressOptionsCell: BaseCell {
     @IBOutlet private var errorLabel: UILabel!
     @IBOutlet private var offset: NSLayoutConstraint!
 
+    @IBOutlet private var view_1: UIView!
+    @IBOutlet private var view_2: UIView!
+
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        view_1.backgroundColor = UIColor.main.marineThree
+        view_2.backgroundColor = UIColor.main.marineThree
         
         if Settings.sharedManager().isDarkMode {
             addressTypeLabel.textColor = UIColor.main.steel;
@@ -64,18 +71,22 @@ class ReceiveAddressOptionsCell: BaseCell {
             errorLabel.textColor = UIColor.main.steel;
         }
         
-        expirationLabel.setLetterSpacingOnly(value: 1.5, title: Localizable.shared.strings.address_expiration.uppercased(), letter: Localizable.shared.strings.address_expiration.uppercased())
-
         addressTypeLabel.setLetterSpacingOnly(value: 1.5, title: Localizable.shared.strings.address_type.uppercased(), letter: Localizable.shared.strings.address_type.uppercased())
+        
+        
+        let title = "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))"
+        let split = title.split(separator: "(")
+        expirationLabel.setLetterSpacingOnly(value: 1.5, title: title, letter: String(split[0]))
         
         selectionStyle = .none
         
         if AppModel.sharedManager().checkIsOwnNode() {
             errorLabel.isHidden = true
-            offset.constant = -5
+            errorLabel.text = nil
+            offset.constant = -15
         }
         else {
-            offset.constant = 25
+           // offset.constant = 25
             addressTypeSegment.isUserInteractionEnabled = false
             addressTypeSegment.textColor = UIColor.main.blueyGrey.withAlphaComponent(0.2)
         }

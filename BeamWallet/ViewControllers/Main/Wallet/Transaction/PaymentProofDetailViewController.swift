@@ -22,7 +22,8 @@ import UIKit
 class PaymentProofDetailViewController: BaseTableViewController {
     private var transaction: BMTransaction?
     private var paymentProof: BMPaymentProof?
-    
+    private var paymentInfo: BMPaymentInfo?
+
     private var details = [[BMMultiLineItem]]()
     
     private var detailsExpand = true
@@ -35,7 +36,6 @@ class PaymentProofDetailViewController: BaseTableViewController {
     @IBOutlet private weak var headerdHeight: NSLayoutConstraint!
     @IBOutlet private weak var keyKodeTitle: UILabel!
     
-
     
     override var tableStyle: UITableView.Style {
         get {
@@ -122,22 +122,31 @@ class PaymentProofDetailViewController: BaseTableViewController {
             tableView.tableFooterView = footerView
         }
         
-        if let transaction = self.transaction {
-            var section_2 = [BMMultiLineItem]()
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.sender.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.receiver.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: String.currency(value: transaction.realAmount) , detailFont: RegularFont(size: 16), detailColor: UIColor.main.heliotrope))
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            
-            ////+ Localizable.shared.strings.beam
-            
-            details.append(section_2)
-            
-            tableView.tableFooterView = footerView
+        if let info = AppModel.sharedManager().getPaymentProofInfo(self.paymentProof?.code ?? String.empty()){
+            self.fillInfoFromPaymentInfo(info: info)
+        }
+        else {
+            self.paymentInfo = nil
         }
         
         if transaction == nil, paymentProof == nil {
             tableView.tableFooterView = nil
+        }
+    }
+    
+    private func fillInfoFromPaymentInfo(info: BMPaymentInfo?) {
+        if let info = info {
+            self.paymentInfo = info
+            
+            var section_2 = [BMMultiLineItem]()
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.sender.uppercased(), detail: info.sender, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.receiver.uppercased(), detail: info.receiver, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: String.currency(value: info.realAmount) , detailFont: RegularFont(size: 16), detailColor: UIColor.main.heliotrope))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: info.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            
+            details.append(section_2)
+            
+            tableView.tableFooterView = footerView
         }
     }
     
@@ -261,9 +270,9 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        let tr = AppModel.sharedManager().validatePaymentProof(textView.text)
+        let paymentInfo = AppModel.sharedManager().validatePaymentProof(textView.text)
         
-        if tr == nil {
+        if paymentInfo == nil {
             transaction = nil
             
             codeInputLabel.alpha = 1
@@ -272,8 +281,6 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
             codeInputField.lineColor = UIColor.main.red
         }
         else {
-            transaction = tr
-            
             codeInputLabel.alpha = 0
             codeInputField.lineColor = UIColor.white.withAlphaComponent(0.1)
             codeInputField.textColor = UIColor.white
@@ -282,6 +289,7 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
         resize()
         
         fillTransactionInfo()
+        fillInfoFromPaymentInfo(info: paymentInfo)
         tableView.reloadData()
     }
     
@@ -293,8 +301,8 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
         if tr != nil {
             textView.resignFirstResponder()
         }
-        else if transaction != nil, tr == nil {
-            transaction = nil
+        else if paymentInfo != nil, tr == nil {
+            paymentInfo = nil
             
             if textView.text.isEmpty {
                 codeInputLabel.alpha = 0

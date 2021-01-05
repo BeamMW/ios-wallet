@@ -54,8 +54,12 @@ class DetailAddressViewModel: AddressViewModel {
         
         details.append(BMMultiLineItem(title: nil, detail:(self.address!.label.isEmpty ? Localizable.shared.strings.no_name : self.address!.label) , detailFont: BoldFont(size: 30), detailColor: UIColor.white))
 
-        let idItem = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail:self.address!.walletId , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+        let id = "\(self.address!.walletId.prefix(6))...\(self.address!.walletId.suffix(6))"
+
+        let idItem = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail: id , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
         idItem.canCopy = true
+        idItem.copyValue = self.address!.walletId
+        
         details.append(idItem)
         
         if self.address?.identity != nil && self.address?.identity?.isEmpty == false {

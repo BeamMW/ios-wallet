@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     var completionHandler: ((UIBackgroundFetchResult) -> Void)?
-    
+        
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CrashEye.add(delegate: self)
         
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Settings.sharedManager()
         
         KeyboardListener.shared.start()
-        
+                        
         NotificationManager.sharedManager.requestPermissions()
         
         if Settings.sharedManager().target != Mainnet {

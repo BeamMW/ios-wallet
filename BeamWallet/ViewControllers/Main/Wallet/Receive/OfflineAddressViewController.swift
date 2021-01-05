@@ -36,6 +36,7 @@ class OfflineAddressViewController: BaseViewController {
         addressLabel.text = nil
 
         if Settings.sharedManager().isDarkMode {
+            shqreButton.setTitleColor(UIColor.white, for: .normal)
             infoLabel.textColor = UIColor.main.steel;
             addressTitleLabel.textColor = UIColor.main.steel;
         }

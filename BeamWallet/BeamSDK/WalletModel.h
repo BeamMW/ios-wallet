@@ -18,6 +18,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RecoveryProgress.h"
 #include <csignal>
 
 #include "wallet/core/common.h"
@@ -34,9 +35,10 @@ public:
     
 
     bool pre_connected_status;
-
+    
     std::vector<beam::wallet::WalletAddress> ownAddresses;
     std::vector<beam::wallet::WalletAddress> contacts;
+    std::map<uint64_t, beam::wallet::ShieldedCoin> shieldedCoins;
 
 private:
     NSString *GetAddressTo(beam::wallet::TxDescription transaction);
@@ -50,7 +52,8 @@ private:
     NSString *GetShildedUTXOTypeString(beam::wallet::ShieldedCoin coin);
     NSString* GetCurrencyString(beam::wallet::ExchangeRate::Currency type);
     void doFunction(const std::function<void()>& func);
-
+    void onWalletStatusInternal(const beam::wallet::WalletStatus& newStatus);
+    
     void onStatus(const beam::wallet::WalletStatus& status) override;
     void onTxStatus(beam::wallet::ChangeAction, const std::vector<beam::wallet::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;

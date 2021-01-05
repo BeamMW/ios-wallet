@@ -57,10 +57,10 @@ class ReceiveAddressViewModel: NSObject {
     public var expire = ExpireOptions.oneTime {
         didSet {
             if address != nil {
-                let hours = expire == .oneTime ? Settings.sharedManager().maxAddressDurationHours : 0
-                address.duration = UInt64(hours == Settings.sharedManager().maxAddressDurationHours ? Settings.sharedManager().maxAddressDurationSeconds : 0)
-                
-                AppModel.sharedManager().setExpires(Int32(hours), toAddress: address.walletId)
+//                let hours = expire == .oneTime ? Settings.sharedManager().maxAddressDurationHours : 0
+//                address.duration = UInt64(hours == Settings.sharedManager().maxAddressDurationHours ? Settings.sharedManager().maxAddressDurationSeconds : 0)
+//
+//                AppModel.sharedManager().setExpires(Int32(hours), toAddress: address.walletId)
                 
                 generateTokens()
             }
@@ -107,11 +107,11 @@ class ReceiveAddressViewModel: NSObject {
             }
         }
         else {
-            values.append(TokenValue(name: "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))", value: address.onlineToken ?? "", info: String.empty()))
+            values.append(TokenValue(name: "", value: address.onlineToken ?? "", info: String.empty()))
             values.append(TokenValue(name: "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_pool.lowercased()))", value: address.walletId, info: String.empty()))
             
             if isOwn {
-                values.append(TokenValue(name: "\(Localizable.shared.strings.offline_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))", value: address.offlineToken ?? "", info: Localizable.shared.strings.support_10_payments))
+                values.append(TokenValue(name: "\(Localizable.shared.strings.offline_token.uppercased()) (\(Localizable.shared.strings.for_wallets.lowercased()))", value: address.offlineToken ?? "", info: Localizable.shared.strings.support_10_payments))
             }
         } 
     }
@@ -121,6 +121,11 @@ class ReceiveAddressViewModel: NSObject {
             if let result = address {
                 self.address = result
                 self.generateTokens()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.address.duration = 0
+                    AppModel.sharedManager().setExpires(Int32(0), toAddress: self.address.walletId)
+                }
             }
             self.onAddressCreated?(error)
         })

@@ -29,7 +29,7 @@ class TrustedNodeViewController: BMInputViewController {
     
     private var isPresented = false
     private var timer = Timer()
-    private var timeoutTimer = Timer()
+    private var timeoutTimer:Timer?
     private var event: EventType!
     private var isConnected = false
 
@@ -127,7 +127,7 @@ class TrustedNodeViewController: BMInputViewController {
                 }
                 else {
                     timer.invalidate()
-                    timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+                    timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
                     
                     AppModel.sharedManager().getNetworkStatus()
                 }
@@ -239,7 +239,7 @@ extension TrustedNodeViewController: UITextFieldDelegate {
 extension TrustedNodeViewController: WalletModelDelegate {
     
     func onWalletStatusChange(_ status: BMWalletStatus) {
-        if status.available > 0 && event == .restore && !Settings.sharedManager().connectToRandomNode {
+        if (status.available > 0 || status.maxPrivacy > 0 || status.maturing > 0) && event == .restore && !Settings.sharedManager().connectToRandomNode {
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.timeout()
@@ -252,7 +252,7 @@ extension TrustedNodeViewController: WalletModelDelegate {
         if !isPresented && !Settings.sharedManager().connectToRandomNode {
             isPresented = true
             timer.invalidate()
-            timeoutTimer.invalidate()
+            timeoutTimer?.invalidate()
             openMainPage()
         }
     }
@@ -272,8 +272,10 @@ extension TrustedNodeViewController: WalletModelDelegate {
                 }
                 timer.invalidate()
                 
-                timeoutTimer.invalidate()
-                timeoutTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(timeout), userInfo: nil, repeats: false)
+                if timeoutTimer == nil {
+                    timeoutTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(timeout), userInfo: nil, repeats: false)
+                }
+       
             }
             else {
                 SVProgressHUD.dismiss()

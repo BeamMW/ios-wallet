@@ -37,7 +37,8 @@ class OpenWalletProgressViewController: BaseViewController {
     private var isPresented = false
     private var start = Date.timeIntervalSinceReferenceDate;
     private var stopRestore = false
-    
+    private var isWaitingRestore = false
+
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
@@ -61,7 +62,7 @@ class OpenWalletProgressViewController: BaseViewController {
         }
         
         if phrase != nil {
-            versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+            versionLabel.text = "v " + UIApplication.appVersion()
         }
         else{
             versionLabel.isHidden = true
@@ -116,6 +117,10 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     @objc private func openMainPage() {
+        if isWaitingRestore {
+            return
+        }
+        
         if isPresented {
             return
         }
@@ -375,6 +380,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             if done == total ||  percent >= 99.9  {
                 if !strongSelf.stopRestore {
                     strongSelf.stopRestore = true
+                    strongSelf.isWaitingRestore = true
                     
                     let deadlineTime = DispatchTime.now() + .seconds(4)
                     DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
@@ -390,6 +396,10 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                             }
                         }
                         else{
+                            if strongSelf.isWaitingRestore {
+                                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 50%."
+                            }
+                            
                             strongSelf.startCreateWallet()
                         }
                     }
@@ -404,11 +414,25 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
 
             strongSelf.errorLabel.isHidden = true
 
-            if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
+            if total == done && strongSelf.isWaitingRestore {
+                strongSelf.isWaitingRestore = false
+                strongSelf.openMainPage()
+            }
+            else if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
 //
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
+
+                if strongSelf.isWaitingRestore {
+                    let progress_100 = Int32(strongSelf.progressView.progress * 100)
+                    strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
+                    
+                    if progress_100 >= 98 {
+                        strongSelf.isWaitingRestore = false
+                        strongSelf.openMainPage()
+                    }
+                }
             }
         }
     }

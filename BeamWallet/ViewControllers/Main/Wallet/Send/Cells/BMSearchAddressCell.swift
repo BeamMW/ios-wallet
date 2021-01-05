@@ -28,6 +28,7 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var rightButton: UIButton!
     @IBOutlet private weak var showTokenButton: UIButton!
     @IBOutlet private weak var additionalErrorLabel: UILabel!
+    @IBOutlet private weak var addressTypeLabel: UILabel!
 
     @IBOutlet private weak var contactView: UIStackView!
     @IBOutlet private weak var contactName: UILabel!
@@ -57,6 +58,7 @@ class BMSearchAddressCell: BaseCell {
         
         if Settings.sharedManager().isDarkMode {
             nameLabel.textColor = UIColor.main.steel;
+            addressTypeLabel.textColor = UIColor.main.steel;
             additionalErrorLabel.textColor = UIColor.main.steel;
         }
         
@@ -74,9 +76,9 @@ class BMSearchAddressCell: BaseCell {
     
     public var offlineTokensCount = 0 {
         didSet {
-            if let text = contactName.text {
+            if let text = addressTypeLabel.text {
                 if (addressType == BMAddressTypeShielded && offlineTokensCount >= 0 && text.contains(Localizable.shared.strings.offline_address)) {
-                    contactName.text = Localizable.shared.strings.offline_address + ". " + Localizable.shared.strings.payments_left + ": \(offlineTokensCount)"
+                    addressTypeLabel.text = Localizable.shared.strings.offline_address + ". " + Localizable.shared.strings.payments_left + ": \(offlineTokensCount)" + "\n"
                 }
             }
         }
@@ -84,30 +86,30 @@ class BMSearchAddressCell: BaseCell {
     
     public var addressType: BMAddressType = BMAddressType(BMAddressTypeRegular) {
         didSet {
-            if(contact == nil && !textField.text.isEmpty) {
-                contactView.isHidden = false
-                contactName.numberOfLines = 2
+            if(!textField.text.isEmpty) {
                 if addressType == BMAddressTypeMaxPrivacy {
-                    contactName.text = Localizable.shared.strings.max_privacy_address
+                    addressTypeLabel.isHidden = false
+                    addressTypeLabel.text = Localizable.shared.strings.max_privacy_address + "\n"
                 }
                 else if addressType == BMAddressTypeRegular {
-                    contactName.text = Localizable.shared.strings.one_time_expire_text
+                    addressTypeLabel.isHidden = false
+                    addressTypeLabel.text = Localizable.shared.strings.one_time_expire_text + "\n"
                 }
                 else if addressType == BMAddressTypeOfflinePublic {
-                    contactName.text = Localizable.shared.strings.public_offline_address
+                    addressTypeLabel.text = Localizable.shared.strings.public_offline_address + "\n"
                 }
                 else if addressType == BMAddressTypeRegularPermanent {
-                    contactName.text = Localizable.shared.strings.perm_token.replacingOccurrences(of: ".", with: "")
+                    addressTypeLabel.isHidden = false
+                    addressTypeLabel.text = Localizable.shared.strings.perm_token.replacingOccurrences(of: ".", with: "") + "\n"
                 }
                 else if addressType == BMAddressTypeShielded {
-                    contactName.text = Localizable.shared.strings.offline_address
+                    addressTypeLabel.isHidden = false
+                    addressTypeLabel.text = Localizable.shared.strings.offline_address + "\n"
                 }
                 else {
-                    contactName.text = nil
+                    addressTypeLabel.isHidden = true
                 }
-                contactName.font = ItalicFont(size: 14)
-                contactCategory.text = nil
-                iconView.isHidden = true
+                addressTypeLabel.font = ItalicFont(size: 14)
             }
         }
     }

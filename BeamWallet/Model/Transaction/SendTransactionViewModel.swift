@@ -69,19 +69,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public var maxPrivacy = false {
-        didSet {
-            if(maxPrivacy) {
-                if(AppModel.sharedManager().isToken(toAddress)) {
-                    let params = AppModel.sharedManager().getTransactionParameters(toAddress)
-                    if(AppModel.sharedManager().isMyAddress(params.address)) {
-                        toAddressError = Localizable.shared.strings.cant_sent_max_to_my_address
-                    }
-                }
-            }
-            else if (toAddressError == Localizable.shared.strings.cant_sent_max_to_my_address) {
-                toAddressError = nil
-            }
-            
+        didSet {            
             calculateFee()
         }
     }
@@ -154,10 +142,6 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                                 
                 isMyAddress = AppModel.sharedManager().isMyAddress(params.address)
                 
-                if(isMyAddress && maxPrivacy) {
-                    toAddressError = "Can not sent offline transaction to own address"
-                }
-               
                 newVersionError = params.verionError
                 
                 calculateFee()
@@ -312,7 +296,17 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             }
         }
         else {
-            let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+            var canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+                
+            var canSendToMaxPrivacy: String? = nil
+            
+            if(addressType == BMAddressTypeMaxPrivacy) {
+                canSendToMaxPrivacy = AppModel.sharedManager().canSend(toMaxPrivacy: toAddress)
+                
+                if(canSendToMaxPrivacy != nil) {
+                    toAddressError = canSendToMaxPrivacy
+                }
+            }
             
             if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
                 amountError = canSend
@@ -347,26 +341,27 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let valid = AppModel.sharedManager().isValidAddress(toAddress)
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
         let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
-        var isError = (!valid || expired || canSend != nil)
-       
-        let isMyAddress = AppModel.sharedManager().isMyAddress(toAddress)
         
-        if(isMyAddress && maxPrivacy) {
-            isError = true
+        var canSendToMaxPrivacy: String? = nil
+        
+        if(addressType == BMAddressTypeMaxPrivacy) {
+            canSendToMaxPrivacy = AppModel.sharedManager().canSend(toMaxPrivacy: toAddress)
         }
         
+        let isError = (!valid || expired || canSend != nil || canSendToMaxPrivacy != nil)
+               
         if isError {
             amountError = nil
             toAddressError = nil
             
-            if(isMyAddress && maxPrivacy) {
-                toAddressError = "Can not sent offline transaction to own address"
-            }
-            else if !valid {
+            if !valid {
                 toAddressError = Localizable.shared.strings.incorrect_address
             }
             else if expired {
                 toAddressError = Localizable.shared.strings.address_is_expired
+            }
+            else if canSendToMaxPrivacy != nil {
+                toAddressError = canSendToMaxPrivacy
             }
             
             if amount.isEmpty {
@@ -561,7 +556,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.regular). \(Localizable.shared.strings.permanent)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if addressType == BMAddressTypeShielded {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.offline, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.offline), \(Localizable.shared.strings.payments_left.lowercased()):  \(self.offlineTokensCount)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))

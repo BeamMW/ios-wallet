@@ -22,7 +22,7 @@ import UIKit
 protocol WalletAvailableCellDelegate: AnyObject {
     func onExpandAvailable()
     func onDidChangeSelectedState(state:StatusViewModel.SelectedState)
-    func onDidSelectUnlink()
+    func onMoreDetails()
 }
 
 class WalletAvailableCell: BaseCell {
@@ -56,7 +56,7 @@ class WalletAvailableCell: BaseCell {
     @IBOutlet weak private var secondMaturingLabel: UILabel!
     @IBOutlet weak private var secondMaxPrivacyLabel: UILabel!
 
-    @IBOutlet weak private var unlinkButton: UIButton!
+    @IBOutlet weak private var moreDetailsButton: UIButton!
 
     private var selectedState = StatusViewModel.SelectedState.available
     private var availableMaturing = false
@@ -84,6 +84,8 @@ class WalletAvailableCell: BaseCell {
         super.awakeFromNib()
         
         selectionStyle = .none
+        
+        moreDetailsButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
         
         secondMaturingLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
@@ -127,6 +129,10 @@ class WalletAvailableCell: BaseCell {
         didSelectState(animation: true)
     }
     
+    @IBAction func onMoreDetails(sender :UIButton) {
+        delegate?.onMoreDetails()
+    }
+    
     @IBAction func onStackButtons(sender :UIButton) {
         if selectedState != .maturing && sender == maturingButton {
             selectedState = .maturing
@@ -145,9 +151,6 @@ class WalletAvailableCell: BaseCell {
         }
     }
     
-    @IBAction func onUnlink(sender :UIButton) {
-        self.delegate?.onDidSelectUnlink()
-    }
     
     @objc private func onSwipe(sender:UISwipeGestureRecognizer) {
         if isExpand {
@@ -210,6 +213,8 @@ class WalletAvailableCell: BaseCell {
 
         UIView.animate(withDuration: animation ? 0.3 : 0, animations: {
             if self.selectedState == .available {
+                self.moreDetailsButton.isHidden = true
+                
                 self.pageView.currentPage = 0
                 
                 self.maturingView.alpha = 0
@@ -221,6 +226,8 @@ class WalletAvailableCell: BaseCell {
                 self.maxPrivactTopButtonButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }
             else if self.selectedState == .maturing {
+                self.moreDetailsButton.isHidden = true
+
                 self.pageView.currentPage = (self.availableMaxPrivacy) ? 2 : 1
                 
                 self.maturingView.alpha = 1
@@ -232,6 +239,8 @@ class WalletAvailableCell: BaseCell {
                 self.maxPrivactTopButtonButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }
             else if self.selectedState == .maxPrivacy {
+                self.moreDetailsButton.isHidden = false
+
                 self.pageView.currentPage = 1
                 
                 self.maturingView.alpha = 0
@@ -244,16 +253,22 @@ class WalletAvailableCell: BaseCell {
             }
         }) { (_ ) in
             if self.selectedState == .available {
+                self.moreDetailsButton.isHidden = true
+
                 self.availableButton.titleLabel?.font = BoldFont(size: size)
                 self.maturingButton.titleLabel?.font = RegularFont(size: size)
                 self.maxPrivactTopButtonButton.titleLabel?.font = RegularFont(size: size)
             }
             else if self.selectedState == .maxPrivacy {
+                self.moreDetailsButton.isHidden = false
+
                 self.maxPrivactTopButtonButton.titleLabel?.font = BoldFont(size: size)
                 self.availableButton.titleLabel?.font = RegularFont(size: size)
                 self.maturingButton.titleLabel?.font = RegularFont(size: size)
             }
             else{
+                self.moreDetailsButton.isHidden = true
+
                 self.maturingButton.titleLabel?.font = BoldFont(size: size)
                 self.availableButton.titleLabel?.font = RegularFont(size: size)
                 self.maxPrivactTopButtonButton.titleLabel?.font = RegularFont(size: size)
@@ -273,6 +288,14 @@ extension WalletAvailableCell: Configurable {
         availableMaxPrivacy = options.avaiableMaxPrivacy
 
         isExpand = options.expand
+        
+        
+        if options.selectedState == .maxPrivacy {
+            moreDetailsButton.isHidden = false
+        }
+        else {
+            moreDetailsButton.isHidden = true
+        }
         
         if availableMaturing || availableMaxPrivacy {
             let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
@@ -302,13 +325,9 @@ extension WalletAvailableCell: Configurable {
 
             if status.realAmount == 0 {
                 secondAvailableLabel.isHidden = true
-                unlinkButton.isHidden = true
             }
             else {
                 secondAvailableLabel.isHidden = false
-                if IS_UNLIKED_ENABLED {
-                    unlinkButton.isHidden = false
-                }
                 secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(status.realAmount)
                 
                 if secondAvailableLabel.text?.isEmpty == true {
@@ -349,7 +368,7 @@ extension WalletAvailableCell: Configurable {
             secondAvailableLabel.isHidden = true
             secondMaturingLabel.isHidden = true
             secondMaxPrivacyLabel.isHidden = true
-            unlinkButton.isHidden = true
+            moreDetailsButton.isHidden = true
         }
         
         expand(expand: options.expand, animation: false)

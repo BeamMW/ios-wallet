@@ -161,8 +161,7 @@
 }
 
 -(BOOL)hasPaymentProof {
-    return (self.isIncome == NO && self.enumStatus == BMTransactionStatusCompleted && self.isSelf == NO
-            && self.enumType == BMTransactionTypeSimple);
+    return (self.isIncome == NO && self.enumStatus == BMTransactionStatusCompleted && self.isSelf == NO);
 }
 
 -(NSString*)details {
@@ -183,6 +182,8 @@
 }
 
 -(NSString*)csvLine {
+    NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",\"Amount USD\",\"Amount BTC\",\"Transaction fee, BEAM\",Status,Address type,Transaction ID,Kernel ID,Sending address,Sending identity,Receiving address,Receiving identity,Token,Payment proof";
+
     NSNumberFormatter *formatter = [NSNumberFormatter new];
     formatter.currencyCode = @"";
     formatter.currencySymbol = @"";
@@ -194,23 +195,26 @@
     NSString *_type =  self.isIncome ? @"Receive BEAM" : @"Send BEAM";
     NSString *_date =  [self formattedDate];
     NSString *_amount =  [[formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSString *_secondAmount = [[AppModel sharedManager] exchangeValue:_realAmount];
+    NSString *_secondAmountUSD = [[AppModel sharedManager] exchangeValue:_realAmount to:BMCurrencyUSD];
+    NSString *_secondAmountBTC = [[AppModel sharedManager] exchangeValue:_realAmount to:BMCurrencyBTC];
 
     NSString *_status = self.status;
-    NSString *_sending = self.senderAddress;
-    NSString *_receiving = self.receiverAddress;
+    NSString *_sAddress = self.senderAddress;
+    NSString *_sIdenitty = self.senderIdentity;
+    NSString *_rAddress = self.receiverAddress;
+    NSString *_rIdentity = self.receiverIdentity;
     NSString *_addresstype = [self getAddressType];
-    if (_isIncome && (_isPublicOffline || _isShielded)) {
-        _sending = @"Shielded pool";
-    }
-    else if (_isIncome && (_isPublicOffline || _isShielded)) {
-        _receiving = @"Shielded pool";
-    }
+    NSString *_proof = @"";
+
     NSString *_fee =  [[formatter stringFromNumber:[NSNumber numberWithDouble:self.fee]] stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *_id = self.ID;
     NSString *_kernel = self.kernelId;
+    NSString *_tkn = self.token;
+    if(_tkn == nil) {
+        _tkn = @"";
+    }
     
-    NSArray *array = @[_type,_date,_amount, _secondAmount, _status,_sending,_receiving, _addresstype, _fee, _id, _kernel];
+    NSArray *array = @[_type, _date, _amount, _secondAmountUSD, _secondAmountBTC ,_fee, _status, _addresstype, _id, _kernel ,_sAddress, _sIdenitty, _rAddress, _rIdentity, _tkn, _proof];
     
     return [[array componentsJoinedByString:@","] stringByAppendingString:@"\n"];
 }

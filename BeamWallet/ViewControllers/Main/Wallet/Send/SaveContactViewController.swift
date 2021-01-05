@@ -61,8 +61,9 @@ class SaveContactViewController: BaseTableViewController {
         if address != nil {
             if(AppModel.sharedManager().isToken(address!)) {
                 let params = AppModel.sharedManager().getTransactionParameters(address!)
-                self.address.walletId = params.address
+                self.address.walletId = address!//params.address
                 self.address.identity = params.identity
+                self.address.address = address
             }
             else {
                 self.address.walletId = address!
@@ -123,8 +124,16 @@ class SaveContactViewController: BaseTableViewController {
     
     @objc private func onSave() {
         var walletId = address.walletId
-        if(AppModel.sharedManager().isToken(address.walletId)) {
-            walletId = AppModel.sharedManager().getTransactionParameters(address.walletId).address
+        var shouldSaveToken = false
+        let token = address.address
+        
+        if(token?.isEmpty == false) {
+            shouldSaveToken = true
+            walletId = token!
+        }
+        else if(AppModel.sharedManager().isToken(address.walletId)) {
+            walletId = address.walletId
+            shouldSaveToken = true
         }
         
         if isAddContact {            
@@ -148,7 +157,7 @@ class SaveContactViewController: BaseTableViewController {
             }
         }
         
-        AppModel.sharedManager().addContact(walletId, name: address.label, categories: address.categories as! [Any], identidy: address.identity)
+        AppModel.sharedManager().addContact(walletId, address: shouldSaveToken ? walletId : nil, name: address.label, categories: address.categories as! [Any], identidy: address.identity)
         
         goBack()
     }

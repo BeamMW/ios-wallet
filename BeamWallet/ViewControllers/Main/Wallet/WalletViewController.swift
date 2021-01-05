@@ -392,10 +392,7 @@ extension WalletViewController: WalletStatusCellDelegate {
 }
 
 extension WalletViewController: WalletAvailableCellDelegate {
-    func onDidSelectUnlink() {
-        pushViewController(vc: UnlinkViewController())
-    }
-    
+
     func onExpandAvailable() {
         if !Settings.sharedManager().isHideAmounts {
             expandAvailable = !expandAvailable
@@ -405,6 +402,11 @@ extension WalletViewController: WalletAvailableCellDelegate {
     
     func onDidChangeSelectedState(state: StatusViewModel.SelectedState) {
         statusViewModel.selectedState = state
+    }
+    
+    func onMoreDetails() {
+        let vc = MaxPrivacyDetailViewController()
+        pushViewController(vc: vc)
     }
 }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,19 +39,19 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="S7H-KF-Zeb">
-                                    <rect key="frame" x="15" y="0.0" width="345" height="451"/>
+                                    <rect key="frame" x="15" y="0.0" width="345" height="447"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="UOB-ym-z2R">
-                                            <rect key="frame" x="2.5" y="0.0" width="340" height="133.5"/>
+                                            <rect key="frame" x="4" y="0.0" width="337.5" height="131.5"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icnCloud" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Do-q4-98y">
-                                                    <rect key="frame" x="146" y="0.0" width="48" height="36"/>
+                                                    <rect key="frame" x="144.5" y="0.0" width="48" height="36"/>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="lB4-Wb-67k">
-                                                    <rect key="frame" x="0.0" y="56" width="340" height="77.5"/>
+                                                    <rect key="frame" x="0.0" y="56" width="337.5" height="75.5"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="toZ-aC-lQn">
-                                                            <rect key="frame" x="0.0" y="28" width="22" height="22"/>
+                                                            <rect key="frame" x="0.0" y="27" width="22" height="22"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="22" id="VzL-4O-aio"/>
                                                                 <constraint firstAttribute="width" constant="22" id="f8n-OG-gIa"/>
@@ -63,10 +63,10 @@
                                                             </connections>
                                                         </button>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="N8m-eo-eTv">
-                                                            <rect key="frame" x="37" y="0.0" width="303" height="77.5"/>
+                                                            <rect key="frame" x="37" y="0.0" width="300.5" height="75.5"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Automatic restore" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TB3-bF-WdY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="303" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="300.5" height="16.5"/>
                                                                     <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                                                     <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -79,7 +79,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Beam Wallet will download the blockchain snapshot from the cloud. It might take time and consume significant battery power." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="14Q-qq-uOh">
-                                                                    <rect key="frame" x="0.0" y="27" width="303" height="50.5"/>
+                                                                    <rect key="frame" x="0.0" y="26.5" width="300.5" height="49"/>
                                                                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -97,16 +97,16 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </stackView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="hjW-hi-ZXv">
-                                            <rect key="frame" x="2.5" y="203.5" width="340" height="133.5"/>
+                                            <rect key="frame" x="4" y="201.5" width="337.5" height="131.5"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icnLaptop" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZEb-pP-oN1">
-                                                    <rect key="frame" x="146" y="0.0" width="48" height="36"/>
+                                                    <rect key="frame" x="144.5" y="0.0" width="48" height="36"/>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="9Eg-nc-nu0">
-                                                    <rect key="frame" x="0.0" y="56" width="340" height="77.5"/>
+                                                    <rect key="frame" x="0.0" y="56" width="337.5" height="75.5"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wMT-vT-LS1">
-                                                            <rect key="frame" x="0.0" y="28" width="22" height="22"/>
+                                                            <rect key="frame" x="0.0" y="27" width="22" height="22"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="22" id="t15-5D-PPk"/>
                                                                 <constraint firstAttribute="width" constant="22" id="xGC-68-3XP"/>
@@ -118,10 +118,10 @@
                                                             </connections>
                                                         </button>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mpA-Jn-gUT">
-                                                            <rect key="frame" x="37" y="0.0" width="303" height="77.5"/>
+                                                            <rect key="frame" x="37" y="0.0" width="300.5" height="75.5"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Manual restore" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zUo-zA-iGi">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="303" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="300.5" height="16.5"/>
                                                                     <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                                                     <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -134,7 +134,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Beam Wallet will download the blockchain snapshot from the cloud. It might take time and consume significant battery power." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zwc-YE-VJ1">
-                                                                    <rect key="frame" x="0.0" y="27" width="303" height="50.5"/>
+                                                                    <rect key="frame" x="0.0" y="26.5" width="300.5" height="49"/>
                                                                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -152,7 +152,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qf4-GH-eCx" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                            <rect key="frame" x="46" y="407" width="253" height="44"/>
+                                            <rect key="frame" x="46" y="403" width="253" height="44"/>
                                             <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="253" id="BLp-Et-nmx"/>
@@ -194,6 +194,7 @@
                     </constraints>
                 </scrollView>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="QFe-yk-1NC"/>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="QFe-yk-1NC" firstAttribute="bottom" secondItem="a4T-Cx-ITa" secondAttribute="bottom" id="Jzz-I8-qhr"/>
@@ -203,10 +204,14 @@
                 <constraint firstItem="mDG-tH-8GH" firstAttribute="width" secondItem="wg5-gs-nld" secondAttribute="width" id="nsU-VJ-DxM"/>
                 <constraint firstItem="mDG-tH-8GH" firstAttribute="height" secondItem="a4T-Cx-ITa" secondAttribute="height" priority="250" id="yQv-jV-e5S"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="QFe-yk-1NC"/>
             <point key="canvasLocation" x="138" y="123"/>
         </view>
     </objects>
+    <designables>
+        <designable name="Qf4-GH-eCx">
+            <size key="intrinsicContentSize" width="63" height="17"/>
+        </designable>
+    </designables>
     <resources>
         <image name="icnCheckmarkEmpty" width="22" height="22"/>
         <image name="icnCheckmarkFull" width="22" height="22"/>

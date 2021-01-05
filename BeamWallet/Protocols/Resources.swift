@@ -23,6 +23,11 @@ func IconShowBalance() -> UIImage? {
     return UIImage(named: "iconShowBalance")
 }
 
+func IconFilter() -> UIImage? {
+    return UIImage(named: "filterIcon")
+}
+
+
 func IconHideBalance() -> UIImage? {
     return UIImage(named: "iconHideBalance")
 }

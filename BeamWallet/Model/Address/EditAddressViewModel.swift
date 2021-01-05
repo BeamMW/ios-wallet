@@ -33,6 +33,7 @@ class EditAddressViewModel: DetailAddressViewModel {
         self.newAddress.createTime = address.createTime
         self.newAddress.duration = address.duration
         self.newAddress.ownerId = address.ownerId
+        self.newAddress.address = address.address
         self.newAddress.isNowExpired = false
         self.newAddress.isNowActive = false
         self.newAddress.isNowActiveDuration = self.hours_24

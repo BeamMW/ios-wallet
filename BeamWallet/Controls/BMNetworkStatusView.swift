@@ -22,8 +22,8 @@ import UIKit
 class BMNetworkStatusView: UIView {
 
     private var statusLabel: UILabel!
-    private var statusView: UIView!
-    private var indicatorView:MaterialActivityIndicatorView!
+    public var statusView: UIView!
+    public var indicatorView:MaterialActivityIndicatorView!
     private var fromNib = false
     private var isPrevUpdate = false
     private var isPrevRecconected = false
@@ -70,6 +70,7 @@ class BMNetworkStatusView: UIView {
         setup(fromNib: true)
     }
     
+    
     private func setup(fromNib:Bool) {
         self.fromNib = fromNib
         
@@ -91,7 +92,7 @@ class BMNetworkStatusView: UIView {
         changeButton.addTarget(self, action: #selector(onChangeNode), for: .touchUpInside)
         changeButton.setTitleColor(UIColor.main.green, for: .normal)
         changeButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        changeButton.setTitle("change", for: .normal)
+        changeButton.setTitle(Localizable.shared.strings.change.lowercased(), for: .normal)
         addSubview(changeButton)
 
         if (AppModel.sharedManager().isUpdating && AppModel.sharedManager().isConnected)
@@ -234,14 +235,24 @@ extension BMNetworkStatusView: WalletModelDelegate {
         
         DispatchQueue.main.async {
             if done != total  {
-                self.isPrevUpdate = true
-                self.indicatorView.color = UIColor.main.green
-                self.indicatorView.startAnimating()
+                let percent = (Double(done)/Double(total)) * 100.0
                 
-                self.statusLabel.x = self.fromNib ? 22 : 37
-                self.statusLabel.text = Localizable.shared.strings.updating.lowercased()
-                self.statusView.alpha = 0
-                self.statusLabel.textColor = UIColor.main.blueyGrey
+                if(Int(percent)>=99) {
+                    self.isPrevUpdate = false
+                    self.isPrevRecconected = false
+                    self.onNetwotkStartConnecting(true)
+                }
+                else {
+                    self.isPrevUpdate = true
+                    self.indicatorView.color = UIColor.main.green
+                    self.indicatorView.startAnimating()
+                    
+                    self.statusLabel.x = self.fromNib ? 22 : 37
+                    self.statusLabel.text = Localizable.shared.strings.updating.lowercased() + " \(Int(percent))%"
+                    self.statusView.alpha = 0
+                    self.statusLabel.textColor = UIColor.main.blueyGrey
+                }
+     
             }
             else {
                 let time = (self.isPrevUpdate || self.isPrevRecconected) ? 1.5 : 0

@@ -204,14 +204,15 @@
                                 </constraints>
                             </stackView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="noZ-bA-1yW">
-                                <rect key="frame" x="231" y="53" width="44" height="44"/>
+                                <rect key="frame" x="185" y="53" width="90" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="32u-7Z-AFj"/>
+                                    <constraint firstAttribute="width" constant="90" id="32u-7Z-AFj"/>
                                     <constraint firstAttribute="height" constant="44" id="fsP-Ut-g8V"/>
                                 </constraints>
-                                <state key="normal" image="iconUnlink"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="more details"/>
                                 <connections>
-                                    <action selector="onUnlinkWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="PN2-RW-NIc"/>
+                                    <action selector="onMoreDetailsWithSender:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="woi-Un-AVL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -224,6 +225,7 @@
                             <constraint firstAttribute="trailing" secondItem="i5e-tr-I4u" secondAttribute="trailing" constant="15" id="9aB-ge-MJT"/>
                             <constraint firstAttribute="bottom" secondItem="Nd2-Bd-eXV" secondAttribute="bottom" id="9da-kH-70W"/>
                             <constraint firstAttribute="trailing" secondItem="Nd2-Bd-eXV" secondAttribute="trailing" id="Abg-je-ysI"/>
+                            <constraint firstItem="zFZ-o9-rOz" firstAttribute="leading" secondItem="hy8-ta-Pco" secondAttribute="trailing" constant="8" symbolic="YES" id="FYt-fC-8c1"/>
                             <constraint firstItem="0uc-Qz-goX" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="II2-Ho-RsJ"/>
                             <constraint firstAttribute="bottom" secondItem="1qZ-Hb-en1" secondAttribute="bottom" constant="24" id="OIC-Hm-70X"/>
                             <constraint firstAttribute="trailing" secondItem="0uc-Qz-goX" secondAttribute="trailing" constant="15" id="Qlp-Rb-fMB"/>
@@ -274,11 +276,11 @@
                 <outlet property="maxPrivactTopButtonButton" destination="eMf-z3-M7Q" id="HWd-I7-feW"/>
                 <outlet property="maxPrivacyLabel" destination="92K-Q9-PAl" id="EBv-Lr-WF0"/>
                 <outlet property="maxPrivacyView" destination="0uc-Qz-goX" id="YxP-z7-xaX"/>
+                <outlet property="moreDetailsButton" destination="noZ-bA-1yW" id="gFK-Kl-QnK"/>
                 <outlet property="pageView" destination="Hmq-AX-eeV" id="ehA-nn-imL"/>
                 <outlet property="secondAvailableLabel" destination="CIF-Ek-MJq" id="ssQ-sD-jNn"/>
                 <outlet property="secondMaturingLabel" destination="Xig-AJ-TW9" id="7P4-nQ-2Yc"/>
                 <outlet property="secondMaxPrivacyLabel" destination="Fyf-cg-Ffs" id="u1E-dU-WZz"/>
-                <outlet property="unlinkButton" destination="noZ-bA-1yW" id="LFr-Xu-Em1"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="86.806596701649184"/>
         </tableViewCell>
@@ -287,6 +289,5 @@
         <image name="iconBeam" width="22" height="22"/>
         <image name="iconDownArrow" width="13" height="8"/>
         <image name="iconMaturing" width="20" height="20"/>
-        <image name="iconUnlink" width="22" height="22"/>
     </resources>
 </document>

@@ -63,6 +63,7 @@ class SettingsViewModel: NSObject {
         case currency = 29
         case notifications = 30
         case offline_address = 31
+        case max_privacy_limit = 32
     }
     
     class SettingsItem {
@@ -152,7 +153,7 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
             
             var section_1 = [SettingsItem]()
-           // section_1.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
             section_1.append(SettingsItem(title: Localizable.shared.strings.dark_mode, detail: nil, isSwitch: Settings.sharedManager().isDarkMode, type: .dark_mode, hasArrow: false))
             items.append(section_0)
             items.append(section_1)
@@ -167,6 +168,9 @@ class SettingsViewModel: NSObject {
             if BiometricAuthorization.shared.canAuthenticate() {
                 section_0.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, type: .enable_bio, hasArrow: false))
             }
+            section_0.append(SettingsItem(title: Localizable.shared.strings.max_privacy_lock_time, detail: Settings.sharedManager().currentMaxPrivacyLockValue().name, isSwitch: nil, type: .max_privacy_limit, hasArrow: true))
+
+            
             if OnboardManager.shared.isSkipedSeed() == true {
                 section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
@@ -285,6 +289,8 @@ class SettingsViewModel: NSObject {
             onNotifications()
         case .offline_address:
             onOfflineAddress()
+        case .max_privacy_limit:
+            onLockLimit()
             break
         default:
             return
@@ -366,6 +372,19 @@ extension SettingsViewModel {
     func onClearData() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .clear)
+            top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onLockLimit() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = BMDataPickerViewController(type: .max_privacy_lock)
+            vc.completion = { [weak self]
+                _ in
+                self?.items.removeAll()
+                self?.initItems()
+                self?.onDataChanged?()
+            }
             top.pushViewController(vc: vc)
         }
     }

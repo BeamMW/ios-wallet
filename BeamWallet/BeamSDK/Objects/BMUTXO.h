@@ -36,7 +36,10 @@ typedef int BMUTXOStatus;
 @interface BMUTXO : NSObject
 
 @property (nonatomic,assign) UInt64 ID;
+@property (nonatomic,assign) UInt64 txoID;
 @property (nonatomic,assign) UInt64 amount;
+@property (nonatomic,assign) UInt64 time;
+@property (nonatomic,assign) UInt64 user;
 @property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) BMUTXOStatus status;
 @property (nonatomic,assign) UInt64 maturity;
@@ -49,6 +52,8 @@ typedef int BMUTXOStatus;
 @property (nonatomic,strong) BMTransaction * _Nullable transaction;
 @property (nonatomic,assign) UInt64 transactionDate;
 @property (nonatomic,assign) BOOL isShilded;
+@property (nonatomic,strong) NSString * _Nullable hoursLeft;
+
 
 -(NSMutableAttributedString*_Nonnull)attributedStatus;
 

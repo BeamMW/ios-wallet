@@ -3,8 +3,9 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -22,17 +23,21 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="64" id="SOl-oR-3oj" customClass="ReceiveTokenCell" customModule="BeamWallet" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SOl-oR-3oj" id="cS1-sj-EqT">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="26k-lI-lNG">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ytk-wd-INw">
+                                <rect key="frame" x="0.0" y="15" width="320" height="80"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="ONLINE TOKEN" textAlignment="natural" lineBreakMode="middleTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZJn-fS-FOD">
-                                <rect key="frame" x="15" y="15" width="285" height="17"/>
+                                <rect key="frame" x="15" y="30" width="285" height="17.5"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -41,7 +46,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iYq-3b-kyr" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="67.5" width="0.0" height="0.0"/>
+                                <rect key="frame" x="15" y="83" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="13"/>
                                 <color key="textColor" white="1" alpha="0.50420884683098577" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -50,7 +55,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="176aw49q7g7…6daffr9j1k7" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lCI-aM-u2r" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="15" y="43" width="106" height="19.5"/>
+                                <rect key="frame" x="15" y="58.5" width="106" height="19.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="106" id="IkY-UF-GdH"/>
                                 </constraints>
@@ -59,7 +64,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4f9-uv-RzK">
-                                <rect key="frame" x="205" y="41" width="100" height="25"/>
+                                <rect key="frame" x="205" y="56.5" width="100" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="MQB-RE-EoW"/>
                                     <constraint firstAttribute="width" constant="100" id="UxS-GQ-2W9"/>
@@ -73,7 +78,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="OE6-10-jSM">
-                                <rect key="frame" x="136" y="41.5" width="58" height="24"/>
+                                <rect key="frame" x="136" y="57" width="58" height="24"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDn-9k-hg7">
                                         <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
@@ -107,17 +112,21 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="lCI-aM-u2r" firstAttribute="top" secondItem="ZJn-fS-FOD" secondAttribute="bottom" constant="11" id="3cF-dF-p3w"/>
+                            <constraint firstItem="Ytk-wd-INw" firstAttribute="top" secondItem="26k-lI-lNG" secondAttribute="top" constant="15" id="3oc-I8-8as"/>
                             <constraint firstItem="OE6-10-jSM" firstAttribute="leading" secondItem="lCI-aM-u2r" secondAttribute="trailing" constant="15" id="8ar-4F-EnK"/>
+                            <constraint firstItem="Ytk-wd-INw" firstAttribute="leading" secondItem="26k-lI-lNG" secondAttribute="leading" id="9LR-1C-PJP"/>
                             <constraint firstItem="iYq-3b-kyr" firstAttribute="top" secondItem="lCI-aM-u2r" secondAttribute="bottom" constant="5" id="P7z-LX-lo5"/>
                             <constraint firstItem="iYq-3b-kyr" firstAttribute="leading" secondItem="26k-lI-lNG" secondAttribute="leading" constant="15" id="Ts1-5N-3va"/>
                             <constraint firstItem="ZJn-fS-FOD" firstAttribute="leading" secondItem="26k-lI-lNG" secondAttribute="leading" constant="15" id="Vi1-l1-O5p"/>
+                            <constraint firstAttribute="bottom" secondItem="Ytk-wd-INw" secondAttribute="bottom" constant="15" id="WWW-TX-lVJ"/>
                             <constraint firstItem="4f9-uv-RzK" firstAttribute="centerY" secondItem="OE6-10-jSM" secondAttribute="centerY" id="bSB-cO-i8e"/>
                             <constraint firstItem="lCI-aM-u2r" firstAttribute="leading" secondItem="26k-lI-lNG" secondAttribute="leading" constant="15" id="gee-Mg-IhW"/>
                             <constraint firstAttribute="trailing" secondItem="4f9-uv-RzK" secondAttribute="trailing" constant="15" id="hYi-Ka-EuN"/>
                             <constraint firstAttribute="trailing" secondItem="ZJn-fS-FOD" secondAttribute="trailing" constant="20" id="jLk-Zs-ic1"/>
-                            <constraint firstAttribute="bottom" secondItem="lCI-aM-u2r" secondAttribute="bottom" constant="17.5" id="moQ-Ye-QvX"/>
+                            <constraint firstAttribute="bottom" secondItem="lCI-aM-u2r" secondAttribute="bottom" constant="32" id="moQ-Ye-QvX"/>
                             <constraint firstItem="OE6-10-jSM" firstAttribute="top" secondItem="ZJn-fS-FOD" secondAttribute="bottom" constant="9.5" id="rrq-vx-eZw"/>
-                            <constraint firstItem="ZJn-fS-FOD" firstAttribute="top" secondItem="26k-lI-lNG" secondAttribute="top" constant="15" id="x1I-B5-ilg"/>
+                            <constraint firstItem="ZJn-fS-FOD" firstAttribute="top" secondItem="26k-lI-lNG" secondAttribute="top" constant="30" id="x1I-B5-ilg"/>
+                            <constraint firstAttribute="trailing" secondItem="Ytk-wd-INw" secondAttribute="trailing" id="xWs-mf-Gc9"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -133,11 +142,14 @@
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
                 <outlet property="botConstraint" destination="moQ-Ye-QvX" id="kbw-H6-Iw3"/>
+                <outlet property="botConstraintView" destination="WWW-TX-lVJ" id="y3e-Vt-ZOV"/>
                 <outlet property="detailLabel" destination="lCI-aM-u2r" id="H3l-Mm-vdt"/>
                 <outlet property="infoLabel" destination="iYq-3b-kyr" id="eZJ-7I-fEu"/>
                 <outlet property="nameLabel" destination="ZJn-fS-FOD" id="M1h-Dx-1dW"/>
                 <outlet property="qrButton" destination="cDn-9k-hg7" id="qi7-Pg-wjS"/>
                 <outlet property="topConstraint" destination="x1I-B5-ilg" id="bPX-dX-zrC"/>
+                <outlet property="topConstraintView" destination="3oc-I8-8as" id="A6p-JV-YWt"/>
+                <outlet property="view_1" destination="Ytk-wd-INw" id="6Il-uh-17W"/>
             </connections>
             <point key="canvasLocation" x="37.681159420289859" y="-20.758928571428569"/>
         </tableViewCell>
@@ -145,5 +157,8 @@
     <resources>
         <image name="iconCopyWhite" width="16" height="16"/>
         <image name="iconScanQr" width="24" height="24"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

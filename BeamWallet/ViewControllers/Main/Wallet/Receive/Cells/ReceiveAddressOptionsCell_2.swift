@@ -30,16 +30,13 @@ class ReceiveAddressOptionsCell_2: BaseCell {
     
     
     @IBOutlet private var transactionTypeLabel: UILabel!
-    @IBOutlet private var infoLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
         if Settings.sharedManager().isDarkMode {
             transactionTypeLabel.textColor = UIColor.main.steel;
-            infoLabel.textColor = UIColor.main.steel;
         }
-        
         
         transactionTypeLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.address_type.uppercased(), letter: Localizable.shared.strings.address_type.uppercased())
         

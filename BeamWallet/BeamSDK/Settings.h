@@ -19,6 +19,7 @@
 
 #import <Foundation/Foundation.h>
 #import "BMCurrency.h"
+#import "BMMaxPrivacyLock.h"
 
 @class BMLanguage;
 @class BMLockScreenValue;
@@ -58,6 +59,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) BOOL isHideAmounts;
 @property (nonatomic, assign) BOOL isAskForHideAmounts;
 @property (nonatomic, assign) int lockScreenSeconds;
+@property (nonatomic, assign) int lockMaxPrivacyValue;
 @property (nonatomic, assign) BOOL isAllowOpenLink;
 @property (nonatomic, assign) BOOL connectToRandomNode;
 @property (nonatomic, assign) int logDays;
@@ -105,6 +107,9 @@ typedef enum Target : NSUInteger {
 -(BMLogValue*_Nonnull)currentLogValue;
 
 -(NSString*_Nonnull)currencyName;
+
+-(NSArray <BMMaxPrivacyLock*> * _Nonnull)maxPrivacyLockValues;
+-(BMMaxPrivacyLock*_Nonnull)currentMaxPrivacyLockValue;
 
 
 @end

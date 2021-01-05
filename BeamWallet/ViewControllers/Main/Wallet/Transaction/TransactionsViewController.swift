@@ -119,10 +119,7 @@ class TransactionsViewController: BaseTableViewController {
                     self.pushViewController(vc: vc)
                     return
                 case .export_transactions:
-                    let csvPath = AppModel.sharedManager().exportTransactions(toCSV: self.viewModels[self.currentIndex].transactions)
-                    let vc = UIActivityViewController(activityItems: [csvPath], applicationActivities: nil)
-                    vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
-                    self.present(vc, animated: true)
+                    self.onExporToCSV()
                     return
                 default:
                     return
@@ -131,6 +128,16 @@ class TransactionsViewController: BaseTableViewController {
         }, cancel: {
             
         })
+    }
+    
+    @objc private func onExporToCSV() {
+        AppModel.sharedManager().exportTransactions { (data, url) in
+            DispatchQueue.main.async {
+                let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
+                self.present(vc, animated: true)
+            }
+        }
     }
 }
 

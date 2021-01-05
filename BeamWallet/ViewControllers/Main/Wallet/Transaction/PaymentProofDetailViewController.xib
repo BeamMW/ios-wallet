@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,8 +35,8 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="xhf-nH-SmJ">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="lAE-xi-uWa"/>
+            <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <point key="canvasLocation" x="138" y="133"/>
         </view>
         <view contentMode="scaleToFill" id="QUo-Jy-8FX">
@@ -67,13 +67,13 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="33G-az-vd2"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="hGB-Ba-Pmp" firstAttribute="top" secondItem="33G-az-vd2" secondAttribute="top" constant="20" id="NSg-bI-jAD"/>
                 <constraint firstItem="hGB-Ba-Pmp" firstAttribute="centerX" secondItem="QUo-Jy-8FX" secondAttribute="centerX" id="SKX-bE-Wjm"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="33G-az-vd2"/>
             <point key="canvasLocation" x="-487" y="403"/>
         </view>
         <view contentMode="scaleToFill" id="f7L-Hl-nDs">
@@ -140,6 +140,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fSQ-aG-5j3"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="Ekq-f7-dCk" secondAttribute="trailing" id="AXB-aO-GnX"/>
@@ -148,10 +149,14 @@
                 <constraint firstItem="Ekq-f7-dCk" firstAttribute="leading" secondItem="f7L-Hl-nDs" secondAttribute="leading" id="U6h-vb-jm9"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="fSQ-aG-5j3"/>
             <point key="canvasLocation" x="-487" y="145"/>
         </view>
     </objects>
+    <designables>
+        <designable name="hGB-Ba-Pmp">
+            <size key="intrinsicContentSize" width="112" height="17"/>
+        </designable>
+    </designables>
     <resources>
         <image name="iconCopyBlue" width="16" height="16"/>
     </resources>

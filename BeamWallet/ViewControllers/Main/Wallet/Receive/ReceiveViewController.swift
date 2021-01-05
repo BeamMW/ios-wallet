@@ -128,6 +128,9 @@ extension ReceiveViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         switch section {
         case 0:
+            if viewModel.transaction == .regular {
+                return 5
+            }
             return 0
         case 1:
             return 5
@@ -155,15 +158,7 @@ extension ReceiveViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 3 && indexPath.row == 2 {
-            let amount = Double(viewModel.amount ?? "0") ?? 0
             return 17
-
-//            if amount > 0 {
-//                return 17
-//            }
-//            else {
-//                return 0
-//            }
         }
         return UITableView.automaticDimension
     }
@@ -190,10 +185,7 @@ extension ReceiveViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            if viewModel.expire == .parmanent {
-                return showEdit ? 3 : 1
-            }
-            return 0
+            return showEdit ? 3 : 1
         }
         else if section == 3 {
             return showAdvanced ? 3 : 1
@@ -215,7 +207,6 @@ extension ReceiveViewController : UITableViewDataSource {
                 if(viewModel.transaction == .regular) {
                     let cell = tableView
                         .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
-                    cell.contentView.backgroundColor = UIColor.main.marineThree
                     cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
                     cell.delegate = self
                     return cell
@@ -234,7 +225,6 @@ extension ReceiveViewController : UITableViewDataSource {
                 
                 let cell = tableView
                     .dequeueReusableCell(withType: ReceiveTokenCell.self, for: indexPath)
-                cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.configure(with: (title: value.name, value: value.value, index: indexPath.row-1, info: value.info))
                 cell.delegate = self
                 return cell
@@ -253,6 +243,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                     .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label))
                 cell.delegate = self
+                cell.placholder = Localizable.shared.strings.no_name
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 return cell
             }
@@ -268,6 +259,7 @@ extension ReceiveViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                 .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.transactionComment))
             cell.delegate = self
+            cell.placholder = Localizable.shared.strings.local_comment
             cell.contentView.backgroundColor = UIColor.clear
             return cell
         case 3:
@@ -482,8 +474,58 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
         }
     }
     
+    func onCopyToken(token: String) {
+        UIPasteboard.general.string = token
+
+        viewModel.isShared = true
+
+        ShowCopied(text: Localizable.shared.strings.address_copied)
+    }
+    
     func onShareToken(token: String) {
         viewModel.onShare(token: token)
+    }
+    
+    func onClickShare() {
+        if viewModel.transaction == .privacy {
+            onShareToken(token: viewModel.address.maxPrivacyToken ?? "")
+        }
+        else {
+            var items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token),
+                         BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_pool.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_pool_token)]
+            
+            if(AppModel.sharedManager().checkIsOwnNode()) {
+                items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.offline_address, icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_offline_token))
+            }
+            
+            self.showPopoverMenu(items)
+        }
+    }
+    
+    private func showPopoverMenu(_ items:[BMPopoverMenu.BMPopoverMenuItem]) {
+        BMPopoverMenu.show(menuArray: items, done: { selectedItem in
+            if let item = selectedItem {
+                switch item.action {
+                case .share_online_token:
+                    if let token = self.viewModel.address?.onlineToken {
+                        self.onShareToken(token: token)
+                    }
+                    break
+                case .share_offline_token:
+                    if let token = self.viewModel.address?.offlineToken {
+                        self.onShareToken(token: token)
+                    }
+                    break
+                case .share_pool_token:
+                    if let token = self.viewModel.address?.walletId {
+                        self.onShareToken(token: token)
+                    }
+                    break
+                default:
+                    return
+                }
+            }
+        }) {}
     }
 }
 

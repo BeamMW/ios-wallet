@@ -84,8 +84,14 @@ extension BMMultiLinesCell2: Configurable {
     
     func configure(with item:BMMultiLineItem) {
         valueLabel.isUserInteractionEnabled = item.canCopy
-        valueLabel.copyText = item.detail
         valueLabel.copiedText = item.copiedText
+        
+        if let c = item.copyValue {
+            valueLabel.copyText = c
+        }
+        else {
+            valueLabel.copyText = item.detail
+        }
         
         nameLabel.isHidden = false
         

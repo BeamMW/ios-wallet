@@ -22,7 +22,7 @@ def shared_pods
     pod 'CrashEye'
     pod 'Firebase/Crashlytics'    
     pod 'Firebase/Analytics'
-    
+    pod 'PopOverMenu'
 end
 
 #def extension

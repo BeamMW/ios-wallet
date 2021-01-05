@@ -550,6 +550,7 @@ class LocalizableStrings : NSObject {
     var token_expiration = "token_expiration".localized
     var online_token = "online_token".localized
     var offline_token = "offline_token".localized
+    var for_wallets = "for_wallets".localized
     var for_wallet = "for_wallet".localized
     var for_pool = "for_pool".localized
     var for_pool_permanent = "for_pool_permanent".localized
@@ -559,7 +560,6 @@ class LocalizableStrings : NSObject {
     var switch_to_regular = "switch_to_regular".localized
     var address_not_supported_max_privacy = "address_not_supported_max_privacy".localized
     var offline_transactions = "offline_transactions".localized
-    var cant_sent_max_to_my_address = "cant_sent_max_to_my_address".localized
     var withdraw = "withdraw".localized
     var withdraw_cofirm = "withdraw_cofirm".localized
     var confirm_2 = "confirm_2".localized
@@ -593,7 +593,17 @@ class LocalizableStrings : NSObject {
     var send_address_placholder = "send_address_placholder".localized
     var local_comment = "local_comment".localized
     var choose_currency = "choose_currency".localized
-
+    var max_privacy_lock_time = "max_privacy_lock_time".localized
+    var lock_time_limit = "lock_time_limit".localized
+    var no_limit = "no_limit".localized
+    var h24 = "h24".localized
+    var h36 = "h36".localized
+    var h48 = "h48".localized
+    var h60 = "h60".localized
+    var h72 = "h72".localized
+    var last_unlock_time = "last_unlock_time".localized
+    var sync_with_node = "sync_with_node".localized
+    var cant_send_to_max_privacy = "cant_send_to_max_privacy".localized
 
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

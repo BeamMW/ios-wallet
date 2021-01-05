@@ -92,18 +92,13 @@ class SettingsViewController: BaseTableViewController {
         view.backgroundColor = UIColor.clear
         
         let v = UIApplication.appVersion()
-        let string = Localizable.shared.strings.version + ": " + v
-        
-        let range = (string as NSString).range(of: String(v))
-
-        let attributedText = NSMutableAttributedString(string: string)
-        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: range)
-
+        let string = "v " + v
+    
         let label = UILabel(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.size.width, height: 20))
         label.textAlignment = .center
-        label.font = RegularFont(size: 14)
+        label.font = BoldFont(size: 14)
         label.textColor = UIColor.main.blueyGrey
-        label.attributedText = attributedText
+        label.text = string
         view.addSubview(label)
         
         return view
@@ -245,6 +240,14 @@ extension SettingsViewController : SettingsModelDelegate {
         }
         viewModel.reload()
         tableView.reloadData()
+        
+        statusView.removeFromSuperview()
+        
+        statusView = BMNetworkStatusView()
+        statusView.tag = 11
+        statusView.y = Device.isXDevice ? 110 : 80
+        statusView.x = 5
+        self.view.addSubview(statusView)
     }
     
     func onChangeDarkMode() {

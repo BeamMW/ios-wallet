@@ -70,6 +70,12 @@ extension MaterialActivityIndicatorView {
         let diameter = bounds.size.min - indicator.lineWidth
         let path = UIBezierPath(center: bounds.center, radius: diameter / 2)
         indicator.path = path.cgPath
+        
+        if !isHidden {
+            animator.removeAnimation(from: indicator)
+            animator.addAnimation(to: indicator)
+            isAnimating = true
+        }
     }
 }
 

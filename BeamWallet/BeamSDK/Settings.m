@@ -54,6 +54,8 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 -(id)init {
     self = [super init];
     
+    _lockMaxPrivacyValue = 0;
+    
     _maxTokens = 10;
     
     _delegates = [NSHashTable weakObjectsHashTable];
@@ -69,8 +71,10 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     else{
         _target = Mainnet;
     }
+    
+    [self moveDataBase];
 
-   // [self copyOldDatabaseToGroup];
+  //  [self copyOldDatabaseToGroup];
 
     _isLocalNode = NO;
     
@@ -151,22 +155,35 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
-    _language = @"en";
+//    _language = @"en";
 
-//    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
-//        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
-//    }
-//    else{
-//        _language = [[NSLocale currentLocale] languageCode];
-//
-//        if ([_language isEqualToString:@"zh"]) {
-//            _language = @"zh-Hans";
-//        }
-//
-//        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
-//            _language = @"en";
-//        }
-//    }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
+    }
+    else{
+        _language = [[NSLocale currentLocale] languageCode];
+
+        if ([_language isEqualToString:@"zh"]) {
+            _language = @"zh-Hans";
+        }
+        
+        NSArray *languages = [self languages];
+        BOOL isFound = NO;
+
+        for (BMLanguage *lang in languages) {
+            if([lang.code isEqualToString:_language]) {
+                isFound = YES;
+            }
+        }
+        if(isFound) {
+            if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+                _language = @"en";
+            }
+        }
+        else {
+            _language = @"en";
+        }
+    }
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:currenctKey]) {
         _currency = [[[NSUserDefaults standardUserDefaults] objectForKey:currenctKey] intValue];
@@ -331,34 +348,26 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 
 
 -(NSString*_Nonnull)walletStoragePath {
-    if (self.target == Testnet) {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
-        return oldPath;
-    }
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
-        
+    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
     return oldPath;
 }
 
 -(void)setLanguage:(NSString *_Nonnull)language {
-    _language = @"en";
+   // _language = @"en";
 
-//    _language = language;
-//
-//    [[NSUserDefaults standardUserDefaults] setObject:_language forKey:languageKey];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//
-//    for(id<SettingsModelDelegate> delegate in [Settings sharedManager].delegates)
-//    {
-//        if ([delegate respondsToSelector:@selector(onChangeLanguage)]) {
-//            [delegate onChangeLanguage];
-//        }
-//    }
+    _language = language;
+
+    [[NSUserDefaults standardUserDefaults] setObject:_language forKey:languageKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    for(id<SettingsModelDelegate> delegate in [Settings sharedManager].delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onChangeLanguage)]) {
+            [delegate onChangeLanguage];
+        }
+    }
 }
 
 
@@ -489,7 +498,7 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 -(void)copyOldDatabaseToGroup {
     [[NSFileManager defaultManager] removeItemAtPath:[self walletStoragePath] error:nil];
     NSError *error;
-    [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet" ofType:@"db"] toPath:[self walletStoragePath] error:&error];
+    [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"wallet1" ofType:@"db"] toPath:[self walletStoragePath] error:&error];
     NSLog(@"%@", error);
     
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -501,6 +510,16 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 //            [[NSFileManager defaultManager] copyItemAtPath:[self groupDBPath] toPath:oldPath error:nil];
 //        }
 //    }
+}
+
+-(void)moveDataBase {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+        [[NSFileManager defaultManager] copyItemAtPath:oldPath toPath:[self walletStoragePath] error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:oldPath error:nil];
+    }
 }
 
 -(NSString *)groupPath{
@@ -607,7 +626,9 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     cs.ID = 0;
     
     NSArray *array =  @[en, ru, es, sw, ko, vi, ch, tr, fr, jp, th, dutch, fin, cs];
-    
+  
+   // NSArray *array =  @[en, sw, ch, dutch, cs];
+
     NSLocale *locale = [NSLocale currentLocale];
     
     for (BMLanguage *lang in array) {
@@ -731,6 +752,44 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
 -(BMLogValue*_Nonnull)currentLogValue {
     for (BMLogValue *v in [self logValues]) {
         if (v.days == _logDays) {
+            return v;
+        }
+    }
+    
+    return nil;
+}
+
+-(NSArray <BMMaxPrivacyLock*> * _Nonnull)maxPrivacyLockValues {
+    BMMaxPrivacyLock *noLimit = [BMMaxPrivacyLock new];
+    noLimit.name = [@"no_limit" localized];
+    noLimit.hours = 0;
+
+    BMMaxPrivacyLock *h24 = [BMMaxPrivacyLock new];
+    h24.name = [@"h24" localized];
+    h24.hours = 24;
+    
+    BMMaxPrivacyLock *h36 = [BMMaxPrivacyLock new];
+    h36.name = [@"h36" localized];
+    h36.hours = 36;
+    
+    BMMaxPrivacyLock *h48 = [BMMaxPrivacyLock new];
+    h48.name = [@"h48" localized];
+    h48.hours = 48;
+    
+    BMMaxPrivacyLock *h60 = [BMMaxPrivacyLock new];
+    h60.name = [@"h60" localized];
+    h60.hours = 60;
+    
+    BMMaxPrivacyLock *h72 = [BMMaxPrivacyLock new];
+    h72.name = [@"h72" localized];
+    h72.hours = 72;
+    
+    return @[noLimit, h24, h36, h48, h60, h72];
+}
+
+-(BMMaxPrivacyLock*_Nonnull)currentMaxPrivacyLockValue {
+    for (BMMaxPrivacyLock *v in [self maxPrivacyLockValues]) {
+        if (v.hours == _lockMaxPrivacyValue) {
             return v;
         }
     }

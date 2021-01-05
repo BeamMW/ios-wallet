@@ -36,6 +36,8 @@
 #import "BMCurrency.h"
 #import "BMNotification.h"
 #import "BMTransactionParameters.h"
+#import "BMPaymentInfo.h"
+#import "BMMaxPrivacyLock.h"
 
 enum {
     BMRestoreManual = 0,
@@ -78,12 +80,14 @@ typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _
 typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
 typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shieldedInputsFee);
 typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
+typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 @interface AppModel : NSObject
 
 @property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
 @property (nonatomic) FeecalculatedBlock _Nullable feecalculatedBlock;
 @property (nonatomic) PublicAddressBlock _Nullable getPublicAddressBlock;
+@property (nonatomic) ExportCSVBlock _Nullable getCSVBlock;
 @property (nonatomic,readwrite) NSPointerArray * _Nonnull delegates;
 
 @property (nonatomic,assign) BOOL isConnected;
@@ -196,13 +200,14 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
--(void)addContact:(NSString*_Nonnull)addressId name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy;
+-(void)addContact:(NSString*_Nonnull)addressId address:(NSString*_Nullable)address name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy;
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 -(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name;
 -(void)getPublicAddress:(PublicAddressBlock _Nonnull )block;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
+-(NSString*_Nullable)canSendToMaxPrivacy:(NSString*_Nullable)to;
 -(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee;
 -(NSString*_Nullable)feeError:(double)fee;
@@ -223,7 +228,7 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 -(void)clearLogs;
 
 // transactions
--(BMTransaction*_Nullable)validatePaymentProof:(NSString*_Nullable)code;
+-(BMPaymentInfo*_Nullable)validatePaymentProof:(NSString*_Nullable)code;
 -(void)getPaymentProof:(BMTransaction*_Nonnull)transaction;
 -(void)deleteTransaction:(NSString*_Nonnull)ID;
 -(void)prepareDeleteTransaction:(BMTransaction*_Nonnull)transaction;
@@ -233,7 +238,7 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 -(void)cancelTransactionByID:(NSString*_Nonnull)transaction;
 -(void)resumeTransaction:(BMTransaction*_Nonnull)transaction;
 -(NSMutableArray<BMUTXO*>*_Nonnull)getUTXOSFromTransaction:(BMTransaction*_Nonnull)transaction;
--(NSURL*_Nonnull)exportTransactionsToCSV:(NSArray<BMTransaction*>*_Nonnull)transactions;
+-(void)exportTransactionsToCSV:(ExportCSVBlock _Nonnull)block;
 -(void)clearAllTransactions;
 -(BMTransaction*_Nullable)lastTransactionFromAddress:(NSString*_Nonnull)ID;
 -(NSString*_Nullable)getFirstTransactionIdForAddress:(NSString*_Nonnull)address;
@@ -241,6 +246,7 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 -(BMTransaction*_Nullable)transactionById:(NSString*_Nonnull)ID;
 -(void)calculateChange:(double)amount fee:(double)fee;
 -(void)setTransactionStatusToFailed:(NSString*_Nonnull)ID;
+-(BMPaymentInfo*_Nullable)getPaymentProofInfo:(NSString*_Nonnull)proof;
 
 // utxo
 -(void)getUTXO;
@@ -280,6 +286,7 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 -(NSString*_Nonnull)exchangeValue:(double)amount;
 -(NSString*_Nonnull)exchangeValueFee:(double)amount;
 -(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount;
+-(NSString*_Nonnull)exchangeValue:(double)amount to:(BMCurrencyType)to;
 -(void)saveCurrencies;
 -(BOOL)checkIsOwnNode;
 
@@ -297,9 +304,11 @@ typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 -(BMNotification*_Nullable)getLastVersionNotification;
 -(void)readAllNotifications;
 
-//unlink
--(void)sendUnlink:(double)amount fee:(double)fee;
-
 -(BOOL)isCurrenciesAvailable;
+
+-(void)setMaxPrivacyLockTime:(int)hours;
+
+-(NSString*_Nonnull)getMaturityHoursLeft:(BMUTXO*_Nonnull)utxo;
+-(UInt64)getMaturityHours:(BMUTXO*_Nonnull)utxo;
 
 @end

@@ -136,7 +136,7 @@ bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
     }
 
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates){
-        if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
+        if ([delegate respondsToSelector:@selector(onRecoveryProgressUpdated: total: time:)]) {
             [delegate onRecoveryProgressUpdated:(int)done total:(int)total time:(int)m_estimate];
         }
     }

@@ -74,7 +74,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         restoreButton.setTitle(Localizable.shared.strings.restore_create_title, for: .normal)
         restoreButton.titleLabel?.textAlignment = .center
         
-        versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+        versionLabel.text = "v " + UIApplication.appVersion()
     }
     
     override func viewWillAppear(_ animated: Bool) {

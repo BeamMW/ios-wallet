@@ -36,7 +36,7 @@ class BaseViewController: UIViewController {
     public var disableMenu = false
     
     private var alpha:CGFloat = 1.0
-    public let statusView = BMNetworkStatusView()
+    public var statusView = BMNetworkStatusView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +75,10 @@ class BaseViewController: UIViewController {
         
         if let navigation = navigationController {
             self.sideMenuController?.isLeftViewSwipeGestureEnabled = (navigation.viewControllers.count == 1)
+        }
+        
+        if let v = self.view.viewWithTag(11) as? BMNetworkStatusView {
+            v.indicatorView.layoutSubviews()
         }
     }
     

@@ -45,7 +45,23 @@ class SendViewController: BaseTableViewController {
     
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
-        
+                
+        let infoLabel = UILabel(frame: CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0))
+        infoLabel.numberOfLines = 0
+        infoLabel.text = Localizable.shared.strings.send_notice
+        infoLabel.font = ItalicFont(size: 14)
+        infoLabel.textAlignment = .center
+        if Settings.sharedManager().isDarkMode {
+            infoLabel.textColor = UIColor.main.steel;
+        }
+        else {
+            infoLabel.textColor = UIColor.main.blueyGrey
+        }
+        infoLabel.adjustFontSize = true
+        infoLabel.sizeToFit()
+        view.addSubview(infoLabel)
+                
+        nextButton.y = infoLabel.frame.origin.y + infoLabel.frame.size.height + 30
         nextButton.setImage(IconNextPink(), for: .normal)
         nextButton.setTitle(Localizable.shared.strings.next.lowercased(), for: .normal)
         nextButton.layer.borderWidth = 1
@@ -122,10 +138,15 @@ class SendViewController: BaseTableViewController {
         }
         
         if let repeatTransaction = transaction {
+            if let ct = AppModel.sharedManager().getContactFromId(repeatTransaction.receiverAddress)
+            {
+                viewModel.selectedContact = ct
+            }
             viewModel.transaction = repeatTransaction
+            
         }
         
-        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self, AddressTypeCell.self])
+        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMDetailCell.self, BMSearchAddressCell.self, BMAddressCell.self, BMPickedAddressCell.self, AddressTypeCell.self, BMMultiLinesCell.self])
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.delegate = self
         tableView.dataSource = self

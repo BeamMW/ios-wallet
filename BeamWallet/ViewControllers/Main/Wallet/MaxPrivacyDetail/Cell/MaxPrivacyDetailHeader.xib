@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="PVt-sc-E3N" customClass="MaxPrivacyDetailHeader" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJH-s2-jm7">
+                    <rect key="frame" x="20" y="0.0" width="35" height="40"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ei3-T3-uBY">
+                    <rect key="frame" x="359" y="0.0" width="35" height="40"/>
+                    <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="WGq-fL-TOF"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="ei3-T3-uBY" secondAttribute="trailing" constant="20" id="9Nn-c0-gw0"/>
+                <constraint firstItem="ei3-T3-uBY" firstAttribute="top" secondItem="PVt-sc-E3N" secondAttribute="top" id="K0B-3z-FRj"/>
+                <constraint firstItem="pJH-s2-jm7" firstAttribute="top" secondItem="PVt-sc-E3N" secondAttribute="top" id="KyD-wo-rDe"/>
+                <constraint firstItem="WGq-fL-TOF" firstAttribute="bottom" secondItem="pJH-s2-jm7" secondAttribute="bottom" id="PYD-1z-PWP"/>
+                <constraint firstItem="pJH-s2-jm7" firstAttribute="leading" secondItem="PVt-sc-E3N" secondAttribute="leading" constant="20" id="pSU-QP-SQd"/>
+                <constraint firstItem="WGq-fL-TOF" firstAttribute="bottom" secondItem="ei3-T3-uBY" secondAttribute="bottom" id="pXI-Yl-FSq"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="headerLabel1" destination="pJH-s2-jm7" id="GEW-Ow-qN6"/>
+                <outlet property="headerLabel2" destination="ei3-T3-uBY" id="Vu0-42-tUJ"/>
+            </connections>
+            <point key="canvasLocation" x="-1420" y="-58"/>
+        </view>
+    </objects>
+</document>

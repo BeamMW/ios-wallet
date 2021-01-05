@@ -62,6 +62,13 @@
     return _createTime + _duration;
 }
 
+-(NSString*_Nonnull) getWalletId {
+    if(_walletId.length > 5) {
+        return _walletId;
+    }
+    return _address;
+}
+
 -(NSString*_Nonnull)expiredFormattedDate{
     NSDateFormatter *f = [self shortFormatter];
     

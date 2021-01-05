@@ -57,7 +57,7 @@ class WellcomeViewController: BaseViewController {
     private func setTitles() {
         titleLabel.text = Localizable.shared.strings.beam_title
         
-        versionLabel.text = Localizable.shared.strings.version.replacingOccurrences(of: "App ", with: "") + " " + UIApplication.appVersion()
+        versionLabel.text = "v " + UIApplication.appVersion()
 
         createButton.setTitle(Localizable.shared.strings.create_new_wallet.lowercased(), for: .normal)
         restoreButton.setTitle(Localizable.shared.strings.restore_wallet_title, for: .normal)
