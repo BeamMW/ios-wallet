@@ -604,6 +604,9 @@ class LocalizableStrings : NSObject {
     var last_unlock_time = "last_unlock_time".localized
     var sync_with_node = "sync_with_node".localized
     var cant_send_to_max_privacy = "cant_send_to_max_privacy".localized
+    var rescan = "rescan".localized
+    var rescan_text = "rescan_text".localized
+
 
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

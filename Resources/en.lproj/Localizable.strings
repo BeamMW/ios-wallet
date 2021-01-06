@@ -628,5 +628,5 @@ and never kept on the blockchain.";
 "last_unlock_time" = "Latest unlocked time";
 "sync_with_node" = "Synchronizing with node";
 "cant_send_to_max_privacy" = "Can't send to the Max privacy address again. No voucher, no address to receive it.";
-
-
+"rescan" = "Rescan";
+"rescan_text" = "Rescan will sync transaction and UTXO data with the latest information on the blockchain. The process might take long time.\nAre you sure?";

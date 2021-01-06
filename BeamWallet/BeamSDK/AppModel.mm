@@ -3617,5 +3617,9 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     return res;
 }
 
+-(void)rescan {
+    wallet->getAsync()->rescan();
+}
+
 @end
 

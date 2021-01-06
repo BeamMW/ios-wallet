@@ -64,6 +64,7 @@ class SettingsViewModel: NSObject {
         case notifications = 30
         case offline_address = 31
         case max_privacy_limit = 32
+        case rescan = 33
     }
     
     class SettingsItem {
@@ -184,6 +185,7 @@ class SettingsViewModel: NSObject {
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
@@ -291,6 +293,8 @@ class SettingsViewModel: NSObject {
             onOfflineAddress()
         case .max_privacy_limit:
             onLockLimit()
+        case .rescan:
+            onRescan()
             break
         default:
             return
@@ -386,6 +390,16 @@ extension SettingsViewModel {
                 self?.onDataChanged?()
             }
             top.pushViewController(vc: vc)
+        }
+    }
+    
+    func onRescan() {
+        if let top = UIApplication.getTopMostViewController() {
+            top.confirmAlert(title: Localizable.shared.strings.rescan, message: Localizable.shared.strings.rescan_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.rescan, cancelHandler: { _ in
+                
+            }) { _ in
+                AppModel.sharedManager().rescan()
+            }
         }
     }
     

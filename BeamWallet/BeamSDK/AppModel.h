@@ -311,4 +311,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSString*_Nonnull)getMaturityHoursLeft:(BMUTXO*_Nonnull)utxo;
 -(UInt64)getMaturityHours:(BMUTXO*_Nonnull)utxo;
 
+
+-(void)rescan;
+
 @end
