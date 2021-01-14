@@ -71,7 +71,7 @@ class ReceiveAddressOptionsCell: BaseCell {
             errorLabel.textColor = UIColor.main.steel;
         }
         
-        addressTypeLabel.setLetterSpacingOnly(value: 1.5, title: Localizable.shared.strings.address_type.uppercased(), letter: Localizable.shared.strings.address_type.uppercased())
+        addressTypeLabel.setLetterSpacingOnly(value: 2.0, title: Localizable.shared.strings.address_type.uppercased(), letter: Localizable.shared.strings.address_type.uppercased())
         
         
         let title = "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_wallet.lowercased()))"

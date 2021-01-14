@@ -140,7 +140,7 @@ class ShowTokenViewController: BaseTableViewController {
     @objc private func onCopy() {
         if let token = items.last?.detail {
             UIPasteboard.general.string = token
-            ShowCopied()
+            ShowCopied(text: Localizable.shared.strings.address_copied)
             didCopyToken?()
             back()
         }

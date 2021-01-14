@@ -20,7 +20,7 @@ class ReceiveTokenCell: BaseCell {
     weak var delegate: ReceiveAddressTokensCellDelegate?
 
     @IBOutlet private var nameLabel: UILabel!
-    @IBOutlet private var detailLabel: UILabel!
+    @IBOutlet private var detailLabel: BMCopyLabel!
     @IBOutlet private var infoLabel: UILabel!
     @IBOutlet private var topConstraint: NSLayoutConstraint!
     @IBOutlet private var botConstraint: NSLayoutConstraint!
@@ -36,6 +36,7 @@ class ReceiveTokenCell: BaseCell {
         
         selectionStyle = .none
         
+        detailLabel.copiedText = Localizable.shared.strings.address_copied
         view_1.backgroundColor = UIColor.main.marineThree
 
         if Settings.sharedManager().isDarkMode {
@@ -91,7 +92,7 @@ extension ReceiveTokenCell: Configurable {
         }
  
         if options.info.isEmpty {
-          //  botConstraint.constant = 15
+            botConstraint.constant = 25
             infoLabel.isHidden = true
             qrButton.isHidden = false
         }
@@ -104,19 +105,23 @@ extension ReceiveTokenCell: Configurable {
         
         if options.index == 1 {
             topConstraintView.constant = 20
-            topConstraint.constant = 35
+            topConstraint.constant = 40
+            
+            botConstraint.constant = 40
         }
         else if options.index == 2 {
             topConstraintView.constant = 5
-            topConstraint.constant = 15
+            topConstraint.constant = 25
+            
+            botConstraint.constant = 55
         }
         
         if options.title == Localizable.shared.strings.max_privacy_address.uppercased() {
             topConstraintView.constant = 20
-            topConstraint.constant = 35
+            topConstraint.constant = 40
             
             botConstraintView.constant = 20
-            botConstraint.constant = 35
+            botConstraint.constant = 40
         }
     }
 

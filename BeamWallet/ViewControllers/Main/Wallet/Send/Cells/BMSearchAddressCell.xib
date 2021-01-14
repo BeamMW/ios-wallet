@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -216,8 +216,10 @@
                 <outlet property="errorLabel" destination="TWr-4F-fIw" id="6tY-Ia-Udk"/>
                 <outlet property="iconView" destination="rJf-ey-lGU" id="4aD-Ud-Bmi"/>
                 <outlet property="nameLabel" destination="6HZ-x2-k1Y" id="zJg-V7-ZKt"/>
+                <outlet property="nameLabelTopOffset" destination="qVI-Pi-aRO" id="3T6-x3-Rxf"/>
                 <outlet property="rightButton" destination="eOS-wq-7zC" id="ctS-BN-Rf8"/>
                 <outlet property="showTokenButton" destination="GpA-La-Isg" id="QVi-go-s2w"/>
+                <outlet property="stackBotOffset" destination="vZ4-EL-v0o" id="s8D-z0-wqf"/>
                 <outlet property="textField" destination="Wna-Zc-MZ6" id="cN6-yt-xy8"/>
             </connections>
             <point key="canvasLocation" x="37.681159420289859" y="59.598214285714285"/>

@@ -606,8 +606,9 @@ class LocalizableStrings : NSObject {
     var cant_send_to_max_privacy = "cant_send_to_max_privacy".localized
     var rescan = "rescan".localized
     var rescan_text = "rescan_text".localized
-
-
+    var mobile_node_title = "mobile_node_title".localized
+    var mobile_node_text = "mobile_node_text".localized
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

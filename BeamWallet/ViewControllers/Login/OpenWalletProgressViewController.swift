@@ -423,15 +423,13 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
-
                 if strongSelf.isWaitingRestore {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
                     strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
-                    
-                    if progress_100 >= 98 {
-                        strongSelf.isWaitingRestore = false
-                        strongSelf.openMainPage()
-                    }
+//                    if progress_100 >= 98 {
+//                        strongSelf.isWaitingRestore = false
+//                        strongSelf.openMainPage()
+//                    }
                 }
             }
         }

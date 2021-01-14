@@ -211,7 +211,7 @@ class WalletAvailableCell: BaseCell {
     private func didSelectState(animation:Bool) {
         let size = self.availableButton.titleLabel?.font.pointSize ?? 14
 
-        UIView.animate(withDuration: animation ? 0.3 : 0, animations: {
+        UIView.animate(withDuration: animation ? 0.2 : 0, animations: {
             if self.selectedState == .available {
                 self.moreDetailsButton.isHidden = true
                 

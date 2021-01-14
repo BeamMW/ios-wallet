@@ -39,6 +39,7 @@ static NSString *notificationsWalletKey = @"notificationsWalletKey";
 static NSString *notificationsNewsKey = @"notificationsNewsKey";
 static NSString *notificationsTransactionKey = @"notificationsTransactionKey";
 static NSString *notificationsAddressKey = @"notificationsAddressKey";
+static NSString *nodeProtocolKey = @"nodeProtocolKey";
 
 
 
@@ -223,6 +224,13 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     _maxAddressDurationHours = 24;
     _maxAddressDurationSeconds = 24 * 60 * 60;
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeProtocolKey]) {
+        _isNodeProtocolEnabled = [[[NSUserDefaults standardUserDefaults] objectForKey:nodeProtocolKey] boolValue];
+    }
+    else{
+        _isNodeProtocolEnabled = NO;
+    }
+    
     return self;
 }
 
@@ -238,6 +246,7 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     self.isAllowOpenLink = NO;
     self.isAskForHideAmounts = YES;
     self.isHideAmounts = NO;
+    self.isNodeProtocolEnabled = NO;
 }
 
 -(NSString*_Nonnull)customNode {
@@ -247,6 +256,12 @@ static NSString *notificationsAddressKey = @"notificationsAddressKey";
     return @"";
 }
 
+-(void)setIsNodeProtocolEnabled:(BOOL)isNodeProtocolEnabled {
+    _isNodeProtocolEnabled = isNodeProtocolEnabled;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:_isNodeProtocolEnabled forKey:nodeProtocolKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 -(void)setIsHideAmounts:(BOOL)isHideAmounts {
     _isHideAmounts = isHideAmounts;

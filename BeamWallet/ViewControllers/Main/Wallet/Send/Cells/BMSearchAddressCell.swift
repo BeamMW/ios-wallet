@@ -35,6 +35,9 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var contactCategory: UILabel!
     @IBOutlet private weak var iconView: UIView!
 
+    @IBOutlet var nameLabelTopOffset: NSLayoutConstraint!
+    @IBOutlet var stackBotOffset: NSLayoutConstraint!
+
     private var token = ""
     
     public var validateAddress = false
@@ -78,7 +81,7 @@ class BMSearchAddressCell: BaseCell {
         didSet {
             if let text = addressTypeLabel.text {
                 if (addressType == BMAddressTypeShielded && offlineTokensCount >= 0 && text.contains(Localizable.shared.strings.offline_address)) {
-                    addressTypeLabel.text = Localizable.shared.strings.offline_address + ". " + Localizable.shared.strings.payments_left + ": \(offlineTokensCount)" + "\n"
+                    addressTypeLabel.text = Localizable.shared.strings.offline_address + ". " + Localizable.shared.strings.payments_left + ": \(offlineTokensCount)"
                 }
             }
         }
@@ -89,22 +92,22 @@ class BMSearchAddressCell: BaseCell {
             if(!textField.text.isEmpty) {
                 if addressType == BMAddressTypeMaxPrivacy {
                     addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.max_privacy_address + "\n"
+                    addressTypeLabel.text = Localizable.shared.strings.max_privacy_address
                 }
                 else if addressType == BMAddressTypeRegular {
                     addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.one_time_expire_text + "\n"
+                    addressTypeLabel.text = Localizable.shared.strings.one_time_expire_text
                 }
                 else if addressType == BMAddressTypeOfflinePublic {
-                    addressTypeLabel.text = Localizable.shared.strings.public_offline_address + "\n"
+                    addressTypeLabel.text = Localizable.shared.strings.public_offline_address
                 }
                 else if addressType == BMAddressTypeRegularPermanent {
                     addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.perm_token.replacingOccurrences(of: ".", with: "") + "\n"
+                    addressTypeLabel.text = Localizable.shared.strings.perm_token.replacingOccurrences(of: ".", with: "")
                 }
                 else if addressType == BMAddressTypeShielded {
                     addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.offline_address + "\n"
+                    addressTypeLabel.text = Localizable.shared.strings.offline_address
                 }
                 else {
                     addressTypeLabel.isHidden = true

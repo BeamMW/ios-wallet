@@ -80,6 +80,8 @@ typedef enum Target : NSUInteger {
 
 @property (nonatomic, assign) int maxTokens;
 
+@property (nonatomic, assign) BOOL isNodeProtocolEnabled;
+
 -(void)setDefaultDarkMode:(BOOL)isSystemMode;
 
 -(BOOL)isChangedNode;

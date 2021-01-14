@@ -237,22 +237,14 @@ extension BMNetworkStatusView: WalletModelDelegate {
             if done != total  {
                 let percent = (Double(done)/Double(total)) * 100.0
                 
-                if(Int(percent)>=99) {
-                    self.isPrevUpdate = false
-                    self.isPrevRecconected = false
-                    self.onNetwotkStartConnecting(true)
-                }
-                else {
-                    self.isPrevUpdate = true
-                    self.indicatorView.color = UIColor.main.green
-                    self.indicatorView.startAnimating()
-                    
-                    self.statusLabel.x = self.fromNib ? 22 : 37
-                    self.statusLabel.text = Localizable.shared.strings.updating.lowercased() + " \(Int(percent))%"
-                    self.statusView.alpha = 0
-                    self.statusLabel.textColor = UIColor.main.blueyGrey
-                }
-     
+                self.isPrevUpdate = true
+                self.indicatorView.color = UIColor.main.green
+                self.indicatorView.startAnimating()
+                
+                self.statusLabel.x = self.fromNib ? 22 : 37
+                self.statusLabel.text = Localizable.shared.strings.updating.lowercased() + " \(Int(percent))%"
+                self.statusView.alpha = 0
+                self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
                 let time = (self.isPrevUpdate || self.isPrevRecconected) ? 1.5 : 0

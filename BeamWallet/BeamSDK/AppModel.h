@@ -313,5 +313,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 
 -(void)rescan;
+-(void)enableBodyRequests:(BOOL)value;
 
 @end

@@ -82,7 +82,16 @@ extension SettingsCell: Configurable {
         selectionStyle = .default
 
         titleLabel.textColor = UIColor.white
-        titleLabel?.text = item.title
+        
+        if let attr = item.titleAttributed {
+            titleLabel?.attributedText = attr
+            titleLabel?.numberOfLines = 0
+        }
+        else {
+            titleLabel?.text = item.title
+            titleLabel?.numberOfLines = 1
+        }
+        
         detailLabel?.text = item.detail
         
         if let isSwitch = item.isSwitch {

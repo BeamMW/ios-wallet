@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -147,11 +147,11 @@
                                     <action selector="onSelectPageWithSender:" destination="KGk-i7-Jjw" eventType="valueChanged" id="ux9-qG-AcY"/>
                                 </connections>
                             </pageControl>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-ta-Pco">
-                                <rect key="frame" x="15" y="10" width="239" height="29"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-ta-Pco">
+                                <rect key="frame" x="15" y="10" width="233" height="29"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQa-GZ-HfB">
-                                        <rect key="frame" x="0.0" y="0.0" width="73" height="29"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="72" height="29"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                         <state key="normal" title="AVAILABLE">
                                             <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -167,7 +167,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eMf-z3-M7Q">
-                                        <rect key="frame" x="83" y="0.0" width="73" height="29"/>
+                                        <rect key="frame" x="82" y="0.0" width="68" height="29"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                         <state key="normal" title="SHIELDED">
                                             <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -183,7 +183,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJG-jt-Uua">
-                                        <rect key="frame" x="166" y="0.0" width="73" height="29"/>
+                                        <rect key="frame" x="160" y="0.0" width="73" height="29"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                         <state key="normal" title="MATURING">
                                             <color key="titleColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -225,7 +225,6 @@
                             <constraint firstAttribute="trailing" secondItem="i5e-tr-I4u" secondAttribute="trailing" constant="15" id="9aB-ge-MJT"/>
                             <constraint firstAttribute="bottom" secondItem="Nd2-Bd-eXV" secondAttribute="bottom" id="9da-kH-70W"/>
                             <constraint firstAttribute="trailing" secondItem="Nd2-Bd-eXV" secondAttribute="trailing" id="Abg-je-ysI"/>
-                            <constraint firstItem="zFZ-o9-rOz" firstAttribute="leading" secondItem="hy8-ta-Pco" secondAttribute="trailing" constant="8" symbolic="YES" id="FYt-fC-8c1"/>
                             <constraint firstItem="0uc-Qz-goX" firstAttribute="leading" secondItem="ja7-ld-PUy" secondAttribute="leading" constant="15" id="II2-Ho-RsJ"/>
                             <constraint firstAttribute="bottom" secondItem="1qZ-Hb-en1" secondAttribute="bottom" constant="24" id="OIC-Hm-70X"/>
                             <constraint firstAttribute="trailing" secondItem="0uc-Qz-goX" secondAttribute="trailing" constant="15" id="Qlp-Rb-fMB"/>

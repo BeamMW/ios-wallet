@@ -1328,6 +1328,10 @@ NSString* WalletModel::GetTransactionFailurString(TxFailureReason reason)
                          [[@"tx_status_failed_parameter" localized] lowercaseString],
                          [[@"tx_status_expired" localized] lowercaseString],
                          [[@"tx_status_not_signed" localized] lowercaseString]];
+    
+    if(reason >= reasons.count) {
+        return @"";
+    }
 
     return reasons[reason];
 }

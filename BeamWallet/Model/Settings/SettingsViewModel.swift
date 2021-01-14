@@ -65,6 +65,7 @@ class SettingsViewModel: NSObject {
         case offline_address = 31
         case max_privacy_limit = 32
         case rescan = 33
+        case mobile_node = 34
     }
     
     class SettingsItem {
@@ -76,7 +77,8 @@ class SettingsViewModel: NSObject {
         public var icon: UIImage?
         public var hasArrow: Bool!
         public var id: Int?
-        
+        public var titleAttributed: NSMutableAttributedString?
+
         init(title: String?, type: SettingsItemType, icon: UIImage?, hasArrow: Bool) {
             self.title = title
             self.type = type
@@ -163,6 +165,24 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.random_node, detail: nil, isSwitch: Settings.sharedManager().connectToRandomNode, type: .random_node, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, type: .ip_port, hasArrow: true))
             items.append(section_0)
+            
+            let detail = NSMutableAttributedString(string: "\(Localizable.shared.strings.mobile_node_title)\nspace\n\(Localizable.shared.strings.mobile_node_text)")
+            
+            let rangeDetail = (detail.string as NSString).range(of: String(Localizable.shared.strings.mobile_node_text))
+            let spaceRange = (detail.string as NSString).range(of: String("space"))
+            
+            detail.addAttribute(NSAttributedString.Key.font, value: ItalicFont(size: 14), range: rangeDetail)
+            detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeDetail)
+            
+            detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
+            detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
+            
+            let mobileItem = SettingsItem(title: Localizable.shared.strings.mobile_node_title, detail: nil, isSwitch: Settings.sharedManager().isNodeProtocolEnabled, type: .mobile_node, hasArrow: false)
+            mobileItem.titleAttributed = detail
+            
+            var section_1 = [SettingsItem]()
+            section_1.append(mobileItem)
+            items.append(section_1)
         case .privacy:
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, type: .ask_password, hasArrow: false))

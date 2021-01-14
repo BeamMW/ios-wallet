@@ -358,6 +358,18 @@ extension SendViewController: UITableViewDataSource {
                 cell.contact = viewModel.selectedContact
                 cell.addressType = BMAddressType(viewModel.addressType)
                 cell.offlineTokensCount = viewModel.offlineTokensCount
+                cell.nameLabelTopOffset.constant = 20
+                
+                if(viewModel.selectedContact == nil && cell.addressType == BMAddressTypeUnknown) {
+                    cell.stackBotOffset.constant = 25
+                }
+                else if(viewModel.selectedContact != nil && cell.addressType == BMAddressTypeRegular) {
+                    cell.stackBotOffset.constant = 15
+                }
+                else {
+                    cell.stackBotOffset.constant = 20
+                }
+                
                 return cell
             }
             else {
@@ -473,7 +485,7 @@ extension SendViewController: UITableViewDataSource {
         case 3:
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.comment, value: viewModel.comment))
+                .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.comment))
             cell.delegate = self
             cell.placholder = Localizable.shared.strings.local_comment.capitalizingFirstLetter()
             cell.isItalicPlacholder = true

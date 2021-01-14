@@ -220,7 +220,7 @@ extension SendConfirmViewController: WalletModelDelegate {
                 }
                 
                 let totalString = String.currency(value: am) //+ Localizable.shared.strings.beam
-                let totalDetail = self.viewModel.amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""))
+                let totalDetail = self.viewModel.amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""), isFee: false, color: UIColor.white)
                 
                 let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
                 item.detailAttributedString = totalDetail

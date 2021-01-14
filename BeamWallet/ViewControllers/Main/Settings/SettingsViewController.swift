@@ -217,6 +217,9 @@ extension SettingsViewController : SettingsCellDelegate {
                 
                 tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
             }
+            else if item.type == .mobile_node {
+                AppModel.sharedManager().enableBodyRequests(value)
+            }
         }
     }
 }

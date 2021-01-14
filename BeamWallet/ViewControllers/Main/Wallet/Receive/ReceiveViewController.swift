@@ -160,6 +160,9 @@ extension ReceiveViewController : UITableViewDelegate {
         if indexPath.section == 3 && indexPath.row == 2 {
             return 17
         }
+//        else if indexPath.section == 0 && indexPath.row != 0 {
+//            return 110
+//        }
         return UITableView.automaticDimension
     }
     

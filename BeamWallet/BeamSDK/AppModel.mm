@@ -859,6 +859,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
+        
+        if ([Settings sharedManager].isNodeProtocolEnabled) {
+            wallet->getAsync()->enableBodyRequests(true);
+        }
         wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
         
         isRunning = YES;
@@ -882,6 +886,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
             additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
             additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
             additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
+            
+            if ([Settings sharedManager].isNodeProtocolEnabled) {
+                wallet->getAsync()->enableBodyRequests(true);
+            }
             
             wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
         }
@@ -1957,16 +1965,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(NSString*_Nullable)canSendToMaxPrivacy:(NSString*_Nullable)to {
-    for(BMPreparedTransaction *tr in _preparedTransactions) {
-        if([tr.address isEqualToString:to]) {
-            return [@"cant_send_to_max_privacy" localized];
-        }
-    }
-    for(BMTransaction *tr in _transactions) {
-        if([tr.token isEqualToString:to]) {
-            return [@"cant_send_to_max_privacy" localized];
-        }
-    }
+//    for(BMPreparedTransaction *tr in _preparedTransactions) {
+//        if([tr.address isEqualToString:to]) {
+//            return [@"cant_send_to_max_privacy" localized];
+//        }
+//    }
+//    for(BMTransaction *tr in _transactions) {
+//        if([tr.token isEqualToString:to]) {
+//            return [@"cant_send_to_max_privacy" localized];
+//        }
+//    }
     
     return nil;
 }
@@ -2481,9 +2489,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     if (wallet == nil) {
         return false;
     }
-    return true;
-//    auto own = wallet->isConnectionTrusted();
-//    return own;
+    auto own = wallet->isConnectionTrusted();
+    return own || [Settings sharedManager].isNodeProtocolEnabled;
 }
 
 
@@ -3619,6 +3626,12 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
 -(void)rescan {
     wallet->getAsync()->rescan();
+}
+
+-(void)enableBodyRequests:(BOOL)value {
+    wallet->getAsync()->enableBodyRequests(value);
+    
+    [[Settings sharedManager] setIsNodeProtocolEnabled:value];
 }
 
 @end

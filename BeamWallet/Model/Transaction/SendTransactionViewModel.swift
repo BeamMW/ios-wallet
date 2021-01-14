@@ -296,18 +296,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             }
         }
         else {
-            var canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+            let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
                 
-            var canSendToMaxPrivacy: String? = nil
-            
-            if(addressType == BMAddressTypeMaxPrivacy) {
-                canSendToMaxPrivacy = AppModel.sharedManager().canSend(toMaxPrivacy: toAddress)
-                
-                if(canSendToMaxPrivacy != nil) {
-                    toAddressError = canSendToMaxPrivacy
-                }
-            }
-            
             if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
                 amountError = canSend
             }
@@ -553,7 +543,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.public_offline_address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if addressType == BMAddressTypeRegularPermanent {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.regular). \(Localizable.shared.strings.permanent)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.regular), \(Localizable.shared.strings.permanent.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if addressType == BMAddressTypeShielded {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.offline), \(Localizable.shared.strings.payments_left.lowercased()):  \(self.offlineTokensCount)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
@@ -575,7 +565,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             
             let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
             let totalString = String.currency(value: total)
-            let totalDetail = amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""))
+            let totalDetail = amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""), isFee: false, color: UIColor.white)
             let totalItem = BMMultiLineItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
             totalItem.detailAttributedString = totalDetail
             items.append(totalItem)            
@@ -618,7 +608,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         return AppModel.sharedManager().walletStatus?.realShielded != 0
     }
     
-    public func amountString(amount: String, isFee: Bool = false) -> NSMutableAttributedString {
+    public func amountString(amount: String, isFee: Bool = false, color: UIColor? = nil) -> NSMutableAttributedString {
         let amountString = isFee ? (amount + Localizable.shared.strings.groth + "\n") : (amount + Localizable.shared.strings.beam + "\n")
         let secondString = isFee ? AppModel.sharedManager().exchangeValueFee((Double(amount) ?? 0)) : AppModel.sharedManager().exchangeValue(Double(amount) ?? 0)
         let attributedString = amountString + "space\n" + secondString
@@ -629,7 +619,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let spaceRange = (attributedString as NSString).range(of: String("space"))
         
         attributedTitle.addAttribute(NSAttributedString.Key.font, value: SemiboldFont(size: 16) , range: rangeAmount)
-        attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope , range: rangeAmount)
+        if let color = color {
+            attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: rangeAmount)
+        }
+        else {
+            attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope , range: rangeAmount)
+        }
         
         attributedTitle.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
         attributedTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
