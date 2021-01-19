@@ -248,6 +248,7 @@ extension ReceiveViewController : UITableViewDataSource {
                 cell.delegate = self
                 cell.placholder = Localizable.shared.strings.no_name
                 cell.contentView.backgroundColor = UIColor.main.marineThree
+                cell.isItalicPlacholder = true
                 return cell
             }
             else{
@@ -263,6 +264,7 @@ extension ReceiveViewController : UITableViewDataSource {
                 .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.transactionComment))
             cell.delegate = self
             cell.placholder = Localizable.shared.strings.local_comment
+            cell.isItalicPlacholder = true
             cell.contentView.backgroundColor = UIColor.clear
             return cell
         case 3:

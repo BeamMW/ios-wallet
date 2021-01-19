@@ -106,6 +106,9 @@ NSString* WalletModel::GetAddressTo(TxDescription m_tx)
     {
         auto token = m_tx.getToken();
         if (token.length() == 0) {
+            if(!m_tx.m_selfTx) {
+                return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
+            }
             return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
         }
         auto params = beam::wallet::ParseParameters(token);
@@ -494,11 +497,15 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
             address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
 
-            BMContact *contact = [[BMContact alloc] init];
-            contact.address = address;
-            contact.name = address.label;
+            BOOL ignored = [[AppModel sharedManager] containsIgnoredContact:address.walletId];
             
-            [contacts addObject:contact];
+            if((!address.address.isEmpty || !address.walletId.isEmpty) && !ignored) {
+                BMContact *contact = [[BMContact alloc] init];
+                contact.address = address;
+                contact.name = address.label;
+                
+                [contacts addObject:contact];
+            }
         }
         
         NSMutableIndexSet *set = [NSMutableIndexSet indexSet];

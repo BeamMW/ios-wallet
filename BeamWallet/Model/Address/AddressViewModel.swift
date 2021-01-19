@@ -123,6 +123,10 @@ class AddressViewModel: NSObject {
                 }
             }
             
+            
+            self.addresses.removeAll(where: {$0.walletId.isEmpty})
+            self.contacts.removeAll(where: {$0.address.walletId.isEmpty})
+
             self.onDataChanged?()
         }
     }

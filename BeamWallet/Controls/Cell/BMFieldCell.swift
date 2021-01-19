@@ -57,7 +57,7 @@ class BMFieldCell: BaseCell {
         mainStack.isUserInteractionEnabled = true
         mainStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         
-        textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+       // textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
 
         if Settings.sharedManager().isDarkMode {
             nameLabel.textColor = UIColor.main.steel;

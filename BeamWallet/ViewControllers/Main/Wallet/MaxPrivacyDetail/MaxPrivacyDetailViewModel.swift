@@ -45,6 +45,8 @@ class MaxPrivacyDetailViewModel: NSObject {
         
         AppModel.sharedManager().addDelegate(self)
         
+        AppModel.sharedManager().getUTXO()
+        
         filterUTXOS()
     }
     

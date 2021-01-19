@@ -76,6 +76,9 @@ static NSString *unlinkAddressName = @"Unlink";
 static NSString *walletStatusKey = @"walletStatusKey";
 static NSString *transactionsKey = @"transactionsKey";
 static NSString *notificationsKey = @"notificationsKey";
+static NSString *ignoredContactsKey = @"ignoredcontactsKey";
+
+
 
 
 const int kDefaultFeeInGroth = 10;
@@ -1408,6 +1411,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     else {
         wallet->getAsync()->deleteAddress(address.string);	
     }
+    
+    if([self isToken:address]) {
+        BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
+        wallet->getAsync()->deleteAddress(params.address.string);
+    }
 }
 
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address {
@@ -1831,6 +1839,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return  qrString;
 }
 
+-(BOOL)containsIgnoredContact:(NSString*_Nonnull) addressId {
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:ignoredContactsKey]];
+    
+    for (int i=0; i<array.count; i++) {
+        NSString *a = array[i];
+        if([a isEqualToString:addressId]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 -(void)addContact:(NSString*_Nonnull)addressId address:(NSString*_Nullable)address name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy{
 
     if(address != nil) {
@@ -1847,11 +1868,36 @@ bool OnProgress(uint64_t done, uint64_t total) {
         savedAddress.m_Address = address.string;
         savedAddress.m_category =  [categories componentsJoinedByString:@","].string;
         wallet->getAsync()->saveAddress(savedAddress, false);
+        
+        BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
+        
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:ignoredContactsKey]];
+        [array addObject:params.address];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:array forKey:ignoredContactsKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     else {
         WalletID walletID(Zero);
         if (walletID.FromHex(addressId.string))
         {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:ignoredContactsKey]];
+
+            BOOL shouldSave = NO;
+            for (int i=0; i<array.count; i++) {
+                NSString *a = array[i];
+                if([a isEqualToString:addressId]) {
+                    shouldSave = YES;
+                    [array removeObjectAtIndex:i];
+                    break;;
+                }
+            }
+            
+            if(shouldSave) {
+                [[NSUserDefaults standardUserDefaults] setObject:array forKey:ignoredContactsKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
             WalletAddress savedAddress;
             savedAddress.m_label = name.string;
             savedAddress.m_category = [categories componentsJoinedByString:@","].string;
@@ -2233,7 +2279,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
     
     
-    params.SetParameter(TxParameterID::SavePeerAddress, false);
+    if(![self isToken:to]) {
+        params.SetParameter(TxParameterID::SavePeerAddress, false);
+    }
 
     wallet->getAsync()->startTransaction(std::move(params));
 }
@@ -3452,7 +3500,9 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 -(int)getUnreadNotificationsCount {
     int count = 0;
     
-    for (BMNotification *notification in AppModel.sharedManager.notifications) {
+    NSMutableArray *notifications = [NSMutableArray arrayWithArray:AppModel.sharedManager.notifications];
+
+    for (BMNotification *notification in notifications) {
         if(!notification.isRead) {
             if (notification.type == TRANSACTION) {
                 BMTransaction *tr = [[AppModel sharedManager] transactionById:notification.pId];
