@@ -22,6 +22,10 @@
 
 @implementation BMNotification
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
     [encoder encodeObject:self.nId forKey: @"nId"];
@@ -48,7 +52,7 @@
         self.isRead = [[decoder decodeObjectForKey:@"isRead"] boolValue];
         self.isSended = [[decoder decodeObjectForKey:@"isSended"] boolValue];
 
-        self.type = [[decoder decodeObjectForKey:@"type"] integerValue];
+        self.type = [[decoder decodeObjectForKey:@"type"] intValue];
 
         self.createdTime = [[decoder decodeObjectForKey:@"createdTime"] longLongValue];
         

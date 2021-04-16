@@ -24,7 +24,10 @@ class BMExpandCell: BaseCell {
     @IBOutlet weak private var arrowIcon: UIImageView!
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var mainView: NonDisappearingView!
+    @IBOutlet var topOffset: NSLayoutConstraint?
+    @IBOutlet var botOffset: NSLayoutConstraint?
 
+    
     private var isExpand = false
     
     weak var delegate: BMCellProtocol?
@@ -54,7 +57,7 @@ class BMExpandCell: BaseCell {
         if selected {
             isExpand = !isExpand
             
-            let angle:Double = isExpand ? 0 : -180
+            let angle:Double = isExpand ? -180 : 0
             arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(angle * Double.pi/180))
             
             UIView.animate(withDuration: 0.3) {
@@ -77,7 +80,7 @@ extension BMExpandCell: Configurable {
         nameLabel.text = options.title
         nameLabel.letterSpacing = 2
         
-        let angle:Double = isExpand ? 0 : -180
+        let angle:Double = isExpand ? -180 : 0
         arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(angle * Double.pi/180))
     }
 }

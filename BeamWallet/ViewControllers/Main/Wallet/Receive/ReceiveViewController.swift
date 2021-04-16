@@ -24,9 +24,18 @@ class ReceiveViewController: BaseTableViewController {
     private let viewModel = ReceiveAddressViewModel()
     public var address: BMAddress?
 
-    private var showAdvanced = false
-    private var showEdit = false
-
+    private var showRequestAmount = false
+    private var showComment = false
+    private var searchTableView = SearchTableView()
+    private var isSearch = false {
+        didSet {
+            tableView.isScrollEnabled = !isSearch
+            searchTableView.view.isHidden = !isSearch
+            
+            layoutSearchTableView()
+        }
+    }
+    
     override var tableStyle: UITableView.Style {
         get {
             return .grouped
@@ -43,15 +52,22 @@ class ReceiveViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.receive.uppercased()
         
-        tableView.register([BMFieldCell.self, ReceiveAddressButtonsCell.self, BMAmountCell.self, BMExpandCell.self, BMDetailCell.self, ReceiveAddressOptionsCell.self, ReceiveTokenCell.self, ReceiveAddressOptionsCell_2.self])
+        tableView.register([BMFieldCell.self, ReceiveTransactionTypeCell.self, ReceiveTokenCell.self, BMExpandCell.self, BMAmountCell.self, ReceiveAddressButtonsCell.self])
         
-        tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 10))
         tableView.tableHeaderView?.backgroundColor = UIColor.clear
         tableView.sectionHeaderHeight = 0.0
         tableView.sectionFooterHeight = 0.0
+        
+        searchTableView.view.isHidden = !isSearch
+        searchTableView.tableView.contentInsetAdjustmentBehavior = .never
+        searchTableView.view.backgroundColor = self.view.backgroundColor
+        searchTableView.delegate = self
+        searchTableView.displayEmpty = false
+        searchTableView.tableView.contentInset = tableView.contentInset
+        self.view.addSubview(searchTableView.view)
         
         viewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()
@@ -93,6 +109,12 @@ class ReceiveViewController: BaseTableViewController {
         addCustomBackButton(target: self, selector: #selector(onBack))
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        layoutSearchTableView()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -105,6 +127,13 @@ class ReceiveViewController: BaseTableViewController {
         if isMovingFromParent {
             viewModel.revertChanges()
         }
+    }
+    
+    private func layoutSearchTableView() {
+        let rect = tableView.rectForRow(at: IndexPath(row: 0, section: 0))
+        let y: CGFloat = navigationBarOffset + rect.size.height + 20
+        
+        searchTableView.view.frame = CGRect(x: 0, y: y, width: view.bounds.width, height: view.bounds.size.height - y)
     }
     
     @objc private func onBack() {
@@ -125,228 +154,132 @@ class ReceiveViewController: BaseTableViewController {
 
 extension ReceiveViewController : UITableViewDelegate {
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            if viewModel.transaction == .regular {
-                return 5
-            }
-            return 0
-        case 1:
-            return 5
-        case 3:
-            return showAdvanced ? 15 : 5
-        default:
-            return 20
-        }
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 0
-        case 1, 3:
-            return 5
-        case 2:
-            return 20
-        case 4:
-            return 20
-        default:
-            return 30
-        }
+        return 20
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 3 && indexPath.row == 2 {
-            return 17
-        }
-//        else if indexPath.section == 0 && indexPath.row != 0 {
-//            return 110
-//        }
         return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        switch indexPath.section {
-        case 1:
-            if indexPath.row == 2 {
-                viewModel.onCategory()
-            }
-        default:
-            return
-        }
     }
 }
 
 extension ReceiveViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return showEdit ? 3 : 1
+        if section == 3 {
+            return showRequestAmount ? 2 : 1
         }
-        else if section == 3 {
-            return showAdvanced ? 3 : 1
-        }
-        else if section == 2 {
-            return 1
-        }
-        else if section == 0 {
-            return viewModel.values.count + 1
+        else if section == 4 {
+            return showComment ? 2 : 1
         }
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       
-        switch indexPath.section {
-        case 0:
-            if indexPath.row == 0 {
-                if(viewModel.transaction == .regular) {
-                    let cell = tableView
-                        .dequeueReusableCell(withType: ReceiveAddressOptionsCell.self, for: indexPath)
-                    cell.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
-                    cell.delegate = self
-                    return cell
-                }
-                else {
-                    let cell = tableView
-                        .dequeueReusableCell(withType: ReceiveAddressOptionsCell_2.self, for: indexPath)
-                    cell.contentView.backgroundColor = UIColor.main.marineThree
-                    cell.delegate = self
-                    cell.configure()
-                    return cell
-                }
-            }
-            else {
-                let value = viewModel.values[indexPath.row-1]
-                
-                let cell = tableView
-                    .dequeueReusableCell(withType: ReceiveTokenCell.self, for: indexPath)
-                cell.configure(with: (title: value.name, value: value.value, index: indexPath.row-1, info: value.info))
-                cell.delegate = self
-                return cell
-            }
-        case 1:
-            if indexPath.row == 0 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showEdit, title: Localizable.shared.strings.edit_token.uppercased()))
-                cell.delegate = self
-                cell.setColor(UIColor.white)
-                return cell
-            }
-            else if indexPath.row == 1 {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                    .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: viewModel.address.label))
-                cell.delegate = self
-                cell.placholder = Localizable.shared.strings.no_name
-                cell.contentView.backgroundColor = UIColor.main.marineThree
-                cell.isItalicPlacholder = true
-                return cell
-            }
-            else{
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-                cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: viewModel.address.categoriesName()))
-                cell.space = 20
-                return cell
-            }
-        case 2:
+        if indexPath.section == 0 {
             let cell = tableView
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
-                .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.transactionComment))
+                .configured(with: (name: Localizable.shared.strings.contact.uppercased(), value: viewModel.address.label))
             cell.delegate = self
-            cell.placholder = Localizable.shared.strings.local_comment
+            cell.placholder = Localizable.shared.strings.receive_contact_placholder
+            cell.titleTextColor = UIColor.white
+            cell.contentView.backgroundColor = UIColor.main.marineThree
             cell.isItalicPlacholder = true
-            cell.contentView.backgroundColor = UIColor.clear
+            cell.topOffset?.constant = 20
+            cell.bottomOffset?.constant = 20
             return cell
-        case 3:
+        }
+        else if indexPath.section == 1 {
+            let cell = tableView
+                .dequeueReusableCell(withType: ReceiveTransactionTypeCell.self, for: indexPath)
+            cell.contentView.backgroundColor = UIColor.main.marineThree
+            cell.delegate = self
+            
+            if !AppModel.sharedManager().checkIsOwnNode() {
+                cell.disable()
+            }
+            
+            return cell
+        }
+        else if indexPath.section == 2 {
+            let cell = tableView
+                .dequeueReusableCell(withType: ReceiveTokenCell.self, for: indexPath)
+            cell.contentView.backgroundColor = UIColor.main.marineThree
+            cell.delegate = self
+            if viewModel.transaction == .regular {
+                cell.configure(with: viewModel.address.offlineToken ?? "")
+            }
+            else {
+                cell.configure(with: viewModel.address.maxPrivacyToken ?? "")
+            }
+            return cell
+        }
+        else if indexPath.section == 3  {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showAdvanced, title: Localizable.shared.strings.advanced.uppercased()))
+                    .configured(with: (expand: showRequestAmount, title: Localizable.shared.strings.request_amount.uppercased()))
                 cell.delegate = self
                 cell.setColor(UIColor.white)
+                cell.topOffset?.constant = 15
+                cell.botOffset?.constant = 15
                 return cell
             }
             else if indexPath.row == 1  {
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.request_amount, value: viewModel.amount))
+                    .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: String.empty(), value: viewModel.amount))
                 cell.delegate = self
+                cell.hideNameLabel = true
+                cell.contentView.backgroundColor = UIColor.main.marineThree
+                cell.setSecondAmount(amount: viewModel.secondAmount ?? "")
+                return cell
+            }
+        }
+        else if indexPath.section == 4  {
+            if indexPath.row == 0 {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
+                    .configured(with: (expand: showRequestAmount, title: Localizable.shared.strings.comment.uppercased()))
+                cell.delegate = self
+                cell.setColor(UIColor.white)
+                cell.topOffset?.constant = 15
+                cell.botOffset?.constant = 15
+                return cell
+            }
+            else if indexPath.row == 1  {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                    .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.transactionComment))
+                cell.delegate = self
+                cell.placholder = Localizable.shared.strings.local_comment
+                cell.isItalicPlacholder = true
+                cell.hideNameLabel = true
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 return cell
             }
-            else {
-                var cell = tableView.dequeueReusableCell(withIdentifier: "cell")
-                
-                if cell == nil {
-                    cell = SecondCell(style: .default, reuseIdentifier: "cell")
-                    
-                    cell?.textLabel?.textColor = UIColor.main.blueyGrey
-                    cell?.textLabel?.font = RegularFont(size: 14)
-                    
-                    cell?.backgroundColor = UIColor.clear
-                    cell?.contentView.backgroundColor = UIColor.main.marineThree
-                    cell?.selectionStyle = .none
-                    cell?.separatorInset = UIEdgeInsets.zero
-                    cell?.indentationLevel = 0
-                }
-                
-                let amount = Double(viewModel.amount ?? "0") ?? 0
-                let second = AppModel.sharedManager().exchangeValue(amount)
-                
-                if amount > 0 {
-                    cell?.textLabel?.text = second
-                }
-                else {
-                    cell?.textLabel?.text = nil
-                }
-                
-                if Settings.sharedManager().isDarkMode {
-                    cell?.textLabel?.textColor = UIColor.main.steel
-                }
-                
-                return cell!
-            }
-        case 4:
+        }
+        else if indexPath.section == 5 {
             let cell = tableView
                 .dequeueReusableCell(withType: ReceiveAddressButtonsCell.self, for: indexPath)
             cell.delegate = self
             cell.setMaxPrivacy(viewModel.transaction == .privacy)
             return cell
-        default:
-            return BaseCell()
         }
+
+        return BaseCell()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        switch section {
-        case 1, 3:
-            view.backgroundColor = UIColor.main.marineThree
-        default:
-            view.backgroundColor = UIColor.clear
-        }
-
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView()
-        switch section {
-        case 1, 3:
-            view.backgroundColor = UIColor.main.marineThree
-        default:
-            view.backgroundColor = UIColor.clear
-        }
-        
+        view.backgroundColor = UIColor.clear
         return view
     }
 }
@@ -354,83 +287,94 @@ extension ReceiveViewController : UITableViewDataSource {
 extension ReceiveViewController : BMCellProtocol {
     
     func textValueDidBegin(_ sender: UITableViewCell) {
-//        if let path = tableView.indexPath(for: sender)  {
-//            tableView.scrollToRow(at: path, at: .middle, animated: true)
-//        }
+        if let path = tableView.indexPath(for: sender) {
+            
+            if path.section == 0 {
+//                isSearch = true
+//
+//                searchTableView.contacts = viewModel.searchForContacts()
+//                if searchTableView.contacts.count == 0 {
+//                    isSearch = false
+//                }
+//                else {
+//                    isSearch = true
+//                    searchTableView.reload()
+//                }
+            }
+        }
     }
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 1 {
+            if path.section == 0 {
                 viewModel.address.label = text
+                
+//                searchTableView.contacts = viewModel.searchForContacts()
+//                if searchTableView.contacts.count == 0 {
+//                    isSearch = false
+//                }
+//                else {
+//                    isSearch = true
+//                    searchTableView.reload()
+//                }
             }
-            else if path.section == 2 {
+            else if path.section == 4 {
                 viewModel.transactionComment = text
             }
             else if path.section == 3 {
                 viewModel.amount = text
                 
-                for cell in tableView.visibleCells {
-                    if let options1 = cell as? ReceiveAddressOptionsCell {
-                        options1.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, needReload: viewModel.needReloadButtons))
-                    }
-//                    else if let options2 = cell as? ReceiveAddressTokensCell {
-//                        options2.configure(with: (oneTime: viewModel.expire == .oneTime, maxPrivacy: viewModel.transaction == .privacy, address: viewModel.address))
-//                    }
-                    else if let options3 = cell as? SecondCell {
-                        let amount = Double(viewModel.amount ?? "0") ?? 0
-                        let second = AppModel.sharedManager().exchangeValue(amount)
-
-                        if amount > 0 {
-                            options3.textLabel?.text = second
+                UIView.performWithoutAnimation {
+                    tableView.beginUpdates()
+                    for cell in tableView.visibleCells {
+                        if let amoutnCell = cell as? BMAmountCell {
+                            amoutnCell.setSecondAmount(amount: viewModel.secondAmount ?? "")
                         }
-                        else {
-                            options3.textLabel?.text = nil
+                        else if let tokenCell = cell as? ReceiveTokenCell {
+                            if viewModel.transaction == .regular {
+                                tokenCell.configure(with: viewModel.address.offlineToken ?? "")
+                            }
+                            else {
+                                tokenCell.configure(with: viewModel.address.maxPrivacyToken ?? "")
+                            }
                         }
-                        //tableView.reloadRow(SecondCell.self)
                     }
+                    tableView.endUpdates()
                 }
-                
-//                tableView.reloadRows(at: [IndexPath(row: 0, section: 0),
-//                                          IndexPath(row: 1, section: 0),
-//                                          IndexPath(row: 2, section: 3)], with: .none)
-              //  tableView.reloadRow(ReceiveAddressOptionsCell.self, animated: false)
             }
         }
     }
     
     func textValueDidReturn(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 1 {
-                AppModel.sharedManager().setWalletComment(viewModel.address.label, toAddress: viewModel.address.walletId)
-            }
-            else if path.section == 3 {
+            if path.section == 0 {
+                isSearch = false
                 
+                AppModel.sharedManager().setWalletComment(viewModel.address.label, toAddress: viewModel.address.walletId)
             }
         }
     }
     
     func onExpandCell(_ sender: UITableViewCell) {
-        if let path = tableView.indexPath(for: sender)
-        {
-            if path.section == 1 {
-                showEdit = !showEdit
+        if let path = tableView.indexPath(for: sender) {
+            if path.section == 4 {
+                showComment = !showComment
                 
-                if showEdit {
-                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .fade)
+                if showComment {
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 4)], with: .fade)
                 }
                 else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .fade)
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 4)], with: .fade)
                 }
             }
-            else{
-                showAdvanced = !showAdvanced
+            else if path.section == 3 {
+                showRequestAmount = !showRequestAmount
 
-                if showAdvanced {
-                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3)], with: .fade)
+                if showRequestAmount {
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
                 }
                 else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3)], with: .fade)
+                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
                 }
             }
         }
@@ -449,7 +393,7 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
     
     @objc func onSwitchToPool() {
         viewModel.transaction = .regular
-        viewModel.expire = .parmanent
+       // viewModel.expire = .parmanent
         viewModel.needReloadButtons = true
         self.tableView.reloadData()
     }
@@ -473,6 +417,8 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
             modalViewController.onShared = { [weak self] in
                 self?.onBack()
             }
+            modalViewController.isMaxPrivacy = viewModel.transaction == ReceiveAddressViewModel.TransactionOptions.privacy
+            
             modalViewController.modalPresentationStyle = .overFullScreen
             modalViewController.modalTransitionStyle = .crossDissolve
             top.present(modalViewController, animated: true, completion: nil)
@@ -496,70 +442,26 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
             onShareToken(token: viewModel.address.maxPrivacyToken ?? "")
         }
         else {
-            var items = [BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_wallet.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_online_token),
-                         BMPopoverMenu.BMPopoverMenuItem(name: "\(Localizable.shared.strings.online_token) (\(Localizable.shared.strings.for_pool.lowercased()))", icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_pool_token)]
-            
-            if(AppModel.sharedManager().checkIsOwnNode()) {
-                items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.offline_address, icon: nil, action: BMPopoverMenu.BMPopoverMenuItemAction.share_offline_token))
-            }
-            
-            self.showPopoverMenu(items)
+            onShareToken(token: viewModel.address.offlineToken ?? "")
         }
-    }
-    
-    private func showPopoverMenu(_ items:[BMPopoverMenu.BMPopoverMenuItem]) {
-        BMPopoverMenu.show(menuArray: items, done: { selectedItem in
-            if let item = selectedItem {
-                switch item.action {
-                case .share_online_token:
-                    if let token = self.viewModel.address?.onlineToken {
-                        self.onShareToken(token: token)
-                    }
-                    break
-                case .share_offline_token:
-                    if let token = self.viewModel.address?.offlineToken {
-                        self.onShareToken(token: token)
-                    }
-                    break
-                case .share_pool_token:
-                    if let token = self.viewModel.address?.walletId {
-                        self.onShareToken(token: token)
-                    }
-                    break
-                default:
-                    return
-                }
-            }
-        }) {}
     }
 }
 
-extension ReceiveViewController : ReceiveAddressOptionsCellDelegate {
-    @objc func onRegular() {
-        viewModel.transaction = .regular
-        viewModel.needReloadButtons = true
-        self.tableView.reloadData()
-    }
+extension ReceiveViewController : ReceiveTransactionTypeCellDelegate {
     
-    @objc func onMaxPrivacy() {
-        viewModel.transaction = .privacy
-        viewModel.needReloadButtons = true
-        self.tableView.reloadData()
-    }
-    
-    @objc func onOneTime() {
-        viewModel.expire = .oneTime
-        viewModel.needReloadButtons = false
-        self.tableView.reloadData()
-    }
-    
-    @objc func onPermament() {
-        viewModel.expire = .parmanent
-        viewModel.needReloadButtons = false
-        self.tableView.reloadData()
+    func onDidSelectTrasactionType(type: ReceiveAddressViewModel.TransactionOptions) {
+        viewModel.transaction = type
+        tableView.reloadRow(ReceiveTokenCell.self, animated: false)
     }
     
     func onShareToken() {
         viewModel.isShared = true
+    }
+}
+
+
+extension ReceiveViewController: SearchTableViewDelegate {
+    func didSelectContact(contact: BMContact) {
+        isSearch = false
     }
 }

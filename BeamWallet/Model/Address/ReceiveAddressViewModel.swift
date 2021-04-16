@@ -21,12 +21,6 @@ import Foundation
 
 class ReceiveAddressViewModel: NSObject {
     
-    struct TokenValue {
-        let name: String
-        let value: String
-        let info: String
-    }
-    
     enum TransactionOptions: Int {
         case regular = 0
         case privacy = 1
@@ -50,70 +44,44 @@ class ReceiveAddressViewModel: NSObject {
     public var onAddressCreated: ((Error?) -> Void)?
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
-    
-    public var values = [TokenValue]()
-    
+        
     public var address: BMAddress!
-    public var expire = ExpireOptions.oneTime {
-        didSet {
-            if address != nil {
-//                let hours = expire == .oneTime ? Settings.sharedManager().maxAddressDurationHours : 0
-//                address.duration = UInt64(hours == Settings.sharedManager().maxAddressDurationHours ? Settings.sharedManager().maxAddressDurationSeconds : 0)
-//
-//                AppModel.sharedManager().setExpires(Int32(hours), toAddress: address.walletId)
-                
-                generateTokens()
-            }
-        }
-    }
-    public var transaction = TransactionOptions.regular {
-        didSet {
-            generateTokens()
-        }
-    }
+    public var transaction = TransactionOptions.regular
 
     public var isShared = false
     
     public var amount: String? {
         didSet {
             generateTokens()
+            
+            let amount = Double(self.amount ?? "0") ?? 0
+            let second = AppModel.sharedManager().exchangeValue(withZero: amount)
+            secondAmount = second
         }
     }
     
+    public var secondAmount: String?
+    
     override init() {
         super.init()
+        
+        let amount = Double(self.amount ?? "0") ?? 0
+        let second = AppModel.sharedManager().exchangeValue(withZero: amount)
+        secondAmount = second
     }
     
     public func generateTokens() {
         let isOwn = AppModel.sharedManager().checkIsOwnNode()
         
         let bamount = Double(amount ?? "0") ?? 0
-        let isPermanentAddress = (expire == ExpireOptions.parmanent)
-        
-        address.onlineToken = AppModel.sharedManager().generateRegularAddress(address.walletId, amount: bamount, isPermanentAddress: isPermanentAddress)
         
         if isOwn {
             AppModel.sharedManager().generateMaxPrivacyAddress(address.walletId, amount: bamount) { (token) in
                 self.address.maxPrivacyToken = token;
             }
-            address.offlineToken = AppModel.sharedManager().generateOfflineAddress(address.walletId, amount: bamount)
         }
-                
-        values.removeAll()
 
-        if transaction == .privacy {
-            if isOwn {
-                values.append(TokenValue(name: Localizable.shared.strings.max_privacy_address.uppercased(), value: address.maxPrivacyToken ?? "", info: String.empty()))
-            }
-        }
-        else {
-            values.append(TokenValue(name: "", value: address.onlineToken ?? "", info: String.empty()))
-            values.append(TokenValue(name: "\(Localizable.shared.strings.online_token.uppercased()) (\(Localizable.shared.strings.for_pool.lowercased()))", value: address.walletId, info: String.empty()))
-            
-            if isOwn {
-                values.append(TokenValue(name: "\(Localizable.shared.strings.offline_token.uppercased()) (\(Localizable.shared.strings.for_wallets.lowercased()))", value: address.offlineToken ?? "", info: Localizable.shared.strings.support_10_payments))
-            }
-        } 
+        address.offlineToken = AppModel.sharedManager().generateOfflineAddress(address.walletId, amount: bamount)
     }
     
     public func createAddress() {
@@ -121,15 +89,9 @@ class ReceiveAddressViewModel: NSObject {
             if let result = address {
                 self.address = result
                 self.generateTokens()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.address.duration = 0
-                    AppModel.sharedManager().setExpires(Int32(0), toAddress: self.address.walletId)
-                }
             }
             self.onAddressCreated?(error)
         })
-        
     }
     
     public func revertChanges() {
@@ -154,6 +116,32 @@ class ReceiveAddressViewModel: NSObject {
         return .none
     }
     
+    public func searchForContacts() -> [BMContact] {
+        var contacts = [BMContact]()
+        
+        guard var addresses = AppModel.sharedManager().walletAddresses as? [BMAddress] else {
+            return contacts
+        }
+        
+        let searchText = self.address.label
+        
+        addresses = addresses.filter { $0.isExpired() == false && $0.walletId != self.address.walletId}
+        
+        if !searchText.isEmpty {
+            let filterdObjects = addresses.filter {
+                $0.label.lowercased().contains(searchText.lowercased())
+            }
+            
+            for address in filterdObjects {
+                let contact = BMContact()
+                contact.name = address.label
+                contact.address = address
+                contacts.append(contact)
+            }
+        }
+        
+        return contacts
+    }
     
     public func onCategory() {
         if let top = UIApplication.getTopMostViewController() {
@@ -202,9 +190,6 @@ class ReceiveAddressViewModel: NSObject {
             if let item = selectedItem {
                 switch item.action {
                 case .share_online_token:
-//                    if let token = self.address.token {
-//
-//                    }
                     break
                 case .share_offline_token:
                     if let token = self.address.offlineToken {

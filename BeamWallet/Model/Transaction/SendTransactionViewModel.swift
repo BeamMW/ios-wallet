@@ -31,24 +31,15 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var comment = String.empty()
     public var shieldedInputsFee:UInt64 = 0
     
-    public var outgoindAdderss:BMAddress?
-    public var pickedOutgoingAddress:BMAddress?
-    public var startedAddress:BMAddress?
-
-    public var saveContact = true
-
-    public var selectedContact:BMContact?
+    public var selectedContact:BMContact? {
+        didSet{
+            self.onContactChanged?(true)
+        }
+    }
 
     private var addresses = [BMAddress]()
     public var isToken = false
     public var addressType = BMAddressTypeUnknown
-    
-    public var unlinkOnly = false {
-        didSet {
-            amountError = nil
-            sendAll = false
-        }
-    }
     
     public var selectedCurrency = BEAM
     public var selectedCurrencyString: String {
@@ -71,6 +62,26 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var maxPrivacy = false {
         didSet {            
             calculateFee()
+        }
+    }
+    
+    public var secondAmount:String {
+        get {
+            let feeString = "+ \(fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+            var second = ""
+            if selectedCurrency == BEAM  {
+                second = AppModel.sharedManager().exchangeValue(withZero: Double(inputAmount) ?? 0)
+            }
+            else {
+                second = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 1, amount: Double(inputAmount) ?? 0)
+            }
+            
+            if (Double(inputAmount) ?? 0) > 0 {
+                return second + " (" + feeString + ")"
+            }
+            else {
+                return second
+            }
         }
     }
     
@@ -99,29 +110,20 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var requestedMaxPrivacy = false
     public var requestedOffline = false
     public var isPermanentAddress = false
-    public var maxPrivacyDisabled = false
-    public var offlineTokensCount = -1
     public var isMyAddress = false
     
     public var onDataChanged: (() -> Void)?
     public var onFeeChanged: (() -> Void)?
-
-    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
-        DispatchQueue.main.async {
-            self.offlineTokensCount = Int(tokens)
-            self.onDataChanged?()
-        }
-    }
     
     public var onCalculateChanged : ((Double) -> Void)?
+    public var onContactChanged : ((Bool) -> Void)?
 
+    public var saveContactName = String.empty()
     public var sbbsAddress = String.empty()
     public var toAddress = String.empty() {
         didSet {
             toAddressError = nil
             isPermanentAddress = false
-            maxPrivacyDisabled = false;
-            offlineTokensCount = -1
             isMyAddress = false
             
             if(AppModel.sharedManager().isToken(toAddress)) {
@@ -130,14 +132,14 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 let params = AppModel.sharedManager().getTransactionParameters(toAddress)
                 
                 sbbsAddress = params.address
-                addressType = Int(params.getAddressType())
+                addressType = Int(params.newAddressType)
                 maxPrivacy = params.isMaxPrivacy
                 requestedMaxPrivacy = params.isMaxPrivacy
                 requestedOffline = params.isOffline
                 isPermanentAddress = params.isPermanentAddress
                 
                 if(params.amount > 0) {
-                   amount = String.currency(value: params.amount)
+                    amount = String.currency(value: params.amount).replacingOccurrences(of: " BEAM", with: "")
                 }
                                 
                 isMyAddress = AppModel.sharedManager().isMyAddress(params.address)
@@ -149,12 +151,11 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             }
             else if(AppModel.sharedManager().isValidAddress(toAddress)) {
                 sbbsAddress = toAddress
-                addressType = BMAddressTypeUnknown
+                addressType = BMAddressTypeRegular
                 newVersionError = nil
 
                 isToken = false
 
-                maxPrivacyDisabled = true;
                 requestedMaxPrivacy = false;
                 maxPrivacy = false
                 calculateFee()
@@ -202,12 +203,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var fee = String(0) {
         didSet{
             if sendAll {
-                if unlinkOnly {
-                    amount = AppModel.sharedManager().allUnlinkAmount(Double(fee) ?? 0)
-                }
-                else {
-                    amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
-                }
+                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
             }
         }
     }
@@ -215,12 +211,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var sendAll = false {
         didSet{
             if sendAll {
-                if unlinkOnly {
-                    amount = AppModel.sharedManager().allUnlinkAmount(Double(fee) ?? 0)
-                }
-                else {
-                    amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
-                }
+                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
                 calculateFee()
             }
         }
@@ -228,13 +219,17 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     var transaction: BMTransaction?{
         didSet{
-            if let repeatTransaction = transaction{
-                toAddress = repeatTransaction.receiverAddress
+            if let repeatTransaction = transaction {
+                if repeatTransaction.token.isEmpty {
+                    toAddress = repeatTransaction.receiverAddress
+                }
+                else {
+                    toAddress = repeatTransaction.token
+                }
                 if repeatTransaction.realAmount > 0 {
                     amount = String.currency(value: repeatTransaction.realAmount).replacingOccurrences(of: " BEAM", with: "")
                     comment = repeatTransaction.comment ?? ""
                 }
-
             }
         }
     }
@@ -264,9 +259,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         
         AppModel.sharedManager().addDelegate(self)
         
-        fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
-        
-        generateOutgoindAddress()
+        fee = String(AppModel.sharedManager().getDefaultFeeInGroth())        
     }
     
     deinit {
@@ -279,31 +272,19 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             sendedFee = sendedFee - Double(shieldedInputsFee)
         }
         
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, maxPrivacy: maxPrivacy)
+        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, contactName: saveContactName, maxPrivacy: maxPrivacy)
         
         AppStoreReviewManager.incrementAppTransactions()
     }
     
     public func checkAmountError() {
-        if unlinkOnly {
-            let canSend = AppModel.sharedManager().canSendOnlyUnlink((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
-            
-            if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
-                amountError = canSend
-            }
-            else{
-                amountError = nil
-            }
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+        
+        if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
+            amountError = canSend
         }
-        else {
-            let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
-                
-            if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
-                amountError = canSend
-            }
-            else{
-                amountError = nil
-            }
+        else{
+            amountError = nil
         }
     }
     
@@ -311,14 +292,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         if sendAll {
             if let a = Double(amount), let f = Double(fee) {
                 if a == 0 && f > 0  {
-                    if unlinkOnly {
-                        amount = AppModel.sharedManager().allUnlinkAmount(0)
-                        amountError = AppModel.sharedManager().feeError(f)
-                    }
-                    else {
-                        amount = AppModel.sharedManager().allAmount(0)
-                        amountError = AppModel.sharedManager().feeError(f)
-                    }
+                    amount = AppModel.sharedManager().allAmount(0)
+                    amountError = AppModel.sharedManager().feeError(f)
                 }
                 else if a == 0 {
                     amountError = Localizable.shared.strings.amount_zero
@@ -332,13 +307,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
         let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
         
-        var canSendToMaxPrivacy: String? = nil
-        
-        if(addressType == BMAddressTypeMaxPrivacy) {
-            canSendToMaxPrivacy = AppModel.sharedManager().canSend(toMaxPrivacy: toAddress)
-        }
-        
-        let isError = (!valid || expired || canSend != nil || canSendToMaxPrivacy != nil)
+        let isError = (!valid || expired || canSend != nil)
                
         if isError {
             amountError = nil
@@ -349,9 +318,6 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             }
             else if expired {
                 toAddressError = Localizable.shared.strings.address_is_expired
-            }
-            else if canSendToMaxPrivacy != nil {
-                toAddressError = canSendToMaxPrivacy
             }
             
             if amount.isEmpty {
@@ -365,42 +331,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         return !isError
     }
     
-    private func generateOutgoindAddress() {
-        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
-            if let result = address {
-                DispatchQueue.main.async {
-                    self.outgoindAdderss = result
-                    self.startedAddress = BMAddress.fromAddress(result)
-                }
-            }
-        }
-    }
-    
-    public func revertOutgoingAddress() {
-        if let pickedAddress = self.pickedOutgoingAddress {
-            if pickedAddress.walletId == startedAddress?.walletId {
-                AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
-            }
-            else if pickedAddress.label != outgoindAdderss?.label || pickedAddress.categories != outgoindAdderss?.categories || pickedAddress.duration != outgoindAdderss?.duration {
-                
-                if pickedAddress.duration != outgoindAdderss?.duration {
-                    if pickedAddress.duration > 0 {
-                        pickedAddress.isChangedDate = true
-                    }
-                }
-                
-                AppModel.sharedManager().edit(pickedAddress)
-            }
-            
-            if pickedAddress.walletId != startedAddress?.walletId {
-                AppModel.sharedManager().deleteAddress(startedAddress?.walletId)
-            }
-        }
-        else if let address = outgoindAdderss {
-            AppModel.sharedManager().deleteAddress(address.walletId)
-        }
-    }
-    
+
     public func searchForContacts(searchIndex:Int) -> [BMContact] {
         if searchIndex == 0 {
             var contacts = [BMContact]()
@@ -429,7 +360,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 self.addresses = addresses as! [BMAddress]
             }
             
-            self.addresses = self.addresses.filter { $0.isExpired() == false && $0.walletId != self.outgoindAdderss?.walletId}
+            self.addresses = self.addresses.filter { $0.isExpired() == false}
             
             if !toAddress.isEmpty {
                 let filterdObjects = self.addresses.filter {
@@ -498,40 +429,40 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
         
                 
-        if outgoindAdderss != nil {
-            let fromName = outgoindAdderss?.label
-            let fromCategories = outgoindAdderss?.categoriesName()
-            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
-
-            if fromName != nil || fromCategories != nil {
-                if fromName?.isEmpty == true && fromCategories?.string.isEmpty == true {
-                    items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-                }
-                else {
-                    let detail = NSMutableAttributedString(string: "\(out)\nspace\n\(fromName ?? "")")
-                    let rangeName = (detail.string as NSString).range(of: String(fromName ?? ""))
-                    let spaceRange = (detail.string as NSString).range(of: String("space"))
-                    
-                    detail.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 16), range: rangeName)
-                    detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeName)
-                    
-                    detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
-                    detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
-                    
-                    if fromCategories != nil && fromCategories?.string.isEmpty == false {
-                        detail.append(NSAttributedString(string: " "))
-                        detail.append(fromCategories!)
-                    }
-                    
-                    let toItem = BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
-                    toItem.detailAttributedString = detail
-                    items.append(toItem)
-                }
-            }
-            else {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            }
-        }
+//        if outgoindAdderss != nil {
+//            let fromName = outgoindAdderss?.label
+//            let fromCategories = outgoindAdderss?.categoriesName()
+//            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
+//
+//            if fromName != nil || fromCategories != nil {
+//                if fromName?.isEmpty == true && fromCategories?.string.isEmpty == true {
+//                    items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+//                }
+//                else {
+//                    let detail = NSMutableAttributedString(string: "\(out)\nspace\n\(fromName ?? "")")
+//                    let rangeName = (detail.string as NSString).range(of: String(fromName ?? ""))
+//                    let spaceRange = (detail.string as NSString).range(of: String("space"))
+//
+//                    detail.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 16), range: rangeName)
+//                    detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeName)
+//
+//                    detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
+//                    detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
+//
+//                    if fromCategories != nil && fromCategories?.string.isEmpty == false {
+//                        detail.append(NSAttributedString(string: " "))
+//                        detail.append(fromCategories!)
+//                    }
+//
+//                    let toItem = BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+//                    toItem.detailAttributedString = detail
+//                    items.append(toItem)
+//                }
+//            }
+//            else {
+//                items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+//            }
+//        }
 
         if addressType == BMAddressTypeMaxPrivacy {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.max_privacy_address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
@@ -546,7 +477,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.regular), \(Localizable.shared.strings.permanent.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if addressType == BMAddressTypeShielded {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.offline), \(Localizable.shared.strings.payments_left.lowercased()):  \(self.offlineTokensCount)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.offline)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
@@ -579,23 +510,15 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         return items
     }
     
-    public func isNeedSaveContact() -> Bool {
-        var address = toAddress
-        if (AppModel.sharedManager().isToken(address)) {
-            let params = AppModel.sharedManager().getTransactionParameters(address)
-            address = params.address
-        }
-        
-        let isContactFound = (AppModel.sharedManager().getContactFromId(address) != nil)
-        let isMyAddress = AppModel.sharedManager().isMyAddress(address)
-        return (selectedContact == nil && !isContactFound && !isMyAddress)
+    private func isNeedSaveContact() -> Bool {
+        return (saveContactName.isEmpty)
     }
     
     public func calculateChange() {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
             addressType == BMAddressTypeMaxPrivacy)
         
-        AppModel.sharedManager().calculateFee2((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
+        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
             self.onCalculateChanged?(change)
         }
         

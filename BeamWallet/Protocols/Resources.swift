@@ -160,6 +160,10 @@ func IconScanQr() -> UIImage? {
     return UIImage(named: "iconScanQr")
 }
 
+func IconAddressBookSmall() -> UIImage? {
+    return UIImage(named: "iconAddressBookSmall")
+}
+
 func IconNextPink() -> UIImage? {
     return UIImage(named: "iconNextPink")
 }

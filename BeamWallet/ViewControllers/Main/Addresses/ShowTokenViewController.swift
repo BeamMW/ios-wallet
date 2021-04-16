@@ -31,9 +31,9 @@ class ShowTokenViewController: BaseTableViewController {
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
         
-        var copyButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.brightSkyBlue)
+        var copyButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-180)/2, y: 40, width: 180, height: 44), color: UIColor.main.brightSkyBlue)
         copyButton.setImage(IconCopyBlue(), for: .normal)
-        copyButton.setTitle(Localizable.shared.strings.copy.lowercased(), for: .normal)
+        copyButton.setTitle(Localizable.shared.strings.copy_and_close.lowercased(), for: .normal)
         copyButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         copyButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
         copyButton.addTarget(self, action: #selector(onCopy), for: .touchUpInside)
@@ -55,8 +55,8 @@ class ShowTokenViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        AppModel.sharedManager().addDelegate(self)
+        
+        let addressTitle = self.send ?  Localizable.shared.strings.transaction_type.uppercased() :  Localizable.shared.strings.address_type.uppercased()
         
         if AppModel.sharedManager().isToken(token) {
             let params = AppModel.sharedManager().getTransactionParameters(token)
@@ -66,21 +66,9 @@ class ShowTokenViewController: BaseTableViewController {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
-            if params.isTrueMaxPrivacy {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.max_privacy, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            }
-            else if params.isPublicOffline {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.public_offline, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            }
-            else if params.isMaxPrivacy && !params.isOffline {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.offline, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            }
-            else if params.isMaxPrivacy && params.isOffline {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: (Localizable.shared.strings.offline), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            }
-            else {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-            }
+            let addressType = AppModel.sharedManager().getAddressTypeString(params.newAddressType)
+            items.append(BMMultiLineItem(title:addressTitle, detail:addressType , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+
             
             if  !params.isMaxPrivacy {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: params.isPermanentAddress ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
@@ -104,9 +92,9 @@ class ShowTokenViewController: BaseTableViewController {
                 detail = detail + " (\(Localizable.shared.strings.for_pool.lowercased()))"
             }
 
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type, detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: addressTitle, detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
             
-            if address != nil && address?.isContact == false {
+            if address != nil && address?.isContact == false && send == false {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: address?.duration == 0 ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
 
@@ -132,9 +120,7 @@ class ShowTokenViewController: BaseTableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        AppModel.sharedManager().removeDelegate(self)
+        super.viewWillDisappear(animated)        
     }
     
     @objc private func onCopy() {
@@ -174,35 +160,5 @@ extension ShowTokenViewController : UITableViewDataSource {
             .configured(with: items[indexPath.row])
         cell.increaseSpace = true
         return cell
-    }
-}
-
-extension ShowTokenViewController: WalletModelDelegate {
-    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
-        DispatchQueue.main.async {
-            if tokens >= 0 {
-                let detail = "\(tokens)"
-                
-                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.address_type.uppercased()})
-               
-                let foundIndex = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.payments.uppercased()})
-
-                if let found = foundIndex, found > 0 {
-                    self.items[found].detail = detail
-                }
-                else {
-                    let item = BMMultiLineItem(title: Localizable.shared.strings.payments.uppercased(), detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true)
-                    
-                    if let i = index {
-                        self.items.insert(item, at: i+1)
-                    }
-                    else {
-                        self.items.append(item)
-                    }
-                }
-                
-                self.tableView.reloadData()
-            }
-        }
     }
 }

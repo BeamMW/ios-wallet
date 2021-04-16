@@ -166,8 +166,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
-//-(BMAddress*_Nonnull)generateAddress;
--(BMAddress*_Nonnull)generateWithdrawAddress;
+-(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
 -(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId;
 
 -(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId amount:(double)amount;
@@ -205,24 +204,22 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 -(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name;
 -(void)getPublicAddress:(PublicAddressBlock _Nonnull )block;
+-(NSString*_Nonnull)getAddressTypeString:(BMAddressType)type;
 
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
--(NSString*_Nullable)canSendToMaxPrivacy:(NSString*_Nullable)to;
 -(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from;
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact maxPrivacy:(BOOL)maxPrivacy;
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy;
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
--(NSString*_Nonnull)allUnlinkAmount:(double)fee;
 -(double)realTotal:(double)amount fee:(double)fee;
 -(double)remaining:(double)amount fee:(double)fee;
 -(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token;
 -(void)calculateFee:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
--(void)calculateFee2:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
@@ -285,6 +282,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 //exchange
 -(NSString*_Nonnull)exchangeValue:(double)amount;
+-(NSString*_Nonnull)exchangeValueWithZero:(double)amount;
 -(NSString*_Nonnull)exchangeValueFee:(double)amount;
 -(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount;
 -(NSString*_Nonnull)exchangeValue:(double)amount to:(BMCurrencyType)to;

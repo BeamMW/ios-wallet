@@ -24,7 +24,8 @@ class QRCodeSmallViewController: BaseViewController {
     
     weak var delegate: QRViewControllerDelegate?
     public var onShared : (() -> Void)?
-        
+    public var isMaxPrivacy = false
+    
     @IBOutlet weak private var infoLabel: UILabel!
     @IBOutlet weak private var codeConentView: UIView!
     @IBOutlet weak private var codeView: QRCodeView!
@@ -56,7 +57,12 @@ class QRCodeSmallViewController: BaseViewController {
         
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
                 
-        infoLabel.text = Localizable.shared.strings.receive_notice
+        if isMaxPrivacy {
+            infoLabel.text = Localizable.shared.strings.max_privacy_qr_hint
+        }
+        else {
+            infoLabel.text = Localizable.shared.strings.receive_notice
+        }
                 
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
         

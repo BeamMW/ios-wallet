@@ -27,6 +27,7 @@ class SearchTableView: UITableViewController {
     
     weak var delegate: SearchTableViewDelegate?
 
+    public var displayEmpty = true
     public var contacts = [BMContact]()
     
     override func viewDidLoad() {
@@ -73,7 +74,12 @@ class SearchTableView: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (contacts.count == 0 ? 1 : contacts.count)
+        if displayEmpty {
+            return (contacts.count == 0 ? 1 : contacts.count)
+        }
+        else {
+            return contacts.count
+        }
     }
     
     

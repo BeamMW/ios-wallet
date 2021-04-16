@@ -344,7 +344,7 @@ extension AppDelegate: WalletModelDelegate {
             var oldTransactions = [BMTransaction]()
             
             if let data = UserDefaults.standard.data(forKey: "transactions") {
-                if let array = NSKeyedUnarchiver.unarchiveObject(with: data) as? [BMTransaction] {
+                if let array = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSArray.self, BMTransaction.self], from: data) as? [BMTransaction] {
                     oldTransactions = array
                 }
             }
@@ -357,8 +357,10 @@ extension AppDelegate: WalletModelDelegate {
                 }
             }
             
-            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: transactions), forKey: "transactions")
-            UserDefaults.standard.synchronize()
+            if let data = try? NSKeyedArchiver.archivedData(withRootObject: transactions, requiringSecureCoding: true) {
+                UserDefaults.standard.set(data, forKey: "transactions")
+                UserDefaults.standard.synchronize()
+            }
             
             self.completionHandler?(.newData)
         }

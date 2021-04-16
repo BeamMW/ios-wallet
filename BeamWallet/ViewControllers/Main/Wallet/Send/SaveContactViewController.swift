@@ -25,7 +25,7 @@ class SaveContactViewController: BaseTableViewController {
     private var addressError:String?
     
     private var address:BMAddress!
-    private var isAddContact = false
+    private var isAddContact = true
     private var copyAddress:String?
     
     private lazy var footerView: UIView = {
@@ -163,13 +163,6 @@ class SaveContactViewController: BaseTableViewController {
     }
     
     @objc private func onBack() {
-        if self.isAddContact == false {
-            for tr in AppModel.sharedManager().preparedTransactions as! [BMPreparedTransaction] {
-                tr.saveContact = false
-            }
-            AppModel.sharedManager().deleteAddress(address.walletId)
-        }
-        
         goBack()
     }
     
@@ -269,7 +262,7 @@ extension SaveContactViewController : UITableViewDataSource {
                 cell.delegate = self
                 cell.error = addressError
                 cell.contact = nil
-                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: trim, rightIcon: nil))
+                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: trim, rightIcons: nil))
                 cell.backgroundColor = UIColor.clear
                 cell.contentView.backgroundColor = UIColor.clear
                 cell.copyText = copyAddress
@@ -330,7 +323,6 @@ extension SaveContactViewController : BMCellProtocol {
         if let path = tableView.indexPath(for: sender)  {
             if path.section == 0 {
                 self.addressError = nil
-                
                 self.address.walletId = text
             }
             else{

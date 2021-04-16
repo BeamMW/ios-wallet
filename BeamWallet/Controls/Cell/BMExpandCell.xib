@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,11 +19,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="l1c-7x-pBZ" id="w3j-Kh-6mv">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="70.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8N9-tK-1zB" customClass="NonDisappearingView" customModule="BeamWallet" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="70.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="od9-o3-o1h">
                                 <rect key="frame" x="292" y="31.5" width="13" height="8"/>
@@ -35,7 +33,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ADVANCED" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="saO-8R-AmZ">
-                                <rect key="frame" x="15" y="10" width="227" height="50.5"/>
+                                <rect key="frame" x="15" y="10" width="227" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="nPS-XN-aZ2"/>
                                 </constraints>
@@ -52,7 +50,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="od9-o3-o1h" firstAttribute="centerY" secondItem="8N9-tK-1zB" secondAttribute="centerY" id="b9W-41-YIf"/>
+                            <constraint firstItem="od9-o3-o1h" firstAttribute="centerY" secondItem="saO-8R-AmZ" secondAttribute="centerY" id="b9W-41-YIf"/>
                             <constraint firstAttribute="bottom" secondItem="saO-8R-AmZ" secondAttribute="bottom" constant="10" id="bG1-wx-A2T"/>
                             <constraint firstAttribute="trailing" secondItem="od9-o3-o1h" secondAttribute="trailing" constant="15" id="bLN-fr-Tsw"/>
                             <constraint firstItem="saO-8R-AmZ" firstAttribute="leading" secondItem="8N9-tK-1zB" secondAttribute="leading" constant="15" id="k0j-tx-JJk"/>
@@ -68,12 +66,14 @@
                     <constraint firstItem="8N9-tK-1zB" firstAttribute="leading" secondItem="w3j-Kh-6mv" secondAttribute="leading" id="zKn-a5-z5J"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <viewLayoutGuide key="safeArea" id="VlB-Fd-yTB"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
                 <outlet property="arrowIcon" destination="od9-o3-o1h" id="eqL-ne-KQN"/>
+                <outlet property="botOffset" destination="bG1-wx-A2T" id="dIa-Dd-SBM"/>
                 <outlet property="mainView" destination="8N9-tK-1zB" id="5wO-N5-k0h"/>
                 <outlet property="nameLabel" destination="saO-8R-AmZ" id="XQ5-os-MVL"/>
+                <outlet property="topOffset" destination="y4H-d4-25W" id="oEx-BF-nQ3"/>
             </connections>
             <point key="canvasLocation" x="208.69565217391306" y="109.48660714285714"/>
         </tableViewCell>

@@ -27,7 +27,7 @@ enum {
 };
 typedef int BMNotificationType;
 
-@interface BMNotification : NSObject {
+@interface BMNotification : NSObject <NSSecureCoding> {
 }
 
 @property (nonatomic,strong) NSString * _Nonnull nId;

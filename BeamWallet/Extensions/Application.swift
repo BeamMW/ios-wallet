@@ -25,7 +25,7 @@ extension UIApplication {
     class func appVersion() -> String {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
-        return "\(version).00"
+        return "\(version)"
       //  let build = dictionary["CFBundleVersion"] as! String
       //  return "\(version).\(build)"
     }

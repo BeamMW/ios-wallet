@@ -78,6 +78,7 @@
             <viewLayoutGuide key="safeArea" id="EQz-31-f3u"/>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
+                <outlet property="bottomOffset" destination="DnB-HN-jUH" id="4Et-rD-ExR"/>
                 <outlet property="infoLabel" destination="4dD-W5-ZQb" id="AHn-Pn-fdk"/>
                 <outlet property="mainStack" destination="iKw-bk-4dQ" id="cuA-0a-5GM"/>
                 <outlet property="nameLabel" destination="Tmv-KK-qjS" id="psa-AD-ri2"/>

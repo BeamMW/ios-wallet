@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-Pro-Display-Bold.otf">
-            <string>SFProDisplay-Bold</string>
-        </array>
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
@@ -34,18 +31,6 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klu-d3-QDr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="140"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRANSACTION FEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FB0-DL-Bg2">
-                                <rect key="frame" x="15" y="10" width="290" height="17"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
-                                        <real key="value" value="1.5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2000 GROTH" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-cQ-A4w">
                                 <rect key="frame" x="216.5" y="89.5" width="88.5" height="17"/>
                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
@@ -79,16 +64,15 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="2000" translatesAutoresizingMaskIntoConstraints="NO" id="VkK-iS-lz9" customClass="BMSlider" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="13" y="54" width="294" height="31.5"/>
+                                <rect key="frame" x="13" y="25" width="294" height="60.5"/>
                                 <color key="minimumTrackTintColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="maximumTrackTintColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="0.49724422089041098" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="thumbTintColor" red="0.85490196080000003" green="0.40784313729999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xe8-KX-oK1">
-                                <rect key="frame" x="270" y="0.0" width="50" height="30"/>
+                                <rect key="frame" x="270" y="-5" width="50" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Dci-IL-Sb4"/>
-                                    <constraint firstAttribute="height" constant="30" id="i92-NA-k46"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="5" maxX="5" maxY="0.0"/>
                                 <state key="normal" image="icnKeyboard"/>
@@ -112,18 +96,15 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="0jQ-6o-Fdt" secondAttribute="trailing" constant="15" id="02u-Z3-aNu"/>
-                            <constraint firstItem="FB0-DL-Bg2" firstAttribute="top" secondItem="klu-d3-QDr" secondAttribute="top" constant="10" id="2sh-Cl-GQ5"/>
-                            <constraint firstItem="Xe8-KX-oK1" firstAttribute="top" secondItem="klu-d3-QDr" secondAttribute="top" id="89L-V2-jWF"/>
+                            <constraint firstItem="Xe8-KX-oK1" firstAttribute="top" secondItem="klu-d3-QDr" secondAttribute="top" constant="-5" id="89L-V2-jWF"/>
                             <constraint firstItem="J1p-cQ-A4w" firstAttribute="top" secondItem="VkK-iS-lz9" secondAttribute="bottom" constant="5" id="AJl-k9-1Pz"/>
                             <constraint firstAttribute="bottom" secondItem="J1p-cQ-A4w" secondAttribute="bottom" constant="33.5" id="C2g-PJ-icx"/>
                             <constraint firstItem="coB-DO-UM4" firstAttribute="top" secondItem="koK-pm-Nfk" secondAttribute="bottom" constant="3" id="D0q-tP-D4O"/>
-                            <constraint firstAttribute="trailing" secondItem="FB0-DL-Bg2" secondAttribute="trailing" constant="15" id="DKM-QL-jgB"/>
                             <constraint firstAttribute="trailing" secondItem="J1p-cQ-A4w" secondAttribute="trailing" constant="15" id="IpB-DD-OnY"/>
                             <constraint firstAttribute="trailing" secondItem="Xe8-KX-oK1" secondAttribute="trailing" id="NFi-Y8-wec"/>
                             <constraint firstItem="koK-pm-Nfk" firstAttribute="leading" secondItem="klu-d3-QDr" secondAttribute="leading" constant="15" id="NaC-CO-iq5"/>
-                            <constraint firstItem="FB0-DL-Bg2" firstAttribute="leading" secondItem="klu-d3-QDr" secondAttribute="leading" constant="15" id="SMT-0Z-NSb"/>
                             <constraint firstAttribute="bottom" secondItem="koK-pm-Nfk" secondAttribute="bottom" constant="33.5" id="WYV-Ny-Dne"/>
-                            <constraint firstItem="VkK-iS-lz9" firstAttribute="top" secondItem="FB0-DL-Bg2" secondAttribute="bottom" constant="27" id="f68-VT-S50"/>
+                            <constraint firstItem="VkK-iS-lz9" firstAttribute="top" secondItem="klu-d3-QDr" secondAttribute="top" constant="25" id="bg8-Ew-3PN"/>
                             <constraint firstItem="koK-pm-Nfk" firstAttribute="top" secondItem="VkK-iS-lz9" secondAttribute="bottom" constant="5" id="gcz-R8-2Om"/>
                             <constraint firstItem="VkK-iS-lz9" firstAttribute="leading" secondItem="klu-d3-QDr" secondAttribute="leading" constant="15" id="jUy-sd-3gm"/>
                             <constraint firstItem="coB-DO-UM4" firstAttribute="leading" secondItem="klu-d3-QDr" secondAttribute="leading" constant="15" id="jap-Tg-tbl"/>
@@ -148,8 +129,6 @@
                 <outlet property="maxSecondLabel" destination="0jQ-6o-Fdt" id="1hu-It-uqk"/>
                 <outlet property="minLabel" destination="koK-pm-Nfk" id="Y9c-dR-BFN"/>
                 <outlet property="minSecondLabel" destination="coB-DO-UM4" id="2GV-JM-oMl"/>
-                <outlet property="titleLabel" destination="FB0-DL-Bg2" id="t4Y-DZ-Fm0"/>
-                <outlet property="topOffset" destination="f68-VT-S50" id="aAZ-dz-FBk"/>
                 <outlet property="valueLabel" destination="OEr-mN-SqI" id="asy-Dp-ZEj"/>
             </connections>
             <point key="canvasLocation" x="97.101449275362327" y="114.50892857142857"/>

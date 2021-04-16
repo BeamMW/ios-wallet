@@ -28,8 +28,7 @@
 @property (nonatomic,strong) NSString * _Nonnull address;
 @property (nonatomic,strong) NSString * _Nonnull comment;
 @property (nonatomic,strong) NSString * _Nonnull ID;
-@property (nonatomic,strong) NSString * _Nullable from;
-@property (nonatomic,assign) BOOL saveContact;
+@property (nonatomic,strong) NSString * _Nonnull contactName;
 @property (nonatomic,assign) BOOL maxPrivacy;
 
 

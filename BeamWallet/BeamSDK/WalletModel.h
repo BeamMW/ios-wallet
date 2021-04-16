@@ -35,7 +35,8 @@ public:
     
 
     bool pre_connected_status;
-    
+    RecoveryProgress recoveryProgress;
+
     std::vector<beam::wallet::WalletAddress> ownAddresses;
     std::vector<beam::wallet::WalletAddress> contacts;
     std::map<uint64_t, beam::wallet::ShieldedCoin> shieldedCoins;
@@ -50,15 +51,15 @@ private:
     NSString *GetUTXOTypeString(beam::wallet::Coin coin);
     NSString *GetShildedUTXOStatusString(beam::wallet::ShieldedCoin coin);
     NSString *GetShildedUTXOTypeString(beam::wallet::ShieldedCoin coin);
-    NSString* GetCurrencyString(beam::wallet::ExchangeRate::Currency type);
+    int getCurrency(beam::wallet::Currency currency);
+    
     void doFunction(const std::function<void()>& func);
     void onWalletStatusInternal(const beam::wallet::WalletStatus& newStatus);
-    
     void onStatus(const beam::wallet::WalletStatus& status) override;
     void onTxStatus(beam::wallet::ChangeAction, const std::vector<beam::wallet::TxDescription>& items) override;
     void onSyncProgressUpdated(int done, int total) override;
-  //  void onAllUtxoChanged(const std::vector<beam::wallet::Coin>& utxos) override;
-    void onAllUtxoChanged(beam::wallet::ChangeAction , const std::vector<beam::wallet::Coin>& utxos) override;
+    void onNormalCoinsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Coin>& utxos) override;
+    void onShieldedCoinChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::ShieldedCoin>& items) override;
     void onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs) override;
     void onGeneratedNewAddress(const beam::wallet::WalletAddress& walletAddr) override;
     void onNewAddressFailed() override;
@@ -71,18 +72,11 @@ private:
     void onCoinsByTx(const std::vector<beam::wallet::Coin>& coins) override;
     void onAddressChecked(const std::string& addr, bool isValid) override;
     void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
-    void onNoDeviceConnected() override;
-
     void onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) override;
-    void onShieldedCoinChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::ShieldedCoin>& items) override;
-
-    void onShieldedCoinsSelectionCalculated(const beam::wallet::ShieldedCoinsSelectionInfo& selectionRes) override;
-    void onNeedExtractShieldedCoins(bool val) override;
-    
+    void onChangeCalculated(beam::Amount changeAsset, beam::Amount changeBeam, beam::Asset::ID assetId) override;
+    void onCoinsSelectionCalculated(const beam::wallet::CoinsSelectionInfo&) override;
     void onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&) override;
     void onNotificationsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Notification>&) override;
-
-    void onSwapParamsLoaded(const beam::ByteBuffer& token) override;
     void onImportDataFromJson(bool isOk) override;
     void onExportDataToJson(const std::string& data) override;
     void onPostFunctionToClientContext(MessageFunction&& func) override;

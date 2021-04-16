@@ -25,7 +25,6 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var textField: BMTextView!
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var errorLabel: UILabel!
-    @IBOutlet private weak var rightButton: UIButton!
     @IBOutlet private weak var showTokenButton: UIButton!
     @IBOutlet private weak var additionalErrorLabel: UILabel!
     @IBOutlet private weak var addressTypeLabel: UILabel!
@@ -34,7 +33,10 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var contactName: UILabel!
     @IBOutlet private weak var contactCategory: UILabel!
     @IBOutlet private weak var iconView: UIView!
+    @IBOutlet private weak var buttonsStackView: UIStackView!
 
+    private var rightButtons = [UIButton]()
+    
     @IBOutlet var nameLabelTopOffset: NSLayoutConstraint!
     @IBOutlet var stackBotOffset: NSLayoutConstraint!
 
@@ -43,7 +45,22 @@ class BMSearchAddressCell: BaseCell {
     public var validateAddress = false
     
     public var copyText: String?
+    public var titleColor: UIColor? {
+        didSet {
+            if let color = titleColor {
+                nameLabel.textColor = color
+            }
+        }
+    }
     
+    public var placeholder: String? {
+        didSet {
+            if let placeholder = placeholder {
+                textField.placeholder = placeholder
+            }
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -52,6 +69,7 @@ class BMSearchAddressCell: BaseCell {
         nameLabel.isUserInteractionEnabled = true
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         
+        textField.alwaysVisibleClearButton = true
         textField.placholderFont = ItalicFont(size: 16)
         textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
         textField.placeholder = Localizable.shared.strings.send_address_placholder
@@ -77,42 +95,17 @@ class BMSearchAddressCell: BaseCell {
         _ = textField.becomeFirstResponder()
     }
     
-    public var offlineTokensCount = 0 {
-        didSet {
-            if let text = addressTypeLabel.text {
-                if (addressType == BMAddressTypeShielded && offlineTokensCount >= 0 && text.contains(Localizable.shared.strings.offline_address)) {
-                    addressTypeLabel.text = Localizable.shared.strings.offline_address + ". " + Localizable.shared.strings.payments_left + ": \(offlineTokensCount)"
-                }
-            }
-        }
-    }
     
     public var addressType: BMAddressType = BMAddressType(BMAddressTypeRegular) {
         didSet {
-            if(!textField.text.isEmpty) {
-                if addressType == BMAddressTypeMaxPrivacy {
-                    addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.max_privacy_address
-                }
-                else if addressType == BMAddressTypeRegular {
-                    addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.one_time_expire_text
-                }
-                else if addressType == BMAddressTypeOfflinePublic {
-                    addressTypeLabel.text = Localizable.shared.strings.public_offline_address
-                }
-                else if addressType == BMAddressTypeRegularPermanent {
-                    addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.perm_token.replacingOccurrences(of: ".", with: "")
-                }
-                else if addressType == BMAddressTypeShielded {
-                    addressTypeLabel.isHidden = false
-                    addressTypeLabel.text = Localizable.shared.strings.offline_address
-                }
-                else {
-                    addressTypeLabel.isHidden = true
-                }
+            if(!textField.text.isEmpty && addressType != BMAddressTypeUnknown) {
+                let title = AppModel.sharedManager().getAddressTypeString(addressType)
+                addressTypeLabel.isHidden = false
+                addressTypeLabel.text = title
                 addressTypeLabel.font = ItalicFont(size: 14)
+            }
+            else {
+                addressTypeLabel.isHidden = true
             }
         }
     }
@@ -181,31 +174,32 @@ class BMSearchAddressCell: BaseCell {
             if AppModel.sharedManager().isValidAddress(text) {
                 textField.text = "\(text.prefix(6))...\(text.suffix(6))"
                 showTokenButton.isHidden = false
-//                let length = text.lengthOfBytes(using: .utf8)
-//                if length > 12 && !AppModel.sharedManager().isToken(text) {
-//                    let att = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: RegularFont(size: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
-//                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: 0, length: 6))
-//                    att.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.heliotrope, range: NSRange(location: length - 6, length: 6))
-//
-//                    textField.attributedText = att
-//                }
-//                else {
-//                    textField.text = "\(text.prefix(6))...\(text.suffix(6))"
-//                    showTokenButton.isHidden = false
-//                }
+                
+                for btn in rightButtons {
+                    btn.isHidden = true
+                }
             }
             else {
                 textField.text = string
             }
         }
         else {
+            for btn in rightButtons {
+                btn.isHidden = false
+            }
+            
             token = ""
             textField.text = string
         }
     }
     
     @IBAction func onRightButton(sender: UIButton) {
-        delegate?.onRightButton?(self)
+        if sender.tag == 1 {
+            _ = self.textField.becomeFirstResponder()
+        }
+        else {
+            delegate?.onRightButton?(self)
+        }
     }
     
     @IBAction func onShowToken(sender: UIButton) {
@@ -240,12 +234,14 @@ extension BMSearchAddressCell: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
+        buttonsStackView.isHidden = false
         delegate?.textValueDidReturn?(self)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.textValueDidBegin?(self)
         showTokenButton.isHidden = true
+        buttonsStackView.isHidden = true
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -278,14 +274,37 @@ extension BMSearchAddressCell: UITextViewDelegate {
 }
 
 extension BMSearchAddressCell: Configurable {
-    func configure(with options: (name: String, value: String, rightIcon: UIImage?)) {
+    
+    func setData(with options: (name: String, value: String)) {
+        nameLabel.text = options.name
+        nameLabel.letterSpacing = 2
+        checkAttributes(string: options.value)
+    }
+    
+    func configure(with options: (name: String, value: String, rightIcons: [UIImage?]?)) {
         nameLabel.text = options.name
         nameLabel.letterSpacing = 2
         
-        if let icon = options.rightIcon {
-            rightButton.setImage(icon, for: .normal)
+        for button in rightButtons {
+            buttonsStackView.removeArrangedSubview(button)
+        }
+        rightButtons.removeAll()
+        
+        
+        if let icons = options.rightIcons {
+            for icon in icons {
+                let button = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
+                button.setImage(icon, for: .normal)
+                button.tag = buttonsStackView.arrangedSubviews.count
+                button.addTarget(self, action: #selector(onRightButton(sender:)), for: .touchUpInside)
+                button.heightAnchor.constraint(equalToConstant: 36).isActive = true
+                button.widthAnchor.constraint(equalToConstant: 36).isActive = true
+                buttonsStackView.addArrangedSubview(button)
+                rightButtons.append(button)
+            }
         }
         
+        buttonsStackView.setNeedsLayout()
         checkAttributes(string: options.value)
     }
 }

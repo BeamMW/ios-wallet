@@ -27,6 +27,10 @@
 
 @implementation BMTransaction
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
     [encoder encodeObject:self.ID forKey: @"ID"];

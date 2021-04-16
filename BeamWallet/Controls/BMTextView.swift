@@ -25,7 +25,7 @@ class BMTextView: UITextViewPlacholder {
     var line = UIView()
     
     public var defaultOffset:CGFloat = 12
-    
+
     private var _lineColor:UIColor?
     private var _lineHeight:CGFloat = 2
     
@@ -97,6 +97,10 @@ class BMTextView: UITextViewPlacholder {
             clearButton.isHidden = false
             textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
         }
+        else if alwaysVisibleClearButton {
+            clearButton.isHidden = false
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
+        }
 
         return super.becomeFirstResponder()
     }
@@ -111,10 +115,14 @@ class BMTextView: UITextViewPlacholder {
     }
     
     @objc private func onClear() {
+        if self.attributedText.string.isEmpty {
+            self.isClearPressed = true
+        }
         self.attributedText = nil
         self.text = nil
         _ = self.delegate?.textView?(self, shouldChangeTextIn: NSRange(location: 0, length: 0), replacementText: String.empty())
         self.delegate?.textViewDidChange?(self)
+        self.isClearPressed = false
     }
 }
 

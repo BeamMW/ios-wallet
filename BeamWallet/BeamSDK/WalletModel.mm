@@ -36,9 +36,6 @@ using namespace beam::io;
 using namespace beam::wallet;
 using namespace std;
 
-//using namespace beam;
-//using namespace beam::io;
-//using namespace std;
 
 NSString *const AppErrorDomain = @"beam.mw";
 NSTimer *timer;
@@ -50,7 +47,7 @@ namespace
 }
 
 WalletModel::WalletModel(IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor)
-: WalletClient(walletDB, nodeAddr, reactor)
+: WalletClient(Rules::get(), walletDB, nodeAddr, reactor)
 {
     pre_connected_status = true;
 }
@@ -69,22 +66,22 @@ void WalletModel::onStatus(const WalletStatus& status)
 {
     NSLog(@"onStatus");
         
-    auto wstatus = status.GetBeamStatus();
-
+    auto beamStatus = status.GetBeamStatus();
+    
     BMWalletStatus *walletStatus = [[BMWalletStatus alloc] init];
-    walletStatus.available = wstatus.available + wstatus.shielded;
-    walletStatus.receiving = wstatus.receiving;
-    walletStatus.maturing = wstatus.maturing;
-    walletStatus.sending = wstatus.sending;
-    walletStatus.shielded = wstatus.shielded;
-    walletStatus.maxPrivacy = wstatus.maturingMP;
+    walletStatus.available = AmountBig::get_Lo(beamStatus.available) + AmountBig::get_Lo(beamStatus.shielded);
+    walletStatus.receiving = AmountBig::get_Lo(beamStatus.receiving);
+    walletStatus.maturing = AmountBig::get_Lo(beamStatus.maturing);
+    walletStatus.sending = AmountBig::get_Lo(beamStatus.sending);
+    walletStatus.shielded = AmountBig::get_Lo(beamStatus.shielded);
+    walletStatus.maxPrivacy = AmountBig::get_Lo(beamStatus.maturingMP);
 
-    walletStatus.realAmount = (double(int64_t(wstatus.available)) / Rules::Coin) + (double(int64_t(wstatus.shielded)) / Rules::Coin);
-    walletStatus.realMaturing = double(int64_t(wstatus.maturing)) / Rules::Coin;
-    walletStatus.realSending = double(int64_t(wstatus.sending)) / Rules::Coin;
-    walletStatus.realReceiving = double(int64_t(wstatus.receiving)) / Rules::Coin;
-    walletStatus.realShielded = double(int64_t(wstatus.shielded)) / Rules::Coin;
-    walletStatus.realMaxPrivacy = double(int64_t(wstatus.maturingMP)) / Rules::Coin;
+    walletStatus.realAmount = (double(int64_t(AmountBig::get_Lo(beamStatus.available))) / Rules::Coin) + (double(int64_t(AmountBig::get_Lo(beamStatus.shielded))) / Rules::Coin);
+    walletStatus.realMaturing = double(int64_t(AmountBig::get_Lo(beamStatus.maturing))) / Rules::Coin;
+    walletStatus.realSending = double(int64_t(AmountBig::get_Lo(beamStatus.sending))) / Rules::Coin;
+    walletStatus.realReceiving = double(int64_t(AmountBig::get_Lo(beamStatus.receiving))) / Rules::Coin;
+    walletStatus.realShielded = double(int64_t(AmountBig::get_Lo(beamStatus.shielded))) / Rules::Coin;
+    walletStatus.realMaxPrivacy = double(int64_t(AmountBig::get_Lo(beamStatus.maturingMP))) / Rules::Coin;
 
     walletStatus.currentHeight = [NSString stringWithUTF8String:to_string(status.stateID.m_Height).c_str()];
     walletStatus.currentStateHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, 15).c_str()];;
@@ -140,9 +137,7 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
     {
         auto kernelId = to_hex(item.m_kernelID.m_pData, item.m_kernelID.nBytes);
         std::string comment(item.m_message.begin(), item.m_message.end());
-        
-        Amount shieldedFee = GetShieldedFee(item) + item.m_fee;
-           
+                   
         BMTransaction *transaction = [BMTransaction new];
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
@@ -159,8 +154,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.identity = [NSString stringWithUTF8String:item.getIdentity(item.m_sender).c_str()];
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
         transaction.isSelf = item.m_selfTx;
-        transaction.fee = double(int64_t(shieldedFee)) / Rules::Coin;
-        transaction.realFee = int64_t(shieldedFee);
+        transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
+        transaction.realFee = int64_t(item.m_fee);
 
         transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
         transaction.canCancel = item.canCancel();
@@ -317,7 +312,7 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
 }
 
 
-void WalletModel::onAllUtxoChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Coin>& utxos) {
+void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::Coin>& utxos) {
 
     NSLog(@"onAllUtxoChanged");
 
@@ -553,9 +548,10 @@ void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walle
     address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
     address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
 
-    getAsync()->saveAddress(walletAddr, true);
+    getAsync()->saveAddress(walletAddr);
+   // [AppModel sharedManager].generatedNewAddressBlock(address, nil);
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [AppModel sharedManager].generatedNewAddressBlock(address, nil);
     });
 }
@@ -742,16 +738,8 @@ void WalletModel::onAddressChecked(const std::string& addr, bool isValid){
     NSLog(@"onAddressChecked");
 }
 
-void WalletModel::onNoDeviceConnected(){
-    NSLog(@"onNoDeviceConnected");
-}
-
 void WalletModel::onImportRecoveryProgress(uint64_t done, uint64_t total){
-    NSLog(@"onImportRecoveryProgress");
-}
-
-void WalletModel::onSwapParamsLoaded(const beam::ByteBuffer& token) {
-    NSLog(@"onSwapParamsLoaded");
+    recoveryProgress.OnProgress(done, total);
 }
 
 void WalletModel::onImportDataFromJson(bool isOk) {
@@ -790,22 +778,21 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
     getAsync()->getAddresses(false);
 }
 
-
 void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
 
     for (int i=0; i<rates.size(); i++) {
         auto rate = rates[i];
-        
+                
         BMCurrency *currency = [BMCurrency new];
         currency.value = rate.m_rate;
         currency.realValue = double(int64_t(rate.m_rate)) / Rules::Coin;
-        
-        if (rate.m_unit == beam::wallet::ExchangeRate::Currency::Usd) {
+    
+        if (rate.m_to == Currency::USD() && rate.m_from == Currency::BEAM()) {
             currency.type = BMCurrencyUSD;
             currency.maximumFractionDigits = 2;
             currency.code = @"USD";
         }
-        else if (rate.m_unit == beam::wallet::ExchangeRate::Currency::Bitcoin) {
+        else if (rate.m_to == Currency::BTC() && rate.m_from == Currency::BEAM()) {
             currency.type = BMCurrencyBTC;
             currency.maximumFractionDigits = 10;
             currency.code = @"BTC";
@@ -824,8 +811,6 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
         if (!found) {
             [[[AppModel sharedManager] currencies] addObject:currency];
         }
-        
-        NSLog(@"onExchangeRates %@ -> %@ = %llu", GetCurrencyString(rate.m_currency), GetCurrencyString(rate.m_unit), rate.m_rate);
     }
     
     if(rates.size() == 0) {
@@ -1170,9 +1155,7 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
             break;
     }
     
-    
-
-    
+        
     for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
@@ -1181,26 +1164,16 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
     }
 }
 
-void WalletModel::onShieldedCoinsSelectionCalculated(const ShieldedCoinsSelectionInfo& selectionRes)
+void WalletModel::onChangeCalculated(beam::Amount changeAsset, beam::Amount changeBeam, beam::Asset::ID assetId)
 {
-    auto result = selectionRes.minimalFee;
-    auto change = selectionRes.changeBeam;
-    if ([AppModel sharedManager].isMaxPrivacyRequest) {
-        change = selectionRes.changeBeam + selectionRes.shieldedInputsFee;
-    }
-    
-    auto shieldedInputsFee = selectionRes.shieldedInputsFee;
-
-    double amount = double(int64_t(change)) / Rules::Coin;
-
-    [AppModel sharedManager].feecalculatedBlock(result, amount, shieldedInputsFee);
-
-    NSLog(@"onShieldedCoinsSelectionCalculated");
+    NSLog(@"onChangeCalculated");
 }
 
-void WalletModel::onNeedExtractShieldedCoins(bool val)
+void WalletModel::onCoinsSelectionCalculated(const CoinsSelectionInfo& selectionRes)
 {
-    NSLog(@"onNeedExtractShieldedCoins");
+    NSLog(@"onCoinsSelectionCalculated");
+    
+    [AppModel sharedManager].feecalculatedBlock(selectionRes.m_minimalExplicitFee, selectionRes.m_changeBeam, 0);
 }
 
 void WalletModel::onPublicAddress(const std::string& publicAddr)
@@ -1209,24 +1182,6 @@ void WalletModel::onPublicAddress(const std::string& publicAddr)
     [AppModel sharedManager].getPublicAddressBlock(address);
 }
 
-NSString* WalletModel::GetCurrencyString(beam::wallet::ExchangeRate::Currency type)
-{
-   switch (type)
-    {
-        case beam::wallet::ExchangeRate::Currency::Beam:
-            return @"Beam";
-        case beam::wallet::ExchangeRate::Currency::Bitcoin:
-            return @"Bitcoin";
-        case beam::wallet::ExchangeRate::Currency::Litecoin:
-            return @"Litecoin";
-        case beam::wallet::ExchangeRate::Currency::Qtum:
-            return @"Qtum";
-        case beam::wallet::ExchangeRate::Currency::Usd:
-            return @"USD";
-        default:
-            return @"Unexpected error!";
-    }
-}
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
 {
@@ -1323,18 +1278,58 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
 
 NSString* WalletModel::GetTransactionFailurString(TxFailureReason reason)
 {
-    NSArray *reasons = @[[[@"tx_status_unknown" localized] lowercaseString],
-                         [[@"tx_status_cancelled" localized] lowercaseString],
-                         [[@"tx_status_signature" localized] lowercaseString],
-                         [[@"tx_status_register" localized] lowercaseString],
-                         [[@"tx_status_not_valid" localized] lowercaseString],
-                         [[@"tx_status_invalid_kernel" localized] lowercaseString],
-                         [[@"tx_status_params" localized] lowercaseString],
-                         [[@"tx_status_no_inputs" localized] lowercaseString],
-                         [[@"tx_status_expired_address" localized] lowercaseString],
-                         [[@"tx_status_failed_parameter" localized] lowercaseString],
-                         [[@"tx_status_expired" localized] lowercaseString],
-                         [[@"tx_status_not_signed" localized] lowercaseString]];
+    NSArray *reasons = @[[[@"tx_failure_undefined" localized] lowercaseString],
+                         [[@"tx_failure_cancelled" localized] lowercaseString],
+                         [[@"tx_failure_receiver_signature_invalid" localized] lowercaseString],
+                         [[@"tx_failure_not_registered_in_blockchain" localized] lowercaseString],
+                         [[@"tx_failure_not_valid" localized] lowercaseString],
+                         [[@"tx_failure_kernel_invalid" localized] lowercaseString],
+                         [[@"tx_failure_parameters_not_sended" localized] lowercaseString],
+                         [[@"tx_failure_no_inputs" localized] lowercaseString],
+                         [[@"tx_failure_addr_expired" localized] lowercaseString],
+                         [[@"tx_failure_parameters_not_readed" localized] lowercaseString],
+                         [[@"tx_failure_time_out" localized] lowercaseString],
+                         [[@"tx_failure_not_signed_by_receiver" localized] lowercaseString],
+                         [[@"tx_failure_max_height_to_high" localized] lowercaseString],
+                         [[@"tx_failure_invalid_state" localized] lowercaseString],
+                         [[@"tx_failure_subtx_failed" localized] lowercaseString],
+                         [[@"tx_failure_invalid_contract_amount" localized] lowercaseString],
+                         [[@"tx_failure_invalid_sidechain_contract" localized] lowercaseString],
+                         [[@"tx_failure_sidechain_internal_error" localized] lowercaseString],
+                         [[@"tx_failure_sidechain_network_error" localized] lowercaseString],
+                         [[@"tx_failure_invalid_sidechain_response_format" localized] lowercaseString],
+                         [[@"tx_failure_invalid_side_chain_credentials" localized] lowercaseString],
+                         [[@"tx_failure_not_enough_time_btc_lock" localized] lowercaseString],
+                         [[@"tx_failure_create_multisig" localized] lowercaseString],
+                         [[@"tx_failure_fee_too_small" localized] lowercaseString],
+                         [[@"tx_failure_fee_too_large" localized] lowercaseString],
+                         [[@"tx_failure_kernel_min_height" localized] lowercaseString],
+                         [[@"tx_failure_loopback" localized] lowercaseString],
+                         [[@"tx_failure_key_keeper_no_initialized" localized] lowercaseString],
+                         [[@"tx_failure_invalid_asset_id" localized] lowercaseString],
+                         [[@"tx_failure_asset_invalid_info" localized] lowercaseString],
+                         [[@"tx_failure_asset_invalid_metadata" localized] lowercaseString],
+                         [[@"tx_failure_asset_invalid_id" localized] lowercaseString],
+                         [[@"tx_failure_asset_confirmation" localized] lowercaseString],
+                         [[@"tx_failure_asset_in_use" localized] lowercaseString],
+                         [[@"tx_failure_asset_locked" localized] lowercaseString],
+                         [[@"tx_failure_asset_small_fee" localized] lowercaseString],
+                         [[@"tx_failure_invalid_asset_amount" localized] lowercaseString],
+                         [[@"tx_failure_invalid_data_for_payment_proof" localized] lowercaseString],
+                         [[@"tx_failure_there_is_no_master_key" localized] lowercaseString],
+                         [[@"tx_failure_keeper_malfunctioned" localized] lowercaseString],
+                         [[@"tx_failure_aborted_by_user" localized] lowercaseString],
+                         [[@"tx_failure_asset_exists" localized] lowercaseString],
+                         [[@"tx_failure_asset_invalid_owner_id" localized] lowercaseString],
+                         [[@"tx_failure_assets_disabled" localized] lowercaseString],
+                         [[@"tx_failure_no_vouchers" localized] lowercaseString],
+                         [[@"tx_failure_assets_fork2" localized] lowercaseString],
+                         [[@"tx_failure_out_of_slots" localized] lowercaseString],
+                         [[@"tx_failure_shielded_coin_fee" localized] lowercaseString],
+                         [[@"tx_failure_assets_disabled_receiver" localized] lowercaseString],
+                         [[@"tx_failure_assets_disabled_blockchain" localized] lowercaseString],
+                         [[@"tx_failure_identity_required" localized] lowercaseString],
+                         [[@"tx_failure_cannot_get_vouchers" localized] lowercaseString]];
     
     if(reason >= reasons.count) {
         return @"";

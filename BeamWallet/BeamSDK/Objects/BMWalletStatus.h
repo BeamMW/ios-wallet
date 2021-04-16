@@ -19,7 +19,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BMWalletStatus : NSObject {
+@interface BMWalletStatus : NSObject <NSSecureCoding> {
 
 }
 

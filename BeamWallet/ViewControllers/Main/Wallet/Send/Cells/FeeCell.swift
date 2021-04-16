@@ -26,13 +26,11 @@ class FeeCell: BaseCell {
     @IBOutlet weak private var maxLabel: UILabel!
     @IBOutlet weak private var feeSlider: BMSlider!
     @IBOutlet weak private var mainView: UIView!
-    @IBOutlet weak private var titleLabel: UILabel!    
-    @IBOutlet weak private var topOffset: NSLayoutConstraint!
 
     @IBOutlet weak private var minSecondLabel: UILabel!
     @IBOutlet weak private var maxSecondLabel: UILabel!
 
-    private var valueY:CGFloat = 35
+    private var valueY:CGFloat = 0
     private let stepValue:Float = 10
     private var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
 
@@ -58,9 +56,7 @@ class FeeCell: BaseCell {
         minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
         minSecondLabel.text = AppModel.sharedManager().exchangeValueFee(Double(feeSlider.minimumValue))
 
-        titleLabel.text = Localizable.shared.strings.transaction_fee.uppercased()
         if Settings.sharedManager().isDarkMode {
-            titleLabel.textColor = UIColor.main.steel
             feeSlider.maximumTrackTintColor = UIColor.white.withAlphaComponent(0.02)
         }
 
@@ -128,8 +124,8 @@ class FeeCell: BaseCell {
         
         var x = sliderFrm.origin.x
 
-        if ((x + valueLabel.frame.size.width) > (UIScreen.main.bounds.size.width - 15)) {
-            x = UIScreen.main.bounds.size.width - 15 - valueLabel.frame.size.width
+        if ((x + valueLabel.frame.size.width) > (UIScreen.main.bounds.size.width - 70)) {
+            x = UIScreen.main.bounds.size.width - 70 - valueLabel.frame.size.width
         }
         else if (x < 15) {
             x = 15
@@ -159,34 +155,7 @@ extension FeeCell: Configurable {
         maxLabel.text = String(Int(feeSlider.maximumValue)) + Localizable.shared.strings.groth
         
     }
-    
-    func setType(type: BMTransactionType) {
-        self.type = type
         
-        switch type {
-        case 1:
-            valueY = 45
-            
-            topOffset.constant = 40
-            
-            titleLabel.text = Localizable.shared.strings.unlinking_fee.uppercased()
-            titleLabel.letterSpacing = 1.5
-            
-            feeSlider.setThumbImage(SliderDotGreen(), for: .normal)
-            feeSlider.setThumbImage(SliderDotGreen(), for: .highlighted)
-            feeSlider.minimumValue = Float(AppModel.sharedManager().getMinUnlinkFeeInGroth())
-            feeSlider.minimumTrackTintColor = UIColor.main.brightTeal
-            
-            minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
-            
-            valueLabel.textColor = UIColor.main.brightTeal
-            
-            break
-        default:
-            return
-        }
-    }
-    
     func configure(with fee:Double) {
         if fee > Double(feeSlider.maximumValue) {
             feeSlider.maximumValue = Float(fee)

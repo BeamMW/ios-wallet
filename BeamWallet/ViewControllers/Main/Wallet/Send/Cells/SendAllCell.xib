@@ -112,6 +112,7 @@
             <connections>
                 <outlet property="allButton" destination="6P6-9T-9EC" id="EXc-xn-Fyg"/>
                 <outlet property="amountLabel" destination="xSg-t8-b8s" id="Erc-Er-fc2"/>
+                <outlet property="bottomOffset" destination="jVF-Qg-pRI" id="hqi-Lc-PGB"/>
                 <outlet property="secondAvailableLabel" destination="ZcT-bu-dHQ" id="0Xm-71-nmD"/>
                 <outlet property="titleLabel" destination="8qE-nX-ICN" id="rNA-1m-bEe"/>
             </connections>

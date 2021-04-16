@@ -27,6 +27,11 @@ class BMAmountCell: BaseCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var currencyLabel: UILabel!
     @IBOutlet weak private var erorLabel: UILabel!
+    @IBOutlet weak private var secondCurrencyLabel: UILabel!
+
+    @IBOutlet var topNameOffset: NSLayoutConstraint!
+    @IBOutlet var topStackOffset: NSLayoutConstraint!
+    @IBOutlet var botStackOffset: NSLayoutConstraint!
 
     public var fee:Double = 0
     
@@ -37,6 +42,28 @@ class BMAmountCell: BaseCell {
 
     private var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
 
+    public var titleColor: UIColor? {
+        didSet {
+            if let color = titleColor {
+                nameLabel.textColor = color
+            }
+        }
+    }
+    
+    public var hideNameLabel:Bool? = nil
+    {
+        didSet {
+            if let hide = hideNameLabel {
+                nameLabel.isHidden = hide
+                nameLabel.text = nil
+                topNameOffset.constant = 0
+                topStackOffset.constant = 0
+                botStackOffset.constant = 20
+            }
+        }
+    }
+    
+    
     public var error:String?
     {
         didSet{
@@ -83,6 +110,9 @@ class BMAmountCell: BaseCell {
         
         selectionStyle = .none
         
+        secondCurrencyLabel.textColor = UIColor.main.blueyGrey
+        secondCurrencyLabel.font = RegularFont(size: 14)
+        
         erorLabel.textColor = UIColor.main.red
         erorLabel.isHidden = true
         erorLabel.text = nil
@@ -100,6 +130,7 @@ class BMAmountCell: BaseCell {
         textField.placeHolderFont = RegularFont(size: 30)
         
         if Settings.sharedManager().isDarkMode {
+            secondCurrencyLabel.textColor = UIColor.main.steel
             nameLabel.textColor = UIColor.main.steel;
         }
     }
@@ -149,6 +180,16 @@ extension BMAmountCell: Configurable {
         normalTextColor = textField.textColor ?? UIColor.main.heliotrope
 
         textField.text = options.value
+    }
+    
+    func setSecondAmount(amount:String) {
+        if amount.isEmpty {
+            secondCurrencyLabel.isHidden = true
+        }
+        else {
+            secondCurrencyLabel.text = amount
+            secondCurrencyLabel.isHidden = false
+        }
     }
 }
 

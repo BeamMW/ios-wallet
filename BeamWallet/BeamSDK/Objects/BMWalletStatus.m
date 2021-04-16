@@ -36,6 +36,10 @@
     return self;
 }
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
     [encoder encodeObject:[NSNumber numberWithLongLong:_available] forKey: @"available"];

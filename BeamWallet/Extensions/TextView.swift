@@ -26,6 +26,8 @@ class UITextViewPlacholder : UITextView
     public var placholderColor:UIColor?
     public var clearButton = UIButton()
     public var isInput = false
+    public var alwaysVisibleClearButton = false
+    public var isClearPressed = false
 
     
     override open var attributedText: NSAttributedString! {
@@ -81,6 +83,12 @@ class UITextViewPlacholder : UITextView
             clearButton.isHidden = false
             textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 30)
         }
+        else if alwaysVisibleClearButton && isClearPressed && (self.attributedText == nil  || self.attributedText.string.isEmpty){
+            self.endEditing(true)
+        }
+        else if alwaysVisibleClearButton  {
+            
+        }
         else{
             clearButton.isHidden = true
             textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
@@ -95,6 +103,12 @@ class UITextViewPlacholder : UITextView
         if let text = self.attributedText, text.string.isEmpty == false, self.isInput {
             clearButton.isHidden = false
             textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 30)
+        }
+        else if alwaysVisibleClearButton && isClearPressed && (self.attributedText == nil  || self.attributedText.string.isEmpty){
+            self.endEditing(true)
+        }
+        else if alwaysVisibleClearButton  {
+            
         }
         else{
             clearButton.isHidden = true

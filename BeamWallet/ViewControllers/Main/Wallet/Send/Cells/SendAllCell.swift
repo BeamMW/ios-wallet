@@ -26,8 +26,18 @@ class SendAllCell: BaseCell {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var secondAvailableLabel: UILabel!
 
+    @IBOutlet var bottomOffset: NSLayoutConstraint!
+
     weak var delegate: BMCellProtocol?
 
+    public var titleColor: UIColor? {
+        didSet {
+            if let color = titleColor {
+                titleLabel.textColor = color
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -53,7 +63,7 @@ class SendAllCell: BaseCell {
 }
 
 extension SendAllCell: Configurable {
-    func configure(with options: (realAmount: Double, isAll: Bool, type: BMTransactionType, onlyUnlink: Bool )) {
+    func configure(with options: (realAmount: Double, isAll: Bool, type: BMTransactionType)) {
         let total = String.currency(value: options.realAmount)
         
         amountLabel.text = total //+ Localizable.shared.strings.beam
@@ -84,11 +94,5 @@ extension SendAllCell: Configurable {
         
         titleLabel.letterSpacing = 1.5
         
-        if options.onlyUnlink {
-            allButton.setTitle(Localizable.shared.strings.add_all_unlinked.lowercased(), for: .normal)
-        }
-        else {
-            allButton.setTitle(Localizable.shared.strings.add_all.lowercased(), for: .normal)
-        }
     }
 }

@@ -48,7 +48,7 @@ enum {
 typedef UInt64 BMTransactionType;
 
 
-@interface BMTransaction : NSObject
+@interface BMTransaction : NSObject <NSSecureCoding>
 
 @property (nonatomic,strong) NSString *ID;
 @property (nonatomic,assign) UInt64 createdTime;

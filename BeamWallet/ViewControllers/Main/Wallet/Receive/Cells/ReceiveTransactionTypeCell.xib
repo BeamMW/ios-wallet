@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="105" id="Wnd-kQ-yWz" customClass="ReceiveTransactionTypeCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wnd-kQ-yWz" id="yK9-Va-3lB">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B5j-nS-OtY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="108"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TRANSACTION TYPE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahn-yg-UDh">
+                                <rect key="frame" x="15" y="20" width="290" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                        <real key="value" value="1.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spp-bl-pjd" customClass="MASegmentedControl" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="52" width="258" height="40"/>
+                                <color key="backgroundColor" red="0.25490197539999998" green="0.27450981740000002" blue="0.30196079609999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="258" id="LnE-JX-c31"/>
+                                    <constraint firstAttribute="height" constant="40" id="TNX-ar-zgG"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="onTransactionTypeWithSender:" destination="Wnd-kQ-yWz" eventType="valueChanged" id="B5J-p0-0ON"/>
+                                </connections>
+                            </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vAk-jv-fKK">
+                                <rect key="frame" x="15" y="102" width="290" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="connect_node_offline"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="spp-bl-pjd" secondAttribute="bottom" constant="16" id="0qe-eF-TkK"/>
+                            <constraint firstItem="spp-bl-pjd" firstAttribute="leading" secondItem="B5j-nS-OtY" secondAttribute="leading" constant="15" id="LyV-Ez-OdS"/>
+                            <constraint firstAttribute="trailing" secondItem="vAk-jv-fKK" secondAttribute="trailing" constant="15" id="ZJo-8A-h6k"/>
+                            <constraint firstAttribute="trailing" secondItem="ahn-yg-UDh" secondAttribute="trailing" constant="15" id="Zau-nV-B3p"/>
+                            <constraint firstItem="vAk-jv-fKK" firstAttribute="leading" secondItem="B5j-nS-OtY" secondAttribute="leading" constant="15" id="hbN-if-GYJ"/>
+                            <constraint firstItem="vAk-jv-fKK" firstAttribute="top" secondItem="spp-bl-pjd" secondAttribute="bottom" constant="10" id="mg3-4Z-RV1"/>
+                            <constraint firstItem="ahn-yg-UDh" firstAttribute="top" secondItem="B5j-nS-OtY" secondAttribute="top" constant="20" id="myM-70-fmX"/>
+                            <constraint firstItem="spp-bl-pjd" firstAttribute="top" secondItem="ahn-yg-UDh" secondAttribute="bottom" constant="15" id="thr-EJ-dPZ"/>
+                            <constraint firstItem="ahn-yg-UDh" firstAttribute="leading" secondItem="B5j-nS-OtY" secondAttribute="leading" constant="15" id="uii-Qp-hmj"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="B5j-nS-OtY" secondAttribute="trailing" id="6gC-Ha-Ckh"/>
+                    <constraint firstItem="B5j-nS-OtY" firstAttribute="top" secondItem="yK9-Va-3lB" secondAttribute="top" id="GBz-bc-Dgf"/>
+                    <constraint firstItem="B5j-nS-OtY" firstAttribute="leading" secondItem="yK9-Va-3lB" secondAttribute="leading" id="b6h-gC-w2W"/>
+                    <constraint firstAttribute="bottom" secondItem="B5j-nS-OtY" secondAttribute="bottom" constant="12" id="use-qR-HEG"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="0Cv-DB-fnB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="bottomOffset" destination="0qe-eF-TkK" id="4iJ-o1-fg0"/>
+                <outlet property="errorLabel" destination="vAk-jv-fKK" id="ZC1-k2-xJ5"/>
+                <outlet property="transactionTypeLabel" destination="ahn-yg-UDh" id="J8I-WX-DTh"/>
+                <outlet property="transactionTypeSegment" destination="spp-bl-pjd" id="WxX-I6-6zf"/>
+            </connections>
+            <point key="canvasLocation" x="37.681159420289859" y="-104.79910714285714"/>
+        </tableViewCell>
+    </objects>
+</document>

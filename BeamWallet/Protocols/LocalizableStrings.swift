@@ -608,7 +608,12 @@ class LocalizableStrings : NSObject {
     var rescan_text = "rescan_text".localized
     var mobile_node_title = "mobile_node_title".localized
     var mobile_node_text = "mobile_node_text".localized
-    
+    var receive_contact_placholder = "receive_contact_placholder".localized
+    var copy_and_close = "copy_and_close".localized.lowercased()
+    var max_privacy_qr_hint = "max_privacy_qr_hint".localized.lowercased()
+    var search_or_paste = "search_or_paste".localized
+    var enter_name_save = "enter_name_save".localized
+        
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

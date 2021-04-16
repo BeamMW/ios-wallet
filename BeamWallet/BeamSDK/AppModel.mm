@@ -79,8 +79,6 @@ static NSString *notificationsKey = @"notificationsKey";
 static NSString *ignoredContactsKey = @"ignoredcontactsKey";
 
 
-
-
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
 
@@ -199,17 +197,34 @@ struct GetMaxPrivacyLockFunc
     
     NSData *dataStatus = [[NSUserDefaults standardUserDefaults] objectForKey:walletStatusKey];
     if(dataStatus != nil) {
-        _walletStatus = [NSKeyedUnarchiver unarchiveObjectWithData:dataStatus];
+        _walletStatus = [NSKeyedUnarchiver unarchivedObjectOfClass:BMWalletStatus.class fromData:dataStatus error:nil];
     }
     
     NSData *dataTransactions = [[NSUserDefaults standardUserDefaults] objectForKey:transactionsKey];
     if(dataTransactions != nil) {
-        _transactions = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:dataTransactions]];
+        NSSet *classes = [NSSet setWithObjects:[NSArray class], [BMTransaction class], nil];
+        _transactions = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:dataTransactions error:nil];
     }
     
     NSData *dataNotifications = [[NSUserDefaults standardUserDefaults] objectForKey:notificationsKey];
     if(dataNotifications != nil) {
-        _notifications = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:dataNotifications]];
+        NSSet *classes = [NSSet setWithObjects:[NSArray class], [BMNotification class], nil];
+        _notifications = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:dataTransactions error:nil];
+    }
+    
+    if (_transactions == nil) {
+        _transactions = [[NSMutableArray alloc] init];
+        _shildedUtxos = [[NSMutableArray alloc] init];
+        _contacts = [[NSMutableArray alloc] init];
+        _presendedNotifications = [[NSMutableDictionary alloc] init];
+        _deletedNotifications = [[NSMutableDictionary alloc] init];
+        _preparedTransactions = [[NSMutableArray alloc] init];
+        _preparedDeleteAddresses = [[NSMutableArray alloc] init];
+        _preparedDeleteTransactions = [[NSMutableArray alloc] init];
+    }
+    
+    if (_notifications == nil) {
+        _notifications = [[NSMutableArray alloc] init];
     }
     
     [self checkInternetConnection];
@@ -224,18 +239,6 @@ struct GetMaxPrivacyLockFunc
 
 
 -(void)loadRules{
-    if(Settings.sharedManager.target == Masternet) {
-        Rules::get().pForks[1].m_Height = 10;
-        Rules::get().pForks[2].m_Height = 20;
-        Rules::get().MaxRollback = 10;
-        Rules::get().CA.LockPeriod = 10;
-        Rules::get().Shielded.m_ProofMax.n = 4;
-        Rules::get().Shielded.m_ProofMax.M = 3;
-        Rules::get().Shielded.m_ProofMin.n = 4;
-        Rules::get().Shielded.m_ProofMin.M = 2;
-        Rules::get().Shielded.MaxWindowBacklog = 150;
-    }
-    
     Rules::get().UpdateChecksum();
     LOG_INFO() << "Rules signature: " << Rules::get().get_SignatureStr();
 }
@@ -317,7 +320,9 @@ struct GetMaxPrivacyLockFunc
 -(void)changeTransactions {
     NSMutableArray *tr = [NSMutableArray arrayWithArray:self->_transactions];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:tr] forKey:transactionsKey];
+        NSError *error = nil;
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tr requiringSecureCoding:YES error:&error];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:transactionsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     });
 }
@@ -325,7 +330,9 @@ struct GetMaxPrivacyLockFunc
 -(void)changeNotifications {
     NSMutableArray *notif = [NSMutableArray arrayWithArray:self->_notifications];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:notif] forKey:notificationsKey];
+        NSError *error = nil;
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:notif requiringSecureCoding:YES error:&error];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:notificationsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     });
 }
@@ -334,8 +341,8 @@ struct GetMaxPrivacyLockFunc
 
 -(void)setWalletStatus:(BMWalletStatus *)walletStatus {
     _walletStatus = walletStatus;
-    
-    [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self->_walletStatus] forKey:walletStatusKey];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_walletStatus requiringSecureCoding:YES error:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:walletStatusKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -345,7 +352,7 @@ struct GetMaxPrivacyLockFunc
     if ([[NSUserDefaults standardUserDefaults] objectForKey:currenciesKey]) {
         NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:currenciesKey];
         
-        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchivedObjectOfClass:BMCurrency.class fromData:data error:nil]];
         
         return array;
     }
@@ -354,7 +361,7 @@ struct GetMaxPrivacyLockFunc
 }
 
 -(void)saveCurrencies {
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_currencies];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_currencies requiringSecureCoding:YES error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:currenciesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -809,10 +816,27 @@ struct GetMaxPrivacyLockFunc
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         string recoveryPath = path.string;
         
-        RecoveryProgress prog;
-        
         try{
-            walletDb->ImportRecovery(recoveryPath, prog);
+            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+            
+            auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
+            additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
+            additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
+            additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
+            
+            wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+            
+            wallet->getAsync()->setNodeAddress(nodeAddrStr);
+            
+            if ([Settings sharedManager].isNodeProtocolEnabled) {
+                wallet->getAsync()->enableBodyRequests(true);
+            }
+            
+            wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self->wallet->getAsync()->importRecovery(recoveryPath);
+            });
         }
         catch (const std::exception& e) {
             NSLog(@"ImportRecovery failed %s",e.what());
@@ -1037,58 +1061,38 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return params && params->GetParameter<beam::wallet::TxType>(beam::wallet::TxParameterID::TransactionType);
 }
 
-//-(BMAddress*_Nonnull)generateAddress {
-//    WalletAddress address = GenerateNewAddress(walletDb, "", WalletAddress::ExpirationStatus::OneDay);
-//
-//    BMAddress *bmAddress = [[BMAddress alloc] init];
-//    bmAddress.duration = address.m_duration;
-//    bmAddress.ownerId = address.m_OwnID;
-//    bmAddress.createTime = address.m_createTime;
-//    bmAddress.categories = [NSMutableArray new];
-//    bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
-//    bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
-//    bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
-//    bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:NO amount:0 walleetId:bmAddress.walletId identity:bmAddress.identity ownId:bmAddress.ownerId];
-//
-//    return bmAddress;
-//}
 
--(BMAddress*_Nonnull)generateWithdrawAddress {
+-(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block {
+
+    self.generatedNewAddressBlock = block;
+    
     for (int i=0; i<_walletAddresses.count; i++) {
         if ([_walletAddresses[i].label isEqualToString:@"Beam Runner"]
             && _walletAddresses[i].duration == 0
             && !_walletAddresses[i].isExpired) {
-            return _walletAddresses[i];
+            [AppModel sharedManager].generatedNewAddressBlock(_walletAddresses[i], nil);
+            return;
         }
     }
     
-    WalletAddress address = GenerateNewAddress(walletDb, "Beam Runner", WalletAddress::ExpirationStatus::Never);
-    
-    BMAddress *bmAddress = [[BMAddress alloc] init];
-    bmAddress.duration = address.m_duration;
-    bmAddress.ownerId = address.m_OwnID;
-    bmAddress.createTime = address.m_createTime;
-    bmAddress.categories = [NSMutableArray new];
-    bmAddress.label = [NSString stringWithUTF8String:address.m_label.c_str()];
-    bmAddress.walletId = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
-    bmAddress.identity = [NSString stringWithUTF8String:to_string(address.m_Identity).c_str()];
-    bmAddress.address = [NSString stringWithUTF8String:(address.m_Address).c_str()];
-
-   // bmAddress.token = [self token:NO nonInteractive:NO isPermanentAddress:NO amount:0 walleetId:bmAddress.walletId identity:bmAddress.identity ownId:bmAddress.ownerId];
-    
-    return bmAddress;
+    if (wallet!=nil) {
+        wallet->getAsync()->generateNewAddress();
+    }
 }
 
 
 -(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId amount:(double)amount {
-    
+        
     uint64_t bAmount = round(amount * Rules::Coin);
 
-    auto address = walletDb->getAddress(walleetId.string);
+    WalletID m_walletID(Zero);
+    m_walletID.FromHex(walleetId.string);
+    
+    auto address = walletDb->getAddress(m_walletID);
     
     if(![lastWalledId isEqualToString:walleetId]) {
         lastWalledId = walleetId;
-        lastVouchers = wallet->generateVouchers(address->m_OwnID, 10);
+        lastVouchers = wallet->generateVouchers(address->m_OwnID, 1);
     }
 
     TxParameters offlineParameters;
@@ -1098,10 +1102,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     offlineParameters.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
     offlineParameters.SetParameter(TxParameterID::PeerOwnID, address->m_OwnID);
     offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, true);
-    if (bAmount > 0)
-    {
+    
+    if (bAmount > 0) {
         offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
     }
+    
     auto token = to_string(offlineParameters);
     return [NSString stringWithUTF8String:token.c_str()];
 }
@@ -1109,7 +1114,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
     uint64_t bAmount = round(amount * Rules::Coin);
         
-    auto address = walletDb->getAddress(walleetId.string);
+    WalletID m_walletID(Zero);
+    m_walletID.FromHex(walleetId.string);
+    
+    auto address = walletDb->getAddress(m_walletID);
     
     TxParameters params;
     params.SetParameter(TxParameterID::LibraryVersion, std::string(BEAM_LIB_VERSION));
@@ -1130,11 +1138,14 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
     uint64_t bAmount = round(amount * Rules::Coin);
     
-    auto address = walletDb->getAddress(walleetId.string);
+    WalletID m_walletID(Zero);
+    m_walletID.FromHex(walleetId.string);
+    
+    auto address = walletDb->getAddress(m_walletID);
     
     auto func = GenerateVaucherFunc();
     func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
-        auto token = beam::wallet::GenerateMaxPrivacyAddress(*address, bAmount, list[0], std::string(BEAM_LIB_VERSION));
+        auto token = GenerateMaxPrivacyToken(*address, bAmount, 0, list[0], std::string(BEAM_LIB_VERSION));
         block([NSString stringWithUTF8String:token.c_str()]);
     };
     
@@ -1326,7 +1337,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             {
                 addresses[i].m_category = _categories.string;
                 
-                wallet->getAsync()->saveAddress(addresses[i], true);
+                wallet->getAsync()->saveAddress(addresses[i]);
                 
                 break;
             }
@@ -1354,7 +1365,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 _address.m_Identity = addresses[i].m_Identity;
 
                 try{
-                    wallet->getAsync()->saveAddress(_address, false);
+                    wallet->getAsync()->saveAddress(_address);
                 }
                 catch (const std::exception& e) {
                     NSLog(@"setExpires failed");
@@ -1408,14 +1419,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
             [self deleteNotification:notificationId];
         }
     }
-    else {
-        wallet->getAsync()->deleteAddress(address.string);	
-    }
-    
-    if([self isToken:address]) {
-        BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
-        wallet->getAsync()->deleteAddress(params.address.string);
-    }
+//    if([self isToken:address]) {
+//        BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
+//        wallet->getAsync()->deleteAddress(params.address.string);
+//    }
 }
 
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address {
@@ -1732,7 +1739,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
                 if ([wAddress isEqualToString:address.walletId] && ![wCategory isEqualToString:[address.categories componentsJoinedByString:@","]]){
                     addresses[i].m_category = [address.categories componentsJoinedByString:@","].string;
-                    wallet->getAsync()->saveAddress(addresses[i], true);
+                    wallet->getAsync()->saveAddress(addresses[i]);
                     break;
                 }
             }
@@ -1811,7 +1818,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                     
 //                    NSString *s = [NSString stringWithUTF8String:to_string(addresses[i].m_Identity).c_str()];
                     
-                    wallet->getAsync()->saveAddress(addresses[i], true);
+                    wallet->getAsync()->saveAddress(addresses[i]);
                     
                     break;
                 }
@@ -1855,27 +1862,24 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(void)addContact:(NSString*_Nonnull)addressId address:(NSString*_Nullable)address name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy{
 
     if(address != nil) {
+        BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
+
+        WalletID walletID(Zero);
+        walletID.FromHex(params.address.string);
+            
         bool isValid = false;
         auto buf = from_hex(identidy.string, &isValid);
         PeerID m_Identity = Blob(buf);
         
         WalletAddress savedAddress;
-        savedAddress.m_walletID = Zero;
+        savedAddress.m_walletID = walletID;
         savedAddress.m_createTime = getTimestamp();
         savedAddress.m_Identity = m_Identity;
         savedAddress.m_label = name.string;
         savedAddress.m_duration = WalletAddress::AddressExpirationNever;
         savedAddress.m_Address = address.string;
         savedAddress.m_category =  [categories componentsJoinedByString:@","].string;
-        wallet->getAsync()->saveAddress(savedAddress, false);
-        
-        BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
-        
-        NSMutableArray *array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:ignoredContactsKey]];
-        [array addObject:params.address];
-        
-        [[NSUserDefaults standardUserDefaults] setObject:array forKey:ignoredContactsKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        wallet->getAsync()->saveAddress(savedAddress);
     }
     else {
         WalletID walletID(Zero);
@@ -1891,11 +1895,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
                     [array removeObjectAtIndex:i];
                     break;;
                 }
-            }
-            
-            if(shouldSave) {
-                [[NSUserDefaults standardUserDefaults] setObject:array forKey:ignoredContactsKey];
-                [[NSUserDefaults standardUserDefaults] synchronize];
             }
             
             WalletAddress savedAddress;
@@ -1928,13 +1927,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID {
     for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
-        if ([add.walletId isEqualToString:ID]) {
+        if ([add.getMainId isEqualToString:ID] || [add.address isEqualToString:ID]) {
             return add;
         }
     }
     
     for (BMContact *contact in _contacts.reverseObjectEnumerator) {
-        if ([contact.address.walletId isEqualToString:ID]) {
+        if ([contact.address.getMainId isEqualToString:ID] || [contact.address.address isEqualToString:ID]) {
             return contact.address;
         }
     }
@@ -2010,20 +2009,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return errorString;
 }
 
--(NSString*_Nullable)canSendToMaxPrivacy:(NSString*_Nullable)to {
-//    for(BMPreparedTransaction *tr in _preparedTransactions) {
-//        if([tr.address isEqualToString:to]) {
-//            return [@"cant_send_to_max_privacy" localized];
-//        }
-//    }
-//    for(BMTransaction *tr in _transactions) {
-//        if([tr.token isEqualToString:to]) {
-//            return [@"cant_send_to_max_privacy" localized];
-//        }
-//    }
-    
-    return nil;
-}
 
 -(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
     Amount bAmount = round(amount * Rules::Coin);
@@ -2096,20 +2081,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
     
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount + bFee, 0, beam::Asset::s_BeamID, isShielded);
+    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, 0, beam::Asset::s_BeamID, isShielded);
 }
 
--(void)calculateFee2:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
-    
-    self.isMaxPrivacyRequest = isShielded;
-    
-    self.feecalculatedBlock = block;
-    
-    Amount bAmount = round(amount * Rules::Coin);
-    Amount bFee = fee;
-    
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, bFee, beam::Asset::s_BeamID, isShielded);
-}
 
 -(NSString*)sendError:(double)amount fee:(double)fee checkMinAmount:(BOOL)check {
     
@@ -2165,147 +2139,83 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
-    WalletID walletID(Zero);
-    if (walletID.FromHex(to.string))
-    {
-        auto bAmount = round(amount * Rules::Coin);
-        
-        try{
-            wallet->getAsync()->sendMoney(walletID, comment.string, bAmount, fee);
-            wallet->getAsync()->getWalletStatus();
-        }
-        catch(NSException *ex) {
-            NSLog(@"%@",ex);
-        }
-    }
-}
 
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from  {
+
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
         
-    BOOL isShieldedTx = false;
-    BOOL isMaxPrivacy = false;
-    
-    if([[AppModel sharedManager] isToken:from]) {
-        BMTransactionParameters* params = [[AppModel sharedManager] getTransactionParameters:from];
-        from = params.address;
-    }
-    
     auto txParameters = beam::wallet::ParseParameters(to.string);
-    if (!txParameters)
-    {
+    if (!txParameters){
         return;
     }
-    
     _txParameters = *txParameters;
     
-    beam::wallet::PeerID _receiverIdentity = beam::Zero;
-
-    if (auto peerIdentity = _txParameters.GetParameter<beam::PeerID>(TxParameterID::PeerWalletIdentity); peerIdentity) {
-        _receiverIdentity = *peerIdentity;
-    }
     
-    if (auto txType = _txParameters.GetParameter<TxType>(TxParameterID::TransactionType); txType && *txType == TxType::PushTransaction)
-    {
-        isShieldedTx = true;
-        
-        ShieldedTxo::Voucher voucher;
-        isMaxPrivacy = _txParameters.GetParameter(TxParameterID::Voucher, voucher) && _receiverIdentity != beam::Zero;
-    }
-    
-    auto messageString = comment.string;
     
     uint64_t bAmount = round(amount * Rules::Coin);
     uint64_t bfee = fee;
     
-    WalletID m_walletID(Zero);
-    m_walletID.FromHex(from.string);
+   // WalletID m_walletID(Zero);
+   // m_walletID.FromHex(from.string);
     
     auto params = CreateSimpleTransactionParameters();
-    LoadReceiverParams(_txParameters, params);
-   
-    params.SetParameter(TxParameterID::Amount, bAmount)
-        .SetParameter(TxParameterID::Fee, bfee)
-        .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
-       // .SetParameter(beam::wallet::TxParameterID::AssetID, beam::Asset::s_BeamID)
-        .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
+    const auto type = GetAddressType(to.string);
     
-    if (isShieldedTx)
-    {
-        params.SetParameter(TxParameterID::TransactionType, TxType::PushTransaction);
-    }
-    if (isMaxPrivacy)
-    {
-        CopyParameter(TxParameterID::Voucher, _txParameters, params);
-        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, uint8_t(64));
-    }
-    if (isShieldedTx)
-    {
+    auto choiceOffline = false;
+    auto messageString = comment.string;
+    
+    if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline && choiceOffline)) {
+        if (!LoadReceiverParams(_txParameters, params, type)) {
+            assert(false);
+            return;
+        }
         CopyParameter(TxParameterID::PeerOwnID, _txParameters, params);
     }
+    else {
+        if(!LoadReceiverParams(_txParameters, params, TxAddressType::Regular)) {
+            assert(false);
+            return;
+        }
+    }
     
-    if ([self isToken:to])
-    {
+    params.SetParameter(TxParameterID::Amount, bAmount)
+        .SetParameter(TxParameterID::Fee, bfee)
+        //.SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
+        .SetParameter(TxParameterID::AssetID, beam::Asset::s_BeamID)
+        .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
+
+    if (type == TxAddressType::MaxPrivacy) {
+        CopyParameter(TxParameterID::Voucher, _txParameters, params);
+        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, [Settings sharedManager].lockMaxPrivacyValue);
+    }
+    
+    if (!beam::wallet::CheckReceiverAddress(to.string)) {
         params.SetParameter(TxParameterID::OriginalToken, to.string);
     }
-            
-    NSString *toString = to;
-    if([[AppModel sharedManager] isToken:toString]) {
-        BMTransactionParameters* params = [[AppModel sharedManager] getTransactionParameters:toString];
-        toString = params.address;
-    }
-    
-    WalletID walletID(Zero);
-    if (walletID.FromHex(toString.string))
-    {
-        try{
-            __block auto address = walletDb->getAddress(walletID);
-            
-            if(address) {
-                __block NSString *name = [NSString stringWithUTF8String:address->m_label.c_str()];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if (address->isOwn()) {
-                        [[AppModel sharedManager] setWalletComment:name toAddress:from];
-                    }
-                    else {
-                        [[AppModel sharedManager] setContactComment:name toAddress:toString];
-                    }
-                });
-            }
-        }
-        catch(NSException *ex) {
-            NSLog(@"%@",ex);
-        }
-    }
-    
-    
-    if(![self isToken:to]) {
-        params.SetParameter(TxParameterID::SavePeerAddress, false);
-    }
+    params.SetParameter(TxParameterID::OriginalToken, to.string);
+    params.SetParameter(TxParameterID::SavePeerAddress, false);
 
     wallet->getAsync()->startTransaction(std::move(params));
 }
 
 void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxParameters& input, beam::wallet::TxParameters& dest)
 {
-    beam::wallet::ByteBuffer buf;
+    ByteBuffer buf;
     if (input.GetParameter(paramID, buf))
     {
         dest.SetParameter(paramID, buf);
     }
 }
 
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact maxPrivacy:(BOOL)maxPrivacy {
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy {
     
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
     transaction.amount = amount;
     transaction.address = to;
-    transaction.from = from;
     transaction.comment = comment;
     transaction.date = [[NSDate date] timeIntervalSince1970];
     transaction.ID = [NSString randomAlphanumericStringWithLength:10];
-    transaction.saveContact = saveContact;
+    transaction.contactName = contactName;
     transaction.maxPrivacy = maxPrivacy;
     
     [_preparedTransactions addObject:transaction];
@@ -2320,7 +2230,9 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 
 -(NSString*_Nonnull)allAmount:(double)fee {
     Amount bAmount = _walletStatus.available - fee;
-    
+    if (bAmount < 0 || _walletStatus.available == 0) {
+        bAmount = 0;
+    }
     double d = double(int64_t(bAmount)) / Rules::Coin;
     
     NSString *allValue =  [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:d]];
@@ -2334,23 +2246,38 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     return allValue;
 }
 
--(NSString*_Nonnull)allUnlinkAmount:(double)fee {
-    Amount bAmount = _walletStatus.shielded - fee;
-    
-    double d = double(int64_t(bAmount)) / Rules::Coin;
-    
-    NSString *allValue =  [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:d]];
-    allValue = [allValue stringByReplacingOccurrencesOfString:@"," withString:@""];
-    
-    if ([allValue hasPrefix:@"."])
-    {
-        allValue = [NSString stringWithFormat:@"0%@",allValue];
+-(BMAddressType)getAddressTypeFrom:(TxAddressType) type {
+    switch (type) {
+        case TxAddressType::PublicOffline:
+            return BMAddressTypeOfflinePublic;
+        case TxAddressType::MaxPrivacy:
+            return BMAddressTypeMaxPrivacy;
+        case TxAddressType::Offline:
+            return BMAddressTypeShielded;
+        case TxAddressType::Regular:
+            return BMAddressTypeRegular;
+        default:
+            break;
     }
     
-    return allValue;
+    return BMAddressTypeUnknown;
 }
 
--(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token {    
+-(NSString*_Nonnull)getAddressTypeString:(BMAddressType)type {
+    switch (type) {
+        case BMAddressTypeOfflinePublic:
+            return [@"public_offline_address" localized];
+        case BMAddressTypeMaxPrivacy:
+            return [@"max_privacy_address" localized];
+        default:
+            return [@"regular_address" localized];
+    }
+    return [@"regular_address" localized];
+}
+
+-(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token {
+    const auto adressType = GetAddressType(token.string);
+
     auto params = beam::wallet::ParseParameters(token.string);
     auto amount = params->GetParameter<Amount>(TxParameterID::Amount);
     auto type = params->GetParameter<TxType>(TxParameterID::TransactionType);
@@ -2361,6 +2288,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     BMTransactionParameters *p = [BMTransactionParameters new];
     p.amount = 0.0;
     p.isMaxPrivacy = type == TxType::PushTransaction;
+    p.newAddressType = [self getAddressTypeFrom:adressType];
     
     auto gen = params->GetParameter<ShieldedTxo::PublicGen>(TxParameterID::PublicAddreessGen);
     if (gen)
@@ -2368,11 +2296,6 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         p.isPublicOffline = true;
     }
     
-    if(type == TxType::PushTransaction) {
-        auto voucher = params->GetParameter<ShieldedTxo::Voucher>(TxParameterID::Voucher);
-        p.isTrueMaxPrivacy = !!voucher;
-    }
-
             
     if(amount) {
         p.amount = double(uint64_t(*amount)) / Rules::Coin;
@@ -2737,15 +2660,21 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction {
     for (int i=0; i<_preparedTransactions.count; i++) {
         if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
-            if (_preparedTransactions[i].from == nil) {
-                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
-            }
-            else{
-                [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment from:_preparedTransactions[i].from];
-            }
             
-            if (!_preparedTransactions[i].saveContact) {
-                [[AppModel sharedManager] deleteAddress:_preparedTransactions[i].address];
+            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
+  
+            if(!_preparedTransactions[i].contactName.isEmpty) {
+                NSString *name = _preparedTransactions[i].contactName;
+                NSString *to = _preparedTransactions[i].address;
+                BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:to];
+                
+                if ([[AppModel sharedManager] isToken:to]) {
+                    [[AppModel sharedManager] addContact:params.address address:params.address name:name categories:[NSArray new] identidy:params.identity];
+                }
+                else {
+                    [[AppModel sharedManager] addContact:params.address address:nil name:name categories:[NSArray new] identidy:params.identity];
+                }
+                
             }
             
             [_preparedTransactions removeObjectAtIndex:i];
@@ -2861,7 +2790,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 
 -(void)getUTXO {
     if (wallet != nil)  {
-        wallet->getAsync()->getUtxosStatus();
+        wallet->getAsync()->getAllUtxosStatus();
     }
 }
 
@@ -2893,13 +2822,11 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 
 -(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue {
     for (BMContact *contact in _contacts) {
-        if([contact.address.walletId isEqualToString:idValue])
+        if([contact.address.walletId isEqualToString:idValue] || [contact.address.getMainId isEqualToString:idValue])
         {
             return contact;
         }
-    }
-    
-    
+    }    
     return nil;
 }
 
@@ -2953,7 +2880,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     if ([[NSUserDefaults standardUserDefaults] objectForKey:categoriesKey]) {
         NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
         
-        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchivedObjectOfClass:BMCategory.class fromData:data error:nil]];
         
         return array;
     }
@@ -2964,7 +2891,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 -(void)deleteCategory:(BMCategory*_Nonnull)category {
     [_categories removeObjectAtIndex:[self findCategoryIndex:category.ID]];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories requiringSecureCoding:YES error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -2996,7 +2923,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         [_categories addObject:category];
     }
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories requiringSecureCoding:YES error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -3013,7 +2940,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     
     [_categories replaceObjectAtIndex:index withObject:category];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories requiringSecureCoding:YES error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -3028,7 +2955,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 -(void)addCategory:(BMCategory*_Nonnull)category {
     [_categories addObject:category];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories requiringSecureCoding:YES error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -3349,7 +3276,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     else {
         NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
         
-        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchivedObjectOfClass:BMCategory.class fromData:data error:nil]];
         
         NSMutableArray *categories = [NSMutableArray array];
         
@@ -3409,6 +3336,11 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
+}
+
+-(NSString*_Nonnull)exchangeValueWithZero:(double)amount {
+    NSString *result = [self exchangeValue:amount];
+    return [result stringByReplacingOccurrencesOfString:@"-" withString:@"0 "];
 }
 
 -(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount {

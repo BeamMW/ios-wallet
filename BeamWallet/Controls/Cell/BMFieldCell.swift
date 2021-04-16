@@ -24,6 +24,7 @@ class BMFieldCell: BaseCell {
     weak var delegate: BMCellProtocol?
 
     @IBOutlet public var topOffset: NSLayoutConstraint?
+    @IBOutlet public var bottomOffset: NSLayoutConstraint?
 
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
@@ -42,6 +43,26 @@ class BMFieldCell: BaseCell {
         didSet {
             if isItalicPlacholder {
                 textField.placeHolderFont = ItalicFont(size: 16)
+            }
+        }
+    }
+    
+    public var titleTextColor: UIColor? = nil {
+        didSet {
+            if let color = titleTextColor {
+                nameLabel.textColor = color;
+            }
+        }
+    }
+    
+    public var hideNameLabel:Bool? = nil
+    {
+        didSet {
+            if let hide = hideNameLabel {
+                nameLabel.isHidden = hide
+                nameLabel.text = nil
+                topOffset?.constant = -5
+                bottomOffset?.constant = 20
             }
         }
     }
