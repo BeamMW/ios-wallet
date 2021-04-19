@@ -80,11 +80,11 @@ Please notice, that both you and sender should be online to succeed transaction!
                             </subviews>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hti-ZN-8GT" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="114" y="377.5" width="156" height="44"/>
+                            <rect key="frame" x="102" y="377.5" width="180" height="44"/>
                             <color key="backgroundColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="JbB-7x-wOn"/>
-                                <constraint firstAttribute="width" constant="156" id="bxI-lF-nbz"/>
+                                <constraint firstAttribute="width" constant="180" id="bxI-lF-nbz"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>

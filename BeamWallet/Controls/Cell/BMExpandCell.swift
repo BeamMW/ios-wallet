@@ -79,8 +79,14 @@ extension BMExpandCell: Configurable {
         isExpand = options.expand
         nameLabel.text = options.title
         nameLabel.letterSpacing = 2
-        
+
         let angle:Double = isExpand ? -180 : 0
         arrowIcon.transform = CGAffineTransform(rotationAngle: CGFloat(angle * Double.pi/180))
+        
+//        if options.title.contains(Localizable.shared.strings.requested_amount.uppercased()) {
+//            nameLabel.setLetterSpacingOnly(value: 2, title: Localizable.shared.strings.requested_amount, letter: Localizable.shared.strings.requested_amount)
+//        }
+//        else {
+//        }
     }
 }

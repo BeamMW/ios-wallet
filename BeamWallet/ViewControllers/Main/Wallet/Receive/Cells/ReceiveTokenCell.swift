@@ -30,7 +30,7 @@ class ReceiveTokenCell: BaseCell {
       
         detailButton.setTitle(Localizable.shared.strings.address_details.lowercased(), for: .normal)
         
-        nameLabel.text = Localizable.shared.strings.new_address.uppercased()
+        nameLabel.text = Localizable.shared.strings.address.uppercased()
         nameLabel.letterSpacing = 2
         
         detailLabel.copiedText = Localizable.shared.strings.address_copied

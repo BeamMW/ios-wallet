@@ -581,7 +581,7 @@ and never kept on the blockchain.";
 "for_pool" = "For exchange or mining pool";
 "for_pool_permanent" = "Exchanges or mining pools support only permanent address now.";
 "for_pool_regular" = "Exchanges or mining pools support only regular transaction now.";
-"receive_notice_max_privacy" = "Max Privacy transaction can last at most 72 hours.\n\nMin transaction fee to send Max privacy coins is ~0.01 BEAM.";
+"receive_notice_max_privacy" = "Max Privacy transaction can last up to 2 days.\n\nMin transaction fee to send Max privacy coins is 0.01 BEAM.";
 "switch_to_permanent" = "Switch to permanent";
 "switch_to_regular" = "Switch to regular";
 "one_time_expire_text" = "One-time use address (expire in 12 hours after succesfull transaction).";

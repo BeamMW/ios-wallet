@@ -2460,8 +2460,10 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     if (wallet == nil) {
         return false;
     }
-    auto own = wallet->isConnectionTrusted();
-    return own || [Settings sharedManager].isNodeProtocolEnabled;
+    return true;
+
+//    auto own = wallet->isConnectionTrusted();
+//    return own || [Settings sharedManager].isNodeProtocolEnabled;
 }
 
 
@@ -3323,7 +3325,8 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     if(amount == 0.0) {
         return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
     }
-    for (BMCurrency *currency in [_currencies objectEnumerator].allObjects) {
+    NSArray *currencies = [NSArray arrayWithArray:[_currencies objectEnumerator].allObjects];
+    for (BMCurrency *currency in currencies) {
         if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
             currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
             currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];

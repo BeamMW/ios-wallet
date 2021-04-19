@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SFProText-Medium.ttf">
+            <string>SFProText-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BMCopyCell" id="yPs-R5-kYk" customClass="BMCopyCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yPs-R5-kYk" id="kIl-0g-DUB">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="07R-im-8tR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="7fh-vq-xHZ">
+                                <rect key="frame" x="15" y="10" width="245" height="83.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8g-qj-Wn6">
+                                        <rect key="frame" x="0.0" y="0.0" width="245" height="61.5"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                        <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                                <real key="value" value="1.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="6EY-d3-EGp" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="66.5" width="245" height="17"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="14"/>
+                                        <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iwX-xc-xxP">
+                                <rect key="frame" x="270" y="25" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="4ym-OO-FOW"/>
+                                    <constraint firstAttribute="width" constant="50" id="fzd-lV-agM"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="15" maxY="0.0"/>
+                                <state key="normal" image="iconCopyWhite24"/>
+                                <connections>
+                                    <action selector="onCopy" destination="yPs-R5-kYk" eventType="touchUpInside" id="NpD-8A-wHo"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iwX-xc-xxP" firstAttribute="top" secondItem="7fh-vq-xHZ" secondAttribute="top" constant="15" id="4FU-tr-nLI"/>
+                            <constraint firstAttribute="trailing" secondItem="7fh-vq-xHZ" secondAttribute="trailing" constant="60" id="6aM-EN-yMo"/>
+                            <constraint firstAttribute="bottom" secondItem="7fh-vq-xHZ" secondAttribute="bottom" constant="10.5" id="M0H-Vk-F6e"/>
+                            <constraint firstItem="7fh-vq-xHZ" firstAttribute="top" secondItem="07R-im-8tR" secondAttribute="top" constant="10" id="Vi7-TR-plM"/>
+                            <constraint firstItem="7fh-vq-xHZ" firstAttribute="leading" secondItem="07R-im-8tR" secondAttribute="leading" constant="15" id="fr3-R7-wIy"/>
+                            <constraint firstAttribute="trailing" secondItem="iwX-xc-xxP" secondAttribute="trailing" id="lwH-xf-WgB"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="07R-im-8tR" secondAttribute="trailing" id="9wy-mX-5dO"/>
+                    <constraint firstAttribute="bottom" secondItem="07R-im-8tR" secondAttribute="bottom" id="fvj-kj-zuh"/>
+                    <constraint firstItem="07R-im-8tR" firstAttribute="top" secondItem="kIl-0g-DUB" secondAttribute="top" id="h27-3a-yNu"/>
+                    <constraint firstItem="07R-im-8tR" firstAttribute="leading" secondItem="kIl-0g-DUB" secondAttribute="leading" id="rmF-p7-nn7"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="DDx-Tk-cHa"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <connections>
+                <outlet property="botOffset" destination="M0H-Vk-F6e" id="ilh-gO-Azo"/>
+                <outlet property="nameLabel" destination="c8g-qj-Wn6" id="ud6-YP-UZJ"/>
+                <outlet property="stackView" destination="7fh-vq-xHZ" id="f6D-hb-j88"/>
+                <outlet property="topOffset" destination="Vi7-TR-plM" id="ywS-Ei-Vyo"/>
+                <outlet property="valueLabel" destination="6EY-d3-EGp" id="Zwp-ki-YZc"/>
+            </connections>
+            <point key="canvasLocation" x="97.101449275362327" y="109.48660714285714"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="iconCopyWhite24" width="24" height="24"/>
+    </resources>
+</document>

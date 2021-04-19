@@ -42,10 +42,10 @@ For the transaction to complete, you should get online during the 12 hours after
                         </userDefinedRuntimeAttributes>
                     </label>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wAG-wz-QgD">
-                        <rect key="frame" x="80" y="158" width="160" height="44"/>
+                        <rect key="frame" x="70" y="158" width="180" height="44"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BIb-3V-fCK" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="160" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="180" height="44"/>
                                 <color key="backgroundColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="lls-ye-uJh"/>
@@ -68,7 +68,7 @@ For the transaction to complete, you should get online during the 12 hours after
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="width" constant="160" id="5UW-dQ-SlQ"/>
+                            <constraint firstAttribute="width" constant="180" id="5UW-dQ-SlQ"/>
                         </constraints>
                     </stackView>
                 </subviews>

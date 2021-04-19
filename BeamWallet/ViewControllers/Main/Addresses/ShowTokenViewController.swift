@@ -56,7 +56,6 @@ class ShowTokenViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let addressTitle = self.send ?  Localizable.shared.strings.transaction_type.uppercased() :  Localizable.shared.strings.address_type.uppercased()
         
         if AppModel.sharedManager().isToken(token) {
             let params = AppModel.sharedManager().getTransactionParameters(token)
@@ -67,7 +66,7 @@ class ShowTokenViewController: BaseTableViewController {
             }
             
             let addressType = AppModel.sharedManager().getAddressTypeString(params.newAddressType)
-            items.append(BMMultiLineItem(title:addressTitle, detail:addressType , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail:addressType , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
 
             
             if  !params.isMaxPrivacy {
@@ -92,7 +91,7 @@ class ShowTokenViewController: BaseTableViewController {
                 detail = detail + " (\(Localizable.shared.strings.for_pool.lowercased()))"
             }
 
-            items.append(BMMultiLineItem(title: addressTitle, detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
             
             if address != nil && address?.isContact == false && send == false {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: address?.duration == 0 ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
@@ -111,7 +110,7 @@ class ShowTokenViewController: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register([BMMultiLinesCell.self])
+        tableView.register([BMMultiLinesCell.self, BMCopyCell.self])
         if !send {
             tableView.tableFooterView = footerView
         }
@@ -155,10 +154,20 @@ extension ShowTokenViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView
-            .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
-            .configured(with: items[indexPath.row])
-        cell.increaseSpace = true
-        return cell
+        let title = items[indexPath.row].title
+        if title == Localizable.shared.strings.address {
+            let cell = tableView
+                .dequeueReusableCell(withType: BMCopyCell.self, for: indexPath)
+                .configured(with: items[indexPath.row])
+            cell.increaseSpace = true
+            return cell
+        }
+        else {
+            let cell = tableView
+                .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+                .configured(with: items[indexPath.row])
+            cell.increaseSpace = true
+            return cell
+        }
     }
 }

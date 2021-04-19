@@ -58,7 +58,7 @@ class QRCodeSmallViewController: BaseViewController {
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
                 
         if isMaxPrivacy {
-            infoLabel.text = Localizable.shared.strings.max_privacy_qr_hint
+            infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
         }
         else {
             infoLabel.text = Localizable.shared.strings.receive_notice

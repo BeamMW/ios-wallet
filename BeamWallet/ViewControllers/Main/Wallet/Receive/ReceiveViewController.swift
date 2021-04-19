@@ -155,6 +155,9 @@ class ReceiveViewController: BaseTableViewController {
 extension ReceiveViewController : UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 0
+        }
         return 20
     }
     
@@ -174,7 +177,10 @@ extension ReceiveViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 3 {
+        if section == 0 {
+            return 0
+        }
+        else if section == 3 {
             return showRequestAmount ? 2 : 1
         }
         else if section == 4 {
@@ -226,7 +232,7 @@ extension ReceiveViewController : UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showRequestAmount, title: Localizable.shared.strings.request_amount.uppercased()))
+                    .configured(with: (expand: showRequestAmount, title: "\(Localizable.shared.strings.requested_amount.uppercased()) (\(Localizable.shared.strings.optional.lowercased()))"))
                 cell.delegate = self
                 cell.setColor(UIColor.white)
                 cell.topOffset?.constant = 15
@@ -247,7 +253,7 @@ extension ReceiveViewController : UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
-                    .configured(with: (expand: showRequestAmount, title: Localizable.shared.strings.comment.uppercased()))
+                    .configured(with: (expand: showComment, title: Localizable.shared.strings.comment.uppercased()))
                 cell.delegate = self
                 cell.setColor(UIColor.white)
                 cell.topOffset?.constant = 15
@@ -451,7 +457,10 @@ extension ReceiveViewController : ReceiveTransactionTypeCellDelegate {
     
     func onDidSelectTrasactionType(type: ReceiveAddressViewModel.TransactionOptions) {
         viewModel.transaction = type
-        tableView.reloadRow(ReceiveTokenCell.self, animated: false)
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRow(ReceiveTokenCell.self, animated: false)
+            self.tableView.reloadRow(ReceiveAddressButtonsCell.self, animated: false)
+        }
     }
     
     func onShareToken() {
