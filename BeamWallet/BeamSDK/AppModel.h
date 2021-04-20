@@ -119,6 +119,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
 
+@property (nonatomic, strong) NSString * _Nullable addressGeneratedID;
+
 -(void)handleTimer;
 -(void)startConnectionTimer:(int)seconds;
 

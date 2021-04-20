@@ -534,30 +534,19 @@ void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walle
 {
     NSLog(@"onGeneratedNewAddress");
 
-    NSString *categories = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
-    if ([categories isEqualToString:@"0"]) {
-        categories = @"";
-    }
-    
-    BMAddress *address = [[BMAddress alloc] init];
-    address.duration = walletAddr.m_duration;
-    address.ownerId = walletAddr.m_OwnID;
-    address.createTime = walletAddr.m_createTime;
-    address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
-    address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
-    address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-    address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+    [AppModel sharedManager].addressGeneratedID = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
 
     getAsync()->saveAddress(walletAddr);
-   // [AppModel sharedManager].generatedNewAddressBlock(address, nil);
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [AppModel sharedManager].generatedNewAddressBlock(address, nil);
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//        [AppModel sharedManager].generatedNewAddressBlock(address, nil);
+//    });
 }
 
 void WalletModel::onNewAddressFailed()
 {
+    [AppModel sharedManager].addressGeneratedID = @"";
+
     NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
                                                code:1
                                            userInfo:@{ NSLocalizedDescriptionKey:@"Failed to genereate new address" }];
@@ -776,6 +765,23 @@ void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
 void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const std::vector <beam::wallet::WalletAddress > &items) {
     getAsync()->getAddresses(true);
     getAsync()->getAddresses(false);
+    
+    if(action == beam::wallet::ChangeAction::Added && items.size() == 1) {
+        auto walletAddr = items[0];
+        NSString *walletID = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+        
+        if([[AppModel sharedManager].addressGeneratedID isEqualToString:walletID]) {
+            BMAddress *address = [[BMAddress alloc] init];
+            address.duration = walletAddr.m_duration;
+            address.ownerId = walletAddr.m_OwnID;
+            address.createTime = walletAddr.m_createTime;
+            address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+            [AppModel sharedManager].generatedNewAddressBlock(address, nil);
+            [AppModel sharedManager].addressGeneratedID = @"";
+        }
+    }
 }
 
 void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
