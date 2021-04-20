@@ -1791,27 +1791,27 @@ bool OnProgress(uint64_t done, uint64_t total) {
                     addresses[i].m_label = address.label.string;
                     
                     if(address.isNowExpired) {
-                        addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
+                        addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Expired);
                     }
                     else if(address.isNowActive) {
                         if (address.isNowActiveDuration == 0){
-                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
                         }
                         else{
-                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::OneDay);
+                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::OneDay);
                         }
                     }
                     else{
                         if (address.isExpired) {
                             [_deletedNotifications setObject:wAddress forKey:wAddress];
-                            addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Expired);
+                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Expired);
                         }
                         else  {
                             if (address.duration == 0) {
-                                addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::Never);
+                                addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
                             }
                             else {
-                                addresses[i].setExpiration(beam::wallet::WalletAddress::ExpirationStatus::AsIs);
+                                addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::AsIs);
                             }
                         }
                     }

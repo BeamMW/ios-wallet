@@ -1173,7 +1173,9 @@ void WalletModel::onCoinsSelectionCalculated(const CoinsSelectionInfo& selection
 {
     NSLog(@"onCoinsSelectionCalculated");
     
-    [AppModel sharedManager].feecalculatedBlock(selectionRes.m_minimalExplicitFee, selectionRes.m_changeBeam, 0);
+    auto change = double(int64_t(selectionRes.m_changeBeam)) / Rules::Coin;
+    
+    [AppModel sharedManager].feecalculatedBlock(selectionRes.m_minimalExplicitFee, change, 0);
 }
 
 void WalletModel::onPublicAddress(const std::string& publicAddr)

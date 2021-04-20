@@ -34,15 +34,21 @@ class SendViewController: BaseTableViewController {
         }
     }
     
-    private let nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
+    private let nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 180) / 2, y: 40, width: 180, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
     
     
-    private lazy var footerView: UIView = {
+    private func footerView()-> UIView {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
         
-        let infoLabel = UILabel(frame: CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0))
+        let infoLabel = UILabel()
+        infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0)
         infoLabel.numberOfLines = 0
-        infoLabel.text = Localizable.shared.strings.send_notice
+        if viewModel.addressType == BMAddressTypeMaxPrivacy {
+            infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
+        }
+        else {
+            infoLabel.text = Localizable.shared.strings.send_notice
+        }
         infoLabel.font = ItalicFont(size: 14)
         infoLabel.textAlignment = .center
         if Settings.sharedManager().isDarkMode {
@@ -67,7 +73,7 @@ class SendViewController: BaseTableViewController {
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: nextButton.frame.origin.y + nextButton.frame.size.height + 40)
         
         return view
-    }()
+    }
     
     override var tableStyle: UITableView.Style {
         get {
@@ -123,8 +129,16 @@ class SendViewController: BaseTableViewController {
         
         viewModel.onContactChanged = { [weak self] _ in
             guard let strongSelf = self else { return }
+            strongSelf.reloadInutCell()
             UIView.performWithoutAnimation {
                 strongSelf.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+            }
+        }
+        
+        viewModel.onAddressTypeChanged = { [weak self] _ in
+            guard let strongSelf = self else { return }
+            UIView.performWithoutAnimation {
+                strongSelf.tableView.reloadSections(IndexSet(integer: 1), with: .none)
             }
         }
         
@@ -143,12 +157,12 @@ class SendViewController: BaseTableViewController {
             
         }
         
-        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMSearchAddressCell.self, SendSaveAddressCell.self, BMMultiLinesCell.self, SendContactAddressCell.self])
+        tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMSearchAddressCell.self, SendSaveAddressCell.self, BMMultiLinesCell.self, SendContactAddressCell.self, SendTransactionTypeCell.self])
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
-        tableView.tableFooterView = footerView
+        tableView.tableFooterView = footerView()
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
@@ -251,12 +265,18 @@ class SendViewController: BaseTableViewController {
 
 extension SendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 && !viewModel.isNeedDisplaySegmentCell {
+            return nil
+        }
         let view = UIView()
         view.backgroundColor = UIColor.clear
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 && !viewModel.isNeedDisplaySegmentCell {
+            return 0
+        }
         return 20
     }
     
@@ -276,13 +296,13 @@ extension SendViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0:
-            return 1
         case 1:
-            return Settings.sharedManager().isHideAmounts ? 1 : 2
+            return viewModel.isNeedDisplaySegmentCell ? 1 : 0
         case 2:
-            return showComment ? 2 : 1
+            return Settings.sharedManager().isHideAmounts ? 1 : 2
         case 3:
+            return showComment ? 2 : 1
+        case 4:
             return showFee ? 2 : 1
         default:
             return 1
@@ -293,46 +313,54 @@ extension SendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            if viewModel.addressType != BMAddressTypeUnknown && viewModel.selectedContact == nil {
-                let cell = tableView
-                    .dequeueReusableCell(withType: SendSaveAddressCell.self, for: indexPath)
-                cell.configure(with: (token: viewModel.toAddress, addressType: BMAddressType(viewModel.addressType), name: viewModel.saveContactName))
-                cell.delegate = self
-                return cell
+            let cell = tableView
+                .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
+            cell.delegate = self
+            cell.error = viewModel.toAddressError
+            cell.additionalError = viewModel.newVersionError
+            cell.copyText = viewModel.copyAddress
+            cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) //IconAddressBookSmall(),
+            cell.contact = viewModel.selectedContact
+            cell.addressType = BMAddressType(viewModel.addressType)
+            cell.nameLabelTopOffset.constant = 20
+            cell.titleColor = UIColor.white
+            cell.placeholder = Localizable.shared.strings.send_address_placholder
+            
+            if(viewModel.selectedContact == nil && cell.addressType == BMAddressTypeUnknown) {
+                cell.stackBotOffset.constant = 25
             }
-            else if viewModel.selectedContact != nil {
-                let cell = tableView
-                    .dequeueReusableCell(withType: SendContactAddressCell.self, for: indexPath)
-                cell.configure(with: (contact: viewModel.selectedContact, addressType: BMAddressType(viewModel.addressType)))
-                cell.delegate = self
-                return cell
+            else if(viewModel.selectedContact != nil && cell.addressType == BMAddressTypeRegular) {
+                cell.stackBotOffset.constant = 15
             }
             else {
-                let cell = tableView
-                    .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
-                cell.delegate = self
-                cell.error = viewModel.toAddressError
-                cell.additionalError = viewModel.newVersionError
-                cell.copyText = viewModel.copyAddress
-                cell.configure(with: (name: Localizable.shared.strings.send_to.uppercased(), value: viewModel.toAddress, rightIcons: [IconAddressBookSmall(), IconScanQr()]))
-                cell.contact = viewModel.selectedContact
-                cell.addressType = BMAddressType(viewModel.addressType)
-                cell.nameLabelTopOffset.constant = 20
-                cell.titleColor = UIColor.white
-                cell.placeholder = Localizable.shared.strings.search_or_paste
-                
-                if(viewModel.selectedContact == nil && cell.addressType == BMAddressTypeUnknown) {
-                    cell.stackBotOffset.constant = 25
-                }
-                else if(viewModel.selectedContact != nil && cell.addressType == BMAddressTypeRegular) {
-                    cell.stackBotOffset.constant = 15
-                }
-                else {
-                    cell.stackBotOffset.constant = 20
-                }
-                return cell
+                cell.stackBotOffset.constant = 20
             }
+            return cell
+//            if viewModel.addressType != BMAddressTypeUnknown && viewModel.selectedContact == nil {
+//                let cell = tableView
+//                    .dequeueReusableCell(withType: SendSaveAddressCell.self, for: indexPath)
+//                cell.configure(with: (token: viewModel.toAddress, addressType: BMAddressType(viewModel.addressType), name: viewModel.saveContactName))
+//                cell.delegate = self
+//                return cell
+//            }
+//            else if viewModel.selectedContact != nil {
+//                let cell = tableView
+//                    .dequeueReusableCell(withType: SendContactAddressCell.self, for: indexPath)
+//                cell.configure(with: (contact: viewModel.selectedContact, addressType: BMAddressType(viewModel.addressType)))
+//                cell.delegate = self
+//                return cell
+//            }
+//            else {
+//
+//            }
         case 1:
+            let cell = tableView
+                .dequeueReusableCell(withType: SendTransactionTypeCell.self, for: indexPath)
+            cell.delegate = self
+            cell.selectedIndex = viewModel.isSendMaxPrivacy ? 1 : 0
+            cell.contentView.backgroundColor = UIColor.main.marineThree
+            return cell
+        case 2:
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: Localizable.shared.strings.amount.uppercased(), value: viewModel.inputAmount))
@@ -357,7 +385,7 @@ extension SendViewController: UITableViewDataSource {
                 cell.bottomOffset.constant = 20
                 return cell
             }
-        case 2:
+        case 3:
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
@@ -378,7 +406,7 @@ extension SendViewController: UITableViewDataSource {
                 cell.hideNameLabel = true
                 return cell
             }
-        case 3:
+        case 4:
             if indexPath.row == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
@@ -431,6 +459,7 @@ extension SendViewController: BMCellProtocol {
                     viewModel.saveContactName = text
                 }
                 else {
+                    viewModel.selectedContact = nil
                     viewModel.toAddress = text
                     
                     if input {
@@ -449,7 +478,7 @@ extension SendViewController: BMCellProtocol {
                     }
                 }
             }
-            else if path.section == 1 {
+            else if path.section == 2 {
                 if input {
                     viewModel.sendAll = false
                     if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
@@ -471,7 +500,7 @@ extension SendViewController: BMCellProtocol {
                 }
                 
             }
-            else if path.section == 3 {
+            else if path.section == 4 {
                 isNeedReload = false
                 viewModel.comment = text
             }
@@ -479,18 +508,8 @@ extension SendViewController: BMCellProtocol {
         
         if isNeedReload {
             UIView.performWithoutAnimation {
-                tableView.beginUpdates()
-                
-                if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
-                    cell.error = viewModel.toAddressError
-                    cell.additionalError = viewModel.newVersionError
-                    cell.copyText = viewModel.copyAddress
-                    cell.setData(with: (name: Localizable.shared.strings.send_to.uppercased(), value: viewModel.toAddress))
-                    cell.contact = viewModel.selectedContact
-                    cell.addressType = BMAddressType(viewModel.addressType)
-                }
-                
-                tableView.endUpdates()
+              
+                self.reloadInutCell()
                 
                 if isSearch {
                     layoutSearchTableView()
@@ -501,7 +520,7 @@ extension SendViewController: BMCellProtocol {
     
     func textValueDidReturn(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 1 {
+            if path.section == 2 {
                 viewModel.checkAmountError()
                 
                 UIView.performWithoutAnimation {
@@ -553,7 +572,7 @@ extension SendViewController: BMCellProtocol {
     func onRightButton(_ sender: UITableViewCell) {
         
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 1 {
+            if path.section == 2 {
                 if path.row == 1 {
                     view.endEditing(true)
                     viewModel.sendAll = true
@@ -588,7 +607,7 @@ extension SendViewController: BMCellProtocol {
     
     func onExpandCell(_ sender: UITableViewCell) {
         if let path = tableView.indexPath(for: sender) {
-            if path.section == 3 {
+            if path.section == 4 {
                 showFee = !showFee
                 
                 if showFee {
@@ -618,6 +637,25 @@ extension SendViewController: BMCellProtocol {
         
         UIView.performWithoutAnimation {
             tableView.reloadData()
+        }
+    }
+    
+    private func reloadInutCell() {
+        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            
+            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
+                cell.error = viewModel.toAddressError
+                cell.additionalError = viewModel.newVersionError
+                cell.copyText = viewModel.copyAddress
+                cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress))
+                cell.contact = viewModel.selectedContact
+                cell.addressType = BMAddressType(viewModel.addressType)
+            }
+            
+            tableView.tableFooterView = footerView()
+
+            tableView.endUpdates()
         }
     }
 }
@@ -663,10 +701,10 @@ extension SendViewController: SettingsModelDelegate {
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
         
         if Settings.sharedManager().isHideAmounts {
-            tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+            tableView.deleteRows(at: [IndexPath(row: 1, section: 2)], with: .none)
         }
         else {
-            tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: .none)
+            tableView.insertRows(at: [IndexPath(row: 1, section: 2)], with: .none)
         }
     }
 }
@@ -709,3 +747,9 @@ extension SendViewController: SearchTableViewDelegate {
     }
 }
 
+extension SendViewController: SendTransactionTypeCellDelegate {
+    
+    func onDidSelectTrasactionType(maxPrivacy: Bool) {
+        viewModel.isSendMaxPrivacy = maxPrivacy
+    }
+}

@@ -24,7 +24,7 @@ class SendConfirmViewController: BaseTableViewController {
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
         
-        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 40, width: 143, height: 44), color: UIColor.main.heliotrope)
+        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-180)/2, y: 40, width: 180, height: 44), color: UIColor.main.heliotrope)
         sendButton.setImage(IconSendBlue(), for: .normal)
         sendButton.setTitle(Localizable.shared.strings.send.lowercased(), for: .normal)
         sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
@@ -172,38 +172,26 @@ extension SendConfirmViewController : UITableViewDataSource {
 }
 
 extension SendConfirmViewController: WalletModelDelegate {
-    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
-        DispatchQueue.main.async {
-            if tokens >= 0 {
-                
-                let index = self.items.firstIndex(where: {$0.title == Localizable.shared.strings.address_type.uppercased()})
-                
-                if let i = index {
-                    self.items[i].detail = "\(Localizable.shared.strings.offline), \(Localizable.shared.strings.payments_left.lowercased()):  \(tokens)"
-                }
-                
-                self.tableView.reloadData()
-            }
-        }
-    }
     
     func onChangeCalculated(_ amount: Double) {
         DispatchQueue.main.async { [self] in
             if !Settings.sharedManager().isHideAmounts {
-                var am = amount
-                let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0)
-                let left = (AppModel.sharedManager().walletStatus?.realAmount ?? 0) - total
+                let totalString = String.currency(value: amount)
+                let totalDetail = self.viewModel.amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""), isFee: false, color: UIColor.white, doubleAmount: amount)
                 
-                if left < am {
-                    am = 0
-                }
-                
-                let totalString = String.currency(value: am) //+ Localizable.shared.strings.beam
-                let totalDetail = self.viewModel.amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""), isFee: false, color: UIColor.white)
-                
-                let item = BMMultiLineItem(title: Localizable.shared.strings.change_locked, detail: totalDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
+                let item = BMMultiLineItem(title: Localizable.shared.strings.change, detail: totalDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
                 item.detailAttributedString = totalDetail
                 self.items.append(item)
+              
+                let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0)
+                let left = (AppModel.sharedManager().walletStatus?.realAmount ?? 0) - total
+                let leftString = String.currency(value: left)
+                let leftDetail = self.viewModel.amountString(amount: leftString.replacingOccurrences(of: " BEAM", with: ""), isFee: false, color: UIColor.white, doubleAmount: left)
+               
+                let leftItem = BMMultiLineItem(title: Localizable.shared.strings.remaining.uppercased(), detail: leftDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
+                leftItem.detailAttributedString = leftDetail
+                self.items.append(leftItem)
+
                 self.tableView.reloadData()
             }
         }
@@ -211,6 +199,7 @@ extension SendConfirmViewController: WalletModelDelegate {
 }
 
 extension SendConfirmViewController: SettingsModelDelegate {
+    
     func onChangeHideAmounts() {
         addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
 

@@ -311,6 +311,12 @@
 		923DB110235DD2D60056ACDA /* BMInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923DB10C235DD2D60056ACDA /* BMInputViewController.xib */; };
 		923DB111235DD2D60056ACDA /* BMInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923DB10C235DD2D60056ACDA /* BMInputViewController.xib */; };
 		923DB112235DD2D60056ACDA /* BMInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923DB10C235DD2D60056ACDA /* BMInputViewController.xib */; };
+		923EAA12262EDBD80000B8D0 /* SendTransactionTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923EAA10262EDBD80000B8D0 /* SendTransactionTypeCell.swift */; };
+		923EAA13262EDBD80000B8D0 /* SendTransactionTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923EAA11262EDBD80000B8D0 /* SendTransactionTypeCell.xib */; };
+		923EAA14262EDBDB0000B8D0 /* SendTransactionTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923EAA10262EDBD80000B8D0 /* SendTransactionTypeCell.swift */; };
+		923EAA15262EDBDB0000B8D0 /* SendTransactionTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923EAA11262EDBD80000B8D0 /* SendTransactionTypeCell.xib */; };
+		923EAA16262EDBDC0000B8D0 /* SendTransactionTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923EAA10262EDBD80000B8D0 /* SendTransactionTypeCell.swift */; };
+		923EAA17262EDBDC0000B8D0 /* SendTransactionTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923EAA11262EDBD80000B8D0 /* SendTransactionTypeCell.xib */; };
 		92435243222DED3200A0EF37 /* BMWalletStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 92435242222DED3200A0EF37 /* BMWalletStatus.m */; };
 		92435246222DF9AE00A0EF37 /* BMAddress.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92435245222DF9AE00A0EF37 /* BMAddress.mm */; };
 		92435250222E73DC00A0EF37 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243524E222E73DC00A0EF37 /* WalletViewController.swift */; };
@@ -1380,6 +1386,8 @@
 		923670BE25399C2F00180771 /* WithdrawViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawViewModel.swift; sourceTree = "<group>"; };
 		923DB10B235DD2D60056ACDA /* BMInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMInputViewController.swift; sourceTree = "<group>"; };
 		923DB10C235DD2D60056ACDA /* BMInputViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMInputViewController.xib; sourceTree = "<group>"; };
+		923EAA10262EDBD80000B8D0 /* SendTransactionTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTypeCell.swift; sourceTree = "<group>"; };
+		923EAA11262EDBD80000B8D0 /* SendTransactionTypeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SendTransactionTypeCell.xib; sourceTree = "<group>"; };
 		92435241222DED3200A0EF37 /* BMWalletStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMWalletStatus.h; sourceTree = "<group>"; };
 		92435242222DED3200A0EF37 /* BMWalletStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMWalletStatus.m; sourceTree = "<group>"; };
 		92435244222DF9AE00A0EF37 /* BMAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMAddress.h; sourceTree = "<group>"; };
@@ -2718,6 +2726,8 @@
 				92EE50772625A5BF00E684B9 /* SendContactAddressCell.xib */,
 				92EE507E2625B11600E684B9 /* SendSaveAddressCell.swift */,
 				92EE507F2625B11600E684B9 /* SendSaveAddressCell.xib */,
+				923EAA10262EDBD80000B8D0 /* SendTransactionTypeCell.swift */,
+				923EAA11262EDBD80000B8D0 /* SendTransactionTypeCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3018,6 +3028,7 @@
 				9268EA9A23A3DE650015FD68 /* bgBlack.jpg in Resources */,
 				926F4B2922E0CDB7007755D9 /* LICENSE in Resources */,
 				9243C2EA22970EF10018B52D /* BMAddressCell.xib in Resources */,
+				923EAA13262EDBD80000B8D0 /* SendTransactionTypeCell.xib in Resources */,
 				9232EC982267383700A12EEE /* GoogleService-Info.plist in Resources */,
 				92E4AEE32359DC27004062A1 /* SeedIntroCell.xib in Resources */,
 				9225D55B229455CA0067B4EA /* ReceiveAddressButtonsCell.xib in Resources */,
@@ -3146,6 +3157,7 @@
 				922035FB262D8F7E0002CD48 /* BMCopyCell.xib in Resources */,
 				9224750524E3EC6C006FE2B2 /* GoogleServiceTest.plist in Resources */,
 				9260F9632559720000465BE1 /* BMMultiLinesCell2.xib in Resources */,
+				923EAA17262EDBDC0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
 				92D577B422F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				92CC40EC22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				922393A3235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */,
@@ -3218,6 +3230,7 @@
 				923DB112235DD2D60056ACDA /* BMInputViewController.xib in Resources */,
 				92E2EB8C226F225700367928 /* bgMasternet.jpg in Resources */,
 				9280D04A2458631000735C52 /* BMPickerCell3.xib in Resources */,
+				923EAA15262EDBDB0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
 				9225D53922941F940067B4EA /* SFProText-Medium.ttf in Resources */,
 				9212DBBF22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
 				92A65547258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */,
@@ -3729,6 +3742,7 @@
 				9210280F24606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 				92F67D5B25876C340009295E /* BMPaymentInfo.m in Sources */,
+				923EAA12262EDBD80000B8D0 /* SendTransactionTypeCell.swift in Sources */,
 				9279863B258CD6E9003E06BF /* MaxPrivacyDetailHeader.swift in Sources */,
 				9225D5402294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
 				928B0AB222425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
@@ -4007,6 +4021,7 @@
 				9210281024606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 				92F67D5C25876C340009295E /* BMPaymentInfo.m in Sources */,
+				923EAA16262EDBDC0000B8D0 /* SendTransactionTypeCell.swift in Sources */,
 				9279863C258CD6E9003E06BF /* MaxPrivacyDetailHeader.swift in Sources */,
 				9225D5412294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
 				928B0AB322425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
@@ -4285,6 +4300,7 @@
 				9210281124606E42001A7130 /* PagingDiff.swift in Sources */,
 				92E2EB2D226F21C700367928 /* ShareLogActivity.swift in Sources */,
 				92F67D5D25876C340009295E /* BMPaymentInfo.m in Sources */,
+				923EAA14262EDBDB0000B8D0 /* SendTransactionTypeCell.swift in Sources */,
 				9279863D258CD6E9003E06BF /* MaxPrivacyDetailHeader.swift in Sources */,
 				9225D5422294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
 				92E2EB2E226F21C700367928 /* BMPopoverMenu.swift in Sources */,

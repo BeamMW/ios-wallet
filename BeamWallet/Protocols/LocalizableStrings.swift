@@ -613,7 +613,8 @@ class LocalizableStrings : NSObject {
     var max_privacy_qr_hint = "max_privacy_qr_hint".localized.lowercased()
     var search_or_paste = "search_or_paste".localized
     var enter_name_save = "enter_name_save".localized
-        
+    var add_max = "add_max".localized.lowercased()
+
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

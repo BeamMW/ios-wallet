@@ -34,8 +34,9 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var contactCategory: UILabel!
     @IBOutlet private weak var iconView: UIView!
     @IBOutlet private weak var buttonsStackView: UIStackView!
+    @IBOutlet private weak var qrButton: UIButton!
 
-    private var rightButtons = [UIButton]()
+   // private var rightButtons = [UIButton]()
     
     @IBOutlet var nameLabelTopOffset: NSLayoutConstraint!
     @IBOutlet var stackBotOffset: NSLayoutConstraint!
@@ -101,7 +102,7 @@ class BMSearchAddressCell: BaseCell {
             if(!textField.text.isEmpty && addressType != BMAddressTypeUnknown) {
                 let title = AppModel.sharedManager().getAddressTypeString(addressType)
                 addressTypeLabel.isHidden = false
-                addressTypeLabel.text = title
+                addressTypeLabel.text = "\(title)."
                 addressTypeLabel.font = ItalicFont(size: 14)
             }
             else {
@@ -175,19 +176,19 @@ class BMSearchAddressCell: BaseCell {
                 textField.text = "\(text.prefix(6))...\(text.suffix(6))"
                 showTokenButton.isHidden = false
                 
-                for btn in rightButtons {
-                    btn.isHidden = true
-                }
+//                for btn in rightButtons {
+//                    btn.isHidden = true
+//                }
             }
             else {
                 textField.text = string
             }
         }
         else {
-            for btn in rightButtons {
-                btn.isHidden = false
-            }
-            
+//            for btn in rightButtons {
+//                btn.isHidden = false
+//            }
+//
             token = ""
             textField.text = string
         }
@@ -285,26 +286,32 @@ extension BMSearchAddressCell: Configurable {
         nameLabel.text = options.name
         nameLabel.letterSpacing = 2
         
-        for button in rightButtons {
-            buttonsStackView.removeArrangedSubview(button)
+        if options.rightIcons == nil {
+            qrButton.isHidden = true
         }
-        rightButtons.removeAll()
-        
-        
-        if let icons = options.rightIcons {
-            for icon in icons {
-                let button = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
-                button.setImage(icon, for: .normal)
-                button.tag = buttonsStackView.arrangedSubviews.count
-                button.addTarget(self, action: #selector(onRightButton(sender:)), for: .touchUpInside)
-                button.heightAnchor.constraint(equalToConstant: 36).isActive = true
-                button.widthAnchor.constraint(equalToConstant: 36).isActive = true
-                buttonsStackView.addArrangedSubview(button)
-                rightButtons.append(button)
-            }
+        else {
+            qrButton.isHidden = false
         }
         
-        buttonsStackView.setNeedsLayout()
+//        for button in rightButtons {
+//            buttonsStackView.removeArrangedSubview(button)
+//        }
+//        rightButtons.removeAll()
+//
+//
+//        if let icons = options.rightIcons {
+//            for icon in icons {
+//                let button = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
+//                button.setImage(icon, for: .normal)
+//                button.tag = buttonsStackView.arrangedSubviews.count
+//                button.addTarget(self, action: #selector(onRightButton(sender:)), for: .touchUpInside)
+//                button.heightAnchor.constraint(equalToConstant: 36).isActive = true
+//                button.widthAnchor.constraint(equalToConstant: 36).isActive = true
+//                buttonsStackView.insertArrangedSubview(button, at: 1)
+//                rightButtons.append(button)
+//            }
+//        }
+     //   buttonsStackView.setNeedsLayout()
         checkAttributes(string: options.value)
     }
 }

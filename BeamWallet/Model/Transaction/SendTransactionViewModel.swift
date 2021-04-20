@@ -39,7 +39,28 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
     private var addresses = [BMAddress]()
     public var isToken = false
-    public var addressType = BMAddressTypeUnknown
+   
+    public var isSendMaxPrivacy = false
+    public var addressType = BMAddressTypeUnknown {
+        didSet {
+            if addressType == BMAddressTypeShielded && isToken {
+                isSendMaxPrivacy = true
+            }
+            else {
+                isSendMaxPrivacy = false
+            }
+            
+            self.onAddressTypeChanged?(true)
+        }
+    }
+    
+    public var isNeedDisplaySegmentCell:Bool {
+        get {
+            return addressType == BMAddressTypeShielded && isToken
+        }
+    }
+    
+    public var maxPrivacy:Bool = false
     
     public var selectedCurrency = BEAM
     public var selectedCurrencyString: String {
@@ -56,12 +77,6 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             else {
                 return ""
             }
-        }
-    }
-    
-    public var maxPrivacy = false {
-        didSet {            
-            calculateFee()
         }
     }
     
@@ -117,6 +132,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public var onCalculateChanged : ((Double) -> Void)?
     public var onContactChanged : ((Bool) -> Void)?
+    public var onAddressTypeChanged : ((Bool) -> Void)?
 
     public var saveContactName = String.empty()
     public var sbbsAddress = String.empty()
@@ -429,59 +445,21 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
         
                 
-//        if outgoindAdderss != nil {
-//            let fromName = outgoindAdderss?.label
-//            let fromCategories = outgoindAdderss?.categoriesName()
-//            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
-//
-//            if fromName != nil || fromCategories != nil {
-//                if fromName?.isEmpty == true && fromCategories?.string.isEmpty == true {
-//                    items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-//                }
-//                else {
-//                    let detail = NSMutableAttributedString(string: "\(out)\nspace\n\(fromName ?? "")")
-//                    let rangeName = (detail.string as NSString).range(of: String(fromName ?? ""))
-//                    let spaceRange = (detail.string as NSString).range(of: String("space"))
-//
-//                    detail.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 16), range: rangeName)
-//                    detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeName)
-//
-//                    detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
-//                    detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
-//
-//                    if fromCategories != nil && fromCategories?.string.isEmpty == false {
-//                        detail.append(NSAttributedString(string: " "))
-//                        detail.append(fromCategories!)
-//                    }
-//
-//                    let toItem = BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
-//                    toItem.detailAttributedString = detail
-//                    items.append(toItem)
-//                }
-//            }
-//            else {
-//                items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-//            }
-//        }
+        if outgoindAdderss != nil {
+            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        }
 
         if addressType == BMAddressTypeMaxPrivacy {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.max_privacy_address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
-        }
-        else if addressType == BMAddressTypeRegular {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.max_privacy.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if addressType == BMAddressTypeOfflinePublic {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.public_offline_address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
-        }
-        else if addressType == BMAddressTypeRegularPermanent {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.regular), \(Localizable.shared.strings.permanent.lowercased())", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
-        }
-        else if addressType == BMAddressTypeShielded {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: "\(Localizable.shared.strings.offline)", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.public_offline.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: Localizable.shared.strings.regular, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: self.isSendMaxPrivacy ? Localizable.shared.strings.offline.localized : Localizable.shared.strings.regular.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
+
         
         if !Settings.sharedManager().isHideAmounts {
             let amountDetail = amountString(amount: amount)
@@ -489,23 +467,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             amountItem.detailAttributedString = amountDetail
             items.append(amountItem)
             
-            let totalFeeDetail = amountString(amount: fee, isFee: true)
+            let totalFeeDetail = amountString(amount: fee, isFee: true, color: .white)
             let feeItem = BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: totalFeeDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
             feeItem.detailAttributedString = totalFeeDetail
             items.append(feeItem)
-            
-            let total = AppModel.sharedManager().realTotal(Double(amount) ?? 0, fee: Double(fee) ?? 0)
-            let totalString = String.currency(value: total)
-            let totalDetail = amountString(amount: totalString.replacingOccurrences(of: " BEAM", with: ""), isFee: false, color: UIColor.white)
-            let totalItem = BMMultiLineItem(title: Localizable.shared.strings.total_utxo.uppercased(), detail: totalDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
-            totalItem.detailAttributedString = totalDetail
-            items.append(totalItem)            
         }
         
-     
-//        if !maxPrivacy {
-//            items.append(BMMultiLineItem(title: Localizable.shared.strings.send_notice, detail: nil, detailFont: nil, detailColor: nil))
-//        }
         
         return items
     }
@@ -521,19 +488,18 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         AppModel.sharedManager().calculateFee((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
             self.onCalculateChanged?(change)
         }
-        
-        if AppModel.sharedManager().isToken(toAddress) {
-            _ = AppModel.sharedManager().getTransactionParameters(toAddress)
-        }
     }
     
     public func canUnlink() -> Bool {
         return AppModel.sharedManager().walletStatus?.realShielded != 0
     }
     
-    public func amountString(amount: String, isFee: Bool = false, color: UIColor? = nil) -> NSMutableAttributedString {
+    public func amountString(amount: String, isFee: Bool = false, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {
         let amountString = isFee ? (amount + Localizable.shared.strings.groth + "\n") : (amount + Localizable.shared.strings.beam + "\n")
-        let secondString = isFee ? AppModel.sharedManager().exchangeValueFee((Double(amount) ?? 0)) : AppModel.sharedManager().exchangeValue(Double(amount) ?? 0)
+        var secondString = isFee ? AppModel.sharedManager().exchangeValueFee((Double(amount) ?? 0)) : AppModel.sharedManager().exchangeValue(withZero: Double(amount) ?? 0)
+        if doubleAmount > 0.0 {
+            secondString = AppModel.sharedManager().exchangeValue(withZero: doubleAmount)
+        }
         let attributedString = amountString + "space\n" + secondString
         
         let attributedTitle = NSMutableAttributedString(string: attributedString)

@@ -31,7 +31,7 @@ class ShowTokenViewController: BaseTableViewController {
     private lazy var footerView: UIView = {
         var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
         
-        var copyButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-180)/2, y: 40, width: 180, height: 44), color: UIColor.main.brightSkyBlue)
+        var copyButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-180)/2, y: 40, width: 180, height: 44), color: send ? UIColor.main.heliotrope : UIColor.main.brightSkyBlue)
         copyButton.setImage(IconCopyBlue(), for: .normal)
         copyButton.setTitle(Localizable.shared.strings.copy_and_close.lowercased(), for: .normal)
         copyButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
@@ -65,14 +65,20 @@ class ShowTokenViewController: BaseTableViewController {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             
-            let addressType = AppModel.sharedManager().getAddressTypeString(params.newAddressType)
+            var addressType = AppModel.sharedManager().getAddressTypeString(params.newAddressType)
+            if params.newAddressType == BMAddressTypeMaxPrivacy {
+                addressType = Localizable.shared.strings.max_privacy.capitalized
+            }
+            else if params.newAddressType == BMAddressTypeOfflinePublic {
+                addressType = Localizable.shared.strings.public_offline.capitalized
+            }
+            else {
+                addressType = Localizable.shared.strings.regular.capitalized
+            }
+            
             items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail:addressType , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
 
             
-            if  !params.isMaxPrivacy {
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.address_expiration.uppercased(), detail: params.isPermanentAddress ? Localizable.shared.strings.permanent : Localizable.shared.strings.one_time, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            }
-                        
             if !params.address.isEmpty {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.sbbs_address.uppercased(), detail: params.address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
@@ -111,9 +117,8 @@ class ShowTokenViewController: BaseTableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register([BMMultiLinesCell.self, BMCopyCell.self])
-        if !send {
-            tableView.tableFooterView = footerView
-        }
+        tableView.tableFooterView = footerView
+
         
         title = Localizable.shared.strings.address_details
     }

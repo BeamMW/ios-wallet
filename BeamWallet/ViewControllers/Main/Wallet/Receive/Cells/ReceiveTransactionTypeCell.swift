@@ -12,7 +12,6 @@ protocol ReceiveTransactionTypeCellDelegate: AnyObject {
     func onDidSelectTrasactionType(type: ReceiveAddressViewModel.TransactionOptions)
 }
 
-
 class ReceiveTransactionTypeCell: UITableViewCell {
 
     public weak var delegate:ReceiveTransactionTypeCellDelegate? = nil

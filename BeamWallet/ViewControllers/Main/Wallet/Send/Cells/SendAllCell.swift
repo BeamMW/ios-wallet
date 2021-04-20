@@ -46,7 +46,7 @@ class SendAllCell: BaseCell {
         
         selectionStyle = .none
         
-        allButton.setTitle(Localizable.shared.strings.add_all.lowercased(), for: .normal)
+        allButton.setTitle(Localizable.shared.strings.add_max.lowercased(), for: .normal)
 
         if Settings.sharedManager().isDarkMode {
             titleLabel.textColor = UIColor.main.steel;
