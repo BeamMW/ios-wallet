@@ -94,6 +94,7 @@ class SendViewController: BaseTableViewController {
     private var titles = [Localizable.shared.strings.contacts, Localizable.shared.strings.my_active_addresses]
     private var searchControlles = [SearchTableView(), SearchTableView()]
     
+    private var isAppear = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -129,9 +130,11 @@ class SendViewController: BaseTableViewController {
         
         viewModel.onContactChanged = { [weak self] _ in
             guard let strongSelf = self else { return }
-            strongSelf.reloadInutCell()
-            UIView.performWithoutAnimation {
-                strongSelf.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+            if strongSelf.isAppear {
+                strongSelf.reloadInutCell()
+                UIView.performWithoutAnimation {
+                    strongSelf.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+                }
             }
         }
         
@@ -200,6 +203,8 @@ class SendViewController: BaseTableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        self.isAppear = true
+        
         if viewModel.isNeedFocus {
             if let cell = tableView.findCell(BMSearchAddressCell.self) as? BMSearchAddressCell {
                 cell.beginEditing(text: viewModel.copyAddress)
@@ -224,6 +229,7 @@ class SendViewController: BaseTableViewController {
         
         if isMovingFromParent {
             Settings.sharedManager().removeDelegate(self)
+            viewModel.revertOutgoingAddress()
         }
     }
     
@@ -357,7 +363,7 @@ extension SendViewController: UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: SendTransactionTypeCell.self, for: indexPath)
             cell.delegate = self
-            cell.selectedIndex = viewModel.isSendMaxPrivacy ? 1 : 0
+            cell.selectedIndex = viewModel.isSendOffline ? 1 : 0
             cell.contentView.backgroundColor = UIColor.main.marineThree
             return cell
         case 2:
@@ -750,6 +756,6 @@ extension SendViewController: SearchTableViewDelegate {
 extension SendViewController: SendTransactionTypeCellDelegate {
     
     func onDidSelectTrasactionType(maxPrivacy: Bool) {
-        viewModel.isSendMaxPrivacy = maxPrivacy
+        viewModel.isSendOffline = maxPrivacy
     }
 }

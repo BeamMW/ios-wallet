@@ -18,7 +18,7 @@ class SendTransactionTypeCell: UITableViewCell {
 
     @IBOutlet private var transactionTypeLabel: UILabel!
 
-    public var selectedIndex = 1
+    public var selectedIndex = 0
     
     @IBOutlet private var transactionTypeSegment: MASegmentedControl! {
         didSet {

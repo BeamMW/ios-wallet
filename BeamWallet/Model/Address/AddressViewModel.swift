@@ -210,9 +210,14 @@ class AddressViewModel: NSObject {
     }
     
     public func onSendToAddress(address: BMAddress) {
+        var id = address._id
+        if id.isEmpty {
+            id = address.address ?? ""
+        }
         let vc = SendViewController()
         vc.transaction = BMTransaction()
-        vc.transaction?.receiverAddress = address.walletId
+        vc.transaction?.receiverAddress = id
+        vc.transaction?.token = id
 
         if let top = UIApplication.getTopMostViewController() {
             top.pushViewController(vc: vc)

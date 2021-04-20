@@ -21,6 +21,9 @@ import Foundation
 
 class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
+    public var outgoindAdderss:BMAddress?
+    public var saveContact = true
+
     private var isFocused = false
     public var copyAddress:String?
 
@@ -40,16 +43,16 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     private var addresses = [BMAddress]()
     public var isToken = false
    
-    public var isSendMaxPrivacy = false
+    public var isSendOffline = false
     public var addressType = BMAddressTypeUnknown {
         didSet {
-            if addressType == BMAddressTypeShielded && isToken {
-                isSendMaxPrivacy = true
-            }
-            else {
-                isSendMaxPrivacy = false
-            }
-            
+//            if addressType == BMAddressTypeShielded && isToken {
+//                isSendOffline = true
+//            }
+//            else {
+//                isSendOffline = false
+//            }
+            isSendOffline = false
             self.onAddressTypeChanged?(true)
         }
     }
@@ -275,11 +278,29 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         
         AppModel.sharedManager().addDelegate(self)
         
-        fee = String(AppModel.sharedManager().getDefaultFeeInGroth())        
+        fee = String(AppModel.sharedManager().getDefaultFeeInGroth())
+        
+        generateOutgoindAddress()
     }
     
     deinit {
         AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    private func generateOutgoindAddress() {
+        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
+            if let result = address {
+                DispatchQueue.main.async {
+                    self.outgoindAdderss = result
+                }
+            }
+        }
+    }
+    
+    public func revertOutgoingAddress() {
+        if let address = outgoindAdderss {
+            AppModel.sharedManager().deleteAddress(address.walletId)
+        }
     }
     
     public func send() {
@@ -288,8 +309,10 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             sendedFee = sendedFee - Double(shieldedInputsFee)
         }
         
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, contactName: saveContactName, maxPrivacy: maxPrivacy)
-        
+        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, isOffline: isSendOffline)
+
+       // AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, contactName: saveContactName, maxPrivacy: maxPrivacy)
+
         AppStoreReviewManager.incrementAppTransactions()
     }
     
@@ -376,8 +399,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 self.addresses = addresses as! [BMAddress]
             }
             
-            self.addresses = self.addresses.filter { $0.isExpired() == false}
-            
+            self.addresses = self.addresses.filter { $0.isExpired() == false && $0.walletId != self.outgoindAdderss?.walletId}
+
             if !toAddress.isEmpty {
                 let filterdObjects = self.addresses.filter {
                         $0.label.lowercased().contains(toAddress.lowercased()) ||
@@ -457,7 +480,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.public_offline.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else {
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: self.isSendMaxPrivacy ? Localizable.shared.strings.offline.localized : Localizable.shared.strings.regular.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+            items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: self.isSendOffline ? Localizable.shared.strings.offline.localized : Localizable.shared.strings.regular.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
 
         
@@ -476,10 +499,22 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         
         return items
     }
-    
-    private func isNeedSaveContact() -> Bool {
-        return (saveContactName.isEmpty)
+  
+    public func isNeedSaveContact() -> Bool {
+        var address = toAddress
+        if (AppModel.sharedManager().isToken(address)) {
+            let params = AppModel.sharedManager().getTransactionParameters(address)
+            address = params.address
+        }
+        
+        let isContactFound = (AppModel.sharedManager().getContactFromId(address) != nil)
+        let isMyAddress = AppModel.sharedManager().isMyAddress(address)
+        return (selectedContact == nil && !isContactFound && !isMyAddress)
     }
+    
+//    private func isNeedSaveContact() -> Bool {
+//        return (saveContactName.isEmpty)
+//    }
     
     public func calculateChange() {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
@@ -488,10 +523,6 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         AppModel.sharedManager().calculateFee((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
             self.onCalculateChanged?(change)
         }
-    }
-    
-    public func canUnlink() -> Bool {
-        return AppModel.sharedManager().walletStatus?.realShielded != 0
     }
     
     public func amountString(amount: String, isFee: Bool = false, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {

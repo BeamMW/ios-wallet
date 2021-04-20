@@ -1683,7 +1683,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     {
         if ([tr.senderAddress isEqualToString:address.walletId]
             || [tr.receiverAddress isEqualToString:address.walletId]
-            || [tr.token isEqualToString:address.walletId]) {
+            || [tr.token isEqualToString:address.walletId]
+            || [tr.senderAddress isEqualToString:address._id]
+            || [tr.receiverAddress isEqualToString:address._id]
+            || [tr.token isEqualToString:address._id]) {
             [result addObject:tr];
         }
     }
@@ -1699,7 +1702,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     {
         if ([tr.senderAddress isEqualToString:address.walletId]
             || [tr.receiverAddress isEqualToString:address.walletId]
-            || [tr.token isEqualToString:address.walletId]) {
+            || [tr.token isEqualToString:address.walletId]
+            || [tr.senderAddress isEqualToString:address._id]
+            || [tr.receiverAddress isEqualToString:address._id]
+            || [tr.token isEqualToString:address._id]) {
             if (tr.enumStatus == BMTransactionStatusCancelled || tr.enumStatus == BMTransactionStatusCompleted || tr.enumStatus == BMTransactionStatusFailed)
             {
                 [result addObject:tr];
@@ -2041,11 +2047,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return nil;
 }
 
--(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee {
-    NSString *errorString =  [self sendError:amount fee:fee checkMinAmount:YES];
-    
-    return errorString;
-}
 
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee {
     
@@ -2141,8 +2142,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 
 
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment {
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline {
         
+    if([[AppModel sharedManager] isToken:to] && !isOffline) {
+        BMTransactionParameters *params = [self getTransactionParameters:to];
+        if (params.newAddressType != BMAddressTypeOfflinePublic && params.newAddressType != BMAddressTypeMaxPrivacy) {
+            to = params.address;
+        }
+    }
+    
     auto txParameters = beam::wallet::ParseParameters(to.string);
     if (!txParameters){
         return;
@@ -2150,12 +2158,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     _txParameters = *txParameters;
     
     
-    
     uint64_t bAmount = round(amount * Rules::Coin);
     uint64_t bfee = fee;
     
-   // WalletID m_walletID(Zero);
-   // m_walletID.FromHex(from.string);
+    WalletID m_walletID(Zero);
+    m_walletID.FromHex(from.string);
     
     auto params = CreateSimpleTransactionParameters();
     const auto type = GetAddressType(to.string);
@@ -2179,7 +2186,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     params.SetParameter(TxParameterID::Amount, bAmount)
         .SetParameter(TxParameterID::Fee, bfee)
-        //.SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
+        .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
         .SetParameter(TxParameterID::AssetID, beam::Asset::s_BeamID)
         .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
 
@@ -2206,17 +2213,40 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     }
 }
 
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy {
+-(void)prepareSendNew:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy {
+    
+//    BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
+//    transaction.fee = fee;
+//    transaction.amount = amount;
+//    transaction.address = to;
+//    transaction.comment = comment;
+//    transaction.date = [[NSDate date] timeIntervalSince1970];
+//    transaction.ID = [NSString randomAlphanumericStringWithLength:10];
+//    transaction.contactName = contactName;
+//    transaction.maxPrivacy = maxPrivacy;
+//
+//    [_preparedTransactions addObject:transaction];
+//
+//    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+//    {
+//        if ([delegate respondsToSelector:@selector(onAddedPrepareTransaction:)]) {
+//            [delegate onAddedPrepareTransaction:transaction];
+//        }
+//    }
+}
+
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact isOffline:(BOOL)isOffline {
     
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
     transaction.amount = amount;
     transaction.address = to;
+    transaction.from = from;
     transaction.comment = comment;
     transaction.date = [[NSDate date] timeIntervalSince1970];
     transaction.ID = [NSString randomAlphanumericStringWithLength:10];
-    transaction.contactName = contactName;
-    transaction.maxPrivacy = maxPrivacy;
+    transaction.saveContact = saveContact;
+    transaction.isOffline = isOffline;
     
     [_preparedTransactions addObject:transaction];
     
@@ -2460,10 +2490,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     if (wallet == nil) {
         return false;
     }
-    return true;
-
-//    auto own = wallet->isConnectionTrusted();
-//    return own || [Settings sharedManager].isNodeProtocolEnabled;
+    auto own = wallet->isConnectionTrusted();
+    return own || [Settings sharedManager].isNodeProtocolEnabled;
 }
 
 
@@ -2663,23 +2691,26 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     for (int i=0; i<_preparedTransactions.count; i++) {
         if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
             
-            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
+            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address from:_preparedTransactions[i].from comment:_preparedTransactions[i].comment isOffline: _preparedTransactions[i].isOffline];
+            
+          //  [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address comment:_preparedTransactions[i].comment];
   
-            if(!_preparedTransactions[i].contactName.isEmpty) {
-                NSString *name = _preparedTransactions[i].contactName;
-                NSString *to = _preparedTransactions[i].address;
-                BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:to];
-                
-                if ([[AppModel sharedManager] isToken:to]) {
-                    [[AppModel sharedManager] addContact:params.address address:params.address name:name categories:[NSArray new] identidy:params.identity];
-                }
-                else {
-                    [[AppModel sharedManager] addContact:params.address address:nil name:name categories:[NSArray new] identidy:params.identity];
-                }
-                
-            }
+//            if(!_preparedTransactions[i].contactName.isEmpty) {
+//                NSString *name = _preparedTransactions[i].contactName;
+//                NSString *to = _preparedTransactions[i].address;
+//                BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:to];
+//
+//                if ([[AppModel sharedManager] isToken:to]) {
+//                    [[AppModel sharedManager] addContact:params.address address:params.address name:name categories:[NSArray new] identidy:params.identity];
+//                }
+//                else {
+//                    [[AppModel sharedManager] addContact:params.address address:nil name:name categories:[NSArray new] identidy:params.identity];
+//                }
+//
+//            }
             
             [_preparedTransactions removeObjectAtIndex:i];
+            
             break;
         }
     }
@@ -3154,8 +3185,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 #pragma mark - Fork
 
 -(BOOL)isFork {
-    BOOL isFork = walletDb->getCurrentHeight() >= Rules::get().pForks[1].m_Height;
-    return isFork;
+    return true;
 }
 
 -(int)getDefaultFeeInGroth {

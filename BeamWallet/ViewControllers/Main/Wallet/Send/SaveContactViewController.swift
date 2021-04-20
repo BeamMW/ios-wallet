@@ -28,6 +28,8 @@ class SaveContactViewController: BaseTableViewController {
     private var isAddContact = true
     private var copyAddress:String?
     
+    public var isFromSendScreen = false
+    
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 110))
         
@@ -59,6 +61,8 @@ class SaveContactViewController: BaseTableViewController {
         
         self.address = BMAddress.empty()
         if address != nil {
+            self.isAddContact = false
+
             if(AppModel.sharedManager().isToken(address!)) {
                 let params = AppModel.sharedManager().getTransactionParameters(address!)
                 self.address.walletId = address!//params.address
@@ -100,7 +104,7 @@ class SaveContactViewController: BaseTableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if isAddContact {
+        if isAddContact && !isFromSendScreen {
             if let address = UIPasteboard.general.string {
                 if AppModel.sharedManager().isValidAddress(address)
                 {
@@ -243,7 +247,7 @@ extension SaveContactViewController : UITableViewDelegate {
 extension SaveContactViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

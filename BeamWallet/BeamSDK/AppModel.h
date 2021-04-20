@@ -209,11 +209,12 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 // send
 -(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
 -(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to;
--(NSString*_Nullable)canUnlink:(double)amount fee:(double)fee;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment;
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy;
+-(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline;
+-(void)prepareSendNew:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy;
+-(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact isOffline:(BOOL)isOffline;
+
 -(void)sendPreparedTransaction:(NSString*_Nonnull)transaction;
 -(NSString*_Nonnull)allAmount:(double)fee;
 -(double)realTotal:(double)amount fee:(double)fee;

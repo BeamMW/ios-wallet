@@ -154,11 +154,13 @@ class WalletViewController: BaseTableViewController {
         
         statusViewModel.onRatesChange = { [weak self] in
             guard let strongSelf = self else { return }
-            if strongSelf.tableView.findCell(WalletAvailableCell.self) != nil {
-                strongSelf.tableView.reloadRow(WalletAvailableCell.self)
-            }
-            if strongSelf.tableView.findCell(WalletProgressCell.self) != nil {
-                strongSelf.tableView.reloadRow(WalletProgressCell.self)
+            UIView.performWithoutAnimation {
+                if strongSelf.tableView.findCell(WalletAvailableCell.self) != nil {
+                    strongSelf.tableView.reloadRow(WalletAvailableCell.self)
+                }
+                if strongSelf.tableView.findCell(WalletProgressCell.self) != nil {
+                    strongSelf.tableView.reloadRow(WalletProgressCell.self)
+                }
             }
         }
         

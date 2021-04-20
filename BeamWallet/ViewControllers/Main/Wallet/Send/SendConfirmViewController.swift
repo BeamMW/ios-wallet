@@ -95,7 +95,7 @@ class SendConfirmViewController: BaseTableViewController {
             let modalViewController = UnlockPasswordPopover(event: .transaction)
             modalViewController.completion = { [weak self] obj in
                 if obj == true {
-                    self?.onSend(needBack: true)
+                    self?.askForSaveContact()
                 }
             }
             modalViewController.modalPresentationStyle = .overFullScreen
@@ -103,10 +103,33 @@ class SendConfirmViewController: BaseTableViewController {
             self.present(modalViewController, animated: true, completion: nil)
         }
         else{
-            self.onSend(needBack: true)
+            askForSaveContact()
         }
     }
         
+    private func askForSaveContact() {
+        if viewModel.isNeedSaveContact() {
+            viewModel.saveContact = true
+
+            if var controllers = self.navigationController?.viewControllers {
+                controllers.removeLast()
+                controllers.removeLast()
+                
+                let vc = SaveContactViewController(address: self.viewModel.toAddress)
+                vc.isFromSendScreen = true
+                controllers.append(vc)
+                self.navigationController?.setViewControllers(controllers, animated: true)
+            }
+
+            self.onSend(needBack: false)
+        }
+        else{
+            viewModel.saveContact = false
+            
+            self.onSend(needBack: true)
+        }
+    }
+    
     private func onSend(needBack:Bool) {
         viewModel.send()
         
