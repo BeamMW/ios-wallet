@@ -68,15 +68,15 @@ using namespace beam::wallet;
 using namespace std;
 
 static int proofSize = 330;
-static NSString *categoriesKey = @"categoriesKey";
-static NSString *transactionCommentsKey = @"transaction_comment";
-static NSString *restoreFlowKey = @"restoreFlowKey";
-static NSString *currenciesKey = @"allCurrenciesKey";
+static NSString *categoriesKey = @"categoriesKeyNew";
+static NSString *transactionCommentsKey = @"transaction_commentNew";
+static NSString *restoreFlowKey = @"restoreFlowKeyNew";
+static NSString *currenciesKey = @"allCurrenciesKeyNew";
 static NSString *unlinkAddressName = @"Unlink";
-static NSString *walletStatusKey = @"walletStatusKey";
-static NSString *transactionsKey = @"transactionsKey";
-static NSString *notificationsKey = @"notificationsKey";
-static NSString *ignoredContactsKey = @"ignoredcontactsKey";
+static NSString *walletStatusKey = @"walletStatusKeyNew";
+static NSString *transactionsKey = @"transactionsKeyNew";
+static NSString *notificationsKey = @"notificationsKeyNew";
+static NSString *ignoredContactsKey = @"ignoredcontactsKeyNew";
 
 
 const int kDefaultFeeInGroth = 10;
@@ -1319,30 +1319,30 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 
 -(void)setWalletCategories:(NSMutableArray<NSString*>*_Nonnull)categories toAddress:(NSString*_Nonnull)address {
-    WalletID walletID(Zero);
-    
-    if (walletID.FromHex(address.string))
-    {
-        std::vector<WalletAddress> addresses = wallet->ownAddresses;
-        
-        NSString *_categories = [categories componentsJoinedByString:@","];
-        
-        for (int i=0; i<addresses.size(); i++)
-        {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-            
-            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
-            
-            if ([wAddress isEqualToString:address] && ![wCategory isEqualToString:_categories])
-            {
-                addresses[i].m_category = _categories.string;
-                
-                wallet->getAsync()->saveAddress(addresses[i]);
-                
-                break;
-            }
-        }
-    }
+//    WalletID walletID(Zero);
+//
+//    if (walletID.FromHex(address.string))
+//    {
+//        std::vector<WalletAddress> addresses = wallet->ownAddresses;
+//
+//        NSString *_categories = [categories componentsJoinedByString:@","];
+//
+//        for (int i=0; i<addresses.size(); i++)
+//        {
+//            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+//
+//            NSString *wCategory = [NSString stringWithUTF8String:addresses[i].m_category.c_str()];
+//
+//            if ([wAddress isEqualToString:address] && ![wCategory isEqualToString:_categories])
+//            {
+//                addresses[i].m_category = _categories.string;
+//
+//                wallet->getAsync()->saveAddress(addresses[i]);
+//
+//                break;
+//            }
+//        }
+//    }
 }
 
 -(void)setContactComment:(NSString*)comment toAddress:(NSString*_Nonnull)address {
@@ -2876,75 +2876,75 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 }
 
 -(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID {
-    if (ID.isEmpty) {
-        return nil;
-    }
-    
-    for (BMCategory *cat in _categories.reverseObjectEnumerator) {
-        if (cat.ID == ID.intValue) {
-            return cat;
-        }
-    }
+//    if (ID.isEmpty) {
+//        return nil;
+//    }
+//
+//    for (BMCategory *cat in _categories.reverseObjectEnumerator) {
+//        if (cat.ID == ID.intValue) {
+//            return cat;
+//        }
+//    }
     
     return nil;
 }
 
 -(NSUInteger)findCategoryIndex:(int)ID {
-    for (int i=0; i<_categories.count; i++) {
-        if (_categories[i].ID == ID) {
-            return i;
-        }
-    }
+//    for (int i=0; i<_categories.count; i++) {
+//        if (_categories[i].ID == ID) {
+//            return i;
+//        }
+//    }
     
     return 0;
 }
 
 -(BOOL)isCategoryAdded:(int)ID {
-    for (int i=0; i<_categories.count; i++) {
-        if (_categories[i].ID == ID) {
-            return YES;
-        }
-    }
+//    for (int i=0; i<_categories.count; i++) {
+//        if (_categories[i].ID == ID) {
+//            return YES;
+//        }
+//    }
     
     return NO;
 }
 
 -(NSMutableArray<BMCategory*>*_Nonnull)allCategories{
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:categoriesKey]) {
-        NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
-        
-        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchivedObjectOfClass:BMCategory.class fromData:data error:nil]];
-        
-        return array;
-    }
+//    if ([[NSUserDefaults standardUserDefaults] objectForKey:categoriesKey]) {
+//        NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:categoriesKey];
+//
+//        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchivedObjectOfClass:BMCategory.class fromData:data error:nil]];
+//
+//        return array;
+//    }
     
     return @[].mutableCopy;
 }
 
 -(void)deleteCategory:(BMCategory*_Nonnull)category {
-    [_categories removeObjectAtIndex:[self findCategoryIndex:category.ID]];
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories requiringSecureCoding:YES error:nil];
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    NSMutableArray *addresses = [NSMutableArray arrayWithArray:[[AppModel sharedManager] getAddressesFromCategory:category]];
-    for (BMAddress *address in addresses) {
-        for (int i=0; i<address.categories.count; i++) {
-            if ([address.categories[i] intValue] == category.ID) {
-                [address.categories removeObjectAtIndex:i];
-                [[AppModel sharedManager] editCategoryAddress:address];
-                break;
-            }
-        }
-    }
-    
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
-            [delegate onCategoriesChange];
-        }
-    }
+//    [_categories removeObjectAtIndex:[self findCategoryIndex:category.ID]];
+//
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_categories requiringSecureCoding:YES error:nil];
+//    [[NSUserDefaults standardUserDefaults] setObject:data forKey:categoriesKey];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//    NSMutableArray *addresses = [NSMutableArray arrayWithArray:[[AppModel sharedManager] getAddressesFromCategory:category]];
+//    for (BMAddress *address in addresses) {
+//        for (int i=0; i<address.categories.count; i++) {
+//            if ([address.categories[i] intValue] == category.ID) {
+//                [address.categories removeObjectAtIndex:i];
+//                [[AppModel sharedManager] editCategoryAddress:address];
+//                break;
+//            }
+//        }
+//    }
+//
+//    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+//    {
+//        if ([delegate respondsToSelector:@selector(onCategoriesChange)]) {
+//            [delegate onCategoriesChange];
+//        }
+//    }
 }
 
 -(void)updateCategory:(BMCategory*_Nonnull)category {
@@ -3645,7 +3645,8 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
 -(void)enableBodyRequests:(BOOL)value {
     wallet->getAsync()->enableBodyRequests(value);
-    
+    wallet->getAsync()->getNetworkStatus();
+
     [[Settings sharedManager] setIsNodeProtocolEnabled:value];
 }
 

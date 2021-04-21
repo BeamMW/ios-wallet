@@ -614,7 +614,27 @@ class LocalizableStrings : NSObject {
     var search_or_paste = "search_or_paste".localized
     var enter_name_save = "enter_name_save".localized
     var add_max = "add_max".localized.lowercased()
+    var online_mobile_node = "online_mobile_node".localized.lowercased()
+    var online_own_node = "online_own_node".localized.lowercased()
+    var connect = "connect".localized.lowercased()
 
+    var random_node_title = "random_node_title".localized
+    var fast_sync = "fast_sync".localized
+    var random_node_text = "random_node_text".localized
+
+    var slow_sync = "slow_sync".localized
+    var mobile_node_hint = "mobile_node_hint".localized
+
+    var own_node_title = "own_node_title".localized
+    var fast_secure_advance = "fast_secure_advance".localized
+    var own_node_text = "own_node_text".localized
+
+    var connect_to_mobilenode = "connect_to_mobilenode".localized
+    var syncing_with_blockchain = "syncing_with_blockchain".localized
+    var please_no_lock = "please_no_lock".localized
+    var wallet_connected_to_mobile_node = "wallet_connected_to_mobile_node".localized
+
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

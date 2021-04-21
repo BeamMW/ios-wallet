@@ -133,8 +133,8 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.privacy.capitalizingFirstLetter(), type: SettingsItemType.privacy, icon: IconSettingsPrivacy(), hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.utilities.capitalizingFirstLetter(), type: SettingsItemType.utilites, icon: IconSettingsUtilities(), hasArrow: true))
             
-            var section_1 = [SettingsItem]()
-            section_1.append(SettingsItem(title: Localizable.shared.strings.categories.capitalizingFirstLetter(), type: SettingsItemType.tags, icon: IconSettingsTags(), hasArrow: true))
+//            var section_1 = [SettingsItem]()
+//            section_1.append(SettingsItem(title: Localizable.shared.strings.categories.capitalizingFirstLetter(), type: SettingsItemType.tags, icon: IconSettingsTags(), hasArrow: true))
             
             var section_2 = [SettingsItem]()
             section_2.append(SettingsItem(title: Localizable.shared.strings.rate_app.capitalizingFirstLetter(), type: SettingsItemType.rate_app, icon: IconSettingsRate(), hasArrow: false))
@@ -144,7 +144,7 @@ class SettingsViewModel: NSObject {
             section_3.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), type: SettingsItemType.remove_wallet, icon: IconSettingsRemove(), hasArrow: false))
             
             items.append(section_0)
-            items.append(section_1)
+          //  items.append(section_1)
             items.append(section_2)
             items.append(section_3)
         case .general:
@@ -262,9 +262,14 @@ class SettingsViewModel: NSObject {
     
     public func didSelectItem(item: SettingsItem) {
         switch item.type {
-        case .general, .node, .privacy, .tags, .utilites:
+        case .general, .privacy, .tags, .utilites:
             if let top = UIApplication.getTopMostViewController() {
                 let vc = SettingsViewController(type: SettingsType(rawValue: item.type.rawValue)!)
+                top.pushViewController(vc: vc)
+            }
+        case .node:
+            if let top = UIApplication.getTopMostViewController() {
+                let vc = SelectNodeViewController()
                 top.pushViewController(vc: vc)
             }
         case .rate_app:

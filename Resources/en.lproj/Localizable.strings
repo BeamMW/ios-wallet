@@ -637,6 +637,9 @@ and never kept on the blockchain.";
 "copy_and_close" = "Copy and close";
 "max_privacy_qr_hint" = "Max Privacy transaction can last up to 2 days.\n\nMin transaction fee to send Max privacy coins is 0.01 BEAM.";
 "search_or_paste" = "Search by name or paste address";
+"online_mobile_node" = "Online: mobile node";
+"online_own_node" = "Online: own node";
+"connect" = "Connect";
 "tx_failure_undefined" = "Unexpected reason, please send wallet logs to Beam support";
 "tx_failure_cancelled" = "Transaction cancelled";
 "tx_failure_receiver_signature_invalid" = "Receiver signature in not valid, please send wallet logs to Beam support";
@@ -689,3 +692,19 @@ and never kept on the blockchain.";
 "tx_failure_assets_disabled_blockchain" = "Asset transactions are disabled in blockchain configuration";
 "tx_failure_identity_required" = "Peer Identity required";
 "tx_failure_cannot_get_vouchers" = "The sender cannot get vouchers for max privacy transaction";
+
+"random_node_title" = "Random node";
+"fast_sync" = "Slow sync";
+"random_node_text" = "For those who don’t have any other Beam wallet.";
+
+"slow_sync" = "Slow sync";
+"mobile_node_hint" = "For those who want to sync the balance across multiple Beam wallets.";
+
+"own_node_title" = "Own node";
+"fast_secure_advance" = "Fast and secure, advanced";
+"own_node_text" = "For those who run a node configured with the wallet’s Owner Key.";
+"connect_to_mobilenode" = "Connecting to Mobile node";
+"syncing_with_blockchain" = "Syncing  with blockchain";
+"please_no_lock" = "Please do not lock your phone and do not close the wallet.";
+"wallet_connected_to_mobile_node" = "Wallet connected to Mobile node";
+

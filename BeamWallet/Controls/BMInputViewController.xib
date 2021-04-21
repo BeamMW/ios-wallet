@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,7 +36,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter trusted node address" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Um-z3-oa7">
-                    <rect key="frame" x="15" y="100" width="384" height="19.5"/>
+                    <rect key="frame" x="15" y="100" width="384" height="19"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -46,10 +46,10 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Rjj-zT-BMB">
-                    <rect key="frame" x="20" y="169.5" width="374" height="22"/>
+                    <rect key="frame" x="20" y="169" width="374" height="22.5"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ip_port" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WZf-zG-OwS" customClass="BMField" customModule="BeamWallet" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="374" height="22"/>
+                            <rect key="frame" x="0.0" y="0.0" width="374" height="22.5"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
@@ -103,6 +103,7 @@
                     </userDefinedRuntimeAttributes>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="VcE-xo-XJD"/>
             <color key="backgroundColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Rjj-zT-BMB" firstAttribute="top" secondItem="2Um-z3-oa7" secondAttribute="bottom" constant="50" id="0Oy-wj-b47"/>
@@ -114,10 +115,14 @@
                 <constraint firstItem="2Um-z3-oa7" firstAttribute="top" secondItem="bpk-gF-dor" secondAttribute="top" constant="100" id="gLi-Ky-07Y"/>
                 <constraint firstItem="VcE-xo-XJD" firstAttribute="trailing" secondItem="2Um-z3-oa7" secondAttribute="trailing" constant="15" id="upw-ed-1Gb"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="VcE-xo-XJD"/>
             <point key="canvasLocation" x="53.600000000000001" y="70.614692653673174"/>
         </view>
     </objects>
+    <designables>
+        <designable name="VOj-RE-giN">
+            <size key="intrinsicContentSize" width="63" height="17"/>
+        </designable>
+    </designables>
     <resources>
         <image name="iconNextBlue" width="16" height="16"/>
     </resources>

@@ -254,7 +254,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case .clear:
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 1, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 2, multiplie: true))
-            values.append(BMPickerData(title: Localizable.shared.strings.delete_all_tags, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 4, multiplie: true))
+           // values.append(BMPickerData(title: Localizable.shared.strings.delete_all_tags, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 4, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_transactions, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 3, multiplie: true))
         case .category:
             var selectedCategories = (selectedValue as! [String])

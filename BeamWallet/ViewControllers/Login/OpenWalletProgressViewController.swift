@@ -38,12 +38,20 @@ class OpenWalletProgressViewController: BaseViewController {
     private var start = Date.timeIntervalSinceReferenceDate;
     private var stopRestore = false
     private var isWaitingRestore = false
+    private var onlyConnect = false
+
+    public var cancelCallback : (() -> Void)?
 
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
         self.password = password
         self.phrase = phrase
+    }
+    
+    init(onlyConnect:Bool) {
+        super.init(nibName: nil, bundle: nil)
+        self.onlyConnect = onlyConnect
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -73,7 +81,15 @@ class OpenWalletProgressViewController: BaseViewController {
         let transformScale = CGAffineTransform(scaleX: 1.0, y: progressViewHeight)
         progressView.transform = transformScale
         
-        if AppModel.sharedManager().isRestoreFlow {
+        if onlyConnect {
+            progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
+            progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + " 0%."
+            restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
+            progressValueLabel.isHidden = false
+            cancelButton.isHidden = false
+            restotingInfoLabel.isHidden = false
+        }
+        else if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
             restotingInfoLabel.isHidden = false
             progressValueLabel.text = Localizable.shared.strings.restored + " 0%."
@@ -98,7 +114,12 @@ class OpenWalletProgressViewController: BaseViewController {
         
         AppModel.sharedManager().addDelegate(self)
 
-        startCreateWallet()
+        if !onlyConnect {
+            startCreateWallet()
+        }
+        else {
+            AppModel.sharedManager().getWalletStatus()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,6 +138,29 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     @objc private func openMainPage() {
+        AppModel.sharedManager().removeDelegate(self)
+
+        if onlyConnect {
+            var found = false
+            if let controllers = self.navigationController?.viewControllers {
+                for vc in controllers {
+                    if vc is WalletViewController {
+                        found = true
+                        self.navigationController?.popToViewController(vc, animated: true)
+                    }
+                }
+            }
+            
+            if !found && !isPresented {
+                isPresented = true
+                
+                onMainPage()
+                
+                BMToast.show(text: Localizable.shared.strings.wallet_connected_to_mobile_node)
+            }
+            return
+        }
+        
         if isWaitingRestore {
             return
         }
@@ -124,8 +168,7 @@ class OpenWalletProgressViewController: BaseViewController {
         if isPresented {
             return
         }
-        
-        
+                
         isPresented = true
 
         if phrase != nil {
@@ -145,6 +188,12 @@ class OpenWalletProgressViewController: BaseViewController {
         AppModel.sharedManager().refreshAddresses()
         AppModel.sharedManager().getUTXO()
 
+        onMainPage()
+        
+        BMLockScreen.shared.onTapEvent()
+    }
+
+    private func onMainPage() {
         let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
         let menuViewController = LeftMenuViewController()
         
@@ -164,10 +213,8 @@ class OpenWalletProgressViewController: BaseViewController {
         sideMenuController.modalTransitionStyle = .crossDissolve
         
         self.navigationController?.setViewControllers([sideMenuController], animated: true)
-        
-        BMLockScreen.shared.onTapEvent()
     }
-
+    
     private func downloadFile() {
         self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(0)%."
         self.progressTitleLabel.text = Localizable.shared.strings.downloading_blockchain
@@ -308,15 +355,23 @@ class OpenWalletProgressViewController: BaseViewController {
 // MARK: IBAction
     
     @IBAction func onCancel(sender :UIButton) {
-        if AppModel.sharedManager().isRestoreFlow {
-            RestoreManager.shared.cancelRestore()
-            AppModel.sharedManager().isRestoreFlow = false
+        AppModel.sharedManager().removeDelegate(self)
+
+        if onlyConnect {
+            cancelCallback?()
+            navigationController?.popToRootViewController(animated: true)
         }
-        
-        let appModel = AppModel.sharedManager()
-        appModel.resetWallet(true)
-        
-        navigationController?.popToRootViewController(animated: true)
+        else {
+            if AppModel.sharedManager().isRestoreFlow {
+                RestoreManager.shared.cancelRestore()
+                AppModel.sharedManager().isRestoreFlow = false
+            }
+            
+            let appModel = AppModel.sharedManager()
+            appModel.resetWallet(true)
+            
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     @objc private func onTimeOut() {
@@ -332,7 +387,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             
-            if connected && !AppModel.sharedManager().isRestoreFlow {
+            if !strongSelf.onlyConnect && connected && !AppModel.sharedManager().isRestoreFlow {
                 strongSelf.progressView.progress = 1
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -346,7 +401,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
 
-            if AppModel.sharedManager().isRestoreFlow {
+            if AppModel.sharedManager().isRestoreFlow && !strongSelf.onlyConnect {
                 strongSelf.errorLabel.isHidden = false
                 strongSelf.errorLabel.text = Localizable.shared.strings.no_internet
             }
@@ -411,26 +466,29 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
-
             strongSelf.errorLabel.isHidden = true
 
-            if total == done && strongSelf.isWaitingRestore {
-                strongSelf.isWaitingRestore = false
-                strongSelf.openMainPage()
-            }
-            else if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
-//
+            if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
+                //
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
                 if strongSelf.isWaitingRestore {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
                     strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
-//                    if progress_100 >= 98 {
-//                        strongSelf.isWaitingRestore = false
-//                        strongSelf.openMainPage()
-//                    }
                 }
+                else if strongSelf.onlyConnect {
+                    let progress_100 = Int32(strongSelf.progressView.progress * 100)
+                    strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain) \(progress_100)%."
+                }
+            }
+
+            if total == done && strongSelf.isWaitingRestore {
+                strongSelf.isWaitingRestore = false
+                strongSelf.openMainPage()
+            }
+            else if total == done && strongSelf.onlyConnect {
+                strongSelf.openMainPage()
             }
         }
     }

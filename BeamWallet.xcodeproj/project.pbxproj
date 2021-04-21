@@ -276,6 +276,15 @@
 		922FB15E22B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
 		922FB15F22B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
 		922FB16022B3E134007AD689 /* BMSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922FB15D22B3E134007AD689 /* BMSearchView.swift */; };
+		92302048262F22C5001A1883 /* SelectNodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92302046262F22C5001A1883 /* SelectNodeViewController.swift */; };
+		92302049262F22C5001A1883 /* SelectNodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92302046262F22C5001A1883 /* SelectNodeViewController.swift */; };
+		9230204A262F22C5001A1883 /* SelectNodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92302046262F22C5001A1883 /* SelectNodeViewController.swift */; };
+		92302050262F23AE001A1883 /* NodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9230204E262F23AE001A1883 /* NodeCell.swift */; };
+		92302051262F23AE001A1883 /* NodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9230204E262F23AE001A1883 /* NodeCell.swift */; };
+		92302052262F23AE001A1883 /* NodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9230204E262F23AE001A1883 /* NodeCell.swift */; };
+		92302053262F23AE001A1883 /* NodeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9230204F262F23AE001A1883 /* NodeCell.xib */; };
+		92302054262F23AE001A1883 /* NodeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9230204F262F23AE001A1883 /* NodeCell.xib */; };
+		92302055262F23AE001A1883 /* NodeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9230204F262F23AE001A1883 /* NodeCell.xib */; };
 		9231E3F9225CC3A000121B33 /* SF-Pro-Display-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */; };
 		9231E3FA225CC3A000121B33 /* SF-Pro-Display-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */; };
 		9231E3FB225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */; };
@@ -1364,6 +1373,9 @@
 		922EE89222F18C5800BBFDEF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMMultiLineItem.swift; sourceTree = "<group>"; };
 		922FB15D22B3E134007AD689 /* BMSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSearchView.swift; sourceTree = "<group>"; };
+		92302046262F22C5001A1883 /* SelectNodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectNodeViewController.swift; sourceTree = "<group>"; };
+		9230204E262F23AE001A1883 /* NodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCell.swift; sourceTree = "<group>"; };
+		9230204F262F23AE001A1883 /* NodeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NodeCell.xib; sourceTree = "<group>"; };
 		9231E3F7225CC39F00121B33 /* SF-Pro-Display-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-LightItalic.otf"; sourceTree = "<group>"; };
 		9231E3F8225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
 		9232EC952267334900A12EEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -2185,6 +2197,7 @@
 				92C00D2122A00E2A00DDB579 /* OwnerKeyViewController.swift */,
 				92C00D2222A00E2A00DDB579 /* OwnerKeyViewController.xib */,
 				92B7DA2E22D63EFB00D4F88B /* TrustedNodeViewController.swift */,
+				92302046262F22C5001A1883 /* SelectNodeViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2405,6 +2418,8 @@
 			children = (
 				923544812255F45B00889C74 /* SettingsCell.swift */,
 				923544822255F45B00889C74 /* SettingsCell.xib */,
+				9230204E262F23AE001A1883 /* NodeCell.swift */,
+				9230204F262F23AE001A1883 /* NodeCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3025,6 +3040,7 @@
 				9231E3FB225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				92FC610E22295A6E00AEABC1 /* InputWordCell.xib in Resources */,
 				923DB110235DD2D60056ACDA /* BMInputViewController.xib in Resources */,
+				92302053262F23AE001A1883 /* NodeCell.xib in Resources */,
 				9268EA9A23A3DE650015FD68 /* bgBlack.jpg in Resources */,
 				926F4B2922E0CDB7007755D9 /* LICENSE in Resources */,
 				9243C2EA22970EF10018B52D /* BMAddressCell.xib in Resources */,
@@ -3176,6 +3192,7 @@
 				92EE507A2625A5C300E684B9 /* SendContactAddressCell.xib in Resources */,
 				9231E3FA225CC3A000121B33 /* SF-Pro-Display-LightItalic.otf in Resources */,
 				9288DD8E223A55410020C501 /* ProximaNova-Regular.ttf in Resources */,
+				92302054262F23AE001A1883 /* NodeCell.xib in Resources */,
 				92E4AED32359A055004062A1 /* CollectionButtonFooter.xib in Resources */,
 				9288DD8F223A55410020C501 /* SF-Pro-Display-Semibold.otf in Resources */,
 				9288DD90223A55410020C501 /* WellcomeViewController.xib in Resources */,
@@ -3220,6 +3237,7 @@
 				92E2EB4C226F21C700367928 /* InputWordCell.xib in Resources */,
 				922B63812552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				92E4AECC23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
+				92302055262F23AE001A1883 /* NodeCell.xib in Resources */,
 				92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
 				92E2EB4D226F21C700367928 /* GoogleService-Info.plist in Resources */,
 				92E4AEE52359DC27004062A1 /* SeedIntroCell.xib in Resources */,
@@ -3480,6 +3498,7 @@
 				926A8579222EB7C600A3B747 /* BMTransaction.m in Sources */,
 				92F6B78922A541040055C3C3 /* SendAllCell.swift in Sources */,
 				92EE50802625B11600E684B9 /* SendSaveAddressCell.swift in Sources */,
+				92302048262F22C5001A1883 /* SelectNodeViewController.swift in Sources */,
 				921027AF24606E42001A7130 /* EMPageViewController.swift in Sources */,
 				92D6DB5E22DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				92365AD1222D3E79000D7064 /* AppModel.mm in Sources */,
@@ -3742,6 +3761,7 @@
 				9210280F24606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 				92F67D5B25876C340009295E /* BMPaymentInfo.m in Sources */,
+				92302050262F23AE001A1883 /* NodeCell.swift in Sources */,
 				923EAA12262EDBD80000B8D0 /* SendTransactionTypeCell.swift in Sources */,
 				9279863B258CD6E9003E06BF /* MaxPrivacyDetailHeader.swift in Sources */,
 				9225D5402294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
@@ -3759,6 +3779,7 @@
 				9288DD2E223A55410020C501 /* BMTransaction.m in Sources */,
 				92F6B78A22A541040055C3C3 /* SendAllCell.swift in Sources */,
 				92EE50822625B11A00E684B9 /* SendSaveAddressCell.swift in Sources */,
+				92302049262F22C5001A1883 /* SelectNodeViewController.swift in Sources */,
 				921027B024606E42001A7130 /* EMPageViewController.swift in Sources */,
 				92D6DB5F22DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				9288DD2F223A55410020C501 /* AppModel.mm in Sources */,
@@ -4021,6 +4042,7 @@
 				9210281024606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
 				92F67D5C25876C340009295E /* BMPaymentInfo.m in Sources */,
+				92302051262F23AE001A1883 /* NodeCell.swift in Sources */,
 				923EAA16262EDBDC0000B8D0 /* SendTransactionTypeCell.swift in Sources */,
 				9279863C258CD6E9003E06BF /* MaxPrivacyDetailHeader.swift in Sources */,
 				9225D5412294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,
@@ -4038,6 +4060,7 @@
 				92E2EAD1226F21C700367928 /* BMTransaction.m in Sources */,
 				92F6B78B22A541040055C3C3 /* SendAllCell.swift in Sources */,
 				92EE50842625B11A00E684B9 /* SendSaveAddressCell.swift in Sources */,
+				9230204A262F22C5001A1883 /* SelectNodeViewController.swift in Sources */,
 				921027B124606E42001A7130 /* EMPageViewController.swift in Sources */,
 				92D6DB6022DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift in Sources */,
 				92E2EAD2226F21C700367928 /* AppModel.mm in Sources */,
@@ -4300,6 +4323,7 @@
 				9210281124606E42001A7130 /* PagingDiff.swift in Sources */,
 				92E2EB2D226F21C700367928 /* ShareLogActivity.swift in Sources */,
 				92F67D5D25876C340009295E /* BMPaymentInfo.m in Sources */,
+				92302052262F23AE001A1883 /* NodeCell.swift in Sources */,
 				923EAA14262EDBDB0000B8D0 /* SendTransactionTypeCell.swift in Sources */,
 				9279863D258CD6E9003E06BF /* MaxPrivacyDetailHeader.swift in Sources */,
 				9225D5422294458D0067B4EA /* BMPickedAddressCell.swift in Sources */,

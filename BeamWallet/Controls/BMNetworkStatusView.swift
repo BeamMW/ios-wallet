@@ -128,8 +128,23 @@ class BMNetworkStatusView: UIView {
     
     @objc private func onChangeNode() {
         if let top = UIApplication.getTopMostViewController() {
-            let vc = SettingsViewController(type: SettingsViewModel.SettingsType.node)
+            let vc = SelectNodeViewController()
+            //SettingsViewController(type: SettingsViewModel.SettingsType.node)
             top.pushViewController(vc: vc)
+        }
+    }
+    
+    private var onlineString:String {
+        get {
+            if Settings.sharedManager().isNodeProtocolEnabled {
+                return  Localizable.shared.strings.online_mobile_node.lowercased()
+            }
+            else if !Settings.sharedManager().connectToRandomNode {
+                return  Localizable.shared.strings.online_own_node.lowercased()
+            }
+            else {
+                return Localizable.shared.strings.online.lowercased()
+            }
         }
     }
     
@@ -156,14 +171,14 @@ class BMNetworkStatusView: UIView {
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusView.glow()
                 
-                self.statusLabel.text = "\(Localizable.shared.strings.online.lowercased()) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
+                self.statusLabel.text = "\(self.onlineString) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
                 self.statusView.backgroundColor = UIColor.main.green
                 self.statusView.glow()
                 
-                self.statusLabel.text = Localizable.shared.strings.online.lowercased()
+                self.statusLabel.text = self.onlineString
                 
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
