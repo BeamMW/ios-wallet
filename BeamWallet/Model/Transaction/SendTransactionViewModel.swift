@@ -91,7 +91,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 second = AppModel.sharedManager().exchangeValue(withZero: Double(inputAmount) ?? 0)
             }
             else {
-                second = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 1, amount: Double(inputAmount) ?? 0)
+                second = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 0, amount: Double(inputAmount) ?? 0)
             }
             
             if (Double(inputAmount) ?? 0) > 0 {
