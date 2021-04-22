@@ -159,6 +159,9 @@ extension EditAddressViewController : UITableViewDataSource {
         else if section == 2 {
             return (viewModel.isContact ? 1 : 2)
         }
+        else if section == 1 {
+            return 0
+        }
         return 1
     }
     

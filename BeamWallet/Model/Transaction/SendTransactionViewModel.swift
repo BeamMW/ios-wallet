@@ -43,15 +43,13 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     private var addresses = [BMAddress]()
     public var isToken = false
    
-    public var isSendOffline = false
+    public var isSendOffline = false {
+        didSet {
+            calculateFee()
+        }
+    }
     public var addressType = BMAddressTypeUnknown {
         didSet {
-//            if addressType == BMAddressTypeShielded && isToken {
-//                isSendOffline = true
-//            }
-//            else {
-//                isSendOffline = false
-//            }
             isSendOffline = false
             self.onAddressTypeChanged?(true)
         }
@@ -85,7 +83,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public var secondAmount:String {
         get {
-            let feeString = "+ \(fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
+          //  let feeString = "+ \(fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
             var second = ""
             if selectedCurrency == BEAM  {
                 second = AppModel.sharedManager().exchangeValue(withZero: Double(inputAmount) ?? 0)
@@ -93,19 +91,19 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             else {
                 second = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 0, amount: Double(inputAmount) ?? 0)
             }
-            
-            if (Double(inputAmount) ?? 0) > 0 {
-                return second + " (" + feeString + ")"
-            }
-            else {
-                return second
-            }
+            return second
+//            if (Double(inputAmount) ?? 0) > 0 {
+//                return second + " (" + feeString + ")"
+//            }
+//            else {
+//                return second
+//            }
         }
     }
     
     public func calculateFee() {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
-                            addressType == BMAddressTypeMaxPrivacy)
+                            addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
         AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, changed, shieldedInputsFee) in
             DispatchQueue.main.async {
@@ -490,7 +488,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             amountItem.detailAttributedString = amountDetail
             items.append(amountItem)
             
-            let totalFeeDetail = amountString(amount: fee, isFee: true, color: .white)
+            let total = AppModel.sharedManager().realTotal(0.0, fee: Double(fee) ?? 0.0)
+            let totalFeeDetail = amountString(amount: String(total), isFee: false, color: .white)
             let feeItem = BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: totalFeeDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
             feeItem.detailAttributedString = totalFeeDetail
             items.append(feeItem)
@@ -518,7 +517,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public func calculateChange() {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
-            addressType == BMAddressTypeMaxPrivacy)
+            addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
         AppModel.sharedManager().calculateFee((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
             self.onCalculateChanged?(change)

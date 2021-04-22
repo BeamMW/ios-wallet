@@ -132,9 +132,6 @@ class SendViewController: BaseTableViewController {
             guard let strongSelf = self else { return }
             if strongSelf.isAppear {
                 strongSelf.reloadInutCell()
-                UIView.performWithoutAnimation {
-                    strongSelf.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-                }
             }
         }
         

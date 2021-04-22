@@ -1932,18 +1932,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID {
-    for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
-        if ([add.getMainId isEqualToString:ID] || [add.address isEqualToString:ID]) {
-            return add;
+    if(ID.length != 0) {
+        for (BMAddress *add in _walletAddresses.reverseObjectEnumerator) {
+            if ([add.getMainId isEqualToString:ID] || [add.address isEqualToString:ID]) {
+                return add;
+            }
+        }
+        
+        for (BMContact *contact in _contacts.reverseObjectEnumerator) {
+            if ([contact.address.getMainId isEqualToString:ID] || [contact.address.address isEqualToString:ID]) {
+                return contact.address;
+            }
         }
     }
-    
-    for (BMContact *contact in _contacts.reverseObjectEnumerator) {
-        if ([contact.address.getMainId isEqualToString:ID] || [contact.address.address isEqualToString:ID]) {
-            return contact.address;
-        }
-    }
-    
     return nil;
 }
 
@@ -2167,10 +2168,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
     auto params = CreateSimpleTransactionParameters();
     const auto type = GetAddressType(to.string);
     
-    auto choiceOffline = false;
     auto messageString = comment.string;
     
-    if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline && choiceOffline)) {
+    if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline)) {
         if (!LoadReceiverParams(_txParameters, params, type)) {
             assert(false);
             return;
@@ -2854,12 +2854,14 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 #pragma mark - Contacts
 
 -(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue {
-    for (BMContact *contact in _contacts) {
-        if([contact.address.walletId isEqualToString:idValue] || [contact.address.getMainId isEqualToString:idValue])
-        {
-            return contact;
+    if(idValue.length != 0) {
+        for (BMContact *contact in _contacts) {
+            if([contact.address.walletId isEqualToString:idValue] || [contact.address.getMainId isEqualToString:idValue])
+            {
+                return contact;
+            }
         }
-    }    
+    }
     return nil;
 }
 
