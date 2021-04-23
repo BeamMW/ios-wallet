@@ -22,7 +22,7 @@ import UIKit
 class BMNetworkStatusView: UIView {
 
     private var statusLabel: UILabel!
-    public var statusView: UIView!
+    public var statusView: UIImageView!
     public var indicatorView:MaterialActivityIndicatorView!
     private var fromNib = false
     private var isPrevUpdate = false
@@ -74,7 +74,8 @@ class BMNetworkStatusView: UIView {
     private func setup(fromNib:Bool) {
         self.fromNib = fromNib
         
-        statusView = UIView(frame: CGRect(x: !fromNib ? 15 : 0, y: !fromNib ? 17 : 2, width: 12, height: 12))
+        statusView = UIImageView(frame: CGRect(x: !fromNib ? 15 : 0, y: !fromNib ? 17 : 2, width: 12, height: 12))
+        statusView.contentMode = .scaleAspectFit
         statusView.layer.cornerRadius = 6
         addSubview(statusView)
         
@@ -140,7 +141,7 @@ class BMNetworkStatusView: UIView {
                 return  Localizable.shared.strings.online_mobile_node.lowercased()
             }
             else if !Settings.sharedManager().connectToRandomNode {
-                return  Localizable.shared.strings.online_own_node.lowercased()
+                return  Localizable.shared.strings.online.lowercased()
             }
             else {
                 return Localizable.shared.strings.online.lowercased()
@@ -168,6 +169,7 @@ class BMNetworkStatusView: UIView {
         if connected {
             
             if AppModel.sharedManager().currencies.count == 0 && Settings.sharedManager().currency != BMCurrencyOff  {
+                self.statusView.image = nil
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusView.glow()
                 
@@ -175,8 +177,15 @@ class BMNetworkStatusView: UIView {
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
-                self.statusView.backgroundColor = UIColor.main.green
-                self.statusView.glow()
+                if !Settings.sharedManager().isNodeProtocolEnabled && !Settings.sharedManager().connectToRandomNode {
+                    self.statusView.backgroundColor = UIColor.clear
+                    self.statusView.removeGlow()
+                    self.statusView.image = UIImage(named: "ic_trusted_node")
+                }
+                else  {
+                    self.statusView.backgroundColor = UIColor.main.green
+                    self.statusView.glow()
+                }
                 
                 self.statusLabel.text = self.onlineString
                 
@@ -185,6 +194,7 @@ class BMNetworkStatusView: UIView {
             
         }
         else{
+            self.statusView.image = nil
             self.statusView.backgroundColor = UIColor.main.red
             self.statusView.glow()
             
@@ -287,6 +297,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
             
             self.statusLabel.x = self.fromNib ? 22 : 37
             self.statusLabel.text = Localizable.shared.strings.connecting.lowercased()
+            self.statusView.image = nil
             self.statusView.backgroundColor = UIColor.main.orange
             self.statusLabel.textColor = UIColor.main.orange
         }

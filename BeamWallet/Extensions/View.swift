@@ -60,6 +60,13 @@ extension UIView
         self.layer.shadowRadius = 4
         self.layer.shadowOpacity = 0.5
     }
+    
+    func removeGlow() {
+        self.layer.shadowOffset = .zero
+        self.layer.shadowColor = UIColor.clear.cgColor
+        self.layer.shadowRadius = 0
+        self.layer.shadowOpacity = 0
+    }
 }
 
 extension UIView {

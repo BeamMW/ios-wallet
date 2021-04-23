@@ -694,7 +694,7 @@ and never kept on the blockchain.";
 "tx_failure_cannot_get_vouchers" = "The sender cannot get vouchers for max privacy transaction";
 
 "random_node_title" = "Random node";
-"fast_sync" = "Slow sync";
+"fast_sync" = "Fast sync";
 "random_node_text" = "For those who don’t have any other Beam wallet.";
 
 "slow_sync" = "Slow sync";
