@@ -215,33 +215,41 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     private func openMainPage() {
-        
-        AppModel.sharedManager().getNetworkStatus()
-        AppModel.sharedManager().stopChangeWallet()
-        AppModel.sharedManager().refreshAddresses()
-        AppModel.sharedManager().getUTXO()
-        
-        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
-        let menuViewController = LeftMenuViewController()
-        
-        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
-                                                      leftViewController: menuViewController,
-                                                      rightViewController: nil)
-        
-        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
-        sideMenuController.rootViewLayerShadowRadius = 0
-        sideMenuController.rootViewLayerShadowColor = UIColor.clear
-        sideMenuController.leftViewLayerShadowRadius = 0
-        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
-        sideMenuController.rootViewCoverAlphaForRightView = 0.5
-        sideMenuController.leftViewCoverAlpha = 0.5
-        sideMenuController.rightViewCoverAlpha = 0.5
-        sideMenuController.modalTransitionStyle = .crossDissolve
-        
-        self.navigationController?.setViewControllers([sideMenuController], animated: true)
-        
-        BMLockScreen.shared.onTapEvent()
+        if Settings.sharedManager().isNodeProtocolEnabled {
+            let vc = OpenWalletProgressViewController(onlyConnect: true)
+            vc.cancelCallback = {
+                AppModel.sharedManager().resetWallet(false)
+            }
+            pushViewController(vc: vc)
+        }
+        else {
+            AppModel.sharedManager().getNetworkStatus()
+            AppModel.sharedManager().stopChangeWallet()
+            AppModel.sharedManager().refreshAddresses()
+            AppModel.sharedManager().getUTXO()
+            
+            let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+            let menuViewController = LeftMenuViewController()
+            
+            let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+                                                          leftViewController: menuViewController,
+                                                          rightViewController: nil)
+            
+            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
+            sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
+            sideMenuController.rootViewLayerShadowRadius = 0
+            sideMenuController.rootViewLayerShadowColor = UIColor.clear
+            sideMenuController.leftViewLayerShadowRadius = 0
+            sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+            sideMenuController.rootViewCoverAlphaForRightView = 0.5
+            sideMenuController.leftViewCoverAlpha = 0.5
+            sideMenuController.rightViewCoverAlpha = 0.5
+            sideMenuController.modalTransitionStyle = .crossDissolve
+            
+            self.navigationController?.setViewControllers([sideMenuController], animated: true)
+            
+            BMLockScreen.shared.onTapEvent()
+        }
     }
 }
 
