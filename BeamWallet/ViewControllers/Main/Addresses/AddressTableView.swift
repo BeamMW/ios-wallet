@@ -24,28 +24,10 @@ class AddressTableView: UITableViewController {
     
     public var placholder: String?
     
-    public var category: BMCategory? {
-        didSet {
-            viewModel = AddressViewModel(category: category)
-        }
-    }
     
     public var selectedIndex = 0 {
         didSet {
-            if self.category != nil {
-                if selectedIndex == 0 {
-                    viewModel.selectedState = .active
-                    placholder = Localizable.shared.strings.no_category_addresses
-                }
-                else {
-                    viewModel.selectedState = .contacts
-                    placholder = Localizable.shared.strings.no_category_contacts
-                }
-            }
-            else {
-                viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: selectedIndex) ?? .active
-            }
-            
+            viewModel.selectedState = AddressViewModel.AddressesSelectedState(rawValue: selectedIndex) ?? .active
             tableView.tag = selectedIndex
         }
     }
@@ -142,7 +124,7 @@ class AddressTableView: UITableViewController {
             
             let cell = tableView
                 .dequeueReusableCell(withType: BMAddressCell.self, for: indexPath)
-                .configured(with: (row: indexPath.row, address: address, displayTransaction: false, displayCategory: true))
+                .configured(with: (row: indexPath.row, address: address, displayTransaction: false))
             return cell
         }
     }

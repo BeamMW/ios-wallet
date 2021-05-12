@@ -24,7 +24,6 @@ class BMAddressCell: BaseCell {
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var idLabel: UILabel!
-    @IBOutlet weak private var categoryLabel: UILabel!
     @IBOutlet weak private var expiredLabel: UILabel!
 
     @IBOutlet weak private var arrowImage: UIImageView!
@@ -80,7 +79,7 @@ class BMAddressCell: BaseCell {
 
 extension BMAddressCell: Configurable {
     
-    func configure(with options: (row: Int, address:BMAddress, displayTransaction:Bool, displayCategory:Bool)) {
+    func configure(with options: (row: Int, address:BMAddress, displayTransaction:Bool)) {
         
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
         
@@ -119,39 +118,6 @@ extension BMAddressCell: Configurable {
                     transactionCommentDate.text = last.shortDate()
                 }
             }
-        }
-        
-//        if options.address.createTime == 0 {
-//            expiredLabel.text = String.empty()
-//        }
-//        else{
-//            let expired:String = (options.address.isExpired()) ? (Localizable.shared.strings.expired.lowercased() + " " + options.address.expiredFormattedDate()) : (options.address.duration == 0 ? Localizable.shared.strings.never_expires.lowercased() : (Localizable.shared.strings.expires_in.lowercased() + " " + options.address.agoDate().lowercased()))
-//
-//            let imageAttachment = NSTextAttachment()
-//            imageAttachment.image = (options.address.isExpired() ? IconExpired() : (options.address.duration == 0 ? IconInfinity() : IconExpires()))
-//            imageAttachment.bounds = CGRect(x: 0, y: options.address.duration == 0 ? (-4) : (-3), width: 16, height: 16)
-//
-//            let imageString = NSAttributedString(attachment: imageAttachment)
-//
-//            let attributedString = NSMutableAttributedString()
-//            attributedString.append(imageString)
-//            attributedString.append(NSAttributedString(string: "   "))
-//            attributedString.append(NSAttributedString(string: expired))
-//
-//            expiredLabel.attributedText = attributedString
-//        }
-        
-        if options.displayCategory {
-            if options.address.categories.count > 0 {
-                categoryLabel.attributedText = options.address.categoriesName()
-                categoryLabel.isHidden = options.address.categoriesName().length > 0 ? false : true
-            }
-            else{
-                categoryLabel.isHidden = true
-            }
-        }
-        else{
-            categoryLabel.isHidden = true
         }
         
         expiredLabel.isHidden = true

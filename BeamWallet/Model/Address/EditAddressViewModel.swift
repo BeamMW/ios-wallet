@@ -29,7 +29,6 @@ class EditAddressViewModel: DetailAddressViewModel {
         self.newAddress = BMAddress()
         self.newAddress.walletId = address.walletId
         self.newAddress.label = address.label
-        self.newAddress.categories = address.categories
         self.newAddress.createTime = address.createTime
         self.newAddress.duration = address.duration
         self.newAddress.ownerId = address.ownerId
@@ -52,9 +51,7 @@ class EditAddressViewModel: DetailAddressViewModel {
         else if self.newAddress.duration != address?.duration {
             return true
         }
-        else if self.newAddress.categories != address?.categories {
-            return true
-        }
+
         
         return false
     }
@@ -94,35 +91,6 @@ class EditAddressViewModel: DetailAddressViewModel {
             }
             
             top.pushViewController(vc: vc)
-        }
-    }
-    
-    public func pickCategory() {
-        if let top = UIApplication.getTopMostViewController() {
-            if AppModel.sharedManager().categories.count == 0 {
-                let vc = CategoryEditViewController(category: nil)
-                vc.completion = { [weak self]
-                    obj in
-                    if let cat = obj {
-                        self?.newAddress.categories = [String(cat.id)]
-                        self?.onDataChanged?()
-                    }
-                }
-                top.pushViewController(vc: vc)
-            }
-            else {
-                let vc = BMDataPickerViewController(type: .category, selectedValue: self.newAddress?.categories as? [String])
-                vc.completion = { [weak self]
-                    obj in
-            
-                    if let categories = (obj as? [String]) {
-                        self?.newAddress.categories = NSMutableArray(array: categories)
-                        self?.onDataChanged?()
-                    }
-                    
-                }
-                top.pushViewController(vc: vc)
-            }
         }
     }
     

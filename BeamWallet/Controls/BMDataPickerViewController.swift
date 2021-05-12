@@ -25,7 +25,6 @@ class BMDataPickerViewController: BaseTableViewController {
         case lock
         case log
         case address_expire
-        case category
         case clear
         case export_data
         case currency
@@ -75,9 +74,6 @@ class BMDataPickerViewController: BaseTableViewController {
             title = Localizable.shared.strings.save_wallet_logs
         case .address_expire:
             title = Localizable.shared.strings.exp_date
-        case .category:
-            title = Localizable.shared.strings.categories
-            addRightButton(title: Localizable.shared.strings.save, target: self, selector: #selector(onRightButton), enabled: false)
         case .clear:
             title = Localizable.shared.strings.clear_data
             addRightButton(title: Localizable.shared.strings.done, target: self, selector: #selector(onRightButton), enabled: false)
@@ -109,26 +105,6 @@ class BMDataPickerViewController: BaseTableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
-        
-        if type == .category {
-            let label = UILabel(frame: CGRect.zero)
-            label.font = RegularFont(size: 16)
-            if Settings.sharedManager().isDarkMode {
-                label.textColor = UIColor.main.steel;
-            }
-            else {
-                label.textColor = UIColor.main.blueyGrey
-            }
-            label.numberOfLines = 0
-            label.text = Localizable.shared.strings.create_categories_in_settings
-            label.textAlignment = .center
-            let size = label.sizeThatFits(CGSize(width: 260, height: 99999))
-            label.frame = CGRect(x: (UIScreen.main.bounds.width - size.width)/2,y: 30, width: size.width, height: size.height)
-
-            let footer = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: size.height+40))
-            footer.addSubview(label)
-            self.tableView.tableFooterView = footer
-        }
     }
     
     @objc private func onRightButton() {
@@ -175,8 +151,6 @@ class BMDataPickerViewController: BaseTableViewController {
                             AppModel.sharedManager().clearAllContacts()
                         case 3:
                             AppModel.sharedManager().clearAllTransactions()
-                        case 4:
-                            AppModel.sharedManager().clearAllCategories()
                         default:
                             break
                         }
@@ -185,16 +159,11 @@ class BMDataPickerViewController: BaseTableViewController {
                 self.back()
             }
         }
-        else if type == .category || type == .export_data {
+        else if  type == .export_data {
             var selectedValues = [String]()
             for item in values {
                 if item.arrowType == BMPickerData.ArrowType.selected {
-                    if type == .category {
-                        selectedValues.append(String(item.unique as! Int32))
-                    }
-                    else {
-                        selectedValues.append(item.unique as! String)
-                    }
+                    selectedValues.append(item.unique as! String)
                 }
             }
             
@@ -256,25 +225,8 @@ class BMDataPickerViewController: BaseTableViewController {
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 2, multiplie: true))
            // values.append(BMPickerData(title: Localizable.shared.strings.delete_all_tags, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 4, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_transactions, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 3, multiplie: true))
-        case .category:
-            var selectedCategories = (selectedValue as! [String])
-            if selectedCategories.count == 0 {
-                selectedCategories.append("0")
-            }
-            
-            let none = BMCategory.none()
-            none.name = none.name.capitalizingFirstLetter()
-           
-            var categories = AppModel.sharedManager().sortedCategories() as! [BMCategory]
-            categories.insert(none, at: 0)
-            
-            for category in categories {
-                let selected = selectedCategories.contains(String(category.id))
-                values.append(BMPickerData(title: category.name, detail: nil, titleColor: UIColor(hexString: category.color), arrowType: selected ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: category.id, multiplie: true))
-            }
         case .export_data:
             values.append(BMPickerData(title: Localizable.shared.strings.transaction_history, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "transaction", multiplie: true))
-            values.append(BMPickerData(title: Localizable.shared.strings.categories, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "category", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "address", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "contact", multiplie: true))
         case .sendCurrency:
@@ -358,47 +310,6 @@ class BMDataPickerViewController: BaseTableViewController {
                 }
             }
             enableRightButton(enabled: !isAllDisabled)
-        case .category:
-            let id = data.unique as! Int32
-            if id == 0 {
-                for item in values {
-                    item.arrowType = BMPickerData.ArrowType.unselected
-                }
-                data.arrowType = BMPickerData.ArrowType.selected
-            }
-            else {
-                if data.arrowType == BMPickerData.ArrowType.selected {
-                    data.arrowType = BMPickerData.ArrowType.unselected
-                }
-                else {
-                    data.arrowType = BMPickerData.ArrowType.selected
-                }
-                var isAllDisabled = true
-                for item in values {
-                    if item.arrowType == BMPickerData.ArrowType.selected && (item.unique as! Int32) > 0 {
-                        isAllDisabled = false
-                    }
-                }
-                if isAllDisabled {
-                    values[0].arrowType = BMPickerData.ArrowType.selected
-                }
-                else{
-                    values[0].arrowType = BMPickerData.ArrowType.unselected
-                }
-            }
-            let oldSelectedCategories = (selectedValue as! [String])
-            var newSelectedCategories = [String]()
-            for item in values {
-                if item.arrowType == BMPickerData.ArrowType.selected {
-                    newSelectedCategories.append(String(item.unique as! Int32))
-                }
-            }
-            var sorted1 = (oldSelectedCategories.sorted { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }).joined(separator:"")
-            let sorted2 = (newSelectedCategories.sorted { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }).joined(separator:"")
-            if sorted1.isEmpty && sorted2 == "0" {
-                sorted1 = "0"
-            }
-            enableRightButton(enabled: sorted1 != sorted2)
         case .currency:
             if isAutoSelect {
                 Settings.sharedManager().currency = data.unique as! BMCurrencyType
@@ -433,9 +344,6 @@ extension BMDataPickerViewController: UITableViewDelegate {
         
         if type == .clear || type == .export_data {
             tableView.reloadRows(at: [indexPath], with: .none)
-        }
-        else if type == .category {
-            tableView.reloadData()
         }
     }
 }

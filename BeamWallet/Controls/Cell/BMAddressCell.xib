@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,14 +25,14 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gZK-k0-ccp" id="1P1-rY-H61">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="117.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R2c-Wz-DIg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="117.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PZP-qM-XZh">
-                                <rect key="frame" x="15" y="10" width="156" height="19.5"/>
+                                <rect key="frame" x="15" y="10" width="156" height="45"/>
                                 <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -43,7 +41,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="glu-tf-lVx">
-                                <rect key="frame" x="15" y="34.5" width="290" height="42"/>
+                                <rect key="frame" x="15" y="60" width="290" height="17"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="L82-Z4-Ytc">
                                         <rect key="frame" x="0.0" y="0.0" width="183.5" height="17"/>
@@ -71,20 +69,11 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Category" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="euq-xv-eOc">
-                                        <rect key="frame" x="0.0" y="25" width="54.5" height="17"/>
-                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
-                                    </label>
                                 </subviews>
                                 <viewLayoutGuide key="safeArea" id="uD9-rf-H7V"/>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="&quot;comment&quot;" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HsP-Om-9by">
-                                <rect key="frame" x="41" y="86" width="65" height="17"/>
+                                <rect key="frame" x="41" y="86.5" width="65" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="17" id="8a0-Tw-z1t"/>
                                 </constraints>
@@ -96,14 +85,14 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconComment" translatesAutoresizingMaskIntoConstraints="NO" id="zBs-gT-CzZ">
-                                <rect key="frame" x="15" y="86.5" width="16" height="16"/>
+                                <rect key="frame" x="15" y="87" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="34Q-Qo-l2s"/>
                                     <constraint firstAttribute="width" constant="16" id="bzi-fZ-dyj"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 May" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZp-gt-I7T">
-                                <rect key="frame" x="126" y="86" width="45" height="17"/>
+                                <rect key="frame" x="126" y="86.5" width="45" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="a3D-IM-Ycq"/>
                                     <constraint firstAttribute="height" constant="17" id="fqz-a1-ylD"/>
@@ -154,7 +143,6 @@
             <viewLayoutGuide key="safeArea" id="Ypn-16-zTM"/>
             <connections>
                 <outlet property="arrowImage" destination="LN3-xO-1fZ" id="shi-Wv-qeZ"/>
-                <outlet property="categoryLabel" destination="euq-xv-eOc" id="wr1-lk-ymv"/>
                 <outlet property="expiredLabel" destination="CMy-ut-4sW" id="d2a-MV-I7W"/>
                 <outlet property="idLabel" destination="p4n-vs-b1q" id="IWg-gr-mIJ"/>
                 <outlet property="mainView" destination="R2c-Wz-DIg" id="6pJ-iA-yEw"/>

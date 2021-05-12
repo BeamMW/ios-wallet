@@ -45,7 +45,6 @@ typedef int BMAddressType;
 @property (nonatomic,strong) NSString * _Nonnull label;
 @property (nonatomic,strong) NSString * _Nullable identity;
 
-@property (nonatomic,strong) NSMutableArray<NSString*> * _Nonnull categories;
 @property (nonatomic,assign) UInt64 createTime;
 @property (nonatomic,assign) UInt64 duration;
 @property (nonatomic,assign) UInt64 ownerId;
@@ -58,8 +57,6 @@ typedef int BMAddressType;
 @property (nonatomic,assign) BOOL isChangedDate;
 @property (nonatomic,assign) BOOL isNeedRemoveTransactions;
 @property (nonatomic,assign) BOOL isContact;
-
--(NSMutableAttributedString*_Nonnull)categoriesName;
 
 @property (nonatomic,getter=getMainId) NSString * _Nonnull _id;
 

@@ -381,7 +381,6 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 let filterdObjects = contacts.filter {
                     $0.name.lowercased().contains(toAddress.lowercased()) ||
                         $0.address.label.lowercased().contains(toAddress.lowercased()) ||
-                        $0.address.categoriesName().string.lowercased().contains(toAddress.lowercased()) ||
                         $0.address.walletId.lowercased().starts(with: toAddress.lowercased())
                 }
                 contacts.removeAll()
@@ -402,7 +401,6 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             if !toAddress.isEmpty {
                 let filterdObjects = self.addresses.filter {
                         $0.label.lowercased().contains(toAddress.lowercased()) ||
-                        $0.categoriesName().string.lowercased().contains(toAddress.lowercased()) ||
                         $0.walletId.lowercased().starts(with: toAddress.lowercased())
                 }
                 
@@ -434,10 +432,9 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let contact = AppModel.sharedManager().findAddress(byID: sbbsAddress)
         
         let nameName = contact?.label
-        let categories = contact?.categoriesName()
         
-        if nameName != nil || categories != nil {
-            if nameName?.isEmpty == true && categories?.string.isEmpty == true {
+        if nameName != nil  {
+            if nameName?.isEmpty == true  {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: to, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             else {
@@ -450,12 +447,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 
                 detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
                 detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
-                
-                if categories != nil && categories?.string.isEmpty == false {
-                    detail.append(NSAttributedString(string: " "))
-                    detail.append(categories!)
-                }
-                
+                                
                 let toItem = BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: to, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
                 toItem.detailAttributedString = detail
                 items.append(toItem)

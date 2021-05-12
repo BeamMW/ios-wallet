@@ -36,7 +36,6 @@ class QRViewController: BaseViewController {
 
     @IBOutlet weak private var addressTitleLabel: UILabel!
     @IBOutlet weak private var addressLabel: UILabel!
-    @IBOutlet weak private var categoryLabel: UILabel!
     
     @IBOutlet weak private var amountStack: UIStackView!
     @IBOutlet weak private var amountLabel: UILabel!
@@ -92,15 +91,6 @@ class QRViewController: BaseViewController {
         }
         else {
             addressLabel.text = address.walletId
-        }
-        
-        if address.categories.count > 0
-        {
-            categoryLabel.attributedText = address.categoriesName()
-            categoryLabel.isHidden = address.categoriesName().length > 0 ? false : true
-        }
-        else{
-            categoryLabel.isHidden = true
         }
         
         if let a = amount, !a.isEmpty {

@@ -25,7 +25,6 @@ class BMMultiLinesCell: BaseCell {
 
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var valueLabel: BMCopyLabel!
-    @IBOutlet weak private var categoryLabel: UILabel!
     @IBOutlet weak private var addressNameLabel: UILabel!
     @IBOutlet weak private var stackView: UIStackView!
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
@@ -95,7 +94,6 @@ extension BMMultiLinesCell: Configurable {
             valueLabel.copyText = item.detail
         }
         
-        categoryLabel.isHidden = true
         addressNameLabel.isHidden = true
         nameLabel.isHidden = false
 
@@ -132,15 +130,7 @@ extension BMMultiLinesCell: Configurable {
         nameLabel.adjustFontSize = true
         
         if item.title == Localizable.shared.strings.send_to || item.title == Localizable.shared.strings.outgoing_address.uppercased()  {
-            
-            let address = AppModel.sharedManager().findAddress(byID: item.detail ?? String.empty())
-            
-            if address?.categories.count ?? 0 > 0
-            {
-                categoryLabel.isHidden = false
-                categoryLabel.attributedText = address?.categoriesName()
-            }
-            
+                        
             if let address = AppModel.sharedManager().findAddress(byID: item.detail ?? String.empty()) {
                 if !address.label.isEmpty {
                     addressNameLabel.isHidden = false
@@ -228,22 +218,6 @@ extension BMMultiLinesCell: Configurable {
                     attributedString.append(detailString)
                    
                     attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
-                }
-                
-                if address.categories.count > 0 {
-                    let style = NSMutableParagraphStyle()
-                    style.lineSpacing = 3
-                    
-                    let categoriesString = address.categoriesName()
-                    categoriesString.addAttributes([NSAttributedString.Key.font : ItalicFont(size: 14 + fontSizeOffset)], range: NSMakeRange(0, categoriesString.string.count))
-
-                    let whiteString = NSMutableAttributedString(string: "\nwhite\n")
-                    whiteString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, whiteString.string.count))
-                    whiteString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: NSMakeRange(0, whiteString.string.count))
-                    whiteString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 1), range: NSMakeRange(0, whiteString.string.count))
-
-                    attributedString.append(whiteString)
-                    attributedString.append(categoriesString)
                 }
             }
             

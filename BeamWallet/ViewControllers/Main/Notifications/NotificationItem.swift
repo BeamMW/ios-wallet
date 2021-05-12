@@ -27,7 +27,6 @@ class NotificationItem {
 
     public var name:String?
     public var detail:NSMutableAttributedString?
-    public var categories:NSMutableAttributedString?
     public var date:String?
     public var icon:UIImage?
 
@@ -132,10 +131,6 @@ class NotificationItem {
             name = Localizable.shared.strings.address_expired
             
             if let address = AppModel.sharedManager().findAddress(byID: notification.pId) {
-                if address.categories.count > 0 {
-                    categories = address.categoriesName()
-                }
-                
                 if address.label.isEmpty {
                     let attributedText = NSMutableAttributedString(string: pId)
                     attributedText.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: NSRange(location: 0, length: pId.count))

@@ -71,17 +71,6 @@ class DetailAddressViewModel: AddressViewModel {
                 details.append(identityItem)
             }
         }
-        
-        
-        if self.address?.categories.count ?? 0 > 0 {
-            let title = (self.address?.categories.count ?? 0 <= 1 ? Localizable.shared.strings.tag : Localizable.shared.strings.categories)
-            let categories = self.address?.categoriesName()
-            if(categories?.length ?? 0 > 0){
-                let item = BMMultiLineItem(title: title, detail:categories?.string , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
-                       item.detailAttributedString = categories
-                details.append(item)
-            }
-        }
     }
     
     public func actionItems() -> [BMPopoverMenu.BMPopoverMenuItem] {

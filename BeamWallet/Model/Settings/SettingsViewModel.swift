@@ -26,7 +26,6 @@ class SettingsViewModel: NSObject {
         case general = 1
         case node = 2
         case privacy = 3
-        case tags = 4
         case utilites = 5
         case notifications = 6
     }
@@ -57,8 +56,6 @@ class SettingsViewModel: NSObject {
         case verification = 23
         case export = 24
         case imprt = 25
-        case create_category = 26
-        case open_category = 27
         case random_node = 28
         case currency = 29
         case notifications = 30
@@ -73,7 +70,6 @@ class SettingsViewModel: NSObject {
         public var detail: String?
         public var isSwitch: Bool?
         public var type: SettingsItemType!
-        public var category: BMCategory?
         public var icon: UIImage?
         public var hasArrow: Bool!
         public var id: Int?
@@ -91,15 +87,6 @@ class SettingsViewModel: NSObject {
             self.detail = detail
             self.isSwitch = isSwitch
             self.type = type
-            self.hasArrow = hasArrow
-        }
-        
-        init(title: String?, detail: String?, isSwitch: Bool?, type: SettingsItemType, category: BMCategory?, hasArrow: Bool) {
-            self.title = title
-            self.detail = detail
-            self.isSwitch = isSwitch
-            self.type = type
-            self.category = category
             self.hasArrow = hasArrow
         }
     }
@@ -210,21 +197,6 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
             items.append(section_0)
-        case .tags:
-            var categories = [SettingsItem]()
-            if AppModel.sharedManager().categories.count > 0 {
-                let sorted = AppModel.sharedManager().sortedCategories()
-                
-                for category in sorted as! [BMCategory] {
-                    categories.append(SettingsItem(title: category.name, detail: nil, isSwitch: nil, type: .open_category, category: category, hasArrow: true))
-                }
-            }
-            if categories.count > 0 {
-                items.append(categories)
-            }
-            var section_1 = [SettingsItem]()
-            section_1.append(SettingsItem(title: Localizable.shared.strings.create_new_category, detail: nil, isSwitch: nil, type: .create_category, hasArrow: false))
-            items.append(section_1)
         default:
             break
         }
@@ -242,8 +214,6 @@ class SettingsViewModel: NSObject {
             return Localizable.shared.strings.privacy
         case .utilites:
             return Localizable.shared.strings.utilities
-        case .tags:
-            return Localizable.shared.strings.categories
         case .notifications:
             return Localizable.shared.strings.notifications
         case .none:
@@ -306,10 +276,6 @@ class SettingsViewModel: NSObject {
             onExportWallet()
         case .imprt:
             onImportWallet()
-        case .create_category:
-            openCategory(category: nil)
-        case .open_category:
-            openCategory(category: item.category)
         case .currency:
             onCurrencyScreen()
         case .notifications:
@@ -374,18 +340,6 @@ extension SettingsViewModel {
         }
     }
     
-    func openCategory(category: BMCategory?) {
-        if let top = UIApplication.getTopMostViewController() {
-            if category == nil {
-                let vc = CategoryEditViewController(category: category)
-                top.pushViewController(vc: vc)
-            }
-            else {
-                let vc = CategoryDetailViewController(category: category!)
-                top.pushViewController(vc: vc)
-            }
-        }
-    }
     
     func onOpenTgBot() {
         let botURL = URL(string: "tg://resolve?domain=anywhere_testnet_bot")

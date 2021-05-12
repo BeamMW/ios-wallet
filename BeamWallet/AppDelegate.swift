@@ -130,7 +130,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
         
     public func logout() {
-        AppModel.sharedManager().clearAllCategories()
         AppModel.sharedManager().clearNotifications()
         AppModel.sharedManager().isLoggedin = false
         AppModel.sharedManager().resetWallet(true)

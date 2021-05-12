@@ -126,13 +126,7 @@ class BMSearchAddressCell: BaseCell {
                 if contactName.text?.isEmpty ?? true {
                     contactName.text = Localizable.shared.strings.no_name
                 }
-                
-                if contact?.address.categories.count ?? 0 > 0 {
-                    contactCategory.attributedText = contact?.address.categoriesName()
-                }
-                else {
-                    contactCategory.text = nil
-                }
+                contactCategory.text = nil
             }
         }
     }

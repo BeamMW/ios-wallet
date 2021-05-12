@@ -143,44 +143,6 @@ class ReceiveAddressViewModel: NSObject {
         return contacts
     }
     
-    public func onCategory() {
-        if let top = UIApplication.getTopMostViewController() {
-            if AppModel.sharedManager().categories.count == 0 {
-                let vc = CategoryEditViewController(category: nil)
-                vc.completion = { [weak self]
-                    obj in
-                    guard let strongSelf = self else { return }
-                    
-                    if let category = obj {
-                        strongSelf.address?.categories = [String(category.id)]
-                        
-                        AppModel.sharedManager().setWalletCategories(strongSelf.address!.categories, toAddress: strongSelf.address!.walletId)
-                        
-                        self?.onDataChanged?()
-                    }
-                }
-                top.pushViewController(vc: vc)
-            }
-            else {
-                let vc = BMDataPickerViewController(type: .category, selectedValue: address?.categories as? [String])
-                vc.completion = { [weak self]
-                    obj in
-                    
-                    guard let strongSelf = self else { return }
-                    
-                    if let categories = (obj as? [String]) {
-                        strongSelf.address?.categories = NSMutableArray(array: categories)
-                    AppModel.sharedManager().setWalletCategories(strongSelf.address!.categories, toAddress: strongSelf.address!.walletId)
-                        
-                        self?.onDataChanged?()
-                    }
-                }
-                top.pushViewController(vc: vc)
-            }
-        }
-    }
-    
-    
     public func onShare(token: String) {
         self.showShareDialog(token)
     }

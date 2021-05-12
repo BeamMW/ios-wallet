@@ -115,9 +115,6 @@ extension EditAddressViewController : UITableViewDelegate {
         if (indexPath.section == 0 && indexPath.row == 2) {
             viewModel.pickExpire()
         }
-        else if indexPath.section == 1 {
-            viewModel.pickCategory()
-        }
         else if indexPath.section == 2 {
             if viewModel.isContact {
                 viewModel.onDeleteAddress(address: viewModel.address!, indexPath: nil)
@@ -190,16 +187,6 @@ extension EditAddressViewController : UITableViewDataSource {
             default:
                 return BaseCell()
             }
-        }
-        else if indexPath.section == 1 {
-            let cell = tableView
-                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-            cell.simpleConfigure(with: (title: (viewModel.newAddress.categories.count > 1 ? Localizable.shared.strings.categories.uppercased() : Localizable.shared.strings.category.uppercased()), attributedValue: viewModel.newAddress!.categoriesName()))
-            cell.backgroundColor = UIColor.clear
-            cell.contentView.backgroundColor = UIColor.clear
-            cell.selectedBackgroundView?.backgroundColor = UIColor.main.selectedColor
-            cell.space = 15
-            return cell
         }
         else if indexPath.section == 2 {
             if viewModel.isContact {

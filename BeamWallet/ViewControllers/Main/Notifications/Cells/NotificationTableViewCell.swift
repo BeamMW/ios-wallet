@@ -18,7 +18,6 @@ class NotificationTableViewCell: UITableViewCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var detailLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var categoriesLabel: UILabel!
     @IBOutlet weak private var iconView: UIImageView!
 
     private var mainViewColor:UIColor?
@@ -56,10 +55,8 @@ extension NotificationTableViewCell: Configurable {
 
         nameLabel.text = options.item.name
         detailLabel.attributedText = options.item.detail
-        categoriesLabel.attributedText = options.item.categories
         dateLabel.text = options.item.date
         iconView.image = options.item.icon
-        categoriesLabel.isHidden = options.item.categories == nil
         detailLabel.isHidden = options.item.detail == nil
     }
 }

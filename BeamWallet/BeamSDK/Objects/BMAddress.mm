@@ -18,7 +18,6 @@
 //
 
 #import "BMAddress.h"
-#import "BMCategory.h"
 #import "Settings.h"
 #import "StringLocalize.h"
 #import "AppModel.h"
@@ -30,7 +29,6 @@
 
 +(BMAddress*_Nonnull)emptyAddress{
     BMAddress *empty = [BMAddress new];
-    empty.categories = [NSMutableArray new];
     empty.label = @"";
     return empty;
 }
@@ -38,7 +36,6 @@
 +(BMAddress*_Nonnull)fromAddress:(BMAddress*_Nonnull)address{
     BMAddress *copied = [BMAddress new];
     copied.walletId = [NSString stringWithString:address.walletId];
-    copied.categories = [NSMutableArray arrayWithArray:address.categories];
     copied.label = [NSString stringWithString:address.label];
     copied.duration = address.duration;
     copied.createTime = address.createTime;
@@ -207,36 +204,6 @@
     [_shortFormatter setLocale:locale];
     
     return _shortFormatter;
-}
-
--(NSMutableAttributedString*_Nonnull)categoriesName {
-    NSMutableArray <BMCategory*> * result = [NSMutableArray array];
-    
-    for (NSString *s in _categories) {
-        BMCategory *c = [[AppModel sharedManager] findCategoryById:s];
-        if (c!=nil) {
-            [result addObject:c];
-        }
-    }
-        
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@""];
-    
-    if(result.count > 0) {
-        for (BMCategory *category in result) {
-            NSMutableAttributedString *categoryString = [[NSMutableAttributedString alloc] initWithString:category.name];
-            [categoryString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:category.color] range:NSMakeRange(0, category.name.length)];
-            [attrString appendAttributedString:categoryString];
-            if (result.count > 1 && ![category.name isEqualToString:result.lastObject.name])
-            {
-                NSMutableAttributedString *coma = [[NSMutableAttributedString alloc] initWithString:@", "];
-                [coma addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, 1)];
-
-                [attrString appendAttributedString:coma];
-            }
-        }
-    }
-
-    return attrString;
 }
 
 @end

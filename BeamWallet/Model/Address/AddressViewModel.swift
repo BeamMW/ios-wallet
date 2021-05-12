@@ -51,9 +51,7 @@ class AddressViewModel: NSObject {
     }
     
     public var address: BMAddress?
-    
-    public var category: BMCategory?
-    
+        
     override init() {
         super.init()
     }
@@ -72,18 +70,6 @@ class AddressViewModel: NSObject {
         AppModel.sharedManager().addDelegate(self)
     }
     
-    init(category: BMCategory?) {
-        super.init()
-        
-        self.category = category
-        
-        if let cat = category {
-            addresses = AppModel.sharedManager().getAddressesFrom(cat) as! [BMAddress]
-        }
-        
-        AppModel.sharedManager().addDelegate(self)
-    }
-    
     deinit {
         AppModel.sharedManager().removeDelegate(self)
     }
@@ -92,37 +78,18 @@ class AddressViewModel: NSObject {
         DispatchQueue.main.async {
             switch self.selectedState {
             case .active:
-                if let category = self.category {
-                    let addresses = AppModel.sharedManager().getOnlyAddresses(from: category)
+                if let addresses = AppModel.sharedManager().walletAddresses {
                     self.addresses = addresses as! [BMAddress]
                 }
-                else {
-                    if let addresses = AppModel.sharedManager().walletAddresses {
-                        self.addresses = addresses as! [BMAddress]
-                    }
-                    self.addresses = self.addresses.filter { $0.isExpired() == false }
-                }
+                self.addresses = self.addresses.filter { $0.isExpired() == false }
             case .expired:
-                if let category = self.category {
-                    let addresses = AppModel.sharedManager().getOnlyContacts(from: category)
+                if let addresses = AppModel.sharedManager().walletAddresses {
                     self.addresses = addresses as! [BMAddress]
                 }
-                else {
-                    if let addresses = AppModel.sharedManager().walletAddresses {
-                        self.addresses = addresses as! [BMAddress]
-                    }
-                    self.addresses = self.addresses.filter { $0.isExpired() == true }
-                }
+                self.addresses = self.addresses.filter { $0.isExpired() == true }
             case .contacts:
-                if let category = self.category {
-                    let addresses = AppModel.sharedManager().getOnlyContacts(from: category)
-                    self.contacts = addresses as! [BMContact]
-                }
-                else {
-                    self.contacts = AppModel.sharedManager().contacts as! [BMContact]
-                }
+                self.contacts = AppModel.sharedManager().contacts as! [BMContact]
             }
-            
             
             self.addresses.removeAll(where: {$0.walletId.isEmpty})
             self.contacts.removeAll(where: {$0.address.walletId.isEmpty})

@@ -62,7 +62,6 @@ class WalletViewController: BaseTableViewController {
         
         subscribeToUpdates()
         
-        AppModel.sharedManager().fixCategories()
         AppModel.sharedManager().refreshAddressesFrom()
 
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {

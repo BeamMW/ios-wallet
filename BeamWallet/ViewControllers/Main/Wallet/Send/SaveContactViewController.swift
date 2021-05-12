@@ -161,7 +161,7 @@ class SaveContactViewController: BaseTableViewController {
             }
         }
         
-        AppModel.sharedManager().addContact(walletId, address: shouldSaveToken ? walletId : nil, name: address.label, categories: address.categories as! [Any], identidy: address.identity)
+        AppModel.sharedManager().addContact(walletId, address: shouldSaveToken ? walletId : nil, name: address.label, identidy: address.identity)
         
         goBack()
     }
@@ -213,34 +213,6 @@ extension SaveContactViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if indexPath.section == 2 {
-            if AppModel.sharedManager().categories.count == 0 {
-                let vc = CategoryEditViewController(category: nil)
-                vc.completion = {[weak self]
-                    obj in
-                    guard let strongSelf = self else { return }
-                    if let category = obj {
-                        strongSelf.address.categories = [String(category.id)]
-                        strongSelf.tableView.reloadData()
-                    }
-                }
-                pushViewController(vc: vc)
-            }
-            else{
-                let vc = BMDataPickerViewController(type: .category, selectedValue: self.address.categories as? [String])
-                vc.completion = {[weak self]
-                    obj in
-                    guard let strongSelf = self else { return }
-                    
-                    if let categories = (obj as? [String]) {
-                        strongSelf.address.categories = NSMutableArray(array: categories)
-                        strongSelf.tableView.reloadData()
-                    }
-                }
-                pushViewController(vc: vc)
-            }
-        }
     }
 }
 
@@ -287,12 +259,6 @@ extension SaveContactViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                 .configured(with: (name: Localizable.shared.strings.name.uppercased(), value: self.address.label))
             cell.delegate = self
-            return cell
-        case 2:
-            let cell = tableView
-                .dequeueReusableCell(withType: BMDetailCell.self, for: indexPath)
-            cell.simpleConfigure(with: (title: Localizable.shared.strings.category.uppercased(), attributedValue: self.address.categoriesName()))
-            cell.contentView.backgroundColor = UIColor.clear
             return cell
         default:
             return BaseCell()

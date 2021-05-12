@@ -25,7 +25,6 @@
 #import "BMContact.h"
 #import "BMPaymentProof.h"
 #import "Settings.h"
-#import "BMCategory.h"
 #import "BMDuration.h"
 #import "BMPreparedTransaction.h"
 #import "BMWord.h"
@@ -63,7 +62,6 @@ typedef int BMRestoreType;
 -(void)onContactsChange:(NSArray<BMContact*>*_Nonnull)contacts;
 -(void)onReceivePaymentProof:(BMPaymentProof*_Nonnull)proof;
 -(void)onLocalNodeStarted;
--(void)onCategoriesChange;
 -(void)onNoInternetConnection;
 -(void)onNodeStartChanging;
 -(void)onAddedPrepareTransaction:(BMPreparedTransaction*_Nonnull)transaction;
@@ -107,7 +105,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable shildedUtxos;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nullable walletAddresses;
 @property (nonatomic,strong) NSMutableArray<BMContact*>*_Nonnull contacts;
-@property (nonatomic,strong) NSMutableArray<BMCategory*>*_Nonnull categories;
 @property (nonatomic,strong) NSMutableArray<BMPreparedTransaction*>*_Nonnull preparedTransactions;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
@@ -185,7 +182,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)editBotAddress:(NSString*_Nonnull)address ;
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address;
--(void)setWalletCategories:(NSMutableArray<NSString*>*_Nonnull)categories toAddress:(NSString*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getCompletedTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
@@ -201,7 +197,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
 -(void)deletePreparedAddresses:(NSString*_Nonnull)address;
--(void)addContact:(NSString*_Nonnull)addressId address:(NSString*_Nullable)address name:(NSString*_Nonnull)name categories:(NSArray*_Nonnull)categories identidy:(NSString*_Nullable)identidy;
+-(void)addContact:(NSString*_Nonnull)addressId address:(NSString*_Nullable)address name:(NSString*_Nonnull)name identidy:(NSString*_Nullable)identidy;
 -(BOOL)containsIgnoredContact:(NSString*_Nonnull) addressId;
 -(BMAddress*_Nullable)findAddressByID:(NSString*_Nonnull)ID;
 -(BMAddress*_Nullable)findAddressByName:(NSString*_Nonnull)name;
@@ -257,18 +253,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue;
 -(void)clearAllContacts;
 
-//categories
--(void)deleteCategory:(BMCategory*_Nonnull)category;
--(void)editCategory:(BMCategory*_Nonnull)category;
--(void)addCategory:(BMCategory*_Nonnull)category;
--(BOOL)isNameAlreadyExist:(NSString*_Nonnull)name id:(int)ID;
--(BMCategory*_Nullable)findCategoryById:(NSString*_Nullable)ID;
--(NSMutableArray<BMAddress*>*_Nonnull)getAddressesFromCategory:(BMCategory*_Nonnull)category;
--(NSMutableArray<BMAddress*>*_Nonnull)getOnlyAddressesFromCategory:(BMCategory*_Nonnull)category;
--(NSMutableArray<BMContact*>*_Nonnull)getOnlyContactsFromCategory:(BMCategory*_Nonnull)category;
--(void)fixCategories;
--(void)clearAllCategories;
--(NSMutableArray<BMCategory*>*_Nonnull)sortedCategories;
 
 //fork
 -(BOOL)isFork;

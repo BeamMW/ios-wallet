@@ -432,7 +432,6 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             address.duration = walletAddr.m_duration;
             address.ownerId = walletAddr.m_OwnID;
             address.createTime = walletAddr.m_createTime;
-            address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             if([address.label isEqualToString:@"Default"])
             {
@@ -488,7 +487,6 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             BMAddress *address = [[BMAddress alloc] init];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.categories = (categories.length == 0 ? [NSMutableArray new] : [NSMutableArray arrayWithArray:[categories componentsSeparatedByString:@","]]);
             address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
             address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
 

@@ -108,20 +108,13 @@ extension SettingsCell: Configurable {
         if item.type == .remove_wallet {
             titleLabel.textColor = UIColor.main.red
         }
-        if let category = item.category {
+        if item.hasArrow {
             arrowView.isHidden = false
             titleXOffset.constant = 25
-            titleLabel.textColor = UIColor(hexString: category.color)
         }
         else {
-            if item.hasArrow {
-                arrowView.isHidden = false
-                titleXOffset.constant = 25
-            }
-            else {
-                arrowView.isHidden = true
-                titleXOffset.constant = 15
-            }
+            arrowView.isHidden = true
+            titleXOffset.constant = 15
         }
         
         if item.type == .ip_port , Settings.sharedManager().connectToRandomNode {
