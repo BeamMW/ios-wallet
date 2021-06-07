@@ -82,7 +82,12 @@ class OpenWalletProgressViewController: BaseViewController {
         progressView.transform = transformScale
         
         if onlyConnect {
-            progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
+            if AppModel.sharedManager().isLoggedin {
+                progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
+            }
+            else {
+                progressTitleLabel.text = Localizable.shared.strings.loading_wallet
+            }
             progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + " 0%."
             restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
             progressValueLabel.isHidden = false
@@ -104,8 +109,14 @@ class OpenWalletProgressViewController: BaseViewController {
             cancelButton.isHidden = true
         }
         else if phrase != nil {
-            timeoutTimer?.invalidate()
-            timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(openMainPage), userInfo: nil, repeats: false)
+            if Settings.sharedManager().isNodeProtocolEnabled {
+                restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
+                restotingInfoLabel.isHidden = false
+            }
+            else {
+                timeoutTimer?.invalidate()
+                timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(openMainPage), userInfo: nil, repeats: false)
+            }
         }
 
         if let base = self.navigationController as? BaseNavigationController {
@@ -387,7 +398,8 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             
-            if !strongSelf.onlyConnect && connected && !AppModel.sharedManager().isRestoreFlow {
+            if !strongSelf.onlyConnect && connected && !AppModel.sharedManager().isRestoreFlow
+                && (strongSelf.phrase != nil && !Settings.sharedManager().isNodeProtocolEnabled){
                 strongSelf.progressView.progress = 1
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -477,7 +489,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
                     strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
                 }
-                else if strongSelf.onlyConnect {
+                else if strongSelf.onlyConnect || (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
                     strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain) \(progress_100)%."
                 }
@@ -489,6 +501,11 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             }
             else if total == done && strongSelf.onlyConnect {
                 strongSelf.openMainPage()
+            }
+            else if total == done && (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
+                if total != 0 {
+                    strongSelf.openMainPage()
+                }
             }
         }
     }

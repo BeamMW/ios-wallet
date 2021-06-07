@@ -87,6 +87,7 @@ typedef enum Target : NSUInteger {
 -(BOOL)isChangedNode;
 -(void)resetSettings;
 -(void)resetNode;
+-(void)removeCustomNode;
 
 -(NSString*_Nonnull)walletStoragePath;
 -(NSString*_Nonnull)logPath;

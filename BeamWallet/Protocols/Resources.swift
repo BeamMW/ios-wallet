@@ -188,6 +188,10 @@ func IconDoneBlue() -> UIImage? {
     return UIImage(named: "iconDoneBlue")
 }
 
+func IconDeleteBlue() -> UIImage? {
+    return UIImage(named: "iconDeleteBlue")
+}
+
 func IconCancel() -> UIImage? {
     return UIImage(named: "iconCancel")
 }

@@ -32,29 +32,54 @@ class SelectNodeViewController: BaseTableViewController {
     private var items = [SelectNode]()
     private var inputField = UITextField()
 
+    public var isNeedDisconnect = true
+    public var isCreateWallet = false
+    public var password:String?
+    public var phrase:String?
+    
     override var tableStyle: UITableView.Style {
         get { return .grouped }
         set { super.tableStyle = newValue }
     }
     
-    private lazy var footerView: UIView = {
-        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 155))
+    private func footerView() -> UIView  {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 155))
         
-        var connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
-        connectButton.setImage(IconDoneBlue(), for: .normal)
-        connectButton.setTitle(Localizable.shared.strings.connect.lowercased(), for: .normal)
-        connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-        connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-        view.addSubview(connectButton)
+        if isNeedDisconnect {
+            let disconnectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.red)
+            disconnectButton.setImage(IconDeleteBlue(), for: .normal)
+            disconnectButton.setTitle(Localizable.shared.strings.disconnect.lowercased(), for: .normal)
+            disconnectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+            disconnectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+            disconnectButton.addTarget(self, action: #selector(onDisconnect), for: .touchUpInside)
+            view.addSubview(disconnectButton)
+        }
+        else if isCreateWallet {
+            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
+            connectButton.setImage(IconNextBlue(), for: .normal)
+            connectButton.setTitle(Localizable.shared.strings.start_using_wallet.lowercased(), for: .normal)
+            connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+            connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+            connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+            view.addSubview(connectButton)
+        }
+        else {
+            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
+            connectButton.setImage(IconDoneBlue(), for: .normal)
+            connectButton.setTitle(Localizable.shared.strings.connect.lowercased(), for: .normal)
+            connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+            connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+            connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+            view.addSubview(connectButton)
+        }
         
         return view
-    }()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: !isCreateWallet)
         
         title = Localizable.shared.strings.node
         
@@ -67,7 +92,7 @@ class SelectNodeViewController: BaseTableViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
-        tableView.tableFooterView = footerView
+        tableView.tableFooterView = footerView()
         tableView.backgroundColor = UIColor.main.marine
         tableView.keyboardDismissMode = .interactive
         
@@ -75,25 +100,32 @@ class SelectNodeViewController: BaseTableViewController {
         items.append(SelectNode(title: Localizable.shared.strings.mobile_node_title, subTitle: Localizable.shared.strings.slow_sync, detail: Localizable.shared.strings.mobile_node_hint, icon: "iconMobbileNode", selected: false))
         items.append(SelectNode(title: Localizable.shared.strings.own_node_title, subTitle: Localizable.shared.strings.fast_secure_advance, detail: Localizable.shared.strings.own_node_text, icon: "iconSpecificNode", selected: false))
         
-        if Settings.sharedManager().isNodeProtocolEnabled {
-            items[1].selected = true
-        }
-        else if !Settings.sharedManager().connectToRandomNode {
-            items[2].selected = true
-        }
-        else {
+        if isCreateWallet {
             items[0].selected = true
         }
-        
+        else {
+            if Settings.sharedManager().isNodeProtocolEnabled {
+                items[1].selected = true
+            }
+            else if !Settings.sharedManager().connectToRandomNode {
+                items[2].selected = true
+            }
+            else {
+                items[0].selected = true
+            }
+        }
+                
         inputField.keyboardType = .numbersAndPunctuation
         inputField.spellCheckingType = .no
         inputField.autocorrectionType = .no
         inputField.autocapitalizationType = .none
         inputField.textColor = UIColor.white
         inputField.textAlignment = .right
-        inputField.placeholder = String.empty()
+        inputField.placeholder = "12.123.123.1234"
         inputField.delegate = self
-        inputField.text = Settings.sharedManager().customNode()
+        if !isCreateWallet {
+            inputField.text = Settings.sharedManager().customNode()
+        }
         inputField.tintColor = UIColor.white
         
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 50))
@@ -101,10 +133,55 @@ class SelectNodeViewController: BaseTableViewController {
         label.textColor = UIColor.white.withAlphaComponent(0.2)
         inputField.leftView = label
         inputField.leftViewMode = .always
+        
+        if isCreateWallet {
+            self.navigationItem.leftBarButtonItem = nil
+        }
+    }
+    
+    @objc private func onDisconnect() {
+        isNeedDisconnect = false
+        tableView.tableFooterView = footerView()
+        tableView.reloadData()
+    }
+    
+    private func openMain() {
+        AppModel.sharedManager().stopChangeWallet()
+        AppModel.sharedManager().refreshAddresses()
+        AppModel.sharedManager().getUTXO()
+
+        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+        let menuViewController = LeftMenuViewController()
+        
+        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+                                                      leftViewController: menuViewController,
+                                                      rightViewController: nil)
+        
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
+        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
+        sideMenuController.rootViewLayerShadowRadius = 0
+        sideMenuController.rootViewLayerShadowColor = UIColor.clear
+        sideMenuController.leftViewLayerShadowRadius = 0
+        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+        sideMenuController.rootViewCoverAlphaForRightView = 0.5
+        sideMenuController.leftViewCoverAlpha = 0.5
+        sideMenuController.rightViewCoverAlpha = 0.5
+        sideMenuController.modalTransitionStyle = .crossDissolve
+        
+        self.navigationController?.setViewControllers([sideMenuController], animated: true)
+
+        BMLockScreen.shared.onTapEvent()
     }
     
     @objc private func onNext() {
+        isNeedDisconnect = true
+        tableView.tableFooterView = footerView()
+        tableView.reloadData()
+        
         if items[0].selected {
+            if isCreateWallet {
+                Settings.sharedManager().removeCustomNode()
+            }
             if Settings.sharedManager().isNodeProtocolEnabled {
                 Settings.sharedManager().isNodeProtocolEnabled = false
                 AppModel.sharedManager().enableBodyRequests(false)
@@ -112,30 +189,64 @@ class SelectNodeViewController: BaseTableViewController {
             Settings.sharedManager().connectToRandomNode = true
             Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
             AppModel.sharedManager().changeNodeAddress()
+            
+            if isCreateWallet {
+                openMain()
+            }
         }
         else if items[1].selected {
+            if isCreateWallet {
+                Settings.sharedManager().removeCustomNode()
+            }
+            
             Settings.sharedManager().connectToRandomNode = true
             Settings.sharedManager().isNodeProtocolEnabled = true
             Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
             AppModel.sharedManager().changeNodeAddress()
             AppModel.sharedManager().enableBodyRequests(true)
             
-            let vc = OpenWalletProgressViewController(onlyConnect: true)
-            vc.cancelCallback = {
-                self.items[0].selected = true
-                self.items[2].selected = false
-                self.onNext()
+            if isCreateWallet {
+                let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                self.pushViewController(vc: vc)
             }
-            pushViewController(vc: vc)
+            else {
+                let vc = OpenWalletProgressViewController(onlyConnect: true)
+                vc.cancelCallback = {
+                    self.items[0].selected = true
+                    self.items[2].selected = false
+                    self.onNext()
+                }
+                pushViewController(vc: vc)
+            }
         }
         else {
             if let fullAddress = inputField.text {
-                if AppModel.sharedManager().isValidNodeAddress(fullAddress) && !fullAddress.isEmpty {
+                if fullAddress.isEmpty {
+                    isNeedDisconnect = false
+                    tableView.tableFooterView = footerView()
+                    tableView.reloadData()
+                    
+                    alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.enter_node_address, handler: nil)
+                }
+                else if AppModel.sharedManager().isValidNodeAddress(fullAddress) && !fullAddress.isEmpty {
+                    if Settings.sharedManager().isNodeProtocolEnabled {
+                        Settings.sharedManager().isNodeProtocolEnabled = false
+                        AppModel.sharedManager().enableBodyRequests(false)
+                    }
                     Settings.sharedManager().connectToRandomNode = false
                     Settings.sharedManager().nodeAddress = fullAddress
                     AppModel.sharedManager().changeNodeAddress()
+                    
+                    if isCreateWallet {
+                        let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                        self.pushViewController(vc: vc)
+                    }
                 }
                 else {
+                    isNeedDisconnect = false
+                    tableView.tableFooterView = footerView()
+                    tableView.reloadData()
+                    
                     alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.invalid_address_text, handler: nil)
                 }
             }
@@ -146,6 +257,9 @@ class SelectNodeViewController: BaseTableViewController {
 extension SelectNodeViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 1 {
+            return 70
+        }
         return UITableView.automaticDimension
     }
     
@@ -164,6 +278,7 @@ extension SelectNodeViewController : UITableViewDelegate {
 
 extension SelectNodeViewController : UITableViewDataSource {
     
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section > 0 {
             let view = UIView()
@@ -173,56 +288,85 @@ extension SelectNodeViewController : UITableViewDataSource {
         return nil
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if items[2].selected && section == 2 {
-            let view = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 50))
-            view.backgroundColor = UIColor.main.cellBackgroundColor
-            inputField.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width-30, height: 50)
-            view.addSubview(inputField)
-            
-            let topLine = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 1))
-            topLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
-
-            let botLine = UIView(frame: CGRect(x: 0, y: 65, width: UIScreen.main.bounds.width, height: 1))
-            botLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
-            
-            let mainView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
-            mainView.addSubview(topLine)
-            mainView.addSubview(botLine)
-            mainView.backgroundColor = UIColor.clear
-            mainView.addSubview(view)
-            
-            return mainView
-        }
-        return nil
-    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section > 0 ? 40 : 0
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if items[2].selected && section == 2 {
-            return 70
-        }
-        return 0
-    }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 2 {
+            return items[section].selected ? 2 : 1
+        }
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView
-            .dequeueReusableCell(withType: NodeCell.self, for: indexPath)
-        cell.configure(items[indexPath.section])
-        
-        return cell
+        if indexPath.row == 1 {
+            var cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+            if cell == nil {
+                cell = UITableViewCell.init(style: .default, reuseIdentifier: "Cell")
+                
+                cell?.backgroundColor = UIColor.clear
+                cell?.contentView.backgroundColor = UIColor.clear
+                cell?.selectionStyle = .none
+                
+                let view = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 50))
+                view.backgroundColor = UIColor.main.cellBackgroundColor
+                inputField.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width-30, height: 50)
+                view.addSubview(inputField)
+                
+                let topLine = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 1))
+                topLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
+                
+                let botLine = UIView(frame: CGRect(x: 0, y: 65, width: UIScreen.main.bounds.width, height: 1))
+                botLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
+                
+                let mainView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
+                mainView.addSubview(topLine)
+                mainView.addSubview(botLine)
+                mainView.backgroundColor = UIColor.clear
+                mainView.addSubview(view)
+                
+                cell?.contentView.addSubview(mainView)
+            }
+            
+            if isNeedDisconnect {
+                cell?.isUserInteractionEnabled = false
+                cell?.alpha = 0.5
+                cell?.contentView.alpha = 0.5
+            }
+            else {
+                cell?.isUserInteractionEnabled = true
+                cell?.alpha = 1.0
+                cell?.contentView.alpha = 1
+            }
+            
+            return cell ?? UITableViewCell()
+        }
+        else {
+            let cell = tableView
+                .dequeueReusableCell(withType: NodeCell.self, for: indexPath)
+            cell.configure(items[indexPath.section])
+            
+            if isNeedDisconnect && !items[indexPath.section].selected {
+                cell.isUserInteractionEnabled = false
+                cell.alpha = 0.5
+                cell.contentView.alpha = 0.5
+            }
+            else {
+                cell.isUserInteractionEnabled = true
+                cell.alpha = 1.0
+                cell.contentView.alpha = 1
+            }
+            
+            return cell
+        }
     }
 }
 

@@ -89,7 +89,8 @@ void WalletModel::onStatus(const WalletStatus& status)
     
     [[AppModel sharedManager] setWalletStatus:walletStatus];
 
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onWalletStatusChange:)]) {
             [delegate onWalletStatusChange:walletStatus];
@@ -285,7 +286,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
     
     [[[AppModel sharedManager]transactions] removeObjectsAtIndexes:set];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
             [delegate onReceivedTransactions:[[AppModel sharedManager]transactions]];
@@ -303,7 +305,8 @@ void WalletModel::onSyncProgressUpdated(int done, int total)
 
     [AppModel sharedManager].isUpdating = (done != total);
 
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
             [delegate onSyncProgressUpdated:done total:total];
@@ -400,7 +403,8 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
        }
 
 
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
@@ -462,7 +466,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [[AppModel sharedManager] setWalletAddresses:addresses];
 
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
                 [delegate onWalletAddresses:addresses];
@@ -519,7 +524,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [[AppModel sharedManager] setContacts:contacts];
         
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onContactsChange:)]) {
                 [delegate onContactsChange:contacts];
@@ -598,7 +604,8 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
         
         [[AppModel sharedManager] setIsConnecting:NO];
         
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:isNodeConnected];
@@ -621,7 +628,8 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
         {
             BOOL isReconnect = [[AppModel sharedManager] reconnect];
             if (!isReconnect) {
-                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+                      NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
                 {
                     if ([delegate respondsToSelector:@selector(onWalletError:)]) {
                         NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
@@ -634,7 +642,8 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
         }
     }
     else {
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onWalletError:)]) {
                 NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
@@ -659,7 +668,8 @@ void WalletModel::FailedToStartWallet()
         });
     }
     else{
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onWalletError:)]) {
                 NSError *nativeError = [NSError errorWithDomain:AppErrorDomain
@@ -675,7 +685,8 @@ void WalletModel::FailedToStartWallet()
 
 void WalletModel::onSendMoneyVerified()
 {
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onSendMoneyVerified)]) {
             [delegate onSendMoneyVerified];
@@ -687,7 +698,8 @@ void WalletModel::onSendMoneyVerified()
 
 void WalletModel::onCantSendToExpired()
 {
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onCantSendToExpired)]) {
             [delegate onCantSendToExpired];
@@ -709,7 +721,8 @@ void WalletModel::onPaymentProofExported(const beam::wallet::TxID& txID, const b
     paymentProof.code = [NSString stringWithUTF8String:str.c_str()];
     paymentProof.txID = [NSString stringWithUTF8String:txIDToString(txID).c_str()];
 
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivePaymentProof:)]) {
             [delegate onReceivePaymentProof:paymentProof];
@@ -823,7 +836,8 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
     
     [[AppModel sharedManager] saveCurrencies];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
             [delegate onExchangeRatesChange];
@@ -831,7 +845,8 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
     }
     
     if([AppModel sharedManager].isConnected) {
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:YES];
@@ -1019,7 +1034,8 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
     [[[AppModel sharedManager] notifications] removeAllObjects];
     [[[AppModel sharedManager] notifications] addObjectsFromArray:sortedArray];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onNotificationsChanged)]) {
             [delegate onNotificationsChanged];
@@ -1033,7 +1049,8 @@ void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::o
     
     NSLog(@"onGetAddress");
         
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
             [delegate onMaxPrivacyTokensLeft:(int)offlinePayments];
@@ -1160,7 +1177,8 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
     }
     
         
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];

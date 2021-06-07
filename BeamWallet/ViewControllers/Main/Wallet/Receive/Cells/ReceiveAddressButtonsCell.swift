@@ -36,7 +36,7 @@ class ReceiveAddressButtonsCell: BaseCell {
             infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
         }
         else {
-            infoLabel.text = Localizable.shared.strings.receive_notice
+            infoLabel.text = Localizable.shared.strings.sender_choice + "\n\n" +  Localizable.shared.strings.receive_notice
         }
         
         if Settings.sharedManager().isDarkMode {

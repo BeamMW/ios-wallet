@@ -177,7 +177,7 @@ class BMNetworkStatusView: UIView {
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
-                if !Settings.sharedManager().isNodeProtocolEnabled && !Settings.sharedManager().connectToRandomNode {
+                if !Settings.sharedManager().isNodeProtocolEnabled && !Settings.sharedManager().connectToRandomNode && AppModel.sharedManager().checkIsOwnNode() {
                     self.statusView.backgroundColor = UIColor.clear
                     self.statusView.removeGlow()
                     self.statusView.image = UIImage(named: "ic_trusted_node")

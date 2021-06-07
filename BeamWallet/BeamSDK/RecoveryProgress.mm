@@ -135,7 +135,8 @@ bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
         m_estimate = getEstimate(bps);
     }
 
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates){
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates){
         if ([delegate respondsToSelector:@selector(onRecoveryProgressUpdated: total: time:)]) {
             [delegate onRecoveryProgressUpdated:(int)done total:(int)total time:(int)m_estimate];
         }

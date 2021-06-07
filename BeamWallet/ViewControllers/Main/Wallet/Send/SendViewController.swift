@@ -24,6 +24,7 @@ import UIKit
 class SendViewController: BaseTableViewController {
     private var alreadyChanged = false
     private var cellHeights: [IndexPath: CGFloat] = [:]
+    private var infoLabel = UILabel()
     
     private var isSearch = false {
         didSet {
@@ -40,16 +41,18 @@ class SendViewController: BaseTableViewController {
     private func footerView()-> UIView {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
         
-        let infoLabel = UILabel()
         infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0)
         infoLabel.numberOfLines = 0
         if viewModel.addressType == BMAddressTypeMaxPrivacy {
             infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
         }
+        else if viewModel.isSendOffline || viewModel.addressType == BMAddressTypeOfflinePublic {
+            infoLabel.text = Localizable.shared.strings.senf_offline_notice
+        }
         else {
             infoLabel.text = Localizable.shared.strings.send_notice
         }
-        infoLabel.font = ItalicFont(size: 14)
+        infoLabel.font = ItalicFont(size: 16)
         infoLabel.textAlignment = .center
         if Settings.sharedManager().isDarkMode {
             infoLabel.textColor = UIColor.main.steel;
@@ -59,6 +62,8 @@ class SendViewController: BaseTableViewController {
         }
         infoLabel.adjustFontSize = true
         infoLabel.sizeToFit()
+        infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: infoLabel.frame.size.height)
+
         view.addSubview(infoLabel)
         
         nextButton.y = infoLabel.frame.origin.y + infoLabel.frame.size.height + 30
@@ -107,7 +112,7 @@ class SendViewController: BaseTableViewController {
                 cell.copyText = strongSelf.viewModel.copyAddress
                 cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: strongSelf.viewModel.toAddress))
                 cell.contact = strongSelf.viewModel.selectedContact
-                cell.addressType = BMAddressType(strongSelf.viewModel.addressType)
+                cell.setAddressType(BMAddressType(strongSelf.viewModel.addressType), strongSelf.viewModel.isSendOffline)
             }
         }
         
@@ -264,6 +269,8 @@ class SendViewController: BaseTableViewController {
             pushViewController(vc: vc)
         }
     }
+    
+    
 }
 
 extension SendViewController: UITableViewDelegate {
@@ -324,7 +331,7 @@ extension SendViewController: UITableViewDataSource {
             cell.copyText = viewModel.copyAddress
             cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) //IconAddressBookSmall(),
             cell.contact = viewModel.selectedContact
-            cell.addressType = BMAddressType(viewModel.addressType)
+            cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline)
             cell.nameLabelTopOffset.constant = 20
             cell.titleColor = UIColor.white
             cell.placeholder = Localizable.shared.strings.send_address_placholder
@@ -394,6 +401,7 @@ extension SendViewController: UITableViewDataSource {
                     .dequeueReusableCell(withType: BMExpandCell.self, for: indexPath)
                     .configured(with: (expand: showFee, title: Localizable.shared.strings.comment.uppercased()))
                 cell.delegate = self
+                cell.nameLabel.textColor = .white
                 return cell
             }
             else {
@@ -503,7 +511,7 @@ extension SendViewController: BMCellProtocol {
                 }
                 
             }
-            else if path.section == 4 {
+            else if path.section == 3 {
                 isNeedReload = false
                 viewModel.comment = text
             }
@@ -620,7 +628,7 @@ extension SendViewController: BMCellProtocol {
                     tableView.deleteRows(at: [IndexPath(row: 1, section: path.section)], with: .fade)
                 }
             }
-            else if path.section == 2 {
+            else if path.section == 3 {
                 showComment = !showComment
                 
                 if showComment {
@@ -653,7 +661,7 @@ extension SendViewController: BMCellProtocol {
                 cell.copyText = viewModel.copyAddress
                 cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress))
                 cell.contact = viewModel.selectedContact
-                cell.addressType = BMAddressType(viewModel.addressType)
+                cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline)
             }
             
             tableView.tableFooterView = footerView()
@@ -754,5 +762,18 @@ extension SendViewController: SendTransactionTypeCellDelegate {
     
     func onDidSelectTrasactionType(maxPrivacy: Bool) {
         viewModel.isSendOffline = maxPrivacy
+        if viewModel.addressType == BMAddressTypeMaxPrivacy {
+            infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
+        }
+        else if viewModel.isSendOffline || viewModel.addressType == BMAddressTypeOfflinePublic {
+            infoLabel.text = Localizable.shared.strings.senf_offline_notice
+        }
+        else {
+            infoLabel.text = Localizable.shared.strings.send_notice
+        }
+        
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
+            cell.setAddressType(BMAddressType(self.viewModel.addressType), self.viewModel.isSendOffline)
+        }
     }
 }

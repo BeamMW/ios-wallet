@@ -71,7 +71,12 @@ class BMSearchAddressCell: BaseCell {
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         
         textField.alwaysVisibleClearButton = true
-        textField.placholderFont = ItalicFont(size: 16)
+        if Device.isXDevice {
+            textField.placholderFont = ItalicFont(size: 16)
+        }
+        else {
+            textField.placholderFont = ItalicFont(size: 14)
+        }
         textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
         textField.placeholder = Localizable.shared.strings.send_address_placholder
         textField.allowsEditingTextAttributes = true
@@ -97,17 +102,27 @@ class BMSearchAddressCell: BaseCell {
     }
     
     
-    public var addressType: BMAddressType = BMAddressType(BMAddressTypeRegular) {
-        didSet {
-            if(!textField.text.isEmpty && addressType != BMAddressTypeUnknown) {
-                let title = AppModel.sharedManager().getAddressTypeString(addressType)
-                addressTypeLabel.isHidden = false
-                addressTypeLabel.text = "\(title)."
-                addressTypeLabel.font = ItalicFont(size: 14)
+    public var addressType: BMAddressType = BMAddressType(BMAddressTypeRegular) 
+    
+    public func setAddressType(_ type:BMAddressType, _ offline:Bool) {
+        addressType = type
+        
+        if(!textField.text.isEmpty && type != BMAddressTypeUnknown) {
+            let title = AppModel.sharedManager().getAddressTypeString(type)
+            addressTypeLabel.isHidden = false
+            if offline && type == BMAddressTypeShielded {
+                addressTypeLabel.text = Localizable.shared.strings.regular_offline_only + "."
+            }
+            else if type == BMAddressTypeShielded {
+                addressTypeLabel.text = Localizable.shared.strings.regular_online_only + "."
             }
             else {
-                addressTypeLabel.isHidden = true
+                addressTypeLabel.text = "\(title)."
             }
+            addressTypeLabel.font = ItalicFont(size: 14)
+        }
+        else {
+            addressTypeLabel.isHidden = true
         }
     }
     

@@ -99,6 +99,7 @@ class BMAmountCell: BaseCell {
                 let attributedString = NSMutableAttributedString(string:text)
                 attributedString.append(NSAttributedString(string: "  "))
                 attributedString.append(imageString)
+                attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: text.count))
 
                 currencyLabel.attributedText = attributedString
             }

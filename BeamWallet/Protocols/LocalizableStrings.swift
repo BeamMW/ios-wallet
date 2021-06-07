@@ -633,7 +633,13 @@ class LocalizableStrings : NSObject {
     var syncing_with_blockchain = "syncing_with_blockchain".localized
     var please_no_lock = "please_no_lock".localized
     var wallet_connected_to_mobile_node = "wallet_connected_to_mobile_node".localized
-
+    var disconnect = "disconnect".localized
+    var start_using_wallet = "start_using_wallet".localized
+    var enter_node_address = "enter_node_address".localized
+    var senf_offline_notice = "senf_offline_notice".localized
+    var regular_online_only = "regular_online_only".localized
+    var regular_offline_only = "regular_offline_only".localized
+    var sender_choice = "sender_choice".localized
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

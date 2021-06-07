@@ -38,7 +38,8 @@ class SendTransactionTypeCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        transactionTypeSegment.selectedSegmentIndex = selectedIndex
+        
+//        transactionTypeSegment.selectedSegmentIndex = selectedIndex
     }
     
     override func awakeFromNib() {
@@ -48,7 +49,7 @@ class SendTransactionTypeCell: UITableViewCell {
         
         transactionTypeLabel.text = Localizable.shared.strings.transaction_type.uppercased()
         transactionTypeLabel.letterSpacing = 2
-        transactionTypeSegment.selectedSegmentIndex = selectedIndex
+       // transactionTypeSegment.selectedSegmentIndex = selectedIndex
     }
     
     @IBAction private func onTransactionType(sender: MASegmentedControl) {

@@ -1183,6 +1183,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		9217D31E2652AB67006DD6F1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92365AE2222D4039000D7064 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1323,6 +1333,11 @@
 		9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOTableView.swift; sourceTree = "<group>"; };
 		9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOBlockView.swift; sourceTree = "<group>"; };
 		9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UTXOBlockView.xib; sourceTree = "<group>"; };
+		9217D30E2652AB64006DD6F1 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		9217D3102652AB64006DD6F1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		9217D3132652AB64006DD6F1 /* com_mw_beam_beamwalletiOSMasternet_ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = com_mw_beam_beamwalletiOSMasternet_ext.swift; sourceTree = "<group>"; };
+		9217D3152652AB67006DD6F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9217D3172652AB67006DD6F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92194FCD236C498F005A1315 /* BMPickerCell2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMPickerCell2.xib; sourceTree = "<group>"; };
 		9219595422821F9C007E9723 /* BMTableHeaderTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMTableHeaderTitleView.swift; sourceTree = "<group>"; };
 		9219595822823639007E9723 /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
@@ -2000,6 +2015,16 @@
 			path = ThirdParty;
 			sourceTree = "<group>";
 		};
+		9217D3122652AB64006DD6F1 /* com.mw.beam.beamwalletiOSMasternet.ext */ = {
+			isa = PBXGroup;
+			children = (
+				9217D3132652AB64006DD6F1 /* com_mw_beam_beamwalletiOSMasternet_ext.swift */,
+				9217D3152652AB67006DD6F1 /* Assets.xcassets */,
+				9217D3172652AB67006DD6F1 /* Info.plist */,
+			);
+			path = com.mw.beam.beamwalletiOSMasternet.ext;
+			sourceTree = "<group>";
+		};
 		922F2E6F22E1F7DB005D3F33 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
@@ -2054,6 +2079,8 @@
 				3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */,
 				18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */,
 				36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */,
+				9217D30E2652AB64006DD6F1 /* WidgetKit.framework */,
+				9217D3102652AB64006DD6F1 /* SwiftUI.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -2221,6 +2248,7 @@
 			children = (
 				925AD5DA2228254E00DDE66B /* BeamWallet */,
 				925AD5ED2228260C00DDE66B /* Resources */,
+				9217D3122652AB64006DD6F1 /* com.mw.beam.beamwalletiOSMasternet.ext */,
 				92365AC8222D3E16000D7064 /* Frameworks */,
 				925AD5D92228254E00DDE66B /* Products */,
 				C6D82AD1A49FFCFF7CECE71C /* Pods */,
@@ -2897,6 +2925,7 @@
 				92E2EB81226F21C700367928 /* Embed Watch Content */,
 				922474FD24E3E694006FE2B2 /* ShellScript */,
 				03901693440105723276594D /* [CP] Embed Pods Frameworks */,
+				9217D31E2652AB67006DD6F1 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -2913,7 +2942,8 @@
 		925AD5D02228254E00DDE66B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1020;
+				DefaultBuildSystemTypeForWorkspace = Latest;
+				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = Denis;
 				TargetAttributes = {
@@ -4510,7 +4540,7 @@
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4585,7 +4615,7 @@
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4660,7 +4690,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletTestNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4738,7 +4768,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletTestNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4816,6 +4846,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BA659A4953BE271B118EB5D6 /* Pods-BeamWalletMasterNet.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMaster;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -4823,7 +4854,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -4895,6 +4926,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EAEED72AAED404575AB9A6E5 /* Pods-BeamWalletMasterNet.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMaster;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -4902,7 +4934,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

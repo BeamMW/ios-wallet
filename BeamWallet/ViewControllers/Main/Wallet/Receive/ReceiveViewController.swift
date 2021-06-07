@@ -457,6 +457,7 @@ extension ReceiveViewController : ReceiveTransactionTypeCellDelegate {
     
     func onDidSelectTrasactionType(type: ReceiveAddressViewModel.TransactionOptions) {
         viewModel.transaction = type
+        
         UIView.performWithoutAnimation {
             self.tableView.reloadRow(ReceiveTokenCell.self, animated: false)
             self.tableView.reloadRow(ReceiveAddressButtonsCell.self, animated: false)

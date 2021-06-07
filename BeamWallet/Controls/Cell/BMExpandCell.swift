@@ -22,7 +22,7 @@ import UIKit
 class BMExpandCell: BaseCell {
 
     @IBOutlet weak private var arrowIcon: UIImageView!
-    @IBOutlet weak private var nameLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak private var mainView: NonDisappearingView!
     @IBOutlet var topOffset: NSLayoutConstraint?
     @IBOutlet var botOffset: NSLayoutConstraint?

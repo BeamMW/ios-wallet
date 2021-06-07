@@ -2,8 +2,8 @@
 //  openssl.h
 //  OpenSSL-iOS
 //
-//  Created by @levigroker Fri Apr 24 15:21:34 MDT 2020.
-//  Copyright © 2020 @levigroker. All rights reserved.
+//  Created by @levigroker Thu Feb 28 00:31:06 EET 2019.
+//  Copyright © 2019 @levigroker. All rights reserved.
 //
 
 #ifndef openssl_h

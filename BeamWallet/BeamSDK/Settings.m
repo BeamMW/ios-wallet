@@ -256,6 +256,11 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     return @"";
 }
 
+-(void)removeCustomNode {
+    [NSUserDefaults.standardUserDefaults removeObjectForKey:nodeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 -(void)setIsNodeProtocolEnabled:(BOOL)isNodeProtocolEnabled {
     _isNodeProtocolEnabled = isNodeProtocolEnabled;
     
@@ -392,7 +397,8 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:_currency] forKey:currenctKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
             [delegate onExchangeRatesChange];
@@ -400,7 +406,8 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     }
     
     if([AppModel sharedManager].currencies.count == 0 && [AppModel sharedManager].isConnected){
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:YES];
@@ -429,7 +436,8 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     }
     
     if([[AppModel sharedManager] isLoggedin]){
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:NO];

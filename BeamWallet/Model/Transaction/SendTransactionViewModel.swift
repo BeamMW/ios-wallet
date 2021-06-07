@@ -429,8 +429,10 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
         let to = "\(toAddress.prefix(6))...\(toAddress.suffix(6))"
         
-        let contact = AppModel.sharedManager().findAddress(byID: sbbsAddress)
-        
+        var contact = AppModel.sharedManager().findAddress(byID: sbbsAddress)
+        if contact == nil {
+            contact = AppModel.sharedManager().findAddress(byID: toAddress)
+        }
         let nameName = contact?.label
         
         if nameName != nil  {
@@ -438,13 +440,15 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.send_to, detail: to, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
             }
             else {
-                let detail = NSMutableAttributedString(string: "\(to)\nspace\n\(nameName ?? "")")
+                let detail = NSMutableAttributedString(string: "\(nameName ?? "")\nspace\n\(to)")
                 let rangeName = (detail.string as NSString).range(of: String(nameName ?? ""))
                 let spaceRange = (detail.string as NSString).range(of: String("space"))
-                
+                let rangeAddress = (detail.string as NSString).range(of: String(to))
+
                 detail.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 16), range: rangeName)
-                detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeName)
-                
+                detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white, range: rangeName)
+                detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeAddress)
+
                 detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
                 detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
                                 

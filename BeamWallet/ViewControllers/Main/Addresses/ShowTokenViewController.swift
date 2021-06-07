@@ -61,7 +61,7 @@ class ShowTokenViewController: BaseTableViewController {
             let params = AppModel.sharedManager().getTransactionParameters(token)
 
             if(params.amount > 0) {
-                let amount = "\(String.currency(value: params.amount)) BEAM"
+                let amount = "\(String.currency(value: params.amount))"
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             

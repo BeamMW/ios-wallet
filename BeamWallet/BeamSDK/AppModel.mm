@@ -393,7 +393,8 @@ struct GetMaxPrivacyLockFunc
             
             if (weakSelf.isLoggedin == YES)
             {
-                for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+                      NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates) {
                     if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
                         [delegate onNodeStartChanging];
                     }
@@ -421,7 +422,8 @@ struct GetMaxPrivacyLockFunc
         [[AppModel sharedManager] setIsInternetAvailable:NO];
         [[AppModel sharedManager] setIsConnected:NO];
         
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:NO];
@@ -446,8 +448,9 @@ struct GetMaxPrivacyLockFunc
 
 -(void)setIsConnecting:(BOOL)isConnecting {
     _isConnecting = isConnecting;
-    
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onNetwotkStartConnecting:)]) {
             [delegate onNetwotkStartConnecting:_isConnecting];
@@ -474,7 +477,8 @@ struct GetMaxPrivacyLockFunc
             Settings.sharedManager.nodeAddress = node;
             [self changeNodeAddress];
             
-            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+            NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+            for(id<WalletModelDelegate> delegate in delegates)
             {
                 if ([delegate respondsToSelector:@selector(onNetwotkStartReconnecting)]) {
                     [delegate onNetwotkStartReconnecting];
@@ -741,7 +745,8 @@ struct GetMaxPrivacyLockFunc
 -(void)startChangeNode {
     if(self.isInternetAvailable)
     {
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates) {
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates) {
             if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
                 [delegate onNodeStartChanging];
             }
@@ -836,7 +841,8 @@ struct GetMaxPrivacyLockFunc
             
             NSString *erorString = [NSString stringWithUTF8String:e.what()];
             
-            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+                  NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
             {
                 if ([delegate respondsToSelector:@selector(onWalletError:)]) {
                     NSError *nativeError = [NSError errorWithDomain:@"beam"
@@ -851,7 +857,8 @@ struct GetMaxPrivacyLockFunc
             
             NSString *erorString = @"Recovery failed";
             
-            for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+                  NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
             {
                 if ([delegate respondsToSelector:@selector(onWalletError:)]) {
                     NSError *nativeError = [NSError errorWithDomain:@"beam"
@@ -889,7 +896,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         isStarted = YES;
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
                 [delegate onSyncProgressUpdated:0 total:0];
@@ -1464,7 +1472,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         [_transactions removeObjectsAtIndexes:set];
         
-        for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
                 [delegate onReceivedTransactions:_transactions];
@@ -1489,14 +1498,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     [_preparedDeleteAddresses addObject:address];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
             [delegate onWalletAddresses:_walletAddresses];
         }
     }
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onAddedDeleteAddress:)]) {
             [delegate onAddedDeleteAddress:address];
@@ -2111,7 +2121,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         params.SetParameter(TxParameterID::OriginalToken, to.string);
     }
     params.SetParameter(TxParameterID::OriginalToken, to.string);
-    params.SetParameter(TxParameterID::SavePeerAddress, false);
+   // params.SetParameter(TxParameterID::SavePeerAddress, false);
 
     wallet->getAsync()->startTransaction(std::move(params));
 }
@@ -2139,7 +2149,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 //
 //    [_preparedTransactions addObject:transaction];
 //
-//    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+//          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+ //     for(id<WalletModelDelegate> delegate in delegates)
 //    {
 //        if ([delegate respondsToSelector:@selector(onAddedPrepareTransaction:)]) {
 //            [delegate onAddedPrepareTransaction:transaction];
@@ -2162,7 +2173,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     
     [_preparedTransactions addObject:transaction];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onAddedPrepareTransaction:)]) {
             [delegate onAddedPrepareTransaction:transaction];
@@ -2533,14 +2545,15 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     [_transactions removeAllObjects];
     [_transactions addObjectsFromArray:_array];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onAddedDeleteTransaction:)]) {
             [delegate onAddedDeleteTransaction:_preparedDeleteTransactions.lastObject];
         }
     }
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
             [delegate onReceivedTransactions:_transactions];
@@ -2816,7 +2829,8 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [[AppModel sharedManager] setIsConnected: wallet->pre_connected_status];
     [[AppModel sharedManager] getNetworkStatus];
     
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
             [delegate onNetwotkStatusChange:[AppModel sharedManager].isConnected];
@@ -2841,7 +2855,8 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(void)completeWalletVerification {
-    for(id<WalletModelDelegate> delegate in [AppModel sharedManager].delegates)
+          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onWalletCompleteVerefication)]) {
             [delegate onWalletCompleteVerefication];

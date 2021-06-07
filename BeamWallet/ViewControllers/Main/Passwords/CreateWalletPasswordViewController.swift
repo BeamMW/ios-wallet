@@ -40,6 +40,8 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             saveButton.setImage(IconSaveDone(), for: .normal)
         }
         
+ 
+        
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
         
         title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.change_password : Localizable.shared.strings.create_password
@@ -176,9 +178,21 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             else {
                 OnboardManager.shared.saveSeed(seed: phrase)
                 _ = KeychainManager.addPassword(password: pass)
-                
-                let vc = OpenWalletProgressViewController(password: pass, phrase: phrase)
-                self.pushViewController(vc: vc)
+  
+                if AppModel.sharedManager().isRestoreFlow {
+                    let vc = OpenWalletProgressViewController(password: pass, phrase: phrase)
+                    self.pushViewController(vc: vc)
+                }
+                else {
+                    let vc = SelectNodeViewController()
+                    vc.isCreateWallet = true
+                    vc.isNeedDisconnect = false
+                    vc.password = pass
+                    vc.phrase = phrase
+                    self.pushViewController(vc: vc)
+                }
+                                
+
 //
 //                AppModel.sharedManager().stopChangeWallet()
 //                AppModel.sharedManager().refreshAddresses()
