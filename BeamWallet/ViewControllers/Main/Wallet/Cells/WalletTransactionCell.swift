@@ -25,20 +25,17 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var statusLabel: UILabel!
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var balanceView: UIView!
+    @IBOutlet weak private var assetIcon: AssetIconView!
     @IBOutlet weak private var statusIcon: UIImageView!
 
+    @IBOutlet weak private var detailView: UIView!
     @IBOutlet weak private var commentView: UIStackView!
     @IBOutlet weak private var commentLabel: UILabel!
     @IBOutlet weak private var secondAvailableLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-                
-        secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
-        secondAvailableLabel.font = RegularFont(size: 14)
-        
+                        
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.main.selectedColor
         self.selectedBackgroundView = selectedView
@@ -48,35 +45,21 @@ class WalletTransactionCell: UITableViewCell {
 extension WalletTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
-        secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.transaction.realAmount)
+        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueAsset(options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
 
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
+        assetIcon.setAsset(options.transaction.asset)
+        
         statusIcon.image = options.transaction.statusIcon()
-        typeLabel.text = options.transaction.statusName()
         
-        switch options.transaction.isIncome {
-        case true:
-            amountLabel.text = "+ " + String.currency(value: options.transaction.realAmount)
-            amountLabel.textColor = UIColor.main.brightSkyBlue
-        case false:
-            if (options.transaction.enumType == BMTransactionTypeUnlink) {
-                amountLabel.text = String.currency(value: options.transaction.realAmount)
-                amountLabel.textColor = UIColor.main.brightTeal
-            }
-            else {
-                amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
-                amountLabel.textColor = UIColor.main.heliotrope
-            }
-        }
-        
+        typeLabel.text = options.transaction.amountString()
         
         dateLabel.text = options.transaction.formattedDate()
         dateLabel.isHidden = !options.additionalInfo
         statusLabel.text = options.transaction.statusType()
+        detailView.isHidden = !options.additionalInfo
 
-        balanceView.isHidden = Settings.sharedManager().isHideAmounts
-        
         if options.additionalInfo && !options.transaction.comment.isEmpty {
             commentView.isHidden = false
             commentLabel.text = "”" + options.transaction.comment + "”"

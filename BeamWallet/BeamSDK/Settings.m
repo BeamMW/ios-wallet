@@ -397,17 +397,17 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:_currency] forKey:currenctKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
             [delegate onExchangeRatesChange];
         }
     }
     
-    if([AppModel sharedManager].currencies.count == 0 && [AppModel sharedManager].isConnected){
-              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    if([ExchangeManager sharedManager].currencies.count == 0 && [AppModel sharedManager].isConnected){
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:YES];

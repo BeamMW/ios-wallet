@@ -158,7 +158,21 @@ extension String {
     }()
     
     static func currency(value:Double) -> String {
+        if Settings.sharedManager().isHideAmounts {
+            return "BEAM"
+        }
         return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " BEAM"
+    }
+    
+    static func currency(value:Double, name: String) -> String {
+        var assetName = name
+        if assetName == "assets" {
+            assetName = "BEAM"
+        }
+        if Settings.sharedManager().isHideAmounts {
+            return assetName
+        }
+        return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)"
     }
     
     func isValidUrl() -> Bool {

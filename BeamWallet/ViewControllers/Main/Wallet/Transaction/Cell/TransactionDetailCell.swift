@@ -49,7 +49,7 @@ extension TransactionDetailCell: Configurable {
     func configure(with transaction:BMTransaction) {
 
         arrowIcon.image = transaction.statusIcon()
-        secondAmountLabel.text = AppModel.sharedManager().exchangeValue(transaction.realAmount)
+        secondAmountLabel.text = ExchangeManager.shared().exchangeValue(transaction.realAmount)
         
         amountLabel.isHidden = Settings.sharedManager().isHideAmounts
         secondAmountLabel.isHidden = Settings.sharedManager().isHideAmounts

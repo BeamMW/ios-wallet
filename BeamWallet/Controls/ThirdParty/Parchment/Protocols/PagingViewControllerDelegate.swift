@@ -3,7 +3,7 @@ import Foundation
 /// The `PagingViewControllerDelegate` protocol defines methods that
 /// can used to determine when the user navigates between view
 /// controllers, or to define the width of a given `PagingItem`.
-public protocol PagingViewControllerDelegate: class {
+public protocol PagingViewControllerDelegate: AnyObject {
   
   /// Called whenever a scroll transition is in progress.
   ///

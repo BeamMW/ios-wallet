@@ -86,11 +86,71 @@ void WalletModel::onStatus(const WalletStatus& status)
     walletStatus.currentHeight = [NSString stringWithUTF8String:to_string(status.stateID.m_Height).c_str()];
     walletStatus.currentStateHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, 15).c_str()];;
     walletStatus.currentStateFullHash = [NSString stringWithUTF8String:to_hex(status.stateID.m_Hash.m_pData, status.stateID.m_Hash.nBytes).c_str()];;
+
+
+    auto assets = status.all;
+    for (const auto& [key, value] : assets) {
+        auto assetId = key;
+        BOOL found = NO;
+        for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
+            BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
+            
+            if (asset.assetId == assetId) {
+                found = YES;
+                
+                asset.available = AmountBig::get_Lo(value.available);
+                asset.receiving = AmountBig::get_Lo(value.receiving);
+                asset.sending = AmountBig::get_Lo(value.sending);
+                asset.shielded = AmountBig::get_Lo(value.shielded);
+                asset.maxPrivacy = AmountBig::get_Lo(value.maturingMP);
+                asset.maturing = AmountBig::get_Lo(value.maturing);
+
+                asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin);
+                asset.realReceiving = (double(int64_t(AmountBig::get_Lo(value.receiving))) / Rules::Coin);
+                asset.realSending = (double(int64_t(AmountBig::get_Lo(value.sending))) / Rules::Coin);
+                asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
+                asset.realMaxPrivacy = double(int64_t(AmountBig::get_Lo(value.maturingMP))) / Rules::Coin;
+                asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
+
+                [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
+            }
+        }
+        
+        if (!found) {
+            BMAsset *asset = [[BMAsset alloc] init];
+            asset.assetId = assetId;
+            
+            asset.available = AmountBig::get_Lo(value.available);
+            asset.receiving = AmountBig::get_Lo(value.receiving);
+            asset.sending = AmountBig::get_Lo(value.sending);
+            asset.shielded = AmountBig::get_Lo(value.shielded);
+            asset.maxPrivacy = AmountBig::get_Lo(value.maturingMP);
+            asset.maturing = AmountBig::get_Lo(value.maturing);
+
+            asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin);
+            asset.realReceiving = (double(int64_t(AmountBig::get_Lo(value.receiving))) / Rules::Coin);
+            asset.realSending = (double(int64_t(AmountBig::get_Lo(value.sending))) / Rules::Coin);
+            asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
+            asset.realMaxPrivacy = double(int64_t(AmountBig::get_Lo(value.maturingMP))) / Rules::Coin;
+            asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
+            
+            [[[AssetsManager sharedManager]assets] addObject:asset];
+        }
+    }
+    
+    [[AssetsManager sharedManager] changeAssets];
+    
+    for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
+        BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
+        if (asset.name == nil || asset.name.isEmpty) {
+            this->getAsync()->getAssetInfo((uint)asset.assetId);
+        }
+    }
     
     [[AppModel sharedManager] setWalletStatus:walletStatus];
 
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onWalletStatusChange:)]) {
             [delegate onWalletStatusChange:walletStatus];
@@ -168,7 +228,9 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
 
         transaction.senderAddress = GetAddressFrom(item);
         transaction.receiverAddress = GetAddressTo(item);
-
+        transaction.assetId = item.m_assetId;
+        transaction.asset = [[AssetsManager sharedManager] getAsset:item.m_assetId];
+        
         if(item.m_txType == wallet::TxType::PushTransaction) {
             auto token = item.getToken();
             if (token.size() > 0) { //send
@@ -466,7 +528,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [[AppModel sharedManager] setWalletAddresses:addresses];
 
-              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
       for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
@@ -484,11 +546,6 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
 
         for (const auto& walletAddr : addrs)
         {
-            NSString *categories = [NSString stringWithUTF8String:walletAddr.m_category.c_str()];
-            if ([categories isEqualToString:@"0"]) {
-                categories = @"";
-            }
-            
             BMAddress *address = [[BMAddress alloc] init];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
             address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
@@ -524,7 +581,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [[AppModel sharedManager] setContacts:contacts];
         
-              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+      NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
       for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onContactsChange:)]) {
@@ -774,8 +831,152 @@ void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
 }
 
 void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const std::vector <beam::wallet::WalletAddress > &items) {
-    getAsync()->getAddresses(true);
-    getAsync()->getAddresses(false);
+
+    NSMutableArray *addresses = [NSMutableArray array];
+    NSMutableArray *contacts = [NSMutableArray array];
+    BOOL hasContacts = false;
+    BOOL hasOwn = false;
+    
+    for (const auto& walletAddr : items)
+    {
+        if (walletAddr.isOwn()) {
+            hasOwn = true;
+            
+            BMAddress *address = [[BMAddress alloc] init];
+            address.duration = walletAddr.m_duration;
+            address.ownerId = walletAddr.m_OwnID;
+            address.createTime = walletAddr.m_createTime;
+            address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+            if([address.label isEqualToString:@"Default"])
+            {
+                address.label = [@"default" localized];
+            }
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
+            
+            [addresses addObject:address];
+        }
+        else {
+            hasContacts = true;
+            
+            BMAddress *address = [[BMAddress alloc] init];
+            address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
+            
+            BOOL ignored = [[AppModel sharedManager] containsIgnoredContact:address.walletId];
+            
+            if((!address.address.isEmpty || !address.walletId.isEmpty) && !ignored) {
+                BMContact *contact = [[BMContact alloc] init];
+                contact.address = address;
+                contact.name = address.label;
+                
+                [contacts addObject:contact];
+            }
+        }
+    }
+    
+    switch (action) {
+        case ChangeAction::Added:
+        {
+            if(hasOwn) {
+                [[[AppModel sharedManager]walletAddresses] addObjectsFromArray:addresses];
+            }
+            
+            if(hasContacts) {
+                [[[AppModel sharedManager]contacts] addObjectsFromArray:contacts];
+            }
+            
+            break;
+        }
+        case ChangeAction::Removed:
+        {
+            NSMutableIndexSet *set = [NSMutableIndexSet new];
+            
+            if(hasOwn) {
+                for (int i=0;i<[[AppModel sharedManager]walletAddresses].count; i++) {
+                    BMAddress *add_1 = [[[AppModel sharedManager]walletAddresses] objectAtIndex:i];
+                    for (int j=0;j<addresses.count; j++) {
+                        BMAddress *add_2 = [addresses objectAtIndex:j];
+                        if([add_1.getWalletId isEqualToString:add_2.getWalletId])
+                        {
+                            [set addIndex:i];
+                        }
+                    }
+                }
+                
+                [[[AppModel sharedManager]walletAddresses] removeObjectsAtIndexes:set];
+            }
+            
+            if(hasContacts) {
+                set = [NSMutableIndexSet new];
+                
+                for (int i=0;i<[[AppModel sharedManager]contacts].count; i++) {
+                    BMContact *add_1 = [[[AppModel sharedManager]contacts] objectAtIndex:i];
+                    for (int j=0;j<contacts.count; j++) {
+                        BMContact *add_2 = [contacts objectAtIndex:j];
+                        if([add_1.address.getWalletId isEqualToString:add_2.address.getWalletId])
+                        {
+                            [set addIndex:i];
+                        }
+                    }
+                }
+                
+                [[[AppModel sharedManager]contacts] removeObjectsAtIndexes:set];
+            }
+            
+            break;
+        }
+        case ChangeAction::Updated:
+        {
+            if(hasOwn) {
+                for (int i=0;i<[[AppModel sharedManager]walletAddresses].count; i++) {
+                    BMAddress *add_1 = [[[AppModel sharedManager]walletAddresses] objectAtIndex:i];
+                    for (int j=0;j<addresses.count; j++) {
+                        BMAddress *add_2 = [addresses objectAtIndex:j];
+                        if([add_1.getWalletId isEqualToString:add_2.getWalletId])
+                        {
+                            [[[AppModel sharedManager]walletAddresses] replaceObjectAtIndex:i withObject:add_2];
+                        }
+                    }
+                }
+            }
+            
+            if(hasContacts) {
+                for (int i=0;i<[[AppModel sharedManager]contacts].count; i++) {
+                    BMContact *add_1 = [[[AppModel sharedManager]contacts] objectAtIndex:i];
+                    for (int j=0;j<contacts.count; j++) {
+                        BMContact *add_2 = [contacts objectAtIndex:j];
+                        if([add_1.address.getWalletId isEqualToString:add_2.address.getWalletId])
+                        {
+                            [[[AppModel sharedManager]contacts] replaceObjectAtIndex:i withObject:add_2];
+                        }
+                    }
+                }
+            }
+            
+            break;
+        }
+        case ChangeAction::Reset:
+        {
+      
+            if (hasOwn) {
+                [[[AppModel sharedManager]walletAddresses] removeAllObjects];
+                [[[AppModel sharedManager]walletAddresses] addObjectsFromArray:addresses];
+            }
+            
+            if (hasContacts) {
+                [[[AppModel sharedManager]contacts] removeAllObjects];
+                [[[AppModel sharedManager]contacts] addObjectsFromArray:contacts];
+            }
+            
+            break;
+        }
+        default:
+            break;
+    }
     
     if(action == beam::wallet::ChangeAction::Added && items.size() == 1) {
         auto walletAddr = items[0];
@@ -793,13 +994,35 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
             [AppModel sharedManager].addressGeneratedID = @"";
         }
     }
+    
+    if (hasOwn) {
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
+                [delegate onWalletAddresses:addresses];
+            }
+        }
+    }
+    
+    if(hasContacts) {
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onWalletAddresses:)]) {
+                [delegate onContactsChange:contacts];
+            }
+        }
+    }
 }
 
 void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
 
     for (int i=0; i<rates.size(); i++) {
+        
         auto rate = rates[i];
-                
+        NSString *name = [NSString stringWithUTF8String:rate.m_from.m_value.c_str()];
+
         BMCurrency *currency = [BMCurrency new];
         currency.value = rate.m_rate;
         currency.realValue = double(int64_t(rate.m_rate)) / Rules::Coin;
@@ -808,36 +1031,51 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
             currency.type = BMCurrencyUSD;
             currency.maximumFractionDigits = 2;
             currency.code = @"USD";
+            currency.name = @"BEAM";
         }
         else if (rate.m_to == Currency::BTC() && rate.m_from == Currency::BEAM()) {
             currency.type = BMCurrencyBTC;
             currency.maximumFractionDigits = 10;
             currency.code = @"BTC";
+            currency.name = @"BEAM";
+        }
+        else if (rate.m_to == Currency::BTC() && [name containsString:@"asset"]) {
+            currency.type = BMCurrencyBTC;
+            currency.maximumFractionDigits = 10;
+            currency.code = @"BTC";
+            currency.name = name;
+            currency.assetId = [[name stringByReplacingOccurrencesOfString:@"asset_" withString:@""] intValue];
+        }
+        else if (rate.m_to == Currency::USD() && [name containsString:@"asset"]) {
+            currency.type = BMCurrencyUSD;
+            currency.maximumFractionDigits = 2;
+            currency.code = @"USD";
+            currency.name = name;
+            currency.assetId = [[name stringByReplacingOccurrencesOfString:@"asset_" withString:@""] intValue];
         }
         
         bool found = false;
         
-        for (int j=0; j<[[[AppModel sharedManager] currencies] count]; j++) {
-            if([[[AppModel sharedManager] currencies] objectAtIndex:j].type == currency.type) {
+        for (int j=0; j<[[[ExchangeManager sharedManager] currencies] count]; j++) {
+            if([[[ExchangeManager sharedManager] currencies] objectAtIndex:j].type == currency.type
+                && [[[[ExchangeManager sharedManager] currencies] objectAtIndex:j].name isEqualToString:currency.name]) {
                 found = true;
-                [[[AppModel sharedManager] currencies] replaceObjectAtIndex:j withObject:currency];
+                [[[ExchangeManager sharedManager] currencies] replaceObjectAtIndex:j withObject:currency];
                 break;
             }
         }
         
         if (!found) {
-            [[[AppModel sharedManager] currencies] addObject:currency];
+            [[[ExchangeManager sharedManager] currencies] addObject:currency];
         }
     }
     
     if(rates.size() == 0) {
-        [[[AppModel sharedManager] currencies] removeAllObjects];
+        [[[ExchangeManager sharedManager] currencies] removeAllObjects];
     }
-    
-    [[AppModel sharedManager] saveCurrencies];
-    
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+        
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
             [delegate onExchangeRatesChange];
@@ -1177,8 +1415,8 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
     }
     
         
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
@@ -1206,6 +1444,48 @@ void WalletModel::onPublicAddress(const std::string& publicAddr)
     [AppModel sharedManager].getPublicAddressBlock(address);
 }
 
+
+void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
+    auto info = WalletAssetMeta(asset);
+
+    NSString *name = [NSString stringWithUTF8String:info.GetName().c_str()];
+    NSString *nthName = [NSString stringWithUTF8String:info.GetNthUnitName().c_str()];
+    NSString *unitName = [NSString stringWithUTF8String:info.GetUnitName().c_str()];
+    NSString *shortName = [NSString stringWithUTF8String:info.GetShortName().c_str()];
+    NSString *shortDesc = [NSString stringWithUTF8String:info.GetShortDesc().c_str()];
+    NSString *longDesc = [NSString stringWithUTF8String:info.GetLongDesc().c_str()];
+    NSString *site = [NSString stringWithUTF8String:info.GetSiteUrl().c_str()];
+    NSString *paper = [NSString stringWithUTF8String:info.GetPaperUrl().c_str()];
+    NSString *color = [NSString stringWithUTF8String:info.GetColor().c_str()];
+    if(color.isEmpty) {
+        color = [[AssetsManager sharedManager] getAssetColor:assetId];
+    }
+    for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
+        BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
+        if (asset.assetId == assetId) {
+            asset.nthUnitName = nthName;
+            asset.unitName = unitName;
+            asset.shortName = shortName;
+            asset.shortDesc = shortDesc;
+            asset.longDesc = longDesc;
+            asset.site = site;
+            asset.color = color;
+            asset.paper = paper;
+
+            [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
+        }
+    }
+    
+    [[AssetsManager sharedManager] changeAssets];
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onAssetInfoChange)]) {
+            [delegate onAssetInfoChange];
+        }
+    }
+}
 
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
 {

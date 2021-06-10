@@ -87,18 +87,15 @@ class NotificationManager : NSObject {
         }
         else if (notification.type == TRANSACTION) {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
-                print("--------  ---------")
-                print(transaction.isCancelled())
-                print("--------  ---------")
+                let assetValue = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
 
-                var title: String = ""
-                var detail: String = ""
+                var title = ""
+                var detail = ""
                 
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         title = Localizable.shared.strings.buy_transaction_failed_title
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: true).string
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true).string
                     }
                     else if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
                         title = Localizable.shared.strings.new_transaction
@@ -106,27 +103,21 @@ class NotificationManager : NSObject {
                     }
                     else {
                         title = Localizable.shared.strings.transaction_received
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false).string
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: false).string
                     }
                 }
                 else {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         title = Localizable.shared.strings.buy_transaction_failed_title
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true).string
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: transaction.receiverAddress, failed: true).string
                     }
                     else {
                         title = Localizable.shared.strings.transaction_sent
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam: beam, address: transaction.receiverAddress, failed: false).string
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false).string
                     }
                 }
                 
                 scheduleNotification(title: title, body: detail, id: NotificationManager.versionID)
-            }
-            else {
-                print("-------- not found ---------")
             }
         }
         else if (notification.type == VERSION) {

@@ -54,7 +54,7 @@ class FeeCell: BaseCell {
         feeSlider.addTarget(self, action: #selector(onSliderValChanged(sender:event:)), for: .valueChanged)
 
         minLabel.text = String(Int(feeSlider.minimumValue)) + Localizable.shared.strings.groth
-        minSecondLabel.text = AppModel.sharedManager().exchangeValueFee(Double(feeSlider.minimumValue))
+        minSecondLabel.text = ExchangeManager.shared().exchangeValueFee(Double(feeSlider.minimumValue))
 
         if Settings.sharedManager().isDarkMode {
             feeSlider.maximumTrackTintColor = UIColor.white.withAlphaComponent(0.02)
@@ -87,7 +87,7 @@ class FeeCell: BaseCell {
             if nFee > Double(self.feeSlider.maximumValue) {
                 self.feeSlider.maximumValue = Float(nFee)
                 self.maxLabel.text = obj + Localizable.shared.strings.groth
-                self.maxSecondLabel.text = AppModel.sharedManager().exchangeValueFee(nFee)
+                self.maxSecondLabel.text = ExchangeManager.shared().exchangeValueFee(nFee)
             }
             
             self.configure(with: nFee)
@@ -161,7 +161,7 @@ extension FeeCell: Configurable {
             feeSlider.maximumValue = Float(fee)
             maxLabel.text = String(Int(fee)) + Localizable.shared.strings.groth
         }
-        maxSecondLabel.text = AppModel.sharedManager().exchangeValueFee(Double(feeSlider.maximumValue))
+        maxSecondLabel.text = ExchangeManager.shared().exchangeValueFee(Double(feeSlider.maximumValue))
 
         feeSlider.value = Float(fee)
         

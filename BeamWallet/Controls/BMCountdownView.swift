@@ -19,7 +19,7 @@
 
 import Foundation
 
-@objc public protocol BMCountdownViewDelegate: class {
+@objc public protocol BMCountdownViewDelegate: AnyObject {
     @objc optional func timerDidEnd()
 }
 

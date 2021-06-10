@@ -86,18 +86,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
           //  let feeString = "+ \(fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
             var second = ""
             if selectedCurrency == BEAM  {
-                second = AppModel.sharedManager().exchangeValue(withZero: Double(inputAmount) ?? 0)
+                second = ExchangeManager.shared().exchangeValue(withZero: Double(inputAmount) ?? 0)
             }
             else {
-                second = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 0, amount: Double(inputAmount) ?? 0)
+                second = ExchangeManager.shared().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 0, amount: Double(inputAmount) ?? 0)
             }
             return second
-//            if (Double(inputAmount) ?? 0) > 0 {
-//                return second + " (" + feeString + ")"
-//            }
-//            else {
-//                return second
-//            }
         }
     }
     
@@ -210,7 +204,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             return inputAmount
         }
         else {
-            let result = AppModel.sharedManager().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 1, amount: Double(inputAmount) ?? 0).replacingOccurrences(of: " BEAM", with: "")
+            let result = ExchangeManager.shared().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 1, amount: Double(inputAmount) ?? 0).replacingOccurrences(of: " BEAM", with: "")
             return result
         }
     }
@@ -522,9 +516,9 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public func amountString(amount: String, isFee: Bool = false, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {
         let amountString = isFee ? (amount + Localizable.shared.strings.groth + "\n") : (amount + Localizable.shared.strings.beam + "\n")
-        var secondString = isFee ? AppModel.sharedManager().exchangeValueFee((Double(amount) ?? 0)) : AppModel.sharedManager().exchangeValue(withZero: Double(amount) ?? 0)
+        var secondString = isFee ? ExchangeManager.shared().exchangeValueFee((Double(amount) ?? 0)) : ExchangeManager.shared().exchangeValue(withZero: Double(amount) ?? 0)
         if doubleAmount > 0.0 {
-            secondString = AppModel.sharedManager().exchangeValue(withZero: doubleAmount)
+            secondString = ExchangeManager.shared().exchangeValue(withZero: doubleAmount)
         }
         let attributedString = amountString + "space\n" + secondString
         

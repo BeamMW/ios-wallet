@@ -25,11 +25,9 @@ class WalletTransactionSearchCell: UITableViewCell {
     @IBOutlet weak private var statusLabel: UILabel!
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var amountLabel: UILabel!
-    @IBOutlet weak private var balanceView: UIView!
+    @IBOutlet weak private var assetIcon: AssetIconView!
     @IBOutlet weak private var statusIcon: UIImageView!
     @IBOutlet weak private var secondAvailableLabel: UILabel!
-
     @IBOutlet weak private var searchLabel: UILabel!
 
     override func awakeFromNib() {
@@ -58,31 +56,30 @@ class WalletTransactionSearchCell: UITableViewCell {
 extension WalletTransactionSearchCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
-     
-        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
-        secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.transaction.realAmount)
-
-        statusIcon.image = options.transaction.statusIcon()
-        typeLabel.text = options.transaction.statusName()
-        statusLabel.text = options.transaction.statusType()
-
-        switch options.transaction.isIncome {
-        case true:
-            amountLabel.text = "+ " + String.currency(value: options.transaction.realAmount)
-            amountLabel.textColor = UIColor.main.brightSkyBlue
-        case false:
-            amountLabel.text = "- " + String.currency(value: options.transaction.realAmount)
-            amountLabel.textColor = UIColor.main.heliotrope
-        }
+        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueAsset(options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
         
+        mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
+        
+        assetIcon.setAsset(options.transaction.asset)
+        
+        statusIcon.image = options.transaction.statusIcon()
+        
+        typeLabel.text = options.transaction.amountString()
         
         dateLabel.text = options.transaction.formattedDate()
         dateLabel.isHidden = !options.additionalInfo
-        
-        balanceView.isHidden = Settings.sharedManager().isHideAmounts
+        statusLabel.text = options.transaction.statusType()
         
         if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
-            statusLabel.textColor = UIColor.main.greyish
+            if options.transaction.isFailed() && !options.transaction.isCancelled() && !options.transaction.isExpired() {
+                statusLabel.textColor = UIColor.main.failed
+            }
+            else {
+                statusLabel.textColor = UIColor.main.greyish
+            }
+        }
+        else if (options.transaction.enumType == BMTransactionTypeUnlink) {
+            statusLabel.textColor = UIColor.main.brightTeal
         }
         else if options.transaction.isSelf {
             statusLabel.textColor = UIColor.white
@@ -93,5 +90,6 @@ extension WalletTransactionSearchCell: Configurable {
         else if !options.transaction.isIncome {
             statusLabel.textColor = UIColor.main.heliotrope
         }
+        
     }
 }

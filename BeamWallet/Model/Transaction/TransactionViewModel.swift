@@ -137,8 +137,8 @@ class TransactionViewModel: NSObject {
             handler(true)
             self.cancelTransation(indexPath: indexPath)
         }
-        cancel.image = transaction.isUnlink() ? IconStopUnlinking(): IconRowCancel()
-        cancel.backgroundColor = transaction.isUnlink() ? UIColor.main.deepSeaBlue : UIColor.main.cerulean
+        cancel.image = IconRowCancel()
+        cancel.backgroundColor = UIColor.main.cerulean
         
         var rep:UIContextualAction? = nil
         
@@ -164,7 +164,7 @@ class TransactionViewModel: NSObject {
             actions.append(cancel)
         }
         
-        if !transaction.isIncome && !transaction.isUnlink() && rep != nil {
+        if !transaction.isIncome && rep != nil {
             actions.append(rep!)
         }
         

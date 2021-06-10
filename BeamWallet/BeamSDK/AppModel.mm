@@ -52,6 +52,7 @@
 #include "wallet/transactions/lelantus/unlink_transaction.h"
 #include "wallet/transactions/lelantus/push_transaction.h"
 #include "wallet/transactions/lelantus/pull_transaction.h"
+#include "wallet/transactions/dex/dex_tx.h"
 
 #include "wallet/core/simple_transaction.h"
 #include "wallet/core/common_utils.h"
@@ -117,6 +118,7 @@ struct GetMaxPrivacyLockFunc
 };
 
 
+
 @implementation AppModel  {
     BOOL isStarted;
     BOOL isRunning;
@@ -140,8 +142,6 @@ struct GetMaxPrivacyLockFunc
     ByteBuffer lastVouchers;
     NSString *lastWalledId;
     std::string *lastWalledIdS;
-
-    NSNumberFormatter *currencyFormatter;
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -162,17 +162,12 @@ struct GetMaxPrivacyLockFunc
     
     [self createLogger];
         
+    wallet::g_AssetsEnabled = true;
+    
     reconnectAttempts = 0;
     reconnectNodes = [NSMutableArray new];
     lastWalledId = @"";
     
-    currencyFormatter = [[NSNumberFormatter alloc] init];
-    currencyFormatter.currencyCode = @"";
-    currencyFormatter.currencySymbol = @"";
-    currencyFormatter.minimumFractionDigits = 0;
-    currencyFormatter.maximumFractionDigits = 10;
-    currencyFormatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
-    currencyFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     
     walletReactor = Reactor::create();
     io::Reactor::Scope s(*walletReactor); // do it in main thread
@@ -180,7 +175,7 @@ struct GetMaxPrivacyLockFunc
     _delegates = [NSPointerArray weakObjectsPointerArray];
     
     _transactions = [[NSMutableArray alloc] init];
-    
+
     _shildedUtxos = [[NSMutableArray alloc] init];
     _contacts = [[NSMutableArray alloc] init];
     _notifications = [[NSMutableArray alloc] init];
@@ -189,9 +184,7 @@ struct GetMaxPrivacyLockFunc
     _preparedTransactions = [[NSMutableArray alloc] init];
     _preparedDeleteAddresses = [[NSMutableArray alloc] init];
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
-    
-    _currencies = [[NSMutableArray alloc] initWithArray:[self allCurrencies]];
-    
+        
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
     
     NSData *dataStatus = [[NSUserDefaults standardUserDefaults] objectForKey:walletStatusKey];
@@ -201,8 +194,9 @@ struct GetMaxPrivacyLockFunc
     
     NSData *dataTransactions = [[NSUserDefaults standardUserDefaults] objectForKey:transactionsKey];
     if(dataTransactions != nil) {
-        NSSet *classes = [NSSet setWithObjects:[NSArray class], [BMTransaction class], nil];
-        _transactions = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:dataTransactions error:nil];
+        NSSet *classes = [NSSet setWithObjects:[NSArray class], [BMTransaction class], [BMAsset class], nil];
+        NSError *error;
+        _transactions = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:dataTransactions error:&error];
     }
     
     NSData *dataNotifications = [[NSUserDefaults standardUserDefaults] objectForKey:notificationsKey];
@@ -344,27 +338,6 @@ struct GetMaxPrivacyLockFunc
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:walletStatusKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-
-#pragma mark - Exchange
-
--(NSMutableArray<BMCurrency*>*_Nonnull)allCurrencies{
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:currenciesKey]) {
-        NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:currenciesKey];
-        
-        NSMutableArray *array = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchivedObjectOfClass:BMCurrency.class fromData:data error:nil]];
-        
-        return array;
-    }
-    
-    return @[].mutableCopy;
-}
-
--(void)saveCurrencies {
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_currencies requiringSecureCoding:YES error:nil];
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:currenciesKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 
 #pragma mark - Inetrnet
 
@@ -699,6 +672,7 @@ struct GetMaxPrivacyLockFunc
     _walletStatus = [BMWalletStatus new];
     [_transactions removeAllObjects];
     [_notifications removeAllObjects];
+    [[AssetsManager.sharedManager assets] removeAllObjects];
 
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:notificationsKey];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:transactionsKey];
@@ -818,10 +792,8 @@ struct GetMaxPrivacyLockFunc
             string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
             
             auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-            additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
-            additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
-            additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
-            
+            additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
+
             wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
             
             wallet->getAsync()->setNodeAddress(nodeAddrStr);
@@ -880,10 +852,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
                 
         auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-        additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
-        additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
-        additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
-        
+        additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
+
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
@@ -911,10 +881,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
             isRunning = YES;
             
             auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-            additionalTxCreators->emplace(TxType::UnlinkFunds, std::make_shared<lelantus::UnlinkFundsTransaction::Creator>());
-            additionalTxCreators->emplace(TxType::PushTransaction, std::make_shared<lelantus::PushTransaction::Creator>(walletDb));
-            additionalTxCreators->emplace(TxType::PullTransaction, std::make_shared<lelantus::PullTransaction::Creator>());
-            
+            additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
+
             if ([Settings sharedManager].isNodeProtocolEnabled) {
                 wallet->getAsync()->enableBodyRequests(true);
             }
@@ -2905,133 +2873,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     return jsonString;
 }
 
--(NSString*_Nonnull)exchangeValue:(double)amount to:(BMCurrencyType)to {
-    for (BMCurrency *currency in [_currencies objectEnumerator].allObjects) {
-        if(currency.type == to && currency.value > 0) {
-            currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
-            currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
-            currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@",currency.code];
-            
-            double value = double(int64_t(currency.value)) / Rules::Coin;
-            double rate = value * amount;
-            return [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
-        }
-    }
 
-    return @"";
-}
-
--(NSString*_Nonnull)exchangeValue:(double)amount {
-    if(Settings.sharedManager.currency == BMCurrencyOff || [self isCurrenciesAvailable] == NO) {
-        return @"";
-    }
-    if(amount == 0.0) {
-        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
-    }
-    NSArray *currencies = [NSArray arrayWithArray:[_currencies objectEnumerator].allObjects];
-    for (BMCurrency *currency in currencies) {
-        if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
-            currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
-            currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
-            currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@",currency.code];
-            
-            double value = double(int64_t(currency.value)) / Rules::Coin;
-            double rate = value * amount;
-            return [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
-        }
-    }
-    
-    return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
-}
-
--(NSString*_Nonnull)exchangeValueWithZero:(double)amount {
-    NSString *result = [self exchangeValue:amount];
-    return [result stringByReplacingOccurrencesOfString:@"-" withString:@"0 "];
-}
-
--(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount {
-    if(Settings.sharedManager.currency == BMCurrencyOff || [self isCurrenciesAvailable] == NO) {
-        return @"";
-    }
-    if(amount == 0) {
-        return @"";
-    }
-    
-    if(from == BEAM) {
-        for (BMCurrency *currency in _currencies) {
-            if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
-                currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
-                currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
-                
-                double value = double(int64_t(currency.value)) / Rules::Coin;
-                double rate = value * (amount / Rules::Coin);
-                if(rate < 0.01 && currency.type == BMCurrencyUSD) {
-                    return @"< 1 cent";
-                }
-                NSString *result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
-                if([result isEqualToString:@"0 BTC"]) {
-                    rate = rate * 100000000;
-                    currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",@"satoshis"];
-                    result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
-                }
-                return result;
-            }
-        }
-        
-        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
-    }
-    else  {
-        for (BMCurrency *currency in _currencies) {
-            if(currency.type == from && currency.value > 0) {
-      
-                NSNumberFormatter *formatter = [NSNumberFormatter new];
-                formatter.currencyCode = @"";
-                formatter.currencySymbol = @"";
-                formatter.minimumFractionDigits = 0;
-                formatter.maximumFractionDigits = 2;
-                formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-                formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
-                
-                double value = double(int64_t(currency.value)) / Rules::Coin;
-                double rate = (amount) / value;
-                NSString *result = [NSString stringWithFormat:@"%@ BEAM",[formatter stringFromNumber:[NSNumber numberWithDouble:rate]]];
-                return result;
-            }
-        }
-        
-        return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
-    }
-}
-
--(NSString*_Nonnull)exchangeValueFee:(double)amount {
-    if(Settings.sharedManager.currency == BMCurrencyOff || [self isCurrenciesAvailable] == NO) {
-        return @"";
-    }
-    if(amount == 0) {
-        return @"";
-    }
-    for (BMCurrency *currency in _currencies) {
-        if(currency.type == Settings.sharedManager.currency && currency.value > 0) {
-            currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
-            currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
-            
-            double value = double(int64_t(currency.value)) / Rules::Coin;
-            double rate = value * (amount / Rules::Coin);
-            if(rate < 0.01 && currency.type == BMCurrencyUSD) {
-                return @"< 1 cent";
-            }
-            NSString *result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
-            if([result isEqualToString:@"0 BTC"]) {
-                rate = rate * 100000000;
-                currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",@"satoshis"];
-                result = [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
-            }
-            return result;
-        }
-    }
-    
-    return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];
-}
 
 #pragma mark - Notifications
 
@@ -3158,10 +3000,6 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
 }
 
--(BOOL)isCurrenciesAvailable {
-    return (_currencies.count > 0);
-}
-
 -(void)setMaxPrivacyLockTime:(int)hours {
     wallet->getAsync()->setMaxPrivacyLockTimeLimitHours(hours);
 }
@@ -3222,6 +3060,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
     [[Settings sharedManager] setIsNodeProtocolEnabled:value];
 }
+
 
 @end
 

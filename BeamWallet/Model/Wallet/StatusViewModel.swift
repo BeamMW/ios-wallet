@@ -23,22 +23,15 @@ class StatusViewModel: NSObject {
     
     enum CellTypes: Int {
         case buttons = 0
-        case available = 1
-        case progress = 2
-        case faucet = 3
-        case verefication = 4
+        case faucet = 1
+        case verefication = 2
     }
     
-    enum SelectedState: Int {
-        case available = 0
-        case maturing = 1
-        case maxPrivacy = 2
-    }
     
     public var onDataChanged : (() -> Void)?
     public var onRatesChange : (() -> Void)?
     public var onVerificationCompleted : (() -> Void)?
-    public var selectedState = SelectedState.available
+
     public var cells = [CellTypes]()
     
     override init() {
@@ -53,73 +46,28 @@ class StatusViewModel: NSObject {
         AppModel.sharedManager().removeDelegate(self)
     }
     
-    public func isAvaiableMautring() -> Bool {
-        if AppModel.sharedManager().walletStatus?.maturing ?? 0 > 0 {
-            return true
-        }
-        
-        return false
-    }
-    
-    public func isAvaiableMaxPrivacy() -> Bool {
-        if AppModel.sharedManager().walletStatus?.maxPrivacy ?? 0 > 0 {
-            return true
-        }
-        return false
-    }
-    
-    public func isAvaiableBalance() -> Bool {
-        if AppModel.sharedManager().walletStatus?.available ?? 0 > 0 {
-            return true
-        }
-        
-        return false
-    }
-    
     public func onReceive() {
-        if AppModel.sharedManager().isWalletRunning() {
-            let vc = ReceiveViewController()
-            UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
-        }
-        else{
-            UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
-        }
-      
+        let vc = ReceiveViewController()
+        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
     }
     
     public func onSend() {
-        if AppModel.sharedManager().isWalletRunning() {
-            let vc = SendViewController()
-            UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
-        }
-        else{
-            UIApplication.getTopMostViewController()?.alert(message: Localizable.shared.strings.no_internet)
-        }
+        let vc = SendViewController()
+        UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
     }
     
     private func getCells() -> [CellTypes] {
         var result = [CellTypes]()
-        
         result.append(.buttons)
         
         let canReceive = OnboardManager.shared.canReceiveFaucet()
-
-        let isInProgress = AppModel.sharedManager().walletStatus?.hasInProgressBalance() ?? false
-
         if canReceive {
             result.append(.faucet)
         }
         
         let canMakeSecure = OnboardManager.shared.canMakeSecure()
-
         if canMakeSecure {
             result.append(.verefication)
-        }
-        
-        result.append(.available)
-        
-        if isInProgress {
-            result.append(.progress)
         }
            
         return result

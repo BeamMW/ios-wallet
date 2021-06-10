@@ -141,7 +141,7 @@ class DetailTransactionViewModel: TransactionViewModel {
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
 
         
-        if !transaction.isIncome && !transaction.isUnlink() && !transaction.isShielded {
+        if !transaction.isIncome && !transaction.isShielded {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
         }
         

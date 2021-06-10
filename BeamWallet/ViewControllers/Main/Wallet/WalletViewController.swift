@@ -20,16 +20,14 @@
 import UIKit
 
 class WalletViewController: BaseTableViewController {
-    private var isNeedUpdatingReload = true
     
-    private var expandAvailable = true
-    private var expandProgress = true
-    
-    private let viewModel = TransactionViewModel()
+    private let transactionViewModel = TransactionViewModel()
     private let statusViewModel = StatusViewModel()
-    
-    private let maximumTransactionsCount = 5
-    
+    private let assetViewModel = AssetViewModel()
+
+    private let maximumAssetsCount = 4
+    private let maximumTransactionsCount = 4
+
     deinit {
         Settings.sharedManager().removeDelegate(self)
     }
@@ -37,27 +35,21 @@ class WalletViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.wallet
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register([WalletStatusCell.self, WalletAvailableCell.self, WalletProgressCell.self, WalletTransactionCell.self, BMEmptyCell.self, OnboardCell.self])
+        tableView.register([WalletStatusCell.self, WalletTransactionCell.self, BMEmptyCell.self, OnboardCell.self, AssetAvailableCell.self])
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 10))
         tableView.keyboardDismissMode = .interactive
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
         AppModel.sharedManager().isLoggedin = true
-        
-        AppStoreReviewManager.incrementAppOpenedCount()
-                
+                        
         Settings.sharedManager().addDelegate(self)
-        
-        expandProgress = !Settings.sharedManager().isHideAmounts
-        expandAvailable = !Settings.sharedManager().isHideAmounts
-        
+                
         rightButton()
         
         subscribeToUpdates()
@@ -67,22 +59,19 @@ class WalletViewController: BaseTableViewController {
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
-        
-        // AppModel.sharedManager().testVersionNotification()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if WithdrawViewModel.isOpenFromGame
-        {
+        if WithdrawViewModel.isOpenFromGame {
             WithdrawViewModel.isOpenFromGame = false
             
             let vc = WithdrawViewController(amount: WithdrawViewModel.amount, userId: WithdrawViewModel.userId)
             pushViewController(vc: vc)
         }
         else if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
-            if let transaction = viewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
+            if let transaction = transactionViewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
                 let vc = TransactionViewController(transaction: transaction)
                 pushViewController(vc: vc)
             }
@@ -92,9 +81,6 @@ class WalletViewController: BaseTableViewController {
         else if ShortcutManager.canHandle() {
             _ = ShortcutManager.handleShortcutItem()
         }
-        else if AppStoreReviewManager.checkAndAskForReview() {
-            showRateDialog()
-        }
     }
     
     private func rightButton() {
@@ -102,7 +88,7 @@ class WalletViewController: BaseTableViewController {
     }
     
     private func subscribeToUpdates() {
-        viewModel.onDataChanged = { [weak self] in
+        transactionViewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
             
             UIView.performWithoutAnimation {
@@ -111,12 +97,12 @@ class WalletViewController: BaseTableViewController {
             }
         }
         
-        viewModel.onDataDeleted = { [weak self]
+        transactionViewModel.onDataDeleted = { [weak self]
             indexPath, transaction in
             
             guard let strongSelf = self else { return }
             
-            if strongSelf.viewModel.transactions.count == 0 || strongSelf.viewModel.transactions.count >= strongSelf.maximumTransactionsCount {
+            if strongSelf.transactionViewModel.transactions.count == 0 || strongSelf.transactionViewModel.transactions.count >= strongSelf.maximumTransactionsCount {
                 strongSelf.tableView.reloadData()
                 AppModel.sharedManager().prepareDeleteTransaction(transaction)
             }
@@ -131,7 +117,7 @@ class WalletViewController: BaseTableViewController {
             }
         }
         
-        viewModel.onDataUpdated = { [weak self]
+        transactionViewModel.onDataUpdated = { [weak self]
             indexPath, transaction in
             
             if let path = indexPath {
@@ -154,43 +140,23 @@ class WalletViewController: BaseTableViewController {
         statusViewModel.onRatesChange = { [weak self] in
             guard let strongSelf = self else { return }
             UIView.performWithoutAnimation {
-                if strongSelf.tableView.findCell(WalletAvailableCell.self) != nil {
-                    strongSelf.tableView.reloadRow(WalletAvailableCell.self)
-                }
-                if strongSelf.tableView.findCell(WalletProgressCell.self) != nil {
-                    strongSelf.tableView.reloadRow(WalletProgressCell.self)
-                }
+                strongSelf.tableView.reloadData()
             }
         }
         
         statusViewModel.onDataChanged = { [weak self] in
-            
             guard let strongSelf = self else { return }
-            
-            if strongSelf.statusViewModel.selectedState == .maturing, !strongSelf.statusViewModel.isAvaiableMautring() {
-                strongSelf.isNeedUpdatingReload = true
-                strongSelf.statusViewModel.selectedState = .available
+            UIView.performWithoutAnimation {
+                strongSelf.tableView.stopRefreshing()
+                strongSelf.tableView.reloadData()
             }
-            
-            if AppModel.sharedManager().isUpdating && AppModel.sharedManager().isOwnNode {
-                if let cell = strongSelf.tableView.findCell(WalletAvailableCell.self) as? WalletAvailableCell {
-                    cell.configure(with: (expand: strongSelf.expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: strongSelf.statusViewModel.selectedState, avaiableMaturing: strongSelf.statusViewModel.isAvaiableMautring(), avaiableMaxPrivacy: strongSelf.statusViewModel.isAvaiableMaxPrivacy()))
-                }
-
-                if let cell = strongSelf.tableView.findCell(WalletProgressCell.self) as? WalletProgressCell {
-                    cell.configure(with: (expand: strongSelf.expandProgress, status: AppModel.sharedManager().walletStatus))
-                }
-
-                if strongSelf.isNeedUpdatingReload {
-                    strongSelf.isNeedUpdatingReload = false
-                    strongSelf.tableView.reloadData()
-                }
-            }
-            else {
-                UIView.performWithoutAnimation {
-                    strongSelf.tableView.stopRefreshing()
-                    strongSelf.tableView.reloadData()
-                }
+        }
+        
+        assetViewModel.onDataChanged = { [weak self] in
+            guard let strongSelf = self else { return }
+            UIView.performWithoutAnimation {
+                strongSelf.tableView.stopRefreshing()
+                strongSelf.tableView.reloadData()
             }
         }
     }
@@ -199,8 +165,13 @@ class WalletViewController: BaseTableViewController {
         AppModel.sharedManager().getWalletStatus()
     }
     
+    
+    @objc private func onAssets(_ sender: Any) {
+        
+    }
+    
     @objc private func onMore(_ sender: Any) {
-        if viewModel.transactions.count > 0 {
+        if transactionViewModel.transactions.count > 0 {
             let vc = TransactionsViewController()
             pushViewController(vc: vc)
         }
@@ -226,83 +197,50 @@ class WalletViewController: BaseTableViewController {
 }
 
 extension WalletViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1, viewModel.transactions.count > 0 {
+        if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
             return true
         }
-        
         return false
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            let cell = statusViewModel.cells[indexPath.row]
-            
-            if cell == .buttons {
-                return UITableView.automaticDimension
-            }
-            else if cell == .available {
-                if Settings.sharedManager().isHideAmounts || !expandAvailable {
-                    return WalletAvailableCell.hideHeight()
-                }
-                else {
-                    let height = (statusViewModel.isAvaiableMautring() || statusViewModel.isAvaiableMaxPrivacy()) ? WalletAvailableCell.maturingHeight() : WalletAvailableCell.secondHeight()
-                    return height
-                }
-            }
-            else if cell == .progress {
-                if Settings.sharedManager().isHideAmounts || !expandProgress {
-                    return WalletProgressCell.hideHeight()
-                }
-                else {
-                    return AppModel.sharedManager().walletStatus?.isSendingAndReceiving() ?? false ? WalletProgressCell.mainHeight() : WalletProgressCell.singleHeight()
-                }
-            }
-            else {
-                return UITableView.automaticDimension
-            }
-        case 1:
-            if viewModel.transactions.count == 0 {
-                return 200
-            }
-            else {
-                return UITableView.automaticDimension
-            }
-        default:
-            return 0
+        if indexPath.section == 2 && transactionViewModel.transactions.count == 0 {
+            return 200
         }
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if viewModel.transactions.count == 0, section == 1 {
+        if section == 0 {
             return 0
         }
-        return (section == 1 ? BMTableHeaderTitleView.height : 0)
+        else if transactionViewModel.transactions.count == 0, section == 2 {
+            return 0
+        }
+        return BMTableHeaderTitleView.height
+    }
+        
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return transactionViewModel.trailingSwipeActions(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 1, viewModel.transactions.count > 0 {
-            let vc = TransactionViewController(transaction: viewModel.transactions[indexPath.row])
+        if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
+            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
     }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        return viewModel.trailingSwipeActions(indexPath: indexPath)
-    }
 }
 
 extension WalletViewController: UITableViewDataSource {
+   
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 1:
-            if viewModel.transactions.count == 0 {
-                return nil
-            }
+        if section == 2, transactionViewModel.transactions.count > 0 {
             let header = BMTableHeaderTitleView(title: Localizable.shared.strings.transactions.uppercased(), handler: #selector(onMore), target: self)
             header.letterSpacing = 1.5
             header.textColor = UIColor.white
@@ -310,13 +248,21 @@ extension WalletViewController: UITableViewDataSource {
             header.buttonImage = IconNextArrow()
             header.buttonFrame = header.bounds
             return header
-        default:
-            return nil
         }
+        else if section == 1 {
+            let header = BMTableHeaderTitleView(title: Localizable.shared.strings.assets.uppercased(), handler: #selector(onAssets), target: self)
+            header.letterSpacing = 1.5
+            header.textColor = UIColor.white
+            header.textFont = BoldFont(size: 14)
+            header.buttonImage = IconNextArrow()
+            header.buttonFrame = header.bounds
+            return header
+        }
+        return nil
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -324,7 +270,9 @@ extension WalletViewController: UITableViewDataSource {
         case 0:
             return statusViewModel.cells.count
         case 1:
-            return (viewModel.transactions.count == 0) ? 1 : ((viewModel.transactions.count > maximumTransactionsCount) ? maximumTransactionsCount : viewModel.transactions.count)
+            return (assetViewModel.assets.count == 0) ? 0 : ((assetViewModel.assets.count > maximumAssetsCount) ? maximumTransactionsCount : assetViewModel.assets.count)
+        case 2:
+            return (transactionViewModel.transactions.count == 0) ? 1 : ((transactionViewModel.transactions.count > maximumTransactionsCount) ? maximumTransactionsCount : transactionViewModel.transactions.count)
         default:
             return 0
         }
@@ -334,22 +282,9 @@ extension WalletViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = statusViewModel.cells[indexPath.row]
-            
             switch cell {
             case .buttons:
                 let cell = tableView.dequeueReusableCell(withType: WalletStatusCell.self, for: indexPath)
-                cell.delegate = self
-                return cell
-            case .available:
-                let cell = tableView
-                    .dequeueReusableCell(withType: WalletAvailableCell.self, for: indexPath)
-                cell.configure(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring(), avaiableMaxPrivacy: statusViewModel.isAvaiableMaxPrivacy()))
-                cell.delegate = self
-                return cell
-            case .progress:
-                let cell = tableView
-                    .dequeueReusableCell(withType: WalletProgressCell.self, for: indexPath)
-                    .configured(with: (expand: expandProgress, status: AppModel.sharedManager().walletStatus))
                 cell.delegate = self
                 return cell
             case .verefication:
@@ -364,7 +299,11 @@ extension WalletViewController: UITableViewDataSource {
                 return cell
             }
         case 1:
-            if viewModel.transactions.count == 0 {
+            let cell = tableView.dequeueReusableCell(withType: AssetAvailableCell.self, for: indexPath)
+            cell.setAsset(assetViewModel.assets[indexPath.row])
+            return cell
+        case 2:
+            if transactionViewModel.transactions.count == 0 {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
                     .configured(with: (text: Localizable.shared.strings.transactions_empty, image: IconWalletEmpty()))
@@ -373,7 +312,7 @@ extension WalletViewController: UITableViewDataSource {
             else {
                 let cell = tableView
                     .dequeueReusableCell(withType: WalletTransactionCell.self, for: indexPath)
-                    .configured(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo: false))
+                    .configured(with: (row: indexPath.row, transaction: transactionViewModel.transactions[indexPath.row], additionalInfo: false))
                 return cell
             }
         default:
@@ -392,68 +331,21 @@ extension WalletViewController: WalletStatusCellDelegate {
     }
 }
 
-extension WalletViewController: WalletAvailableCellDelegate {
-
-    func onExpandAvailable() {
-        if !Settings.sharedManager().isHideAmounts {
-            expandAvailable = !expandAvailable
-            tableView.reloadRow(WalletAvailableCell.self)
-        }
-    }
-    
-    func onDidChangeSelectedState(state: StatusViewModel.SelectedState) {
-        statusViewModel.selectedState = state
-    }
-    
-    func onMoreDetails() {
-        let vc = MaxPrivacyDetailViewController()
-        pushViewController(vc: vc)
-    }
-}
-
-extension WalletViewController: WalletProgressCellDelegate {
-    func onExpandProgress() {
-        if !Settings.sharedManager().isHideAmounts {
-            expandProgress = !expandProgress
-            tableView.reloadRow(WalletProgressCell.self)
-        }
-    }
-}
 
 extension WalletViewController: SettingsModelDelegate {
+  
     func onChangeHideAmounts() {
         rightButton()
         
-        expandProgress = !Settings.sharedManager().isHideAmounts
-        expandAvailable = !Settings.sharedManager().isHideAmounts
-        
-        let lastContentOffset = tableView.contentOffset
-        tableView.beginUpdates()
-        tableView.endUpdates()
-        tableView.layer.removeAllAnimations()
-        tableView.setContentOffset(lastContentOffset, animated: false)
-        
-        let cells = tableView.visibleCells
-        
-        for cell in cells {
-            if let availableCell = cell as? WalletAvailableCell {
-                availableCell.configure(with: (expand: expandAvailable, status: AppModel.sharedManager().walletStatus, selectedState: statusViewModel.selectedState, avaiableMaturing: statusViewModel.isAvaiableMautring(), avaiableMaxPrivacy: statusViewModel.isAvaiableMaxPrivacy()))
-            }
-            else if let progressCell = cell as? WalletProgressCell {
-                progressCell.configure(with: (expand: expandProgress, status: AppModel.sharedManager().walletStatus))
-            }
-            else if let trCell = cell as? WalletTransactionCell {
-                if let indexPath = tableView.indexPath(for: trCell){
-                    trCell.configure(with: (row: indexPath.row, transaction: viewModel.transactions[indexPath.row], additionalInfo: false))
-                }
-            }
-        }
+        tableView.reloadData()
     }
 }
 
 extension WalletViewController: UIViewControllerPreviewingDelegate {
+    
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if viewModel.transactions.count > 0 {
+       
+        if transactionViewModel.transactions.count > 0 {
             guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
             
             if indexPath.section != 1 {
@@ -462,13 +354,9 @@ extension WalletViewController: UIViewControllerPreviewingDelegate {
             
             guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
             
-            let detailVC = TransactionViewController(transaction: viewModel.transactions[indexPath.row], preview: true)
+            let detailVC = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row], preview: true)
             detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
-
             previewingContext.sourceRect = cell.frame
-            
-            
-            
             return detailVC
         }
         else {
@@ -484,6 +372,7 @@ extension WalletViewController: UIViewControllerPreviewingDelegate {
 }
 
 extension WalletViewController: OnboardCellDelegate {
+    
     func onClickMakeSecure(cell: UITableViewCell) {
         let vc = BMDoubleAuthViewController(event: .verification)
         pushViewController(vc: vc)

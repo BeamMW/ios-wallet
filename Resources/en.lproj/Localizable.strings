@@ -692,14 +692,11 @@ and never kept on the blockchain.";
 "tx_failure_assets_disabled_blockchain" = "Asset transactions are disabled in blockchain configuration";
 "tx_failure_identity_required" = "Peer Identity required";
 "tx_failure_cannot_get_vouchers" = "The sender cannot get vouchers for max privacy transaction";
-
 "random_node_title" = "Random node";
 "fast_sync" = "Fast sync";
 "random_node_text" = "For those who don’t have any other Beam wallet.";
-
 "slow_sync" = "Slow sync";
 "mobile_node_hint" = "For those who want to sync the balance across multiple Beam wallets.";
-
 "own_node_title" = "Own node";
 "fast_secure_advance" = "Fast and secure, advanced";
 "own_node_text" = "For those who run a node configured with the wallet’s Owner Key.";
@@ -714,5 +711,5 @@ and never kept on the blockchain.";
 "regular_online_only" = "Regular online-only address";
 "regular_offline_only" = "Regular offline-only address";
 "sender_choice" = "Sender will be given a choice between\nregular and offline payment.";
-
+"assets" = "Assets";
 

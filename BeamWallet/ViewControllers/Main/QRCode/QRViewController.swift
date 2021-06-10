@@ -102,7 +102,7 @@ class QRViewController: BaseViewController {
             
             if amount > 0 {
                 secondAvailableLabel.isHidden = false
-                secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(amount)
+                secondAvailableLabel.text = ExchangeManager.shared().exchangeValue(amount)
             }
         }
         else{

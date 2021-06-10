@@ -44,20 +44,19 @@ class NotificationItem {
         }
         else if(notification.type == TRANSACTION) {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
+                let assetValue = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
+
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         icon = UIImage.init(named: "iconNotifictionsFailedReceived")
                         name = Localizable.shared.strings.buy_transaction_failed_title
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: true)
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
                     }
                     else {
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-
                         if transaction.isMaxPrivacy {
                             icon = UIImage(named: "iconNotifictionsReceivedMaxPrivacy")
                             name = Localizable.shared.strings.transaction_received
-                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: false)
                         }
                         else if transaction.isShielded || transaction.isPublicOffline {
                             
@@ -69,12 +68,12 @@ class NotificationItem {
                             }
                             
                             icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
-                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: Localizable.shared.strings.shielded_pool.lowercased(), failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: Localizable.shared.strings.shielded_pool.lowercased(), failed: false)
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsReceived")
                             name = Localizable.shared.strings.transaction_received
-                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(beam: beam, address: transaction.senderAddress, failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: false)
                         }
                     }
                 }
@@ -83,25 +82,20 @@ class NotificationItem {
                         if transaction.isMaxPrivacy {
                             icon = UIImage.init(named: "iconNotifictionsFailedSentMaxPrivacy")
                             name = Localizable.shared.strings.buy_transaction_failed_title
-                            let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: transaction.receiverAddress, failed: true)
                         }
                         else if transaction.isShielded || transaction.isPublicOffline {
                             icon = UIImage.init(named: "iconNotifictionsFailedSentOffline")
                             name = Localizable.shared.strings.buy_transaction_failed_title
-                            let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: "shielded pool", failed: true)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: "shielded pool", failed: true)
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsFailed")
                             name = Localizable.shared.strings.buy_transaction_failed_title
-                            let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam:beam , address: transaction.receiverAddress, failed: true)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: true)
                         }
                     }
                     else {
-                        let beam = Settings.sharedManager().isHideAmounts ? String.empty() : String.currency(value: transaction.realAmount)
-
                         if transaction.isMaxPrivacy  {
                             icon = UIImage.init(named: "iconNotifictionsSentMaxPrivacy")
                             name = Localizable.shared.strings.transaction_sent
@@ -121,7 +115,7 @@ class NotificationItem {
                             name = Localizable.shared.strings.transaction_sent
                         }
                         
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(beam: beam, address: transaction.receiverAddress, failed: false)
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
                     }
                 }
             }

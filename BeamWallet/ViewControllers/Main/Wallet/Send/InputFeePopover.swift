@@ -69,7 +69,7 @@ class InputFeePopover: BaseViewController {
         }
         
         feeField.text = mainFee
-        secondAvailableLabel.text = AppModel.sharedManager().exchangeValueFee(Double(mainFee) ?? 0)
+        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueFee(Double(mainFee) ?? 0)
         
         addSwipeToDismiss()
         
@@ -147,7 +147,7 @@ extension InputFeePopover : UITextFieldDelegate {
         textField.text = txtAfterUpdate
         
         mainFee = txtAfterUpdate
-        secondAvailableLabel.text = AppModel.sharedManager().exchangeValueFee(Double(mainFee) ?? 0)
+        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueFee(Double(mainFee) ?? 0)
 
         return false
     }

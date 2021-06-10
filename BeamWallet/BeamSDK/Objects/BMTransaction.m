@@ -41,7 +41,8 @@
     [encoder encodeObject:[NSNumber numberWithInteger:self.enumStatus] forKey: @"enumStatus"];
     [encoder encodeObject:[NSNumber numberWithInteger:self.enumType] forKey: @"enumType"];
     [encoder encodeObject:[NSNumber numberWithLongLong:self.createdTime] forKey: @"createdTime"];
-
+    [encoder encodeObject:[NSNumber numberWithInteger:self.assetId] forKey: @"assetId"];
+    
     [encoder encodeObject:[NSNumber numberWithDouble:self.fee] forKey: @"fee"];
     [encoder encodeObject:[NSNumber numberWithLongLong:self.realFee] forKey: @"realFee"];
     
@@ -58,6 +59,7 @@
     [encoder encodeObject:self.senderContactName forKey: @"senderContactName"];
     [encoder encodeObject:self.receiverContactName forKey: @"receiverContactName"];
     [encoder encodeObject:self.identity forKey: @"identity"];
+    [encoder encodeObject:self.asset forKey: @"asset"];
     
     [encoder encodeObject:[NSNumber numberWithBool:self.isMaxPrivacy] forKey: @"isMaxPrivacy"];
     [encoder encodeObject:[NSNumber numberWithBool:self.isPublicOffline] forKey: @"isPublicOffline"];
@@ -99,6 +101,9 @@
         self.isMaxPrivacy = [[decoder decodeObjectForKey:@"isMaxPrivacy"] boolValue];
         self.isPublicOffline = [[decoder decodeObjectForKey:@"isPublicOffline"] boolValue];
         self.isShielded = [[decoder decodeObjectForKey:@"isShielded"] boolValue];
+
+        self.assetId = [[decoder decodeObjectForKey:@"assetId"] intValue];
+        self.asset = [decoder decodeObjectForKey: @"asset"];
 
         self.token = [decoder decodeObjectForKey: @"token"];
     }
@@ -199,8 +204,8 @@
     NSString *_type =  self.isIncome ? @"Receive BEAM" : @"Send BEAM";
     NSString *_date =  [self formattedDate];
     NSString *_amount =  [[formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSString *_secondAmountUSD = [[AppModel sharedManager] exchangeValue:_realAmount to:BMCurrencyUSD];
-    NSString *_secondAmountBTC = [[AppModel sharedManager] exchangeValue:_realAmount to:BMCurrencyBTC];
+    NSString *_secondAmountUSD = [[ExchangeManager sharedManager] exchangeValue:_realAmount to:BMCurrencyUSD];
+    NSString *_secondAmountBTC = [[ExchangeManager sharedManager] exchangeValue:_realAmount to:BMCurrencyBTC];
 
     NSString *_status = self.status;
     NSString *_sAddress = self.senderAddress;
@@ -235,10 +240,6 @@
     return NO;
 }
 
--(BOOL)isUnlink {
-    return self.enumType == BMTransactionTypeUnlink;
-}
-
 -(NSString*)statusType {
     if (_isPublicOffline) {
         return [NSString stringWithFormat:@"%@ (%@ %@)", _status, [[@"public" localized]lowercaseString], [[@"offline" localized]lowercaseString]];
@@ -265,6 +266,16 @@
     return [@"regular" localized];
 }
 
+-(NSString*)amountString {
+    NSString *number = [[StringManager sharedManager] realAmountStringAsset:_asset value:_realAmount];
+
+    if (_isIncome) {
+        return [NSString stringWithFormat:@"+ %@", number];
+    }
+    else {
+        return [NSString stringWithFormat:@"- %@", number];
+    }
+}
 
 -(NSString*)statusName {
     NSString *status = @"";
@@ -280,10 +291,7 @@
 }
 
 -(UIImage*)statusIcon {
-    if (self.enumType == BMTransactionTypeUnlink) {
-        return [UIImage imageNamed:@"iconUnlinkedTransaction"];
-    }
-    else if (self.enumType == BMTransactionTypePushTransaction) {
+    if (self.enumType == BMTransactionTypePushTransaction) {
         if(_isIncome) {
             if(self.isCancelled) {
                 return _isShielded ? [UIImage imageNamed:@"icon-canceled-max-offline"] : [UIImage imageNamed:@"icon-canceled-max-online"];
@@ -309,7 +317,6 @@
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                     case BMTransactionStatusCompleted:
                         return [UIImage imageNamed:@"icon-received-max-privacy-offline"];
-                        //_isOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     default:
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                 }
@@ -655,15 +662,7 @@
 -(NSString*)textDetails {
     NSMutableArray *details = [NSMutableArray array];
     
-    NSNumberFormatter *formatter = [NSNumberFormatter new];
-    formatter.currencyCode = @"";
-    formatter.currencySymbol = @"";
-    formatter.minimumFractionDigits = 0;
-    formatter.maximumFractionDigits = 10;
-    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    formatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
-    
-    NSString *number = [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]];
+    NSString *number = [[StringManager sharedManager] realAmountString:_realAmount];
     number = [number stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     NSString *date = [NSString stringWithFormat:@"%@\n%@",[[@"date" localized]uppercaseString], [self formattedDate]];

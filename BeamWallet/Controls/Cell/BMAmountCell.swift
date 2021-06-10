@@ -85,7 +85,7 @@ class BMAmountCell: BaseCell {
     public var currency:String?
     {
         didSet{
-            if currency != nil && AppModel.sharedManager().isCurrenciesAvailable() {
+            if currency != nil && ExchangeManager.shared().isCurrenciesAvailable() {
                 
                 currencyLabel.isUserInteractionEnabled = true
 

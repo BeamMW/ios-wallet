@@ -67,7 +67,7 @@ extension SendAllCell: Configurable {
         let total = String.currency(value: options.realAmount)
         
         amountLabel.text = total //+ Localizable.shared.strings.beam
-        secondAvailableLabel.text = AppModel.sharedManager().exchangeValue(options.realAmount)
+        secondAvailableLabel.text = ExchangeManager.shared().exchangeValue(options.realAmount)
 
         if options.realAmount == 0 {
             secondAvailableLabel.isHidden = true

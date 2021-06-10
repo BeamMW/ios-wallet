@@ -30,9 +30,11 @@ typedef int BMCurrencyType;
 
 @property (nonatomic,assign) UInt64 value;
 @property (nonatomic,assign) double realValue;
+@property (nonatomic,assign) int maximumFractionDigits;
 @property (nonatomic,assign) BMCurrencyType type;
 @property (nonatomic,strong) NSString* _Nonnull code;
-@property (nonatomic,assign) int maximumFractionDigits;
+@property (nonatomic,strong) NSString* _Nullable name;
+@property (nonatomic,assign) int assetId;
 
 -(NSString*_Nonnull)currencyName;
 -(NSString*_Nonnull)currencyLongName;

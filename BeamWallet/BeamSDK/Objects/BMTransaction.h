@@ -18,6 +18,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "BMAsset.h"
 #import <UIKit/UIKit.h>
 
 enum {
@@ -48,7 +49,8 @@ enum {
 typedef UInt64 BMTransactionType;
 
 
-@interface BMTransaction : NSObject <NSSecureCoding>
+@interface BMTransaction : NSObject <NSSecureCoding> {
+}
 
 @property (nonatomic,strong) NSString *ID;
 @property (nonatomic,assign) UInt64 createdTime;
@@ -71,6 +73,8 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,assign) UInt64 realFee;
 @property (nonatomic,assign) BMTransactionStatus enumStatus;
 @property (nonatomic,assign) BMTransactionType enumType;
+@property (nonatomic,assign) int assetId;
+@property (nonatomic,strong) BMAsset *asset;
 
 @property (nonatomic,strong) NSString *senderContactName;
 @property (nonatomic,strong) NSString *receiverContactName;
@@ -81,6 +85,7 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,strong) NSString *senderIdentity;
 @property (nonatomic,strong) NSString *receiverIdentity;
 
+-(NSString*)amountString;
 -(UIImage*)statusIcon;
 -(NSString*)statusName;
 -(NSString*)statusType;
@@ -94,7 +99,6 @@ typedef UInt64 BMTransactionType;
 -(BOOL)isNew;
 -(BOOL)isExpired;
 -(BOOL)canSaveContact;
--(BOOL)isUnlink;
 
 -(NSString*)details;
 -(NSString*)csvLine;

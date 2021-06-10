@@ -168,7 +168,7 @@ class BMNetworkStatusView: UIView {
 
         if connected {
             
-            if AppModel.sharedManager().currencies.count == 0 && Settings.sharedManager().currency != BMCurrencyOff  {
+            if ExchangeManager.shared().currencies.count == 0  {
                 self.statusView.image = nil
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusView.glow()

@@ -20,7 +20,7 @@
 import Foundation
 import CoreGraphics
 
-protocol Configurable: class {
+protocol Configurable: AnyObject {
     
     associatedtype Configurator
     
@@ -44,7 +44,7 @@ extension Configurable {
     }
 }
 
-protocol Delegating: class {
+protocol Delegating: AnyObject {
     
     associatedtype Delegate
     

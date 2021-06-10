@@ -55,7 +55,7 @@ class ReceiveAddressViewModel: NSObject {
             generateTokens()
             
             let amount = Double(self.amount ?? "0") ?? 0
-            let second = AppModel.sharedManager().exchangeValue(withZero: amount)
+            let second = ExchangeManager.shared().exchangeValue(withZero: amount)
             secondAmount = second
         }
     }
@@ -66,7 +66,7 @@ class ReceiveAddressViewModel: NSObject {
         super.init()
         
         let amount = Double(self.amount ?? "0") ?? 0
-        let second = AppModel.sharedManager().exchangeValue(withZero: amount)
+        let second = ExchangeManager.shared().exchangeValue(withZero: amount)
         secondAmount = second
     }
     

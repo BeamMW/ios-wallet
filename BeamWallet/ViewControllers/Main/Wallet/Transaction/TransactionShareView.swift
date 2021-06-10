@@ -93,7 +93,7 @@ class TransactionShareView: UIView {
     
     private func setupView() {
         amountStackView.isHidden = Settings.sharedManager().isHideAmounts
-        secondAmountLabel.text = AppModel.sharedManager().exchangeValue(transaction.realAmount)
+        secondAmountLabel.text = ExchangeManager.shared().exchangeValue(transaction.realAmount)
 
         if Settings.sharedManager().isHideAmounts {
             statusView.isHidden = true

@@ -37,6 +37,10 @@
 #import "BMTransactionParameters.h"
 #import "BMPaymentInfo.h"
 #import "BMMaxPrivacyLock.h"
+#import "BMAsset.h"
+#import "ExchangeManager.h"
+#import "AssetsManager.h"
+#import "StringManager.h"
 
 enum {
     BMRestoreManual = 0,
@@ -72,6 +76,7 @@ typedef int BMRestoreType;
 -(void)onNotificationsChanged;
 -(void)onChangeCalculated:(double)amount;
 -(void)onMaxPrivacyTokensLeft:(int)tokens;
+-(void)onAssetInfoChange;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -100,6 +105,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,assign) BOOL isMaxPrivacyRequest;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
+
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nullable transactions;
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable utxos;
 @property (nonatomic,strong) NSMutableArray<BMUTXO*>*_Nullable shildedUtxos;
@@ -108,7 +114,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableArray<BMPreparedTransaction*>*_Nonnull preparedTransactions;
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
-@property (nonatomic,strong) NSMutableArray<BMCurrency*>*_Nonnull currencies;
 @property (nonatomic,strong) NSMutableArray<BMNotification*>*_Nonnull notifications;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull presendedNotifications;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull deletedNotifications;
@@ -267,13 +272,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSString*_Nonnull)exportData:(NSArray*_Nonnull)items;
 -(BOOL)importData:(NSString*_Nonnull)jsonString;
 
-//exchange
--(NSString*_Nonnull)exchangeValue:(double)amount;
--(NSString*_Nonnull)exchangeValueWithZero:(double)amount;
--(NSString*_Nonnull)exchangeValueFee:(double)amount;
--(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount;
--(NSString*_Nonnull)exchangeValue:(double)amount to:(BMCurrencyType)to;
--(void)saveCurrencies;
+
 -(BOOL)checkIsOwnNode;
 
 //notifications
@@ -290,13 +289,10 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BMNotification*_Nullable)getLastVersionNotification;
 -(void)readAllNotifications;
 
--(BOOL)isCurrenciesAvailable;
-
 -(void)setMaxPrivacyLockTime:(int)hours;
 
 -(NSString*_Nonnull)getMaturityHoursLeft:(BMUTXO*_Nonnull)utxo;
 -(UInt64)getMaturityHours:(BMUTXO*_Nonnull)utxo;
-
 
 -(void)rescan;
 -(void)enableBodyRequests:(BOOL)value;
