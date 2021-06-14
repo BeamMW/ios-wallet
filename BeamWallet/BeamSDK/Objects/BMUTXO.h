@@ -53,7 +53,8 @@ typedef int BMUTXOStatus;
 @property (nonatomic,assign) UInt64 transactionDate;
 @property (nonatomic,assign) BOOL isShilded;
 @property (nonatomic,strong) NSString * _Nullable hoursLeft;
-
+@property (nonatomic,assign) int assetId;
+@property (nonatomic,strong) NSString * _Nullable amountString;
 
 -(NSMutableAttributedString*_Nonnull)attributedStatus;
 

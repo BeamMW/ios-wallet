@@ -37,8 +37,8 @@ class UTXODetailCell: UITableViewCell {
 extension UTXODetailCell: Configurable {
     
     func configure(with utxo:BMUTXO) {
-        amountLabel.text = String.currency(value: utxo.realAmount)
-        
+        amountLabel.text = utxo.amountString
+
         if utxo.status == 1 || utxo.status == 2 {
             statusLabel.textColor = UIColor.white
         }

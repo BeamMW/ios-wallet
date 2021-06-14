@@ -387,6 +387,8 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
         for (const auto& coin : utxos)
         {
             if(coin.m_ID.m_Type != Key::Type::Decoy) {
+                BMAsset *asset = [[AssetsManager sharedManager] getAsset:coin.getAssetID()];
+                
                 BMUTXO *bmUTXO = [[BMUTXO alloc] init];
                 bmUTXO.ID = coin.m_ID.m_Idx;
                 bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
@@ -397,7 +399,9 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
                 bmUTXO.confirmHeight = coin.m_confirmHeight;
                 bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
                 bmUTXO.typeString = GetUTXOTypeString(coin);
-                
+                bmUTXO.assetId = coin.getAssetID();
+                bmUTXO.amountString = [[StringManager sharedManager] realAmountStringAsset:asset value:bmUTXO.realAmount];
+
                 if (coin.m_createTxId)
                 {
                     string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());

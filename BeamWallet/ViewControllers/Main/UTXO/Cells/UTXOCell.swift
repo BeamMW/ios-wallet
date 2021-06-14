@@ -48,7 +48,7 @@ extension UTXOCell: Configurable {
     
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
         
-        amountLabel.text = String.currency(value: options.utxo.realAmount)
+        amountLabel.text = options.utxo.amountString
         statusLabel.text = options.utxo.statusString
         typeLabel.text = options.utxo.typeString.capitalizingFirstLetter()
         

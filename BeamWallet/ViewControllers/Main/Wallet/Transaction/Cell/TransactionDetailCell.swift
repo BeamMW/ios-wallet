@@ -24,8 +24,8 @@ class TransactionDetailCell: UITableViewCell {
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var statusLabel: UILabel!
-    @IBOutlet weak private var circleView: UIView!
-    @IBOutlet weak private var arrowIcon: UIImageView!
+    @IBOutlet weak private var circleView: AssetIconView!
+    @IBOutlet weak private var statusIcon: UIImageView!
     @IBOutlet weak private var securityIcon: UIImageView!
     @IBOutlet weak private var secondAmountLabel: UILabel!
 
@@ -47,27 +47,23 @@ class TransactionDetailCell: UITableViewCell {
 extension TransactionDetailCell: Configurable {
     
     func configure(with transaction:BMTransaction) {
-
-        arrowIcon.image = transaction.statusIcon()
-        secondAmountLabel.text = ExchangeManager.shared().exchangeValue(transaction.realAmount)
+        circleView.isBig = true
+        circleView.setAsset(transaction.asset)
+        statusIcon.image = transaction.statusIcon()
+        secondAmountLabel.text = ExchangeManager.shared().exchangeValueAsset(transaction.realAmount, assetID: UInt64(transaction.assetId))
         
         amountLabel.isHidden = Settings.sharedManager().isHideAmounts
         secondAmountLabel.isHidden = Settings.sharedManager().isHideAmounts
         securityIcon.isHidden = !Settings.sharedManager().isHideAmounts
 
-        amountLabel.text = String.currency(value: transaction.realAmount)
+        amountLabel.text = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
         statusLabel.text = transaction.statusType().capitalizingFirstLetter().replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
 
         switch transaction.isIncome {
         case true:
             amountLabel.textColor = UIColor.main.brightSkyBlue
         case false:
-            if (transaction.enumType == BMTransactionTypeUnlink) {
-                amountLabel.textColor = UIColor.main.brightTeal
-            }
-            else {
-                amountLabel.textColor = UIColor.main.heliotrope
-            }
+            amountLabel.textColor = UIColor.main.heliotrope
         }
         
         if transaction.isFailed() || transaction.isCancelled() || transaction.isExpired() {            
@@ -89,7 +85,5 @@ extension TransactionDetailCell: Configurable {
         else if !transaction.isIncome {
             statusLabel.textColor = UIColor.main.heliotrope
         }
-        
-        circleView.layer.borderColor = statusLabel.textColor.cgColor
     }
 }
