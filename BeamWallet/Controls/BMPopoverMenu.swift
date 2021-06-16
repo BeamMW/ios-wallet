@@ -120,7 +120,7 @@ class BMPopoverMenu: NSObject {
     fileprivate let animationDuration: CGFloat = 0.3
     
     fileprivate let defaultMargin: CGFloat = 15.0
-    fileprivate let menuWidth: CGFloat = 240.0
+    fileprivate let menuWidth: CGFloat = 270.0
     fileprivate let menuRowHeight: CGFloat = 50.0
     
     fileprivate var senderRect: CGRect = CGRect.zero
@@ -286,7 +286,8 @@ private class BMPopOverMenuView: UIView {
     
     fileprivate func show(frame: CGRect, menuItems: [BMPopoverMenu.BMPopoverMenuItem]!, done: @escaping ((BMPopoverMenu.BMPopoverMenuItem) -> Void)) {
         self.frame = frame
-        backgroundColor = UIColor.main.marineThree
+        
+        self.backgroundColor = Settings.sharedManager().isDarkMode ? UIColor.black : UIColor(displayP3Red: 230.0/255.0, green: 233.0/255.0, blue: 236.0/255.0, alpha: 1.0)
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
@@ -297,8 +298,12 @@ private class BMPopOverMenuView: UIView {
         self.menuItems = menuItems
         self.done = done
         
+        menuTableView.register(PopoverCell.self)
         menuTableView.backgroundColor = UIColor.clear
         menuTableView.frame = CGRect(x: 0, y: 15, width: frame.size.width, height: frame.size.height - 15)
+        menuTableView.separatorStyle = .singleLine
+        menuTableView.separatorColor = Settings.sharedManager().isDarkMode ? UIColor.white.withAlphaComponent(0.1) : UIColor(displayP3Red: 226.0/255.0, green: 226.0/255.0, blue: 226.0/255.0, alpha: 1.0)
+        menuTableView.tableFooterView = UIView()
         menuTableView.reloadData()
         
         addSubview(menuTableView)
@@ -311,17 +316,24 @@ extension BMPopOverMenuView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-        cell.textLabel?.textColor = UIColor.white
-        cell.textLabel?.font = RegularFont(size: 16)
-        cell.textLabel?.text = menuItems[indexPath.row].name
+        let cell = tableView.dequeueReusableCell(withType: PopoverCell.self, for: indexPath)
+              
         if let image = self.menuItems[indexPath.row].icon {
-            cell.imageView?.image = UIImage(named: image)
+            cell.iconView.image = UIImage(named: image)?.withRenderingMode(.alwaysTemplate)
+            cell.iconView.tintColor = Settings.sharedManager().isDarkMode ? UIColor.white : UIColor.main.marineOriginal
         }
+        else {
+            cell.iconView.image = nil
+        }
+    
         cell.backgroundColor = UIColor.clear
-        cell.selectedBackgroundView = UIView()
-        cell.selectedBackgroundView?.backgroundColor = UIColor.main.marine.withAlphaComponent(0.7)
         
+        cell.selectedBackgroundView = UIView()
+        cell.selectedBackgroundView?.backgroundColor = Settings.sharedManager().isDarkMode ? UIColor.main.marine.withAlphaComponent(0.7) : UIColor.white.withAlphaComponent(0.5)
+       
+        cell.label.textColor = Settings.sharedManager().isDarkMode ? UIColor.white : UIColor.main.marineOriginal
+        cell.label.text = menuItems[indexPath.row].name
+
         return cell
     }
 }

@@ -34,6 +34,7 @@
 -(NSString*_Nonnull)exchangeValueFee:(double)amount;
 -(NSString*_Nonnull)exchangeValueFrom2:(BMCurrencyType)from to:(BMCurrencyType)to amount:(double)amount;
 -(NSString*_Nonnull)exchangeValue:(double)amount to:(BMCurrencyType)to;
+-(double)exchangeValueUSDAsset:(double)amount assetID:(UInt64)assetID;
 
 -(BOOL)isCurrenciesAvailable;
 

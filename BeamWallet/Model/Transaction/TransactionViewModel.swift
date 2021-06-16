@@ -46,6 +46,16 @@ class TransactionViewModel: NSObject {
         }
     }
     
+    public var assetId:Int32? = nil {
+        didSet {
+            if let id = assetId {
+                self.transactions = self.transactions.filter { tr in
+                    return tr.assetId == id
+                }
+            }
+        }
+    }
+    
     public var selectedState: TransactionSelectedState = .all
     public var searchString = String.empty()
 
@@ -196,6 +206,11 @@ extension TransactionViewModel : WalletModelDelegate {
                         self.transaction = transaction
                     }
                 }
+                else if let id = self.assetId {
+                    self.transactions = transactions.filter { tr in
+                        return tr.assetId == id
+                    }
+                }
                 else{
                     self.transactions = transactions
                 }
@@ -222,6 +237,12 @@ extension TransactionViewModel : WalletModelDelegate {
                 allTransactions = allTransactions.filter { $0.isIncome == true}
             case .in_progress:
                 allTransactions = allTransactions.filter { $0.enumStatus == BMTransactionStatusPending || $0.enumStatus == BMTransactionStatusInProgress || $0.enumStatus == BMTransactionStatusRegistering}
+            }
+            
+            if let id = strongSelf.assetId {
+                allTransactions = allTransactions.filter { tr in
+                    return tr.assetId == id
+                }
             }
             
             if !strongSelf.searchString.isEmpty {

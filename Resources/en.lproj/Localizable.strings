@@ -712,4 +712,10 @@ and never kept on the blockchain.";
 "regular_offline_only" = "Regular offline-only address";
 "sender_choice" = "Sender will be given a choice between\nregular and offline payment.";
 "assets" = "Assets";
+"usage_recent_old" = "Usage: recent to oldest";
+"usage_old_recent" = "Usage: oldest to recent";
+"amount_large_small" = "Amount: largest to smallest";
+"amount_small_large" = "Amount: smallest to largest";
+"usd_small_large" = "USD: smallest to largest";
+"usd_large_small" = "USD: largest to smallest";
 

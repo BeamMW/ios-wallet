@@ -21,19 +21,69 @@ import UIKit
 
 class AssetViewModel: NSObject {
     
+    enum AssetFilterType: Int {
+        case recent_old = 0
+        case old_recent = 1
+        case amount_large_small = 2
+        case amount_small_large = 3
+        case amount_usd_small = 4
+        case amount_usd_large = 5
+    }
+    
     public var onDataChanged : (() -> Void)?
     public var assets = [BMAsset]()
+    
+    public var filtertype = AssetFilterType.recent_old {
+        didSet {
+            self.sort()
+            self.onDataChanged?()
+        }
+    }
     
     override init() {
         super.init()
         
-        self.assets = AssetsManager.shared().assets  as! [BMAsset]
+        sort()
         
         AppModel.sharedManager().addDelegate(self)
     }
     
     deinit {
         AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    public func sort() {
+        self.assets = AssetsManager.shared().assets  as! [BMAsset]
+        
+        switch filtertype {
+        case .recent_old:
+            self.assets.sort { a1, a2 in
+                return a1.dateUsed() > a2.dateUsed()
+            }
+            break
+        case .old_recent:
+            self.assets.sort { a1, a2 in
+                return a1.dateUsed() < a2.dateUsed()
+            }
+            break
+        case .amount_large_small:
+            self.assets.sort { a1, a2 in
+                return a1.realAmount > a2.realAmount
+            }
+            break
+        case .amount_small_large:
+            self.assets.sort { a1, a2 in
+                return a1.realAmount < a2.realAmount
+            }
+        case .amount_usd_small:
+            self.assets.sort { a1, a2 in
+                return a1.usd() > a2.usd()
+            }
+        case .amount_usd_large:
+            self.assets.sort { a1, a2 in
+                return a1.usd() < a2.usd()
+            }
+        }
     }
 }
 
@@ -43,7 +93,7 @@ extension AssetViewModel : WalletModelDelegate {
     
     func onAssetInfoChange() {
         DispatchQueue.main.async {
-            self.assets = AssetsManager.shared().assets  as! [BMAsset]
+            self.sort()
             self.onDataChanged?()
         }
     }

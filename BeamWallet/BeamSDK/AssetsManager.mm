@@ -19,6 +19,7 @@
 
 #import "AssetsManager.h"
 #import "Settings.h"
+#import "AppModel.h"
 #include "wallet/core/wallet.h"
 
 static NSString *assetsKey = @"assetsKey";
@@ -61,6 +62,21 @@ NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#00
     for (BMAsset *asset in self.assets.reverseObjectEnumerator) {
         if (asset.assetId == assetId) {
             return asset;
+        }
+    }
+    return nil;
+}
+
+-(BMTransaction*_Nullable)getLastTransaction:(int)assetId {
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdTime"
+                                                 ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [[AppModel sharedManager].transactions sortedArrayUsingDescriptors:sortDescriptors];
+    
+    for (BMTransaction *transaction in sortedArray) {
+        if (transaction.assetId == assetId) {
+            return transaction;
         }
     }
     return nil;

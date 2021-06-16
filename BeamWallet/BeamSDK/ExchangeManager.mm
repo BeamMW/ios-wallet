@@ -85,6 +85,27 @@
     return @"";
 }
 
+-(double)exchangeValueUSDAsset:(double)amount assetID:(UInt64)assetID {
+    if(amount == 0.0 || [Settings sharedManager].isHideAmounts) {
+        return 0.0;
+    }
+    
+    NSArray *currencies = [NSArray arrayWithArray:[_currencies objectEnumerator].allObjects];
+    for (BMCurrency *currency in currencies) {
+        if(currency.type == BMCurrencyUSD && currency.value > 0 && currency.assetId == assetID) {
+            currencyFormatter.maximumFractionDigits = currency.maximumFractionDigits;
+            currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@",currency.code];
+            currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@",currency.code];
+            
+            double value = double(int64_t(currency.value)) / beam::Rules::Coin;
+            double rate = value * amount;
+            return rate;
+        }
+    }
+    
+    return 0.0;
+}
+
 -(NSString*_Nonnull)exchangeValue:(double)amount {
     if(amount == 0.0) {
         return [NSString stringWithFormat:@"-%@",Settings.sharedManager.currencyName];

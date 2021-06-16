@@ -271,6 +271,7 @@ class BaseViewController: UIViewController {
         }
         
         stackView.frame = CGRect(x: UIScreen.main.bounds.size.width - x - 15, y: y, width: x, height: 40)
+        stackView.tag = 200
         
         self.view.addSubview(stackView)
     }

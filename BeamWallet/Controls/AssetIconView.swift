@@ -43,7 +43,7 @@ class AssetIconView: BMGradientView {
             }
             else {
                 imageView.image = UIImage(named: "ic_asset")
-                imageView.frame = CGRect(x:8, y: 7, width: 12, height: 10)
+                imageView.frame = CGRect(x:7, y: 7, width: 12, height: 10)
             }
         }
         

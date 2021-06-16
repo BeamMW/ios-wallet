@@ -1,5 +1,5 @@
 //
-// WalletViewController.swift
+// AssetDetailViewController.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -19,15 +19,24 @@
 
 import UIKit
 
-class WalletViewController: BaseTableViewController {
+class AssetDetailViewController: BaseTableViewController {
+    
+    private var asset:BMAsset!
+    
+    init(asset: BMAsset) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.asset = asset
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
     
     private let transactionViewModel = TransactionViewModel()
     private let statusViewModel = StatusViewModel()
     private let assetViewModel = AssetViewModel()
-
-    private let maximumAssetsCount = 4
-    private let maximumTransactionsCount = 4
-
+        
     deinit {
         Settings.sharedManager().removeDelegate(self)
     }
@@ -37,7 +46,14 @@ class WalletViewController: BaseTableViewController {
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
-        title = Localizable.shared.strings.wallet
+        if !asset.isBeam() {
+            title = asset.unitName.uppercased()
+        }
+        else {
+            title = Localizable.shared.strings.beam.uppercased()
+        }
+        
+        transactionViewModel.assetId = Int32(asset.assetId)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -47,44 +63,24 @@ class WalletViewController: BaseTableViewController {
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
         AppModel.sharedManager().isLoggedin = true
-                        
+        
         Settings.sharedManager().addDelegate(self)
-                
+        
         rightButton()
         
         subscribeToUpdates()
         
         AppModel.sharedManager().refreshAddressesFrom()
-
+        
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if WithdrawViewModel.isOpenFromGame {
-            WithdrawViewModel.isOpenFromGame = false
-            
-            let vc = WithdrawViewController(amount: WithdrawViewModel.amount, userId: WithdrawViewModel.userId)
-            pushViewController(vc: vc)
-        }
-        else if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
-            if let transaction = transactionViewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
-                let vc = TransactionViewController(transaction: transaction)
-                pushViewController(vc: vc)
-            }
-            
-            NotificationManager.sharedManager.clickedTransaction = ""
-        }
-        else if ShortcutManager.canHandle() {
-            _ = ShortcutManager.handleShortcutItem()
-        }
-    }
     
-    private func rightButton() {
-        addRightButton(image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), target: self, selector: #selector(onHideAmounts))
+    private func rightButton() {        
+        addRightButtons(image: [Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), IconAssetInfo()].reversed(), target: self, selector: [#selector(onHideAmounts), #selector(onInfo)].reversed())
+
     }
     
     private func subscribeToUpdates() {
@@ -103,7 +99,7 @@ class WalletViewController: BaseTableViewController {
             
             guard let strongSelf = self else { return }
             
-            if strongSelf.transactionViewModel.transactions.count == 0 || strongSelf.transactionViewModel.transactions.count >= strongSelf.maximumTransactionsCount {
+            if strongSelf.transactionViewModel.transactions.count == 0  {
                 strongSelf.tableView.reloadData()
                 AppModel.sharedManager().prepareDeleteTransaction(transaction)
             }
@@ -130,14 +126,6 @@ class WalletViewController: BaseTableViewController {
             }
         }
         
-        statusViewModel.onVerificationCompleted = { [weak self] in
-            UIView.performWithoutAnimation {
-                guard let strongSelf = self else { return }
-                strongSelf.tableView.stopRefreshing()
-                strongSelf.tableView.reloadData()
-            }
-        }
-        
         statusViewModel.onRatesChange = { [weak self] in
             guard let strongSelf = self else { return }
             UIView.performWithoutAnimation {
@@ -148,6 +136,7 @@ class WalletViewController: BaseTableViewController {
         statusViewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
             UIView.performWithoutAnimation {
+                strongSelf.asset = AssetsManager.shared().getAsset(Int32(strongSelf.asset.assetId))
                 strongSelf.tableView.stopRefreshing()
                 strongSelf.tableView.reloadData()
             }
@@ -156,6 +145,7 @@ class WalletViewController: BaseTableViewController {
         assetViewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
             UIView.performWithoutAnimation {
+                strongSelf.asset = AssetsManager.shared().getAsset(Int32(strongSelf.asset.assetId))
                 strongSelf.tableView.stopRefreshing()
                 strongSelf.tableView.reloadData()
             }
@@ -166,10 +156,8 @@ class WalletViewController: BaseTableViewController {
         AppModel.sharedManager().getWalletStatus()
     }
     
-    
-    @objc private func onAssets(_ sender: Any) {
-        let vc = AssetsViewController()
-        pushViewController(vc: vc)
+    @objc private func onInfo() {
+        
     }
     
     @objc private func onMore(_ sender: Any) {
@@ -198,7 +186,7 @@ class WalletViewController: BaseTableViewController {
     }
 }
 
-extension WalletViewController: UITableViewDelegate {
+extension AssetDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
@@ -215,15 +203,12 @@ extension WalletViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 0
+        if section == 2, transactionViewModel.transactions.count > 0 {
+            return BMTableHeaderTitleView.height
         }
-        else if transactionViewModel.transactions.count == 0, section == 2 {
-            return 0
-        }
-        return BMTableHeaderTitleView.height
+        return 0
     }
-        
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         return transactionViewModel.trailingSwipeActions(indexPath: indexPath)
     }
@@ -233,29 +218,17 @@ extension WalletViewController: UITableViewDelegate {
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
             let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
-            pushViewController(vc: vc)
-        }
-        else if indexPath.section == 1 {
-            let vc = AssetDetailViewController(asset: assetViewModel.assets[indexPath.row])
+            vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
     }
 }
 
-extension WalletViewController: UITableViewDataSource {
-   
+extension AssetDetailViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 2, transactionViewModel.transactions.count > 0 {
             let header = BMTableHeaderTitleView(title: Localizable.shared.strings.transactions.uppercased(), handler: #selector(onMore), target: self)
-            header.letterSpacing = 1.5
-            header.textColor = UIColor.white
-            header.textFont = BoldFont(size: 14)
-            header.buttonImage = IconNextArrow()
-            header.buttonFrame = header.bounds
-            return header
-        }
-        else if section == 1 {
-            let header = BMTableHeaderTitleView(title: Localizable.shared.strings.assets.uppercased(), handler: #selector(onAssets), target: self)
             header.letterSpacing = 1.5
             header.textColor = UIColor.white
             header.textFont = BoldFont(size: 14)
@@ -273,11 +246,11 @@ extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return statusViewModel.cells.count
+            return 1
         case 1:
-            return (assetViewModel.assets.count == 0) ? 0 : ((assetViewModel.assets.count > maximumAssetsCount) ? maximumTransactionsCount : assetViewModel.assets.count)
+            return 1
         case 2:
-            return (transactionViewModel.transactions.count == 0) ? 1 : ((transactionViewModel.transactions.count > maximumTransactionsCount) ? maximumTransactionsCount : transactionViewModel.transactions.count)
+            return transactionViewModel.transactions.count == 0 ? 1 : transactionViewModel.transactions.count
         default:
             return 0
         }
@@ -286,26 +259,12 @@ extension WalletViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = statusViewModel.cells[indexPath.row]
-            switch cell {
-            case .buttons:
-                let cell = tableView.dequeueReusableCell(withType: WalletStatusCell.self, for: indexPath)
-                cell.delegate = self
-                return cell
-            case .verefication:
-                let cell = tableView.dequeueReusableCell(withType: OnboardCell.self, for: indexPath)
-                cell.delegate = self
-                cell.setIsSecure(secure: true)
-                return cell
-            case .faucet:
-                let cell = tableView.dequeueReusableCell(withType: OnboardCell.self, for: indexPath)
-                cell.delegate = self
-                cell.setIsSecure(secure: false)
-                return cell
-            }
+            let cell = tableView.dequeueReusableCell(withType: WalletStatusCell.self, for: indexPath)
+            cell.delegate = self
+            return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withType: AssetAvailableCell.self, for: indexPath)
-            cell.setAsset(assetViewModel.assets[indexPath.row])
+            cell.setAsset(asset)
             return cell
         case 2:
             if transactionViewModel.transactions.count == 0 {
@@ -326,7 +285,7 @@ extension WalletViewController: UITableViewDataSource {
     }
 }
 
-extension WalletViewController: WalletStatusCellDelegate {
+extension AssetDetailViewController: WalletStatusCellDelegate {
     func onClickReceived() {
         statusViewModel.onReceive()
     }
@@ -337,19 +296,18 @@ extension WalletViewController: WalletStatusCellDelegate {
 }
 
 
-extension WalletViewController: SettingsModelDelegate {
-  
+extension AssetDetailViewController: SettingsModelDelegate {
+    
     func onChangeHideAmounts() {
         rightButton()
-        
         tableView.reloadData()
     }
 }
 
-extension WalletViewController: UIViewControllerPreviewingDelegate {
+extension AssetDetailViewController: UIViewControllerPreviewingDelegate {
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-       
+        
         if transactionViewModel.transactions.count > 0 {
             guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
             
@@ -373,51 +331,5 @@ extension WalletViewController: UIViewControllerPreviewingDelegate {
         show(viewControllerToCommit, sender: self)
         
         (viewControllerToCommit as! TransactionViewController).didShow()
-    }
-}
-
-extension WalletViewController: OnboardCellDelegate {
-    
-    func onClickMakeSecure(cell: UITableViewCell) {
-        let vc = BMDoubleAuthViewController(event: .verification)
-        pushViewController(vc: vc)
-    }
-    
-    func onClickCloseFaucet(cell: UITableViewCell) {
-        if let indexPath = tableView.indexPath(for: cell) {
-            let cell = statusViewModel.cells[indexPath.row]
-            
-            if cell == .faucet {
-                OnboardManager.shared.isCloseFaucet = true
-                statusViewModel.cells.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            else if cell == .verefication {
-                OnboardManager.shared.isCloseSecure = true
-                statusViewModel.cells.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        }
-    }
-    
-    func onClickReceiveFaucet(cell: UITableViewCell) {
-        OnboardManager.shared.receiveFaucet { [weak self] url, error in
-            guard let strongSelf = self else { return }
-            if let reason = error?.localizedDescription {
-                strongSelf.alert(message: reason)
-            }
-            else if let result = url {
-                if Settings.sharedManager().isAllowOpenLink {
-                    BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
-                }
-                else {
-                    strongSelf.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
-                        
-                    }) { _ in
-                        BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
-                    }
-                }
-            }
-        }
     }
 }

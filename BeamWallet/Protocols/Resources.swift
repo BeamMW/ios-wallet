@@ -27,6 +27,9 @@ func IconFilter() -> UIImage? {
     return UIImage(named: "filterIcon")
 }
 
+func IconAssetInfo() -> UIImage? {
+    return UIImage(named: "ic_asset_info")
+}
 
 func IconHideBalance() -> UIImage? {
     return UIImage(named: "iconHideBalance")

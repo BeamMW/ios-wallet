@@ -18,6 +18,10 @@
 //
 
 #import "BMAsset.h"
+#import "StringManager.h"
+#import "ExchangeManager.h"
+#import "BMTransaction.h"
+#import "AssetsManager.h"
 
 @implementation BMAsset
 
@@ -105,6 +109,18 @@
 
 -(BOOL)isBeam {
     return _assetId <= 0;
+}
+
+-(double)USD {
+    return [[ExchangeManager sharedManager] exchangeValueUSDAsset:self.realAmount assetID:self.assetId];
+}
+
+-(UInt64)dateUsed {
+    BMTransaction *transaction = [[AssetsManager sharedManager] getLastTransaction:(int)self.assetId];
+    if (transaction != nil) {
+        return transaction.createdTime;
+    }
+    return 0;
 }
 
 @end

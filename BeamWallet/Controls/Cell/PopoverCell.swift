@@ -1,5 +1,5 @@
 //
-// AssetsManager.h
+// BMMultiLinesCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -17,24 +17,23 @@
 // limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
-#import "BMAsset.h"
-#import "BMTransaction.h"
+import UIKit
 
-@interface AssetsManager : NSObject {
-    NSNumberFormatter *currencyFormatter;
+class PopoverCell: UITableViewCell {
+
+    @IBOutlet weak var label:UILabel!
+    @IBOutlet weak var iconView:UIImageView!
+
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+    
 }
-
-+(AssetsManager*_Nonnull)sharedManager;
-
-@property (nonatomic,strong) NSMutableArray<BMAsset*>*_Nonnull assets;
-
--(NSString*_Nonnull)getAssetColor:(int)value;
--(BMAsset*_Nullable)getAsset:(int)assetId;
--(BMTransaction*_Nullable)getLastTransaction:(int)assetId;
-
-
--(void)changeAssets;
-
-@end
-

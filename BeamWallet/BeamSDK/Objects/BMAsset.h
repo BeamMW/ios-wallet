@@ -55,4 +55,7 @@
 
 -(BOOL)isBeam;
 
+-(double)USD;
+-(UInt64)dateUsed;
+
 @end
