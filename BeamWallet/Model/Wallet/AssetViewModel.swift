@@ -85,6 +85,59 @@ class AssetViewModel: NSObject {
             }
         }
     }
+    
+    public func getAssetInfo(asset:BMAsset) -> [BMThreeLineItem] {        
+        let name = BMThreeLineItem(title: Localizable.shared.strings.small_unit_unit.uppercased(), detail: asset.unitName, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        let shortDesc = BMThreeLineItem(title: Localizable.shared.strings.short_desc.uppercased(), detail: asset.shortDesc, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+
+        let longDesc = BMThreeLineItem(title: Localizable.shared.strings.long_desc.uppercased(), detail: asset.longDesc, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+
+        
+        return [name, shortDesc, longDesc]
+    }
+
+    public func getAssetBalanceInfo(asset:BMAsset)-> [[BMThreeLineItem]] {
+        var result = [[BMThreeLineItem]]()
+        
+        var section_1 = [BMThreeLineItem]()
+        var section_2 = [BMThreeLineItem]()
+
+        let available = BMThreeLineItem(title: Localizable.shared.strings.available.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realAmount) : String.currency(value: asset.realAmount, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realAmount, assetID: asset.assetId), titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        let regular = BMThreeLineItem(title: Localizable.shared.strings.regular.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realAmount - asset.realShielded) : String.currency(value: asset.realAmount - asset.realShielded, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realAmount - asset.realShielded, assetID: asset.assetId), titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        let shielded = BMThreeLineItem(title: Localizable.shared.strings.max_privacy.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realShielded) : String.currency(value: asset.realShielded, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realShielded, assetID: asset.assetId), titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        let empty = BMThreeLineItem(title: "", detail: "", subDetail: "", titleColor: .clear, detailColor: .clear, subDetailColor: .cyan, titleFont: UIFont.systemFont(ofSize: 0), detailFont: UIFont.systemFont(ofSize: 0), subDetailFont: UIFont.systemFont(ofSize: 0), hasArrow: false)
+        
+        section_1.append(empty)
+        section_1.append(available)
+        section_1.append(regular)
+        section_1.append(shielded)
+
+
+        let lockedBalance = asset.realMaxPrivacy + asset.realMaturing + asset.realSending + asset.realReceiving
+        let changeBalance = asset.realSending + asset.realReceiving
+
+        let locked = BMThreeLineItem(title: Localizable.shared.strings.locked.uppercased(), detail: asset.isBeam() ? String.currency(value: lockedBalance) : String.currency(value: lockedBalance, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(lockedBalance, assetID: asset.assetId), titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: true)
+        
+        let maturing = BMThreeLineItem(title: Localizable.shared.strings.maturing.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realMaturing) : String.currency(value: asset.realMaturing, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realMaturing, assetID: asset.assetId), titleColor: UIColor.white.withAlphaComponent(0.5), detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        let change = BMThreeLineItem(title: Localizable.shared.strings.change.uppercased(), detail: asset.isBeam() ? String.currency(value: changeBalance) : String.currency(value: changeBalance, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(changeBalance, assetID: asset.assetId), titleColor: UIColor.white.withAlphaComponent(0.5), detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        let maxPrivacy = BMThreeLineItem(title: Localizable.shared.strings.max_privacy.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realMaxPrivacy) : String.currency(value: asset.realMaxPrivacy, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realMaxPrivacy, assetID: asset.assetId), titleColor: UIColor.white.withAlphaComponent(0.5), detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        section_2.append(locked)
+        section_2.append(maturing)
+        section_2.append(change)
+        section_2.append(maxPrivacy)
+
+        result.append(section_1)
+        result.append(section_2)
+
+        return result
+    }
 }
 
 //MARK: - Delegate

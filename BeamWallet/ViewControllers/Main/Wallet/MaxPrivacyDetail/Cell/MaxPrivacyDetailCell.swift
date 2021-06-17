@@ -36,6 +36,7 @@ class MaxPrivacyDetailCell: BaseCell {
         // Configure the view for the selected state
     }
     
+
 }
 
 

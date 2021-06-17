@@ -718,4 +718,13 @@ and never kept on the blockchain.";
 "amount_small_large" = "Amount: smallest to largest";
 "usd_small_large" = "USD: smallest to largest";
 "usd_large_small" = "USD: largest to smallest";
-
+"balance" = "Balance";
+"asset_info" = "Asset info";
+"locked" = "Locked";
+"small_unit_unit" = "Smallest unit name";
+"ratio" = "Ratio";
+"short_desc" = "Short description";
+"long_desc" = "Long description";
+"desc_paper" = "Description paper";
+"website" = "Website";
+"beam_conf_asset" = "Beam Confidential Asset";

@@ -134,7 +134,6 @@ extension MaxPrivacyDetailViewController : UITableViewDataSource {
         let cell = tableView
             .dequeueReusableCell(withType: MaxPrivacyDetailCell.self, for: indexPath)
         cell.configure(with: (row: indexPath.row, utxo: viewModel.utxos[indexPath.row]))
-
         return cell
     }
 }

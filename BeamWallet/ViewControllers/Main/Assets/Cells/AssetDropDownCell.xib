@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="58" id="tgd-cz-JWZ" customClass="AssetDropDownCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tgd-cz-JWZ" id="h5Z-Ug-jUl">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WMn-Kd-bn3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL8-lO-iyB">
+                                <rect key="frame" x="51" y="29.5" width="254" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                        <real key="value" value="1.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="icj-ek-Dhx">
+                                <rect key="frame" x="292" y="34" width="13" height="8"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fT-hS-43g" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="25" width="26" height="26"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="26" id="Ive-8u-GPT"/>
+                                    <constraint firstAttribute="width" constant="26" id="Ngm-ku-0FM"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="eL8-lO-iyB" firstAttribute="centerY" secondItem="5fT-hS-43g" secondAttribute="centerY" id="2T0-6F-IHK"/>
+                            <constraint firstAttribute="trailing" secondItem="icj-ek-Dhx" secondAttribute="trailing" constant="15" id="AQS-7z-wBW"/>
+                            <constraint firstItem="5fT-hS-43g" firstAttribute="top" secondItem="WMn-Kd-bn3" secondAttribute="top" constant="25" id="BSk-N8-9dX"/>
+                            <constraint firstItem="eL8-lO-iyB" firstAttribute="leading" secondItem="5fT-hS-43g" secondAttribute="trailing" constant="10" id="Ghp-3F-Qca"/>
+                            <constraint firstAttribute="bottom" secondItem="5fT-hS-43g" secondAttribute="bottom" constant="15" id="VnA-zV-Edn"/>
+                            <constraint firstAttribute="trailing" secondItem="eL8-lO-iyB" secondAttribute="trailing" constant="15" id="b83-hZ-Qx4"/>
+                            <constraint firstItem="5fT-hS-43g" firstAttribute="leading" secondItem="WMn-Kd-bn3" secondAttribute="leading" constant="15" id="cyx-mM-K68"/>
+                            <constraint firstItem="icj-ek-Dhx" firstAttribute="centerY" secondItem="eL8-lO-iyB" secondAttribute="centerY" id="dhV-ew-NVz"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="WMn-Kd-bn3" secondAttribute="bottom" id="1Gq-p4-sFq"/>
+                    <constraint firstItem="WMn-Kd-bn3" firstAttribute="leading" secondItem="h5Z-Ug-jUl" secondAttribute="leading" id="2cf-H0-60M"/>
+                    <constraint firstItem="WMn-Kd-bn3" firstAttribute="top" secondItem="h5Z-Ug-jUl" secondAttribute="top" id="4II-41-ptD"/>
+                    <constraint firstAttribute="trailing" secondItem="WMn-Kd-bn3" secondAttribute="trailing" id="QTe-ZO-j9a"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="g9d-eh-Xaz"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <connections>
+                <outlet property="arrow" destination="icj-ek-Dhx" id="PVO-EZ-afn"/>
+                <outlet property="iconView" destination="5fT-hS-43g" id="80U-em-EAf"/>
+                <outlet property="mainView" destination="WMn-Kd-bn3" id="gEE-ne-skL"/>
+                <outlet property="nameLabel" destination="eL8-lO-iyB" id="GnV-m7-oNR"/>
+            </connections>
+            <point key="canvasLocation" x="97.101449275362327" y="93.415178571428569"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="iconDownArrow" width="13" height="8"/>
+    </resources>
+</document>

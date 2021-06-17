@@ -649,6 +649,19 @@ class LocalizableStrings : NSObject {
     var usd_small_large = "usd_small_large".localized
     var usd_large_small = "usd_large_small".localized
     
+    var balance = "balance".localized
+    var asset_info = "asset_info".localized
+    var locked = "locked".localized
+
+    var small_unit_unit = "small_unit_unit".localized
+    var ratio = "ratio".localized
+    var short_desc = "short_desc".localized
+    var long_desc = "long_desc".localized
+    var desc_paper = "desc_paper".localized
+    var website = "website".localized
+    var beam_conf_asset = "beam_conf_asset".localized
+
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

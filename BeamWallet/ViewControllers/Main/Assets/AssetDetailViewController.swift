@@ -157,7 +157,8 @@ class AssetDetailViewController: BaseTableViewController {
     }
     
     @objc private func onInfo() {
-        
+        let vc = AssetInfoViewController(asset: self.asset)
+        pushViewController(vc: vc)
     }
     
     @objc private func onMore(_ sender: Any) {
@@ -265,6 +266,7 @@ extension AssetDetailViewController: UITableViewDataSource {
         case 1:
             let cell = tableView.dequeueReusableCell(withType: AssetAvailableCell.self, for: indexPath)
             cell.setAsset(asset)
+            cell.selectionStyle = .none
             return cell
         case 2:
             if transactionViewModel.transactions.count == 0 {

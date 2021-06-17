@@ -1,5 +1,5 @@
 //
-// BMMultiLinesCell.swift
+// PopoverCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development

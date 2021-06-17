@@ -19,6 +19,23 @@
 
 import Foundation
 
+struct BMThreeLineItem {
+    public var title:String
+    public var detail:String
+    public var subDetail:String
+    
+    public var titleColor:UIColor
+    public var detailColor:UIColor
+    public var subDetailColor:UIColor
+    
+    public var titleFont:UIFont
+    public var detailFont:UIFont
+    public var subDetailFont:UIFont
+
+    public var hasArrow:Bool
+    public var expand = true
+}
+
 class BMMultiLineItem {
     public var title:String!
     public var detail:String?
@@ -51,6 +68,5 @@ class BMMultiLineItem {
         self.detailColor = detailColor
         self.canCopy = copy
         self.copiedText = copiedText
-
     }
 }

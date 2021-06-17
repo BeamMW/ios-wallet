@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Bold.otf">
+            <string>SFProDisplay-Bold</string>
+        </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="108" id="40g-Ey-whB" customClass="AssetSiteCell" customModule="BeamWallet" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="40g-Ey-whB" id="GuE-qR-aQn">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHb-S7-YKs">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rrd-nG-gH8">
+                                <rect key="frame" x="51" y="29.5" width="254" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="letterSpacing">
+                                        <real key="value" value="1.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bbk-g8-fA1" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
+                                <rect key="frame" x="15" y="25" width="26" height="26"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="26" id="HAx-lQ-bZY"/>
+                                    <constraint firstAttribute="height" constant="26" id="HcH-Lp-bZ0"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Beam Confidential Asset" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w54-Dd-VM3">
+                                <rect key="frame" x="51" y="49.5" width="254" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="beam_conf_asset"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xyJ-ra-fNp">
+                                <rect key="frame" x="51" y="81.5" width="60" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Website" image="iconExternalLinkGreen">
+                                    <color key="titleColor" red="0.019607843137254902" green="0.88627450980392153" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="website"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onSite" destination="40g-Ey-whB" eventType="touchUpInside" id="wpc-Pp-GbS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzM-2a-aWT">
+                                <rect key="frame" x="136" y="81.5" width="116" height="17"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Description paper" image="iconExternalLinkGreen">
+                                    <color key="titleColor" red="0.019607843140000001" green="0.8862745098" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="desc_paper"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onPaper" destination="40g-Ey-whB" eventType="touchUpInside" id="lUR-mG-5VD"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="xyJ-ra-fNp" secondAttribute="bottom" constant="15.5" id="58Q-3r-JOr"/>
+                            <constraint firstItem="rrd-nG-gH8" firstAttribute="leading" secondItem="bbk-g8-fA1" secondAttribute="trailing" constant="10" id="9xk-XO-5Cq"/>
+                            <constraint firstAttribute="bottom" secondItem="fzM-2a-aWT" secondAttribute="bottom" constant="15.5" id="FuX-sd-T5P"/>
+                            <constraint firstItem="rrd-nG-gH8" firstAttribute="centerY" secondItem="bbk-g8-fA1" secondAttribute="centerY" id="JZl-dd-XxU"/>
+                            <constraint firstAttribute="trailing" secondItem="rrd-nG-gH8" secondAttribute="trailing" constant="15" id="LeA-2u-b9d"/>
+                            <constraint firstItem="fzM-2a-aWT" firstAttribute="leading" secondItem="xyJ-ra-fNp" secondAttribute="trailing" constant="25" id="OWg-FM-com"/>
+                            <constraint firstItem="bbk-g8-fA1" firstAttribute="top" secondItem="zHb-S7-YKs" secondAttribute="top" constant="25" id="OuT-G9-Vx8"/>
+                            <constraint firstItem="fzM-2a-aWT" firstAttribute="top" secondItem="w54-Dd-VM3" secondAttribute="bottom" constant="15" id="SwR-KT-Zv8"/>
+                            <constraint firstItem="w54-Dd-VM3" firstAttribute="leading" secondItem="zHb-S7-YKs" secondAttribute="leading" constant="51" id="dIZ-XN-cL9"/>
+                            <constraint firstAttribute="trailing" secondItem="w54-Dd-VM3" secondAttribute="trailing" constant="15" id="dnE-b2-fDp"/>
+                            <constraint firstItem="xyJ-ra-fNp" firstAttribute="top" secondItem="w54-Dd-VM3" secondAttribute="bottom" constant="15" id="gvS-bq-Ad2"/>
+                            <constraint firstItem="xyJ-ra-fNp" firstAttribute="leading" secondItem="zHb-S7-YKs" secondAttribute="leading" constant="51" id="iCz-5H-6lV"/>
+                            <constraint firstItem="bbk-g8-fA1" firstAttribute="leading" secondItem="zHb-S7-YKs" secondAttribute="leading" constant="15" id="lwM-iG-JnO"/>
+                            <constraint firstItem="w54-Dd-VM3" firstAttribute="top" secondItem="rrd-nG-gH8" secondAttribute="bottom" constant="3" id="oP8-fI-0ub"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="zHb-S7-YKs" firstAttribute="leading" secondItem="GuE-qR-aQn" secondAttribute="leading" id="6M1-NR-kwv"/>
+                    <constraint firstAttribute="bottom" secondItem="zHb-S7-YKs" secondAttribute="bottom" id="FYy-CP-9JW"/>
+                    <constraint firstAttribute="trailing" secondItem="zHb-S7-YKs" secondAttribute="trailing" id="ZE6-XH-H1n"/>
+                    <constraint firstItem="zHb-S7-YKs" firstAttribute="top" secondItem="GuE-qR-aQn" secondAttribute="top" id="mXb-gS-eZM"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="ndv-xf-K0z"/>
+            <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <connections>
+                <outlet property="iconView" destination="bbk-g8-fA1" id="aJk-MA-UrO"/>
+                <outlet property="mainView" destination="zHb-S7-YKs" id="qoc-vz-eGT"/>
+                <outlet property="nameLabel" destination="rrd-nG-gH8" id="SZJ-zg-iLK"/>
+                <outlet property="paperButton" destination="fzM-2a-aWT" id="Vcg-QV-ZxP"/>
+                <outlet property="siteButton" destination="xyJ-ra-fNp" id="oN7-XN-NnF"/>
+            </connections>
+            <point key="canvasLocation" x="97.101449275362327" y="108.48214285714285"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="iconExternalLinkGreen" width="12" height="12"/>
+    </resources>
+</document>
