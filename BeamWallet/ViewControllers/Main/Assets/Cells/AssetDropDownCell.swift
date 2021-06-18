@@ -41,7 +41,7 @@ class AssetDropDownCell: BaseCell {
             nameLabel.text = asset.unitName.uppercased()
         }
         else {
-            nameLabel.text = Localizable.shared.strings.beam.uppercased()
+            nameLabel.text = Localizable.shared.strings.beam_2.uppercased()
         }
         
         let angle:Double = expand ? 0 : -180

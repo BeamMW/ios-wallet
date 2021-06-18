@@ -33,6 +33,14 @@ class AssetBalanceViewController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.register([BMThreeLineCell.self, AssetDropDownCell.self])
         tableView.keyboardDismissMode = .interactive
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+    }
+    
+    @objc private func onMaxPrivacyInfo() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = MaxPrivacyDetailViewController()
+            top.pushViewController(vc: vc)
+        }
     }
     
     func reloadData(asset:BMAsset, items: [[BMThreeLineItem]]) {
@@ -86,6 +94,7 @@ class AssetBalanceViewController: UITableViewController {
             if indexPath.section == 1 {
                 cell.setExpand(value: section_1_visible)
             }
+            cell.accessoryButton.addTarget(self, action: #selector(onMaxPrivacyInfo), for: .touchUpInside)
             
             return cell
         }

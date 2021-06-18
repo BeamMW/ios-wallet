@@ -11,6 +11,9 @@
         <array key="SF-Pro-Display-Bold.otf">
             <string>SFProDisplay-Bold</string>
         </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
         <array key="SFProText-Medium.ttf">
             <string>SFProText-Medium</string>
         </array>
@@ -69,6 +72,21 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="kn1-eI-MOJ">
                                 <rect key="frame" x="292" y="19.5" width="13" height="8"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9nZ-cG-M7v">
+                                <rect key="frame" x="200" y="32" width="120" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="jH8-xP-PLQ"/>
+                                    <constraint firstAttribute="height" constant="33" id="qhb-hZ-EaV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="3" maxX="15" maxY="0.0"/>
+                                <state key="normal" title="more details">
+                                    <color key="titleColor" red="0.019607843140000001" green="0.8862745098" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onAccessory" destination="JYM-4x-aXZ" eventType="touchUpInside" id="5ve-cj-FM5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -76,6 +94,8 @@
                             <constraint firstItem="eXP-jq-qRY" firstAttribute="top" secondItem="gkQ-3Z-HYg" secondAttribute="top" constant="15" id="Cts-9z-wh5"/>
                             <constraint firstItem="eXP-jq-qRY" firstAttribute="leading" secondItem="gkQ-3Z-HYg" secondAttribute="leading" constant="15" id="D42-5F-2Tm"/>
                             <constraint firstAttribute="trailing" secondItem="dHu-m2-PYN" secondAttribute="trailing" constant="15" id="F2Z-CP-QVP"/>
+                            <constraint firstAttribute="trailing" secondItem="9nZ-cG-M7v" secondAttribute="trailing" id="GbX-0H-cVf"/>
+                            <constraint firstItem="9nZ-cG-M7v" firstAttribute="top" secondItem="eXP-jq-qRY" secondAttribute="bottom" id="MPw-fy-FJ9"/>
                             <constraint firstItem="dHu-m2-PYN" firstAttribute="leading" secondItem="gkQ-3Z-HYg" secondAttribute="leading" constant="15" id="W0O-wb-Iq9"/>
                             <constraint firstAttribute="bottom" secondItem="dHu-m2-PYN" secondAttribute="bottom" constant="15" id="bQr-NX-14s"/>
                             <constraint firstItem="kn1-eI-MOJ" firstAttribute="centerY" secondItem="eXP-jq-qRY" secondAttribute="centerY" id="cH2-cS-1nO"/>
@@ -94,6 +114,7 @@
             <viewLayoutGuide key="safeArea" id="xmS-2d-Rel"/>
             <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <connections>
+                <outlet property="accessoryButton" destination="9nZ-cG-M7v" id="Li0-Ui-0aq"/>
                 <outlet property="arrow" destination="kn1-eI-MOJ" id="Oxo-Qd-vqX"/>
                 <outlet property="detailLabel" destination="yyp-LZ-oeH" id="QMa-7Z-kuR"/>
                 <outlet property="mainView" destination="gkQ-3Z-HYg" id="qFZ-j0-lHp"/>

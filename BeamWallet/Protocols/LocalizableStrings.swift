@@ -58,6 +58,8 @@ class LocalizableStrings : NSObject {
     var receiver  = "receiver".localized
     var amount  = "amount".localized
     var beam  = "beam".localized
+    var beam_2  = "beam".localized.replacingOccurrences(of: " ", with: "")
+
     var fatalInitCoderError = "init(coder:) has not been implemented"
     var spent  = "spent".localized
     var total  = "total".localized
@@ -660,8 +662,10 @@ class LocalizableStrings : NSObject {
     var desc_paper = "desc_paper".localized
     var website = "website".localized
     var beam_conf_asset = "beam_conf_asset".localized
+    var more_details = "more_details".localized
+    var time_ear_last = "time_ear_last".localized
+    var time_last_ear = "time_last_ear".localized
 
-    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

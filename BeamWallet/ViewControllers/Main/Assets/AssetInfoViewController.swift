@@ -79,7 +79,7 @@ class AssetInfoViewController: BaseTableViewController {
             title = asset.unitName.uppercased()
         }
         else {
-            title = Localizable.shared.strings.beam.uppercased()
+            title = Localizable.shared.strings.beam_2.uppercased()
         }
         
         

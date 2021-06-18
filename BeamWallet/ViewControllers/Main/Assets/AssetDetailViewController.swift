@@ -50,7 +50,7 @@ class AssetDetailViewController: BaseTableViewController {
             title = asset.unitName.uppercased()
         }
         else {
-            title = Localizable.shared.strings.beam.uppercased()
+            title = Localizable.shared.strings.beam_2.uppercased()
         }
         
         transactionViewModel.assetId = Int32(asset.assetId)

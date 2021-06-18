@@ -718,6 +718,8 @@ and never kept on the blockchain.";
 "amount_small_large" = "Amount: smallest to largest";
 "usd_small_large" = "USD: smallest to largest";
 "usd_large_small" = "USD: largest to smallest";
+"time_ear_last" = "Time: earliest to latest";
+"time_last_ear" = "Time: latest to earliest";
 "balance" = "Balance";
 "asset_info" = "Asset info";
 "locked" = "Locked";

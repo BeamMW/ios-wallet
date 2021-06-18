@@ -27,6 +27,7 @@ class BMThreeLineCell: BaseCell {
     @IBOutlet weak private var subDetailLabel: UILabel!
     @IBOutlet weak private var arrow: UIImageView!
     @IBOutlet weak private var mainView: UIView!
+    @IBOutlet weak var accessoryButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -39,6 +40,10 @@ class BMThreeLineCell: BaseCell {
     func setExpand(value:Bool) {
         let angle:Double = value ? 0 : -180
         arrow.transform = CGAffineTransform(rotationAngle: CGFloat(angle * Double.pi/180))
+    }
+    
+    @IBAction private func onAccessory() {
+        
     }
 }
 
@@ -59,5 +64,13 @@ extension BMThreeLineCell: Configurable {
         
         arrow.isHidden = !item.hasArrow
         subDetailLabel.isHidden = item.subDetail.isEmpty
+        
+        if let accessory = item.accessoryName, !accessory.isEmpty {
+            accessoryButton.isHidden = false
+            accessoryButton.setTitle(accessory, for: .normal)
+        }
+        else {
+            accessoryButton.isHidden = true
+        }
     }
 }

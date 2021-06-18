@@ -126,7 +126,11 @@ class AssetViewModel: NSObject {
         
         let change = BMThreeLineItem(title: Localizable.shared.strings.change.uppercased(), detail: asset.isBeam() ? String.currency(value: changeBalance) : String.currency(value: changeBalance, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(changeBalance, assetID: asset.assetId), titleColor: UIColor.white.withAlphaComponent(0.5), detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
         
-        let maxPrivacy = BMThreeLineItem(title: Localizable.shared.strings.max_privacy.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realMaxPrivacy) : String.currency(value: asset.realMaxPrivacy, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realMaxPrivacy, assetID: asset.assetId), titleColor: UIColor.white.withAlphaComponent(0.5), detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        var maxPrivacy = BMThreeLineItem(title: Localizable.shared.strings.max_privacy.uppercased(), detail: asset.isBeam() ? String.currency(value: asset.realMaxPrivacy) : String.currency(value: asset.realMaxPrivacy, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(asset.realMaxPrivacy, assetID: asset.assetId), titleColor: UIColor.white.withAlphaComponent(0.5), detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        
+        if asset.realMaxPrivacy > 0 {
+            maxPrivacy.accessoryName = Localizable.shared.strings.more_details.lowercased()
+        }
         
         section_2.append(locked)
         section_2.append(maturing)

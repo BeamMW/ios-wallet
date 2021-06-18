@@ -34,6 +34,8 @@ struct BMThreeLineItem {
 
     public var hasArrow:Bool
     public var expand = true
+    
+    public var accessoryName:String? = nil
 }
 
 class BMMultiLineItem {

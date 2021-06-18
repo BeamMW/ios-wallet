@@ -31,6 +31,7 @@ class AssetDescViewController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.register([BMThreeLineCell.self, AssetSiteCell.self])
         tableView.keyboardDismissMode = .interactive
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
     }
     
     func reloadData(asset:BMAsset, items: [BMThreeLineItem]) {

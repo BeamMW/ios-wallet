@@ -775,9 +775,6 @@
 		92A65542258A2815005486D4 /* MaxPrivacyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A65540258A2815005486D4 /* MaxPrivacyDetailViewController.swift */; };
 		92A65543258A2815005486D4 /* MaxPrivacyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A65540258A2815005486D4 /* MaxPrivacyDetailViewController.swift */; };
 		92A65544258A2815005486D4 /* MaxPrivacyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A65540258A2815005486D4 /* MaxPrivacyDetailViewController.swift */; };
-		92A65545258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A65541258A2815005486D4 /* MaxPrivacyDetailViewController.xib */; };
-		92A65546258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A65541258A2815005486D4 /* MaxPrivacyDetailViewController.xib */; };
-		92A65547258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A65541258A2815005486D4 /* MaxPrivacyDetailViewController.xib */; };
 		92A6554B258A2947005486D4 /* MaxPrivacyDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A65549258A2947005486D4 /* MaxPrivacyDetailCell.swift */; };
 		92A6554C258A2947005486D4 /* MaxPrivacyDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A65549258A2947005486D4 /* MaxPrivacyDetailCell.swift */; };
 		92A6554D258A2947005486D4 /* MaxPrivacyDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A65549258A2947005486D4 /* MaxPrivacyDetailCell.swift */; };
@@ -1645,7 +1642,6 @@
 		92A2C5F7233918BC00766EA7 /* BMLockScreenValue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMLockScreenValue.m; sourceTree = "<group>"; };
 		92A2C5FB23391DC500766EA7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		92A65540258A2815005486D4 /* MaxPrivacyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxPrivacyDetailViewController.swift; sourceTree = "<group>"; };
-		92A65541258A2815005486D4 /* MaxPrivacyDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MaxPrivacyDetailViewController.xib; sourceTree = "<group>"; };
 		92A65549258A2947005486D4 /* MaxPrivacyDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxPrivacyDetailCell.swift; sourceTree = "<group>"; };
 		92A6554A258A2947005486D4 /* MaxPrivacyDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MaxPrivacyDetailCell.xib; sourceTree = "<group>"; };
 		92A65551258A2FB5005486D4 /* MaxPrivacyDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxPrivacyDetailViewModel.swift; sourceTree = "<group>"; };
@@ -2589,7 +2585,6 @@
 				92A65548258A2939005486D4 /* Cell */,
 				92A65551258A2FB5005486D4 /* MaxPrivacyDetailViewModel.swift */,
 				92A65540258A2815005486D4 /* MaxPrivacyDetailViewController.swift */,
-				92A65541258A2815005486D4 /* MaxPrivacyDetailViewController.xib */,
 			);
 			path = MaxPrivacyDetail;
 			sourceTree = "<group>";
@@ -3185,7 +3180,6 @@
 				927EDE4B22A7F6BF005D5CEA /* InputFeePopover.xib in Resources */,
 				92C5EBB6229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */,
 				92FE264122A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
-				92A65545258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */,
 				927D2F8622CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
 				92790DAC224E6FDE00F79D64 /* PaymentProofDetailViewController.xib in Resources */,
 				92D577B322F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
@@ -3236,7 +3230,6 @@
 				927EDE2822A66A90005D5CEA /* BMSearchAddressCell.xib in Resources */,
 				92480DA6229540280084512A /* BMAmountCell.xib in Resources */,
 				92790DA7224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */,
-				92A65546258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */,
 				92E17910235735BD001C30A6 /* UnlockPasswordPopover.xib in Resources */,
 				92B39D6F2260CB97006D27A5 /* phrases.txt in Resources */,
 				92D9F7A3266FA98D006FB555 /* AssetAvailableCell.xib in Resources */,
@@ -3366,7 +3359,6 @@
 				923EAA15262EDBDB0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
 				9225D53922941F940067B4EA /* SFProText-Medium.ttf in Resources */,
 				9212DBBF22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
-				92A65547258A2815005486D4 /* MaxPrivacyDetailViewController.xib in Resources */,
 				927D2F8822CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
 				9225D55D229455CA0067B4EA /* ReceiveAddressButtonsCell.xib in Resources */,
 				92E2EB55226F21C700367928 /* SettingsCell.xib in Resources */,
@@ -5008,7 +5000,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -5088,7 +5080,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

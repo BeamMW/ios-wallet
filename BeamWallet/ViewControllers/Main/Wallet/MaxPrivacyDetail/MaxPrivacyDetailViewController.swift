@@ -23,32 +23,11 @@ import PopOverMenu
 class MaxPrivacyDetailViewController: BaseTableViewController {
     
     private let viewModel = MaxPrivacyDetailViewModel()
-    @IBOutlet  private var flterView: UIView!
-    @IBOutlet  private var flterSubView: UIView!
-    @IBOutlet  private var filterButton1: UIButton!
-    @IBOutlet  private var filterButton2: UIButton!
-    @IBOutlet  private var filterButton3: UIButton!
-    @IBOutlet  private var filterButton4: UIButton!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        filterButton1.setTitleColor(UIColor.main.marine, for: .normal)
-        filterButton2.setTitleColor(UIColor.main.marine, for: .normal)
-        filterButton3.setTitleColor(UIColor.main.marine, for: .normal)
-        filterButton4.setTitleColor(UIColor.main.marine, for: .normal)
-
-        filterButton1.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color: UIColor.clear), for: .normal)
-        filterButton2.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color:UIColor.clear), for: .normal)
-        filterButton3.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color:UIColor.clear), for: .normal)
-        filterButton4.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color: UIColor.clear), for: .normal)
-
-        filterButton1.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color: UIColor.main.marine), for: .selected)
-        filterButton2.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color: UIColor.main.marine), for: .selected)
-        filterButton3.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color: UIColor.main.marine), for: .selected)
-        filterButton4.setImage(UIImage(named: "iconDoneBlue")?.maskWithColor(color: UIColor.main.marine), for: .selected)
-        
+                
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         addRightButton(image: IconFilter(), target: self, selector: #selector(onFilter))
 
@@ -67,8 +46,6 @@ class MaxPrivacyDetailViewController: BaseTableViewController {
             
             strongSelf.tableView.reloadData()
         }
-        
-        flterView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onHideFilter)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,23 +55,32 @@ class MaxPrivacyDetailViewController: BaseTableViewController {
     }
     
     @objc private func onFilter() {
-        self.view.addSubview(flterView)
-        flterView.isHidden = false
-    }
-    
-    @objc private func onHideFilter() {
-        flterView.isHidden = true
-    }
-    
-    @IBAction private func onSelectFilter(sender: UIButton) {
-        filterButton1.isSelected = false
-        filterButton2.isSelected = false
-        filterButton3.isSelected = false
-        filterButton4.isSelected = false
-        sender.isSelected = true
+        
+        if let view = self.view.viewWithTag(20191) {
+            let selectedImage = "iconDoneBlue"
+            
+            var menu = [BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.time_ear_last, icon: viewModel.filterType == .time_ear ? selectedImage : nil, action: .cancel_transaction)]
+            menu.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.time_last_ear, icon: viewModel.filterType == .time_latest ? selectedImage : nil, action: .cancel_transaction))
+            menu.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.amount_large_small, icon: viewModel.filterType == .amount_large ? selectedImage : nil, action: .cancel_transaction))
+            menu.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.amount_small_large, icon: viewModel.filterType == .amount_small ? selectedImage : nil, action: .cancel_transaction))
 
-        self.flterView.isHidden = true
-        self.viewModel.filterType = MaxPrivacyDetailViewModel.UTXOFilterType(rawValue: sender.tag) ??  MaxPrivacyDetailViewModel.UTXOFilterType.time_ear
+            BMPopoverMenu.showForSender(sender: view, with: menu) { item in
+                if item?.name == Localizable.shared.strings.time_ear_last {
+                    self.viewModel.filterType = .time_ear
+                }
+                else if item?.name == Localizable.shared.strings.time_last_ear {
+                    self.viewModel.filterType = .time_latest
+                }
+                else if item?.name == Localizable.shared.strings.amount_large_small {
+                    self.viewModel.filterType = .amount_large
+                }
+                else if item?.name == Localizable.shared.strings.amount_small_large {
+                    self.viewModel.filterType = .amount_small
+                }
+            } cancel: {
+                
+            }
+        }
     }
 }
 
