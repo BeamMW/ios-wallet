@@ -54,7 +54,9 @@ class AssetViewModel: NSObject {
     
     public func sort() {
         self.assets = AssetsManager.shared().assets  as! [BMAsset]
-        
+        self.assets = self.assets.filter({ a in
+            a.shortName != nil
+        })
         switch filtertype {
         case .recent_old:
             self.assets.sort { a1, a2 in

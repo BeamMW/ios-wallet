@@ -22,7 +22,7 @@
 #import "AppModel.h"
 #include "wallet/core/wallet.h"
 
-static NSString *assetsKey = @"assetsKey";
+static NSString *assetsKey = @"assetsKeyNew";
 
 NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#008eff",@"#ff746b",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
 
@@ -49,6 +49,19 @@ NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#00
     
     if (_assets == nil) {
         _assets = [[NSMutableArray alloc] init];
+        
+        
+        BMAsset *asset = [[BMAsset alloc] init];
+        asset.assetId = 0;
+        asset.nthUnitName = @"BEAM";
+        asset.unitName = @"BEAM";
+        asset.color = colors[0];
+        asset.shortName = @"BEAM";
+        asset.shortDesc = @"";
+        asset.longDesc = @"";
+        asset.site = @"";
+        asset.paper = @"";
+        [_assets addObject:asset];
     }
     
     return self;

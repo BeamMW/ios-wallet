@@ -93,6 +93,9 @@ class TransactionViewModel: NSObject {
         
         if let transactions = AppModel.sharedManager().transactions {
             self.transactions = transactions as! [BMTransaction]
+            self.transactions = self.transactions.filter({ t in
+                t.asset.shortName != nil
+            })
         }
         
         AppModel.sharedManager().addDelegate(self)
@@ -213,6 +216,9 @@ extension TransactionViewModel : WalletModelDelegate {
                 }
                 else{
                     self.transactions = transactions
+                    self.transactions = self.transactions.filter({ t in
+                        t.asset.shortName != nil
+                    })
                 }
                 self.onDataChanged?()
             }

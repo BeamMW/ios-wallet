@@ -143,6 +143,7 @@ void WalletModel::onStatus(const WalletStatus& status)
     for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
         BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
         if (asset.name == nil || asset.name.isEmpty) {
+            NSLog(@"GET ASSET %d",(uint)asset.assetId);
             this->getAsync()->getAssetInfo((uint)asset.assetId);
         }
     }
@@ -386,36 +387,34 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
     @autoreleasepool {
         for (const auto& coin : utxos)
         {
-            if(coin.m_ID.m_Type != Key::Type::Decoy) {
-                BMAsset *asset = [[AssetsManager sharedManager] getAsset:coin.getAssetID()];
-                
-                BMUTXO *bmUTXO = [[BMUTXO alloc] init];
-                bmUTXO.ID = coin.m_ID.m_Idx;
-                bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
-                bmUTXO.amount = coin.m_ID.m_Value;
-                bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
-                bmUTXO.status = (int)coin.m_status;
-                bmUTXO.maturity = coin.m_maturity;
-                bmUTXO.confirmHeight = coin.m_confirmHeight;
-                bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
-                bmUTXO.typeString = GetUTXOTypeString(coin);
-                bmUTXO.assetId = coin.getAssetID();
-                bmUTXO.amountString = [[StringManager sharedManager] realAmountStringAsset:asset value:bmUTXO.realAmount];
-
-                if (coin.m_createTxId)
-                {
-                    string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());
-                    bmUTXO.createTxId = [NSString stringWithUTF8String:createdTxId.c_str()];
-                }
-                
-                if (coin.m_spentTxId)
-                {
-                    string spentTxId = to_hex(coin.m_spentTxId->data(), coin.m_spentTxId->size());
-                    bmUTXO.spentTxId = [NSString stringWithUTF8String:spentTxId.c_str()];
-                }
-                
-                [bmUtxos addObject:bmUTXO];
+            BMAsset *asset = [[AssetsManager sharedManager] getAsset:coin.getAssetID()];
+            
+            BMUTXO *bmUTXO = [[BMUTXO alloc] init];
+            bmUTXO.ID = coin.m_ID.m_Idx;
+            bmUTXO.stringID = [NSString stringWithUTF8String:coin.toStringID().c_str()];
+            bmUTXO.amount = coin.m_ID.m_Value;
+            bmUTXO.realAmount = double(int64_t(coin.m_ID.m_Value)) / Rules::Coin;
+            bmUTXO.status = (int)coin.m_status;
+            bmUTXO.maturity = coin.m_maturity;
+            bmUTXO.confirmHeight = coin.m_confirmHeight;
+            bmUTXO.statusString = [GetUTXOStatusString(coin) lowercaseString];
+            bmUTXO.typeString = GetUTXOTypeString(coin);
+            bmUTXO.assetId = coin.getAssetID();
+            bmUTXO.amountString = [[StringManager sharedManager] realAmountStringAsset:asset value:bmUTXO.realAmount];
+            
+            if (coin.m_createTxId)
+            {
+                string createdTxId = to_hex(coin.m_createTxId->data(), coin.m_createTxId->size());
+                bmUTXO.createTxId = [NSString stringWithUTF8String:createdTxId.c_str()];
             }
+            
+            if (coin.m_spentTxId)
+            {
+                string spentTxId = to_hex(coin.m_spentTxId->data(), coin.m_spentTxId->size());
+                bmUTXO.spentTxId = [NSString stringWithUTF8String:spentTxId.c_str()];
+            }
+            
+            [bmUtxos addObject:bmUTXO];
         }
     }
 
@@ -1450,6 +1449,8 @@ void WalletModel::onPublicAddress(const std::string& publicAddr)
 
 
 void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
+    NSLog(@"onAssetInfo :%d", assetId);
+    
     auto info = WalletAssetMeta(asset);
 
     NSString *name = [NSString stringWithUTF8String:info.GetName().c_str()];
