@@ -156,5 +156,12 @@ extension AssetViewModel : WalletModelDelegate {
             self.onDataChanged?()
         }
     }
+    
+    func onWalletStatusChange(_ status: BMWalletStatus) {
+        DispatchQueue.main.async {
+            self.sort()
+            self.onDataChanged?()
+        }
+    }
 }
 

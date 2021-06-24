@@ -144,7 +144,21 @@ void WalletModel::onStatus(const WalletStatus& status)
         BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
         if (asset.name == nil || asset.name.isEmpty) {
             NSLog(@"GET ASSET %d",(uint)asset.assetId);
-            this->getAsync()->getAssetInfo((uint)asset.assetId);
+            if(asset.assetId == 0) {
+                asset.assetId = 0;
+                asset.nthUnitName = @"BEAM";
+                asset.unitName = @"BEAM";
+                asset.color = [[AssetsManager sharedManager] getAssetColor:0];
+                asset.shortName = @"BEAM";
+                asset.shortDesc = @"";
+                asset.longDesc = @"";
+                asset.site = @"";
+                asset.paper = @"";
+                [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
+            }
+            else {
+                this->getAsync()->getAssetInfo((uint)asset.assetId);
+            }
         }
     }
     
