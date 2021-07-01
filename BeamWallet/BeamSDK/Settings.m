@@ -156,35 +156,39 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     
-//    _language = @"en";
-
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
-        _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
-    }
-    else{
-        _language = [[NSLocale currentLocale] languageCode];
-
-        if ([_language isEqualToString:@"zh"]) {
-            _language = @"zh-Hans";
+    if (ENALBE_LANG) {
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
+            _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
         }
-        
-        NSArray *languages = [self languages];
-        BOOL isFound = NO;
-
-        for (BMLanguage *lang in languages) {
-            if([lang.code isEqualToString:_language]) {
-                isFound = YES;
+        else{
+            _language = [[NSLocale currentLocale] languageCode];
+            
+            if ([_language isEqualToString:@"zh"]) {
+                _language = @"zh-Hans";
             }
-        }
-        if(isFound) {
-            if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+            
+            NSArray *languages = [self languages];
+            BOOL isFound = NO;
+            
+            for (BMLanguage *lang in languages) {
+                if([lang.code isEqualToString:_language]) {
+                    isFound = YES;
+                }
+            }
+            if(isFound) {
+                if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:_language ofType:@"lproj"]]) {
+                    _language = @"en";
+                }
+            }
+            else {
                 _language = @"en";
             }
         }
-        else {
-            _language = @"en";
-        }
     }
+    else {
+        _language = @"en";
+    }
+    
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:currenctKey]) {
         _currency = [[[NSUserDefaults standardUserDefaults] objectForKey:currenctKey] intValue];
@@ -422,6 +426,8 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
             return @"USD";
         case BMCurrencyBTC:
             return @"BTC";
+        case BMCurrencyETH:
+            return @"ETH";
         default:
             return [@"off" localized];
     }

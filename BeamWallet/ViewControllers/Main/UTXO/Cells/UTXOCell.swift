@@ -27,15 +27,7 @@ class UTXOCell: UITableViewCell {
     @IBOutlet weak private var amountView: UIView!
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-
-//    @IBOutlet weak private var transactionDateLabel: UILabel!
-//    @IBOutlet weak private var transactionCommentLabel: UILabel!
-//    @IBOutlet weak private var transactionIcon: UIImageView!
-//    @IBOutlet weak private var transactionIconHeight: NSLayoutConstraint!
-//    @IBOutlet weak private var transactionIconWidth: NSLayoutConstraint!
-//    @IBOutlet weak private var transactionDateWidth: NSLayoutConstraint!
-//    @IBOutlet weak private var statusY: NSLayoutConstraint!
-//    @IBOutlet weak private var dateY: NSLayoutConstraint!
+    @IBOutlet weak private var assetIconView: AssetIconView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -48,11 +40,18 @@ extension UTXOCell: Configurable {
     
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
         
+        if let asset = AssetsManager.shared().getAsset(options.utxo.assetId) {
+            assetIconView.setAsset(asset)
+        }
+        
         amountLabel.text = options.utxo.amountString
         statusLabel.text = options.utxo.statusString
         typeLabel.text = options.utxo.typeString.capitalizingFirstLetter()
         
-        if options.utxo.status == 1 || options.utxo.status == 2 {
+        if options.utxo.status == 1 {
+            statusLabel.textColor = UIColor.main.brightTeal
+        }
+        else if options.utxo.status == 2 {
             statusLabel.textColor = UIColor.white
         }
         else if options.utxo.status == 6 || options.utxo.status == 3 {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -29,10 +29,10 @@
                         <rect key="frame" x="15" y="15" width="290" height="89.5"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GIP-fu-pjn">
-                                <rect key="frame" x="118.5" y="20" width="53.5" height="24"/>
+                                <rect key="frame" x="15" y="20" width="260" height="24"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ubL-pw-5FK">
-                                        <rect key="frame" x="0.0" y="0.0" width="53.5" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ubL-pw-5FK">
+                                        <rect key="frame" x="0.0" y="0.0" width="260" height="24"/>
                                         <fontDescription key="fontDescription" name="SFProText-Medium" family="SF Pro Text" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -62,10 +62,11 @@
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="BoK-WT-fzr" firstAttribute="centerX" secondItem="yio-1z-dxj" secondAttribute="centerX" id="Ew2-bG-7d7"/>
-                            <constraint firstItem="GIP-fu-pjn" firstAttribute="centerX" secondItem="yio-1z-dxj" secondAttribute="centerX" id="b00-e9-zMp"/>
                             <constraint firstItem="GIP-fu-pjn" firstAttribute="top" secondItem="yio-1z-dxj" secondAttribute="top" constant="20" id="iMN-oa-xJa"/>
                             <constraint firstItem="BoK-WT-fzr" firstAttribute="top" secondItem="GIP-fu-pjn" secondAttribute="bottom" constant="5" id="noi-Ay-Rqg"/>
+                            <constraint firstAttribute="trailing" secondItem="GIP-fu-pjn" secondAttribute="trailing" constant="15" id="pNJ-06-dn9"/>
                             <constraint firstAttribute="bottom" secondItem="BoK-WT-fzr" secondAttribute="bottom" constant="21" id="rKn-Ea-yws"/>
+                            <constraint firstItem="GIP-fu-pjn" firstAttribute="leading" secondItem="yio-1z-dxj" secondAttribute="leading" constant="15" id="yyK-Vj-rMa"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -82,8 +83,8 @@
                     <constraint firstItem="yio-1z-dxj" firstAttribute="leading" secondItem="nlU-c7-klL" secondAttribute="leading" constant="15" id="ux3-pD-9KH"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="7nM-t7-gc3"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="amountLabel" destination="ubL-pw-5FK" id="VNz-OM-EO5"/>
                 <outlet property="mainView" destination="yio-1z-dxj" id="vBc-vf-TcL"/>

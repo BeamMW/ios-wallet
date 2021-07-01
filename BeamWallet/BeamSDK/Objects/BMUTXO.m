@@ -21,6 +21,8 @@
 #import "BMTransaction.h"
 #import "StringLocalize.h"
 #import "Settings.h"
+#import "StringManager.h"
+#import "AssetsManager.h"
 
 @implementation BMUTXO
 
@@ -48,6 +50,19 @@
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_statusString];
         return attrString;
     }
+}
+
+-(NSString*_Nonnull)amountString {
+    NSString *number = @"";
+    BMAsset *asset = [[AssetsManager sharedManager] getAsset:_assetId];
+    if (asset != nil) {
+        number = [[StringManager sharedManager] realAmountStringAsset:asset value:_realAmount];
+    }
+    else {
+        number = [NSString stringWithFormat:@"%f", _realAmount];
+    }
+    
+    return number;
 }
 
 @end

@@ -22,8 +22,6 @@ import UIKit
 class UTXOBlockView: UIView {
     
     @IBOutlet weak private var heightLabel: UILabel!
-    @IBOutlet weak private var hashLabel: UILabel!
-    @IBOutlet weak private var hashTitleLabel: UILabel!
     @IBOutlet weak private var heightTitleLabel: UILabel!
     
     override func awakeFromNib() {
@@ -31,14 +29,11 @@ class UTXOBlockView: UIView {
         
         self.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
-        hashTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.block_hash).uppercased()
-        heightTitleLabel.text = Localizable.shared.strings.addDots(value: Localizable.shared.strings.blockchain_height).uppercased()
-        hashTitleLabel.letterSpacing = 1.5
+        heightTitleLabel.text = Localizable.shared.strings.blockchain_height.uppercased()
         heightTitleLabel.letterSpacing = 1.5
         
         if Settings.sharedManager().isDarkMode {
             heightTitleLabel.textColor = UIColor.main.steel
-            hashTitleLabel.textColor = UIColor.main.steel
         }
     }
     
@@ -46,11 +41,9 @@ class UTXOBlockView: UIView {
         
         if let walletStatus = status {
             heightLabel.text = walletStatus.currentHeight
-            hashLabel.text = walletStatus.currentStateHash
         }
         else{
             heightLabel.text = String.empty()
-            hashLabel.text = String.empty()
         }
     }
 }

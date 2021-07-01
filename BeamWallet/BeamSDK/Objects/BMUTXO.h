@@ -58,5 +58,7 @@ typedef int BMUTXOStatus;
 
 -(NSMutableAttributedString*_Nonnull)attributedStatus;
 
+-(NSString*_Nonnull)amountString;
+
 @end
 

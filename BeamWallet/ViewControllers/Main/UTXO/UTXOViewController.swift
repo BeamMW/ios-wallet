@@ -104,7 +104,7 @@ class UTXOViewController: BaseTableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        blockView.frame = CGRect(x: 15, y: tableView.y + 15, width: UIScreen.main.bounds.width - 30, height: 98)
+        blockView.frame = CGRect(x: 15, y: tableView.y + 15, width: UIScreen.main.bounds.width - 30, height: 82)
         
         var frame = tableView.frame
         frame.origin.y = frame.origin.y + 130

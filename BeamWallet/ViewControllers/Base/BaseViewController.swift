@@ -62,6 +62,13 @@ class BaseViewController: UIViewController {
             frame.size.width = view.bounds.width - (offset * 2)
             titleLabel.frame = frame
         }
+        else if let rightButtons = view.viewWithTag(200), let titleLabel = view.viewWithTag(987) {
+            let offset = rightButtons.frame.size.width + 25
+            var frame = titleLabel.frame
+            frame.origin.x = offset
+            frame.size.width = view.bounds.width - (offset * 2)
+            titleLabel.frame = frame
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

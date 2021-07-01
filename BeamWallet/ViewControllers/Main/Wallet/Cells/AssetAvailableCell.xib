@@ -50,8 +50,8 @@
                                                     <constraint firstAttribute="height" constant="26" id="tJY-ik-fXk"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 USD" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TD6-h9-vjl">
-                                                <rect key="frame" x="221.5" y="0.0" width="38.5" height="111"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" verticalHuggingPriority="251" text="2 USD" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TD6-h9-vjl">
+                                                <rect key="frame" x="184.5" y="0.0" width="75.5" height="111"/>
                                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -68,6 +68,7 @@
                                             <constraint firstItem="GhY-51-TcJ" firstAttribute="centerY" secondItem="wna-hu-URf" secondAttribute="centerY" id="jk7-sU-WcV"/>
                                             <constraint firstAttribute="bottom" secondItem="TD6-h9-vjl" secondAttribute="bottom" id="l37-jJ-9hS"/>
                                             <constraint firstItem="GhY-51-TcJ" firstAttribute="leading" secondItem="wna-hu-URf" secondAttribute="leading" id="qMA-9z-tYD"/>
+                                            <constraint firstItem="TD6-h9-vjl" firstAttribute="leading" secondItem="HfO-Kl-1O2" secondAttribute="trailing" constant="15" id="t2l-1n-rUH"/>
                                         </constraints>
                                     </view>
                                     <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nP5-k8-O3u">

@@ -45,6 +45,8 @@
             return @"USD (United States Dollar)";
         case BMCurrencyBTC:
             return @"BTC (Bitcoin)";
+        case BMCurrencyETH:
+            return @"ETH (Ethereum)";
         case BEAM:
             return @"BEAM";
         default:
@@ -58,6 +60,8 @@
             return @"USD";
         case BMCurrencyBTC:
             return @"BTC";
+        case BMCurrencyETH:
+            return @"ETH";
         default:
             return @"";
     }

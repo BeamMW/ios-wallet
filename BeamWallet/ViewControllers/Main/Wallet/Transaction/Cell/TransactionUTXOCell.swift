@@ -37,7 +37,7 @@ class TransactionUTXOCell: BaseCell {
 extension TransactionUTXOCell: Configurable {
     
     func configure(with utxo: BMUTXO) {        
-        amountLabel.text = String.currency(value: utxo.realAmount)
+        amountLabel.text = utxo.amountString
         
         switch utxo.statusString {
         case Localizable.shared.strings.spent:

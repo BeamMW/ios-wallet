@@ -1056,6 +1056,12 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
             currency.code = @"BTC";
             currency.name = @"BEAM";
         }
+        else if (rate.m_to == Currency::ETH() && rate.m_from == Currency::BEAM()) {
+            currency.type = BMCurrencyETH;
+            currency.maximumFractionDigits = 10;
+            currency.code = @"ETH";
+            currency.name = @"BEAM";
+        }
         else if (rate.m_to == Currency::BTC() && [name containsString:@"asset"]) {
             currency.type = BMCurrencyBTC;
             currency.maximumFractionDigits = 10;
@@ -1067,6 +1073,13 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
             currency.type = BMCurrencyUSD;
             currency.maximumFractionDigits = 2;
             currency.code = @"USD";
+            currency.name = name;
+            currency.assetId = [[name stringByReplacingOccurrencesOfString:@"asset_" withString:@""] intValue];
+        }
+        else if (rate.m_to == Currency::ETH() && [name containsString:@"asset"]) {
+            currency.type = BMCurrencyETH;
+            currency.maximumFractionDigits = 10;
+            currency.code = @"ETH";
             currency.name = name;
             currency.assetId = [[name stringByReplacingOccurrencesOfString:@"asset_" withString:@""] intValue];
         }
@@ -1329,6 +1342,7 @@ void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const
             bmUTXO.txoID = coin.m_TxoID;
             bmUTXO.ID = coin.m_spentHeight;
             bmUTXO.user = 0; //coin.m_CoinID.m_User;
+            bmUTXO.assetId = coin.getAssetID();
             bmUTXO.stringID = [NSString stringWithFormat:@"%llu", bmUTXO.ID];
             bmUTXO.amount = coin.m_CoinID.m_Value;
             bmUTXO.realAmount = double(int64_t(coin.m_CoinID.m_Value)) / Rules::Coin;

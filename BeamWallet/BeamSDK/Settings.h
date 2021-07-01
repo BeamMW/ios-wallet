@@ -26,6 +26,7 @@
 @class BMLogValue;
 
 static double MAX_AMOUNT = 262800000;
+static Boolean ENALBE_LANG = false;
 
 typedef enum Target : NSUInteger {
     Testnet = 0,

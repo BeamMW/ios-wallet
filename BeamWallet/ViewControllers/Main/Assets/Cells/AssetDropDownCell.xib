@@ -25,8 +25,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WMn-Kd-bn3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL8-lO-iyB">
-                                <rect key="frame" x="51" y="29.5" width="254" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="TOTAL AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL8-lO-iyB">
+                                <rect key="frame" x="51" y="29.5" width="224" height="17"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -55,7 +55,7 @@
                             <constraint firstItem="5fT-hS-43g" firstAttribute="top" secondItem="WMn-Kd-bn3" secondAttribute="top" constant="25" id="BSk-N8-9dX"/>
                             <constraint firstItem="eL8-lO-iyB" firstAttribute="leading" secondItem="5fT-hS-43g" secondAttribute="trailing" constant="10" id="Ghp-3F-Qca"/>
                             <constraint firstAttribute="bottom" secondItem="5fT-hS-43g" secondAttribute="bottom" constant="15" id="VnA-zV-Edn"/>
-                            <constraint firstAttribute="trailing" secondItem="eL8-lO-iyB" secondAttribute="trailing" constant="15" id="b83-hZ-Qx4"/>
+                            <constraint firstAttribute="trailing" secondItem="eL8-lO-iyB" secondAttribute="trailing" constant="45" id="b83-hZ-Qx4"/>
                             <constraint firstItem="5fT-hS-43g" firstAttribute="leading" secondItem="WMn-Kd-bn3" secondAttribute="leading" constant="15" id="cyx-mM-K68"/>
                             <constraint firstItem="icj-ek-Dhx" firstAttribute="centerY" secondItem="eL8-lO-iyB" secondAttribute="centerY" id="dhV-ew-NVz"/>
                         </constraints>

@@ -32,10 +32,10 @@
                         <rect key="frame" x="15" y="45" width="290" height="137.5"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GIP-fu-pjn">
-                                <rect key="frame" x="117.5" y="40" width="55" height="24"/>
+                                <rect key="frame" x="20" y="40" width="250" height="24"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ubL-pw-5FK">
-                                        <rect key="frame" x="0.0" y="0.0" width="55" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ubL-pw-5FK">
+                                        <rect key="frame" x="0.0" y="0.0" width="250" height="24"/>
                                         <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -85,12 +85,13 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10980392160000001" green="0.26274509800000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="GIP-fu-pjn" secondAttribute="trailing" constant="20" id="3UR-Ue-bbX"/>
                             <constraint firstAttribute="bottom" secondItem="zKZ-C1-mg2" secondAttribute="bottom" constant="23.5" id="C1V-g6-BQk"/>
                             <constraint firstItem="zKZ-C1-mg2" firstAttribute="centerX" secondItem="yio-1z-dxj" secondAttribute="centerX" id="MHM-rs-RNy"/>
                             <constraint firstItem="lCf-d5-5pB" firstAttribute="centerX" secondItem="yio-1z-dxj" secondAttribute="centerX" id="MMk-Cc-D31"/>
                             <constraint firstItem="lCf-d5-5pB" firstAttribute="top" secondItem="yio-1z-dxj" secondAttribute="top" constant="37" id="Pvd-RO-iHs"/>
-                            <constraint firstItem="GIP-fu-pjn" firstAttribute="centerX" secondItem="yio-1z-dxj" secondAttribute="centerX" id="b00-e9-zMp"/>
                             <constraint firstAttribute="trailing" secondItem="uYk-Ni-S8g" secondAttribute="trailing" constant="10" id="dIq-Q7-aDj"/>
+                            <constraint firstItem="GIP-fu-pjn" firstAttribute="leading" secondItem="yio-1z-dxj" secondAttribute="leading" constant="20" id="h7J-LU-btg"/>
                             <constraint firstItem="GIP-fu-pjn" firstAttribute="top" secondItem="yio-1z-dxj" secondAttribute="top" constant="40" id="iMN-oa-xJa"/>
                             <constraint firstItem="zKZ-C1-mg2" firstAttribute="top" secondItem="uYk-Ni-S8g" secondAttribute="bottom" constant="8" symbolic="YES" id="lJA-kA-Lw0"/>
                             <constraint firstItem="uYk-Ni-S8g" firstAttribute="top" secondItem="GIP-fu-pjn" secondAttribute="bottom" constant="5" id="nQj-05-VpC"/>
