@@ -479,7 +479,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.errorLabel.isHidden = true
-
+            
             if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
                 //
             }
@@ -503,7 +503,10 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 strongSelf.openMainPage()
             }
             else if total == done && (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
-                if total != 0 {
+                if total == 0 && AppModel.sharedManager().isSynced() {
+                    strongSelf.openMainPage()
+                }
+                else if total != 0 {
                     strongSelf.openMainPage()
                 }
             }

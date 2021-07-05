@@ -82,7 +82,6 @@ static NSString *ignoredContactsKey = @"ignoredcontactsKeyNew";
 const int kDefaultFeeInGroth = 10;
 const int kFeeInGroth_Fork1 = 100;
 
-const int kFeeInGroth_Unlink = 1100;
 const int kFeeInGroth_MaxPrivacy = 1000100;
 
 const std::map<Notification::Type,bool> activeNotifications {
@@ -962,6 +961,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
             block(exportedKey);
         });
     });
+}
+
+-(BOOL)isSynced {
+    return self->wallet->isSynced();
 }
 
 #pragma mark - Updates
@@ -1886,56 +1889,38 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 #pragma mark - Send
 
--(double)realTotal:(double)amount fee:(double)fee {
+-(double)realTotal:(double)amount fee:(double)fee assetId:(int)assetId {
     Amount bAmount = round(amount * Rules::Coin);
-    Amount bTotal = bAmount + fee;
+    Amount bTotal = bAmount;
+    if (assetId == 0) {
+        bTotal = bTotal + fee;
+    }
     double realAmount = double(int64_t(bTotal)) / Rules::Coin;
     return realAmount;
 }
 
--(double)remaining:(double)amount fee:(double)fee {
+-(double)remaining:(double)amount fee:(double)fee assetId:(int)assetId {
+    Amount available = [[AssetsManager sharedManager] getAsset:assetId].available;
     Amount bAmount = round(amount * Rules::Coin);
-    Amount bTotal = bAmount + fee;
-    Amount remaining = _walletStatus.available - bTotal;
+    Amount bTotal = bAmount;
+    if (assetId == 0) {
+        bTotal = bTotal + fee;
+    }
+    Amount remaining = available - bTotal;
     double realAmount = double(int64_t(remaining)) / Rules::Coin;
     return realAmount;
 }
 
--(NSString*_Nullable)canSend:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
-    NSString *errorString = [self sendError:amount fee:fee to:to];
-    return errorString;
+-(double)remainingBeam:(double)amount fee:(double)fee {
+    Amount bAmount = round(amount * Rules::Coin);
+    Amount bTotal = bAmount - fee;
+    double realAmount = double(int64_t(bTotal)) / Rules::Coin;
+    return realAmount;
 }
 
-
--(NSString*_Nullable)canSendOnlyUnlink:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
-    Amount bAmount = round(amount * Rules::Coin);
-    Amount bTotal = bAmount + fee;
-    Amount bMax = round(MAX_AMOUNT * Rules::Coin);
-    
-    if (amount==0) {
-        return [@"amount_zero" localized];
-    }
-    else if(_walletStatus.shielded < bTotal)
-    {
-        double need = double(int64_t(bTotal - _walletStatus.shielded)) / Rules::Coin;
-        
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
-    }
-    else if (bTotal > bMax)
-    {
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
-        
-        return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
-    }
-    else if(![self isValidAddress:to])
-    {
-        return [@"incorrect_address" localized];
-    }
-    
-    return nil;
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to {
+    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to];
+    return errorString;
 }
 
 
@@ -1964,7 +1949,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
 }
 
--(void)calculateFee:(double)amount fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
+-(void)calculateFee:(double)amount assetId:(int)assetId fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
    
     self.isMaxPrivacyRequest = isShielded;
 
@@ -1973,51 +1958,52 @@ bool OnProgress(uint64_t done, uint64_t total) {
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
     
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, 0, beam::Asset::s_BeamID, isShielded);
+    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, 0, assetId, isShielded);
 }
 
 
--(NSString*)sendError:(double)amount fee:(double)fee checkMinAmount:(BOOL)check {
+-(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check {
     
     Amount bAmount = round(amount * Rules::Coin);
-    Amount bTotal = bAmount + fee;
+    Amount bTotal = bAmount;
+    if (assetId == 0) {
+        bTotal = bAmount + fee;
+    }
     Amount bMax = round(MAX_AMOUNT * Rules::Coin);
+    BMAsset *asset = [[AssetsManager sharedManager] getAsset:assetId];
+    Amount available = asset.available;
     
     if (amount==0) {
         return [@"amount_zero" localized];
     }
-    else if(_walletStatus.available < bTotal)
+    else if(available < bTotal)
     {
-        double need = double(int64_t(bTotal - _walletStatus.available)) / Rules::Coin;
+        double need = double(int64_t(bTotal - available)) / Rules::Coin;
         
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
         
         NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
+        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
     }
     else if (bTotal > bMax)
     {
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
         
-        return [NSString stringWithFormat:@"Maximum amount %@ BEAMS",beam];
+        return [NSString stringWithFormat:@"Maximum amount %@ %@", beam, asset.unitName];
     }
-    else if (check) {
-        auto min = [self getMinUnlinkFeeInGroth] + 1;
-        if (bAmount < min) {
-            double need = double(min) / Rules::Coin;
-            NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-            if([[beam substringToIndex:1] isEqualToString:@"."]) {
-                beam = [NSString stringWithFormat:@"0%@",beam];
-            }
-            return [NSString stringWithFormat:@"%@ %@ BEAMS", [@"small_amount_unlink" localized], beam];
-        }
+    
+    if (asset !=0 && self.walletStatus.available < fee) {
+        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
+        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+        NSString *s = [@"insufficient_funds" localized];
+        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
     }
     
     return nil;
 }
 
--(NSString*)sendError:(double)amount fee:(double)fee to:(NSString*_Nullable)to {
-    NSString *error = [self sendError:amount fee:fee checkMinAmount:NO];
+-(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to {
+    NSString *error = [self sendError:amount assetId:assetId fee:fee checkMinAmount:NO];
     
     if (error!=nil) {
         return error;
@@ -2033,7 +2019,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 
 
--(void)send:(double)amount fee:(double)fee to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline {
+-(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline {
         
     if([[AppModel sharedManager] isToken:to] && !isOffline) {
         BMTransactionParameters *params = [self getTransactionParameters:to];
@@ -2077,7 +2063,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     params.SetParameter(TxParameterID::Amount, bAmount)
         .SetParameter(TxParameterID::Fee, bfee)
         .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
-        .SetParameter(TxParameterID::AssetID, beam::Asset::s_BeamID)
+        .SetParameter(TxParameterID::AssetID, beam::Asset::ID((uint32_t)assetId))
         .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
 
     if (type == TxAddressType::MaxPrivacy) {
@@ -2103,7 +2089,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     }
 }
 
--(void)prepareSendNew:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy {
+-(void)prepareSendNew:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment contactName:(NSString*_Nonnull)contactName maxPrivacy:(BOOL)maxPrivacy {
     
 //    BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
 //    transaction.fee = fee;
@@ -2126,7 +2112,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 //    }
 }
 
--(void)prepareSend:(double)amount fee:(double)fee to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact isOffline:(BOOL)isOffline {
+-(void)prepareSend:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to comment:(NSString*_Nonnull)comment from:(NSString*_Nullable)from saveContact:(BOOL)saveContact isOffline:(BOOL)isOffline {
     
     BMPreparedTransaction *transaction = [[BMPreparedTransaction alloc] init];
     transaction.fee = fee;
@@ -2138,7 +2124,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     transaction.ID = [NSString randomAlphanumericStringWithLength:10];
     transaction.saveContact = saveContact;
     transaction.isOffline = isOffline;
-    
+    transaction.assetId = assetId;
+
     [_preparedTransactions addObject:transaction];
     
     NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
@@ -2150,12 +2137,15 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     }
 }
 
--(NSString*_Nonnull)allAmount:(double)fee {
-    Amount bAmount = _walletStatus.available - fee;
-    if (bAmount < 0 || _walletStatus.available == 0) {
-        bAmount = 0;
+-(NSString*_Nonnull)allAmount:(double)fee assetId:(int)assetId {
+    Amount available = [[AssetsManager sharedManager] getAsset:assetId].available;
+    if(assetId == 0) {
+        available = available - fee;
     }
-    double d = double(int64_t(bAmount)) / Rules::Coin;
+    if (available < 0 || available == 0) {
+        available = 0;
+    }
+    double d = double(int64_t(available)) / Rules::Coin;
     
     NSString *allValue =  [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:d]];
     allValue = [allValue stringByReplacingOccurrencesOfString:@"," withString:@""];
@@ -2584,7 +2574,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     for (int i=0; i<_preparedTransactions.count; i++) {
         if ([_preparedTransactions[i].ID isEqualToString:transaction]) {
             
-            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee to:_preparedTransactions[i].address from:_preparedTransactions[i].from comment:_preparedTransactions[i].comment isOffline: _preparedTransactions[i].isOffline];
+            [[AppModel sharedManager] send:_preparedTransactions[i].amount fee:_preparedTransactions[i].fee assetId:_preparedTransactions[i].assetId to:_preparedTransactions[i].address from:_preparedTransactions[i].from comment:_preparedTransactions[i].comment isOffline: _preparedTransactions[i].isOffline];
             
             [_preparedTransactions removeObjectAtIndex:i];
             
@@ -2761,10 +2751,6 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
 
 -(int)getMinFeeInGroth {
     return [self isFork] ? kFeeInGroth_Fork1 : 0;
-}
-
--(int)getMinUnlinkFeeInGroth {
-    return kFeeInGroth_Unlink;
 }
 
 -(int)getMinMaxPrivacyFeeInGroth {

@@ -44,6 +44,8 @@ class AssetDetailViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        statusViewModel.assetId = Int(asset.assetId)
+
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         if !asset.isBeam() {

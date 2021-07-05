@@ -100,11 +100,11 @@
 }
 
 -(UInt64)locked {
-    return _receiving + _sending + _maturing + _maxPrivacy;
+    return _receiving + _maturing + _maxPrivacy;
 }
 
 -(double)realLocked {
-    return _realReceiving + _realSending + _realMaturing + _realMaxPrivacy;
+    return _realReceiving + _realMaturing + _realMaxPrivacy;
 }
 
 -(BOOL)isBeam {

@@ -63,11 +63,12 @@ class SendAllCell: BaseCell {
 }
 
 extension SendAllCell: Configurable {
-    func configure(with options: (realAmount: Double, isAll: Bool, type: BMTransactionType)) {
-        let total = String.currency(value: options.realAmount)
+    func configure(with options: (realAmount: Double, assetId:Int, isAll: Bool, type: BMTransactionType)) {
+        let asset = AssetsManager.shared().getAsset(Int32(options.assetId))
+        let total = String.currency(value: options.realAmount, name: asset?.unitName ?? "")
         
-        amountLabel.text = total //+ Localizable.shared.strings.beam
-        secondAvailableLabel.text = ExchangeManager.shared().exchangeValue(options.realAmount)
+        amountLabel.text = total
+        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueAsset(options.realAmount, assetID: UInt64(options.assetId))
 
         if options.realAmount == 0 {
             secondAvailableLabel.isHidden = true

@@ -84,7 +84,7 @@ class DetailTransactionViewModel: TransactionViewModel {
 
         
         if transaction.realFee > 0 {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String(transaction.realFee) + " GROTH", detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String.currency(value: transaction.fee), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
         
         

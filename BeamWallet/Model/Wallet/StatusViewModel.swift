@@ -33,6 +33,7 @@ class StatusViewModel: NSObject {
     public var onVerificationCompleted : (() -> Void)?
 
     public var cells = [CellTypes]()
+    public var assetId = 0
     
     override init() {
         super.init()
@@ -53,6 +54,7 @@ class StatusViewModel: NSObject {
     
     public func onSend() {
         let vc = SendViewController()
+        vc.assetId = assetId
         UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
     }
     

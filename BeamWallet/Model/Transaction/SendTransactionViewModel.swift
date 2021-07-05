@@ -63,35 +63,16 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public var maxPrivacy:Bool = false
     
-    public var selectedCurrency = BEAM
+    public var selectedAssetId = 0
     public var selectedCurrencyString: String {
         get {
-            if selectedCurrency == BEAM {
-                return "BEAM"
-            }
-            else if selectedCurrency == BMCurrencyUSD {
-                return "USD"
-            }
-            else if selectedCurrency == BMCurrencyBTC {
-                return "BTC"
-            }
-            else {
-                return ""
-            }
+            return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
         }
     }
     
     public var secondAmount:String {
         get {
-          //  let feeString = "+ \(fee) GROTH " + Localizable.shared.strings.transaction_fee.lowercased()
-            var second = ""
-            if selectedCurrency == BEAM  {
-                second = ExchangeManager.shared().exchangeValue(withZero: Double(inputAmount) ?? 0)
-            }
-            else {
-                second = ExchangeManager.shared().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 0, amount: Double(inputAmount) ?? 0)
-            }
-            return second
+            return ExchangeManager.shared().exchangeValueAsset(Double(inputAmount) ?? 0, assetID: UInt64(selectedAssetId))
         }
     }
     
@@ -99,7 +80,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
                             addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
-        AppModel.sharedManager().calculateFee(Double(amount) ?? 0, fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, changed, shieldedInputsFee) in
+        AppModel.sharedManager().calculateFee(Double(amount) ?? 0, assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, changed, shieldedInputsFee) in
             DispatchQueue.main.async {
                 self.shieldedInputsFee = shieldedInputsFee
                 let current = UInt64(self.fee) ?? 0
@@ -200,21 +181,14 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public var getAmount: String {
-        if selectedCurrency == BEAM {
-            return inputAmount
-        }
-        else {
-            let result = ExchangeManager.shared().exchangeValueFrom2(BMCurrencyType(selectedCurrency), to: 1, amount: Double(inputAmount) ?? 0).replacingOccurrences(of: " BEAM", with: "")
-            return result
-        }
+        return inputAmount
     }
-    
     
     public var minFee = ""
     public var fee = String(0) {
         didSet{
             if sendAll {
-                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0, assetId: Int32(selectedAssetId))
             }
         }
     }
@@ -222,7 +196,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var sendAll = false {
         didSet{
             if sendAll {
-                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0)
+                amount = AppModel.sharedManager().allAmount(Double(fee) ?? 0, assetId: Int32(selectedAssetId))
                 calculateFee()
             }
         }
@@ -301,7 +275,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             sendedFee = sendedFee - Double(shieldedInputsFee)
         }
         
-        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, isOffline: isSendOffline)
+        AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, assetId: Int32(selectedAssetId), to: toAddress, comment: comment, from: outgoindAdderss?.walletId, saveContact: saveContact, isOffline: isSendOffline)
 
        // AppModel.sharedManager().prepareSend(Double(amount) ?? 0, fee: sendedFee, to: toAddress, comment: comment, contactName: saveContactName, maxPrivacy: maxPrivacy)
 
@@ -309,7 +283,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func checkAmountError() {
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress)
         
         if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
             amountError = canSend
@@ -323,7 +297,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         if sendAll {
             if let a = Double(amount), let f = Double(fee) {
                 if a == 0 && f > 0  {
-                    amount = AppModel.sharedManager().allAmount(0)
+                    amount = AppModel.sharedManager().allAmount(0, assetId: Int32(selectedAssetId))
                     amountError = AppModel.sharedManager().feeError(f)
                 }
                 else if a == 0 {
@@ -336,7 +310,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public func canSend() -> Bool {
         let valid = AppModel.sharedManager().isValidAddress(toAddress)
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), fee: (Double(fee) ?? 0), to: toAddress)
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress)
         
         let isError = (!valid || expired || canSend != nil)
                
@@ -473,13 +447,13 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
         
         if !Settings.sharedManager().isHideAmounts {
-            let amountDetail = amountString(amount: amount)
+            let amountDetail = amountString(amount: amount, isFee: false, assetId: self.selectedAssetId)
             let amountItem = BMMultiLineItem(title: Localizable.shared.strings.amount_to_send.uppercased(), detail: amountDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.main.heliotrope)
             amountItem.detailAttributedString = amountDetail
             items.append(amountItem)
             
-            let total = AppModel.sharedManager().realTotal(0.0, fee: Double(fee) ?? 0.0)
-            let totalFeeDetail = amountString(amount: String(total), isFee: false, color: .white)
+            let total = AppModel.sharedManager().realTotal(0.0, fee: Double(fee) ?? 0.0, assetId: 0)
+            let totalFeeDetail = amountString(amount: String(total), isFee: true, assetId: 0, color: .white)
             let feeItem = BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: totalFeeDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)
             feeItem.detailAttributedString = totalFeeDetail
             items.append(feeItem)
@@ -509,16 +483,19 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
             addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
-        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
+        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
             self.onCalculateChanged?(change)
         }
     }
     
-    public func amountString(amount: String, isFee: Bool = false, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {
-        let amountString = isFee ? (amount + Localizable.shared.strings.groth + "\n") : (amount + Localizable.shared.strings.beam + "\n")
-        var secondString = isFee ? ExchangeManager.shared().exchangeValueFee((Double(amount) ?? 0)) : ExchangeManager.shared().exchangeValue(withZero: Double(amount) ?? 0)
+    public func amountString(amount: String, isFee:Bool, assetId:Int, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {
+        let assetName = (AssetsManager.shared().getAsset(Int32(assetId))?.unitName ?? "") + " "
+        
+        let amountString =  isFee ? ((amount + Localizable.shared.strings.beam + "\n")) : ((amount + assetName + "\n"))
+        var secondString = isFee ? ExchangeManager.shared().exchangeValueFee(Double(amount) ?? 0) :
+            ExchangeManager.shared().exchangeValueAsset(Double(amount) ?? 0, assetID: UInt64(self.selectedAssetId))
         if doubleAmount > 0.0 {
-            secondString = ExchangeManager.shared().exchangeValue(withZero: doubleAmount)
+            secondString = isFee ? ExchangeManager.shared().exchangeValue(withZero: doubleAmount) :  ExchangeManager.shared().exchangeValueAsset(doubleAmount, assetID: UInt64(self.selectedAssetId))
         }
         let attributedString = amountString + "space\n" + secondString
         

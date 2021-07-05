@@ -665,7 +665,9 @@ class LocalizableStrings : NSObject {
     var more_details = "more_details".localized
     var time_ear_last = "time_ear_last".localized
     var time_last_ear = "time_last_ear".localized
+    var remaining_beam = "remaining_beam".localized
 
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

@@ -89,6 +89,7 @@ class SendViewController: BaseTableViewController {
         }
     }
     
+    public var assetId = 0
     public var transaction: BMTransaction?
     private let viewModel = SendTransactionViewModel()
     
@@ -148,6 +149,7 @@ class SendViewController: BaseTableViewController {
         }
         
         if let repeatTransaction = transaction {
+            viewModel.selectedAssetId = Int(repeatTransaction.assetId)
             if let ct = AppModel.sharedManager().getContactFromId(repeatTransaction.receiverAddress)
             {
                 viewModel.selectedContact = ct
@@ -159,9 +161,11 @@ class SendViewController: BaseTableViewController {
                 viewModel.selectedContact = contact
             }
             viewModel.transaction = repeatTransaction
-            
         }
-        
+        else if assetId > 0 {
+            viewModel.selectedAssetId = assetId
+        }
+            
         tableView.register([BMFieldCell.self, SendAllCell.self, BMAmountCell.self, BMExpandCell.self, FeeCell.self, BMSearchAddressCell.self, SendSaveAddressCell.self, BMMultiLinesCell.self, SendContactAddressCell.self, SendTransactionTypeCell.self])
         
         tableView.delegate = self
@@ -346,23 +350,6 @@ extension SendViewController: UITableViewDataSource {
                 cell.stackBotOffset.constant = 20
             }
             return cell
-//            if viewModel.addressType != BMAddressTypeUnknown && viewModel.selectedContact == nil {
-//                let cell = tableView
-//                    .dequeueReusableCell(withType: SendSaveAddressCell.self, for: indexPath)
-//                cell.configure(with: (token: viewModel.toAddress, addressType: BMAddressType(viewModel.addressType), name: viewModel.saveContactName))
-//                cell.delegate = self
-//                return cell
-//            }
-//            else if viewModel.selectedContact != nil {
-//                let cell = tableView
-//                    .dequeueReusableCell(withType: SendContactAddressCell.self, for: indexPath)
-//                cell.configure(with: (contact: viewModel.selectedContact, addressType: BMAddressType(viewModel.addressType)))
-//                cell.delegate = self
-//                return cell
-//            }
-//            else {
-//
-//            }
         case 1:
             let cell = tableView
                 .dequeueReusableCell(withType: SendTransactionTypeCell.self, for: indexPath)
@@ -385,11 +372,11 @@ extension SendViewController: UITableViewDataSource {
                 return cell
             }
             else {
-                let amount = AppModel.sharedManager().walletStatus?.realAmount ?? 0
+                let amount = AssetsManager.shared().getRealAvailableAmount(Int32(viewModel.selectedAssetId))
                 let isAll = (amount > 0.0 ? viewModel.sendAll : true)
                 let cell = tableView
                     .dequeueReusableCell(withType: SendAllCell.self, for: indexPath)
-                cell.configure(with: (realAmount:amount , isAll: isAll, type: 0))
+                cell.configure(with: (realAmount:amount, assetId:viewModel.selectedAssetId, isAll: isAll, type: 0))
                 cell.delegate = self
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.bottomOffset.constant = 20
@@ -493,9 +480,9 @@ extension SendViewController: BMCellProtocol {
                 if input {
                     viewModel.sendAll = false
                     if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
-                        let amount = AppModel.sharedManager().walletStatus?.realAmount ?? 0
+                        let amount = AssetsManager.shared().getRealAvailableAmount(Int32(self.viewModel.selectedAssetId))
                         let isAll = (amount > 0.0 ? viewModel.sendAll : true)
-                        cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: isAll, type: 0))
+                        cell.configure(with: (realAmount: amount, assetId:viewModel.selectedAssetId, isAll: isAll, type: 0))
                     }
                 }
                 viewModel.amount = text
@@ -592,10 +579,12 @@ extension SendViewController: BMCellProtocol {
                 }
                 else {
                     let vc = BMDataPickerViewController(type: .sendCurrency)
-                    vc.selectedValue = viewModel.selectedCurrency
+                    vc.selectedValue = viewModel.selectedAssetId
                     vc.isAutoSelect = false
                     vc.completion = { [weak self] obj in
-                        self?.viewModel.selectedCurrency = Int(obj as! BMCurrencyType)
+                        self?.viewModel.selectedAssetId = obj as! Int
+                        self?.viewModel.sendAll = false
+                        self?.viewModel.checkAmountError()
                         self?.tableView.reloadData()
                     }
                     pushViewController(vc: vc)
@@ -679,10 +668,10 @@ extension SendViewController: QRScannerViewControllerDelegate {
             if Double(a) ?? 0 > 0 {
                 viewModel.amount = a
                 viewModel.sendAll = false
-                let amount = AppModel.sharedManager().walletStatus?.realAmount ?? 0
+                let amount = AssetsManager.shared().getRealAvailableAmount(Int32(self.viewModel.selectedAssetId))
                 let isAll = (amount > 0.0 ? viewModel.sendAll : true)
                 if let cell = tableView.findCell(SendAllCell.self) as? SendAllCell {
-                    cell.configure(with: (realAmount: AppModel.sharedManager().walletStatus?.realAmount ?? 0, isAll: isAll, type: 0))
+                    cell.configure(with: (realAmount: amount, assetId:self.viewModel.selectedAssetId, isAll: isAll, type: 0))
                 }
             }
         }

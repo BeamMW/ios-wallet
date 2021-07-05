@@ -29,7 +29,7 @@
 -(NSMutableAttributedString*_Nonnull)attributedStatus {
     if(_status == BMUTXOMaturing) {
         NSString *available = [NSString stringWithFormat:@"(%@ %llu)",[@"till_block" localized].lowercaseString, self.maturity];
-        NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.capitalizedString, available];
+        NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.lowercaseString, available];
         
         NSRange range = [str rangeOfString:available];
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:str];
@@ -38,7 +38,7 @@
     }
     else if(_maturity > 0) {
         NSString *available = [NSString stringWithFormat:@"(%@ %llu %@)",[@"since" localized].lowercaseString, self.maturity, [@"block_height" localized].lowercaseString];
-        NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.capitalizedString, available];
+        NSString *str = [NSString stringWithFormat:@"%@ %@",self.statusString.lowercaseString, available];
         
         NSRange range = [str rangeOfString:available];
         

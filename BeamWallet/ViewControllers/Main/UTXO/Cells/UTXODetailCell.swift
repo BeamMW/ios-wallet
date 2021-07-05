@@ -24,6 +24,7 @@ class UTXODetailCell: UITableViewCell {
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var statusLabel: UILabel!
+    @IBOutlet weak private var assetIconView: AssetIconView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,8 +39,10 @@ extension UTXODetailCell: Configurable {
     
     func configure(with utxo:BMUTXO) {
         amountLabel.text = utxo.amountString
-
-        if utxo.status == 1 || utxo.status == 2 {
+        if utxo.status == 1 {
+            statusLabel.textColor = UIColor.main.brightTeal
+        }
+        else if utxo.status == 2 {
             statusLabel.textColor = UIColor.white
         }
         else if utxo.status == 6 || utxo.status == 3 {
@@ -53,5 +56,9 @@ extension UTXODetailCell: Configurable {
         }
         
         statusLabel.attributedText = utxo.attributedStatus()
+        
+        if let asset = AssetsManager.shared().getAsset(utxo.assetId) {
+            assetIconView.setAsset(asset)
+        }
     }
 }

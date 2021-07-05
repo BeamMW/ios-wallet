@@ -31,6 +31,7 @@
 @property (nonatomic,strong) NSString * _Nullable from;
 @property (nonatomic,assign) BOOL saveContact;
 @property (nonatomic,assign) BOOL isOffline;
+@property (nonatomic,assign) int assetId;
 
 
 @end

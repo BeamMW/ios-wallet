@@ -105,5 +105,10 @@ NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#00
     });
 }
 
+-(double)getRealAvailableAmount:(int)assetId {
+    BMAsset *asset = [self getAsset:assetId];
+    return asset.realAmount;
+}
+
 @end
 

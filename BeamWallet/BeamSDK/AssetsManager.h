@@ -33,8 +33,8 @@
 -(BMAsset*_Nullable)getAsset:(int)assetId;
 -(BMTransaction*_Nullable)getLastTransaction:(int)assetId;
 
-
 -(void)changeAssets;
+-(double)getRealAvailableAmount:(int)assetId;
 
 @end
 

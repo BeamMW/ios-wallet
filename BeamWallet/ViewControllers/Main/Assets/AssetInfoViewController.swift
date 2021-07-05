@@ -49,6 +49,8 @@ class AssetInfoViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        statusViewModel.assetId = Int(asset.assetId)
+        
         var allSize:CGFloat = 0
         for title in titles {
             let size = title.boundingWidth(with: pagingViewController.options.font, kern: 1.5)

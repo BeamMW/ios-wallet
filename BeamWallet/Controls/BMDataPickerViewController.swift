@@ -230,27 +230,12 @@ class BMDataPickerViewController: BaseTableViewController {
             values.append(BMPickerData(title: Localizable.shared.strings.addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "address", multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "contact", multiplie: true))
         case .sendCurrency:
-            let beam = BMCurrency()
-            beam.type = BMCurrencyType(BEAM)
-            
-            let usd = BMCurrency()
-            usd.type = BMCurrencyType(BMCurrencyUSD)
-            
-            let btc = BMCurrency()
-            btc.type = BMCurrencyType(BMCurrencyBTC)
-            
-            let eth = BMCurrency()
-            eth.type = BMCurrencyType(BMCurrencyETH)
-            
             let selected = selectedValue as! Int
             
-            values.append(BMPickerData(title: beam.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (beam.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: beam.type))
-            values.append(BMPickerData(title: usd.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (usd.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: usd.type))
-            values.append(BMPickerData(title: btc.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (btc.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: btc.type))
-            values.append(BMPickerData(title: eth.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (eth.type == BMCurrencyType(selected)) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: eth.type))
-
-
-            
+            for asset in AssetsManager.shared().assets as! [BMAsset] {
+                values.append(BMPickerData(title: asset.unitName, detail: nil, titleColor: UIColor.white, arrowType: (Int(asset.assetId) == selected) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int(asset.assetId)))
+            }
+                        
         case .currency:
           //  values.append(BMPickerData(title: Localizable.shared.strings.off, detail: nil, titleColor: UIColor.white, arrowType: (BMCurrencyOff == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(3)))
             
