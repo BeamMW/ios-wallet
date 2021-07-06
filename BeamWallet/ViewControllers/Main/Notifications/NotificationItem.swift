@@ -49,7 +49,7 @@ class NotificationItem {
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         icon = UIImage.init(named: "iconNotifictionsFailedReceived")
-                        name = Localizable.shared.strings.buy_transaction_failed_title
+                        name = Localizable.shared.strings.failed
                         detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
                     }
                     else {
@@ -81,17 +81,17 @@ class NotificationItem {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         if transaction.isMaxPrivacy {
                             icon = UIImage.init(named: "iconNotifictionsFailedSentMaxPrivacy")
-                            name = Localizable.shared.strings.buy_transaction_failed_title
+                            name = Localizable.shared.strings.failed
                             detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: transaction.receiverAddress, failed: true)
                         }
                         else if transaction.isShielded || transaction.isPublicOffline {
                             icon = UIImage.init(named: "iconNotifictionsFailedSentOffline")
-                            name = Localizable.shared.strings.buy_transaction_failed_title
+                            name = Localizable.shared.strings.failed
                             detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: "shielded pool", failed: true)
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsFailed")
-                            name = Localizable.shared.strings.buy_transaction_failed_title
+                            name = Localizable.shared.strings.failed
                             detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: true)
                         }
                     }

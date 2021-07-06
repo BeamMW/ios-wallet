@@ -18,7 +18,6 @@
 //
 
 import UIKit
-import PopOverMenu
 
 class MaxPrivacyDetailViewController: BaseTableViewController {
     

@@ -85,17 +85,7 @@ extension SendAllCell: Configurable {
             allButton.alpha = 1
         }
         
-        if options.type == BMTransactionTypeSimple {
-            titleLabel.text = Localizable.shared.strings.available.uppercased()
-        }
-        else {
-            amountLabel.textColor = UIColor.white
-            titleLabel.text = Localizable.shared.strings.available_unlink.uppercased()
-            allButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
-            allButton.setImage(IconSendPink()?.maskWithColor(color: UIColor.main.brightTeal), for: .normal)
-        }
-        
+        titleLabel.text = Localizable.shared.strings.available.uppercased()
         titleLabel.letterSpacing = 1.5
-        
     }
 }

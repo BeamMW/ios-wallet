@@ -19,7 +19,6 @@
 
 import Foundation
 import MessageUI
-import SwipeTransition
 
 class BaseViewController: UIViewController {
     public var navigationBarOffset: CGFloat = Device.isXDevice ? 150 : 120

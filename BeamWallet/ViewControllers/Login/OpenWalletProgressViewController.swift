@@ -525,17 +525,6 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             }
             else if error.code == 1 {
                 strongSelf.openMainPage()
-
-//                if strongSelf.navigationController?.viewControllers.last is OpenWalletProgressViewController {
-//                    strongSelf.confirmAlert(title: Localizable.shared.strings.incompatible_node_title, message: Localizable.shared.strings.incompatible_node_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.change_settings, cancelHandler: { (_ ) in
-//
-//                        AppModel.sharedManager().resetWallet(false)
-//                        strongSelf.back()
-//                    }, confirmHandler: { (_ ) in
-//
-//                        strongSelf.openNodeController()
-//                    })
-//                }
             }
             else if error.code == 4 {
                 strongSelf.openMainPage()

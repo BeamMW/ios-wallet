@@ -94,7 +94,7 @@ class NotificationManager : NSObject {
                 
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        title = Localizable.shared.strings.buy_transaction_failed_title
+                        title = Localizable.shared.strings.failed
                         detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true).string
                     }
                     else if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
@@ -108,7 +108,7 @@ class NotificationManager : NSObject {
                 }
                 else {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        title = Localizable.shared.strings.buy_transaction_failed_title
+                        title = Localizable.shared.strings.failed
                         detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: transaction.receiverAddress, failed: true).string
                     }
                     else {

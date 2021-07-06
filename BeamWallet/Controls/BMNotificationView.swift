@@ -90,7 +90,7 @@ class BMNotificationView: UIView {
                 }
                 else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                     icon = UIImage.init(named: "iconNotifictionsFailedReceived")
-                    title = Localizable.shared.strings.buy_transaction_failed_title
+                    title = Localizable.shared.strings.failed
                     detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
                 }
                 else {
@@ -110,7 +110,7 @@ class BMNotificationView: UIView {
             else {
                 if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                     icon = UIImage.init(named: "iconNotifictionsFailed")
-                    title = Localizable.shared.strings.buy_transaction_failed_title
+                    title = Localizable.shared.strings.failed
                     detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: true)
                 }
                 else {
@@ -155,7 +155,7 @@ class BMNotificationView: UIView {
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         icon = UIImage.init(named: "iconNotifictionsFailedReceived")
-                        title = Localizable.shared.strings.buy_transaction_failed_title
+                        title = Localizable.shared.strings.failed
                         detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
                     }
                     else {
@@ -179,7 +179,7 @@ class BMNotificationView: UIView {
                 else {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
                         icon = UIImage.init(named: "iconNotifictionsFailed")
-                        title = Localizable.shared.strings.buy_transaction_failed_title
+                        title = Localizable.shared.strings.failed
                         detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: true)
                     }
                     else {

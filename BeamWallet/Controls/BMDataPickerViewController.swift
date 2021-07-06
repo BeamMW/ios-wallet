@@ -70,8 +70,6 @@ class BMDataPickerViewController: BaseTableViewController {
             title = Localizable.shared.strings.language
         case .lock:
             title = Localizable.shared.strings.lock_screen
-        case .log:
-            title = Localizable.shared.strings.save_wallet_logs
         case .address_expire:
             title = Localizable.shared.strings.exp_date
         case .clear:
@@ -223,7 +221,6 @@ class BMDataPickerViewController: BaseTableViewController {
         case .clear:
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 1, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_contacts, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 2, multiplie: true))
-           // values.append(BMPickerData(title: Localizable.shared.strings.delete_all_tags, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 4, multiplie: true))
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_transactions, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 3, multiplie: true))
         case .export_data:
             values.append(BMPickerData(title: Localizable.shared.strings.transaction_history, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: "transaction", multiplie: true))
