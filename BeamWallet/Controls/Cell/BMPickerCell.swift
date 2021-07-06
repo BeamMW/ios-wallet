@@ -48,10 +48,6 @@ class BMPickerCell: BaseCell {
         contentView.backgroundColor = UIColor.clear
         mainView.backgroundColor = UIColor.main.cellBackgroundColor
         
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
-        
         arrowView?.image = Tick()?.withRenderingMode(.alwaysTemplate)
         arrowView?.tintColor = UIColor.main.brightTeal
 
@@ -62,13 +58,6 @@ class BMPickerCell: BaseCell {
         detailLabel.textColor = UIColor.main.blueyGrey
     }
     
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        if !customBackgroundColor {
-            mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
-        }
-    }
     
     func configure(data:BMPickerData) {
         titleLabel.text = data.title

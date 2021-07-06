@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NotificationTableViewCell: UITableViewCell {
+class NotificationTableViewCell: RippleCell {
 
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var bottomOffset: NSLayoutConstraint!
@@ -25,15 +25,6 @@ class NotificationTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         dateLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
-    }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : mainViewColor
     }
 }
 

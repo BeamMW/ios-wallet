@@ -52,7 +52,8 @@ class BMCopyCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
+        allowHighlighted = false
+
         selectionStyle = .none
     }
     

@@ -52,11 +52,7 @@ class SettingsCell: BaseCell {
         backgroundColor = UIColor.clear
         contentView.backgroundColor = UIColor.clear
         mainView.backgroundColor = UIColor.main.cellBackgroundColor
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        selectedBackgroundView = selectedView
-        
+                
         detailLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey
     }
     
@@ -69,17 +65,10 @@ class SettingsCell: BaseCell {
         
         switchView.layer.cornerRadius = switchView.frame.height / 2
     }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
-    }
 }
 
 extension SettingsCell: Configurable {
     func configure(with item: SettingsViewModel.SettingsItem) {
-        selectionStyle = .default
 
         titleLabel.textColor = UIColor.white
         

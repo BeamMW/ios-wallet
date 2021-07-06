@@ -30,6 +30,7 @@ class BMEmptyCell: BaseCell {
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
 
+        allowHighlighted = false
         selectionStyle = .none
 
         isUserInteractionEnabled = false

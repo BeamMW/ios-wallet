@@ -1,8 +1,7 @@
 //
-//  BaseCell.swift
-//  BeamWallet
+// BMRippleCell.swift
+// BeamWallet
 //
-// 3/1/19.
 // Copyright 2018 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,18 +18,29 @@
 //
 
 import Foundation
+import UIKit
 
-class BaseCell: RippleCell {
+
+class RippleCell: UITableViewCell {
+    
+    var allowHighlighted = true
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.backgroundColor = UIColor.clear
-        self.contentView.backgroundColor = UIColor.main.marine
+        selectionStyle = .none
     }
     
-    
-    public func changeBacgkroundView() {
-        backgroundColor = UIColor.main.marineThree
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if allowHighlighted {
+            if !highlighted {
+                self.contentView.alpha = 1
+            }
+            else {
+                self.contentView.alpha = 0.1
+            }
+        }
     }
 }

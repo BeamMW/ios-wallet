@@ -52,6 +52,8 @@ class BMMultiLinesCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        allowHighlighted = false
+
         valueLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(titleLabelTapGestureAction(_:))))
 
         selectionStyle = .none

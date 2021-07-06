@@ -19,7 +19,7 @@
 
 import UIKit
 
-class WalletTransactionSearchCell: UITableViewCell {
+class WalletTransactionSearchCell: RippleCell {
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var statusLabel: UILabel!
@@ -35,10 +35,6 @@ class WalletTransactionSearchCell: UITableViewCell {
         
         secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         secondAvailableLabel.font = RegularFont(size: 14)
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
     }
     
     public func setSearch(searchString:String, transaction:BMTransaction) {

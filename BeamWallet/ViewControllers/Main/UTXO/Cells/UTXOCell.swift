@@ -19,7 +19,7 @@
 
 import UIKit
 
-class UTXOCell: UITableViewCell {
+class UTXOCell: RippleCell {
     
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var amountLabel: UILabel!

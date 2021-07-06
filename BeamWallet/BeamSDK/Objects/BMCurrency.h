@@ -26,7 +26,7 @@ enum {
 };
 typedef int BMCurrencyType;
 
-@interface BMCurrency : NSObject
+@interface BMCurrency : NSObject <NSSecureCoding> 
 
 @property (nonatomic,assign) UInt64 value;
 @property (nonatomic,assign) double realValue;

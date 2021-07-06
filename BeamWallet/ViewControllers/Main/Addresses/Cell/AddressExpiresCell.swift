@@ -33,10 +33,6 @@ class AddressExpiresCell: BaseCell {
         selectionStyle = .default
         
         backgroundColor = UIColor.clear
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
     }
 }
 

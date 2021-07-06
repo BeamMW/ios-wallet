@@ -19,7 +19,7 @@
 
 import UIKit
 
-class WalletTransactionCell: UITableViewCell {
+class WalletTransactionCell: RippleCell {
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var statusLabel: UILabel!
@@ -35,10 +35,8 @@ class WalletTransactionCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-                        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
+        
+        selectionStyle = .none
     }
 }
 

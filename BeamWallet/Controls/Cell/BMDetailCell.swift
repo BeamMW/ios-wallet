@@ -38,12 +38,6 @@ class BMDetailCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
        
-        selectionStyle = .default
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = contentView.backgroundColor
-        selectedBackgroundView = selectedView
-        
         contentView.backgroundColor = UIColor.main.marineThree
 
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)

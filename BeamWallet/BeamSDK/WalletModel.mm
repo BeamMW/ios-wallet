@@ -1104,6 +1104,8 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
         [[[ExchangeManager sharedManager] currencies] removeAllObjects];
     }
         
+    [[ExchangeManager sharedManager] changeCurrencies];
+    
     NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
     for(id<WalletModelDelegate> delegate in delegates)
     {

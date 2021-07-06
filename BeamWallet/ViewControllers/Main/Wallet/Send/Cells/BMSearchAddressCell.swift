@@ -66,7 +66,8 @@ class BMSearchAddressCell: BaseCell {
         super.awakeFromNib()
         
         selectionStyle = .none
-        
+        allowHighlighted = false
+
         nameLabel.isUserInteractionEnabled = true
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         

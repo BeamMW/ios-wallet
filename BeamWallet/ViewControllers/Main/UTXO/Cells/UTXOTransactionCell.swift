@@ -28,18 +28,6 @@ class UTXOTransactionCell: BaseCell {
     @IBOutlet weak private var commentLabel: UILabel!
     @IBOutlet weak private var commentView: UIStackView!
     @IBOutlet weak private var mainView: UIView!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
 }
 
 extension UTXOTransactionCell: Configurable {

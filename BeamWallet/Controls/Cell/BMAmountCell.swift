@@ -109,6 +109,7 @@ class BMAmountCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        allowHighlighted = false
         selectionStyle = .none
         
         secondCurrencyLabel.textColor = UIColor.main.blueyGrey

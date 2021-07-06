@@ -268,7 +268,7 @@ extension AssetDetailViewController: UITableViewDataSource {
         case 1:
             let cell = tableView.dequeueReusableCell(withType: AssetAvailableCell.self, for: indexPath)
             cell.setAsset(asset)
-            cell.selectionStyle = .none
+            cell.isUserInteractionEnabled = false
             return cell
         case 2:
             if transactionViewModel.transactions.count == 0 {

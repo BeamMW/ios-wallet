@@ -20,6 +20,7 @@
 import UIKit
 
 class MaxPrivacyDetailCell: BaseCell {
+    
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var amountLabel: UILabel!
     @IBOutlet weak private var timeLabel: UILabel!
@@ -27,16 +28,10 @@ class MaxPrivacyDetailCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
       
+        allowHighlighted = false
+
         selectionStyle = .none
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-
 }
 
 

@@ -38,5 +38,7 @@
 
 -(BOOL)isCurrenciesAvailable;
 
+-(void)changeCurrencies;
+
 @end
 

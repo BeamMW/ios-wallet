@@ -19,7 +19,7 @@
 
 import UIKit
 
-class AssetAvailableCell: UITableViewCell {
+class AssetAvailableCell: RippleCell {
 
     @IBOutlet weak private var mainView: BMGradientView!
     @IBOutlet weak private var balanceLabel: UILabel!
@@ -31,15 +31,7 @@ class AssetAvailableCell: UITableViewCell {
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var botOffset: NSLayoutConstraint!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-  
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
-    }
-
-
+    
     public func setAsset(_ asset:BMAsset) {
         iconView.setAsset(asset)
         

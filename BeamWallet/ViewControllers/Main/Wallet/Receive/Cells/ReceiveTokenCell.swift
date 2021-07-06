@@ -27,7 +27,8 @@ class ReceiveTokenCell: BaseCell {
         super.awakeFromNib()
         
         selectionStyle = .none
-      
+        allowHighlighted = false
+
         detailButton.setTitle(Localizable.shared.strings.address_details.lowercased(), for: .normal)
         
         nameLabel.text = Localizable.shared.strings.address.uppercased()

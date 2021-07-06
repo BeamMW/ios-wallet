@@ -21,6 +21,8 @@ class SendSaveAddressCell: BaseCell, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        allowHighlighted = false
+
         nameLabel.text = Localizable.shared.strings.send_to.uppercased()
         nameLabel.letterSpacing = 1.5
         

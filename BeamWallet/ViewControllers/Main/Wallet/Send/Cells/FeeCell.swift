@@ -39,6 +39,8 @@ class FeeCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        allowHighlighted = false
+
         maxSecondLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         maxSecondLabel.font = RegularFont(size: 14)
         

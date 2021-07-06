@@ -21,6 +21,8 @@
 #import "Settings.h"
 #include "wallet/core/wallet.h"
 
+static NSString *currenciesKey = @"currenciesKey";
+
 @implementation ExchangeManager
 
 + (ExchangeManager*_Nonnull)sharedManager {
@@ -35,7 +37,17 @@
 -(id)init{
     self = [super init];
     
-    _currencies = [[NSMutableArray alloc] init];
+    NSData *dataNotifications = [[NSUserDefaults standardUserDefaults] objectForKey:currenciesKey];
+    if(dataNotifications != nil) {
+        NSError *error;
+        NSSet *classes = [NSSet setWithObjects:[NSArray class], [BMCurrency class], nil];
+        _currencies = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:dataNotifications error:&error];
+        NSLog(@"%@",error);
+    }
+    
+    if (_currencies == nil) {
+        _currencies = [[NSMutableArray alloc] init];
+    }
     
     currencyFormatter = [[NSNumberFormatter alloc] init];
     currencyFormatter.currencyCode = @"";
@@ -212,6 +224,16 @@
 
 -(BOOL)isCurrenciesAvailable {
     return _currencies.count > 0;
+}
+
+-(void)changeCurrencies {
+    NSMutableArray *tr = [NSMutableArray arrayWithArray:self->_currencies];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *error = nil;
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tr requiringSecureCoding:YES error:&error];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:currenciesKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    });
 }
 
 @end

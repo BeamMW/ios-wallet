@@ -203,7 +203,7 @@ extension SendConfirmViewController: WalletModelDelegate {
                 let asset = (AssetsManager.shared().getAsset(Int32(self.viewModel.selectedAssetId)))
                 let assetName = (asset?.unitName ?? "")
                 
-                let totalString = self.viewModel.selectedAssetId == 0 ? String.currency(value: (amount), name: assetName) : String.currency(value: (0.0), name: assetName).replacingOccurrences(of: assetName, with: "")
+                let totalString = (self.viewModel.selectedAssetId == 0 ? String.currency(value: (amount), name: assetName) : String.currency(value: (0.0), name: assetName)).replacingOccurrences(of: assetName, with: "").replacingOccurrences(of: " ", with: "")
                 
                 let totalDetail = self.viewModel.amountString(amount: totalString, isFee: false, assetId: viewModel.selectedAssetId, color: UIColor.white, doubleAmount: amount)
                 

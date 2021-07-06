@@ -41,6 +41,8 @@ class SendAllCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        allowHighlighted = false
+
         secondAvailableLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         secondAvailableLabel.font = RegularFont(size: 14)
         

@@ -15,15 +15,11 @@ def shared_pods
     use_frameworks!
     inhibit_all_warnings!
 
-   # pod 'Crashlytics'
     pod 'SVProgressHUD'
     pod 'SSZipArchive'
-   # pod 'Parchment'
-    pod 'SwipeTransition'
     pod 'CrashEye'
     pod 'Firebase/Crashlytics'    
     pod 'Firebase/Analytics'
-    pod 'PopOverMenu'
 end
 
 #def extension

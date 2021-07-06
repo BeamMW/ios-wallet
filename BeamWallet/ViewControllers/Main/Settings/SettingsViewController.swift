@@ -114,7 +114,14 @@ extension SettingsViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        viewModel.didSelectItem(item: viewModel.getItem(indexPath: indexPath))
+        let item = viewModel.getItem(indexPath: indexPath)
+        if let isSwitch = item.isSwitch, let cell = tableView.cellForRow(at: indexPath) as? SettingsCell {
+            onClickSwitch(value: !isSwitch, cell: cell)
+            tableView.reloadData()
+        }
+        else {
+            viewModel.didSelectItem(item: viewModel.getItem(indexPath: indexPath))
+        }
     }
 }
 

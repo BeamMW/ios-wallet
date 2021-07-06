@@ -20,11 +20,19 @@
 
 @implementation BMCurrency
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
     [encoder encodeObject:[NSNumber numberWithDouble:self.realValue] forKey: @"realValue"];
-    [encoder encodeObject:[NSNumber numberWithInteger:self.value] forKey: @"value"];
+    [encoder encodeObject:[NSNumber numberWithLongLong:self.value] forKey: @"value"];
     [encoder encodeObject:[NSNumber numberWithInteger:self.type] forKey: @"type"];
+    [encoder encodeObject:[NSNumber numberWithInteger:self.maximumFractionDigits] forKey: @"maximumFractionDigits"];
+    [encoder encodeObject:self.code forKey: @"code"];
+    [encoder encodeObject:self.name forKey: @"name"];
+    [encoder encodeObject:[NSNumber numberWithInteger:self.assetId] forKey: @"assetId"];
 }
 
 -(id)initWithCoder:(NSCoder *)decoder
@@ -33,8 +41,12 @@
     if(self)
     {
         self.realValue = [[decoder decodeObjectForKey:@"realValue"] doubleValue];
-        self.value = [[decoder decodeObjectForKey:@"realAmount"] integerValue];
+        self.value = [[decoder decodeObjectForKey:@"value"] longLongValue];
         self.type = [[decoder decodeObjectForKey:@"type"] intValue];
+        self.maximumFractionDigits = [[decoder decodeObjectForKey:@"maximumFractionDigits"] intValue];
+        self.code = [decoder decodeObjectForKey:@"code"];
+        self.name = [decoder decodeObjectForKey:@"name"];
+        self.assetId = [[decoder decodeObjectForKey:@"assetId"] intValue];
     }
     return self;
 }

@@ -491,7 +491,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public func amountString(amount: String, isFee:Bool, assetId:Int, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {
         let assetName = (AssetsManager.shared().getAsset(Int32(assetId))?.unitName ?? "") + " "
         
-        let amountString =  isFee ? ((amount + Localizable.shared.strings.beam + "\n")) : ((amount + assetName + "\n"))
+        let amountString =  isFee ? ((amount + Localizable.shared.strings.beam + "\n")) : ((amount + " " + assetName + "\n"))
         var secondString = isFee ? ExchangeManager.shared().exchangeValueFee(Double(amount) ?? 0) :
             ExchangeManager.shared().exchangeValueAsset(Double(amount) ?? 0, assetID: UInt64(self.selectedAssetId))
         if doubleAmount > 0.0 {

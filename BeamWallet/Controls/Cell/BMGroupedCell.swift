@@ -42,16 +42,6 @@ class BMGroupedCell: BaseCell {
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
         mainView.backgroundColor = UIColor.main.cellBackgroundColor
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.main.selectedColor
-        self.selectedBackgroundView = selectedView
-    }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        mainView.backgroundColor = highlighted ? UIColor.main.selectedColor : UIColor.main.cellBackgroundColor
     }
 }
 

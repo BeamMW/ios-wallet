@@ -32,6 +32,8 @@ class BMThreeLineCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        allowHighlighted = false
+
         mainView.backgroundColor = UIColor.main.cellBackgroundColor
         
         selectionStyle = .none

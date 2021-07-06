@@ -36,7 +36,8 @@ class TransactionPaymentProofCell: BaseCell {
         super.awakeFromNib()
         
         selectionStyle = .none
-        
+        allowHighlighted = false
+
         titleLabel.text = Localizable.shared.strings.payment_proof.uppercased()
         titleLabel.letterSpacing = 1.5
         
