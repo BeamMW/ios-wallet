@@ -1958,7 +1958,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
     
-    wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, 0, assetId, isShielded);
+    wallet->getAsync()->selectCoins(bAmount, bFee, beam::Asset::ID(assetId), isShielded);
+   // wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, 0, assetId, isShielded);
 }
 
 

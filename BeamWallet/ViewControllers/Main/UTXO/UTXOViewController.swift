@@ -27,7 +27,6 @@ class UTXOViewController: BaseTableViewController {
     private var titles = [Localizable.shared.strings.available, Localizable.shared.strings.in_progress, Localizable.shared.strings.spent, Localizable.shared.strings.unavailable]
     
     private let emptyView: BMEmptyView = UIView.fromNib()
-    private let blockView: UTXOBlockView = UIView.fromNib()
     private let hideUTXOView: BMEmptyView = UIView.fromNib()
 
     private var _selectedIndex = 0
@@ -39,7 +38,6 @@ class UTXOViewController: BaseTableViewController {
            _selectedIndex = newValue
         }
     }
-    
   
     
     override func viewDidLoad() {
@@ -52,9 +50,7 @@ class UTXOViewController: BaseTableViewController {
         
         emptyView.text = Localizable.shared.strings.utxo_empty
         emptyView.image = IconUtxoEmpty()
-        
-        blockView.configure(with: AppModel.sharedManager().walletStatus)
-        
+                
         let pagingView = pagingViewController.view as! PagingView
         pagingView.options.menuItemSpacing = 20
 
@@ -74,9 +70,7 @@ class UTXOViewController: BaseTableViewController {
         view.addSubview(hideUTXOView)
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
-        
-        view.insertSubview(blockView, belowSubview: pagingViewController.view)
-        
+                
         title = Localizable.shared.strings.utxo
 
         rightButton()
@@ -103,12 +97,10 @@ class UTXOViewController: BaseTableViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        blockView.frame = CGRect(x: 15, y: tableView.y + 15, width: UIScreen.main.bounds.width - 30, height: 82)
-        
-        var frame = tableView.frame
-        frame.origin.y = frame.origin.y + 130
-        frame.size.height = frame.size.height - 130
+                
+        let frame = tableView.frame
+      //  frame.origin.y = frame.origin.y + 130
+       // frame.size.height = frame.size.height - 130
         
         pagingViewController.view.frame = frame
         emptyView.frame = frame
@@ -143,7 +135,7 @@ class UTXOViewController: BaseTableViewController {
     }
     
     private func menuOffset(for scrollView: UIScrollView) -> CGFloat {
-        return min(pagingViewController.options.menuHeight + blockView.h + blockView.y, max(0, scrollView.contentOffset.y))
+        return min(pagingViewController.options.menuHeight, max(0, scrollView.contentOffset.y))
     }
 }
 
@@ -200,9 +192,7 @@ extension UTXOViewController : SettingsModelDelegate {
 extension UTXOViewController : WalletModelDelegate {
     
     func onWalletStatusChange(_ status: BMWalletStatus) {
-        DispatchQueue.main.async {
-            self.blockView.configure(with: AppModel.sharedManager().walletStatus)
-        }
+
     }
     
     func onReceivedUTXOs(_ utxos: [BMUTXO]) {

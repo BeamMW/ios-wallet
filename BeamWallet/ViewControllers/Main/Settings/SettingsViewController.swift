@@ -137,10 +137,19 @@ extension SettingsViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        let item = viewModel.getItem(indexPath: indexPath)
+        
         let cell = tableView
             .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
-        cell.configure(with: viewModel.getItem(indexPath: indexPath))
+        cell.configure(with: item)
         cell.delegate = self
+        
+        if item.type == .blockchain {
+            cell.isUserInteractionEnabled = false
+        }
+        else {
+            cell.isUserInteractionEnabled = true
+        }
         
         return cell
     }

@@ -232,6 +232,7 @@ class LocalizableStrings : NSObject {
     var requested_amount = "requested_amount".localized
     var now = "now".localized
     var blockchain_height = "blockchain_height".localized
+    var show_utxo = "show_utxo".localized    
     var available = "available".localized
     var key_code = "key_code".localized
     var or = "or".localized

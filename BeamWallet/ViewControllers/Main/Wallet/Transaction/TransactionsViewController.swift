@@ -34,8 +34,6 @@ class TransactionsViewController: BaseTableViewController {
     private var searchView:BMSearchView!
     private var controllers: [Int : TransactionsTableView] = [:]
 
-  
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         

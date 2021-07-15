@@ -63,6 +63,8 @@ class SettingsViewModel: NSObject {
         case max_privacy_limit = 32
         case rescan = 33
         case mobile_node = 34
+        case utxo = 35
+        case blockchain = 36
     }
     
     class SettingsItem {
@@ -199,6 +201,10 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+            
+            section_0.append(SettingsItem(title: Localizable.shared.strings.show_utxo, detail: nil, isSwitch: nil, type: .utxo, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
+            
             items.append(section_0)
         default:
             break
@@ -289,7 +295,8 @@ class SettingsViewModel: NSObject {
             onLockLimit()
         case .rescan:
             onRescan()
-            break
+        case .utxo:
+            onShowUTXO()
         default:
             return
         }
@@ -311,6 +318,14 @@ extension SettingsViewModel: WalletModelDelegate {
 }
 
 extension SettingsViewModel {
+    
+    func onShowUTXO() {
+        if let top = UIApplication.getTopMostViewController() {
+            let vc = UTXOViewController()
+            top.pushViewController(vc: vc)
+        }
+    }
+    
     func showOwnerKey() {
         if let top = UIApplication.getTopMostViewController() {
             var text: String = ""

@@ -74,7 +74,6 @@ private:
     void onImportRecoveryProgress(uint64_t done, uint64_t total) override;
     void onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) override;
     void onChangeCalculated(beam::Amount changeAsset, beam::Amount changeBeam, beam::Asset::ID assetId) override;
-    void onCoinsSelectionCalculated(const beam::wallet::CoinsSelectionInfo&) override;
     void onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&) override;
     void onNotificationsChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::Notification>&) override;
     void onImportDataFromJson(bool isOk) override;
@@ -83,6 +82,6 @@ private:
     void onExportTxHistoryToCsv(const std::string& data) override;
     void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
     void onPublicAddress(const std::string& publicAddr) override;
-    
     void onAssetInfo(beam::Asset::ID assetId, const beam::wallet::WalletAsset&) override;
+    void onCoinsSeleced(const beam::wallet::CoinsSelectionInfo&) override;
 };

@@ -44,6 +44,8 @@ class UTXODetailViewController: BaseTableViewController {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
     
+    private let showTransactions = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -122,7 +124,7 @@ extension UTXODetailViewController : UITableViewDelegate {
 extension UTXODetailViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return (viewModel.history.count > 0) ? 3 : 2
+        return (viewModel.history.count > 0 && showTransactions) ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -186,12 +186,6 @@
 		9212DBAD22E0A1730053FC99 /* UTXOTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */; };
 		9212DBAE22E0A1730053FC99 /* UTXOTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */; };
 		9212DBAF22E0A1730053FC99 /* UTXOTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */; };
-		9212DBB922E0B25D0053FC99 /* UTXOBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */; };
-		9212DBBA22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */; };
-		9212DBBB22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */; };
-		9212DBBD22E0B2740053FC99 /* UTXOBlockView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */; };
-		9212DBBE22E0B2740053FC99 /* UTXOBlockView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */; };
-		9212DBBF22E0B2740053FC99 /* UTXOBlockView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */; };
 		92194FCE236C498F005A1315 /* BMPickerCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92194FCD236C498F005A1315 /* BMPickerCell2.xib */; };
 		92194FCF236C498F005A1315 /* BMPickerCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92194FCD236C498F005A1315 /* BMPickerCell2.xib */; };
 		92194FD0236C498F005A1315 /* BMPickerCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92194FCD236C498F005A1315 /* BMPickerCell2.xib */; };
@@ -1380,8 +1374,6 @@
 		9212DB9822E0990D0053FC99 /* BMEmptyView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BMEmptyView.xib; path = BeamWallet/Controls/BMEmptyView.xib; sourceTree = SOURCE_ROOT; };
 		9212DBA822E09E080053FC99 /* BMPagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPagingViewController.swift; sourceTree = "<group>"; };
 		9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOTableView.swift; sourceTree = "<group>"; };
-		9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOBlockView.swift; sourceTree = "<group>"; };
-		9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UTXOBlockView.xib; sourceTree = "<group>"; };
 		9217D30E2652AB64006DD6F1 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		9217D3102652AB64006DD6F1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		92194FCD236C498F005A1315 /* BMPickerCell2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMPickerCell2.xib; sourceTree = "<group>"; };
@@ -2814,8 +2806,6 @@
 				92F68C7D2244E77500197D4D /* UTXODetailCell.xib */,
 				92F68C8B2245070200197D4D /* UTXOTransactionCell.swift */,
 				92F68C8C2245070200197D4D /* UTXOTransactionCell.xib */,
-				9212DBB822E0B25D0053FC99 /* UTXOBlockView.swift */,
-				9212DBBC22E0B2740053FC99 /* UTXOBlockView.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3128,7 +3118,6 @@
 				92790DA6224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */,
 				92FE263B22A11E4E00102DB4 /* BMPickedAddressCell.xib in Resources */,
 				92C00D2E22A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */,
-				9212DBBD22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
 				92E4AECA23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92B39D6E2260CB97006D27A5 /* phrases.txt in Resources */,
 				925AD5E62228254F00DDE66B /* LaunchScreen.storyboard in Resources */,
@@ -3279,7 +3268,6 @@
 				922B63802552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				9261C269228BF55800D666E0 /* BMPickerCell.xib in Resources */,
 				9288DD8A223A55410020C501 /* QRViewController.xib in Resources */,
-				9212DBBE22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
 				92F78BC024D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
 				9261C281228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
 				9288DD8C223A55410020C501 /* WalletStatusCell.xib in Resources */,
@@ -3350,7 +3338,6 @@
 				9280D04A2458631000735C52 /* BMPickerCell3.xib in Resources */,
 				923EAA15262EDBDB0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
 				9225D53922941F940067B4EA /* SFProText-Medium.ttf in Resources */,
-				9212DBBF22E0B2740053FC99 /* UTXOBlockView.xib in Resources */,
 				927D2F8822CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
 				9225D55D229455CA0067B4EA /* ReceiveAddressButtonsCell.xib in Resources */,
 				92E2EB55226F21C700367928 /* SettingsCell.xib in Resources */,
@@ -3655,7 +3642,6 @@
 				921FA630227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
 				92790DAA224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78222A5278A0055C3C3 /* SendViewController.swift in Sources */,
-				9212DBB922E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
 				921027D624606E42001A7130 /* PagingMenuItemSize.swift in Sources */,
 				92F6B79222A558530055C3C3 /* FeeCell.swift in Sources */,
 				9243525A222E73FC00A0EF37 /* UTXOViewController.swift in Sources */,
@@ -3948,7 +3934,6 @@
 				921FA631227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
 				92790DAB224E6FDE00F79D64 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78322A5278A0055C3C3 /* SendViewController.swift in Sources */,
-				9212DBBA22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
 				921027D724606E42001A7130 /* PagingMenuItemSize.swift in Sources */,
 				92F6B79322A558530055C3C3 /* FeeCell.swift in Sources */,
 				9288DD3D223A55410020C501 /* UTXOViewController.swift in Sources */,
@@ -4241,7 +4226,6 @@
 				921FA632227C3BB6008E80A3 /* CurrencyFormatter.m in Sources */,
 				92E2EAE7226F21C700367928 /* PaymentProofDetailViewController.swift in Sources */,
 				92F6B78422A5278A0055C3C3 /* SendViewController.swift in Sources */,
-				9212DBBB22E0B25D0053FC99 /* UTXOBlockView.swift in Sources */,
 				921027D824606E42001A7130 /* PagingMenuItemSize.swift in Sources */,
 				92F6B79422A558530055C3C3 /* FeeCell.swift in Sources */,
 				92E2EAE8226F21C700367928 /* UTXOViewController.swift in Sources */,
@@ -4992,7 +4976,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -5072,7 +5056,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

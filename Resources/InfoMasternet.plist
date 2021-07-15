@@ -30,6 +30,8 @@
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>Dat file</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>com.giena.Interface.document.dat</string>

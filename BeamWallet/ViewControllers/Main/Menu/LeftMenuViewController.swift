@@ -39,7 +39,7 @@ class LeftMenuViewController: BaseTableViewController {
     private var buyButton:UIButton!
     private var logoView:UIImageView!
 
-    private var items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.notifications, icon: IconNotifications(), selected: false, type: NotificationsViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
+    private var items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.notifications, icon: IconNotifications(), selected: false, type: NotificationsViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: false, type: SettingsViewController.self)]
     //MenuItem(name: Localizable.shared.strings.logout, icon: IconLogout(), selected: false, type: AnyClass.self)
     
     override func viewDidLoad() {
@@ -158,12 +158,8 @@ class LeftMenuViewController: BaseTableViewController {
                 items[1].selected = true
                 self.tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .top)
             }
-            else if navigationController.viewControllers.first is UTXOViewController{
-                items[3].selected = true
-                self.tableView.selectRow(at: IndexPath(row: 2, section: 0), animated: false, scrollPosition: .top)
-            }
             else if navigationController.viewControllers.first is SettingsViewController{
-                items[4].selected = true
+                items[3].selected = true
                 self.tableView.selectRow(at: IndexPath(row: 3, section: 0), animated: false, scrollPosition: .top)
             }
         }
@@ -262,8 +258,6 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
                 navigationController.setViewControllers([WalletViewController()], animated: false)
             case Localizable.shared.strings.notifications :
                 navigationController.setViewControllers([NotificationsViewController()], animated: false)
-            case Localizable.shared.strings.utxo :
-                navigationController.setViewControllers([UTXOViewController()], animated: false)
             case Localizable.shared.strings.addresses :
                 navigationController.setViewControllers([AddressesViewController()], animated: false)
             case Localizable.shared.strings.settings :
@@ -309,7 +303,7 @@ extension LeftMenuViewController : SettingsModelDelegate {
     func onChangeLanguage() {
         addFooterView()
         
-        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: false, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.notifications, icon: IconNotifications(), selected: false, type: NotificationsViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: true, type: SettingsViewController.self)]
+        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: false, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.notifications, icon: IconNotifications(), selected: false, type: NotificationsViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: true, type: SettingsViewController.self)]
         
         tableView.reloadData()
     }
@@ -318,7 +312,7 @@ extension LeftMenuViewController : SettingsModelDelegate {
         addBackgroundView()
         addFooterView()
 
-        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: false, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.notifications, icon: IconNotifications(), selected: false, type: NotificationsViewController.self), MenuItem(name: Localizable.shared.strings.utxo, icon: IconUtxo(), selected: false, type: UTXOViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: true, type: SettingsViewController.self)]
+        items = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: false, type: WalletViewController.self), MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self), MenuItem(name: Localizable.shared.strings.notifications, icon: IconNotifications(), selected: false, type: NotificationsViewController.self), MenuItem(name: Localizable.shared.strings.settings, icon: IconSettings(), selected: true, type: SettingsViewController.self)]
 
         
         tableView.reloadData()
