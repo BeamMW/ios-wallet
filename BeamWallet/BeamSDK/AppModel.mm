@@ -61,6 +61,13 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
+#include "wallet/api/i_wallet_api.h"
+#include "webapi_shaders.h"
+#include "webapi_beam.h"
+#include "webapi_creator.h"
+
+#include "wallet/transactions/swaps/swap_tx_description.h"
+
 using namespace beam;
 using namespace ECC;
 using namespace beam;
@@ -136,6 +143,8 @@ struct GetMaxPrivacyLockFunc
     beam::wallet::TxParameters _txParameters;
     
     ECC::NoLeak<ECC::uintBig> passwordHash;
+
+    std::unique_ptr<beamui::applications::WebAPICreator> webApi;
     
     NSString *pathLog;
     ByteBuffer lastVouchers;
@@ -3048,6 +3057,13 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [[Settings sharedManager] setIsNodeProtocolEnabled:value];
 }
 
+
+#pragma mark - API
+
+-(void)generateAPI:(NSString*_Nonnull)appId appName:(NSString*_Nonnull)appName appUrl:(NSString*_Nonnull)appUrl verWant:(NSString*_Nonnull)verWant verMin:(NSString*_Nonnull)verMin {
+    
+    webApi = std::make_unique<beamui::applications::WebAPICreator>(walletDb, wallet->getWallet(), wallet);
+}
 
 @end
 
