@@ -83,5 +83,5 @@ private:
     void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
     void onPublicAddress(const std::string& publicAddr) override;
     void onAssetInfo(beam::Asset::ID assetId, const beam::wallet::WalletAsset&) override;
-    void onCoinsSeleced(const beam::wallet::CoinsSelectionInfo&) override;
+    void onCoinsSelected(const beam::wallet::CoinsSelectionInfo&) override;
 };

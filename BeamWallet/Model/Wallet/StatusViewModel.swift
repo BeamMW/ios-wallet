@@ -49,6 +49,7 @@ class StatusViewModel: NSObject {
     
     public func onReceive() {
         let vc = ReceiveViewController()
+        vc.assetId = self.assetId
         UIApplication.getTopMostViewController()?.pushViewController(vc: vc)
     }
     

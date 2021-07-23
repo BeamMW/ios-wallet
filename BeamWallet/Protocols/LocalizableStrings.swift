@@ -163,7 +163,6 @@ class LocalizableStrings : NSObject {
     var qr_code = "qr_code".localized
     var edit = "edit".localized
     var delete = "delete".localized
-    var beams_send = "beams_send".localized
     var undo = "undo".localized
     var cancelled = "cancelled".localized
     var delete_transaction_title = "delete_transaction_title".localized
@@ -568,6 +567,9 @@ class LocalizableStrings : NSObject {
         return "addresses_expired_notif".localized.replacingOccurrences(of: "(count)", with: String(count))
     }
     
+    public func assets_sent(name:String) -> String {
+        return String.init(format: "assets_sent".localized, name)
+    }
 
     public func minAmount(str:String) -> String {
         return "min_amount".localized + " " + str

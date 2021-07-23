@@ -81,7 +81,7 @@ class Device {
                 return .iPhones_Plus
             case 2436:
                 return .iPhones_X_XS
-            case 2688:
+            case 2688, 2778:
                 return .iPhone_XSMax
             default:
                 return .unknown

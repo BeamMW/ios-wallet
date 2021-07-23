@@ -578,16 +578,33 @@ extension SendViewController: BMCellProtocol {
                     tableView.reloadData()
                 }
                 else {
-                    let vc = BMDataPickerViewController(type: .sendCurrency)
-                    vc.selectedValue = viewModel.selectedAssetId
-                    vc.isAutoSelect = false
-                    vc.completion = { [weak self] obj in
-                        self?.viewModel.selectedAssetId = obj as! Int
-                        self?.viewModel.sendAll = false
-                        self?.viewModel.checkAmountError()
-                        self?.tableView.reloadData()
+                    if tableView.indexPath(for: sender) != nil, let cell = sender as? BMAmountCell {
+                        var menu = [BMPopoverMenu.BMPopoverMenuItem]()
+                        
+                        for asset in AssetsManager.shared().assets as! [BMAsset] {
+                            menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset))
+                        }
+                        
+                        BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
+                            let itemName = item?.name ?? ""
+                            let asset = AssetsManager.shared().getAssetByName(itemName)
+                            let selected = asset?.assetId ?? 0
+                       
+                            let old = self.viewModel.selectedAssetId
+                            self.viewModel.selectedAssetId = Int(selected)
+                            
+                            if selected != old && self.viewModel.sendAll == true  {
+                                self.viewModel.sendAll = false
+                                self.viewModel.amount = ""
+                            }
+                            
+                            self.viewModel.checkAmountError()
+                            self.tableView.reloadData()
+                            
+                        } cancel: {
+                            self.tableView.reloadData()
+                        }
                     }
-                    pushViewController(vc: vc)
                 }
             }
             else if path.section == 0 {

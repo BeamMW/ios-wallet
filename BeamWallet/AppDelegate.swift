@@ -296,7 +296,7 @@ extension AppDelegate {
 extension AppDelegate: WalletModelDelegate {
     func onAddedDelete(_ transaction: BMTransaction) {
         DispatchQueue.main.async {
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: .delete_transaction, id: transaction.id), done: { data in
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .delete_transaction, id: transaction.id, title: ""), done: { data in
                 if let result = data, result.type == .delete_transaction {
                     AppModel.sharedManager().cancelDeleteTransaction(result.id)
                 }
@@ -312,7 +312,7 @@ extension AppDelegate: WalletModelDelegate {
         DispatchQueue.main.async {
             let isContact = address.isContact
             
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: isContact ? .contact : .address, id: address.walletId), done: { data in
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: isContact ? .contact : .address, id: address.walletId, title: ""), done: { data in
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().cancelDeleteAddress(result.id)
                 }
@@ -326,7 +326,9 @@ extension AppDelegate: WalletModelDelegate {
     
     func onAddedPrepare(_ transaction: BMPreparedTransaction) {
         DispatchQueue.main.async {
-            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id), done: { data in
+            let name = AssetsManager.shared().getAsset(transaction.assetId)?.unitName ?? ""
+            let localized = Localizable.shared.strings.assets_sent(name: name)
+            BMSnackBar.show(data: BMSnackBar.SnackData(type: .transaction, id: transaction.id, title: localized), done: { data in
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().cancelPreparedTransaction(result.id)
                 }

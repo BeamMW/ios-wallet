@@ -241,6 +241,12 @@ class SelectNodeViewController: BaseTableViewController {
                         let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
                         self.pushViewController(vc: vc)
                     }
+                    else {
+                        let vc = OpenWalletProgressViewController(onlyConnect: true)
+                        vc.cancelCallback = {
+                        }
+                        pushViewController(vc: vc)
+                    }
                 }
                 else {
                     isNeedDisconnect = false

@@ -25,7 +25,8 @@ class BMAmountCell: BaseCell {
 
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
-    @IBOutlet weak private var currencyLabel: UILabel!
+    @IBOutlet weak var currencyLabel: UILabel!
+    @IBOutlet weak private var currencyArrow: UIImageView!
     @IBOutlet weak private var erorLabel: UILabel!
     @IBOutlet weak private var secondCurrencyLabel: UILabel!
 
@@ -85,23 +86,12 @@ class BMAmountCell: BaseCell {
     public var currency:String?
     {
         didSet{
-            if currency != nil && ExchangeManager.shared().isCurrenciesAvailable() {
-                
+            if currency != nil && AssetsManager.shared().assets.count > 0 {
                 currencyLabel.isUserInteractionEnabled = true
-
+                currencyArrow.isHidden = false
+                
                 let text = currency!
-
-                let imageAttachment = NSTextAttachment()
-                imageAttachment.image = IconNextArrow()
-
-                let imageString = NSAttributedString(attachment: imageAttachment)
-
-                let attributedString = NSMutableAttributedString(string:text)
-                attributedString.append(NSAttributedString(string: "  "))
-                attributedString.append(imageString)
-                attributedString.addAttribute(NSAttributedString.Key.kern, value: CGFloat(1.5), range: NSRange(location: 0, length: text.count))
-
-                currencyLabel.attributedText = attributedString
+                currencyLabel.text = text
             }
         }
     }
@@ -142,6 +132,7 @@ class BMAmountCell: BaseCell {
     }
     
     @objc private func onCurrency(_ sender: UITapGestureRecognizer) {
+        self.currencyArrow.image = IconDownArrow()
         self.delegate?.onRightButton?(self)
     }
     
@@ -182,6 +173,8 @@ extension BMAmountCell: Configurable {
         normalTextColor = textField.textColor ?? UIColor.main.heliotrope
 
         textField.text = options.value
+        
+        currencyArrow.image = IconNextArrow()
     }
     
     func setSecondAmount(amount:String) {

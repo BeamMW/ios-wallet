@@ -138,10 +138,11 @@ class PaymentProofDetailViewController: BaseTableViewController {
         if let info = info {
             self.paymentInfo = info
             
+            let asset = AssetsManager.shared().getAsset(info.assetId )
             var section_2 = [BMMultiLineItem]()
             section_2.append(BMMultiLineItem(title: Localizable.shared.strings.sender.uppercased(), detail: info.sender, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             section_2.append(BMMultiLineItem(title: Localizable.shared.strings.receiver.uppercased(), detail: info.receiver, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: String.currency(value: info.realAmount) , detailFont: RegularFont(size: 16), detailColor: UIColor.main.heliotrope))
+            section_2.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: String.currency(value: info.realAmount, name: asset?.unitName ?? "BEAM") , detailFont: RegularFont(size: 16), detailColor: UIColor.main.heliotrope))
             section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: info.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             
             details.append(section_2)

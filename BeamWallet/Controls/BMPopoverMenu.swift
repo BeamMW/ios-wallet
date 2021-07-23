@@ -68,6 +68,10 @@ extension BMPopoverMenu {
         sharedMenu.showForSender(sender: sender, or: nil, with: menuArray, done: done, cancel: cancel)
     }
     
+    public static func showForSenderAssets(sender: UIView, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel: @escaping () -> Void) {
+        sharedMenu.showForSenderAssets(sender: sender, or: nil, with: menuArray, done: done, cancel: cancel)
+    }
+    
     public static func showForSenderFrame(senderFrame: CGRect, with menuArray: [BMPopoverMenuItem], done: @escaping (BMPopoverMenuItem?) -> Void, cancel: @escaping () -> Void) {
         sharedMenu.showForSender(sender: nil, or: senderFrame, with: menuArray, done: done, cancel: cancel)
     }
@@ -94,7 +98,7 @@ class BMPopoverMenu: NSObject {
         case share_offline_token = 18
         case share_online_token = 19
         case share_pool_token = 20
-
+        case asset = 21
     }
     
     class BMPopoverMenuItem {
@@ -109,6 +113,7 @@ class BMPopoverMenu: NSObject {
         }
     }
     
+    var isAssets = false
     var sender: UIView?
     var senderFrame: CGRect?
     
@@ -182,6 +187,28 @@ class BMPopoverMenu: NSObject {
         }
     }
     
+    fileprivate func showForSenderAssets(sender: UIView?, or senderFrame: CGRect?, with menuItems: [BMPopoverMenuItem]!, done: @escaping (BMPopoverMenuItem?) -> Void, cancel: (() -> Void)? = nil) {
+        if sender == nil, senderFrame == nil {
+            return
+        }
+        if menuItems.count == 0 {
+            return
+        }
+        
+        self.isAssets = true
+        self.sender = sender
+        self.senderFrame = senderFrame
+        self.menuItems = menuItems
+        self.done = done
+        self.cancel = cancel
+        
+        backgroundView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        
+        UIApplication.shared.keyWindow?.addSubview(backgroundView)
+        
+        adjustPostionForPopOverMenu()
+    }
+    
     fileprivate func showForSender(sender: UIView?, or senderFrame: CGRect?, with menuItems: [BMPopoverMenuItem]!, done: @escaping (BMPopoverMenuItem?) -> Void, cancel: (() -> Void)? = nil) {
         if sender == nil, senderFrame == nil {
             return
@@ -190,6 +217,7 @@ class BMPopoverMenu: NSObject {
             return
         }
         
+        self.isAssets = false
         self.sender = sender
         self.senderFrame = senderFrame
         self.menuItems = menuItems
@@ -241,7 +269,7 @@ class BMPopoverMenu: NSObject {
             popMenuFrame = CGRect(x: popMenuOriginX, y: senderRect.origin.y + senderRect.size.height, width: menuWidth, height: UIScreen.main.bounds.size.height - popMenuFrame.origin.y)
         }
         
-        popOverMenu.show(frame: popMenuFrame, menuItems: menuItems) { selectedItem in
+        popOverMenu.show(frame: popMenuFrame, menuItems: menuItems, isAsset: self.isAssets) { selectedItem in
             self.doneActionWithSelectedIndex(selectedItem: selectedItem)
         }
     }
@@ -271,6 +299,8 @@ extension BMPopoverMenu: UIGestureRecognizerDelegate {
 }
 
 private class BMPopOverMenuView: UIView {
+    private var isAssets = false
+    
     fileprivate var menuItems: [BMPopoverMenu.BMPopoverMenuItem]!
     fileprivate var done: ((BMPopoverMenu.BMPopoverMenuItem) -> Void)!
     
@@ -284,10 +314,17 @@ private class BMPopOverMenuView: UIView {
         return tableView
     }()
     
-    fileprivate func show(frame: CGRect, menuItems: [BMPopoverMenu.BMPopoverMenuItem]!, done: @escaping ((BMPopoverMenu.BMPopoverMenuItem) -> Void)) {
+    fileprivate func show(frame: CGRect, menuItems: [BMPopoverMenu.BMPopoverMenuItem]!, isAsset:Bool, done: @escaping ((BMPopoverMenu.BMPopoverMenuItem) -> Void)) {
         self.frame = frame
+
+        self.isAssets = isAsset
         
-        self.backgroundColor = Settings.sharedManager().isDarkMode ? UIColor.black : UIColor(displayP3Red: 230.0/255.0, green: 233.0/255.0, blue: 236.0/255.0, alpha: 1.0)
+        if !isAsset {
+            self.backgroundColor = Settings.sharedManager().isDarkMode ? UIColor.black : UIColor(displayP3Red: 230.0/255.0, green: 233.0/255.0, blue: 236.0/255.0, alpha: 1.0)
+        }
+        else {
+            self.backgroundColor = UIColor.main.marine
+        }
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
@@ -298,12 +335,22 @@ private class BMPopOverMenuView: UIView {
         self.menuItems = menuItems
         self.done = done
         
-        menuTableView.register(PopoverCell.self)
-        menuTableView.backgroundColor = UIColor.clear
-        menuTableView.frame = CGRect(x: 0, y: 15, width: frame.size.width, height: frame.size.height - 15)
-        menuTableView.separatorStyle = .singleLine
-        menuTableView.separatorColor = Settings.sharedManager().isDarkMode ? UIColor.white.withAlphaComponent(0.1) : UIColor(displayP3Red: 226.0/255.0, green: 226.0/255.0, blue: 226.0/255.0, alpha: 1.0)
-        menuTableView.tableFooterView = UIView()
+        menuTableView.register([PopoverCell.self, PopoverAssetCell.self])
+        if !isAsset {
+            menuTableView.backgroundColor = UIColor.clear
+            menuTableView.frame = CGRect(x: 0, y: 15, width: frame.size.width, height: frame.size.height - 15)
+            menuTableView.separatorStyle = .singleLine
+            menuTableView.separatorColor = Settings.sharedManager().isDarkMode ? UIColor.white.withAlphaComponent(0.1) : UIColor(displayP3Red: 226.0/255.0, green: 226.0/255.0, blue: 226.0/255.0, alpha: 1.0)
+            menuTableView.tableFooterView = UIView()
+        }
+        else {
+            menuTableView.cornerRadius = 12
+            menuTableView.backgroundColor = UIColor.main.cellBackgroundColor
+            menuTableView.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
+            menuTableView.separatorStyle = .none
+            menuTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 15))
+            menuTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 15))
+        }
         menuTableView.reloadData()
         
         addSubview(menuTableView)
@@ -311,30 +358,59 @@ private class BMPopOverMenuView: UIView {
 }
 
 extension BMPopOverMenuView: UITableViewDataSource {
+  
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withType: PopoverCell.self, for: indexPath)
-              
-        if let image = self.menuItems[indexPath.row].icon {
-            cell.iconView.image = UIImage(named: image)?.withRenderingMode(.alwaysTemplate)
-            cell.iconView.tintColor = Settings.sharedManager().isDarkMode ? UIColor.white : UIColor.main.marineOriginal
+        if self.isAssets {
+            let asset = AssetsManager.shared().getAssetByName(menuItems[indexPath.row].name)
+            
+            let cell = tableView.dequeueReusableCell(withType: PopoverAssetCell.self, for: indexPath)
+            cell.backgroundColor = UIColor.clear
+            
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+            
+            cell.label.text = menuItems[indexPath.row].name
+            
+            if let asset = asset {
+                cell.iconView.setAsset(asset)
+            }
+            
+            if asset?.isBeam() == true {
+                cell.label.font = BoldFont(size: 16)
+                cell.label.textColor = UIColor.main.brightTeal
+            }
+            else {
+                cell.label.font = RegularFont(size: 16)
+                cell.label.textColor = UIColor.white
+            }
+            
+            return cell
         }
         else {
-            cell.iconView.image = nil
+            let cell = tableView.dequeueReusableCell(withType: PopoverCell.self, for: indexPath)
+            
+            if let image = self.menuItems[indexPath.row].icon {
+                cell.iconView.image = UIImage(named: image)?.withRenderingMode(.alwaysTemplate)
+                cell.iconView.tintColor = Settings.sharedManager().isDarkMode ? UIColor.white : UIColor.main.marineOriginal
+            }
+            else {
+                cell.iconView.image = nil
+            }
+            
+            cell.backgroundColor = UIColor.clear
+            
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = Settings.sharedManager().isDarkMode ? UIColor.main.marine.withAlphaComponent(0.7) : UIColor.white.withAlphaComponent(0.5)
+            
+            cell.label.textColor = Settings.sharedManager().isDarkMode ? UIColor.white : UIColor.main.marineOriginal
+            cell.label.text = menuItems[indexPath.row].name
+            
+            return cell
         }
-    
-        cell.backgroundColor = UIColor.clear
-        
-        cell.selectedBackgroundView = UIView()
-        cell.selectedBackgroundView?.backgroundColor = Settings.sharedManager().isDarkMode ? UIColor.main.marine.withAlphaComponent(0.7) : UIColor.white.withAlphaComponent(0.5)
-       
-        cell.label.textColor = Settings.sharedManager().isDarkMode ? UIColor.white : UIColor.main.marineOriginal
-        cell.label.text = menuItems[indexPath.row].name
-
-        return cell
     }
 }
 

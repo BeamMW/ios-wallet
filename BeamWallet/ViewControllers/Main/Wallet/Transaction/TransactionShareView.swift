@@ -156,12 +156,13 @@ class TransactionShareView: UIView {
         }
         centeredTypeLabel.textColor = typeLabel.textColor
         
+        let asset = AssetsManager.shared().getAsset(transaction.assetId)
         switch transaction.isIncome {
         case true:
-            amountLabel.text = "+" + String.currency(value: transaction.realAmount)
+            amountLabel.text = "+" + String.currency(value: transaction.realAmount, name: asset?.unitName ?? "")
             amountLabel.textColor = UIColor.main.brightSkyBlue
         case false:
-            amountLabel.text = "-" + String.currency(value: transaction.realAmount)
+            amountLabel.text = "-" + String.currency(value: transaction.realAmount, name: asset?.unitName ?? "")
             amountLabel.textColor = UIColor.main.heliotrope
         }
         

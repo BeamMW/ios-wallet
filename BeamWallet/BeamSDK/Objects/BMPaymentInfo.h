@@ -26,6 +26,7 @@
 @property (nonatomic,strong) NSString * _Nonnull receiver;
 @property (nonatomic,strong) NSString * _Nonnull kernelId;
 
+@property (nonatomic,assign) int assetId;
 @property (nonatomic,assign) double realAmount;
 
 @end

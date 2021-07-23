@@ -215,7 +215,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     }
     
     private func openMainPage() {
-        if Settings.sharedManager().isNodeProtocolEnabled {
+        if Settings.sharedManager().isNodeProtocolEnabled || (Settings.sharedManager().isChangedNode() && !Settings.sharedManager().connectToRandomNode) {
             let vc = OpenWalletProgressViewController(onlyConnect: true)
             vc.cancelCallback = {
                 AppModel.sharedManager().resetWallet(false)

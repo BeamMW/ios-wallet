@@ -61,6 +61,16 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     public var secondAmount: String?
+    public var selectedAssetId = 0 {
+        didSet {
+            generateTokens()
+        }
+    }
+    public var selectedCurrencyString: String {
+        get {
+            return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
+        }
+    }
     
     override init() {
         super.init()
@@ -76,12 +86,12 @@ class ReceiveAddressViewModel: NSObject {
         let bamount = Double(amount ?? "0") ?? 0
         
         if isOwn {
-            AppModel.sharedManager().generateMaxPrivacyAddress(address.walletId, amount: bamount) { (token) in
+            AppModel.sharedManager().generateMaxPrivacyAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
                 self.address.maxPrivacyToken = token;
             }
         }
 
-        address.offlineToken = AppModel.sharedManager().generateOfflineAddress(address.walletId, amount: bamount)
+        address.offlineToken = AppModel.sharedManager().generateOfflineAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount)
     }
     
     public func createAddress() {

@@ -33,6 +33,8 @@
 @property (nonatomic,strong) NSString *identity;
 @property (nonatomic,strong) NSString *verionError;
 
+@property (nonatomic, assign) UInt32 assetId;
+
 @property (nonatomic,assign) BMAddressType newAddressType;
 
 @end

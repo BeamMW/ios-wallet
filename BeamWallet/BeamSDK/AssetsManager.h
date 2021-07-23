@@ -31,6 +31,7 @@
 
 -(NSString*_Nonnull)getAssetColor:(int)value;
 -(BMAsset*_Nullable)getAsset:(int)assetId;
+-(BMAsset*_Nullable)getAssetByName:(NSString*_Nullable)name;
 -(BMTransaction*_Nullable)getLastTransaction:(int)assetId;
 
 -(void)changeAssets;

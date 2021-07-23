@@ -83,7 +83,12 @@ class OpenWalletProgressViewController: BaseViewController {
         
         if onlyConnect {
             if AppModel.sharedManager().isLoggedin {
-                progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
+                if Settings.sharedManager().isNodeProtocolEnabled {
+                    progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
+                }
+                else {
+                    progressTitleLabel.text = Localizable.shared.strings.loading_wallet
+                }
             }
             else {
                 progressTitleLabel.text = Localizable.shared.strings.loading_wallet
@@ -130,6 +135,20 @@ class OpenWalletProgressViewController: BaseViewController {
         }
         else {
             AppModel.sharedManager().getWalletStatus()
+            
+            if (Settings.sharedManager().isChangedNode() && !Settings.sharedManager().connectToRandomNode)
+            {
+                let deadlineTime = DispatchTime.now() + .seconds(3)
+                DispatchQueue.main.asyncAfter(deadline: deadlineTime) {[weak self] in
+                    if AppModel.sharedManager().isSynced() {
+                        self?.openMainPage()
+                    }
+                    else {
+                        print("timeout")
+                        AppModel.sharedManager().getWalletStatus()
+                    }
+                }           
+            }
         }
     }
     
@@ -167,7 +186,9 @@ class OpenWalletProgressViewController: BaseViewController {
                 
                 onMainPage()
                 
-                BMToast.show(text: Localizable.shared.strings.wallet_connected_to_mobile_node)
+                if Settings.sharedManager().isNodeProtocolEnabled {
+                    BMToast.show(text: Localizable.shared.strings.wallet_connected_to_mobile_node)
+                }
             }
             return
         }
@@ -500,7 +521,14 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 strongSelf.openMainPage()
             }
             else if total == done && strongSelf.onlyConnect {
-                strongSelf.openMainPage()
+                if Settings.sharedManager().isChangedNode() && !Settings.sharedManager().connectToRandomNode {
+                    if AppModel.sharedManager().isSynced() {
+                        strongSelf.openMainPage()
+                    }
+                }
+                else {
+                    strongSelf.openMainPage()
+                }
             }
             else if total == done && (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
                 if total == 0 && AppModel.sharedManager().isSynced() {

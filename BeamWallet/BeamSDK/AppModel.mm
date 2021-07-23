@@ -963,10 +963,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
     });
 }
 
--(BOOL)isSynced {
-    return self->wallet->isSynced();
-}
-
 #pragma mark - Updates
 
 -(void)getWalletStatus {
@@ -1053,7 +1049,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 
--(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId amount:(double)amount {
+-(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount {
         
     uint64_t bAmount = round(amount * Rules::Coin);
 
@@ -1074,7 +1070,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     offlineParameters.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
     offlineParameters.SetParameter(TxParameterID::PeerOwnID, address->m_OwnID);
     offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, true);
-    
+    offlineParameters.SetParameter(TxParameterID::AssetID, uint32_t(assetId));
+
     if (bAmount > 0) {
         offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
     }
@@ -1083,7 +1080,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return [NSString stringWithUTF8String:token.c_str()];
 }
 
--(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
+-(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
     uint64_t bAmount = round(amount * Rules::Coin);
         
     WalletID m_walletID(Zero);
@@ -1100,6 +1097,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     params.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
     params.SetParameter(TxParameterID::IsPermanentPeerID, isPermanentAddress);
     params.SetParameter(TxParameterID::TransactionType, TxType::Simple);
+    params.SetParameter(TxParameterID::AssetID, uint32_t(assetId));
     params.DeleteParameter(TxParameterID::Voucher);
     
     auto token = to_string(params);
@@ -1107,7 +1105,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 
--(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+-(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
     uint64_t bAmount = round(amount * Rules::Coin);
     
     WalletID m_walletID(Zero);
@@ -1117,51 +1115,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     auto func = GenerateVaucherFunc();
     func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
-        auto token = GenerateMaxPrivacyToken(*address, bAmount, 0, list[0], std::string(BEAM_LIB_VERSION));
+        auto token = GenerateMaxPrivacyToken(*address, bAmount, uint32_t(assetId), list[0], std::string(BEAM_LIB_VERSION));
         block([NSString stringWithUTF8String:token.c_str()]);
     };
     
     wallet->getAsync()->generateVouchers(address->m_OwnID, 1, func);
-}
-
--(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId {
-    
-    WalletID m_walletID(Zero);
-    m_walletID.FromHex(walleetId.string);
-        
-    bool isValid = false;
-    auto buf = from_hex(identity.string, &isValid);
-    PeerID m_Identity = Blob(buf);
-        
-    TxParameters params;
-    params.SetParameter(TxParameterID::PeerID, m_walletID);
-    params.SetParameter(TxParameterID::PeerWalletIdentity, m_Identity);
-    params.SetParameter(TxParameterID::IsPermanentPeerID, isPermanentAddress);
-
-    if (amount > 0) {
-        uint64_t bAmount = round(amount * Rules::Coin);
-        params.SetParameter(TxParameterID::Amount, bAmount);
-    }
-    
-    if (maxPrivacy) {
-        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
-    }
-    else {
-        params.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::Simple);
-    }
-    
-    if(nonInteractive) {
-        auto vouchers = wallet->generateVouchers(ownId, 10);
-        if (!vouchers.empty())
-        {
-            params.SetParameter(TxParameterID::ShieldedVoucherList, vouchers);
-        }
-    }
-    
-    params.SetParameter(TxParameterID::LibraryVersion, std::string(BEAM_LIB_VERSION));
-
-    auto token = to_string(params);
-    return [NSString stringWithUTF8String:token.c_str()];
 }
 
 
@@ -2256,6 +2214,13 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         }
     }
     
+    if (auto assetId = params->GetParameter<uint32_t>(TxParameterID::AssetID); assetId) {
+        p.assetId = *assetId;
+    }
+    else {
+        p.assetId = 0;
+    }
+    
     //    ProcessLibraryVersion(params, ((const std::string& version, const std::string& myVersion))
     //    });
     //    if (auto libVersion = params->GetParameter(TxParameterID::LibraryVersion); libVersion)
@@ -2377,6 +2342,12 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     return own || [Settings sharedManager].isNodeProtocolEnabled;
 }
 
+-(BOOL)isSynced {
+    if (wallet == nil) {
+        return false;
+    }
+    return wallet->isSynced();
+}
 
 #pragma mark - Transactions
 
@@ -2419,7 +2390,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         info.sender = [NSString stringWithUTF8String:to_string(paymentInfo.m_Sender).c_str()];
         info.receiver = [NSString stringWithUTF8String:to_string(paymentInfo.m_Receiver).c_str()];
         info.kernelId = [NSString stringWithUTF8String:to_string(paymentInfo.m_KernelID).c_str()];
-        
+        info.assetId = paymentInfo.m_AssetID;
+
         return info;
     }
     
@@ -2435,7 +2407,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         info.sender = [NSString stringWithUTF8String:to_string(shieldedPaymentInfo.m_Sender).c_str()];
         info.receiver = [NSString stringWithUTF8String:to_string(shieldedPaymentInfo.m_Receiver).c_str()];
         info.kernelId = [NSString stringWithUTF8String:to_string(shieldedPaymentInfo.m_KernelID).c_str()];
-        
+        info.assetId = shieldedPaymentInfo.m_AssetID;
+
         return info;
     }
     catch (...)

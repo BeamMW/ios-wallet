@@ -45,6 +45,8 @@ class ReceiveViewController: BaseTableViewController {
         }
     }
     
+    public var assetId = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -86,6 +88,9 @@ class ReceiveViewController: BaseTableViewController {
                     })
                 }
                 else{
+                    if self?.assetId != 0 {
+                        self?.viewModel.selectedAssetId = self?.assetId ?? 0
+                    }
                     self?.tableView.delegate = self
                     self?.tableView.dataSource = self
                     self?.tableView.reloadData()
@@ -244,6 +249,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: String.empty(), value: viewModel.amount))
                 cell.delegate = self
                 cell.hideNameLabel = true
+                cell.currency = viewModel.selectedCurrencyString
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.setSecondAmount(amount: viewModel.secondAmount ?? "")
                 return cell
@@ -392,6 +398,27 @@ extension ReceiveViewController : BMCellProtocol {
         self.view.endEditing(true)
 
         viewModel.isShared = true
+    }
+    
+    
+    func onRightButton(_ sender: UITableViewCell) {
+        if tableView.indexPath(for: sender) != nil, let cell = sender as? BMAmountCell {
+            var menu = [BMPopoverMenu.BMPopoverMenuItem]()
+            
+            for asset in AssetsManager.shared().assets as! [BMAsset] {
+                menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset))
+            }
+            
+            BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
+                let itemName = item?.name ?? ""
+                let asset = AssetsManager.shared().getAssetByName(itemName)
+                self.viewModel.selectedAssetId = Int(asset?.assetId ?? 0)
+                self.tableView.reloadData()
+                
+            } cancel: {
+                self.tableView.reloadData()
+            }
+        }
     }
 }
 

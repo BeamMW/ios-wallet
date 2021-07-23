@@ -1462,7 +1462,7 @@ void WalletModel::onChangeCalculated(beam::Amount changeAsset, beam::Amount chan
     NSLog(@"onChangeCalculated");
 }
 
-void WalletModel::onCoinsSeleced(const CoinsSelectionInfo& selectionRes)
+void WalletModel::onCoinsSelected(const CoinsSelectionInfo& selectionRes)
 {
     NSLog(@"onCoinsSelectionCalculated");
     

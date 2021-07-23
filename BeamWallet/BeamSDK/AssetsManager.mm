@@ -80,6 +80,15 @@ NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#00
     return nil;
 }
 
+-(BMAsset*_Nullable)getAssetByName:(NSString*_Nullable)name {
+    for (BMAsset *asset in self.assets.reverseObjectEnumerator) {
+        if ([asset.unitName isEqualToString:name]) {
+            return asset;
+        }
+    }
+    return nil;
+}
+
 -(BMTransaction*_Nullable)getLastTransaction:(int)assetId {
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdTime"

@@ -302,84 +302,6 @@
 		923670C225399C2F00180771 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923670BE25399C2F00180771 /* WithdrawViewModel.swift */; };
 		923670C325399C2F00180771 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923670BE25399C2F00180771 /* WithdrawViewModel.swift */; };
 		923670C425399C2F00180771 /* WithdrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923670BE25399C2F00180771 /* WithdrawViewModel.swift */; };
-		923B54752642D208002DCD35 /* libassets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545B2642D204002DCD35 /* libassets.a */; };
-		923B54762642D208002DCD35 /* libassets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545B2642D204002DCD35 /* libassets.a */; };
-		923B54772642D208002DCD35 /* libassets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545B2642D204002DCD35 /* libassets.a */; };
-		923B54782642D208002DCD35 /* libwallet_api.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545C2642D204002DCD35 /* libwallet_api.a */; };
-		923B54792642D208002DCD35 /* libwallet_api.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545C2642D204002DCD35 /* libwallet_api.a */; };
-		923B547A2642D208002DCD35 /* libwallet_api.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545C2642D204002DCD35 /* libwallet_api.a */; };
-		923B547B2642D208002DCD35 /* libhw_crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545D2642D204002DCD35 /* libhw_crypto.a */; };
-		923B547C2642D208002DCD35 /* libhw_crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545D2642D204002DCD35 /* libhw_crypto.a */; };
-		923B547D2642D208002DCD35 /* libhw_crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545D2642D204002DCD35 /* libhw_crypto.a */; };
-		923B547E2642D208002DCD35 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545E2642D205002DCD35 /* libmnemonic.a */; };
-		923B547F2642D208002DCD35 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545E2642D205002DCD35 /* libmnemonic.a */; };
-		923B54802642D208002DCD35 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545E2642D205002DCD35 /* libmnemonic.a */; };
-		923B54812642D208002DCD35 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545F2642D205002DCD35 /* libutility.a */; };
-		923B54822642D208002DCD35 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545F2642D205002DCD35 /* libutility.a */; };
-		923B54832642D208002DCD35 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B545F2642D205002DCD35 /* libutility.a */; };
-		923B54842642D208002DCD35 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54602642D205002DCD35 /* libkeccak.a */; };
-		923B54852642D208002DCD35 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54602642D205002DCD35 /* libkeccak.a */; };
-		923B54862642D208002DCD35 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54602642D205002DCD35 /* libkeccak.a */; };
-		923B54872642D208002DCD35 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54612642D205002DCD35 /* libuv_a.a */; };
-		923B54882642D208002DCD35 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54612642D205002DCD35 /* libuv_a.a */; };
-		923B54892642D208002DCD35 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54612642D205002DCD35 /* libuv_a.a */; };
-		923B548A2642D208002DCD35 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54622642D205002DCD35 /* libsqlite.a */; };
-		923B548B2642D208002DCD35 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54622642D205002DCD35 /* libsqlite.a */; };
-		923B548C2642D208002DCD35 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54622642D205002DCD35 /* libsqlite.a */; };
-		923B548D2642D208002DCD35 /* libwallet_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54632642D205002DCD35 /* libwallet_client.a */; };
-		923B548E2642D208002DCD35 /* libwallet_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54632642D205002DCD35 /* libwallet_client.a */; };
-		923B548F2642D208002DCD35 /* libwallet_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54632642D205002DCD35 /* libwallet_client.a */; };
-		923B54902642D208002DCD35 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54642642D206002DCD35 /* libhttp.a */; };
-		923B54912642D208002DCD35 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54642642D206002DCD35 /* libhttp.a */; };
-		923B54922642D208002DCD35 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54642642D206002DCD35 /* libhttp.a */; };
-		923B54932642D208002DCD35 /* libwebsocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54652642D206002DCD35 /* libwebsocket.a */; };
-		923B54942642D208002DCD35 /* libwebsocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54652642D206002DCD35 /* libwebsocket.a */; };
-		923B54952642D208002DCD35 /* libwebsocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54652642D206002DCD35 /* libwebsocket.a */; };
-		923B54962642D208002DCD35 /* libbvm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54662642D206002DCD35 /* libbvm.a */; };
-		923B54972642D208002DCD35 /* libbvm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54662642D206002DCD35 /* libbvm.a */; };
-		923B54982642D208002DCD35 /* libbvm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54662642D206002DCD35 /* libbvm.a */; };
-		923B54992642D208002DCD35 /* liblelantus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54672642D206002DCD35 /* liblelantus.a */; };
-		923B549A2642D208002DCD35 /* liblelantus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54672642D206002DCD35 /* liblelantus.a */; };
-		923B549B2642D208002DCD35 /* liblelantus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54672642D206002DCD35 /* liblelantus.a */; };
-		923B549C2642D208002DCD35 /* libethash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54682642D206002DCD35 /* libethash.a */; };
-		923B549D2642D208002DCD35 /* libethash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54682642D206002DCD35 /* libethash.a */; };
-		923B549E2642D208002DCD35 /* libethash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54682642D206002DCD35 /* libethash.a */; };
-		923B549F2642D208002DCD35 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54692642D206002DCD35 /* libpow.a */; };
-		923B54A02642D208002DCD35 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54692642D206002DCD35 /* libpow.a */; };
-		923B54A12642D208002DCD35 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54692642D206002DCD35 /* libpow.a */; };
-		923B54A22642D208002DCD35 /* libblake2b.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546A2642D206002DCD35 /* libblake2b.a */; };
-		923B54A32642D208002DCD35 /* libblake2b.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546A2642D206002DCD35 /* libblake2b.a */; };
-		923B54A42642D208002DCD35 /* libblake2b.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546A2642D206002DCD35 /* libblake2b.a */; };
-		923B54A52642D208002DCD35 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546B2642D206002DCD35 /* libp2p.a */; };
-		923B54A62642D208002DCD35 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546B2642D206002DCD35 /* libp2p.a */; };
-		923B54A72642D208002DCD35 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546B2642D206002DCD35 /* libp2p.a */; };
-		923B54A82642D208002DCD35 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546C2642D207002DCD35 /* libnode.a */; };
-		923B54A92642D208002DCD35 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546C2642D207002DCD35 /* libnode.a */; };
-		923B54AA2642D208002DCD35 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546C2642D207002DCD35 /* libnode.a */; };
-		923B54AB2642D208002DCD35 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546D2642D207002DCD35 /* libkeykeeper.a */; };
-		923B54AC2642D208002DCD35 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546D2642D207002DCD35 /* libkeykeeper.a */; };
-		923B54AD2642D208002DCD35 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546D2642D207002DCD35 /* libkeykeeper.a */; };
-		923B54AE2642D208002DCD35 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546E2642D207002DCD35 /* libdex.a */; };
-		923B54AF2642D208002DCD35 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546E2642D207002DCD35 /* libdex.a */; };
-		923B54B02642D208002DCD35 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546E2642D207002DCD35 /* libdex.a */; };
-		923B54B12642D208002DCD35 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546F2642D207002DCD35 /* libcli.a */; };
-		923B54B22642D208002DCD35 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546F2642D207002DCD35 /* libcli.a */; };
-		923B54B32642D208002DCD35 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B546F2642D207002DCD35 /* libcli.a */; };
-		923B54B42642D208002DCD35 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54702642D207002DCD35 /* libsecp256k1.a */; };
-		923B54B52642D208002DCD35 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54702642D207002DCD35 /* libsecp256k1.a */; };
-		923B54B62642D208002DCD35 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54702642D207002DCD35 /* libsecp256k1.a */; };
-		923B54B72642D208002DCD35 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54712642D207002DCD35 /* libcore.a */; };
-		923B54B82642D208002DCD35 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54712642D207002DCD35 /* libcore.a */; };
-		923B54B92642D208002DCD35 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54712642D207002DCD35 /* libcore.a */; };
-		923B54BA2642D208002DCD35 /* libpbkdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54722642D208002DCD35 /* libpbkdf.a */; };
-		923B54BB2642D208002DCD35 /* libpbkdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54722642D208002DCD35 /* libpbkdf.a */; };
-		923B54BC2642D208002DCD35 /* libpbkdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54722642D208002DCD35 /* libpbkdf.a */; };
-		923B54BD2642D208002DCD35 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54732642D208002DCD35 /* libexternal_pow.a */; };
-		923B54BE2642D208002DCD35 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54732642D208002DCD35 /* libexternal_pow.a */; };
-		923B54BF2642D208002DCD35 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54732642D208002DCD35 /* libexternal_pow.a */; };
-		923B54C02642D208002DCD35 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54742642D208002DCD35 /* libwallet.a */; };
-		923B54C12642D208002DCD35 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54742642D208002DCD35 /* libwallet.a */; };
-		923B54C22642D208002DCD35 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923B54742642D208002DCD35 /* libwallet.a */; };
 		923DB10D235DD2D60056ACDA /* BMInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923DB10B235DD2D60056ACDA /* BMInputViewController.swift */; };
 		923DB10E235DD2D60056ACDA /* BMInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923DB10B235DD2D60056ACDA /* BMInputViewController.swift */; };
 		923DB10F235DD2D60056ACDA /* BMInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923DB10B235DD2D60056ACDA /* BMInputViewController.swift */; };
@@ -397,6 +319,84 @@
 		92435250222E73DC00A0EF37 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243524E222E73DC00A0EF37 /* WalletViewController.swift */; };
 		92435255222E73E900A0EF37 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435253222E73E900A0EF37 /* SettingsViewController.swift */; };
 		9243525A222E73FC00A0EF37 /* UTXOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435258222E73FC00A0EF37 /* UTXOViewController.swift */; };
+		92437C6226A5783500A9C7A1 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4826A5783000A9C7A1 /* libuv_a.a */; };
+		92437C6326A5783500A9C7A1 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4826A5783000A9C7A1 /* libuv_a.a */; };
+		92437C6426A5783500A9C7A1 /* libuv_a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4826A5783000A9C7A1 /* libuv_a.a */; };
+		92437C6526A5783500A9C7A1 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4926A5783000A9C7A1 /* libcli.a */; };
+		92437C6626A5783500A9C7A1 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4926A5783000A9C7A1 /* libcli.a */; };
+		92437C6726A5783500A9C7A1 /* libcli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4926A5783000A9C7A1 /* libcli.a */; };
+		92437C6826A5783500A9C7A1 /* libbvm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4A26A5783100A9C7A1 /* libbvm.a */; };
+		92437C6926A5783500A9C7A1 /* libbvm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4A26A5783100A9C7A1 /* libbvm.a */; };
+		92437C6A26A5783500A9C7A1 /* libbvm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4A26A5783100A9C7A1 /* libbvm.a */; };
+		92437C6B26A5783500A9C7A1 /* libethash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4B26A5783100A9C7A1 /* libethash.a */; };
+		92437C6C26A5783500A9C7A1 /* libethash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4B26A5783100A9C7A1 /* libethash.a */; };
+		92437C6D26A5783500A9C7A1 /* libethash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4B26A5783100A9C7A1 /* libethash.a */; };
+		92437C6E26A5783500A9C7A1 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4C26A5783100A9C7A1 /* libkeykeeper.a */; };
+		92437C6F26A5783500A9C7A1 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4C26A5783100A9C7A1 /* libkeykeeper.a */; };
+		92437C7026A5783500A9C7A1 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4C26A5783100A9C7A1 /* libkeykeeper.a */; };
+		92437C7126A5783500A9C7A1 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4D26A5783100A9C7A1 /* libmnemonic.a */; };
+		92437C7226A5783500A9C7A1 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4D26A5783100A9C7A1 /* libmnemonic.a */; };
+		92437C7326A5783500A9C7A1 /* libmnemonic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4D26A5783100A9C7A1 /* libmnemonic.a */; };
+		92437C7426A5783500A9C7A1 /* libwallet_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4E26A5783100A9C7A1 /* libwallet_client.a */; };
+		92437C7526A5783500A9C7A1 /* libwallet_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4E26A5783100A9C7A1 /* libwallet_client.a */; };
+		92437C7626A5783500A9C7A1 /* libwallet_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4E26A5783100A9C7A1 /* libwallet_client.a */; };
+		92437C7726A5783500A9C7A1 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4F26A5783200A9C7A1 /* libkeccak.a */; };
+		92437C7826A5783500A9C7A1 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4F26A5783200A9C7A1 /* libkeccak.a */; };
+		92437C7926A5783500A9C7A1 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C4F26A5783200A9C7A1 /* libkeccak.a */; };
+		92437C7A26A5783500A9C7A1 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5026A5783200A9C7A1 /* libnode.a */; };
+		92437C7B26A5783500A9C7A1 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5026A5783200A9C7A1 /* libnode.a */; };
+		92437C7C26A5783500A9C7A1 /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5026A5783200A9C7A1 /* libnode.a */; };
+		92437C7D26A5783500A9C7A1 /* libpbkdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5126A5783200A9C7A1 /* libpbkdf.a */; };
+		92437C7E26A5783500A9C7A1 /* libpbkdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5126A5783200A9C7A1 /* libpbkdf.a */; };
+		92437C7F26A5783500A9C7A1 /* libpbkdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5126A5783200A9C7A1 /* libpbkdf.a */; };
+		92437C8026A5783500A9C7A1 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5226A5783200A9C7A1 /* libwallet.a */; };
+		92437C8126A5783500A9C7A1 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5226A5783200A9C7A1 /* libwallet.a */; };
+		92437C8226A5783500A9C7A1 /* libwallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5226A5783200A9C7A1 /* libwallet.a */; };
+		92437C8326A5783500A9C7A1 /* libwebsocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5326A5783200A9C7A1 /* libwebsocket.a */; };
+		92437C8426A5783500A9C7A1 /* libwebsocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5326A5783200A9C7A1 /* libwebsocket.a */; };
+		92437C8526A5783500A9C7A1 /* libwebsocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5326A5783200A9C7A1 /* libwebsocket.a */; };
+		92437C8626A5783500A9C7A1 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5426A5783300A9C7A1 /* libp2p.a */; };
+		92437C8726A5783500A9C7A1 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5426A5783300A9C7A1 /* libp2p.a */; };
+		92437C8826A5783500A9C7A1 /* libp2p.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5426A5783300A9C7A1 /* libp2p.a */; };
+		92437C8926A5783500A9C7A1 /* libassets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5526A5783300A9C7A1 /* libassets.a */; };
+		92437C8A26A5783500A9C7A1 /* libassets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5526A5783300A9C7A1 /* libassets.a */; };
+		92437C8B26A5783500A9C7A1 /* libassets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5526A5783300A9C7A1 /* libassets.a */; };
+		92437C8C26A5783500A9C7A1 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5626A5783300A9C7A1 /* libpow.a */; };
+		92437C8D26A5783500A9C7A1 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5626A5783300A9C7A1 /* libpow.a */; };
+		92437C8E26A5783500A9C7A1 /* libpow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5626A5783300A9C7A1 /* libpow.a */; };
+		92437C8F26A5783500A9C7A1 /* libwallet_api.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5726A5783300A9C7A1 /* libwallet_api.a */; };
+		92437C9026A5783500A9C7A1 /* libwallet_api.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5726A5783300A9C7A1 /* libwallet_api.a */; };
+		92437C9126A5783500A9C7A1 /* libwallet_api.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5726A5783300A9C7A1 /* libwallet_api.a */; };
+		92437C9226A5783500A9C7A1 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5826A5783300A9C7A1 /* libsqlite.a */; };
+		92437C9326A5783500A9C7A1 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5826A5783300A9C7A1 /* libsqlite.a */; };
+		92437C9426A5783500A9C7A1 /* libsqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5826A5783300A9C7A1 /* libsqlite.a */; };
+		92437C9526A5783500A9C7A1 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5926A5783400A9C7A1 /* libutility.a */; };
+		92437C9626A5783500A9C7A1 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5926A5783400A9C7A1 /* libutility.a */; };
+		92437C9726A5783500A9C7A1 /* libutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5926A5783400A9C7A1 /* libutility.a */; };
+		92437C9826A5783500A9C7A1 /* liblelantus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5A26A5783400A9C7A1 /* liblelantus.a */; };
+		92437C9926A5783500A9C7A1 /* liblelantus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5A26A5783400A9C7A1 /* liblelantus.a */; };
+		92437C9A26A5783500A9C7A1 /* liblelantus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5A26A5783400A9C7A1 /* liblelantus.a */; };
+		92437C9B26A5783500A9C7A1 /* libblake2b.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5B26A5783400A9C7A1 /* libblake2b.a */; };
+		92437C9C26A5783500A9C7A1 /* libblake2b.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5B26A5783400A9C7A1 /* libblake2b.a */; };
+		92437C9D26A5783500A9C7A1 /* libblake2b.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5B26A5783400A9C7A1 /* libblake2b.a */; };
+		92437C9E26A5783500A9C7A1 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5C26A5783400A9C7A1 /* libdex.a */; };
+		92437C9F26A5783500A9C7A1 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5C26A5783400A9C7A1 /* libdex.a */; };
+		92437CA026A5783500A9C7A1 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5C26A5783400A9C7A1 /* libdex.a */; };
+		92437CA126A5783500A9C7A1 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5D26A5783400A9C7A1 /* libsecp256k1.a */; };
+		92437CA226A5783500A9C7A1 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5D26A5783400A9C7A1 /* libsecp256k1.a */; };
+		92437CA326A5783500A9C7A1 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5D26A5783400A9C7A1 /* libsecp256k1.a */; };
+		92437CA426A5783500A9C7A1 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5E26A5783400A9C7A1 /* libexternal_pow.a */; };
+		92437CA526A5783500A9C7A1 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5E26A5783400A9C7A1 /* libexternal_pow.a */; };
+		92437CA626A5783500A9C7A1 /* libexternal_pow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5E26A5783400A9C7A1 /* libexternal_pow.a */; };
+		92437CA726A5783500A9C7A1 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5F26A5783500A9C7A1 /* libcore.a */; };
+		92437CA826A5783500A9C7A1 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5F26A5783500A9C7A1 /* libcore.a */; };
+		92437CA926A5783500A9C7A1 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C5F26A5783500A9C7A1 /* libcore.a */; };
+		92437CAA26A5783500A9C7A1 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C6026A5783500A9C7A1 /* libhttp.a */; };
+		92437CAB26A5783500A9C7A1 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C6026A5783500A9C7A1 /* libhttp.a */; };
+		92437CAC26A5783500A9C7A1 /* libhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C6026A5783500A9C7A1 /* libhttp.a */; };
+		92437CAD26A5783500A9C7A1 /* libhw_crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C6126A5783500A9C7A1 /* libhw_crypto.a */; };
+		92437CAE26A5783500A9C7A1 /* libhw_crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C6126A5783500A9C7A1 /* libhw_crypto.a */; };
+		92437CAF26A5783500A9C7A1 /* libhw_crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92437C6126A5783500A9C7A1 /* libhw_crypto.a */; };
 		9243C2E722970EF10018B52D /* BMAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243C2E522970EF10018B52D /* BMAddressCell.swift */; };
 		9243C2E822970EF10018B52D /* BMAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243C2E522970EF10018B52D /* BMAddressCell.swift */; };
 		9243C2E922970EF10018B52D /* BMAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243C2E522970EF10018B52D /* BMAddressCell.swift */; };
@@ -607,6 +607,12 @@
 		92708DDC2272398300B30613 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
 		92708DDD2272398300B30613 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
 		92708DDE2272398300B30613 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92708DDB2272398300B30613 /* URL.swift */; };
+		9272B3EC26A9C0CA00B78008 /* PopoverAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272B3EA26A9C0CA00B78008 /* PopoverAssetCell.swift */; };
+		9272B3ED26A9C0CA00B78008 /* PopoverAssetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9272B3EB26A9C0CA00B78008 /* PopoverAssetCell.xib */; };
+		9272B3EE26A9C0D100B78008 /* PopoverAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272B3EA26A9C0CA00B78008 /* PopoverAssetCell.swift */; };
+		9272B3EF26A9C0D100B78008 /* PopoverAssetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9272B3EB26A9C0CA00B78008 /* PopoverAssetCell.xib */; };
+		9272B3F026A9C0D100B78008 /* PopoverAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272B3EA26A9C0CA00B78008 /* PopoverAssetCell.swift */; };
+		9272B3F126A9C0D100B78008 /* PopoverAssetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9272B3EB26A9C0CA00B78008 /* PopoverAssetCell.xib */; };
 		92779DF924AB4C1100E4B91C /* ShowTokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92779DF824AB4C1100E4B91C /* ShowTokenViewController.swift */; };
 		92779DFA24AB4C1100E4B91C /* ShowTokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92779DF824AB4C1100E4B91C /* ShowTokenViewController.swift */; };
 		92779DFB24AB4C1100E4B91C /* ShowTokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92779DF824AB4C1100E4B91C /* ShowTokenViewController.swift */; };
@@ -1436,32 +1442,6 @@
 		92365B05222D743A000D7064 /* EnterWalletPasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EnterWalletPasswordViewController.xib; sourceTree = "<group>"; };
 		923670BD25399C2F00180771 /* WithdrawViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
 		923670BE25399C2F00180771 /* WithdrawViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawViewModel.swift; sourceTree = "<group>"; };
-		923B545B2642D204002DCD35 /* libassets.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libassets.a; sourceTree = "<group>"; };
-		923B545C2642D204002DCD35 /* libwallet_api.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwallet_api.a; path = "../../../../../../../Downloads/beam-ios-combined-masternet-6-3/lib/libwallet_api.a"; sourceTree = "<group>"; };
-		923B545D2642D204002DCD35 /* libhw_crypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libhw_crypto.a; sourceTree = "<group>"; };
-		923B545E2642D205002DCD35 /* libmnemonic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmnemonic.a; sourceTree = "<group>"; };
-		923B545F2642D205002DCD35 /* libutility.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libutility.a; sourceTree = "<group>"; };
-		923B54602642D205002DCD35 /* libkeccak.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkeccak.a; path = "../../../../../../../Downloads/beam-ios-combined-masternet-6-3/lib/libkeccak.a"; sourceTree = "<group>"; };
-		923B54612642D205002DCD35 /* libuv_a.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libuv_a.a; sourceTree = "<group>"; };
-		923B54622642D205002DCD35 /* libsqlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlite.a; sourceTree = "<group>"; };
-		923B54632642D205002DCD35 /* libwallet_client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwallet_client.a; sourceTree = "<group>"; };
-		923B54642642D206002DCD35 /* libhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libhttp.a; sourceTree = "<group>"; };
-		923B54652642D206002DCD35 /* libwebsocket.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebsocket.a; path = "../../../../../../../Downloads/beam-ios-combined-masternet-6-3/lib/libwebsocket.a"; sourceTree = "<group>"; };
-		923B54662642D206002DCD35 /* libbvm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbvm.a; path = "../../../../../../../Downloads/beam-ios-combined-masternet-6-3/lib/libbvm.a"; sourceTree = "<group>"; };
-		923B54672642D206002DCD35 /* liblelantus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblelantus.a; sourceTree = "<group>"; };
-		923B54682642D206002DCD35 /* libethash.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libethash.a; path = "../../../../../../../Downloads/beam-ios-combined-masternet-6-3/lib/libethash.a"; sourceTree = "<group>"; };
-		923B54692642D206002DCD35 /* libpow.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpow.a; sourceTree = "<group>"; };
-		923B546A2642D206002DCD35 /* libblake2b.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libblake2b.a; sourceTree = "<group>"; };
-		923B546B2642D206002DCD35 /* libp2p.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libp2p.a; sourceTree = "<group>"; };
-		923B546C2642D207002DCD35 /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnode.a; sourceTree = "<group>"; };
-		923B546D2642D207002DCD35 /* libkeykeeper.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkeykeeper.a; sourceTree = "<group>"; };
-		923B546E2642D207002DCD35 /* libdex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdex.a; path = "../../../../../../../Downloads/beam-ios-combined-masternet-6-3/lib/libdex.a"; sourceTree = "<group>"; };
-		923B546F2642D207002DCD35 /* libcli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcli.a; sourceTree = "<group>"; };
-		923B54702642D207002DCD35 /* libsecp256k1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsecp256k1.a; sourceTree = "<group>"; };
-		923B54712642D207002DCD35 /* libcore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcore.a; sourceTree = "<group>"; };
-		923B54722642D208002DCD35 /* libpbkdf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpbkdf.a; sourceTree = "<group>"; };
-		923B54732642D208002DCD35 /* libexternal_pow.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libexternal_pow.a; sourceTree = "<group>"; };
-		923B54742642D208002DCD35 /* libwallet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwallet.a; sourceTree = "<group>"; };
 		923DB10B235DD2D60056ACDA /* BMInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMInputViewController.swift; sourceTree = "<group>"; };
 		923DB10C235DD2D60056ACDA /* BMInputViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMInputViewController.xib; sourceTree = "<group>"; };
 		923EAA10262EDBD80000B8D0 /* SendTransactionTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTypeCell.swift; sourceTree = "<group>"; };
@@ -1473,6 +1453,32 @@
 		9243524E222E73DC00A0EF37 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		92435253222E73E900A0EF37 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92435258222E73FC00A0EF37 /* UTXOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOViewController.swift; sourceTree = "<group>"; };
+		92437C4826A5783000A9C7A1 /* libuv_a.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libuv_a.a; sourceTree = "<group>"; };
+		92437C4926A5783000A9C7A1 /* libcli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcli.a; sourceTree = "<group>"; };
+		92437C4A26A5783100A9C7A1 /* libbvm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbvm.a; sourceTree = "<group>"; };
+		92437C4B26A5783100A9C7A1 /* libethash.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libethash.a; sourceTree = "<group>"; };
+		92437C4C26A5783100A9C7A1 /* libkeykeeper.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkeykeeper.a; sourceTree = "<group>"; };
+		92437C4D26A5783100A9C7A1 /* libmnemonic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmnemonic.a; sourceTree = "<group>"; };
+		92437C4E26A5783100A9C7A1 /* libwallet_client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwallet_client.a; sourceTree = "<group>"; };
+		92437C4F26A5783200A9C7A1 /* libkeccak.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkeccak.a; sourceTree = "<group>"; };
+		92437C5026A5783200A9C7A1 /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnode.a; sourceTree = "<group>"; };
+		92437C5126A5783200A9C7A1 /* libpbkdf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpbkdf.a; sourceTree = "<group>"; };
+		92437C5226A5783200A9C7A1 /* libwallet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwallet.a; sourceTree = "<group>"; };
+		92437C5326A5783200A9C7A1 /* libwebsocket.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebsocket.a; sourceTree = "<group>"; };
+		92437C5426A5783300A9C7A1 /* libp2p.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libp2p.a; sourceTree = "<group>"; };
+		92437C5526A5783300A9C7A1 /* libassets.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libassets.a; sourceTree = "<group>"; };
+		92437C5626A5783300A9C7A1 /* libpow.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpow.a; sourceTree = "<group>"; };
+		92437C5726A5783300A9C7A1 /* libwallet_api.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwallet_api.a; sourceTree = "<group>"; };
+		92437C5826A5783300A9C7A1 /* libsqlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlite.a; sourceTree = "<group>"; };
+		92437C5926A5783400A9C7A1 /* libutility.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libutility.a; sourceTree = "<group>"; };
+		92437C5A26A5783400A9C7A1 /* liblelantus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblelantus.a; sourceTree = "<group>"; };
+		92437C5B26A5783400A9C7A1 /* libblake2b.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libblake2b.a; sourceTree = "<group>"; };
+		92437C5C26A5783400A9C7A1 /* libdex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libdex.a; sourceTree = "<group>"; };
+		92437C5D26A5783400A9C7A1 /* libsecp256k1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsecp256k1.a; sourceTree = "<group>"; };
+		92437C5E26A5783400A9C7A1 /* libexternal_pow.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libexternal_pow.a; sourceTree = "<group>"; };
+		92437C5F26A5783500A9C7A1 /* libcore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcore.a; sourceTree = "<group>"; };
+		92437C6026A5783500A9C7A1 /* libhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libhttp.a; sourceTree = "<group>"; };
+		92437C6126A5783500A9C7A1 /* libhw_crypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libhw_crypto.a; sourceTree = "<group>"; };
 		9243C2E522970EF10018B52D /* BMAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMAddressCell.swift; sourceTree = "<group>"; };
 		9243C2E622970EF10018B52D /* BMAddressCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMAddressCell.xib; sourceTree = "<group>"; };
 		9246F758227C48830091FB0B /* BMEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMEmptyCell.swift; sourceTree = "<group>"; };
@@ -1572,6 +1578,8 @@
 		926F4B2822E0CDB7007755D9 /* LGSideMenuBorderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGSideMenuBorderView.m; sourceTree = "<group>"; };
 		92708DD72271FA5100B30613 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		92708DDB2272398300B30613 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		9272B3EA26A9C0CA00B78008 /* PopoverAssetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverAssetCell.swift; sourceTree = "<group>"; };
+		9272B3EB26A9C0CA00B78008 /* PopoverAssetCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopoverAssetCell.xib; sourceTree = "<group>"; };
 		927367212277AB330060CB67 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		927367232277AB340060CB67 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		92779DF824AB4C1100E4B91C /* ShowTokenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTokenViewController.swift; sourceTree = "<group>"; };
@@ -1804,35 +1812,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				923B54872642D208002DCD35 /* libuv_a.a in Frameworks */,
-				923B54962642D208002DCD35 /* libbvm.a in Frameworks */,
-				923B54A82642D208002DCD35 /* libnode.a in Frameworks */,
-				923B549F2642D208002DCD35 /* libpow.a in Frameworks */,
-				923B54B72642D208002DCD35 /* libcore.a in Frameworks */,
-				923B54752642D208002DCD35 /* libassets.a in Frameworks */,
+				92437C8626A5783500A9C7A1 /* libp2p.a in Frameworks */,
+				92437C9826A5783500A9C7A1 /* liblelantus.a in Frameworks */,
+				92437C7D26A5783500A9C7A1 /* libpbkdf.a in Frameworks */,
+				92437C8C26A5783500A9C7A1 /* libpow.a in Frameworks */,
+				92437C7726A5783500A9C7A1 /* libkeccak.a in Frameworks */,
+				92437C6B26A5783500A9C7A1 /* libethash.a in Frameworks */,
+				92437C7126A5783500A9C7A1 /* libmnemonic.a in Frameworks */,
+				92437C6E26A5783500A9C7A1 /* libkeykeeper.a in Frameworks */,
 				926783832456DE29006F3221 /* boost.framework in Frameworks */,
-				923B548D2642D208002DCD35 /* libwallet_client.a in Frameworks */,
-				923B54842642D208002DCD35 /* libkeccak.a in Frameworks */,
-				923B548A2642D208002DCD35 /* libsqlite.a in Frameworks */,
-				923B54BA2642D208002DCD35 /* libpbkdf.a in Frameworks */,
-				923B54782642D208002DCD35 /* libwallet_api.a in Frameworks */,
-				923B54902642D208002DCD35 /* libhttp.a in Frameworks */,
+				92437C8F26A5783500A9C7A1 /* libwallet_api.a in Frameworks */,
+				92437C8326A5783500A9C7A1 /* libwebsocket.a in Frameworks */,
+				92437CA726A5783500A9C7A1 /* libcore.a in Frameworks */,
+				92437C7A26A5783500A9C7A1 /* libnode.a in Frameworks */,
+				92437C9526A5783500A9C7A1 /* libutility.a in Frameworks */,
+				92437C9226A5783500A9C7A1 /* libsqlite.a in Frameworks */,
+				92437C6826A5783500A9C7A1 /* libbvm.a in Frameworks */,
+				92437C9E26A5783500A9C7A1 /* libdex.a in Frameworks */,
+				92437C8026A5783500A9C7A1 /* libwallet.a in Frameworks */,
+				92437C9B26A5783500A9C7A1 /* libblake2b.a in Frameworks */,
 				9253A77025A5C6A500E456A2 /* openssl.framework in Frameworks */,
+				92437CA426A5783500A9C7A1 /* libexternal_pow.a in Frameworks */,
+				92437C6226A5783500A9C7A1 /* libuv_a.a in Frameworks */,
+				92437CA126A5783500A9C7A1 /* libsecp256k1.a in Frameworks */,
+				92437CAA26A5783500A9C7A1 /* libhttp.a in Frameworks */,
+				92437C8926A5783500A9C7A1 /* libassets.a in Frameworks */,
 				09BB8194C318850B9C687050 /* Pods_BeamWallet.framework in Frameworks */,
-				923B54A52642D208002DCD35 /* libp2p.a in Frameworks */,
-				923B54992642D208002DCD35 /* liblelantus.a in Frameworks */,
-				923B547E2642D208002DCD35 /* libmnemonic.a in Frameworks */,
-				923B54AE2642D208002DCD35 /* libdex.a in Frameworks */,
-				923B54BD2642D208002DCD35 /* libexternal_pow.a in Frameworks */,
-				923B54812642D208002DCD35 /* libutility.a in Frameworks */,
-				923B54AB2642D208002DCD35 /* libkeykeeper.a in Frameworks */,
-				923B547B2642D208002DCD35 /* libhw_crypto.a in Frameworks */,
-				923B54B42642D208002DCD35 /* libsecp256k1.a in Frameworks */,
-				923B54932642D208002DCD35 /* libwebsocket.a in Frameworks */,
-				923B54C02642D208002DCD35 /* libwallet.a in Frameworks */,
-				923B549C2642D208002DCD35 /* libethash.a in Frameworks */,
-				923B54B12642D208002DCD35 /* libcli.a in Frameworks */,
-				923B54A22642D208002DCD35 /* libblake2b.a in Frameworks */,
+				92437C6526A5783500A9C7A1 /* libcli.a in Frameworks */,
+				92437C7426A5783500A9C7A1 /* libwallet_client.a in Frameworks */,
+				92437CAD26A5783500A9C7A1 /* libhw_crypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1840,35 +1848,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				923B54882642D208002DCD35 /* libuv_a.a in Frameworks */,
-				923B54972642D208002DCD35 /* libbvm.a in Frameworks */,
-				923B54A92642D208002DCD35 /* libnode.a in Frameworks */,
-				923B54A02642D208002DCD35 /* libpow.a in Frameworks */,
-				923B54B82642D208002DCD35 /* libcore.a in Frameworks */,
-				923B54762642D208002DCD35 /* libassets.a in Frameworks */,
+				92437C8726A5783500A9C7A1 /* libp2p.a in Frameworks */,
+				92437C9926A5783500A9C7A1 /* liblelantus.a in Frameworks */,
+				92437C7E26A5783500A9C7A1 /* libpbkdf.a in Frameworks */,
+				92437C8D26A5783500A9C7A1 /* libpow.a in Frameworks */,
+				92437C7826A5783500A9C7A1 /* libkeccak.a in Frameworks */,
+				92437C6C26A5783500A9C7A1 /* libethash.a in Frameworks */,
+				92437C7226A5783500A9C7A1 /* libmnemonic.a in Frameworks */,
+				92437C6F26A5783500A9C7A1 /* libkeykeeper.a in Frameworks */,
 				926783842456DE29006F3221 /* boost.framework in Frameworks */,
-				923B548E2642D208002DCD35 /* libwallet_client.a in Frameworks */,
-				923B54852642D208002DCD35 /* libkeccak.a in Frameworks */,
-				923B548B2642D208002DCD35 /* libsqlite.a in Frameworks */,
-				923B54BB2642D208002DCD35 /* libpbkdf.a in Frameworks */,
-				923B54792642D208002DCD35 /* libwallet_api.a in Frameworks */,
-				923B54912642D208002DCD35 /* libhttp.a in Frameworks */,
+				92437C9026A5783500A9C7A1 /* libwallet_api.a in Frameworks */,
+				92437C8426A5783500A9C7A1 /* libwebsocket.a in Frameworks */,
+				92437CA826A5783500A9C7A1 /* libcore.a in Frameworks */,
+				92437C7B26A5783500A9C7A1 /* libnode.a in Frameworks */,
+				92437C9626A5783500A9C7A1 /* libutility.a in Frameworks */,
+				92437C9326A5783500A9C7A1 /* libsqlite.a in Frameworks */,
+				92437C6926A5783500A9C7A1 /* libbvm.a in Frameworks */,
+				92437C9F26A5783500A9C7A1 /* libdex.a in Frameworks */,
+				92437C8126A5783500A9C7A1 /* libwallet.a in Frameworks */,
+				92437C9C26A5783500A9C7A1 /* libblake2b.a in Frameworks */,
 				9253A77125A5C6A500E456A2 /* openssl.framework in Frameworks */,
+				92437CA526A5783500A9C7A1 /* libexternal_pow.a in Frameworks */,
+				92437C6326A5783500A9C7A1 /* libuv_a.a in Frameworks */,
+				92437CA226A5783500A9C7A1 /* libsecp256k1.a in Frameworks */,
+				92437CAB26A5783500A9C7A1 /* libhttp.a in Frameworks */,
+				92437C8A26A5783500A9C7A1 /* libassets.a in Frameworks */,
 				0E952497DFB46C7621546999 /* Pods_BeamWalletTestNet.framework in Frameworks */,
-				923B54A62642D208002DCD35 /* libp2p.a in Frameworks */,
-				923B549A2642D208002DCD35 /* liblelantus.a in Frameworks */,
-				923B547F2642D208002DCD35 /* libmnemonic.a in Frameworks */,
-				923B54AF2642D208002DCD35 /* libdex.a in Frameworks */,
-				923B54BE2642D208002DCD35 /* libexternal_pow.a in Frameworks */,
-				923B54822642D208002DCD35 /* libutility.a in Frameworks */,
-				923B54AC2642D208002DCD35 /* libkeykeeper.a in Frameworks */,
-				923B547C2642D208002DCD35 /* libhw_crypto.a in Frameworks */,
-				923B54B52642D208002DCD35 /* libsecp256k1.a in Frameworks */,
-				923B54942642D208002DCD35 /* libwebsocket.a in Frameworks */,
-				923B54C12642D208002DCD35 /* libwallet.a in Frameworks */,
-				923B549D2642D208002DCD35 /* libethash.a in Frameworks */,
-				923B54B22642D208002DCD35 /* libcli.a in Frameworks */,
-				923B54A32642D208002DCD35 /* libblake2b.a in Frameworks */,
+				92437C6626A5783500A9C7A1 /* libcli.a in Frameworks */,
+				92437C7526A5783500A9C7A1 /* libwallet_client.a in Frameworks */,
+				92437CAE26A5783500A9C7A1 /* libhw_crypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1876,35 +1884,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				923B54892642D208002DCD35 /* libuv_a.a in Frameworks */,
-				923B54982642D208002DCD35 /* libbvm.a in Frameworks */,
-				923B54AA2642D208002DCD35 /* libnode.a in Frameworks */,
-				923B54A12642D208002DCD35 /* libpow.a in Frameworks */,
-				923B54B92642D208002DCD35 /* libcore.a in Frameworks */,
-				923B54772642D208002DCD35 /* libassets.a in Frameworks */,
+				92437C8826A5783500A9C7A1 /* libp2p.a in Frameworks */,
+				92437C9A26A5783500A9C7A1 /* liblelantus.a in Frameworks */,
+				92437C7F26A5783500A9C7A1 /* libpbkdf.a in Frameworks */,
+				92437C8E26A5783500A9C7A1 /* libpow.a in Frameworks */,
+				92437C7926A5783500A9C7A1 /* libkeccak.a in Frameworks */,
+				92437C6D26A5783500A9C7A1 /* libethash.a in Frameworks */,
+				92437C7326A5783500A9C7A1 /* libmnemonic.a in Frameworks */,
+				92437C7026A5783500A9C7A1 /* libkeykeeper.a in Frameworks */,
 				926783852456DE29006F3221 /* boost.framework in Frameworks */,
-				923B548F2642D208002DCD35 /* libwallet_client.a in Frameworks */,
-				923B54862642D208002DCD35 /* libkeccak.a in Frameworks */,
-				923B548C2642D208002DCD35 /* libsqlite.a in Frameworks */,
-				923B54BC2642D208002DCD35 /* libpbkdf.a in Frameworks */,
-				923B547A2642D208002DCD35 /* libwallet_api.a in Frameworks */,
-				923B54922642D208002DCD35 /* libhttp.a in Frameworks */,
+				92437C9126A5783500A9C7A1 /* libwallet_api.a in Frameworks */,
+				92437C8526A5783500A9C7A1 /* libwebsocket.a in Frameworks */,
+				92437CA926A5783500A9C7A1 /* libcore.a in Frameworks */,
+				92437C7C26A5783500A9C7A1 /* libnode.a in Frameworks */,
+				92437C9726A5783500A9C7A1 /* libutility.a in Frameworks */,
+				92437C9426A5783500A9C7A1 /* libsqlite.a in Frameworks */,
+				92437C6A26A5783500A9C7A1 /* libbvm.a in Frameworks */,
+				92437CA026A5783500A9C7A1 /* libdex.a in Frameworks */,
+				92437C8226A5783500A9C7A1 /* libwallet.a in Frameworks */,
+				92437C9D26A5783500A9C7A1 /* libblake2b.a in Frameworks */,
 				9253A77225A5C6A500E456A2 /* openssl.framework in Frameworks */,
+				92437CA626A5783500A9C7A1 /* libexternal_pow.a in Frameworks */,
+				92437C6426A5783500A9C7A1 /* libuv_a.a in Frameworks */,
+				92437CA326A5783500A9C7A1 /* libsecp256k1.a in Frameworks */,
+				92437CAC26A5783500A9C7A1 /* libhttp.a in Frameworks */,
+				92437C8B26A5783500A9C7A1 /* libassets.a in Frameworks */,
 				53E3D6F8F19BD21A69380CBA /* Pods_BeamWalletMasterNet.framework in Frameworks */,
-				923B54A72642D208002DCD35 /* libp2p.a in Frameworks */,
-				923B549B2642D208002DCD35 /* liblelantus.a in Frameworks */,
-				923B54802642D208002DCD35 /* libmnemonic.a in Frameworks */,
-				923B54B02642D208002DCD35 /* libdex.a in Frameworks */,
-				923B54BF2642D208002DCD35 /* libexternal_pow.a in Frameworks */,
-				923B54832642D208002DCD35 /* libutility.a in Frameworks */,
-				923B54AD2642D208002DCD35 /* libkeykeeper.a in Frameworks */,
-				923B547D2642D208002DCD35 /* libhw_crypto.a in Frameworks */,
-				923B54B62642D208002DCD35 /* libsecp256k1.a in Frameworks */,
-				923B54952642D208002DCD35 /* libwebsocket.a in Frameworks */,
-				923B54C22642D208002DCD35 /* libwallet.a in Frameworks */,
-				923B549E2642D208002DCD35 /* libethash.a in Frameworks */,
-				923B54B32642D208002DCD35 /* libcli.a in Frameworks */,
-				923B54A42642D208002DCD35 /* libblake2b.a in Frameworks */,
+				92437C6726A5783500A9C7A1 /* libcli.a in Frameworks */,
+				92437C7626A5783500A9C7A1 /* libwallet_client.a in Frameworks */,
+				92437CAF26A5783500A9C7A1 /* libhw_crypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2710,32 +2718,32 @@
 		92D3CBD32264B562007E3C55 /* mainnet */ = {
 			isa = PBXGroup;
 			children = (
-				923B545B2642D204002DCD35 /* libassets.a */,
-				923B546A2642D206002DCD35 /* libblake2b.a */,
-				923B54662642D206002DCD35 /* libbvm.a */,
-				923B546F2642D207002DCD35 /* libcli.a */,
-				923B54712642D207002DCD35 /* libcore.a */,
-				923B546E2642D207002DCD35 /* libdex.a */,
-				923B54682642D206002DCD35 /* libethash.a */,
-				923B54732642D208002DCD35 /* libexternal_pow.a */,
-				923B54642642D206002DCD35 /* libhttp.a */,
-				923B545D2642D204002DCD35 /* libhw_crypto.a */,
-				923B54602642D205002DCD35 /* libkeccak.a */,
-				923B546D2642D207002DCD35 /* libkeykeeper.a */,
-				923B54672642D206002DCD35 /* liblelantus.a */,
-				923B545E2642D205002DCD35 /* libmnemonic.a */,
-				923B546C2642D207002DCD35 /* libnode.a */,
-				923B546B2642D206002DCD35 /* libp2p.a */,
-				923B54722642D208002DCD35 /* libpbkdf.a */,
-				923B54692642D206002DCD35 /* libpow.a */,
-				923B54702642D207002DCD35 /* libsecp256k1.a */,
-				923B54622642D205002DCD35 /* libsqlite.a */,
-				923B545F2642D205002DCD35 /* libutility.a */,
-				923B54612642D205002DCD35 /* libuv_a.a */,
-				923B545C2642D204002DCD35 /* libwallet_api.a */,
-				923B54632642D205002DCD35 /* libwallet_client.a */,
-				923B54742642D208002DCD35 /* libwallet.a */,
-				923B54652642D206002DCD35 /* libwebsocket.a */,
+				92437C5526A5783300A9C7A1 /* libassets.a */,
+				92437C5B26A5783400A9C7A1 /* libblake2b.a */,
+				92437C4A26A5783100A9C7A1 /* libbvm.a */,
+				92437C4926A5783000A9C7A1 /* libcli.a */,
+				92437C5F26A5783500A9C7A1 /* libcore.a */,
+				92437C5C26A5783400A9C7A1 /* libdex.a */,
+				92437C4B26A5783100A9C7A1 /* libethash.a */,
+				92437C5E26A5783400A9C7A1 /* libexternal_pow.a */,
+				92437C6026A5783500A9C7A1 /* libhttp.a */,
+				92437C6126A5783500A9C7A1 /* libhw_crypto.a */,
+				92437C4F26A5783200A9C7A1 /* libkeccak.a */,
+				92437C4C26A5783100A9C7A1 /* libkeykeeper.a */,
+				92437C5A26A5783400A9C7A1 /* liblelantus.a */,
+				92437C4D26A5783100A9C7A1 /* libmnemonic.a */,
+				92437C5026A5783200A9C7A1 /* libnode.a */,
+				92437C5426A5783300A9C7A1 /* libp2p.a */,
+				92437C5126A5783200A9C7A1 /* libpbkdf.a */,
+				92437C5626A5783300A9C7A1 /* libpow.a */,
+				92437C5D26A5783400A9C7A1 /* libsecp256k1.a */,
+				92437C5826A5783300A9C7A1 /* libsqlite.a */,
+				92437C5926A5783400A9C7A1 /* libutility.a */,
+				92437C4826A5783000A9C7A1 /* libuv_a.a */,
+				92437C5726A5783300A9C7A1 /* libwallet_api.a */,
+				92437C4E26A5783100A9C7A1 /* libwallet_client.a */,
+				92437C5226A5783200A9C7A1 /* libwallet.a */,
+				92437C5326A5783200A9C7A1 /* libwebsocket.a */,
 			);
 			path = mainnet;
 			sourceTree = "<group>";
@@ -2863,6 +2871,8 @@
 				9252DA37267A132800FDDD5A /* PopoverCell.xib */,
 				9252DA4A267A520F00FDDD5A /* BMThreeLineCell.swift */,
 				9252DA4B267A520F00FDDD5A /* BMThreeLineCell.xib */,
+				9272B3EA26A9C0CA00B78008 /* PopoverAssetCell.swift */,
+				9272B3EB26A9C0CA00B78008 /* PopoverAssetCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -3153,6 +3163,7 @@
 				9260F9622559720000465BE1 /* BMMultiLinesCell2.xib in Resources */,
 				9212DB9C22E0990D0053FC99 /* BMEmptyView.xib in Resources */,
 				9247DCEA267B5C8100F4E3D8 /* AssetDropDownCell.xib in Resources */,
+				9272B3ED26A9C0CA00B78008 /* PopoverAssetCell.xib in Resources */,
 				9252DA4F267A520F00FDDD5A /* BMThreeLineCell.xib in Resources */,
 				92F78BBF24D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
 				92CC40EB22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
@@ -3258,6 +3269,7 @@
 				92DBA6F924599DCD0013FB54 /* NotificationTableViewCell.xib in Resources */,
 				92798640258CD704003E06BF /* MaxPrivacyDetailHeader.xib in Resources */,
 				922035FB262D8F7E0002CD48 /* BMCopyCell.xib in Resources */,
+				9272B3EF26A9C0D100B78008 /* PopoverAssetCell.xib in Resources */,
 				9224750524E3EC6C006FE2B2 /* GoogleServiceTest.plist in Resources */,
 				9260F9632559720000465BE1 /* BMMultiLinesCell2.xib in Resources */,
 				923EAA17262EDBDC0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
@@ -3332,6 +3344,7 @@
 				92E2EB51226F21C700367928 /* Localizable.strings in Resources */,
 				92DFD5D1255031FA00B9751C /* OfflineAddressViewController.xib in Resources */,
 				92E2EB52226F21C700367928 /* Assets.xcassets in Resources */,
+				9272B3F126A9C0D100B78008 /* PopoverAssetCell.xib in Resources */,
 				927EDE4D22A7F6BF005D5CEA /* InputFeePopover.xib in Resources */,
 				923DB112235DD2D60056ACDA /* BMInputViewController.xib in Resources */,
 				92E2EB8C226F225700367928 /* bgMasternet.jpg in Resources */,
@@ -3667,6 +3680,7 @@
 				925AD5FF22282AB500DDE66B /* View.swift in Sources */,
 				92538F61222B5F7E00792A25 /* OpenWalletProgressViewController.swift in Sources */,
 				921027DF24606E42001A7130 /* PagingMenuTransition.swift in Sources */,
+				9272B3EC26A9C0CA00B78008 /* PopoverAssetCell.swift in Sources */,
 				92592CA52245296D00050A13 /* KeychainManager.swift in Sources */,
 				927F04EF245AED8B0058372E /* BMNotificationView.swift in Sources */,
 				9210280324606E42001A7130 /* UIEdgeInsets.swift in Sources */,
@@ -3959,6 +3973,7 @@
 				9288DD3F223A55410020C501 /* View.swift in Sources */,
 				9288DD40223A55410020C501 /* OpenWalletProgressViewController.swift in Sources */,
 				921027E024606E42001A7130 /* PagingMenuTransition.swift in Sources */,
+				9272B3EE26A9C0D100B78008 /* PopoverAssetCell.swift in Sources */,
 				92592CA62245296D00050A13 /* KeychainManager.swift in Sources */,
 				927F04F0245AED8B0058372E /* BMNotificationView.swift in Sources */,
 				9210280424606E42001A7130 /* UIEdgeInsets.swift in Sources */,
@@ -4251,6 +4266,7 @@
 				92E2EAEC226F21C700367928 /* View.swift in Sources */,
 				92E2EAED226F21C700367928 /* OpenWalletProgressViewController.swift in Sources */,
 				921027E124606E42001A7130 /* PagingMenuTransition.swift in Sources */,
+				9272B3F026A9C0D100B78008 /* PopoverAssetCell.swift in Sources */,
 				92E2EAEE226F21C700367928 /* KeychainManager.swift in Sources */,
 				927F04F1245AED8B0058372E /* BMNotificationView.swift in Sources */,
 				9210280524606E42001A7130 /* UIEdgeInsets.swift in Sources */,
@@ -4976,7 +4992,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -5056,7 +5072,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

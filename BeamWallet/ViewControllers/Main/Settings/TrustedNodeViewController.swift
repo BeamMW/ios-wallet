@@ -65,7 +65,6 @@ class TrustedNodeViewController: BMInputViewController {
             nextButton.setTitle(Localizable.shared.strings.save, for: .normal)
             nextButton.setImage(IconSaveDone(), for: .normal)
         case .restore:
-            AppModel.sharedManager().addDelegate(self)
             
             nextButton.setTitle(Localizable.shared.strings.next, for: .normal)
             nextButton.setImage(IconNextBlue(), for: .normal)
@@ -92,12 +91,14 @@ class TrustedNodeViewController: BMInputViewController {
     
     override func onNext() {
         view.endEditing(true)
+        AppModel.sharedManager().removeDelegate(self)
         
         switch event {
         case .change:
             changeNode()
         case .restore:
             setNode()
+            AppModel.sharedManager().addDelegate(self)
         case .none:
             break
         }
@@ -126,6 +127,9 @@ class TrustedNodeViewController: BMInputViewController {
                     }
                 }
                 else {
+                    timeoutTimer?.invalidate()
+                    timeoutTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(timeout), userInfo: nil, repeats: false)
+
                     timer.invalidate()
                     timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
                     
@@ -170,25 +174,38 @@ class TrustedNodeViewController: BMInputViewController {
             AppModel.sharedManager().isOwnNode = true
         }
 
-        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
-        let menuViewController = LeftMenuViewController()
-
-        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
-                                                      leftViewController: menuViewController,
-                                                      rightViewController: nil)
-
-        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
-        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
-        sideMenuController.rootViewLayerShadowRadius = 0
-        sideMenuController.rootViewLayerShadowColor = UIColor.clear
-        sideMenuController.leftViewLayerShadowRadius = 0
-        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
-        sideMenuController.rootViewCoverAlphaForRightView = 0.5
-        sideMenuController.leftViewCoverAlpha = 0.5
-        sideMenuController.rightViewCoverAlpha = 0.5
-        sideMenuController.modalTransitionStyle = .crossDissolve
-
-        navigationController?.setViewControllers([sideMenuController], animated: true)
+        AppModel.sharedManager().removeDelegate(self)
+        
+        timer.invalidate()
+        timeoutTimer?.invalidate()
+        
+        timeoutTimer = nil
+        
+        let vc = OpenWalletProgressViewController(onlyConnect: true)
+        vc.cancelCallback = {
+            self.isPresented = false
+        }
+        pushViewController(vc: vc)
+        
+//        let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
+//        let menuViewController = LeftMenuViewController()
+//
+//        let sideMenuController = LGSideMenuController(rootViewController: mainVC,
+//                                                      leftViewController: menuViewController,
+//                                                      rightViewController: nil)
+//
+//        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+//        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
+//        sideMenuController.rootViewLayerShadowRadius = 0
+//        sideMenuController.rootViewLayerShadowColor = UIColor.clear
+//        sideMenuController.leftViewLayerShadowRadius = 0
+//        sideMenuController.rootViewCoverAlphaForLeftView = 0.5
+//        sideMenuController.rootViewCoverAlphaForRightView = 0.5
+//        sideMenuController.leftViewCoverAlpha = 0.5
+//        sideMenuController.rightViewCoverAlpha = 0.5
+//        sideMenuController.modalTransitionStyle = .crossDissolve
+//
+//        navigationController?.setViewControllers([sideMenuController], animated: true)
     }
 }
 

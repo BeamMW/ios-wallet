@@ -172,11 +172,10 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
--(NSString*_Nonnull)token:(BOOL)maxPrivacy nonInteractive:(BOOL)nonInteractive isPermanentAddress:(BOOL)isPermanentAddress amount:(double)amount walleetId:(NSString*_Nonnull)walleetId identity:(NSString*_Nonnull)identity ownId:(int64_t)ownId;
 
--(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId amount:(double)amount;
--(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
--(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount;
+-(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
+-(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
 
 
 // addresses

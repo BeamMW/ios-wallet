@@ -31,10 +31,12 @@ class BMSnackBar: UIView, BMCountdownViewDelegate {
     struct SnackData {
         var type:SnackType!
         var id:String!
-        
-        init(type:SnackType!, id:String!) {
+        var title:String!
+
+        init(type:SnackType!, id:String!, title:String!) {
             self.type = type
             self.id = id
+            self.title = title
         }
     }
     
@@ -78,7 +80,7 @@ class BMSnackBar: UIView, BMCountdownViewDelegate {
             label.text = Localizable.shared.strings.transaction_deleted
         }
         else{
-            label.text = Localizable.shared.strings.beams_send
+            label.text = data.title 
         }
       
         addSubview(label)
