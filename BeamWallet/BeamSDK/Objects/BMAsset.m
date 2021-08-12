@@ -111,6 +111,10 @@
     return _assetId <= 0;
 }
 
+-(BOOL)isDemoX {
+    return [_unitName isEqualToString:@"DEMOX"];
+}
+
 -(double)USD {
     return [[ExchangeManager sharedManager] exchangeValueUSDAsset:self.realAmount assetID:self.assetId];
 }

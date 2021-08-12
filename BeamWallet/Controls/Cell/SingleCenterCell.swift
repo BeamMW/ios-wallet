@@ -1,5 +1,5 @@
 //
-// ReceiveAddressButtonsCell.swift
+// SingleCenterCell.swift
 // BeamWallet
 //
 // Copyright 2018 Beam Development
@@ -16,37 +16,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
 import UIKit
 
-class ReceiveAddressButtonsCell: BaseCell {
-    @IBOutlet private var infoLabel: UILabel!
+class SingleCenterCell: UITableViewCell {
 
-    weak var delegate: BMCellProtocol?
+    @IBOutlet public weak var label:UILabel!
+    @IBOutlet public weak var separatorView:UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        allowHighlighted = false
-
+        if(Settings.sharedManager().isDarkMode) {
+            label.textColor =  UIColor.main.steel
+        }
         selectionStyle = .none
-        
-        if Settings.sharedManager().isDarkMode {
-            infoLabel.textColor = UIColor.main.steel;
-        }
-        else {
-            infoLabel.textColor = UIColor.main.blueyGrey
-        }
     }
 
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
 
-    public func setText(text:String) {
-        infoLabel.text = text
+        // Configure the view for the selected state
     }
-
-    @IBAction func onShare(sender: UIButton) {
-        delegate?.onClickShare?()
-    }
+    
 }
-
-

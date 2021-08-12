@@ -105,11 +105,19 @@ class BMPopoverMenu: NSObject {
         var name: String
         var icon: String?
         var action: BMPopoverMenuItemAction
+        var selected:Bool? = nil
         
         init(name: String, icon: String?, action: BMPopoverMenuItemAction) {
             self.name = name
             self.icon = icon
             self.action = action
+        }
+        
+        init(name: String, icon: String?, action: BMPopoverMenuItemAction, selected: Bool?) {
+            self.name = name
+            self.icon = icon
+            self.action = action
+            self.selected = selected
         }
     }
     
@@ -379,7 +387,7 @@ extension BMPopOverMenuView: UITableViewDataSource {
                 cell.iconView.setAsset(asset)
             }
             
-            if asset?.isBeam() == true {
+            if menuItems[indexPath.row].selected == true {
                 cell.label.font = BoldFont(size: 16)
                 cell.label.textColor = UIColor.main.brightTeal
             }

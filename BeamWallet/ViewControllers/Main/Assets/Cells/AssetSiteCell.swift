@@ -28,6 +28,8 @@ class AssetSiteCell: BaseCell {
     @IBOutlet weak private var siteButton: UIButton!
     @IBOutlet weak private var paperButton: UIButton!
 
+    private var assetInfo: BMAsset!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -42,14 +44,24 @@ class AssetSiteCell: BaseCell {
     }
     
     @IBAction private func onSite() {
-        
+        if let url = URL(string: assetInfo.site) {
+            if let top = UIApplication.getTopMostViewController() {
+                top.openUrl(url: url)
+            }
+        }
     }
     
     @IBAction private func onPaper() {
-        
+        if let url = URL(string: assetInfo.paper) {
+            if let top = UIApplication.getTopMostViewController() {
+                top.openUrl(url: url)
+            }
+        }
     }
     
     public func setAsset(_ asset:BMAsset) {
+        self.assetInfo = asset
+        
         iconView.setAsset(asset)
         
         if !asset.isBeam() {
@@ -57,6 +69,14 @@ class AssetSiteCell: BaseCell {
         }
         else {
             nameLabel.text = Localizable.shared.strings.beam_2.uppercased()
+        }
+        
+        if asset.site.isEmpty {
+            siteButton.isHidden = true
+        }
+        
+        if asset.paper.isEmpty {
+            paperButton.isHidden = true
         }
     }
     

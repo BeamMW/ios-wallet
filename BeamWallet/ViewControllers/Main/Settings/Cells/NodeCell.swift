@@ -25,12 +25,14 @@ class NodeCell: UITableViewCell {
     @IBOutlet weak private var nameLabel: UILabel!
     @IBOutlet weak private var infoLabel: UILabel!
     @IBOutlet weak private var iconView: UIImageView!
+    @IBOutlet weak private var hintLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
        
         if Settings.sharedManager().isDarkMode {
             nameLabel.textColor = UIColor.main.steel;
+            hintLabel.textColor = UIColor.main.steel;
         }
         
         selectionStyle = .none
@@ -43,5 +45,11 @@ class NodeCell: UITableViewCell {
         iconView.image = UIImage(named: item.icon)
         checkButton.isSelected = item.selected
         checkButton.isUserInteractionEnabled = false
+        if item.title == Localizable.shared.strings.random_node_title {
+            hintLabel.isHidden = false
+        }
+        else {
+            hintLabel.isHidden = true
+        }
     }
 }

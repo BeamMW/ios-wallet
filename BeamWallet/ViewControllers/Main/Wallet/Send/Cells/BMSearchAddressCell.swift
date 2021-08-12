@@ -105,17 +105,28 @@ class BMSearchAddressCell: BaseCell {
     
     public var addressType: BMAddressType = BMAddressType(BMAddressTypeRegular) 
     
-    public func setAddressType(_ type:BMAddressType, _ offline:Bool) {
+    public func setAddressType(_ type:BMAddressType, _ offline:Bool, _ left:Int) {
         addressType = type
         
         if(!textField.text.isEmpty && type != BMAddressTypeUnknown) {
             let title = AppModel.sharedManager().getAddressTypeString(type)
             addressTypeLabel.isHidden = false
             if offline && type == BMAddressTypeShielded {
-                addressTypeLabel.text = Localizable.shared.strings.regular_offline_only + "."
+                if left <= 3 {
+                    addressTypeLabel.text = String(format: Localizable.shared.strings.offline_left_address_warning, left)
+                }
+                else {
+                    addressTypeLabel.text = String(format: Localizable.shared.strings.offline_left_address, left)
+                }
             }
             else if type == BMAddressTypeShielded {
-                addressTypeLabel.text = Localizable.shared.strings.regular_online_only + "."
+                addressTypeLabel.text = Localizable.shared.strings.online_address + "."
+            }
+            else if type == BMAddressTypeMaxPrivacy {
+                addressTypeLabel.text = Localizable.shared.strings.send_max_privacy_title
+            }
+            else if type == BMAddressTypeRegular {
+                addressTypeLabel.text = Localizable.shared.strings.online_address + "."
             }
             else {
                 addressTypeLabel.text = "\(title)."

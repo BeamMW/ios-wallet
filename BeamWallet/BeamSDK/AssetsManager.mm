@@ -24,7 +24,7 @@
 
 static NSString *assetsKey = @"assetsKeyNew";
 
-NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#008eff",@"#ff746b",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
+NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#a37dff",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
 
 @implementation AssetsManager
 
@@ -55,7 +55,7 @@ NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#00
         asset.assetId = 0;
         asset.nthUnitName = @"BEAM";
         asset.unitName = @"BEAM";
-        asset.color = colors[0];
+        asset.color = @"#00F6D2";
         asset.shortName = @"BEAM";
         asset.shortDesc = @"";
         asset.longDesc = @"";
@@ -68,7 +68,8 @@ NSArray *colors = @[@"#00F6D2",@"#73FF7C",@"#FFE75B",@"#FF746B",@"#d885ff",@"#00
 }
 
 -(NSString*_Nonnull)getAssetColor:(int)value {
-    return colors[value];
+    int idx = (value % colors.count);
+    return colors[idx];
 }
 
 -(BMAsset*_Nullable)getAsset:(int)assetId {

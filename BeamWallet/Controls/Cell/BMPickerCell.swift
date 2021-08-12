@@ -29,7 +29,7 @@ class BMPickerCell: BaseCell {
     
     weak var delegate: BMPickerCellDelegate?
 
-    @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet private weak var arrowView: UIImageView!

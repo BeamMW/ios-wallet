@@ -167,7 +167,6 @@ class BMNetworkStatusView: UIView {
         }
 
         if connected {
-            
             if ExchangeManager.shared().currencies.count == 0  {
                 self.statusView.image = nil
                 self.statusView.backgroundColor = UIColor.main.orange
@@ -187,7 +186,16 @@ class BMNetworkStatusView: UIView {
                     self.statusView.glow()
                 }
                 
-                self.statusLabel.text = self.onlineString
+                if Settings.sharedManager().connectToRandomNode && !Settings.sharedManager().isNodeProtocolEnabled {
+                    self.numberOfLines = 2
+                    self.statusLabel.text = Localizable.shared.strings.online_new_status
+                    self.changeButton.isHidden = false
+                }
+                else {
+                    self.numberOfLines = 1
+                    self.statusLabel.text = self.onlineString
+                }
+                
                 
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }

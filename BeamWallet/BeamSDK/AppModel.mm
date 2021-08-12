@@ -790,9 +790,10 @@ struct GetMaxPrivacyLockFunc
         try{
             string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
             
+            auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(walletDb);
             auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-            additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
-
+            additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
+            
             wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
             
             wallet->getAsync()->setNodeAddress(nodeAddrStr);
@@ -850,9 +851,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (isStarted == NO && walletDb != nil) {
         string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
                 
+        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>(walletDb);
         auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-        additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
-
+        additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
+        
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
@@ -1980,12 +1982,6 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline {
         
-    if([[AppModel sharedManager] isToken:to] && !isOffline) {
-        BMTransactionParameters *params = [self getTransactionParameters:to];
-        if (params.newAddressType != BMAddressTypeOfflinePublic && params.newAddressType != BMAddressTypeMaxPrivacy) {
-            to = params.address;
-        }
-    }
     
     auto txParameters = beam::wallet::ParseParameters(to.string);
     if (!txParameters){
@@ -2005,7 +2001,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     auto messageString = comment.string;
     
-    if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline)) {
+    if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline && isOffline)) {
         if (!LoadReceiverParams(_txParameters, params, type)) {
             assert(false);
             return;
@@ -2030,10 +2026,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, [Settings sharedManager].lockMaxPrivacyValue);
     }
     
-    if (!beam::wallet::CheckReceiverAddress(to.string)) {
-        params.SetParameter(TxParameterID::OriginalToken, to.string);
-    }
     params.SetParameter(TxParameterID::OriginalToken, to.string);
+
    // params.SetParameter(TxParameterID::SavePeerAddress, false);
 
     wallet->getAsync()->startTransaction(std::move(params));
@@ -2209,8 +2203,8 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
         ShieldedVoucherList trVouchers;
         if (params->GetParameter(TxParameterID::ShieldedVoucherList, trVouchers))
         {
-            wallet->getAsync()->getAddress(*peerId);
             wallet->getAsync()->saveVouchers(trVouchers, *peerId);
+            wallet->getAsync()->getAddress(*peerId);
         }
     }
     

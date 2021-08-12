@@ -505,6 +505,30 @@ class LocalizableStrings : NSObject {
     var failed = "failed".localized
     var clear_wallet = "clear_wallet".localized
 
+    var advanced = "advanced".localized
+    var maximum_anonymity_set = "maximum_anonymity_set".localized
+    var receive_description = "receive_description".localized
+    var maximum_anonymity = "maximum_anonymity".localized
+    var connect_node_offline = "connect_node_offline".localized
+    var max_privacy_fee = "max_privacy_fee".localized
+    var transaction_time = "transaction_time".localized
+    var transaction_indefinitely = "transaction_indefinitely".localized
+    var online_sbbs_address = "online_sbbs_address".localized
+    var copy_address_close = "copy_address_close".localized
+    var about_sbbs = "about_sbbs".localized
+    var max_anonymity_address = "max_anonymity_address".localized
+    var regular_address = "regular_address".localized
+    var online_address = "online_address".localized
+    var offline_left_address = "offline_left_address".localized
+    var offline_left_address_warning = "offline_left_address_warning".localized
+    var send_offline_hint = "send_offline_hint".localized
+    var send_max_privacy_title = "send_max_privacy_title".localized
+    var send_notice_max_privacy = "send_notice_max_privacy".localized
+    var online_new_status = "online_new_status".localized
+    var receive_description_2 = "receive_description_2".localized
+    var only_online_support = "only_online_support".localized
+
+    
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

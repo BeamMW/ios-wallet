@@ -88,15 +88,23 @@ class AssetViewModel: NSObject {
         }
     }
     
-    public func getAssetInfo(asset:BMAsset) -> [BMThreeLineItem] {        
-        let name = BMThreeLineItem(title: Localizable.shared.strings.small_unit_unit.uppercased(), detail: asset.unitName, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+    public func getAssetInfo(asset:BMAsset) -> [BMThreeLineItem] {
+        var result = [BMThreeLineItem]()
         
-        let shortDesc = BMThreeLineItem(title: Localizable.shared.strings.short_desc.uppercased(), detail: asset.shortDesc, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
-
-        let longDesc = BMThreeLineItem(title: Localizable.shared.strings.long_desc.uppercased(), detail: asset.longDesc, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
-
+        let name = BMThreeLineItem(title: Localizable.shared.strings.small_unit_unit.uppercased(), detail: asset.nthUnitName, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+        result.append(name)
         
-        return [name, shortDesc, longDesc]
+        if !asset.shortDesc.isEmpty {
+            let shortDesc = BMThreeLineItem(title: Localizable.shared.strings.short_desc.uppercased(), detail: asset.shortDesc, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+            result.append(shortDesc)
+        }
+
+        if !asset.longDesc.isEmpty {
+            let longDesc = BMThreeLineItem(title: Localizable.shared.strings.long_desc.uppercased(), detail: asset.longDesc, subDetail: "", titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: false)
+            result.append(longDesc)
+        }
+        
+        return result
     }
 
     public func getAssetBalanceInfo(asset:BMAsset)-> [[BMThreeLineItem]] {

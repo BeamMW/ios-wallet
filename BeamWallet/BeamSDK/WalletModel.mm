@@ -98,14 +98,14 @@ void WalletModel::onStatus(const WalletStatus& status)
             if (asset.assetId == assetId) {
                 found = YES;
                 
-                asset.available = AmountBig::get_Lo(value.available);
+                asset.available =  AmountBig::get_Lo(value.available) + AmountBig::get_Lo(value.shielded);
                 asset.receiving = AmountBig::get_Lo(value.receiving);
                 asset.sending = AmountBig::get_Lo(value.sending);
                 asset.shielded = AmountBig::get_Lo(value.shielded);
                 asset.maxPrivacy = AmountBig::get_Lo(value.maturingMP);
                 asset.maturing = AmountBig::get_Lo(value.maturing);
 
-                asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin);
+                asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin) + (double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin);
                 asset.realReceiving = (double(int64_t(AmountBig::get_Lo(value.receiving))) / Rules::Coin);
                 asset.realSending = (double(int64_t(AmountBig::get_Lo(value.sending))) / Rules::Coin);
                 asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
@@ -120,14 +120,14 @@ void WalletModel::onStatus(const WalletStatus& status)
             BMAsset *asset = [[BMAsset alloc] init];
             asset.assetId = assetId;
             
-            asset.available = AmountBig::get_Lo(value.available);
+            asset.available =  AmountBig::get_Lo(value.available) + AmountBig::get_Lo(value.shielded);
             asset.receiving = AmountBig::get_Lo(value.receiving);
             asset.sending = AmountBig::get_Lo(value.sending);
             asset.shielded = AmountBig::get_Lo(value.shielded);
             asset.maxPrivacy = AmountBig::get_Lo(value.maturingMP);
             asset.maturing = AmountBig::get_Lo(value.maturing);
 
-            asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin);
+            asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin) + (double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin);
             asset.realReceiving = (double(int64_t(AmountBig::get_Lo(value.receiving))) / Rules::Coin);
             asset.realSending = (double(int64_t(AmountBig::get_Lo(value.sending))) / Rules::Coin);
             asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
@@ -148,7 +148,7 @@ void WalletModel::onStatus(const WalletStatus& status)
                 asset.assetId = 0;
                 asset.nthUnitName = @"BEAM";
                 asset.unitName = @"BEAM";
-                asset.color = [[AssetsManager sharedManager] getAssetColor:0];
+                asset.color = @"#00F6D2";
                 asset.shortName = @"BEAM";
                 asset.shortDesc = @"";
                 asset.longDesc = @"";
@@ -1317,10 +1317,10 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
 
 void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) {
     
-    NSLog(@"onGetAddress");
-        
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSLog(@"onGetAddress: %d", (int)offlinePayments);
+    
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
             [delegate onMaxPrivacyTokensLeft:(int)offlinePayments];
@@ -1466,7 +1466,7 @@ void WalletModel::onCoinsSelected(const CoinsSelectionInfo& selectionRes)
 {
     NSLog(@"onCoinsSelectionCalculated");
     
-    auto change = double(int64_t(selectionRes.m_changeBeam)) / Rules::Coin;
+    auto change = double(int64_t(selectionRes.m_changeAsset)) / Rules::Coin;
     
     [AppModel sharedManager].feecalculatedBlock(selectionRes.m_minimalExplicitFee, change, 0);
 }

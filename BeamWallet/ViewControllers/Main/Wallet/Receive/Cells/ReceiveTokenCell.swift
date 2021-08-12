@@ -58,12 +58,10 @@ class ReceiveTokenCell: BaseCell {
             self.delegate?.onShowQR?(token: token)
         }
     }
-}
-
-extension ReceiveTokenCell: Configurable {
     
-    func configure(with value: String) {
+    func configure(with value: String, title:String) {
         detailLabel.text = value
+        nameLabel.text = title
+        nameLabel.letterSpacing = 2
     }
-
 }

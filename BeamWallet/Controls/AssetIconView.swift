@@ -38,7 +38,11 @@ class AssetIconView: BMGradientView {
     
     public func setAsset(_ asset:BMAsset) {
         if isBig {
-            if asset.isBeam() {
+            if asset.isDemoX() {
+                imageView.frame = self.bounds
+                imageView.image = UIImage(named: "assetbeamx")
+            }
+            else if asset.isBeam() {
                 imageView.image = UIImage(named: "ic_asset_beam_big")
                 imageView.frame = CGRect(x:12, y: 11, width: 24, height: 20)
             }
@@ -48,7 +52,11 @@ class AssetIconView: BMGradientView {
             }
         }
         else {
-            if asset.isBeam() {
+            if asset.isDemoX() {
+                imageView.frame = self.bounds
+                imageView.image = UIImage(named: "assetbeamx")
+            }
+            else if asset.isBeam() {
                 imageView.image = UIImage(named: "ic_asset_beam")
                 imageView.frame = CGRect(x:6, y: 5, width: 15, height: 13)
             }
@@ -67,6 +75,11 @@ class AssetIconView: BMGradientView {
         
         self.borderWidth = 2
         self.borderColor = UIColor(hexString: asset.color)
+        
+        if asset.isDemoX() {
+            self.borderWidth = 0
+            self.gradientLayer.colors = nil
+        }
     }
 
 }

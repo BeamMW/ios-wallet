@@ -40,6 +40,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
     }
 
+    public var tokensLeft = 0
     private var addresses = [BMAddress]()
     public var isToken = false
    
@@ -109,6 +110,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var onCalculateChanged : ((Double) -> Void)?
     public var onContactChanged : ((Bool) -> Void)?
     public var onAddressTypeChanged : ((Bool) -> Void)?
+    public var onTokensCountChanged : ((Int) -> Void)?
 
     public var saveContactName = String.empty()
     public var sbbsAddress = String.empty()
@@ -486,6 +488,13 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         
         AppModel.sharedManager().calculateFee((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
             self.onCalculateChanged?(change)
+        }
+    }
+    
+    func onMaxPrivacyTokensLeft(_ tokens: Int32) {
+        DispatchQueue.main.async {
+            self.tokensLeft = Int(tokens)
+            self.onTokensCountChanged?(self.tokensLeft)
         }
     }
     

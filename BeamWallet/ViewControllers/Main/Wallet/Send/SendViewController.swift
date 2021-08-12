@@ -44,7 +44,7 @@ class SendViewController: BaseTableViewController {
         infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0)
         infoLabel.numberOfLines = 0
         if viewModel.addressType == BMAddressTypeMaxPrivacy {
-            infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
+            infoLabel.text = Localizable.shared.strings.send_notice_max_privacy
         }
         else if viewModel.isSendOffline || viewModel.addressType == BMAddressTypeOfflinePublic {
             infoLabel.text = Localizable.shared.strings.senf_offline_notice
@@ -104,6 +104,13 @@ class SendViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.onTokensCountChanged = {[weak self] obj in
+            guard let strongSelf = self else { return }
+            if let cell = strongSelf.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
+                cell.setAddressType(BMAddressType(strongSelf.viewModel.addressType), strongSelf.viewModel.isSendOffline, strongSelf.viewModel.tokensLeft)
+            }
+        }
+        
         viewModel.onDataChanged = { [weak self] in
             guard let strongSelf = self else { return }
             
@@ -113,7 +120,7 @@ class SendViewController: BaseTableViewController {
                 cell.copyText = strongSelf.viewModel.copyAddress
                 cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: strongSelf.viewModel.toAddress))
                 cell.contact = strongSelf.viewModel.selectedContact
-                cell.setAddressType(BMAddressType(strongSelf.viewModel.addressType), strongSelf.viewModel.isSendOffline)
+                cell.setAddressType(BMAddressType(strongSelf.viewModel.addressType), strongSelf.viewModel.isSendOffline, strongSelf.viewModel.tokensLeft)
             }
         }
         
@@ -333,9 +340,9 @@ extension SendViewController: UITableViewDataSource {
             cell.error = viewModel.toAddressError
             cell.additionalError = viewModel.newVersionError
             cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) //IconAddressBookSmall(),
+            cell.configure(with: (name: Localizable.shared.strings.send_to.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) //IconAddressBookSmall(),
             cell.contact = viewModel.selectedContact
-            cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline)
+            cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline, viewModel.tokensLeft)
             cell.nameLabelTopOffset.constant = 20
             cell.titleColor = UIColor.white
             cell.placeholder = Localizable.shared.strings.send_address_placholder
@@ -582,7 +589,7 @@ extension SendViewController: BMCellProtocol {
                         var menu = [BMPopoverMenu.BMPopoverMenuItem]()
                         
                         for asset in AssetsManager.shared().assets as! [BMAsset] {
-                            menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset))
+                            menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId)))
                         }
                         
                         BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
@@ -593,7 +600,7 @@ extension SendViewController: BMCellProtocol {
                             let old = self.viewModel.selectedAssetId
                             self.viewModel.selectedAssetId = Int(selected)
                             
-                            if selected != old && self.viewModel.sendAll == true  {
+                            if selected != old {
                                 self.viewModel.sendAll = false
                                 self.viewModel.amount = ""
                             }
@@ -667,7 +674,7 @@ extension SendViewController: BMCellProtocol {
                 cell.copyText = viewModel.copyAddress
                 cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress))
                 cell.contact = viewModel.selectedContact
-                cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline)
+                cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline, viewModel.tokensLeft)
             }
             
             tableView.tableFooterView = footerView()
@@ -769,17 +776,24 @@ extension SendViewController: SendTransactionTypeCellDelegate {
     func onDidSelectTrasactionType(maxPrivacy: Bool) {
         viewModel.isSendOffline = maxPrivacy
         if viewModel.addressType == BMAddressTypeMaxPrivacy {
-            infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
+            infoLabel.text = Localizable.shared.strings.send_notice_max_privacy
         }
-        else if viewModel.isSendOffline || viewModel.addressType == BMAddressTypeOfflinePublic {
+        else if viewModel.addressType == BMAddressTypeOfflinePublic {
             infoLabel.text = Localizable.shared.strings.senf_offline_notice
+        }
+        else if viewModel.isSendOffline {
+            infoLabel.text = Localizable.shared.strings.send_offline_hint
         }
         else {
             infoLabel.text = Localizable.shared.strings.send_notice
         }
         
         if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
-            cell.setAddressType(BMAddressType(self.viewModel.addressType), self.viewModel.isSendOffline)
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                cell.setAddressType(BMAddressType(self.viewModel.addressType), self.viewModel.isSendOffline, self.viewModel.tokensLeft)
+                self.tableView.endUpdates()
+            }
         }
     }
 }

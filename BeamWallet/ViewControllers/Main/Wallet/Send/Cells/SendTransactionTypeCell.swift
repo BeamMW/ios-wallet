@@ -26,7 +26,7 @@ class SendTransactionTypeCell: UITableViewCell {
             transactionTypeSegment.fillEqually = true
             transactionTypeSegment.roundedControl = true
             
-            transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.regular, Localizable.shared.strings.offline])
+            transactionTypeSegment.setSegmentedWith(items: [Localizable.shared.strings.online, Localizable.shared.strings.offline])
             transactionTypeSegment.padding = 0
             transactionTypeSegment.textColor = UIColor.main.blueyGrey
             transactionTypeSegment.selectedTextColor = UIColor.main.brightTeal

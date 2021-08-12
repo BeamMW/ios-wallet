@@ -30,6 +30,19 @@ class BMCopyCell: BaseCell {
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var botOffset: NSLayoutConstraint!
     
+    public var onlySingleLine = false {
+        didSet {
+            if onlySingleLine {
+                valueLabel.numberOfLines = 1
+                valueLabel.adjustsFontSizeToFitWidth = false
+                valueLabel.lineBreakMode = .byTruncatingMiddle
+            }
+            else {
+                valueLabel.numberOfLines = 0
+            }
+        }
+    }
+    
     public var increaseSpace = false {
         didSet {
             if increaseSpace {

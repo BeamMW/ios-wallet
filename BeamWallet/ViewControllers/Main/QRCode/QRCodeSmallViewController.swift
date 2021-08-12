@@ -58,10 +58,20 @@ class QRCodeSmallViewController: BaseViewController {
         mainView.addShadow(offset: CGSize(width: 0, height: -5), color: UIColor.black, opacity: 0.3, radius: 5)
                 
         if isMaxPrivacy {
-            infoLabel.text = Localizable.shared.strings.receive_notice_max_privacy
+            var text = "\n\n" + Localizable.shared.strings.max_privacy_fee
+            let locValue = Settings.sharedManager().currentMaxPrivacyLockValue()
+            
+            if locValue.hours == 0 {
+                text = Localizable.shared.strings.transaction_indefinitely + text
+            }
+            else {
+                text = String(format: Localizable.shared.strings.transaction_time, locValue.name) + text
+            }
+            
+            infoLabel.text = text
         }
         else {
-            infoLabel.text = Localizable.shared.strings.sender_choice + "\n\n" +  Localizable.shared.strings.receive_notice
+            infoLabel.text = Localizable.shared.strings.receive_description
         }
                 
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)

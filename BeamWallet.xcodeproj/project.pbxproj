@@ -993,6 +993,12 @@
 		92E179172357655D001C30A6 /* BMPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E179162357655D001C30A6 /* BMPickerData.swift */; };
 		92E179182357655D001C30A6 /* BMPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E179162357655D001C30A6 /* BMPickerData.swift */; };
 		92E179192357655D001C30A6 /* BMPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E179162357655D001C30A6 /* BMPickerData.swift */; };
+		92E271E326B043FB004C0FB2 /* SingleCenterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E271E126B043FB004C0FB2 /* SingleCenterCell.swift */; };
+		92E271E426B043FB004C0FB2 /* SingleCenterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E271E126B043FB004C0FB2 /* SingleCenterCell.swift */; };
+		92E271E526B043FB004C0FB2 /* SingleCenterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E271E126B043FB004C0FB2 /* SingleCenterCell.swift */; };
+		92E271E626B043FB004C0FB2 /* SingleCenterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E271E226B043FB004C0FB2 /* SingleCenterCell.xib */; };
+		92E271E726B043FB004C0FB2 /* SingleCenterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E271E226B043FB004C0FB2 /* SingleCenterCell.xib */; };
+		92E271E826B043FB004C0FB2 /* SingleCenterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E271E226B043FB004C0FB2 /* SingleCenterCell.xib */; };
 		92E2EA9B226DE5F500367928 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92E2EA9D226DE5F500367928 /* Localizable.strings */; };
 		92E2EAD0226F21C700367928 /* BMWordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FC610F22295DC100AEABC1 /* BMWordField.swift */; };
 		92E2EAD1226F21C700367928 /* BMTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A8578222EB7C600A3B747 /* BMTransaction.m */; };
@@ -1735,6 +1741,8 @@
 		92E1790B235735BD001C30A6 /* UnlockPasswordPopover.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnlockPasswordPopover.xib; sourceTree = "<group>"; };
 		92E17912235762F7001C30A6 /* BMDataPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMDataPickerViewController.swift; sourceTree = "<group>"; };
 		92E179162357655D001C30A6 /* BMPickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPickerData.swift; sourceTree = "<group>"; };
+		92E271E126B043FB004C0FB2 /* SingleCenterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCenterCell.swift; sourceTree = "<group>"; };
+		92E271E226B043FB004C0FB2 /* SingleCenterCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleCenterCell.xib; sourceTree = "<group>"; };
 		92E2EA9C226DE5F500367928 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		92E2EB85226F21C700367928 /* BeamWalletMasterNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamWalletMasterNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E2EB88226F222800367928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenMasterNet.storyboard; sourceTree = "<group>"; };
@@ -2873,6 +2881,8 @@
 				9252DA4B267A520F00FDDD5A /* BMThreeLineCell.xib */,
 				9272B3EA26A9C0CA00B78008 /* PopoverAssetCell.swift */,
 				9272B3EB26A9C0CA00B78008 /* PopoverAssetCell.xib */,
+				92E271E126B043FB004C0FB2 /* SingleCenterCell.swift */,
+				92E271E226B043FB004C0FB2 /* SingleCenterCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -3205,6 +3215,7 @@
 				92D9F7A2266FA98D006FB555 /* AssetAvailableCell.xib in Resources */,
 				92AC9EB722F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */,
 				925AD5F9222829A400DDE66B /* ProximaNova-Bold.ttf in Resources */,
+				92E271E626B043FB004C0FB2 /* SingleCenterCell.xib in Resources */,
 				92090D09223A67D400A1CFBB /* LaunchScreenTestNet.storyboard in Resources */,
 				926EB47B231E843800D059BC /* WalletTransactionCell.xib in Resources */,
 				92F68C802244E77500197D4D /* UTXODetailCell.xib in Resources */,
@@ -3240,6 +3251,7 @@
 				9243C2EB22970EF10018B52D /* BMAddressCell.xib in Resources */,
 				9288DD7B223A55410020C501 /* InputWordCell.xib in Resources */,
 				9225D55C229455CA0067B4EA /* ReceiveAddressButtonsCell.xib in Resources */,
+				92E271E726B043FB004C0FB2 /* SingleCenterCell.xib in Resources */,
 				9232EC962267334A00A12EEE /* GoogleService-Info.plist in Resources */,
 				92E2EA9B226DE5F500367928 /* Localizable.strings in Resources */,
 				9288DD7C223A55410020C501 /* Assets.xcassets in Resources */,
@@ -3379,6 +3391,7 @@
 				92EE507C2625A5C400E684B9 /* SendContactAddressCell.xib in Resources */,
 				92E2EB5B226F21C700367928 /* SF-Pro-Display-Bold.otf in Resources */,
 				9261C282228BF55800D666E0 /* AddressExpiresCell.xib in Resources */,
+				92E271E826B043FB004C0FB2 /* SingleCenterCell.xib in Resources */,
 				92E2EB60226F21C700367928 /* OpenWalletProgressViewController.xib in Resources */,
 				922035FC262D8F7E0002CD48 /* BMCopyCell.xib in Resources */,
 				92E2EB63226F21C700367928 /* PaymentProofDetailViewController.xib in Resources */,
@@ -3709,6 +3722,7 @@
 				923544832255F45B00889C74 /* SettingsCell.swift in Sources */,
 				92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */,
 				925D10E0224A3CF100C64876 /* StringStd.mm in Sources */,
+				92E271E326B043FB004C0FB2 /* SingleCenterCell.swift in Sources */,
 				92B7E4E222AFBF95001708E4 /* BMWord.m in Sources */,
 				92AB832E223BC5D4000ADE86 /* TransactionViewController.swift in Sources */,
 				92B8374D22859210002B385B /* Resources.swift in Sources */,
@@ -4002,6 +4016,7 @@
 				923544842255F45B00889C74 /* SettingsCell.swift in Sources */,
 				92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */,
 				925D10E1224A3CF100C64876 /* StringStd.mm in Sources */,
+				92E271E426B043FB004C0FB2 /* SingleCenterCell.swift in Sources */,
 				92B7E4E322AFBF95001708E4 /* BMWord.m in Sources */,
 				92AB832F223BC5D4000ADE86 /* TransactionViewController.swift in Sources */,
 				92B8374E22859210002B385B /* Resources.swift in Sources */,
@@ -4295,6 +4310,7 @@
 				92E2EAF4226F21C700367928 /* SettingsCell.swift in Sources */,
 				92E2EAF5226F21C700367928 /* BMUTXO.m in Sources */,
 				92E2EAF6226F21C700367928 /* StringStd.mm in Sources */,
+				92E271E526B043FB004C0FB2 /* SingleCenterCell.swift in Sources */,
 				92B7E4E422AFBF95001708E4 /* BMWord.m in Sources */,
 				92E2EAF8226F21C700367928 /* TransactionViewController.swift in Sources */,
 				92B8374F22859210002B385B /* Resources.swift in Sources */,
@@ -4992,7 +5008,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 25;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
@@ -5072,7 +5088,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWalletMasterNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

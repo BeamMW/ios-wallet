@@ -54,6 +54,7 @@
 -(double)realLocked;
 
 -(BOOL)isBeam;
+-(BOOL)isDemoX;
 
 -(double)USD;
 -(UInt64)dateUsed;
