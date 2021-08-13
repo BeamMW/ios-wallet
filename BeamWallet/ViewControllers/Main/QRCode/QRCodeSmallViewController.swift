@@ -71,7 +71,12 @@ class QRCodeSmallViewController: BaseViewController {
             infoLabel.text = text
         }
         else {
-            infoLabel.text = Localizable.shared.strings.receive_description
+            if !AppModel.sharedManager().checkIsOwnNode() {
+                infoLabel.text = Localizable.shared.strings.receive_description_2
+            }
+            else {
+                infoLabel.text = Localizable.shared.strings.receive_description
+            }
         }
                 
         codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)

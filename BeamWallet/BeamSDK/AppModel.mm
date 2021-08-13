@@ -1234,7 +1234,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             {
                 
                 try{
-                    wallet->getAsync()->updateAddress(walletID, addresses[i].m_label, hours == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::OneDay);
+                    wallet->getAsync()->updateAddress(walletID, addresses[i].m_label, hours == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::Auto);
                 }
                 catch (const std::exception& e) {
                     NSLog(@"setExpires failed");
@@ -1297,7 +1297,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             if ([wAddress isEqualToString:address])
             {
                 try{
-                    wallet->getAsync()->updateAddress(walletID, comment.string, addresses[i].m_duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::OneDay);
+                    wallet->getAsync()->updateAddress(walletID, comment.string, addresses[i].m_duration == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::Auto);
                 }
                 catch (const std::exception& e) {
                     NSLog(@"setExpires failed");
@@ -1659,7 +1659,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                             addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
                         }
                         else{
-                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::OneDay);
+                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Auto);
                         }
                     }
                     else{

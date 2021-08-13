@@ -87,7 +87,7 @@ class NotificationManager : NSObject {
         }
         else if (notification.type == TRANSACTION) {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
-                let assetValue = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
+                let assetValue = String.currencyShort(value: transaction.realAmount, name: transaction.asset.unitName)
 
                 var title = ""
                 var detail = ""

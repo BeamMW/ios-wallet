@@ -175,6 +175,20 @@ extension String {
         return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)"
     }
     
+    static func currencyShort(value:Double, name: String) -> String {
+        var assetName = name
+        if assetName == "assets" {
+            assetName = "BEAM"
+        }
+        if assetName.count > 10 {
+            assetName = assetName.prefix(10) + "..."
+        }
+        if Settings.sharedManager().isHideAmounts {
+            return assetName
+        }
+        return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)"
+    }
+    
     func isValidUrl() -> Bool {
         let urlRegEx = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$"
         let urlTest = NSPredicate(format:"SELF MATCHES %@", urlRegEx)

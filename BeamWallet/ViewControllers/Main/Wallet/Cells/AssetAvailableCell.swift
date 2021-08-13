@@ -47,7 +47,7 @@ class AssetAvailableCell: RippleCell {
         
         if asset.locked() > 0 {
             lockedLabel.text = asset.isBeam() ? String.currency(value: asset.realLocked())
-                : String.currency(value: asset.realLocked(), name: asset.unitName)
+                : String.currencyShort(value: asset.realLocked(), name: asset.unitName)
             
             lockedView.isHidden = false
             topOffset.constant = 18
