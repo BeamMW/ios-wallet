@@ -32,6 +32,8 @@ class AssetsViewController: BaseTableViewController {
         
         title = Localizable.shared.strings.assets
 
+        assetViewModel.removeBeam()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register([WalletStatusCell.self, AssetAvailableCell.self])

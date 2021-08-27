@@ -40,11 +40,11 @@ extension UTXOTransactionCell: Configurable {
         
         if !options.transaction.isIncome {
             arrowImage.image = IconSent()
-            typeLabel.text = Localizable.shared.strings.send + " \(options.transaction.asset.unitName ?? "")"
+            typeLabel.text = Localizable.shared.strings.send + " \(options.transaction.asset?.unitName ?? "")"
         }
         else{
             arrowImage.image = IconReceived()
-            typeLabel.text = Localizable.shared.strings.receive + " \(options.transaction.asset.unitName ?? "")"
+            typeLabel.text = Localizable.shared.strings.receive + " \(options.transaction.asset?.unitName ?? "")"
         }
         
         if options.transaction.comment.isEmpty {

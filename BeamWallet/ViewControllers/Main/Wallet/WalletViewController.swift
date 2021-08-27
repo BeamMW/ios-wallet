@@ -221,6 +221,9 @@ extension WalletViewController: UITableViewDelegate {
         else if transactionViewModel.transactions.count == 0, section == 2 {
             return 0
         }
+        else if assetViewModel.assets.count <= 1, section == 1 {
+            return 20
+        }
         return BMTableHeaderTitleView.height
     }
         
@@ -236,7 +239,7 @@ extension WalletViewController: UITableViewDelegate {
             pushViewController(vc: vc)
         }
         else if indexPath.section == 1 {
-            let vc = AssetDetailViewController(asset: assetViewModel.assets[indexPath.row])
+            let vc = AssetDetailViewController(asset: assetViewModel.filteredAssets[indexPath.row])
             pushViewController(vc: vc)
         }
     }
@@ -254,7 +257,7 @@ extension WalletViewController: UITableViewDataSource {
             header.buttonFrame = header.bounds
             return header
         }
-        else if section == 1 {
+        else if section == 1, assetViewModel.assets.count > 1 {
             let header = BMTableHeaderTitleView(title: Localizable.shared.strings.assets.uppercased(), handler: #selector(onAssets), target: self)
             header.letterSpacing = 1.5
             header.textColor = UIColor.white
@@ -262,6 +265,11 @@ extension WalletViewController: UITableViewDataSource {
             header.buttonImage = IconNextArrow()
             header.buttonFrame = header.bounds
             return header
+        }
+        else if assetViewModel.assets.count <= 1, section == 1 {
+            let v = UIView()
+            v.backgroundColor = UIColor.clear
+            return v
         }
         return nil
     }
@@ -275,7 +283,7 @@ extension WalletViewController: UITableViewDataSource {
         case 0:
             return statusViewModel.cells.count
         case 1:
-            return (assetViewModel.assets.count == 0) ? 0 : ((assetViewModel.assets.count > maximumAssetsCount) ? maximumTransactionsCount : assetViewModel.assets.count)
+            return (assetViewModel.filteredAssets.count == 0) ? 0 : ((assetViewModel.filteredAssets.count > maximumAssetsCount) ? maximumTransactionsCount : assetViewModel.filteredAssets.count)
         case 2:
             return (transactionViewModel.transactions.count == 0) ? 1 : ((transactionViewModel.transactions.count > maximumTransactionsCount) ? maximumTransactionsCount : transactionViewModel.transactions.count)
         default:
@@ -305,7 +313,7 @@ extension WalletViewController: UITableViewDataSource {
             }
         case 1:
             let cell = tableView.dequeueReusableCell(withType: AssetAvailableCell.self, for: indexPath)
-            cell.setAsset(assetViewModel.assets[indexPath.row])
+            cell.setAsset(assetViewModel.filteredAssets[indexPath.row])
             return cell
         case 2:
             if transactionViewModel.transactions.count == 0 {

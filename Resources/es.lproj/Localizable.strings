@@ -334,7 +334,7 @@ and never kept on the blockchain.";
 "restore_create_text" = "If you'll restore a wallet all transaction history and addresses will be lost.";
 "proceed" = "Proceed";
 "info_restore_title" = "Do not simultaneously run two wallets initiated from the same seed phrase";
-"info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not sycnrhonized between wallets in any case.";
+"info_restore_text" = "If you run two wallets with the same seed, their balances will not be synchronized. To keep the balances in sync, use your own trusted node configured with your owner key. Also note that transaction history is not synchronized between wallets in any case.";
 "crash_title" = "Beam Wallet crashed unexpectedly";
 "crash_message" = "Would you agree to report your limited amount of information to us? Collecting crash information would allow us to discover and fix bugs much faster. This is only a single crash-related report, we won't keep collecting any of your data later.";
 "crash_negative" = "No, thanks";

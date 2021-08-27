@@ -433,7 +433,7 @@ extension ReceiveViewController : BMCellProtocol {
         if tableView.indexPath(for: sender) != nil, let cell = sender as? BMAmountCell {
             var menu = [BMPopoverMenu.BMPopoverMenuItem]()
             
-            for asset in AssetsManager.shared().assets as! [BMAsset] {
+            for asset in AssetsManager.shared().getAssetsWithBalanceWithBeam() as! [BMAsset] {
                 menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId)))
             }
             

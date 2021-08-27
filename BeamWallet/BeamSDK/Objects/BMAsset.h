@@ -53,10 +53,14 @@
 -(UInt64)locked;
 -(double)realLocked;
 
+-(UInt64)change;
+-(double)realChange;
+
 -(BOOL)isBeam;
 -(BOOL)isDemoX;
 
 -(double)USD;
 -(UInt64)dateUsed;
+-(BOOL)isIncomming;
 
 @end

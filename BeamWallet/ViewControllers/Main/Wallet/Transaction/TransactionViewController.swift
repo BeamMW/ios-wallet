@@ -316,7 +316,7 @@ extension TransactionViewController: GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell) {
             if viewModel.details[path.row].title == Localizable.shared.strings.kernel_id.uppercased() {
-                let kernelId = viewModel.transaction!.kernelId!
+                let kernelId = viewModel.transaction!.kernelId
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {
                     openUrl(url: url)

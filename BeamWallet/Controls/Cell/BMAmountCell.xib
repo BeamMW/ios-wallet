@@ -116,6 +116,15 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="test" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mba-E8-aWk">
+                                        <rect key="frame" x="0.0" y="61" width="185" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -147,6 +156,7 @@
                 <outlet property="currencyArrow" destination="yxO-YM-DxX" id="XyF-YB-xhl"/>
                 <outlet property="currencyLabel" destination="RSM-WO-QCM" id="IRl-Wq-437"/>
                 <outlet property="erorLabel" destination="zPC-i6-2wx" id="Fs8-wV-RA2"/>
+                <outlet property="maxAmountErrorLabel" destination="mba-E8-aWk" id="Heo-iD-hsg"/>
                 <outlet property="nameLabel" destination="4ns-1p-pyG" id="zwq-Ht-UTx"/>
                 <outlet property="secondCurrencyLabel" destination="Q6y-hi-n0C" id="6AA-KM-fXd"/>
                 <outlet property="textField" destination="Bcu-hn-VIp" id="k64-qq-RJi"/>

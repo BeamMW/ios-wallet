@@ -37,5 +37,8 @@
 -(void)changeAssets;
 -(double)getRealAvailableAmount:(int)assetId;
 
+-(NSMutableArray<BMAsset*>*_Nonnull)getAssetsWithBalance;
+-(NSMutableArray<BMAsset*>*_Nonnull)getAssetsWithBalanceWithBeam;
+
 @end
 

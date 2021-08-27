@@ -43,11 +43,15 @@ class WalletTransactionCell: RippleCell {
 extension WalletTransactionCell: Configurable {
     
     func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
+        guard let asset = options.transaction.asset else {
+            return
+        }
+        
         secondAvailableLabel.text = ExchangeManager.shared().exchangeValueAsset(options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
 
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
-        assetIcon.setAsset(options.transaction.asset)
+        assetIcon.setAsset(asset)
         
         statusIcon.image = options.transaction.statusIcon()
         

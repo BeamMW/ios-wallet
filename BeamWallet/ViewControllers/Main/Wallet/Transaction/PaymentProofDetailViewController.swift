@@ -352,7 +352,7 @@ extension PaymentProofDetailViewController: GeneralInfoCellDelegate {
         if let path = tableView.indexPath(for: cell) {
             if details[path.section][path.row].title == Localizable.shared.strings.kernel_id.uppercased(),
                let transaction = self.transaction {
-                let kernelId = transaction.kernelId!
+                let kernelId = transaction.kernelId
                 let link = Settings.sharedManager().explorerAddress + kernelId
                 if let url = URL(string: link) {
                     openUrl(url: url)

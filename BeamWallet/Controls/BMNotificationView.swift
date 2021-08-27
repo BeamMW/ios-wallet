@@ -66,7 +66,12 @@ class BMNotificationView: UIView {
             var icon: UIImage?
             var title: String?
             var detail: NSMutableAttributedString?
-            let assetValue = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
+            
+            guard let asset = transaction.asset else {
+                return
+            }
+            
+            let assetValue = String.currencyShort(value: transaction.realAmount, name: asset.unitName)
 
             if transaction.isIncome {
                 if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
@@ -147,10 +152,14 @@ class BMNotificationView: UIView {
     static func showTransaction (notification: BMNotification, delegate:BMNotificationViewDelegate) {
         DispatchQueue.main.async {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
+                guard let asset = transaction.asset else {
+                    return
+                }
+                
                 var icon: UIImage?
                 var title: String?
                 var detail: NSMutableAttributedString?
-                let assetValue = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
+                let assetValue = String.currencyShort(value: transaction.realAmount, name: asset.unitName)
 
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {

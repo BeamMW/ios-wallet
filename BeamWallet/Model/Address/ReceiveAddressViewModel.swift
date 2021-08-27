@@ -90,8 +90,15 @@ class ReceiveAddressViewModel: NSObject {
                 self.address.maxPrivacyToken = token;
             }
         }
-
-        address.offlineToken = AppModel.sharedManager().generateOfflineAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount)
+        
+        if isOwn {
+            AppModel.sharedManager().generateOfflineAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
+                DispatchQueue.main.async {
+                    self.address.offlineToken = token;
+                    self.onAddressCreated?(nil)
+                }
+            }
+        }
     }
     
     public func createAddress() {

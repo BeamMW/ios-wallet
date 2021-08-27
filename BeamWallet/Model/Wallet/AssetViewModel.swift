@@ -32,6 +32,9 @@ class AssetViewModel: NSObject {
     
     public var onDataChanged : (() -> Void)?
     public var assets = [BMAsset]()
+    private var isBeamRemoved = false
+    
+    public var filteredAssets = [BMAsset]()
     
     public var filtertype = AssetFilterType.recent_old {
         didSet {
@@ -50,6 +53,16 @@ class AssetViewModel: NSObject {
     
     deinit {
         AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    func removeBeam() {
+        isBeamRemoved = true
+        self.filteredAssets.removeAll { asset in
+            return asset.isBeam()
+        }
+        self.assets.removeAll { asset in
+            return asset.isBeam()
+        }
     }
     
     public func sort() {
@@ -86,6 +99,37 @@ class AssetViewModel: NSObject {
                 return a1.usd() < a2.usd()
             }
         }
+        
+        self.assets = self.assets.filter({ asset in
+            return asset.realLocked() > 0 || asset.realAmount > 0
+                || asset.isBeam() || asset.sending > 0 || (asset.receiving > 0 && asset.isIncomming())
+        })
+        
+        self.filteredAssets = self.assets.filter({ asset in
+            return asset.realLocked() > 0 || asset.realAmount > 0
+                || asset.isBeam() || asset.sending > 0 || (asset.receiving > 0 && asset.isIncomming())
+        })
+        
+        if !isBeamRemoved {
+            if let index = self.filteredAssets.firstIndex(where: { asset in
+                asset.isBeam()
+            }) {
+                if index != 0 {
+                    let beam = self.filteredAssets[index]
+                    self.filteredAssets.remove(at: index)
+                    self.filteredAssets.insert(beam, at: 0)
+                }
+            }
+        }
+        else {
+            self.filteredAssets.removeAll { asset in
+                return asset.isBeam()
+            }
+            self.assets.removeAll { asset in
+                return asset.isBeam()
+            }
+        }
+
     }
     
     public func getAssetInfo(asset:BMAsset) -> [BMThreeLineItem] {
@@ -127,8 +171,8 @@ class AssetViewModel: NSObject {
         section_1.append(shielded)
 
 
-        let lockedBalance = asset.realMaxPrivacy + asset.realMaturing + asset.realSending + asset.realReceiving
-        let changeBalance = asset.realSending + asset.realReceiving
+        let lockedBalance = asset.realLocked()
+        let changeBalance = asset.realChange()
 
         let locked = BMThreeLineItem(title: Localizable.shared.strings.locked.uppercased(), detail: asset.isBeam() ? String.currency(value: lockedBalance) : String.currency(value: lockedBalance, name: asset.unitName), subDetail: ExchangeManager.shared().exchangeValueAsset(lockedBalance, assetID: asset.assetId), titleColor: UIColor.white, detailColor: UIColor.white, subDetailColor: UIColor.white.withAlphaComponent(0.7), titleFont: BoldFont(size: 14), detailFont: RegularFont(size: 14), subDetailFont: RegularFont(size: 14), hasArrow: true)
         

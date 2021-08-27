@@ -47,8 +47,12 @@ class TransactionDetailCell: UITableViewCell {
 extension TransactionDetailCell: Configurable {
     
     func configure(with transaction:BMTransaction) {
+        guard let asset = transaction.asset else {
+            return
+        }
+        
         circleView.isBig = true
-        circleView.setAsset(transaction.asset)
+        circleView.setAsset(asset)
         statusIcon.image = transaction.statusIcon()
         secondAmountLabel.text = ExchangeManager.shared().exchangeValueAsset(transaction.realAmount, assetID: UInt64(transaction.assetId))
         
@@ -56,7 +60,7 @@ extension TransactionDetailCell: Configurable {
         secondAmountLabel.isHidden = Settings.sharedManager().isHideAmounts
         securityIcon.isHidden = !Settings.sharedManager().isHideAmounts
 
-        amountLabel.text = String.currency(value: transaction.realAmount, name: transaction.asset.unitName)
+        amountLabel.text = String.currency(value: transaction.realAmount, name: asset.unitName)
         statusLabel.text = transaction.statusType().capitalizingFirstLetter().replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
 
         switch transaction.isIncome {

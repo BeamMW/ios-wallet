@@ -29,6 +29,7 @@ class BMAmountCell: BaseCell {
     @IBOutlet weak private var currencyArrow: UIImageView!
     @IBOutlet weak private var erorLabel: UILabel!
     @IBOutlet weak private var secondCurrencyLabel: UILabel!
+    @IBOutlet weak private var maxAmountErrorLabel: UILabel!
 
     @IBOutlet var topNameOffset: NSLayoutConstraint!
     @IBOutlet var topStackOffset: NSLayoutConstraint!
@@ -86,7 +87,7 @@ class BMAmountCell: BaseCell {
     public var currency:String?
     {
         didSet{
-            if currency != nil && AssetsManager.shared().assets.count > 0 {
+            if currency != nil && AssetsManager.shared().getAssetsWithBalance().count >= 1 {
                 currencyLabel.isUserInteractionEnabled = true
                 currencyArrow.isHidden = false
                 
@@ -95,6 +96,19 @@ class BMAmountCell: BaseCell {
             }
         }
     }
+    public var maxAmountError:String?
+    {
+        didSet{
+            self.maxAmountErrorLabel.text = maxAmountError
+            if maxAmountError != nil  {
+                self.maxAmountErrorLabel.isHidden = false
+            }
+            else {
+                self.maxAmountErrorLabel.isHidden = true
+            }
+        }
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -104,6 +118,9 @@ class BMAmountCell: BaseCell {
         
         secondCurrencyLabel.textColor = UIColor.main.blueyGrey
         secondCurrencyLabel.font = RegularFont(size: 14)
+        
+        maxAmountErrorLabel.textColor = UIColor.main.blueyGrey
+        maxAmountErrorLabel.font = RegularFont(size: 14)
         
         erorLabel.textColor = UIColor.main.red
         erorLabel.isHidden = true
@@ -124,6 +141,7 @@ class BMAmountCell: BaseCell {
         if Settings.sharedManager().isDarkMode {
             secondCurrencyLabel.textColor = UIColor.main.steel
             nameLabel.textColor = UIColor.main.steel;
+            maxAmountErrorLabel.textColor = UIColor.main.steel;
         }
     }
     

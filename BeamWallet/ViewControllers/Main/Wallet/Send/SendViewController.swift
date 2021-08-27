@@ -148,6 +148,13 @@ class SendViewController: BaseTableViewController {
             }
         }
         
+        viewModel.onAmountMaxError = { [weak self]  in
+            guard let strongSelf = self else { return }
+            if strongSelf.isAppear {
+                strongSelf.tableView.reloadData()
+            }
+        }
+        
         viewModel.onAddressTypeChanged = { [weak self] _ in
             guard let strongSelf = self else { return }
             UIView.performWithoutAnimation {
@@ -376,6 +383,7 @@ extension SendViewController: UITableViewDataSource {
                 cell.setSecondAmount(amount: viewModel.secondAmount)
                 cell.topNameOffset.constant = 20
                 cell.titleColor = UIColor.white
+                cell.maxAmountError = viewModel.maxAmountError
                 return cell
             }
             else {
@@ -588,7 +596,7 @@ extension SendViewController: BMCellProtocol {
                     if tableView.indexPath(for: sender) != nil, let cell = sender as? BMAmountCell {
                         var menu = [BMPopoverMenu.BMPopoverMenuItem]()
                         
-                        for asset in AssetsManager.shared().assets as! [BMAsset] {
+                        for asset in AssetsManager.shared().getAssetsWithBalanceWithBeam() as! [BMAsset] {
                             menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId)))
                         }
                         

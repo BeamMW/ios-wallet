@@ -527,8 +527,8 @@ class LocalizableStrings : NSObject {
     var online_new_status = "online_new_status".localized
     var receive_description_2 = "receive_description_2".localized
     var only_online_support = "only_online_support".localized
-
-    
+    var max_funds_error = "max_funds_error".localized
+    var max_funds_hint = "max_funds_hint".localized
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

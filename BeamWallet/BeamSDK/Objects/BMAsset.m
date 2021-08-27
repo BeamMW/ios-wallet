@@ -99,12 +99,26 @@
     return (_realSending >0 || _realReceiving > 0);
 }
 
+-(UInt64)change {
+    if (_realSending > 0 && _realReceiving > 0) {
+        return _receiving;
+    }
+    return  0;
+}
+
+-(double)realChange {
+    if (_realSending > 0 && _realReceiving > 0) {
+        return _realReceiving;
+    }
+    return  0;
+}
+
 -(UInt64)locked {
-    return _receiving + _maturing + _maxPrivacy;
+    return _maturing + _maxPrivacy + [self change];
 }
 
 -(double)realLocked {
-    return _realReceiving + _realMaturing + _realMaxPrivacy;
+    return _realMaturing + _realMaxPrivacy + [self realChange];
 }
 
 -(BOOL)isBeam {
@@ -112,7 +126,7 @@
 }
 
 -(BOOL)isDemoX {
-    return [_unitName isEqualToString:@"DEMOX"];
+    return [[_unitName uppercaseString] isEqualToString:@"DEMOX"] || [[_unitName uppercaseString] isEqualToString:@"BEAMX"];
 }
 
 -(double)USD {
@@ -125,6 +139,14 @@
         return transaction.createdTime;
     }
     return 0;
+}
+
+-(BOOL)isIncomming {
+    BMTransaction *transaction = [[AssetsManager sharedManager] getLastTransaction:(int)self.assetId];
+    if (transaction != nil && transaction.isIncome) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

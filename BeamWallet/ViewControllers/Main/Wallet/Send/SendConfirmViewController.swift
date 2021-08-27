@@ -203,7 +203,7 @@ extension SendConfirmViewController: WalletModelDelegate {
                 let asset = (AssetsManager.shared().getAsset(Int32(self.viewModel.selectedAssetId)))
                 let assetName = (asset?.unitName ?? "")
                 
-                let totalString = (self.viewModel.selectedAssetId == 0 ? String.currency(value: (amount), name: assetName) : String.currency(value: (0.0), name: assetName)).replacingOccurrences(of: assetName, with: "").replacingOccurrences(of: " ", with: "")
+                let totalString = (self.viewModel.selectedAssetId == 0 ? String.currencyShort(value: (amount), name: assetName) : String.currencyShort(value: (0.0), name: assetName)).replacingOccurrences(of: assetName, with: "")
                 
                 let totalDetail = self.viewModel.amountString(amount: totalString, isFee: false, assetId: viewModel.selectedAssetId, color: UIColor.white, doubleAmount: amount)
                 
@@ -213,7 +213,7 @@ extension SendConfirmViewController: WalletModelDelegate {
               
                 let total = AppModel.sharedManager().realTotal(Double(self.viewModel.amount) ?? 0, fee: Double(self.viewModel.fee) ?? 0, assetId: Int32(self.viewModel.selectedAssetId))
                 let left = (asset?.realAmount ?? 0.0) - total
-                let leftString = String.currency(value: left, name: assetName).replacingOccurrences(of: assetName, with: "")
+                let leftString = String.currencyShort(value: left, name: assetName).replacingOccurrences(of: assetName, with: "")
                 
                 let leftDetail = self.viewModel.amountString(amount: leftString, isFee: false, assetId: viewModel.selectedAssetId, color: UIColor.white, doubleAmount: left)
                
@@ -225,7 +225,7 @@ extension SendConfirmViewController: WalletModelDelegate {
                     let beamAsset = (AssetsManager.shared().getAsset(Int32(0)))
                     let total = AppModel.sharedManager().remainingBeam(Double(beamAsset?.realAmount ?? 0), fee: Double(self.viewModel.fee) ?? 0)
 
-                    let leftString = String.currency(value: total, name: beamAsset?.unitName ?? "").replacingOccurrences(of: "BEAM", with: "")
+                    let leftString = String.currencyShort(value: total, name: beamAsset?.unitName ?? "").replacingOccurrences(of: "BEAM", with: "")
                     let leftDetail = self.viewModel.amountString(amount: leftString, isFee: false, assetId: 0, color: UIColor.white, doubleAmount: left)
                     
                     let leftItem = BMMultiLineItem(title: Localizable.shared.strings.remaining_beam.uppercased(), detail: leftDetail.string, detailFont: SemiboldFont(size: 16), detailColor: UIColor.white)

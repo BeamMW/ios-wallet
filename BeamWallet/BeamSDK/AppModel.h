@@ -81,7 +81,7 @@ typedef int BMRestoreType;
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
 typedef void(^ExportOwnerKey)(NSString * _Nonnull key);
-typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shieldedInputsFee);
+typedef void(^FeecalculatedBlock)(uint64_t fee, double change, uint64_t shieldedInputsFee, double max);
 typedef void(^PublicAddressBlock)(NSString * _Nonnull address);
 typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
@@ -90,6 +90,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
 @property (nonatomic) FeecalculatedBlock _Nullable feecalculatedBlock;
 @property (nonatomic) PublicAddressBlock _Nullable getPublicAddressBlock;
+
 @property (nonatomic) ExportCSVBlock _Nullable getCSVBlock;
 @property (nonatomic,readwrite) NSPointerArray * _Nonnull delegates;
 
@@ -173,7 +174,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
 
--(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount;
+-(void)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
 
@@ -210,7 +211,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSString*_Nonnull)getAddressTypeString:(BMAddressType)type;
 
 // send
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to;
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline;
@@ -296,6 +297,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)rescan;
 -(void)enableBodyRequests:(BOOL)value;
 
-
+-(double)grothToBeam:(uint64_t)groth;
 
 @end

@@ -52,14 +52,14 @@ typedef UInt64 BMTransactionType;
 @interface BMTransaction : NSObject <NSSecureCoding> {
 }
 
-@property (nonatomic,strong) NSString *ID;
+@property (nonatomic,strong) NSString *_Nonnull ID;
 @property (nonatomic,assign) UInt64 createdTime;
-@property (nonatomic,strong) NSString *status;
-@property (nonatomic,strong) NSString *failureReason;
-@property (nonatomic,strong) NSString *kernelId;
-@property (nonatomic,strong) NSString *senderAddress;
-@property (nonatomic,strong) NSString *receiverAddress;
-@property (nonatomic,strong) NSString *comment;
+@property (nonatomic,strong) NSString * _Nonnull status;
+@property (nonatomic,strong) NSString * _Nonnull failureReason;
+@property (nonatomic,strong) NSString * _Nonnull kernelId;
+@property (nonatomic,strong) NSString * _Nonnull senderAddress;
+@property (nonatomic,strong) NSString * _Nonnull receiverAddress;
+@property (nonatomic,strong) NSString * _Nonnull comment;
 @property (nonatomic,assign) BOOL isIncome;
 @property (nonatomic,assign) BOOL isSelf;
 @property (nonatomic,assign) BOOL canCancel;
@@ -74,25 +74,25 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,assign) BMTransactionStatus enumStatus;
 @property (nonatomic,assign) BMTransactionType enumType;
 @property (nonatomic,assign) int assetId;
-@property (nonatomic,strong) BMAsset *asset;
+@property (nonatomic,strong) BMAsset * _Nullable asset;
 
-@property (nonatomic,strong) NSString *senderContactName;
-@property (nonatomic,strong) NSString *receiverContactName;
+@property (nonatomic,strong) NSString * _Nonnull senderContactName;
+@property (nonatomic,strong) NSString * _Nonnull receiverContactName;
 
-@property (nonatomic,strong) NSString *identity;
-@property (nonatomic,strong) NSString *token;
+@property (nonatomic,strong) NSString * _Nonnull identity;
+@property (nonatomic,strong) NSString * _Nonnull token;
 
-@property (nonatomic,strong) NSString *senderIdentity;
-@property (nonatomic,strong) NSString *receiverIdentity;
+@property (nonatomic,strong) NSString * _Nonnull senderIdentity;
+@property (nonatomic,strong) NSString * _Nonnull receiverIdentity;
 
--(NSString*)amountString;
--(UIImage*)statusIcon;
--(NSString*)statusName;
--(NSString*)statusType;
--(NSString*)getAddressType;
+-(NSString*_Nonnull)amountString;
+-(UIImage*_Nonnull)statusIcon;
+-(NSString*_Nonnull)statusName;
+-(NSString*_Nonnull)statusType;
+-(NSString*_Nonnull)getAddressType;
 
--(NSString*)formattedDate;
--(NSString*)shortDate;
+-(NSString*_Nonnull)formattedDate;
+-(NSString*_Nonnull)shortDate;
 -(BOOL)isFailed;
 -(BOOL)hasPaymentProof;
 -(BOOL)isCancelled;
@@ -100,11 +100,11 @@ typedef UInt64 BMTransactionType;
 -(BOOL)isExpired;
 -(BOOL)canSaveContact;
 
--(NSString*)details;
--(NSString*)csvLine;
--(NSString*)textDetails;
+-(NSString*_Nonnull)details;
+-(NSString*_Nonnull)csvLine;
+-(NSString*_Nonnull)textDetails;
 
--(NSMutableAttributedString*)searchString:(NSString*)searchText;
+-(NSMutableAttributedString*_Nonnull)searchString:(NSString*_Nonnull)searchText;
 
 @end
 

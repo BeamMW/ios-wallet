@@ -106,6 +106,7 @@ void WalletModel::onStatus(const WalletStatus& status)
                 asset.maturing = AmountBig::get_Lo(value.maturing);
 
                 asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin) + (double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin);
+                asset.realMaturing = double(int64_t(AmountBig::get_Lo(value.maturing))) / Rules::Coin;
                 asset.realReceiving = (double(int64_t(AmountBig::get_Lo(value.receiving))) / Rules::Coin);
                 asset.realSending = (double(int64_t(AmountBig::get_Lo(value.sending))) / Rules::Coin);
                 asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
@@ -128,6 +129,7 @@ void WalletModel::onStatus(const WalletStatus& status)
             asset.maturing = AmountBig::get_Lo(value.maturing);
 
             asset.realAmount = (double(int64_t(AmountBig::get_Lo(value.available))) / Rules::Coin) + (double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin);
+            asset.realMaturing = double(int64_t(AmountBig::get_Lo(value.maturing))) / Rules::Coin;
             asset.realReceiving = (double(int64_t(AmountBig::get_Lo(value.receiving))) / Rules::Coin);
             asset.realSending = (double(int64_t(AmountBig::get_Lo(value.sending))) / Rules::Coin);
             asset.realShielded = double(int64_t(AmountBig::get_Lo(value.shielded))) / Rules::Coin;
@@ -1467,8 +1469,9 @@ void WalletModel::onCoinsSelected(const CoinsSelectionInfo& selectionRes)
     NSLog(@"onCoinsSelectionCalculated");
     
     auto change = double(int64_t(selectionRes.m_changeAsset)) / Rules::Coin;
-    
-    [AppModel sharedManager].feecalculatedBlock(selectionRes.m_minimalExplicitFee, change, 0);
+    double real = double(int64_t(AmountBig::get_Lo(selectionRes.m_selectedSumAsset))) / Rules::Coin;
+
+    [AppModel sharedManager].feecalculatedBlock(selectionRes.m_minimalExplicitFee, change, 0, real);
 }
 
 void WalletModel::onPublicAddress(const std::string& publicAddr)

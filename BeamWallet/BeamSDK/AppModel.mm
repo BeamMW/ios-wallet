@@ -138,7 +138,7 @@ struct GetMaxPrivacyLockFunc
     ECC::NoLeak<ECC::uintBig> passwordHash;
     
     NSString *pathLog;
-    ByteBuffer lastVouchers;
+    ShieldedVoucherList lastVouchers;
     NSString *lastWalledId;
     std::string *lastWalledIdS;
 }
@@ -1051,35 +1051,57 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 
--(NSString*_Nonnull)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount {
+-(void)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
         
     uint64_t bAmount = round(amount * Rules::Coin);
-
+    
     WalletID m_walletID(Zero);
     m_walletID.FromHex(walleetId.string);
     
     auto address = walletDb->getAddress(m_walletID);
     
-    if(![lastWalledId isEqualToString:walleetId]) {
-        lastWalledId = walleetId;
-        lastVouchers = wallet->generateVouchers(address->m_OwnID, 1);
-    }
-
-    TxParameters offlineParameters;
-    offlineParameters.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
-    offlineParameters.SetParameter(TxParameterID::ShieldedVoucherList, lastVouchers);
-    offlineParameters.SetParameter(TxParameterID::PeerID, address->m_walletID);
-    offlineParameters.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
-    offlineParameters.SetParameter(TxParameterID::PeerOwnID, address->m_OwnID);
-    offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, true);
-    offlineParameters.SetParameter(TxParameterID::AssetID, uint32_t(assetId));
-
-    if (bAmount > 0) {
-        offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
-    }
+    auto func = GenerateVaucherFunc();
+    func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
+        auto token = GenerateOfflineToken(*address, bAmount, uint32_t(assetId), list, std::string(BEAM_LIB_VERSION));
+        block([NSString stringWithUTF8String:token.c_str()]);
+    };
     
-    auto token = to_string(offlineParameters);
-    return [NSString stringWithUTF8String:token.c_str()];
+    wallet->getAsync()->generateVouchers(address->m_OwnID, 1, func);
+    
+//    uint64_t bAmount = round(amount * Rules::Coin);
+//
+//    WalletID m_walletID(Zero);
+//    m_walletID.FromHex(walleetId.string);
+//
+//    auto address = walletDb->getAddress(m_walletID);
+//
+//    if(![lastWalledId isEqualToString:walleetId]) {
+//
+//        lastWalledId = walleetId;
+//
+//        auto func = GenerateVaucherFunc();
+//        func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
+//            self->lastVouchers = list;
+//        };
+//
+//        wallet->getAsync()->generateVouchers(address->m_OwnID, 1, func);
+//    }
+//
+//    TxParameters offlineParameters;
+//    offlineParameters.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
+//    offlineParameters.SetParameter(TxParameterID::ShieldedVoucherList, lastVouchers);
+//    offlineParameters.SetParameter(TxParameterID::PeerID, address->m_walletID);
+//    offlineParameters.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
+//    offlineParameters.SetParameter(TxParameterID::PeerOwnID, address->m_OwnID);
+//    offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, true);
+//    offlineParameters.SetParameter(TxParameterID::AssetID, uint32_t(assetId));
+//
+//    if (bAmount > 0) {
+//        offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
+//    }
+//
+//    auto token = to_string(offlineParameters);
+//    return [NSString stringWithUTF8String:token.c_str()];
 }
 
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
@@ -1641,49 +1663,34 @@ bool OnProgress(uint64_t done, uint64_t total) {
         {
             [_presendedNotifications setValue:address.walletId forKey:address.walletId];
             
-            std::vector<WalletAddress> addresses = wallet->ownAddresses;
+            auto status = beam::wallet::WalletAddress::ExpirationStatus::AsIs;
             
-            for (int i=0; i<addresses.size(); i++)
-            {
-                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-                                
-                if ([wAddress isEqualToString:address.walletId])
-                {
-                    addresses[i].m_label = address.label.string;
-                    
-                    if(address.isNowExpired) {
-                        addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Expired);
-                    }
-                    else if(address.isNowActive) {
-                        if (address.isNowActiveDuration == 0){
-                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
-                        }
-                        else{
-                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Auto);
-                        }
-                    }
-                    else{
-                        if (address.isExpired) {
-                            [_deletedNotifications setObject:wAddress forKey:wAddress];
-                            addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Expired);
-                        }
-                        else  {
-                            if (address.duration == 0) {
-                                addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
-                            }
-                            else {
-                                addresses[i].setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::AsIs);
-                            }
-                        }
-                    }
-                    
-//                    NSString *s = [NSString stringWithUTF8String:to_string(addresses[i].m_Identity).c_str()];
-                    
-                    wallet->getAsync()->saveAddress(addresses[i]);
-                    
-                    break;
+            if(address.isNowExpired) {
+                status = beam::wallet::WalletAddress::ExpirationStatus::Expired;
+            }
+            else if(address.isNowActive) {
+                if (address.isNowActiveDuration == 0){
+                    status = beam::wallet::WalletAddress::ExpirationStatus::Never;
+                }
+                else{
+                    status = beam::wallet::WalletAddress::ExpirationStatus::Auto;
                 }
             }
+            else{
+                if (address.isExpired) {
+                    status = beam::wallet::WalletAddress::ExpirationStatus::Expired;
+                }
+                else  {
+                    if (address.duration == 0) {
+                        status = beam::wallet::WalletAddress::ExpirationStatus::Never;
+                    }
+                    else {
+                        status = beam::wallet::WalletAddress::ExpirationStatus::AsIs;
+                    }
+                }
+            }
+            
+            wallet->getAsync()->updateAddress(walletID, address.label.string,  status);
         }
     }
 }
@@ -1878,8 +1885,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return realAmount;
 }
 
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to {
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount {
     NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to];
+    if (errorString == nil) {
+        if (amount > maxAmount && maxAmount != 0) {
+            NSString *amountString = [[StringManager sharedManager] realAmountString:maxAmount];
+            NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
+            NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
+            return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
+        }
+    }
     return errorString;
 }
 
@@ -1917,11 +1932,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     Amount bAmount = round(amount * Rules::Coin);
     Amount bFee = fee;
-    
+
     wallet->getAsync()->selectCoins(bAmount, bFee, beam::Asset::ID(assetId), isShielded);
    // wallet->getAsync()->calcShieldedCoinSelectionInfo(bAmount, 0, assetId, isShielded);
 }
 
+-(double)grothToBeam:(uint64_t)groth {
+    double real = double(groth / Rules::Coin);
+    return real;
+}
 
 -(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check {
     

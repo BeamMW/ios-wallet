@@ -27,6 +27,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     private var isFocused = false
     public var copyAddress:String?
 
+    public var maxAmountError:String?
     public var amountError:String?
     public var toAddressError:String?
     public var newVersionError:String?
@@ -63,7 +64,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public var maxPrivacy:Bool = false
-    
+    public var maxSendAmount:Double = 0
+
     public var selectedAssetId = 0
     public var selectedCurrencyString: String {
         get {
@@ -78,10 +80,17 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func calculateFee() {
-        let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
+        let isShielded = (addressType == BMAddressTypeOfflinePublic ||
                             addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
-        AppModel.sharedManager().calculateFee(Double(amount) ?? 0, assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, changed, shieldedInputsFee) in
+        //addressType == BMAddressTypeShielded ||
+        
+        var assetName = (AssetsManager.shared().getAsset(Int32(self.selectedAssetId))?.unitName ?? "") + " "
+        if assetName == "assets" {
+            assetName = "BEAM"
+        }
+        
+        AppModel.sharedManager().calculateFee(Double(amount) ?? 0, assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, changed, shieldedInputsFee, max) in
             DispatchQueue.main.async {
                 self.shieldedInputsFee = shieldedInputsFee
                 let current = UInt64(self.fee) ?? 0
@@ -94,6 +103,28 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                     self.fee = String(result)
                     self.minFee = self.fee
                     self.onFeeChanged?()
+                }
+                
+                let selectedAmount = Double(self.amount) ?? 0
+                let realFee = AppModel.sharedManager().realTotal(0, fee: Double(result), assetId: 0)
+                self.maxSendAmount = max - realFee
+                if selectedAmount > self.maxSendAmount {
+                    if self.sendAll {
+                        self.amount = String(self.maxSendAmount)
+                        var assetName = (AssetsManager.shared().getAsset(Int32(self.selectedAssetId))?.unitName ?? "") + " "
+                        if assetName == "assets" {
+                            assetName = "BEAM"
+                        }
+                        if assetName.count > 10 {
+                            assetName = assetName.prefix(10) + "..."
+                        }
+                        let amountString = String.currencyShort(value: self.maxSendAmount, name: assetName)
+                        self.maxAmountError = String(format: Localizable.shared.strings.max_funds_hint, amountString)
+                        self.onAmountMaxError?()
+                    }
+                    else {
+                        self.maxAmountError = nil
+                    }
                 }
             }
         }
@@ -111,6 +142,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var onContactChanged : ((Bool) -> Void)?
     public var onAddressTypeChanged : ((Bool) -> Void)?
     public var onTokensCountChanged : ((Int) -> Void)?
+    public var onAmountMaxError : (() -> Void)?
 
     public var saveContactName = String.empty()
     public var sbbsAddress = String.empty()
@@ -169,6 +201,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var inputAmount = String.empty() {
         didSet {
             amountError = nil
+            maxAmountError = nil
             if !sendAll {
                 calculateFee()
             }
@@ -216,7 +249,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 }
                 if repeatTransaction.realAmount > 0 {
                     amount = String.currency(value: repeatTransaction.realAmount).replacingOccurrences(of: " BEAM", with: "")
-                    comment = repeatTransaction.comment ?? ""
+                    comment = repeatTransaction.comment 
                 }
             }
         }
@@ -286,7 +319,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func checkAmountError() {
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress)
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount)
         
         if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
             amountError = canSend
@@ -313,7 +346,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public func canSend() -> Bool {
         let valid = AppModel.sharedManager().isValidAddress(toAddress)
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress)
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount)
         
         let isError = (!valid || expired || canSend != nil)
                
@@ -486,7 +519,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
             addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
-        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee) in
+        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee, max) in
             self.onCalculateChanged?(change)
         }
     }
@@ -499,8 +532,14 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func amountString(amount: String, isFee:Bool, assetId:Int, color: UIColor? = nil, doubleAmount:Double = 0.0) -> NSMutableAttributedString {
-        let assetName = (AssetsManager.shared().getAsset(Int32(assetId))?.unitName ?? "") + " "
-        
+        var assetName = (AssetsManager.shared().getAsset(Int32(assetId))?.unitName ?? "") + " "
+        if assetName == "assets" {
+            assetName = "BEAM"
+        }
+        if assetName.count > 10 {
+            assetName = assetName.prefix(10) + "..."
+        }
+                
         let amountString =  isFee ? ((amount + Localizable.shared.strings.beam + "\n")) : ((amount + " " + assetName + "\n"))
         var secondString = isFee ? ExchangeManager.shared().exchangeValueAsset(Double(amount) ?? 0, assetID: UInt64(0)) :
             ExchangeManager.shared().exchangeValueAsset(Double(amount) ?? 0, assetID: UInt64(self.selectedAssetId))
