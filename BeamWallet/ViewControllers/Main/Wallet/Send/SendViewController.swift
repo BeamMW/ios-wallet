@@ -597,13 +597,12 @@ extension SendViewController: BMCellProtocol {
                         var menu = [BMPopoverMenu.BMPopoverMenuItem]()
                         
                         for asset in AssetsManager.shared().getAssetsWithBalanceWithBeam() as! [BMAsset] {
-                            var m = BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId))
+                            let m = BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId))
                             m.id = Int(asset.assetId)
                             menu.append(m)
                         }
                         
                         BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
-                            let itemName = item?.name ?? ""
                             let asset = AssetsManager.shared().getAsset(Int32(item?.id ?? 0))
                             let selected = asset?.assetId ?? 0
                        

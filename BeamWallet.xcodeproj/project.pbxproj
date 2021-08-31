@@ -457,6 +457,15 @@
 		924C7E42252F3272001FB2EB /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C7E41252F3272001FB2EB /* Array.swift */; };
 		924C7E43252F3272001FB2EB /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C7E41252F3272001FB2EB /* Array.swift */; };
 		924C7E44252F3272001FB2EB /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C7E41252F3272001FB2EB /* Array.swift */; };
+		92506BDC26DE3A77001804BA /* WebAPICreator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92506BDB26DE3A77001804BA /* WebAPICreator.mm */; };
+		92506BDD26DE3A77001804BA /* WebAPICreator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92506BDB26DE3A77001804BA /* WebAPICreator.mm */; };
+		92506BDE26DE3A77001804BA /* WebAPICreator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92506BDB26DE3A77001804BA /* WebAPICreator.mm */; };
+		92506BE126DE3D83001804BA /* AppsApiUI.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92506BE026DE3D83001804BA /* AppsApiUI.mm */; };
+		92506BE226DE3D83001804BA /* AppsApiUI.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92506BE026DE3D83001804BA /* AppsApiUI.mm */; };
+		92506BE326DE3D83001804BA /* AppsApiUI.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92506BE026DE3D83001804BA /* AppsApiUI.mm */; };
+		92506BEA26DE5C17001804BA /* Public.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92506BE926DE5C17001804BA /* Public.cpp */; };
+		92506BEB26DE5C17001804BA /* Public.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92506BE926DE5C17001804BA /* Public.cpp */; };
+		92506BEC26DE5C17001804BA /* Public.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92506BE926DE5C17001804BA /* Public.cpp */; };
 		9252DA38267A132800FDDD5A /* PopoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252DA36267A132800FDDD5A /* PopoverCell.swift */; };
 		9252DA39267A132800FDDD5A /* PopoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252DA36267A132800FDDD5A /* PopoverCell.swift */; };
 		9252DA3A267A132800FDDD5A /* PopoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9252DA36267A132800FDDD5A /* PopoverCell.swift */; };
@@ -1506,6 +1515,12 @@
 		924C762322D4CC5700625B7C /* Color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		924C762422D4CC5700625B7C /* Color.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
 		924C7E41252F3272001FB2EB /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		92506BDA26DE3A77001804BA /* WebAPICreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebAPICreator.h; sourceTree = "<group>"; };
+		92506BDB26DE3A77001804BA /* WebAPICreator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WebAPICreator.mm; sourceTree = "<group>"; };
+		92506BDF26DE3D83001804BA /* AppsApiUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppsApiUI.h; sourceTree = "<group>"; };
+		92506BE026DE3D83001804BA /* AppsApiUI.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppsApiUI.mm; sourceTree = "<group>"; };
+		92506BE826DE5C17001804BA /* Public.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Public.h; sourceTree = "<group>"; };
+		92506BE926DE5C17001804BA /* Public.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Public.cpp; sourceTree = "<group>"; };
 		9252DA36267A132800FDDD5A /* PopoverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverCell.swift; sourceTree = "<group>"; };
 		9252DA37267A132800FDDD5A /* PopoverCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopoverCell.xib; sourceTree = "<group>"; };
 		9252DA3E267A21B200FDDD5A /* AssetDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailViewController.swift; sourceTree = "<group>"; };
@@ -2121,6 +2136,7 @@
 		92365AAB222D3DEC000D7064 /* BeamSDK */ = {
 			isa = PBXGroup;
 			children = (
+				92506BD526DE3A53001804BA /* DAO */,
 				92435240222DED1800A0EF37 /* Objects */,
 				92365ADF222D3FAE000D7064 /* ObjcExtensions */,
 				92365AD4222D3E94000D7064 /* AppModel.h */,
@@ -2324,6 +2340,19 @@
 				9223D539261F480E0086D95C /* ReceiveTransactionTypeCell.xib */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		92506BD526DE3A53001804BA /* DAO */ = {
+			isa = PBXGroup;
+			children = (
+				92506BDA26DE3A77001804BA /* WebAPICreator.h */,
+				92506BDB26DE3A77001804BA /* WebAPICreator.mm */,
+				92506BDF26DE3D83001804BA /* AppsApiUI.h */,
+				92506BE026DE3D83001804BA /* AppsApiUI.mm */,
+				92506BE826DE5C17001804BA /* Public.h */,
+				92506BE926DE5C17001804BA /* Public.cpp */,
+			);
+			path = DAO;
 			sourceTree = "<group>";
 		};
 		92554D1622896BE600FE6041 /* Addresses */ = {
@@ -3683,6 +3712,7 @@
 				921027A924606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E422B24F58001391FB /* RestoreManager.swift in Sources */,
 				92E4AECE2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
+				92506BEA26DE5C17001804BA /* Public.cpp in Sources */,
 				9210282724606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */,
 				9249A5122694584900FF6C00 /* BMRippleCell.swift in Sources */,
 				9235EB0E2296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
@@ -3719,6 +3749,7 @@
 				92365AD3222D3E79000D7064 /* WalletModel.mm in Sources */,
 				925AD5F3222827A500DDE66B /* WellcomeViewController.swift in Sources */,
 				92F006E6229D4E1800333409 /* BMCountdownView.swift in Sources */,
+				92506BDC26DE3A77001804BA /* WebAPICreator.mm in Sources */,
 				923544832255F45B00889C74 /* SettingsCell.swift in Sources */,
 				92E884B9223F93FF0003D6BB /* BMUTXO.m in Sources */,
 				925D10E0224A3CF100C64876 /* StringStd.mm in Sources */,
@@ -3832,6 +3863,7 @@
 				926F4B3E22E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179172357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,
+				92506BE126DE3D83001804BA /* AppsApiUI.mm in Sources */,
 				92EE50872625C82B00E684B9 /* SaveContactViewController.swift in Sources */,
 				921027D024606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
 				92F78BAA24D0322900489229 /* MASegmentedControl+actions.swift in Sources */,
@@ -3977,6 +4009,7 @@
 				921027AA24606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E522B24F58001391FB /* RestoreManager.swift in Sources */,
 				92E4AECF2359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
+				92506BEB26DE5C17001804BA /* Public.cpp in Sources */,
 				9210282824606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */,
 				9249A5132694584900FF6C00 /* BMRippleCell.swift in Sources */,
 				9235EB0F2296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
@@ -4013,6 +4046,7 @@
 				9288DD44223A55410020C501 /* WalletModel.mm in Sources */,
 				9288DD45223A55410020C501 /* WellcomeViewController.swift in Sources */,
 				92F006E7229D4E1800333409 /* BMCountdownView.swift in Sources */,
+				92506BDD26DE3A77001804BA /* WebAPICreator.mm in Sources */,
 				923544842255F45B00889C74 /* SettingsCell.swift in Sources */,
 				92E884BA223F93FF0003D6BB /* BMUTXO.m in Sources */,
 				925D10E1224A3CF100C64876 /* StringStd.mm in Sources */,
@@ -4126,6 +4160,7 @@
 				926F4B3F22E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179182357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9288DD58223A55410020C501 /* Configurable.swift in Sources */,
+				92506BE226DE3D83001804BA /* AppsApiUI.mm in Sources */,
 				92EE50882625C82B00E684B9 /* SaveContactViewController.swift in Sources */,
 				921027D124606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
 				92F78BAB24D0322900489229 /* MASegmentedControl+actions.swift in Sources */,
@@ -4271,6 +4306,7 @@
 				921027AB24606E42001A7130 /* PagingView.swift in Sources */,
 				92C4F2E622B24F58001391FB /* RestoreManager.swift in Sources */,
 				92E4AED02359A03E004062A1 /* CollectionButtonFooter.swift in Sources */,
+				92506BEC26DE5C17001804BA /* Public.cpp in Sources */,
 				9210282924606E42001A7130 /* PagingViewControllerDataSource.swift in Sources */,
 				9249A5142694584900FF6C00 /* BMRippleCell.swift in Sources */,
 				9235EB102296F6E000BDC232 /* ReceiveListViewController.swift in Sources */,
@@ -4307,6 +4343,7 @@
 				92E2EAF2226F21C700367928 /* WalletModel.mm in Sources */,
 				92E2EAF3226F21C700367928 /* WellcomeViewController.swift in Sources */,
 				92F006E8229D4E1800333409 /* BMCountdownView.swift in Sources */,
+				92506BDE26DE3A77001804BA /* WebAPICreator.mm in Sources */,
 				92E2EAF4226F21C700367928 /* SettingsCell.swift in Sources */,
 				92E2EAF5226F21C700367928 /* BMUTXO.m in Sources */,
 				92E2EAF6226F21C700367928 /* StringStd.mm in Sources */,
@@ -4420,6 +4457,7 @@
 				926F4B4022E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179192357655D001C30A6 /* BMPickerData.swift in Sources */,
 				92E2EB1C226F21C700367928 /* Configurable.swift in Sources */,
+				92506BE326DE3D83001804BA /* AppsApiUI.mm in Sources */,
 				92EE50892625C82B00E684B9 /* SaveContactViewController.swift in Sources */,
 				921027D224606E42001A7130 /* PagingBorderLayoutAttributes.swift in Sources */,
 				92F78BAC24D0322900489229 /* MASegmentedControl+actions.swift in Sources */,
