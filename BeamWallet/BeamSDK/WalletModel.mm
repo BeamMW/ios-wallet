@@ -1509,6 +1509,9 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
             asset.site = site;
             asset.color = color;
             asset.paper = paper;
+            if(asset.assetId == 11) {
+                asset.color = @"#977dff";
+            }
 
             [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
         }

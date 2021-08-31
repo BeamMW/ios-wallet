@@ -35,9 +35,16 @@ class AssetAvailableCell: RippleCell {
     public func setAsset(_ asset:BMAsset) {
         iconView.setAsset(asset)
         
-        mainView.gradientLayer.colors = [
-            UIColor(hexString: asset.color).withAlphaComponent(0.3).cgColor,
-            UIColor.main.cellBackgroundColor.cgColor]
+        if Settings.sharedManager().target == Testnet {
+            mainView.gradientLayer.colors = [
+                UIColor(hexString: asset.color).withAlphaComponent(0.3).cgColor,
+                UIColor(red: 12 / 255, green: 12 / 255, blue: 12 / 255, alpha: 1).cgColor]
+        }
+        else {
+            mainView.gradientLayer.colors = [
+                UIColor(hexString: asset.color).withAlphaComponent(0.3).cgColor,
+                UIColor.main.cellBackgroundColor.cgColor]
+        }
         
         mainView.gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         mainView.gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)

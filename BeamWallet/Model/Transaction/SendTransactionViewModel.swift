@@ -107,7 +107,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 
                 let selectedAmount = Double(self.amount) ?? 0
                 let realFee = AppModel.sharedManager().realTotal(0, fee: Double(result), assetId: 0)
-                self.maxSendAmount = max - realFee
+                if self.selectedAssetId == 0 {
+                    self.maxSendAmount = max - realFee
+                }
+                else {
+                    self.maxSendAmount = max
+                }
                 if selectedAmount > self.maxSendAmount {
                     if self.sendAll {
                         self.amount = String(self.maxSendAmount)

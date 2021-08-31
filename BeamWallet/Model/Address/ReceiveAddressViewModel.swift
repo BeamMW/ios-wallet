@@ -44,7 +44,8 @@ class ReceiveAddressViewModel: NSObject {
     public var onAddressCreated: ((Error?) -> Void)?
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
-        
+    public var onAddressUpdate: ((Error?) -> Void)?
+
     public var address: BMAddress!
     public var transaction = TransactionOptions.regular
 
@@ -59,6 +60,7 @@ class ReceiveAddressViewModel: NSObject {
             secondAmount = second
         }
     }
+    
     
     public var secondAmount: String?
     public var selectedAssetId = 0 {
@@ -94,8 +96,14 @@ class ReceiveAddressViewModel: NSObject {
         if isOwn {
             AppModel.sharedManager().generateOfflineAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
                 DispatchQueue.main.async {
-                    self.address.offlineToken = token;
-                    self.onAddressCreated?(nil)
+                    if self.address.offlineToken != nil {
+                        self.address.offlineToken = token;
+                        self.onAddressUpdate?(nil)
+                    }
+                    else {
+                        self.address.offlineToken = token;
+                        self.onAddressCreated?(nil)
+                    }
                 }
             }
         }

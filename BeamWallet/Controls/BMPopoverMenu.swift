@@ -106,7 +106,8 @@ class BMPopoverMenu: NSObject {
         var icon: String?
         var action: BMPopoverMenuItemAction
         var selected:Bool? = nil
-        
+        var id:Int? = nil
+
         init(name: String, icon: String?, action: BMPopoverMenuItemAction) {
             self.name = name
             self.icon = icon
@@ -373,7 +374,8 @@ extension BMPopOverMenuView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.isAssets {
-            let asset = AssetsManager.shared().getAssetByName(menuItems[indexPath.row].name)
+            let id = menuItems[indexPath.row].id ?? 0
+            let asset = AssetsManager.shared().getAsset(Int32(id))
             
             let cell = tableView.dequeueReusableCell(withType: PopoverAssetCell.self, for: indexPath)
             cell.backgroundColor = UIColor.clear

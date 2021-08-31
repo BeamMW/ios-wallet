@@ -91,13 +91,36 @@ class ReceiveViewController: BaseTableViewController {
                     })
                 }
                 else{
-                    if self?.assetId != 0 {
+                    if self?.assetId != 0 && self?.assetId != self?.viewModel.selectedAssetId {
                         self?.viewModel.selectedAssetId = self?.assetId ?? 0
                     }
                     self?.tableView.delegate = self
                     self?.tableView.dataSource = self
                     self?.tableView.reloadData()
                 }
+            }
+        }
+        
+        viewModel.onAddressUpdate = {[weak self]
+            error in
+            UIView.performWithoutAnimation {
+                guard let strongSelf = self else { return }
+
+                strongSelf.tableView.beginUpdates()
+                for cell in strongSelf.tableView.visibleCells {
+                    if let amoutnCell = cell as? BMAmountCell {
+                        amoutnCell.setSecondAmount(amount: strongSelf.viewModel.secondAmount ?? "")
+                    }
+                    else if let tokenCell = cell as? ReceiveTokenCell {
+                        if strongSelf.viewModel.transaction == .regular {
+                            tokenCell.configure(with: strongSelf.viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased())
+                        }
+                        else {
+                            tokenCell.configure(with: strongSelf.viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased())")
+                        }
+                    }
+                }
+                strongSelf.tableView.endUpdates()
             }
         }
         
@@ -111,6 +134,11 @@ class ReceiveViewController: BaseTableViewController {
         }
         else {
             viewModel.createAddress()
+
+            if self.assetId == 0 {
+            }
+            else {
+            }
         }
         
         
@@ -354,10 +382,10 @@ extension ReceiveViewController : BMCellProtocol {
     
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input:Bool) {
         if let path = tableView.indexPath(for: sender) {
-             if path.section == 3 {
+             if path.section == 2 {
                 viewModel.transactionComment = text
             }
-            else if path.section == 2 {
+            else if path.section == 1 {
                 viewModel.amount = text
                 
                 UIView.performWithoutAnimation {
@@ -434,12 +462,14 @@ extension ReceiveViewController : BMCellProtocol {
             var menu = [BMPopoverMenu.BMPopoverMenuItem]()
             
             for asset in AssetsManager.shared().getAssetsWithBalanceWithBeam() as! [BMAsset] {
-                menu.append(BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId)))
+                var m = BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId))
+                m.id = Int(asset.assetId)
+                menu.append(m)
             }
             
             BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
                 let itemName = item?.name ?? ""
-                let asset = AssetsManager.shared().getAssetByName(itemName)
+                let asset = AssetsManager.shared().getAsset(Int32(item?.id ?? 0))
                 self.viewModel.selectedAssetId = Int(asset?.assetId ?? 0)
                 self.viewModel.amount = nil
                 self.tableView.reloadData()
