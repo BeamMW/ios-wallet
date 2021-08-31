@@ -15,9 +15,9 @@
 #include "Public.h"
 
 
-WebAPICreator::WebAPICreator(WalletModel& walletModel)
+WebAPICreator::WebAPICreator(WalletModel::Ptr walletModel)
 {
-    
+    _walletModel = walletModel;
 }
 
 void WebAPICreator::createApi(const std::string& verWant, const std::string& verMin, const std::string &appName, const std::string &appUrl)
@@ -39,7 +39,7 @@ void WebAPICreator::createApi(const std::string& verWant, const std::string& ver
     
     auto guard = this;
     
-    AppsApiUI::ClientThread_Create(walletModel, version, appid, appName,
+    AppsApiUI::ClientThread_Create(_walletModel.get(), version, appid, appName,
                                    [this, guard, version, appName, appid] (AppsApiUI::Ptr api) {
         if (guard)
         {

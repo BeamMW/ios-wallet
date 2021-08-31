@@ -67,6 +67,7 @@ void AppsApiUI::callWalletApi(const std::string& request)
 void AppsApiUI::AnyThread_sendApiResponse(const std::string& result)
 {
     LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
+//    emit callWalletApiResult(QString::fromStdString(result));
 }
 
 void AppsApiUI::ClientThread_getSendConsent(const std::string& request, const nlohmann::json& jinfo, const nlohmann::json& jamounts)
@@ -135,6 +136,6 @@ std::string AppsApiUI::prepareAmounts4QT(const nlohmann::json& amounts)
 
 std::string AppsApiUI::AmountToUIString(const beam::Amount& value)
 {
-   // const auto samount = libbitcoin::encode_base10(value, decimalPlaces ? decimalPlaces : beamDecimals());
-    return "samount";
+    double realAmount = (double(int64_t(beam::AmountBig::get_Lo(value))) / beam::Rules::Coin);
+    return [[NSString stringWithFormat:@"%f", realAmount] string];
 }

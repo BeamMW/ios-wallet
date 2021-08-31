@@ -6,7 +6,6 @@
 //  Copyright © 2021 Denis. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #include "wallet/api/i_wallet_api.h"
 #include "wallet/core/contracts/i_shaders_manager.h"
 #include "wallet/client/apps_api/apps_api.h"
