@@ -162,7 +162,10 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                 
                 let params = AppModel.sharedManager().getTransactionParameters(toAddress)
                 
-                selectedAssetId = Int(params.assetId)
+                if Int(params.assetId) != 0 {
+                    selectedAssetId = Int(params.assetId)
+                }
+                
                 sbbsAddress = params.address
                 addressType = Int(params.newAddressType)
                 maxPrivacy = params.isMaxPrivacy

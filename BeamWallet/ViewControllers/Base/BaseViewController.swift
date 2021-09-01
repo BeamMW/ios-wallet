@@ -49,6 +49,28 @@ class BaseViewController: UIViewController {
         if self.navigationController?.viewControllers.count ?? 0 > 1 {
             self.addCustomBackButton(target: self, selector: #selector(self.onLeftBackButton))
         }
+        
+        if let base = self.navigationController as? BaseNavigationController {
+            if base.viewControllers.count == 1 {
+                base.enableSwipeToDismiss = false
+            }
+            else {
+                base.enableSwipeToDismiss = true
+            }
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let base = self.navigationController as? BaseNavigationController {
+            if base.viewControllers.count == 1 {
+                base.enableSwipeToDismiss = false
+            }
+            else {
+                base.enableSwipeToDismiss = true
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {

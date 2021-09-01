@@ -526,6 +526,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
             address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
 
+            NSLog(@"%@", [NSString stringWithFormat:@"IDENTITY %@",address.identity]);
+            
             [addresses addObject:address];
         }
         
@@ -1036,7 +1038,8 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
 }
 
 void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
-
+    NSLog(@"onExchangeRates %d", rates.size());
+    
     for (int i=0; i<rates.size(); i++) {
         
         auto rate = rates[i];
@@ -1509,7 +1512,7 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
             asset.site = site;
             asset.color = color;
             asset.paper = paper;
-            if(asset.assetId == 11) {
+            if([asset isDemoX]) {
                 asset.color = @"#977dff";
             }
 

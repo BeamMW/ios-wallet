@@ -126,7 +126,7 @@
 }
 
 -(BOOL)isDemoX {
-    return ([[_unitName uppercaseString] isEqualToString:@"DEMOX"] || [[_unitName uppercaseString] isEqualToString:@"BEAMX"]) && _assetId != 9;
+    return ([[_unitName uppercaseString] isEqualToString:@"DEMOX"] || [[_unitName uppercaseString] isEqualToString:@"BEAMX"]);
 }
 
 -(double)USD {

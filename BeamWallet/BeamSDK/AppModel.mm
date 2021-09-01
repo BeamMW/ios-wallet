@@ -967,6 +967,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 #pragma mark - Updates
 
+-(void)udpateAddresses {
+    wallet->getAsync()->getAddresses(false);
+    wallet->getAsync()->getAddresses(true);
+}
+
 -(void)getWalletStatus {
     if (wallet != nil)  {
         wallet->getAsync()->getWalletStatus();

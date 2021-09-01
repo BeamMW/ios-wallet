@@ -98,6 +98,9 @@ class OpenWalletProgressViewController: BaseViewController {
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
             restotingInfoLabel.isHidden = false
+            
+            timeoutTimer?.invalidate()
+            timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
         }
         else if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
@@ -164,6 +167,14 @@ class OpenWalletProgressViewController: BaseViewController {
         if AppModel.sharedManager().isRestoreFlow {
             RestoreManager.shared.cancelRestore()
             AppModel.sharedManager().isRestoreFlow = false
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let base = self.navigationController as? BaseNavigationController {
+            base.enableSwipeToDismiss = false
         }
     }
     
@@ -407,7 +418,10 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     @objc private func onTimeOut() {
-        if Settings.sharedManager().isChangedNode() {
+        if onlyConnect {
+            self.openMainPage()
+        }
+        else if Settings.sharedManager().isChangedNode() {
             self.openMainPage()
         }
     }

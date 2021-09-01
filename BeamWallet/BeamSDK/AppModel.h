@@ -198,6 +198,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BOOL)isMyAddress:(NSString*_Nullable)address;
 -(void)clearAllAddresses;
 -(void)refreshAddresses;
+-(void)udpateAddresses;
 -(void)refreshAddressesFrom;
 -(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount;
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;

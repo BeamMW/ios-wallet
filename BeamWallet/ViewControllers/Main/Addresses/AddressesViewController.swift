@@ -30,6 +30,8 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        AppModel.sharedManager().udpateAddresses()
+        
         emptyView.text = Localizable.shared.strings.addresses_empty
         emptyView.image = IconAddressbookEmpty()
         

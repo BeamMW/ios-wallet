@@ -81,12 +81,20 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
         return navigation
     }
     
+    private var popRecognizer:UIPanGestureRecognizer!
+    
     public var enableSwipeToDismiss = true {
         didSet{
             if !enableSwipeToDismiss {
+                if let view = self.viewControllers.last {
+                    view.view.removeGestureRecognizer(popRecognizer)
+                }
                 self.delegate = nil
             }
             else {
+                if let view = self.viewControllers.last {
+                    view.view.addGestureRecognizer(popRecognizer)
+                }
                 self.delegate = self
             }
         }
@@ -95,6 +103,9 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     var interactivePopTransition: UIPercentDrivenInteractiveTransition!
     
     override func viewDidLoad() {
+        
+        popRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer(recognizer:)))
+
         self.delegate = self
     }
     
@@ -121,7 +132,6 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     }
     
     private func addPanGesture(_ viewController: UIViewController){
-        let popRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer(recognizer:)))
         viewController.view.addGestureRecognizer(popRecognizer)
     }
     
