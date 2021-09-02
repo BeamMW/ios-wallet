@@ -577,6 +577,12 @@
 		926D44042375776D00D34491 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 926D44032375776D00D34491 /* Image.m */; };
 		926D44052375776D00D34491 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 926D44032375776D00D34491 /* Image.m */; };
 		926D44062375776D00D34491 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 926D44032375776D00D34491 /* Image.m */; };
+		926DB36C26DFC75200E85F0B /* DAOManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 926DB36B26DFC75200E85F0B /* DAOManager.mm */; };
+		926DB36D26DFC75200E85F0B /* DAOManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 926DB36B26DFC75200E85F0B /* DAOManager.mm */; };
+		926DB36E26DFC75200E85F0B /* DAOManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 926DB36B26DFC75200E85F0B /* DAOManager.mm */; };
+		926DB37126DFC91A00E85F0B /* BMApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 926DB37026DFC91A00E85F0B /* BMApp.m */; };
+		926DB37226DFC91A00E85F0B /* BMApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 926DB37026DFC91A00E85F0B /* BMApp.m */; };
+		926DB37326DFC91A00E85F0B /* BMApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 926DB37026DFC91A00E85F0B /* BMApp.m */; };
 		926EB47B231E843800D059BC /* WalletTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926EB479231E843400D059BC /* WalletTransactionCell.xib */; };
 		926EB47C231E843800D059BC /* WalletTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926EB479231E843400D059BC /* WalletTransactionCell.xib */; };
 		926EB47D231E843800D059BC /* WalletTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926EB479231E843400D059BC /* WalletTransactionCell.xib */; };
@@ -1579,6 +1585,10 @@
 		926A857F222ECD7600A3B747 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		926D44022375776D00D34491 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
 		926D44032375776D00D34491 /* Image.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Image.m; sourceTree = "<group>"; };
+		926DB36A26DFC75200E85F0B /* DAOManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DAOManager.h; sourceTree = "<group>"; };
+		926DB36B26DFC75200E85F0B /* DAOManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DAOManager.mm; sourceTree = "<group>"; };
+		926DB36F26DFC91A00E85F0B /* BMApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMApp.h; sourceTree = "<group>"; };
+		926DB37026DFC91A00E85F0B /* BMApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMApp.m; sourceTree = "<group>"; };
 		926EB479231E843400D059BC /* WalletTransactionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WalletTransactionCell.xib; sourceTree = "<group>"; };
 		926EB47A231E843800D059BC /* WalletTransactionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletTransactionCell.swift; sourceTree = "<group>"; };
 		926F4B1822E0CDB7007755D9 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -2260,6 +2270,8 @@
 				92F67D682587786C0009295E /* BMMaxPrivacyLock.m */,
 				92FA196B266F893D002780DC /* BMAsset.h */,
 				92FA196C266F893D002780DC /* BMAsset.m */,
+				926DB36F26DFC91A00E85F0B /* BMApp.h */,
+				926DB37026DFC91A00E85F0B /* BMApp.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -2351,6 +2363,8 @@
 				92506BE026DE3D83001804BA /* AppsApiUI.mm */,
 				92506BE826DE5C17001804BA /* Public.h */,
 				92506BE926DE5C17001804BA /* Public.cpp */,
+				926DB36A26DFC75200E85F0B /* DAOManager.h */,
+				926DB36B26DFC75200E85F0B /* DAOManager.mm */,
 			);
 			path = DAO;
 			sourceTree = "<group>";
@@ -3688,6 +3702,7 @@
 				926F4B3B22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD82271FA5100B30613 /* SettingsViewModel.swift in Sources */,
 				920DE98922F8BC1C002B1110 /* KeyboardListener.swift in Sources */,
+				926DB36C26DFC75200E85F0B /* DAOManager.mm in Sources */,
 				92435243222DED3200A0EF37 /* BMWalletStatus.m in Sources */,
 				929AE4D822BCDCB8006BE960 /* Frames.swift in Sources */,
 				92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */,
@@ -3899,6 +3914,7 @@
 				92B340AB2670E68C00936168 /* AssetIconView.swift in Sources */,
 				921027F424606E42001A7130 /* PagingState.swift in Sources */,
 				9207DD8726778DF900250E80 /* AssetsViewController.swift in Sources */,
+				926DB37126DFC91A00E85F0B /* BMApp.m in Sources */,
 				92790DA4224E59E800F79D64 /* TransactionUTXOCell.swift in Sources */,
 				92AE366C22383D2300E0810B /* QRScannerViewController.swift in Sources */,
 				924C762522D4CC5700625B7C /* Color.m in Sources */,
@@ -3985,6 +4001,7 @@
 				926F4B3C22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD92271FA5100B30613 /* SettingsViewModel.swift in Sources */,
 				920DE98A22F8BC1C002B1110 /* KeyboardListener.swift in Sources */,
+				926DB36D26DFC75200E85F0B /* DAOManager.mm in Sources */,
 				9288DD3A223A55410020C501 /* BMWalletStatus.m in Sources */,
 				929AE4D922BCDCB8006BE960 /* Frames.swift in Sources */,
 				9288DD3B223A55410020C501 /* InputWordCell.swift in Sources */,
@@ -4196,6 +4213,7 @@
 				92B340AC2670E68C00936168 /* AssetIconView.swift in Sources */,
 				921027F524606E42001A7130 /* PagingState.swift in Sources */,
 				9207DD8826778DF900250E80 /* AssetsViewController.swift in Sources */,
+				926DB37226DFC91A00E85F0B /* BMApp.m in Sources */,
 				92790DA5224E59E800F79D64 /* TransactionUTXOCell.swift in Sources */,
 				9288DD60223A55410020C501 /* QRScannerViewController.swift in Sources */,
 				924C762622D4CC5700625B7C /* Color.m in Sources */,
@@ -4282,6 +4300,7 @@
 				926F4B3D22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DDA2271FA5100B30613 /* SettingsViewModel.swift in Sources */,
 				920DE98B22F8BC1C002B1110 /* KeyboardListener.swift in Sources */,
+				926DB36E26DFC75200E85F0B /* DAOManager.mm in Sources */,
 				92E2EAE3226F21C700367928 /* BMWalletStatus.m in Sources */,
 				929AE4DA22BCDCB8006BE960 /* Frames.swift in Sources */,
 				92E2EAE4226F21C700367928 /* InputWordCell.swift in Sources */,
@@ -4493,6 +4512,7 @@
 				92B340AD2670E68C00936168 /* AssetIconView.swift in Sources */,
 				921027F624606E42001A7130 /* PagingState.swift in Sources */,
 				9207DD8926778DF900250E80 /* AssetsViewController.swift in Sources */,
+				926DB37326DFC91A00E85F0B /* BMApp.m in Sources */,
 				92E2EB2A226F21C700367928 /* TransactionUTXOCell.swift in Sources */,
 				92E2EB2B226F21C700367928 /* QRScannerViewController.swift in Sources */,
 				924C762722D4CC5700625B7C /* Color.m in Sources */,
