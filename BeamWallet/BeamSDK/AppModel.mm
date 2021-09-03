@@ -439,28 +439,41 @@ struct GetMaxPrivacyLockFunc
 }
 
 -(BOOL)reconnect {
-    if(Settings.sharedManager.connectToRandomNode && reconnectAttempts < 3) {        
-        [reconnectNodes addObject:Settings.sharedManager.nodeAddress];
-        
-       // reconnectAttempts = reconnectAttempts + 1;
-        
-        NSString *node = [AppModel chooseRandomNodeWithoutNodes:reconnectNodes];
-        if(node.length > 0) {
-            Settings.sharedManager.nodeAddress = node;
-            [self changeNodeAddress];
-            
-            NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-            for(id<WalletModelDelegate> delegate in delegates)
-            {
-                if ([delegate respondsToSelector:@selector(onNetwotkStartReconnecting)]) {
-                    [delegate onNetwotkStartReconnecting];
-                }
-            }
-            
-            return YES;
+    Settings.sharedManager.nodeAddress = [AppModel chooseRandomNode];
+    [self changeNodeAddress];
+    
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
+    {
+        if ([delegate respondsToSelector:@selector(onNetwotkStartReconnecting)]) {
+            [delegate onNetwotkStartReconnecting];
         }
     }
-    return NO;
+    
+    return YES;
+    
+//    if(Settings.sharedManager.connectToRandomNode && reconnectAttempts < 3) {
+//        [reconnectNodes addObject:Settings.sharedManager.nodeAddress];
+//
+//       // reconnectAttempts = reconnectAttempts + 1;
+//
+//        NSString *node = [AppModel chooseRandomNodeWithoutNodes:reconnectNodes];
+//        if(node.length > 0) {
+//            Settings.sharedManager.nodeAddress = node;
+//            [self changeNodeAddress];
+//
+//            NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+//            for(id<WalletModelDelegate> delegate in delegates)
+//            {
+//                if ([delegate respondsToSelector:@selector(onNetwotkStartReconnecting)]) {
+//                    [delegate onNetwotkStartReconnecting];
+//                }
+//            }
+//
+//            return YES;
+//        }
+//    }
+//    return NO;
 }
 
 
