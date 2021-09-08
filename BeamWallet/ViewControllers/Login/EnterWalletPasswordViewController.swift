@@ -99,8 +99,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-//        passField.text = "1"
-//        onLogin(sender: UIButton())
+        passField.text = "1"
+        onLogin(sender: UIButton())
     }
     
     override func viewDidDisappear(_ animated: Bool) {

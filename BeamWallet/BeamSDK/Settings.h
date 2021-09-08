@@ -96,7 +96,6 @@ typedef enum Target : NSUInteger {
 -(int)nodePort;
 -(NSString*_Nonnull)localNodeStorage;
 -(NSString*_Nonnull)localNodeTemdDir;
--(NSArray*_Nonnull)localNodePeers;
 
 -(NSString*_Nonnull)languageName;
 -(NSArray <BMLanguage*> * _Nonnull)languages;
@@ -114,6 +113,8 @@ typedef enum Target : NSUInteger {
 
 -(NSArray <BMMaxPrivacyLock*> * _Nonnull)maxPrivacyLockValues;
 -(BMMaxPrivacyLock*_Nonnull)currentMaxPrivacyLockValue;
+
+-(NSString*_Nonnull)dAppUrl;
 
 
 @end

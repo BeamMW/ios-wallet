@@ -220,7 +220,7 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
-        transaction.status = [GetTransactionStatusString(item) lowercaseString];
+        transaction.status = [GetTransactionStatusString(item, transaction.isIncome) lowercaseString];
         transaction.enumStatus = (UInt64)item.m_status;
         transaction.enumType = (UInt64)item.m_txType;
         if (item.m_failureReason != TxFailureReason::Unknown) {
@@ -248,7 +248,41 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.assetId = item.m_assetId;
         transaction.asset = [[AssetsManager sharedManager] getAsset:item.m_assetId];
         
-        if(item.m_txType == wallet::TxType::PushTransaction) {
+        if (item.m_txType == wallet::TxType::Contract) {
+            bvm2::ContractInvokeData vData;
+            Height h = item.m_minHeight;
+
+            if(item.GetParameter(TxParameterID::ContractDataPacked, vData))
+            {
+                auto contractFee = bvm2::getFullFee(vData, h);
+                auto contractSpend = bvm2::getFullSpend(vData);
+                
+                transaction.realFee = int64_t(contractFee);
+                transaction.fee = double(int64_t(contractFee)) / Rules::Coin;
+
+                for (const auto& info: contractSpend)
+                {
+                    auto amount = info.second;
+                    if (info.first == beam::Asset::s_BeamID)
+                    {
+                        if (amount < 0)
+                        {
+                            amount += contractFee;
+                        }
+                    }
+                    
+                    transaction.realAmount = transaction.realAmount + (double(int64_t(amount)) / Rules::Coin);
+                }
+                
+                transaction.isIncome = transaction.realAmount <= 0;
+                transaction.status = [GetTransactionStatusString(item, transaction.isIncome) lowercaseString];
+                
+                if (transaction.realAmount < 0) {
+                    transaction.realAmount = transaction.realAmount * (-1.0);
+                }
+            }
+        }
+        else if(item.m_txType == wallet::TxType::PushTransaction) {
             auto token = item.getToken();
             if (token.size() > 0) { //send
                 auto p = wallet::ParseParameters(token);
@@ -484,8 +518,8 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
        }
 
 
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
@@ -1555,9 +1589,9 @@ NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
     }
 }
 
-NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
+NSString* WalletModel::GetTransactionStatusString(TxDescription transaction, BOOL income)
 {
-    bool isIncome = (transaction.m_sender == false);
+    bool isIncome = income;
     
     switch (transaction.m_status)
     {        

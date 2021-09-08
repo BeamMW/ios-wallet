@@ -45,7 +45,7 @@ private:
     NSString *GetAddressTo(beam::wallet::TxDescription transaction);
     NSString *GetAddressFrom(beam::wallet::TxDescription transaction);
     NSString *GetErrorString(beam::wallet::ErrorType type);
-    NSString *GetTransactionStatusString(beam::wallet::TxDescription transaction);
+    NSString *GetTransactionStatusString(beam::wallet::TxDescription transaction, BOOL income);
     NSString *GetTransactionFailurString(beam::wallet::TxFailureReason reason);
     NSString *GetUTXOStatusString(beam::wallet::Coin coin);
     NSString *GetUTXOTypeString(beam::wallet::Coin coin);

@@ -97,6 +97,10 @@ func IconSettings() -> UIImage? {
     return UIImage(named: "iconSettings")
 }
 
+func IconDappStore() -> UIImage? {
+    return UIImage(named: "iconDapps")
+}
+
 func CheckboxFull() -> UIImage? {
     return UIImage(named: "checkboxFull")
 }

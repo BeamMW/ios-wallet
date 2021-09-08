@@ -509,15 +509,6 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     return documentsDirectory;
 }
 
--(NSArray*_Nonnull)localNodePeers {
-    if (self.target == Testnet) {
-        return @[@"us-nodes.testnet.beam.mw:8100",@"eu-nodes.testnet.beam.mw:8100",@"ap-nodes.testnet.beam.mw:8100"];
-    }
-    else{
-        return @[@"ap-nodes.mainnet.beam.mw:8100",@"eu-nodes.mainnet.beam.mw:8100",@"us-nodes.mainnet.beam.mw:8100"];
-    }
-}
-
 -(NSString *)groupDBPath{
     NSString *documentsDirectory = [self groupPath];
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
@@ -824,6 +815,16 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     }
     
     return nil;
+}
+
+-(NSString*_Nonnull)dAppUrl {
+    if (_target == Testnet) {
+        return @"https://apps-testnet.beam.mw/appslist.json";
+    }
+    else if (_target == Masternet) {
+        return @"http://3.19.141.112/app/appslist.json";;
+    }
+    return @"https://apps.beam.mw/appslist.json";
 }
 
 @end

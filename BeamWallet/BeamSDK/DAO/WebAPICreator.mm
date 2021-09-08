@@ -15,9 +15,8 @@
 #include "Public.h"
 
 
-WebAPICreator::WebAPICreator(WalletModel::Ptr walletModel)
+WebAPICreator::WebAPICreator()
 {
-    _walletModel = walletModel;
 }
 
 void WebAPICreator::createApi(const std::string& verWant, const std::string& verMin, const std::string &appName, const std::string &appUrl)
@@ -33,7 +32,6 @@ void WebAPICreator::createApi(const std::string& verWant, const std::string& ver
     {
         version = verMin;
     }
-    
     
     const auto appid = GenerateAppID(appName, appUrl);
     

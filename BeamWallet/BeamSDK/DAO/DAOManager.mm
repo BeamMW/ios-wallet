@@ -10,6 +10,12 @@
 #import "AppsApiUI.h"
 #import "Public.h"
 #import "WebAPICreator.h"
+#import "StringStd.h"
+
+#include "common.h"
+
+#include <sys/sysctl.h>
+#import <sys/utsname.h>
 
 #include "wallet/core/wallet.h"
 #include "wallet/core/wallet_db.h"
@@ -23,16 +29,44 @@
     WebAPICreator webAPICreator;
 }
 
--(id)init {
+- (id)initWithWallet:(WalletModel::Ptr)wallet {
     self = [super init];
-
-    webAPICreator = WebAPICreator()
+        
+    webAPICreator = WebAPICreator();
+    webAPICreator._walletModel = wallet;
     
     return self;
 }
 
--(void)launchApp:(BMApp*)app {
-    auto appId = webapiCreator.generateAppID(app.name, app.url);
+-(BOOL)appSupported:(BMApp*_Nonnull)app {
+    return webAPICreator.apiSupported("current") ||  webAPICreator.apiSupported("");
+}
+
+-(void)launchApp:(BMApp*_Nonnull)app {
+    auto appId = webAPICreator.generateAppID(app.name.string, app.url.string);
+    
+    try
+    {
+        auto verWant = "current";
+        auto verMin  = "";
+        webAPICreator.createApi(verWant, verMin, app.name.string, app.url.string);
+    }
+    catch (NSException *ex)
+    {
+        NSLog(@"%@", ex);
+    }
+}
+
+-(void)callWalletApi:(NSString*_Nonnull)json {
+    webAPICreator._api->callWalletApi(json.string);
+}
+
+-(void)contractInfoApproved:(NSString*_Nonnull)json {
+    webAPICreator._api->contractInfoApproved(json.string);
+}
+
+-(void)contractInfoRejected:(NSString*_Nonnull)json {
+    webAPICreator._api->contractInfoRejected(json.string);
 }
 
 @end

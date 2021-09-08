@@ -20,6 +20,8 @@ def shared_pods
     pod 'CrashEye'
     pod 'Firebase/Crashlytics'    
     pod 'Firebase/Analytics'
+    pod 'SDWebImage'
+
 end
 
 #def extension

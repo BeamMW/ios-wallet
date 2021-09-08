@@ -8,11 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import "BMApp.h"
+#import "WalletModel.h"
 
+@interface DAOManager : NSObject {
+    
+}
 
-@interface DAOManager : NSObject
+-(id _Nonnull)initWithWallet:(WalletModel::Ptr)wallet;
 
+-(BOOL)appSupported:(BMApp*_Nonnull)app;
 -(void)launchApp:(BMApp*_Nonnull)app;
+-(void)callWalletApi:(NSString*_Nonnull)json;
+-(void)contractInfoApproved:(NSString*_Nonnull)json;
+-(void)contractInfoRejected:(NSString*_Nonnull)json;
+
+
 
 @end
 

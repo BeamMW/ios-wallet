@@ -16,5 +16,7 @@
 @property (nonatomic,strong) NSString *url;
 @property (nonatomic,strong) NSString *icon;
 
+-(void)setAPIResult:(NSDictionary*)dct;
+
 @end
 

@@ -25,6 +25,27 @@
 		920DE98922F8BC1C002B1110 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DE98822F8BC1C002B1110 /* KeyboardListener.swift */; };
 		920DE98A22F8BC1C002B1110 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DE98822F8BC1C002B1110 /* KeyboardListener.swift */; };
 		920DE98B22F8BC1C002B1110 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DE98822F8BC1C002B1110 /* KeyboardListener.swift */; };
+		920EBE0E26E8D06D003FD0A8 /* DAOAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE0D26E8D06D003FD0A8 /* DAOAppsViewController.swift */; };
+		920EBE0F26E8D06D003FD0A8 /* DAOAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE0D26E8D06D003FD0A8 /* DAOAppsViewController.swift */; };
+		920EBE1026E8D06D003FD0A8 /* DAOAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE0D26E8D06D003FD0A8 /* DAOAppsViewController.swift */; };
+		920EBE1226E8D254003FD0A8 /* DAOListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1126E8D254003FD0A8 /* DAOListViewModel.swift */; };
+		920EBE1326E8D254003FD0A8 /* DAOListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1126E8D254003FD0A8 /* DAOListViewModel.swift */; };
+		920EBE1426E8D254003FD0A8 /* DAOListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1126E8D254003FD0A8 /* DAOListViewModel.swift */; };
+		920EBE1726E8D48A003FD0A8 /* DAOAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1526E8D48A003FD0A8 /* DAOAppCell.swift */; };
+		920EBE1826E8D48A003FD0A8 /* DAOAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1526E8D48A003FD0A8 /* DAOAppCell.swift */; };
+		920EBE1926E8D48A003FD0A8 /* DAOAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1526E8D48A003FD0A8 /* DAOAppCell.swift */; };
+		920EBE1A26E8D48A003FD0A8 /* DAOAppCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920EBE1626E8D48A003FD0A8 /* DAOAppCell.xib */; };
+		920EBE1B26E8D48A003FD0A8 /* DAOAppCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920EBE1626E8D48A003FD0A8 /* DAOAppCell.xib */; };
+		920EBE1C26E8D48A003FD0A8 /* DAOAppCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920EBE1626E8D48A003FD0A8 /* DAOAppCell.xib */; };
+		920EBE1E26E8D88B003FD0A8 /* SVGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1D26E8D88B003FD0A8 /* SVGImageView.swift */; };
+		920EBE1F26E8D88B003FD0A8 /* SVGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1D26E8D88B003FD0A8 /* SVGImageView.swift */; };
+		920EBE2026E8D88B003FD0A8 /* SVGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE1D26E8D88B003FD0A8 /* SVGImageView.swift */; };
+		920EBE2626E8DA3F003FD0A8 /* SDImageSVGCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE2226E8DA3F003FD0A8 /* SDImageSVGCoder.m */; };
+		920EBE2726E8DA3F003FD0A8 /* SDImageSVGCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE2226E8DA3F003FD0A8 /* SDImageSVGCoder.m */; };
+		920EBE2826E8DA3F003FD0A8 /* SDImageSVGCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE2226E8DA3F003FD0A8 /* SDImageSVGCoder.m */; };
+		920EBE2926E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE2526E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m */; };
+		920EBE2A26E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE2526E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m */; };
+		920EBE2B26E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 920EBE2526E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m */; };
 		920F460D223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		920F460E223A9EA20048966E /* BMInputCopyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920F460C223A9EA20048966E /* BMInputCopyBar.swift */; };
 		921027A024606E42001A7130 /* PagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210276D24606E42001A7130 /* PagingViewController.swift */; };
@@ -956,6 +977,51 @@
 		92D6DB6122DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6DB5122DF63B40086DFF7 /* MaterialActivityIndicator.swift */; };
 		92D6DB6222DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6DB5122DF63B40086DFF7 /* MaterialActivityIndicator.swift */; };
 		92D6DB6322DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6DB5122DF63B40086DFF7 /* MaterialActivityIndicator.swift */; };
+		92D729C826E233FF00A92456 /* DAOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729C726E233FF00A92456 /* DAOViewController.swift */; };
+		92D729C926E233FF00A92456 /* DAOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729C726E233FF00A92456 /* DAOViewController.swift */; };
+		92D729CA26E233FF00A92456 /* DAOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729C726E233FF00A92456 /* DAOViewController.swift */; };
+		92D729D926E2369000A92456 /* XWVInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CC26E2368E00A92456 /* XWVInvocation.swift */; };
+		92D729DA26E2369000A92456 /* XWVInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CC26E2368E00A92456 /* XWVInvocation.swift */; };
+		92D729DB26E2369000A92456 /* XWVInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CC26E2368E00A92456 /* XWVInvocation.swift */; };
+		92D729DC26E2369000A92456 /* XWVJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CD26E2368E00A92456 /* XWVJson.swift */; };
+		92D729DD26E2369000A92456 /* XWVJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CD26E2368E00A92456 /* XWVJson.swift */; };
+		92D729DE26E2369000A92456 /* XWVJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CD26E2368E00A92456 /* XWVJson.swift */; };
+		92D729DF26E2369000A92456 /* XWVBindingObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CE26E2368F00A92456 /* XWVBindingObject.swift */; };
+		92D729E026E2369000A92456 /* XWVBindingObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CE26E2368F00A92456 /* XWVBindingObject.swift */; };
+		92D729E126E2369000A92456 /* XWVBindingObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CE26E2368F00A92456 /* XWVBindingObject.swift */; };
+		92D729E226E2369000A92456 /* XWVMetaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CF26E2368F00A92456 /* XWVMetaObject.swift */; };
+		92D729E326E2369000A92456 /* XWVMetaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CF26E2368F00A92456 /* XWVMetaObject.swift */; };
+		92D729E426E2369000A92456 /* XWVMetaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729CF26E2368F00A92456 /* XWVMetaObject.swift */; };
+		92D729E526E2369000A92456 /* XWVLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D026E2368F00A92456 /* XWVLogging.swift */; };
+		92D729E626E2369000A92456 /* XWVLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D026E2368F00A92456 /* XWVLogging.swift */; };
+		92D729E726E2369000A92456 /* XWVLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D026E2368F00A92456 /* XWVLogging.swift */; };
+		92D729E826E2369000A92456 /* XWVHttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D126E2368F00A92456 /* XWVHttpServer.swift */; };
+		92D729E926E2369000A92456 /* XWVHttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D126E2368F00A92456 /* XWVHttpServer.swift */; };
+		92D729EA26E2369000A92456 /* XWVHttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D126E2368F00A92456 /* XWVHttpServer.swift */; };
+		92D729EB26E2369000A92456 /* XWVObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D226E2368F00A92456 /* XWVObject.swift */; };
+		92D729EC26E2369000A92456 /* XWVObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D226E2368F00A92456 /* XWVObject.swift */; };
+		92D729ED26E2369000A92456 /* XWVObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D226E2368F00A92456 /* XWVObject.swift */; };
+		92D729EE26E2369000A92456 /* XWVHttpConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D326E2368F00A92456 /* XWVHttpConnection.swift */; };
+		92D729EF26E2369000A92456 /* XWVHttpConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D326E2368F00A92456 /* XWVHttpConnection.swift */; };
+		92D729F026E2369000A92456 /* XWVHttpConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D326E2368F00A92456 /* XWVHttpConnection.swift */; };
+		92D729F126E2369000A92456 /* XWVUserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D426E2368F00A92456 /* XWVUserScript.swift */; };
+		92D729F226E2369000A92456 /* XWVUserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D426E2368F00A92456 /* XWVUserScript.swift */; };
+		92D729F326E2369000A92456 /* XWVUserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D426E2368F00A92456 /* XWVUserScript.swift */; };
+		92D729F426E2369000A92456 /* XWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D526E2368F00A92456 /* XWebView.swift */; };
+		92D729F526E2369000A92456 /* XWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D526E2368F00A92456 /* XWebView.swift */; };
+		92D729F626E2369000A92456 /* XWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D526E2368F00A92456 /* XWebView.swift */; };
+		92D729F726E2369000A92456 /* XWVScriptObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D626E2369000A92456 /* XWVScriptObject.swift */; };
+		92D729F826E2369000A92456 /* XWVScriptObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D626E2369000A92456 /* XWVScriptObject.swift */; };
+		92D729F926E2369000A92456 /* XWVScriptObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D626E2369000A92456 /* XWVScriptObject.swift */; };
+		92D729FA26E2369000A92456 /* XWVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D726E2369000A92456 /* XWVScripting.swift */; };
+		92D729FB26E2369000A92456 /* XWVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D726E2369000A92456 /* XWVScripting.swift */; };
+		92D729FC26E2369000A92456 /* XWVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D726E2369000A92456 /* XWVScripting.swift */; };
+		92D729FD26E2369000A92456 /* XWVChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D826E2369000A92456 /* XWVChannel.swift */; };
+		92D729FE26E2369000A92456 /* XWVChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D826E2369000A92456 /* XWVChannel.swift */; };
+		92D729FF26E2369000A92456 /* XWVChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D729D826E2369000A92456 /* XWVChannel.swift */; };
+		92D72A0126E23A1B00A92456 /* xwebview.js in Resources */ = {isa = PBXBuildFile; fileRef = 92D72A0026E23A1B00A92456 /* xwebview.js */; };
+		92D72A0226E23A1B00A92456 /* xwebview.js in Resources */ = {isa = PBXBuildFile; fileRef = 92D72A0026E23A1B00A92456 /* xwebview.js */; };
+		92D72A0326E23A1B00A92456 /* xwebview.js in Resources */ = {isa = PBXBuildFile; fileRef = 92D72A0026E23A1B00A92456 /* xwebview.js */; };
 		92D9F79A266FA363006FB555 /* AssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9F799266FA363006FB555 /* AssetViewModel.swift */; };
 		92D9F79B266FA363006FB555 /* AssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9F799266FA363006FB555 /* AssetViewModel.swift */; };
 		92D9F79C266FA363006FB555 /* AssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D9F799266FA363006FB555 /* AssetViewModel.swift */; };
@@ -1142,6 +1208,12 @@
 		92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E884C2223FADCD0003D6BB /* UTXOCell.swift */; };
 		92E884C6223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
 		92E884C7223FADCD0003D6BB /* UTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E884C3223FADCD0003D6BB /* UTXOCell.xib */; };
+		92ED772626E63EB000B41B3C /* DAOConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ED772526E63EB000B41B3C /* DAOConfirmViewController.swift */; };
+		92ED772726E63EB000B41B3C /* DAOConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ED772526E63EB000B41B3C /* DAOConfirmViewController.swift */; };
+		92ED772826E63EB000B41B3C /* DAOConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ED772526E63EB000B41B3C /* DAOConfirmViewController.swift */; };
+		92ED772A26E643F500B41B3C /* DAOConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ED772926E643F500B41B3C /* DAOConfirmViewModel.swift */; };
+		92ED772B26E643F500B41B3C /* DAOConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ED772926E643F500B41B3C /* DAOConfirmViewModel.swift */; };
+		92ED772C26E643F500B41B3C /* DAOConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ED772926E643F500B41B3C /* DAOConfirmViewModel.swift */; };
 		92EE50782625A5BF00E684B9 /* SendContactAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EE50762625A5BF00E684B9 /* SendContactAddressCell.swift */; };
 		92EE50792625A5BF00E684B9 /* SendContactAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EE50772625A5BF00E684B9 /* SendContactAddressCell.xib */; };
 		92EE507A2625A5C300E684B9 /* SendContactAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92EE50772625A5BF00E684B9 /* SendContactAddressCell.xib */; };
@@ -1347,6 +1419,15 @@
 		92090D08223A67D400A1CFBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenTestNet.storyboard; sourceTree = "<group>"; };
 		92090D0B223A684000A1CFBB /* bgTestnet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgTestnet.jpg; sourceTree = "<group>"; };
 		920DE98822F8BC1C002B1110 /* KeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
+		920EBE0D26E8D06D003FD0A8 /* DAOAppsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAOAppsViewController.swift; sourceTree = "<group>"; };
+		920EBE1126E8D254003FD0A8 /* DAOListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAOListViewModel.swift; sourceTree = "<group>"; };
+		920EBE1526E8D48A003FD0A8 /* DAOAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAOAppCell.swift; sourceTree = "<group>"; };
+		920EBE1626E8D48A003FD0A8 /* DAOAppCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DAOAppCell.xib; sourceTree = "<group>"; };
+		920EBE1D26E8D88B003FD0A8 /* SVGImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGImageView.swift; sourceTree = "<group>"; };
+		920EBE2226E8DA3F003FD0A8 /* SDImageSVGCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDImageSVGCoder.m; sourceTree = "<group>"; };
+		920EBE2326E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageSVGCoderDefine.h; sourceTree = "<group>"; };
+		920EBE2426E8DA3F003FD0A8 /* SDImageSVGCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageSVGCoder.h; sourceTree = "<group>"; };
+		920EBE2526E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWebImageSVGCoderDefine.m; sourceTree = "<group>"; };
 		920F460C223A9EA20048966E /* BMInputCopyBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMInputCopyBar.swift; sourceTree = "<group>"; };
 		9210276D24606E42001A7130 /* PagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingViewController.swift; sourceTree = "<group>"; };
 		9210276E24606E42001A7130 /* PagingTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingTitleCell.swift; sourceTree = "<group>"; };
@@ -1747,6 +1828,22 @@
 		92D6DB4F22DF63B40086DFF7 /* CGSize+Min.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+Min.swift"; sourceTree = "<group>"; };
 		92D6DB5022DF63B40086DFF7 /* MaterialActivityIndicatorAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialActivityIndicatorAnimator.swift; sourceTree = "<group>"; };
 		92D6DB5122DF63B40086DFF7 /* MaterialActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialActivityIndicator.swift; sourceTree = "<group>"; };
+		92D729C026E22FD300A92456 /* plugin-faucet */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "plugin-faucet"; path = "../../../../../Desktop/plugin-faucet"; sourceTree = "<group>"; };
+		92D729C726E233FF00A92456 /* DAOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAOViewController.swift; sourceTree = "<group>"; };
+		92D729CC26E2368E00A92456 /* XWVInvocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVInvocation.swift; sourceTree = "<group>"; };
+		92D729CD26E2368E00A92456 /* XWVJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVJson.swift; sourceTree = "<group>"; };
+		92D729CE26E2368F00A92456 /* XWVBindingObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVBindingObject.swift; sourceTree = "<group>"; };
+		92D729CF26E2368F00A92456 /* XWVMetaObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVMetaObject.swift; sourceTree = "<group>"; };
+		92D729D026E2368F00A92456 /* XWVLogging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVLogging.swift; sourceTree = "<group>"; };
+		92D729D126E2368F00A92456 /* XWVHttpServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVHttpServer.swift; sourceTree = "<group>"; };
+		92D729D226E2368F00A92456 /* XWVObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVObject.swift; sourceTree = "<group>"; };
+		92D729D326E2368F00A92456 /* XWVHttpConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVHttpConnection.swift; sourceTree = "<group>"; };
+		92D729D426E2368F00A92456 /* XWVUserScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVUserScript.swift; sourceTree = "<group>"; };
+		92D729D526E2368F00A92456 /* XWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWebView.swift; sourceTree = "<group>"; };
+		92D729D626E2369000A92456 /* XWVScriptObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVScriptObject.swift; sourceTree = "<group>"; };
+		92D729D726E2369000A92456 /* XWVScripting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVScripting.swift; sourceTree = "<group>"; };
+		92D729D826E2369000A92456 /* XWVChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVChannel.swift; sourceTree = "<group>"; };
+		92D72A0026E23A1B00A92456 /* xwebview.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xwebview.js; sourceTree = "<group>"; };
 		92D9F799266FA363006FB555 /* AssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetViewModel.swift; sourceTree = "<group>"; };
 		92D9F79D266FA98D006FB555 /* AssetAvailableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAvailableCell.swift; sourceTree = "<group>"; };
 		92D9F79E266FA98D006FB555 /* AssetAvailableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssetAvailableCell.xib; sourceTree = "<group>"; };
@@ -1784,6 +1881,8 @@
 		92E884B8223F93FF0003D6BB /* BMUTXO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMUTXO.m; sourceTree = "<group>"; };
 		92E884C2223FADCD0003D6BB /* UTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTXOCell.swift; sourceTree = "<group>"; };
 		92E884C3223FADCD0003D6BB /* UTXOCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UTXOCell.xib; sourceTree = "<group>"; };
+		92ED772526E63EB000B41B3C /* DAOConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAOConfirmViewController.swift; sourceTree = "<group>"; };
+		92ED772926E643F500B41B3C /* DAOConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAOConfirmViewModel.swift; sourceTree = "<group>"; };
 		92EE50762625A5BF00E684B9 /* SendContactAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendContactAddressCell.swift; sourceTree = "<group>"; };
 		92EE50772625A5BF00E684B9 /* SendContactAddressCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SendContactAddressCell.xib; sourceTree = "<group>"; };
 		92EE507E2625B11600E684B9 /* SendSaveAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSaveAddressCell.swift; sourceTree = "<group>"; };
@@ -2021,6 +2120,17 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		920EBE2126E8DA3F003FD0A8 /* SDWebImageSVGCoder */ = {
+			isa = PBXGroup;
+			children = (
+				920EBE2426E8DA3F003FD0A8 /* SDImageSVGCoder.h */,
+				920EBE2226E8DA3F003FD0A8 /* SDImageSVGCoder.m */,
+				920EBE2326E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.h */,
+				920EBE2526E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m */,
+			);
+			path = SDWebImageSVGCoder;
+			sourceTree = "<group>";
+		};
 		9210276B24606E42001A7130 /* Parchment */ = {
 			isa = PBXGroup;
 			children = (
@@ -2118,6 +2228,7 @@
 		9212DBC622E0CD720053FC99 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				920EBE2126E8DA3F003FD0A8 /* SDWebImageSVGCoder */,
 				92F78BA724D0322900489229 /* MASegmentedControl */,
 				9210276B24606E42001A7130 /* Parchment */,
 				92D6DB4A22DF63B40086DFF7 /* MaterialActivityIndicator */,
@@ -2146,9 +2257,9 @@
 		92365AAB222D3DEC000D7064 /* BeamSDK */ = {
 			isa = PBXGroup;
 			children = (
-				92506BD526DE3A53001804BA /* DAO */,
 				92435240222DED1800A0EF37 /* Objects */,
 				92365ADF222D3FAE000D7064 /* ObjcExtensions */,
+				92506BD526DE3A53001804BA /* DAO */,
 				92365AD4222D3E94000D7064 /* AppModel.h */,
 				92365ACD222D3E79000D7064 /* AppModel.mm */,
 				925E14922670C04F00B5C98F /* ExchangeManager.h */,
@@ -2279,6 +2390,7 @@
 		92435247222E728300A0EF37 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				92D729C626E233F300A92456 /* DAO */,
 				9207DD8526778DD500250E80 /* Assets */,
 				92DBA6E9245996C20013FB54 /* Notifications */,
 				925AFBB82297E4CC00B1C680 /* Menu */,
@@ -2385,6 +2497,7 @@
 		925AD5CF2228254E00DDE66B = {
 			isa = PBXGroup;
 			children = (
+				92D729C026E22FD300A92456 /* plugin-faucet */,
 				925AD5DA2228254E00DDE66B /* BeamWallet */,
 				925AD5ED2228260C00DDE66B /* Resources */,
 				92365AC8222D3E16000D7064 /* Frameworks */,
@@ -2827,6 +2940,43 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		92D729C626E233F300A92456 /* DAO */ = {
+			isa = PBXGroup;
+			children = (
+				92D729CB26E2368300A92456 /* JS */,
+				92D729C726E233FF00A92456 /* DAOViewController.swift */,
+				92ED772526E63EB000B41B3C /* DAOConfirmViewController.swift */,
+				920EBE1126E8D254003FD0A8 /* DAOListViewModel.swift */,
+				92ED772926E643F500B41B3C /* DAOConfirmViewModel.swift */,
+				920EBE0D26E8D06D003FD0A8 /* DAOAppsViewController.swift */,
+				920EBE1526E8D48A003FD0A8 /* DAOAppCell.swift */,
+				920EBE1626E8D48A003FD0A8 /* DAOAppCell.xib */,
+				920EBE1D26E8D88B003FD0A8 /* SVGImageView.swift */,
+			);
+			path = DAO;
+			sourceTree = "<group>";
+		};
+		92D729CB26E2368300A92456 /* JS */ = {
+			isa = PBXGroup;
+			children = (
+				92D72A0026E23A1B00A92456 /* xwebview.js */,
+				92D729D526E2368F00A92456 /* XWebView.swift */,
+				92D729CE26E2368F00A92456 /* XWVBindingObject.swift */,
+				92D729D826E2369000A92456 /* XWVChannel.swift */,
+				92D729D326E2368F00A92456 /* XWVHttpConnection.swift */,
+				92D729D126E2368F00A92456 /* XWVHttpServer.swift */,
+				92D729CC26E2368E00A92456 /* XWVInvocation.swift */,
+				92D729CD26E2368E00A92456 /* XWVJson.swift */,
+				92D729D026E2368F00A92456 /* XWVLogging.swift */,
+				92D729CF26E2368F00A92456 /* XWVMetaObject.swift */,
+				92D729D226E2368F00A92456 /* XWVObject.swift */,
+				92D729D726E2369000A92456 /* XWVScripting.swift */,
+				92D729D626E2369000A92456 /* XWVScriptObject.swift */,
+				92D729D426E2368F00A92456 /* XWVUserScript.swift */,
+			);
+			path = JS;
+			sourceTree = "<group>";
+		};
 		92DBA6E9245996C20013FB54 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -3180,6 +3330,7 @@
 				92A6554E258A2947005486D4 /* MaxPrivacyDetailCell.xib in Resources */,
 				92790DA6224E59E800F79D64 /* TransactionUTXOCell.xib in Resources */,
 				92FE263B22A11E4E00102DB4 /* BMPickedAddressCell.xib in Resources */,
+				92D72A0126E23A1B00A92456 /* xwebview.js in Resources */,
 				92C00D2E22A04C8300DDB579 /* SF-Pro-Display-Light.otf in Resources */,
 				92E4AECA23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92B39D6E2260CB97006D27A5 /* phrases.txt in Resources */,
@@ -3213,6 +3364,7 @@
 				925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */,
 				92F6B78C22A541040055C3C3 /* SendAllCell.xib in Resources */,
 				9280D0482458631000735C52 /* BMPickerCell3.xib in Resources */,
+				920EBE1A26E8D48A003FD0A8 /* DAOAppCell.xib in Resources */,
 				9260F9622559720000465BE1 /* BMMultiLinesCell2.xib in Resources */,
 				9212DB9C22E0990D0053FC99 /* BMEmptyView.xib in Resources */,
 				9247DCEA267B5C8100F4E3D8 /* AssetDropDownCell.xib in Resources */,
@@ -3287,6 +3439,7 @@
 				9288DD78223A55410020C501 /* LaunchScreen.storyboard in Resources */,
 				9288DD79223A55410020C501 /* EnterWalletPasswordViewController.xib in Resources */,
 				9231E3FC225CC3A000121B33 /* SF-Pro-Display-RegularItalic.otf in Resources */,
+				920EBE1B26E8D48A003FD0A8 /* DAOAppCell.xib in Resources */,
 				92AC9EB822F4E389007C554E /* TransactionPaymentProofCell.xib in Resources */,
 				92F6B79622A558530055C3C3 /* FeeCell.xib in Resources */,
 				927EDE4022A6B47C005D5CEA /* BMMultiLinesCell.xib in Resources */,
@@ -3328,6 +3481,7 @@
 				9224750524E3EC6C006FE2B2 /* GoogleServiceTest.plist in Resources */,
 				9260F9632559720000465BE1 /* BMMultiLinesCell2.xib in Resources */,
 				923EAA17262EDBDC0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
+				92D72A0226E23A1B00A92456 /* xwebview.js in Resources */,
 				92D577B422F038EE003B50B3 /* TransactionDetailCell.xib in Resources */,
 				92CC40EC22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				922393A3235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */,
@@ -3400,11 +3554,13 @@
 				92DFD5D1255031FA00B9751C /* OfflineAddressViewController.xib in Resources */,
 				92E2EB52226F21C700367928 /* Assets.xcassets in Resources */,
 				9272B3F126A9C0D100B78008 /* PopoverAssetCell.xib in Resources */,
+				92D72A0326E23A1B00A92456 /* xwebview.js in Resources */,
 				927EDE4D22A7F6BF005D5CEA /* InputFeePopover.xib in Resources */,
 				923DB112235DD2D60056ACDA /* BMInputViewController.xib in Resources */,
 				92E2EB8C226F225700367928 /* bgMasternet.jpg in Resources */,
 				9280D04A2458631000735C52 /* BMPickerCell3.xib in Resources */,
 				923EAA15262EDBDB0000B8D0 /* SendTransactionTypeCell.xib in Resources */,
+				920EBE1C26E8D48A003FD0A8 /* DAOAppCell.xib in Resources */,
 				9225D53922941F940067B4EA /* SFProText-Medium.ttf in Resources */,
 				927D2F8822CF4D5F00D4B439 /* TransactionShareView.xib in Resources */,
 				9225D55D229455CA0067B4EA /* ReceiveAddressButtonsCell.xib in Resources */,
@@ -3694,6 +3850,7 @@
 				92365ADB222D3F5E000D7064 /* Settings.m in Sources */,
 				927D2F8222CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
 				92AC9EBA22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
+				92ED772A26E643F500B41B3C /* DAOConfirmViewModel.swift in Sources */,
 				92A65542258A2815005486D4 /* MaxPrivacyDetailViewController.swift in Sources */,
 				92D2426922F8560D000945A6 /* TransactionsViewController.swift in Sources */,
 				9261C295228BF55900D666E0 /* AddressesViewController.swift in Sources */,
@@ -3701,8 +3858,10 @@
 				92D6DB6122DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3B22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD82271FA5100B30613 /* SettingsViewModel.swift in Sources */,
+				92D729DC26E2369000A92456 /* XWVJson.swift in Sources */,
 				920DE98922F8BC1C002B1110 /* KeyboardListener.swift in Sources */,
 				926DB36C26DFC75200E85F0B /* DAOManager.mm in Sources */,
+				92D729EE26E2369000A92456 /* XWVHttpConnection.swift in Sources */,
 				92435243222DED3200A0EF37 /* BMWalletStatus.m in Sources */,
 				929AE4D822BCDCB8006BE960 /* Frames.swift in Sources */,
 				92FC610D22295A6E00AEABC1 /* InputWordCell.swift in Sources */,
@@ -3752,10 +3911,12 @@
 				926F4B3522E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				92FC61262229C0C200AEABC1 /* BaseWizardViewController.swift in Sources */,
 				926EB47E231E843800D059BC /* WalletTransactionCell.swift in Sources */,
+				920EBE1E26E8D88B003FD0A8 /* SVGImageView.swift in Sources */,
 				921027E524606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */,
 				921027B824606E42001A7130 /* PagingInvalidationContext.swift in Sources */,
 				923670C225399C2F00180771 /* WithdrawViewModel.swift in Sources */,
 				921027F724606E42001A7130 /* PagingMenuItemSource.swift in Sources */,
+				920EBE0E26E8D06D003FD0A8 /* DAOAppsViewController.swift in Sources */,
 				92D6DB5522DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
 				921027D924606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */,
 				921AE99A229957F6008869EB /* ShortcutManager.swift in Sources */,
@@ -3775,6 +3936,7 @@
 				922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				925AD5DC2228254E00DDE66B /* AppDelegate.swift in Sources */,
 				92E4AEC2235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				92D729F726E2369000A92456 /* XWVScriptObject.swift in Sources */,
 				921027E824606E42001A7130 /* PagingIndicatorOptions.swift in Sources */,
 				92E4AEC623599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				9247DCF5267B6BBB00F4E3D8 /* AssetSiteCell.swift in Sources */,
@@ -3787,11 +3949,15 @@
 				92E884C4223FADCD0003D6BB /* UTXOCell.swift in Sources */,
 				92DBA6EC245996E10013FB54 /* NotificationsViewController.swift in Sources */,
 				92B2190E23E2DA7F0029135D /* BMOverlayTimerView.swift in Sources */,
+				920EBE2926E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m in Sources */,
+				920EBE2626E8DA3F003FD0A8 /* SDImageSVGCoder.m in Sources */,
 				92AE366F223845E300E0810B /* BMNetworkStatusView.swift in Sources */,
 				92554D512289A34000FE6041 /* BaseTableViewController.swift in Sources */,
 				92A1BA032236920C008135B5 /* QRViewController.swift in Sources */,
+				92ED772626E63EB000B41B3C /* DAOConfirmViewController.swift in Sources */,
 				92B7E4EB22B0001B001708E4 /* SendTransactionViewModel.swift in Sources */,
 				92F006E2229D44BB00333409 /* BMSnackBar.swift in Sources */,
+				92D729FA26E2369000A92456 /* XWVScripting.swift in Sources */,
 				92227B072281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */,
 				923670BF25399C2F00180771 /* WithdrawViewController.swift in Sources */,
 				921027FD24606E42001A7130 /* UIColor+interpolation.swift in Sources */,
@@ -3833,12 +3999,15 @@
 				92708DDC2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CD22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
 				9210281824606E42001A7130 /* PagingTransition.swift in Sources */,
+				92D729FD26E2369000A92456 /* XWVChannel.swift in Sources */,
+				92D729EB26E2369000A92456 /* XWVObject.swift in Sources */,
 				926F4B2F22E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837522285D218002B385B /* Fonts.swift in Sources */,
 				927EDE2422A66A90005D5CEA /* BMSearchAddressCell.swift in Sources */,
 				9227AEDF2282EADA00FB221F /* TextView.swift in Sources */,
 				92592CA82245309B00050A13 /* NotificationManager.swift in Sources */,
 				9261C25C228BF55800D666E0 /* AddressViewController.swift in Sources */,
+				92D729DF26E2369000A92456 /* XWVBindingObject.swift in Sources */,
 				92F68C8D2245070200197D4D /* UTXOTransactionCell.swift in Sources */,
 				9261C289228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92B7E4C522AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
@@ -3869,12 +4038,15 @@
 				92A1BA0622369567008135B5 /* QRCodeView.swift in Sources */,
 				9288DDA5223A5B430020C501 /* BaseView.swift in Sources */,
 				926A8580222ECD7600A3B747 /* Reachability.m in Sources */,
+				92D729E826E2369000A92456 /* XWVHttpServer.swift in Sources */,
 				921027CD24606E42001A7130 /* PagingOptions.swift in Sources */,
 				9210280024606E42001A7130 /* UIView+constraints.swift in Sources */,
+				92D729F426E2369000A92456 /* XWebView.swift in Sources */,
 				92B7DA3022D63EFB00D4F88B /* TrustedNodeViewController.swift in Sources */,
 				9246F761227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
 				923DB10D235DD2D60056ACDA /* BMInputViewController.swift in Sources */,
 				92A6554B258A2947005486D4 /* MaxPrivacyDetailCell.swift in Sources */,
+				92D729E526E2369000A92456 /* XWVLogging.swift in Sources */,
 				926F4B3E22E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179172357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9207FF50222948F3009D931B /* Configurable.swift in Sources */,
@@ -3892,10 +4064,14 @@
 				92FC933422538CE400555DE1 /* Double.swift in Sources */,
 				92A2C5FC23391DC500766EA7 /* main.swift in Sources */,
 				921027EB24606E42001A7130 /* PagingEvent.swift in Sources */,
+				920EBE1226E8D254003FD0A8 /* DAOListViewModel.swift in Sources */,
+				920EBE1726E8D48A003FD0A8 /* DAOAppCell.swift in Sources */,
+				92D729E226E2369000A92456 /* XWVMetaObject.swift in Sources */,
 				92B340B52670FFC900936168 /* StringManager.m in Sources */,
 				92948EBC243B8EF00006FF71 /* BMCurrency.m in Sources */,
 				92B7E4D922AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				92ADED812229F213001D0A38 /* ViewController.swift in Sources */,
+				92D729F126E2369000A92456 /* XWVUserScript.swift in Sources */,
 				926A856C222E835300A3B747 /* TableView.swift in Sources */,
 				9246F75A227C48830091FB0B /* BMEmptyCell.swift in Sources */,
 				92365B06222D743A000D7064 /* EnterWalletPasswordViewController.swift in Sources */,
@@ -3929,9 +4105,11 @@
 				921027A324606E42001A7130 /* PagingTitleCell.swift in Sources */,
 				926D44042375776D00D34491 /* Image.m in Sources */,
 				9252DA3F267A21B200FDDD5A /* AssetDetailViewController.swift in Sources */,
+				92D729D926E2369000A92456 /* XWVInvocation.swift in Sources */,
 				923544752254C9A700889C74 /* BMAutoSecurityScreen.swift in Sources */,
 				9210280F24606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8327223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
+				92D729C826E233FF00A92456 /* DAOViewController.swift in Sources */,
 				92F67D5B25876C340009295E /* BMPaymentInfo.m in Sources */,
 				92302050262F23AE001A1883 /* NodeCell.swift in Sources */,
 				923EAA12262EDBD80000B8D0 /* SendTransactionTypeCell.swift in Sources */,
@@ -3993,6 +4171,7 @@
 				9288DD37223A55410020C501 /* Settings.m in Sources */,
 				927D2F8322CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
 				92AC9EBB22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
+				92ED772B26E643F500B41B3C /* DAOConfirmViewModel.swift in Sources */,
 				92A65543258A2815005486D4 /* MaxPrivacyDetailViewController.swift in Sources */,
 				92D2426A22F8560D000945A6 /* TransactionsViewController.swift in Sources */,
 				9261C296228BF55900D666E0 /* AddressesViewController.swift in Sources */,
@@ -4000,8 +4179,10 @@
 				92D6DB6222DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3C22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DD92271FA5100B30613 /* SettingsViewModel.swift in Sources */,
+				92D729DD26E2369000A92456 /* XWVJson.swift in Sources */,
 				920DE98A22F8BC1C002B1110 /* KeyboardListener.swift in Sources */,
 				926DB36D26DFC75200E85F0B /* DAOManager.mm in Sources */,
+				92D729EF26E2369000A92456 /* XWVHttpConnection.swift in Sources */,
 				9288DD3A223A55410020C501 /* BMWalletStatus.m in Sources */,
 				929AE4D922BCDCB8006BE960 /* Frames.swift in Sources */,
 				9288DD3B223A55410020C501 /* InputWordCell.swift in Sources */,
@@ -4051,10 +4232,12 @@
 				926F4B3622E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				9288DD43223A55410020C501 /* BaseWizardViewController.swift in Sources */,
 				926EB47F231E843800D059BC /* WalletTransactionCell.swift in Sources */,
+				920EBE1F26E8D88B003FD0A8 /* SVGImageView.swift in Sources */,
 				921027E624606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */,
 				921027B924606E42001A7130 /* PagingInvalidationContext.swift in Sources */,
 				923670C325399C2F00180771 /* WithdrawViewModel.swift in Sources */,
 				921027F824606E42001A7130 /* PagingMenuItemSource.swift in Sources */,
+				920EBE0F26E8D06D003FD0A8 /* DAOAppsViewController.swift in Sources */,
 				92D6DB5622DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
 				921027DA24606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */,
 				921AE99B229957F6008869EB /* ShortcutManager.swift in Sources */,
@@ -4074,6 +4257,7 @@
 				922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				9288DD47223A55410020C501 /* AppDelegate.swift in Sources */,
 				92E4AEC3235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				92D729F826E2369000A92456 /* XWVScriptObject.swift in Sources */,
 				921027E924606E42001A7130 /* PagingIndicatorOptions.swift in Sources */,
 				92E4AEC723599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				9247DCF6267B6BBB00F4E3D8 /* AssetSiteCell.swift in Sources */,
@@ -4086,11 +4270,15 @@
 				92E884C5223FADCD0003D6BB /* UTXOCell.swift in Sources */,
 				92DBA6ED245996E10013FB54 /* NotificationsViewController.swift in Sources */,
 				92B2190F23E2DA7F0029135D /* BMOverlayTimerView.swift in Sources */,
+				920EBE2A26E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m in Sources */,
+				920EBE2726E8DA3F003FD0A8 /* SDImageSVGCoder.m in Sources */,
 				9288DD49223A55410020C501 /* BMNetworkStatusView.swift in Sources */,
 				92554D522289A34000FE6041 /* BaseTableViewController.swift in Sources */,
 				9288DD4B223A55410020C501 /* QRViewController.swift in Sources */,
+				92ED772726E63EB000B41B3C /* DAOConfirmViewController.swift in Sources */,
 				92B7E4EC22B0001B001708E4 /* SendTransactionViewModel.swift in Sources */,
 				92F006E3229D44BB00333409 /* BMSnackBar.swift in Sources */,
+				92D729FB26E2369000A92456 /* XWVScripting.swift in Sources */,
 				92227B082281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */,
 				923670C025399C2F00180771 /* WithdrawViewController.swift in Sources */,
 				921027FE24606E42001A7130 /* UIColor+interpolation.swift in Sources */,
@@ -4132,12 +4320,15 @@
 				92708DDD2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CE22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
 				9210281924606E42001A7130 /* PagingTransition.swift in Sources */,
+				92D729FE26E2369000A92456 /* XWVChannel.swift in Sources */,
+				92D729EC26E2369000A92456 /* XWVObject.swift in Sources */,
 				926F4B3022E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837532285D218002B385B /* Fonts.swift in Sources */,
 				927EDE2522A66A90005D5CEA /* BMSearchAddressCell.swift in Sources */,
 				9227AEE02282EADA00FB221F /* TextView.swift in Sources */,
 				92592CA92245309B00050A13 /* NotificationManager.swift in Sources */,
 				9261C25D228BF55800D666E0 /* AddressViewController.swift in Sources */,
+				92D729E026E2369000A92456 /* XWVBindingObject.swift in Sources */,
 				92F68C8E2245070200197D4D /* UTXOTransactionCell.swift in Sources */,
 				9261C28A228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92B7E4C622AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
@@ -4168,12 +4359,15 @@
 				9288DD54223A55410020C501 /* QRCodeView.swift in Sources */,
 				9288DDA6223A5B430020C501 /* BaseView.swift in Sources */,
 				9288DD55223A55410020C501 /* Reachability.m in Sources */,
+				92D729E926E2369000A92456 /* XWVHttpServer.swift in Sources */,
 				921027CE24606E42001A7130 /* PagingOptions.swift in Sources */,
 				9210280124606E42001A7130 /* UIView+constraints.swift in Sources */,
+				92D729F526E2369000A92456 /* XWebView.swift in Sources */,
 				92B7DA3122D63EFB00D4F88B /* TrustedNodeViewController.swift in Sources */,
 				9246F762227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
 				923DB10E235DD2D60056ACDA /* BMInputViewController.swift in Sources */,
 				92A6554C258A2947005486D4 /* MaxPrivacyDetailCell.swift in Sources */,
+				92D729E626E2369000A92456 /* XWVLogging.swift in Sources */,
 				926F4B3F22E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179182357655D001C30A6 /* BMPickerData.swift in Sources */,
 				9288DD58223A55410020C501 /* Configurable.swift in Sources */,
@@ -4191,10 +4385,14 @@
 				92FC933522538CE400555DE1 /* Double.swift in Sources */,
 				92A2C5FD23391DC500766EA7 /* main.swift in Sources */,
 				921027EC24606E42001A7130 /* PagingEvent.swift in Sources */,
+				920EBE1326E8D254003FD0A8 /* DAOListViewModel.swift in Sources */,
+				920EBE1826E8D48A003FD0A8 /* DAOAppCell.swift in Sources */,
+				92D729E326E2369000A92456 /* XWVMetaObject.swift in Sources */,
 				92B340B62670FFC900936168 /* StringManager.m in Sources */,
 				92948EBD243B8EF00006FF71 /* BMCurrency.m in Sources */,
 				92B7E4DA22AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				9288DD5A223A55410020C501 /* ViewController.swift in Sources */,
+				92D729F226E2369000A92456 /* XWVUserScript.swift in Sources */,
 				9288DD5B223A55410020C501 /* TableView.swift in Sources */,
 				9246F75B227C48830091FB0B /* BMEmptyCell.swift in Sources */,
 				9288DD5C223A55410020C501 /* EnterWalletPasswordViewController.swift in Sources */,
@@ -4228,9 +4426,11 @@
 				921027A424606E42001A7130 /* PagingTitleCell.swift in Sources */,
 				926D44052375776D00D34491 /* Image.m in Sources */,
 				9252DA40267A21B200FDDD5A /* AssetDetailViewController.swift in Sources */,
+				92D729DA26E2369000A92456 /* XWVInvocation.swift in Sources */,
 				923544762254C9A700889C74 /* BMAutoSecurityScreen.swift in Sources */,
 				9210281024606E42001A7130 /* PagingDiff.swift in Sources */,
 				92AB8328223BA921000ADE86 /* ShareLogActivity.swift in Sources */,
+				92D729C926E233FF00A92456 /* DAOViewController.swift in Sources */,
 				92F67D5C25876C340009295E /* BMPaymentInfo.m in Sources */,
 				92302051262F23AE001A1883 /* NodeCell.swift in Sources */,
 				923EAA16262EDBDC0000B8D0 /* SendTransactionTypeCell.swift in Sources */,
@@ -4292,6 +4492,7 @@
 				92E2EADD226F21C700367928 /* Settings.m in Sources */,
 				927D2F8422CF4A7A00D4B439 /* TransactionShareView.swift in Sources */,
 				92AC9EBC22F4E389007C554E /* TransactionPaymentProofCell.swift in Sources */,
+				92ED772C26E643F500B41B3C /* DAOConfirmViewModel.swift in Sources */,
 				92A65544258A2815005486D4 /* MaxPrivacyDetailViewController.swift in Sources */,
 				92D2426B22F8560D000945A6 /* TransactionsViewController.swift in Sources */,
 				9261C297228BF55900D666E0 /* AddressesViewController.swift in Sources */,
@@ -4299,8 +4500,10 @@
 				92D6DB6322DF63B40086DFF7 /* MaterialActivityIndicator.swift in Sources */,
 				926F4B3D22E0CDB7007755D9 /* LGSideMenuGesturesHandler.m in Sources */,
 				92708DDA2271FA5100B30613 /* SettingsViewModel.swift in Sources */,
+				92D729DE26E2369000A92456 /* XWVJson.swift in Sources */,
 				920DE98B22F8BC1C002B1110 /* KeyboardListener.swift in Sources */,
 				926DB36E26DFC75200E85F0B /* DAOManager.mm in Sources */,
+				92D729F026E2369000A92456 /* XWVHttpConnection.swift in Sources */,
 				92E2EAE3226F21C700367928 /* BMWalletStatus.m in Sources */,
 				929AE4DA22BCDCB8006BE960 /* Frames.swift in Sources */,
 				92E2EAE4226F21C700367928 /* InputWordCell.swift in Sources */,
@@ -4350,10 +4553,12 @@
 				926F4B3722E0CDB7007755D9 /* LGSideMenuSegue.m in Sources */,
 				92E2EAF1226F21C700367928 /* BaseWizardViewController.swift in Sources */,
 				926EB480231E843800D059BC /* WalletTransactionCell.swift in Sources */,
+				920EBE2026E8D88B003FD0A8 /* SVGImageView.swift in Sources */,
 				921027E724606E42001A7130 /* PagingMenuHorizontalAlignment.swift in Sources */,
 				921027BA24606E42001A7130 /* PagingInvalidationContext.swift in Sources */,
 				923670C425399C2F00180771 /* WithdrawViewModel.swift in Sources */,
 				921027F924606E42001A7130 /* PagingMenuItemSource.swift in Sources */,
+				920EBE1026E8D06D003FD0A8 /* DAOAppsViewController.swift in Sources */,
 				92D6DB5722DF63B40086DFF7 /* CAPropertyAnimation+Key.swift in Sources */,
 				921027DB24606E42001A7130 /* PagingSelectedScrollPosition.swift in Sources */,
 				921AE99C229957F6008869EB /* ShortcutManager.swift in Sources */,
@@ -4373,6 +4578,7 @@
 				922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */,
 				92E2EAF9226F21C700367928 /* AppDelegate.swift in Sources */,
 				92E4AEC4235995F0004062A1 /* SeedPhraseViewController.swift in Sources */,
+				92D729F926E2369000A92456 /* XWVScriptObject.swift in Sources */,
 				921027EA24606E42001A7130 /* PagingIndicatorOptions.swift in Sources */,
 				92E4AEC823599D3B004062A1 /* CollectionTextHeader.swift in Sources */,
 				9247DCF7267B6BBB00F4E3D8 /* AssetSiteCell.swift in Sources */,
@@ -4385,11 +4591,15 @@
 				92E2EAFE226F21C700367928 /* UTXOCell.swift in Sources */,
 				92DBA6EE245996E10013FB54 /* NotificationsViewController.swift in Sources */,
 				92B2191023E2DA7F0029135D /* BMOverlayTimerView.swift in Sources */,
+				920EBE2B26E8DA3F003FD0A8 /* SDWebImageSVGCoderDefine.m in Sources */,
+				920EBE2826E8DA3F003FD0A8 /* SDImageSVGCoder.m in Sources */,
 				92E2EAFF226F21C700367928 /* BMNetworkStatusView.swift in Sources */,
 				92554D532289A34000FE6041 /* BaseTableViewController.swift in Sources */,
 				92E2EB00226F21C700367928 /* QRViewController.swift in Sources */,
+				92ED772826E63EB000B41B3C /* DAOConfirmViewController.swift in Sources */,
 				92B7E4ED22B0001B001708E4 /* SendTransactionViewModel.swift in Sources */,
 				92F006E4229D44BB00333409 /* BMSnackBar.swift in Sources */,
+				92D729FC26E2369000A92456 /* XWVScripting.swift in Sources */,
 				92227B092281C28D0070DC68 /* BMCategoryColorsView.swift in Sources */,
 				923670C125399C2F00180771 /* WithdrawViewController.swift in Sources */,
 				921027FF24606E42001A7130 /* UIColor+interpolation.swift in Sources */,
@@ -4431,12 +4641,15 @@
 				92708DDE2272398300B30613 /* URL.swift in Sources */,
 				92B7E4CF22AECD33001708E4 /* EditAddressViewModel.swift in Sources */,
 				9210281A24606E42001A7130 /* PagingTransition.swift in Sources */,
+				92D729FF26E2369000A92456 /* XWVChannel.swift in Sources */,
+				92D729ED26E2369000A92456 /* XWVObject.swift in Sources */,
 				926F4B3122E0CDB7007755D9 /* LGSideMenuHelper.m in Sources */,
 				92B837542285D218002B385B /* Fonts.swift in Sources */,
 				927EDE2622A66A90005D5CEA /* BMSearchAddressCell.swift in Sources */,
 				9227AEE12282EADA00FB221F /* TextView.swift in Sources */,
 				92E2EB0B226F21C700367928 /* NotificationManager.swift in Sources */,
 				9261C25E228BF55800D666E0 /* AddressViewController.swift in Sources */,
+				92D729E126E2369000A92456 /* XWVBindingObject.swift in Sources */,
 				92E2EB0C226F21C700367928 /* UTXOTransactionCell.swift in Sources */,
 				9261C28B228BF55900D666E0 /* AddressExpiresCell.swift in Sources */,
 				92B7E4C722AEB3EC001708E4 /* DetailAddressViewModel.swift in Sources */,
@@ -4467,12 +4680,15 @@
 				92E2EB16226F21C700367928 /* QRCodeView.swift in Sources */,
 				92E2EB17226F21C700367928 /* BaseView.swift in Sources */,
 				92E2EB18226F21C700367928 /* Reachability.m in Sources */,
+				92D729EA26E2369000A92456 /* XWVHttpServer.swift in Sources */,
 				921027CF24606E42001A7130 /* PagingOptions.swift in Sources */,
 				9210280224606E42001A7130 /* UIView+constraints.swift in Sources */,
+				92D729F626E2369000A92456 /* XWebView.swift in Sources */,
 				92B7DA3222D63EFB00D4F88B /* TrustedNodeViewController.swift in Sources */,
 				9246F763227C6A290091FB0B /* UITapGestureRecognizer.swift in Sources */,
 				923DB10F235DD2D60056ACDA /* BMInputViewController.swift in Sources */,
 				92A6554D258A2947005486D4 /* MaxPrivacyDetailCell.swift in Sources */,
+				92D729E726E2369000A92456 /* XWVLogging.swift in Sources */,
 				926F4B4022E0CDB7007755D9 /* UIViewController+LGSideMenuController.m in Sources */,
 				92E179192357655D001C30A6 /* BMPickerData.swift in Sources */,
 				92E2EB1C226F21C700367928 /* Configurable.swift in Sources */,
@@ -4490,10 +4706,14 @@
 				92E2EB21226F21C700367928 /* Double.swift in Sources */,
 				92A2C5FE23391DC500766EA7 /* main.swift in Sources */,
 				921027ED24606E42001A7130 /* PagingEvent.swift in Sources */,
+				920EBE1426E8D254003FD0A8 /* DAOListViewModel.swift in Sources */,
+				920EBE1926E8D48A003FD0A8 /* DAOAppCell.swift in Sources */,
+				92D729E426E2369000A92456 /* XWVMetaObject.swift in Sources */,
 				92B340B72670FFC900936168 /* StringManager.m in Sources */,
 				92948EBE243B8EF00006FF71 /* BMCurrency.m in Sources */,
 				92B7E4DB22AF064A001708E4 /* DetailUTXOViewModel.swift in Sources */,
 				92E2EB23226F21C700367928 /* ViewController.swift in Sources */,
+				92D729F326E2369000A92456 /* XWVUserScript.swift in Sources */,
 				92E2EB24226F21C700367928 /* TableView.swift in Sources */,
 				9246F75C227C48830091FB0B /* BMEmptyCell.swift in Sources */,
 				92E2EB25226F21C700367928 /* EnterWalletPasswordViewController.swift in Sources */,
@@ -4527,9 +4747,11 @@
 				921027A524606E42001A7130 /* PagingTitleCell.swift in Sources */,
 				926D44062375776D00D34491 /* Image.m in Sources */,
 				9252DA41267A21B200FDDD5A /* AssetDetailViewController.swift in Sources */,
+				92D729DB26E2369000A92456 /* XWVInvocation.swift in Sources */,
 				92E2EB2C226F21C700367928 /* BMAutoSecurityScreen.swift in Sources */,
 				9210281124606E42001A7130 /* PagingDiff.swift in Sources */,
 				92E2EB2D226F21C700367928 /* ShareLogActivity.swift in Sources */,
+				92D729CA26E233FF00A92456 /* DAOViewController.swift in Sources */,
 				92F67D5D25876C340009295E /* BMPaymentInfo.m in Sources */,
 				92302052262F23AE001A1883 /* NodeCell.swift in Sources */,
 				923EAA14262EDBDB0000B8D0 /* SendTransactionTypeCell.swift in Sources */,

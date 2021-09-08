@@ -10,4 +10,11 @@
 
 @implementation BMApp
 
+-(void)setAPIResult:(NSDictionary*)dct {
+    _name = [dct valueForKey:@"name"];
+    _desc = [dct valueForKey:@"description"];
+    _url = [dct valueForKey:@"url"];
+    _icon = [dct valueForKey:@"icon"];
+}
+
 @end

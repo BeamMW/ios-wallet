@@ -99,10 +99,10 @@
     </objects>
     <designables>
         <designable name="GtC-cW-9tn">
-            <size key="intrinsicContentSize" width="69" height="20"/>
+            <size key="intrinsicContentSize" width="67" height="19"/>
         </designable>
         <designable name="XG1-kg-id9">
-            <size key="intrinsicContentSize" width="52" height="20"/>
+            <size key="intrinsicContentSize" width="51" height="19"/>
         </designable>
     </designables>
     <resources>

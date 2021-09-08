@@ -18,6 +18,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
 #import "BMWalletStatus.h"
 #import "BMAddress.h"
 #import "BMTransaction.h"
@@ -41,6 +43,7 @@
 #import "ExchangeManager.h"
 #import "AssetsManager.h"
 #import "StringManager.h"
+#import "BMApp.h"
 
 enum {
     BMRestoreManual = 0,
@@ -77,6 +80,7 @@ typedef int BMRestoreType;
 -(void)onChangeCalculated:(double)amount;
 -(void)onMaxPrivacyTokensLeft:(int)tokens;
 -(void)onAssetInfoChange;
+-(void)onDAPPsLoaded;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -118,6 +122,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableArray<BMNotification*>*_Nonnull notifications;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull presendedNotifications;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull deletedNotifications;
+@property (nonatomic,strong) NSMutableArray<BMApp*>*_Nonnull apps;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -298,5 +303,14 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)enableBodyRequests:(BOOL)value;
 
 -(double)grothToBeam:(uint64_t)groth;
+
+
+//DAO
+-(void)loadApps;
+-(void)startTestApp:(UIViewController*_Nonnull)controller;
+-(void)sendDAOApiResult:(NSString*_Nonnull)json;
+-(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
+                      amounts:(NSString*_Nonnull)amounts;
+
 
 @end

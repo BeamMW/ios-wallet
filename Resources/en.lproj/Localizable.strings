@@ -607,3 +607,8 @@ and never kept on the blockchain.";
 "only_online_support" = "You are currently connected to the node\nthat supports only online transactions.";
 "max_funds_error" = "Insufficient funds to complete the transaction. Maximum amount is %@";
 "max_funds_hint" = "Maximum amount is %@";
+"dAppStore" = "DAPP Store";
+"fee" = "Fee";
+"confirm_accept" = "Confirm";
+"will_take_funds" = "%@ will take the funds from your wallet";
+"will_send_funds" = "%@ will send the funds to your wallet";

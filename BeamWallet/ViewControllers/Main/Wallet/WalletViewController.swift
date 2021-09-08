@@ -55,15 +55,19 @@ class WalletViewController: BaseTableViewController {
         subscribeToUpdates()
         
         AppModel.sharedManager().refreshAddressesFrom()
-
+        AppModel.sharedManager().loadApps()
+        
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+       // AppModel.sharedManager().startTestApp(self)
+
         if WithdrawViewModel.isOpenFromGame {
             WithdrawViewModel.isOpenFromGame = false
             

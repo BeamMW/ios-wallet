@@ -46,6 +46,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CrashEye.add(delegate: self)
         
+        if #available(iOS 13.0, *) {
+            let SVGCoder = SDImageSVGCoder.shared
+            SDImageCodersManager.shared.addCoder(SVGCoder)
+        } else {
+        }
+       
+        
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         
         UIApplication.shared.isIdleTimerDisabled = true

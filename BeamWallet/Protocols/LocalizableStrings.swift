@@ -529,6 +529,11 @@ class LocalizableStrings : NSObject {
     var only_online_support = "only_online_support".localized
     var max_funds_error = "max_funds_error".localized
     var max_funds_hint = "max_funds_hint".localized
+    var dAppStore = "dAppStore".localized
+    var fee = "fee".localized
+    var confirm_accept = "confirm_accept".localized
+    var will_take_funds = "will_take_funds".localized
+    var will_send_funds = "will_send_funds".localized
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

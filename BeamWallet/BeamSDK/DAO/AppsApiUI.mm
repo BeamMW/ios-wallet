@@ -7,6 +7,7 @@
 //
 
 #import "AppsApiUI.h"
+#import "AppModel.h"
 
 #include <boost/regex.hpp>
 #include <boost/optional.hpp>
@@ -67,7 +68,8 @@ void AppsApiUI::callWalletApi(const std::string& request)
 void AppsApiUI::AnyThread_sendApiResponse(const std::string& result)
 {
     LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
-//    emit callWalletApiResult(QString::fromStdString(result));
+    NSString *json = [NSString stringWithUTF8String:result.c_str()];
+    [[AppModel sharedManager] sendDAOApiResult:json];
 }
 
 void AppsApiUI::ClientThread_getSendConsent(const std::string& request, const nlohmann::json& jinfo, const nlohmann::json& jamounts)
@@ -89,7 +91,11 @@ void AppsApiUI::ClientThread_getContractConsent(const std::string& request, cons
     const auto info = prepareInfo4QT(jinfo);
     const auto amounts = prepareAmounts4QT(jamounts);
    
-    //emit approveContractInfo(QString::fromStdString(request), info, amounts);
+    NSString *json = [NSString stringWithUTF8String:request.c_str()];
+    NSString *inf = [NSString stringWithUTF8String:info.c_str()];
+    NSString *am = [NSString stringWithUTF8String:amounts.c_str()];
+
+    [[AppModel sharedManager] approveContractInfo:json info:inf amounts:am];
 }
 
 std::string AppsApiUI::prepareInfo4QT(const nlohmann::json& info)

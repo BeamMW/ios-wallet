@@ -19,11 +19,20 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import <AVFoundation/AVFoundation.h>
+#import <NotificationCenter/NotificationCenter.h>
+#import <UserNotifications/UserNotifications.h>
+#import <SafariServices/SafariServices.h>
+#import <WebKit/WebKit.h>
+
 #import "Reachability.h"
 #import "AppModel.h"
 #import "MnemonicModel.h"
 #import "WalletModel.h"
 #import "StringStd.h"
+#import "DAOManager.h"
+
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
 #import "RecoveryProgress.h"
@@ -60,6 +69,8 @@
 #include "common.h"
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
+
+#import "BeamWalletMasterNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -141,6 +152,9 @@ struct GetMaxPrivacyLockFunc
     ShieldedVoucherList lastVouchers;
     NSString *lastWalledId;
     std::string *lastWalledIdS;
+    
+    DAOManager *daoManager;
+    DAOViewController *daoViewController;
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -185,6 +199,7 @@ struct GetMaxPrivacyLockFunc
     _preparedDeleteTransactions = [[NSMutableArray alloc] init];
         
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
+    _apps = [[NSMutableArray alloc] init];
     
     NSData *dataStatus = [[NSUserDefaults standardUserDefaults] objectForKey:walletStatusKey];
     if(dataStatus != nil) {
@@ -224,7 +239,6 @@ struct GetMaxPrivacyLockFunc
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self loadRules];
-    
     
     return self;
 }
@@ -365,8 +379,8 @@ struct GetMaxPrivacyLockFunc
             
             if (weakSelf.isLoggedin == YES)
             {
-                      NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates) {
+                NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+                for(id<WalletModelDelegate> delegate in delegates) {
                     if ([delegate respondsToSelector:@selector(onNodeStartChanging)]) {
                         [delegate onNodeStartChanging];
                     }
@@ -804,6 +818,8 @@ struct GetMaxPrivacyLockFunc
             
             wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
             
+            daoManager = [[DAOManager alloc] initWithWallet:wallet];
+
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 self->wallet->getAsync()->importRecovery(recoveryPath);
             });
@@ -865,6 +881,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         isRunning = YES;
         isStarted = YES;
+        
+        daoManager = [[DAOManager alloc] initWithWallet:wallet];
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
               NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
@@ -3034,6 +3052,91 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     [[Settings sharedManager] setIsNodeProtocolEnabled:value];
 }
 
+-(void)sendDAOApiResult:(NSString*_Nonnull)json {
+    [daoViewController sendDAOApiResultWithJson:json];
+}
+
+-(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
+                   amounts:(NSString*_Nonnull)amounts {
+    
+    [daoViewController showConfirmDialogWithJson:json info:info amount:amounts];
+    
+   // [daoManager :json];
+}
+
+-(void)startTestApp:(UIViewController*_Nonnull)controller {
+    BMApp *app = [BMApp new];
+    app.name = @"BEAM Faucet";
+    app.url = @"http://localhost:5000";
+    BOOL isSupported = [daoManager appSupported:app];
+    
+    __weak typeof(self) weakSelf = self;
+
+    if (isSupported) {
+        [daoManager launchApp:app];
+        
+        daoViewController = [[DAOViewController alloc] init];
+        daoViewController.app = app;
+        daoViewController.onRejected = ^(NSString * _Nonnull json) {
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf->daoManager contractInfoRejected:json];
+        };
+        daoViewController.onApproved = ^(NSString * _Nonnull json) {
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf->daoManager contractInfoApproved:json];
+        };
+        daoViewController.onCallWalletApi = ^(NSString * _Nonnull json) {
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf->daoManager callWalletApi:json];
+        };
+        [[controller navigationController] pushViewController:daoViewController animated:YES];
+    }
+}
+
+-(void)loadApps {
+    __weak typeof(self) weakSelf = self;
+
+    NSString *urlAsString = [NSString stringWithFormat:[Settings sharedManager].dAppUrl];
+    
+    NSCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet];
+    NSString *encodedUrlAsString = [urlAsString stringByAddingPercentEncodingWithAllowedCharacters:set];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    [[session dataTaskWithURL:[NSURL URLWithString:encodedUrlAsString]
+            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        __strong typeof(self) strongSelf = weakSelf;
+
+        if (!error) {
+            // Success
+            if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                NSError *jsonError;
+                NSArray *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+                
+                if (jsonError == nil) {
+                    [strongSelf->_apps removeAllObjects];
+                    
+                    for (NSDictionary *dct in jsonResponse) {
+                        BMApp *app = [BMApp new];
+                        [app setAPIResult:dct];
+                        if(app.icon != nil) {
+                            [strongSelf->_apps addObject:app];
+                        }
+                    }
+                    
+                    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+                    for(id<WalletModelDelegate> delegate in delegates) {
+                        if ([delegate respondsToSelector:@selector(onDAPPsLoaded)]) {
+                            [delegate onDAPPsLoaded];
+                        }
+                    }
+                }
+            }
+        } else {
+            NSLog(@"error : %@", error.description);
+        }
+    }] resume];
+}
 
 @end
 
