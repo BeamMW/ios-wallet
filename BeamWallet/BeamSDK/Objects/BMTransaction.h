@@ -49,7 +49,7 @@ enum {
 typedef UInt64 BMTransactionType;
 
 
-@interface BMTransaction : NSObject <NSSecureCoding> {
+@interface BMTransaction : NSSecureUnarchiveFromDataTransformer <NSSecureCoding> {
 }
 
 @property (nonatomic,strong) NSString *_Nonnull ID;
@@ -68,9 +68,11 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,assign) BOOL isPublicOffline;
 @property (nonatomic,assign) BOOL isShielded;
 @property (nonatomic,assign) BOOL isMaxPrivacy;
+@property (nonatomic,assign) BOOL isDapps;
 @property (nonatomic,assign) double fee;
 @property (nonatomic,assign) double realAmount;
 @property (nonatomic,assign) UInt64 realFee;
+@property (nonatomic,assign) UInt64 realRate;
 @property (nonatomic,assign) BMTransactionStatus enumStatus;
 @property (nonatomic,assign) BMTransactionType enumType;
 @property (nonatomic,assign) int assetId;
@@ -84,6 +86,13 @@ typedef UInt64 BMTransactionType;
 
 @property (nonatomic,strong) NSString * _Nonnull senderIdentity;
 @property (nonatomic,strong) NSString * _Nonnull receiverIdentity;
+
+@property (nonatomic,strong) NSString * _Nullable appName;
+@property (nonatomic,strong) NSString * _Nullable appID;
+@property (nonatomic,strong) NSString * _Nullable contractCids;
+@property (nonatomic,strong) NSString * _Nullable minConfirmations;
+@property (nonatomic,strong) NSString * _Nullable minConfirmationsProgress;
+
 
 -(NSString*_Nonnull)amountString;
 -(UIImage*_Nonnull)statusIcon;
@@ -103,6 +112,8 @@ typedef UInt64 BMTransactionType;
 -(NSString*_Nonnull)details;
 -(NSString*_Nonnull)csvLine;
 -(NSString*_Nonnull)textDetails;
+
+-(NSString*_Nonnull)source;
 
 -(NSMutableAttributedString*_Nonnull)searchString:(NSString*_Nonnull)searchText;
 

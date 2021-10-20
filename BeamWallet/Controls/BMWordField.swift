@@ -34,7 +34,6 @@ class BMWordField: BMField {
     private var accessoryOptions = [UIButton]()
     
     private let errorColor = UIColor.main.red
-    private let normalColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree : UIColor.main.darkSlateBlue
     
     var suggestions: [String]?
     
@@ -42,16 +41,16 @@ class BMWordField: BMField {
         didSet {
             switch fState {
             case .empty?:
+                self.status = .normal
                 self.textColor = UIColor.white
-                self.line.backgroundColor = normalColor
                 break
             case .error?:
+                self.status = .error
                 self.textColor = errorColor
-                self.line.backgroundColor = errorColor
                 break
             case .correct?:
+                self.status = .normal
                 self.textColor = UIColor.white
-                self.line.backgroundColor = normalColor
                 break
             case .none:
                 break
@@ -69,13 +68,7 @@ class BMWordField: BMField {
         setupSuggestionsView()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        defaultHeight = 25
-        heightConstraint.constant = 25
-    }
-    
+
     private func setupSuggestionsView() {
         accessoryView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
 
@@ -213,5 +206,23 @@ class BMWordField: BMField {
         else{
             self.inputAccessoryView = nil
         }
+    }
+    
+    open override func textRect(forBounds bounds: CGRect) -> CGRect {
+        let oldRect = super.textRect(forBounds: bounds)
+        let padding = UIEdgeInsets(top: 0, left: 21, bottom: 0, right: 0)
+        return oldRect.inset(by: padding)
+    }
+    
+    open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        let oldRect = super.placeholderRect(forBounds: bounds)
+        let padding = UIEdgeInsets(top: 0, left: 21, bottom: 0, right: 0)
+        return oldRect.inset(by: padding)
+    }
+    
+    open override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        let oldRect = super.editingRect(forBounds: bounds)
+        let padding = UIEdgeInsets(top: 0, left: 21, bottom: 0, right: 0)
+        return oldRect.inset(by: padding)
     }
 }

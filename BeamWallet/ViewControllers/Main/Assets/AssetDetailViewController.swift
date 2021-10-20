@@ -71,9 +71,7 @@ class AssetDetailViewController: BaseTableViewController {
         rightButton()
         
         subscribeToUpdates()
-        
-        AppModel.sharedManager().refreshAddressesFrom()
-        
+                
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: tableView)
         }
@@ -220,7 +218,7 @@ extension AssetDetailViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
-            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
+            let vc = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }

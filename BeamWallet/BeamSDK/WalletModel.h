@@ -51,6 +51,7 @@ private:
     NSString *GetUTXOTypeString(beam::wallet::Coin coin);
     NSString *GetShildedUTXOStatusString(beam::wallet::ShieldedCoin coin);
     NSString *GetShildedUTXOTypeString(beam::wallet::ShieldedCoin coin);
+    NSString *GetConfirmationProgress(beam::wallet::TxDescription transaction, uint32_t minConfirmations);
     int getCurrency(beam::wallet::Currency currency);
     
     void doFunction(const std::function<void()>& func);

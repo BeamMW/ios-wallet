@@ -93,7 +93,14 @@ class AddressViewModel: NSObject {
             
             self.addresses.removeAll(where: {$0.walletId.isEmpty})
             self.contacts.removeAll(where: {$0.address.walletId.isEmpty})
+            
+            let isOwn = AppModel.sharedManager().checkIsOwnNode()
+            if !isOwn {
+                for (index, element) in self.addresses.enumerated() {
+                    self.addresses[index].displayAddress = element._id
+                }
 
+            }
             self.onDataChanged?()
         }
     }
@@ -177,9 +184,9 @@ class AddressViewModel: NSObject {
     }
     
     public func onSendToAddress(address: BMAddress) {
-        var id = address._id
+        var id = address.address ?? ""
         if id.isEmpty {
-            id = address.address ?? ""
+            id = address._id 
         }
         let vc = SendViewController()
         vc.transaction = BMTransaction()
@@ -210,7 +217,12 @@ class AddressViewModel: NSObject {
     }
     
     public func onCopyAddress(address: BMAddress) {
-        UIPasteboard.general.string = address.walletId
+        if let display = address.displayAddress {
+            UIPasteboard.general.string = display
+        }
+        else {
+            UIPasteboard.general.string = address.walletId
+        }
         ShowCopied(text: Localizable.shared.strings.address_copied)
     }
     

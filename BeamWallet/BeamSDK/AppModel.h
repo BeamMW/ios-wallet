@@ -92,6 +92,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @interface AppModel : NSObject
 
 @property (nonatomic) NewAddressGeneratedBlock _Nullable generatedNewAddressBlock;
+
 @property (nonatomic) FeecalculatedBlock _Nullable feecalculatedBlock;
 @property (nonatomic) PublicAddressBlock _Nullable getPublicAddressBlock;
 
@@ -120,9 +121,9 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableArray<BMAddress*>*_Nonnull preparedDeleteAddresses;
 @property (nonatomic,strong) NSMutableArray<BMTransaction*>*_Nonnull preparedDeleteTransactions;
 @property (nonatomic,strong) NSMutableArray<BMNotification*>*_Nonnull notifications;
-@property (nonatomic,strong) NSMutableDictionary*_Nonnull presendedNotifications;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull deletedNotifications;
 @property (nonatomic,strong) NSMutableArray<BMApp*>*_Nonnull apps;
+@property (nonatomic,strong) NSMutableDictionary*_Nonnull needSaveContacts;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -174,6 +175,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)getNetworkStatus;
 -(void)refreshAllInfo;
 -(void)getWalletNotifications;
+-(void)refreshAddresses;
+-(void)refreshTransactions;
 
 //token
 -(BOOL)isToken:(NSString*_Nullable)address;
@@ -194,16 +197,15 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)setExpires:(int)hours toAddress:(NSString*_Nonnull)address;
 -(void)setWalletComment:(NSString*_Nonnull)comment toAddress:(NSString*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getTransactionsFromAddress:(BMAddress*_Nonnull)address;
+-(BOOL)hasActiveTransactionsFromAddress:(BMAddress*_Nonnull)address;
 -(NSMutableArray<BMTransaction*>*_Nonnull)getCompletedTransactionsFromAddress:(BMAddress*_Nonnull)address;
--(NSMutableArray<BMAddress*>*_Nonnull)getWalletAddresses;
 -(void)editAddress:(BMAddress*_Nonnull)address;
+-(void)saveToken:(NSString*_Nonnull)walletID token:(NSString*_Nonnull)token;
 -(void)deleteAddress:(NSString*_Nullable)address;
 -(BOOL)isValidAddress:(NSString*_Nullable)address;
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address;
--(BOOL)isMyAddress:(NSString*_Nullable)address;
+-(BOOL)isMyAddress:(NSString*_Nullable)address identity:(NSString*_Nullable)identity;
 -(void)clearAllAddresses;
--(void)refreshAddresses;
--(void)refreshAddressesFrom;
 -(NSString*_Nonnull)generateQRCodeString:(NSString*_Nonnull)address amount:(NSString*_Nullable)amount;
 -(void)prepareDeleteAddress:(BMAddress*_Nonnull)address removeTransactions:(BOOL)removeTransactions;
 -(void)cancelDeleteAddress:(NSString*_Nonnull)address;
@@ -263,7 +265,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 //contacts
 -(BMContact*_Nullable)getContactFromId:(NSString*_Nonnull)idValue;
 -(void)clearAllContacts;
-
+-(void)addIgnoredContact:(NSString*_Nonnull) addressId;
+-(void)refreshContacts;
 
 //fork
 -(BOOL)isFork;
@@ -295,6 +298,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)readAllNotifications;
 
 -(void)setMaxPrivacyLockTime:(int)hours;
+-(void)setMinConfirmations:(uint32_t)count;
 
 -(NSString*_Nonnull)getMaturityHoursLeft:(BMUTXO*_Nonnull)utxo;
 -(UInt64)getMaturityHours:(BMUTXO*_Nonnull)utxo;
@@ -307,10 +311,14 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 //DAO
 -(void)loadApps;
--(void)startTestApp:(UIViewController*_Nonnull)controller;
+-(void)stopDAO;
+-(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*_Nonnull)app;
+-(void)startBeamXDaoApp:(UINavigationController*_Nonnull)controller app:(BMApp*_Nonnull)app;
 -(void)sendDAOApiResult:(NSString*_Nonnull)json;
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
                       amounts:(NSString*_Nonnull)amounts;
+
+-(BMApp*_Nonnull)DAOBeamXApp;
 
 
 @end

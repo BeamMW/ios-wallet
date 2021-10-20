@@ -174,7 +174,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                     amount = String.currency(value: params.amount).replacingOccurrences(of: " BEAM", with: "")
                 }
                                 
-                isMyAddress = AppModel.sharedManager().isMyAddress(params.address)
+                isMyAddress = AppModel.sharedManager().isMyAddress(params.address, identity: params.identity)
                 
                 newVersionError = params.verionError
                 
@@ -506,13 +506,18 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
   
     public func isNeedSaveContact() -> Bool {
         var address = toAddress
+        var identity:String? = nil
+        
         if (AppModel.sharedManager().isToken(address)) {
             let params = AppModel.sharedManager().getTransactionParameters(address)
-            address = params.address
+            if !params.address.isEmpty {
+                address = params.address
+            }
+            identity = params.identity
         }
         
         let isContactFound = (AppModel.sharedManager().getContactFromId(address) != nil)
-        let isMyAddress = AppModel.sharedManager().isMyAddress(address)
+        let isMyAddress = AppModel.sharedManager().isMyAddress(address, identity: identity)
         return (selectedContact == nil && !isContactFound && !isMyAddress)
     }
     

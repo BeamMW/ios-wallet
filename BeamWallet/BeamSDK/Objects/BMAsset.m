@@ -26,7 +26,7 @@
 @implementation BMAsset
 
 + (BOOL)supportsSecureCoding {
-    return YES;
+    return NO;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
@@ -125,8 +125,8 @@
     return _assetId <= 0;
 }
 
--(BOOL)isDemoX {
-    return ([[_unitName uppercaseString] isEqualToString:@"DEMOX"] || [[_unitName uppercaseString] isEqualToString:@"BEAMX"]) && _assetId != 9;
+-(BOOL)isBeamX {
+    return _assetId == 31;
 }
 
 -(double)USD {

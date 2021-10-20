@@ -127,7 +127,7 @@ extension UILabel {
                 }
                 var newFontSize = font.pointSize
                 
-                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
+                if Device.isLarge {
                     newFontSize = newFontSize + 1.0
                 }
                 else if Device.screenType == .iPhones_5{

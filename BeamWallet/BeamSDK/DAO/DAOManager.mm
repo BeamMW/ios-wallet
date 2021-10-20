@@ -39,10 +39,16 @@
 }
 
 -(BOOL)appSupported:(BMApp*_Nonnull)app {
-    return webAPICreator.apiSupported("current") ||  webAPICreator.apiSupported("");
+    return webAPICreator.apiSupported(app.api_version.string) || webAPICreator.apiSupported(app.min_api_version.string);
+}
+
+-(void)stopApp {
+    webAPICreator._api.~shared_ptr();
+    webAPICreator.~WebAPICreator();
 }
 
 -(void)launchApp:(BMApp*_Nonnull)app {
+    
     auto appId = webAPICreator.generateAppID(app.name.string, app.url.string);
     
     try

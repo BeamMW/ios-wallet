@@ -133,7 +133,11 @@ class NotificationManager : NSObject {
     }
     
     public func scheduleNotification(transaction: BMTransaction){
-        if ((transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf && transaction.isIncome) {
+        if (transaction.isDapps && (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending || transaction.enumStatus == BMTransactionStatusInProgress)) {
+            print("cancel scheduleNotification")
+        }
+        else if ((transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending
+                || (transaction.isDapps && transaction.enumStatus == BMTransactionStatusInProgress)) && !transaction.isSelf && transaction.isIncome) {
             if UIApplication.shared.applicationState == .active {
                 BMNotificationView.showTransaction(transaction: transaction, delegate: self)
             }
@@ -288,7 +292,7 @@ extension NotificationManager: BMNotificationViewDelegate {
                             }
                         }
                         if !found {
-                            vc.navigationController?.pushViewController(TransactionViewController(transaction: transaction), animated: true)
+                            vc.navigationController?.pushViewController(TransactionPageViewController(transaction: transaction), animated: true)
                         }
                     }
                     AppModel.sharedManager().readNotification(byObject: id)

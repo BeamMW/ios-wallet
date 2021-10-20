@@ -82,7 +82,7 @@
 -(NSString*_Nonnull)formattedDate {
     if (_duration == 0)
     {
-        return @"never";
+        return [@"never_expires" localized];
     }
 
     NSDateFormatter *f = [self formatter];
@@ -95,7 +95,7 @@
 -(NSString*_Nonnull)agoDate {
     if (_duration == 0)
     {
-        return @"never";
+        return [@"never_expires" localized];
     }
     
     NSDate *date = [NSDate dateWithTimeIntervalSince1970: [self getExpirationTime]];
@@ -129,7 +129,7 @@
 -(NSString*)expireNowDate {
     if (_isNowActiveDuration == 0)
     {
-        return @"never";
+        return [@"never_expires" localized];
     }
     
     NSDateFormatter *f = [self formatter];

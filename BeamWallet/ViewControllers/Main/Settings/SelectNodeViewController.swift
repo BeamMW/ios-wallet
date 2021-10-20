@@ -30,7 +30,7 @@ struct SelectNode {
 class SelectNodeViewController: BaseTableViewController {
 
     private var items = [SelectNode]()
-    private var inputField = UITextField()
+    private var inputField = BMField()
 
     public var isNeedDisconnect = true
     public var isCreateWallet = false
@@ -79,6 +79,8 @@ class SelectNodeViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        inputField.awakeFromNib()
+        
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: !isCreateWallet)
         
         title = Localizable.shared.strings.node
@@ -114,7 +116,8 @@ class SelectNodeViewController: BaseTableViewController {
                 items[0].selected = true
             }
         }
-                
+              
+        inputField.setNormalColor(color: .white)
         inputField.keyboardType = .numbersAndPunctuation
         inputField.spellCheckingType = .no
         inputField.autocorrectionType = .no
@@ -122,18 +125,13 @@ class SelectNodeViewController: BaseTableViewController {
         inputField.textColor = UIColor.white
         inputField.textAlignment = .right
         inputField.placeholder = "12.123.123.1234"
+        inputField.placeHolderColor = UIColor.white.withAlphaComponent(0.20)
         inputField.delegate = self
         if !isCreateWallet {
             inputField.text = Settings.sharedManager().customNode()
         }
         inputField.tintColor = UIColor.white
-        
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 50))
-        label.text = Localizable.shared.strings.ip_port
-        label.textColor = UIColor.white.withAlphaComponent(0.2)
-        inputField.leftView = label
-        inputField.leftViewMode = .always
-        
+                
         if isCreateWallet {
             self.navigationItem.leftBarButtonItem = nil
         }
@@ -264,7 +262,7 @@ extension SelectNodeViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 1 {
-            return 70
+            return 80
         }
         return UITableView.automaticDimension
     }
@@ -322,18 +320,24 @@ extension SelectNodeViewController : UITableViewDataSource {
                 cell?.contentView.backgroundColor = UIColor.clear
                 cell?.selectionStyle = .none
                 
-                let view = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 50))
+                let view = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 65))
                 view.backgroundColor = UIColor.main.cellBackgroundColor
-                inputField.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width-30, height: 50)
+                inputField.frame = CGRect(x: UIScreen.main.bounds.width-265, y: 10, width: 250, height: 45)
                 view.addSubview(inputField)
+                
+                let label = UILabel(frame: CGRect(x: 15, y: 0, width: 80, height: 65))
+                label.text = Localizable.shared.strings.ip_port.uppercased()
+                label.textColor = UIColor.white
+                label.font = BoldFont(size: 14)
+                view.addSubview(label)
                 
                 let topLine = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 1))
                 topLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
                 
-                let botLine = UIView(frame: CGRect(x: 0, y: 65, width: UIScreen.main.bounds.width, height: 1))
+                let botLine = UIView(frame: CGRect(x: 0, y: 79, width: UIScreen.main.bounds.width, height: 1))
                 botLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
                 
-                let mainView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
+                let mainView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 80))
                 mainView.addSubview(topLine)
                 mainView.addSubview(botLine)
                 mainView.backgroundColor = UIColor.clear

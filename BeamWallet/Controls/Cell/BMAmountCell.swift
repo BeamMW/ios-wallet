@@ -25,9 +25,6 @@ class BMAmountCell: BaseCell {
 
     @IBOutlet weak private var textField: BMField!
     @IBOutlet weak private var nameLabel: UILabel!
-    @IBOutlet weak var currencyLabel: UILabel!
-    @IBOutlet weak private var currencyArrow: UIImageView!
-    @IBOutlet weak private var erorLabel: UILabel!
     @IBOutlet weak private var secondCurrencyLabel: UILabel!
     @IBOutlet weak private var maxAmountErrorLabel: UILabel!
 
@@ -35,13 +32,14 @@ class BMAmountCell: BaseCell {
     @IBOutlet var topStackOffset: NSLayoutConstraint!
     @IBOutlet var botStackOffset: NSLayoutConstraint!
 
+    @IBOutlet weak private var currencyLabel: UILabel!
+    @IBOutlet weak private var currencyArrow: UIImageView!
+    @IBOutlet weak private var currencyIcon: AssetIconView!
+    @IBOutlet weak var currencyView: UIView!
+
     public var fee:Double = 0
-    
     public var info:String?
     
-    public var normalTextColor = UIColor.main.heliotrope
-    public var normalLineColor = UIColor.main.heliotrope
-
     private var type: BMTransactionType = BMTransactionType(BMTransactionTypeSimple)
 
     public var titleColor: UIColor? {
@@ -70,29 +68,47 @@ class BMAmountCell: BaseCell {
     {
         didSet{
             if error == nil {
-                erorLabel.text = nil
-                erorLabel.isHidden = true
-                textField.textColor = normalTextColor
-                textField.lineColor = UIColor.white.withAlphaComponent(0.1)
+                textField.status = .normal
+                textField.error = nil
             }
             else{
-                erorLabel.text = error
-                erorLabel.isHidden = false
-                textField.textColor = UIColor.main.red
-                textField.lineColor = UIColor.main.red
+                textField.status = .error
+                textField.error = error
             }
         }
     }
-    
+
     public var currency:String?
     {
         didSet{
-            if currency != nil && AssetsManager.shared().getAssetsWithBalance().count >= 1 {
-                currencyLabel.isUserInteractionEnabled = true
-                currencyArrow.isHidden = false
-                
+            
+            if currency != nil {       
                 let text = currency!
                 currencyLabel.text = text
+                currencyLabel.letterSpacing = 2
+                
+                let asset = AssetsManager.shared().getAssetByName(currency)
+                if let asset = asset {
+                    currencyIcon.setAsset(asset)
+                }
+                
+                if AssetsManager.shared().getAssetsWithBalance().count >= 1 {
+                    currencyView.isUserInteractionEnabled = true
+                    currencyArrow.isHidden = false
+                }
+                else {
+                    currencyView.isUserInteractionEnabled = false
+                    currencyArrow.isHidden = true
+                }
+            }
+            else {
+                currencyView.isUserInteractionEnabled = false
+                currencyArrow.isHidden = true
+                currencyLabel.letterSpacing = 2
+                
+                if let asset = AssetsManager.shared().assets.firstObject as? BMAsset {
+                    currencyIcon.setAsset(asset)
+                }
             }
         }
     }
@@ -113,6 +129,8 @@ class BMAmountCell: BaseCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        textField.additionalRightOffset = 100
+        
         allowHighlighted = false
         selectionStyle = .none
         
@@ -122,27 +140,32 @@ class BMAmountCell: BaseCell {
         maxAmountErrorLabel.textColor = UIColor.main.blueyGrey
         maxAmountErrorLabel.font = RegularFont(size: 14)
         
-        erorLabel.textColor = UIColor.main.red
-        erorLabel.isHidden = true
-        erorLabel.text = nil
+//        erorLabel.textColor = UIColor.main.red
+//        erorLabel.isHidden = true
+//        erorLabel.text = nil
         
         textField.statusDelegate = self
         
-        currencyLabel.isUserInteractionEnabled = false
-        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCurrency(_:))))
+        currencyView.isUserInteractionEnabled = false
+        currencyView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCurrency(_:))))
         
         nameLabel.isUserInteractionEnabled = true
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
-        
-        textField.placeholder = Localizable.shared.strings.zero
-        textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
-        textField.placeHolderFont = RegularFont(size: 30)
-        
+                
         if Settings.sharedManager().isDarkMode {
             secondCurrencyLabel.textColor = UIColor.main.steel
             nameLabel.textColor = UIColor.main.steel;
             maxAmountErrorLabel.textColor = UIColor.main.steel;
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        textField.placeholder = Localizable.shared.strings.zero
+        textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
+        textField.placeHolderFont = RegularFont(size: 30)
+        textField.additionalRightOffset = currencyView.width
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
@@ -187,9 +210,6 @@ extension BMAmountCell: Configurable {
         nameLabel.text = options.name
         nameLabel.letterSpacing = 2
         
-        normalLineColor = textField.lineColor ?? UIColor.main.marine
-        normalTextColor = textField.textColor ?? UIColor.main.heliotrope
-
         textField.text = options.value
         
         currencyArrow.image = IconNextArrow()

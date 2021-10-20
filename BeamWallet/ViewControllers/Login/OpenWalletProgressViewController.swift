@@ -171,6 +171,8 @@ class OpenWalletProgressViewController: BaseViewController {
         AppModel.sharedManager().removeDelegate(self)
 
         if onlyConnect {
+            AppModel.sharedManager().refreshAddresses()
+            
             var found = false
             if let controllers = self.navigationController?.viewControllers {
                 for vc in controllers {
@@ -442,6 +444,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
     }
     
     func onRecoveryProgressUpdated(_ done: Int32, total: Int32, time: Int32) {
+        
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             
@@ -468,7 +471,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             if done == total ||  percent >= 99.9  {
                 if !strongSelf.stopRestore {
                     strongSelf.stopRestore = true
-                    strongSelf.isWaitingRestore = true
+                    strongSelf.isWaitingRestore = false
                     
                     let deadlineTime = DispatchTime.now() + .seconds(4)
                     DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
@@ -484,11 +487,12 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                             }
                         }
                         else{
-                            if strongSelf.isWaitingRestore {
-                                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 50%."
-                            }
-                            
-                            strongSelf.startCreateWallet()
+                            strongSelf.openMainPage()
+//                            if strongSelf.isWaitingRestore {
+//                                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 50%."
+//                            }
+//
+//                            strongSelf.startCreateWallet()
                         }
                     }
                 }

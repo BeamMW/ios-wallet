@@ -68,6 +68,9 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
 }
 
 -(NSString*_Nonnull)getAssetColor:(int)value {
+    if (value == 31) {
+        return  @"#977dff";
+    }
     int idx = (value % colors.count);
     return colors[idx];
 }

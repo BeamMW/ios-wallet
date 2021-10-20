@@ -65,7 +65,7 @@ class QRCodeSmallViewController: BaseViewController {
                 text = Localizable.shared.strings.transaction_indefinitely + text
             }
             else {
-                text = String(format: Localizable.shared.strings.transaction_time, locValue.name) + text
+                text = String(format: Localizable.shared.strings.transaction_time, locValue.title) + text
             }
             
             infoLabel.text = text

@@ -37,7 +37,11 @@
 }
 
 + (BOOL)supportsSecureCoding {
-    return YES;
+    return NO;
+}
+
++(NSArray<Class>*)allowedTopLevelClasses {
+    return @[NSArray.class, NSString.class, NSNumber.class];
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder

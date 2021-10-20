@@ -24,6 +24,8 @@ class AddressExpiresCell: BaseCell {
     @IBOutlet weak private var expireLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak private var arrowView: UIImageView!
+    @IBOutlet weak private var arrowViewOffset: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -46,6 +48,8 @@ extension AddressExpiresCell: Configurable {
             titleLabel.text = Localizable.shared.strings.expires.uppercased()
         }
         
+        arrowView.isHidden = false
+        arrowViewOffset.constant = 15
         titleLabel.letterSpacing = 1.5
         
         if address.isExpired() || address.isNowActive {
@@ -55,9 +59,18 @@ extension AddressExpiresCell: Configurable {
                 dateLabel.isHidden = true
             }
             else{
-                expireLabel.text = Localizable.shared.strings.in_24_hours.lowercased()
-                dateLabel.text = address.expireNowDate()
-                dateLabel.isHidden = false
+                if address.isExpired() && !address.isNowActive {
+                    expireLabel.text = Localizable.shared.strings.this_address_expired.lowercased()
+                    dateLabel.isHidden = true
+                    arrowView.isHidden = true
+                    arrowViewOffset.constant = 0
+                }
+                else {
+                    expireLabel.text = Localizable.shared.strings.auto.lowercased()
+                    dateLabel.text = address.expireNowDate()
+                    dateLabel.isHidden = false
+                }
+    
             }
         }
         else{
@@ -73,7 +86,7 @@ extension AddressExpiresCell: Configurable {
                     dateLabel.isHidden = true
                 }
                 else{
-                    expireLabel.text = Localizable.shared.strings.in_24_hours.lowercased()
+                    expireLabel.text = Localizable.shared.strings.auto.lowercased()
                     dateLabel.text = address.formattedDate()
                     dateLabel.isHidden = false
                 }

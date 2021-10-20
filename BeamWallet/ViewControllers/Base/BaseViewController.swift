@@ -82,11 +82,13 @@ class BaseViewController: UIViewController {
         if let navigation = navigationController {
             self.sideMenuController?.isLeftViewSwipeGestureEnabled = (navigation.viewControllers.count == 1)
         }
-        
+                
         if let v = self.view.viewWithTag(11) as? BMNetworkStatusView {
             v.indicatorView.layoutSubviews()
         }
     }
+    
+    
     
     override var title: String? {
         get {
@@ -260,7 +262,8 @@ class BaseViewController: UIViewController {
         let y: CGFloat = Device.isXDevice ? 60 : 35
         
         self.view.viewWithTag(20194)?.removeFromSuperview()
-        
+        self.view.viewWithTag(200)?.removeFromSuperview()
+
         let stackView = UIView()
         var x: CGFloat = 0
         

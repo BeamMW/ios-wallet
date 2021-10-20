@@ -195,6 +195,12 @@ class TransactionViewModel: NSObject {
 
 extension TransactionViewModel : WalletModelDelegate {
     
+    func onWalletStatusChange(_ status: BMWalletStatus) {
+        if self.transaction != nil {
+            AppModel.sharedManager().refreshTransactions()
+        }
+    }
+    
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
             if self.isSegment {

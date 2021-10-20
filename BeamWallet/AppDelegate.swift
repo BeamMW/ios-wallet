@@ -46,12 +46,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CrashEye.add(delegate: self)
         
+        if #available(iOS 15.0, *) {
+            UITableView.appearance().sectionHeaderTopPadding = CGFloat(0)
+        }
+        
         if #available(iOS 13.0, *) {
             let SVGCoder = SDImageSVGCoder.shared
             SDImageCodersManager.shared.addCoder(SVGCoder)
-        } else {
         }
-       
         
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         
@@ -349,26 +351,27 @@ extension AppDelegate: WalletModelDelegate {
     
     public func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
-            var oldTransactions = [BMTransaction]()
+            var oldTransactions = [String]()
             
-            if let data = UserDefaults.standard.data(forKey: "transactions") {
-                if let array = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSArray.self, BMTransaction.self], from: data) as? [BMTransaction] {
-                    oldTransactions = array
+            let userDefaults = UserDefaults.standard
+
+            if let data = userDefaults.object(forKey: "transactions_ids") as? [String] {
+                oldTransactions = data
+            }
+            
+            let filtered = transactions.filter { t in
+                t.isIncome && !t.isSelf
+            }
+            
+            for transaction in filtered {
+                if oldTransactions.first(where: { $0 == transaction.id }) == nil {
+                    NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
+                    oldTransactions.append(transaction.id)
                 }
             }
             
-            for transaction in transactions {
-                if transaction.isIncome, !transaction.isSelf {
-                    if oldTransactions.first(where: { $0.id == transaction.id }) == nil {
-                        NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
-                    }
-                }
-            }
-            
-            if let data = try? NSKeyedArchiver.archivedData(withRootObject: transactions, requiringSecureCoding: true) {
-                UserDefaults.standard.set(data, forKey: "transactions")
-                UserDefaults.standard.synchronize()
-            }
+            userDefaults.set(oldTransactions, forKey: "transactions_ids")
+            userDefaults.synchronize()
             
             self.completionHandler?(.newData)
         }

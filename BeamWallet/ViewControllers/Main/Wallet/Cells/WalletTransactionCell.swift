@@ -47,7 +47,16 @@ extension WalletTransactionCell: Configurable {
             return
         }
         
-        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueAsset(options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
+        let rate = options.transaction.realRate
+        
+        if rate > 0 {
+            let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(options.transaction.realRate), amount: options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
+            secondAvailableLabel.text = second
+        }
+        else {
+            secondAvailableLabel.text = ""
+        }
+        
 
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 

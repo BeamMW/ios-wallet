@@ -15,6 +15,11 @@
 @property (nonatomic,strong) NSString *desc;
 @property (nonatomic,strong) NSString *url;
 @property (nonatomic,strong) NSString *icon;
+@property (nonatomic,strong) NSString *api_version;
+@property (nonatomic,strong) NSString *min_api_version;
+@property (nonatomic,assign) BOOL isSupported;
+
+
 
 -(void)setAPIResult:(NSDictionary*)dct;
 

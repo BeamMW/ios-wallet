@@ -19,9 +19,12 @@
 
 import UIKit
 
-class TransactionViewController: BaseTableViewController {
+class TransactionViewController: UITableViewController {
+   
     private var viewModel: DetailTransactionViewModel!
     private var isPreview = false
+    private var isPaymentProof = false
+
     public var transactionId = ""
 
     override var previewActionItems: [UIPreviewActionItem] {
@@ -84,21 +87,22 @@ class TransactionViewController: BaseTableViewController {
         return array
     }
     
-    override var tableStyle: UITableView.Style {
-        get {
-            return .grouped
-        }
-        set {
-            super.tableStyle = newValue
-        }
-    }
-    
+
     init(transaction: BMTransaction, preview: Bool = false) {
         super.init(nibName: nil, bundle: nil)
         
         isPreview = preview
         transactionId = transaction.id
         viewModel = DetailTransactionViewModel(transaction: transaction)
+    }
+    
+    init(transaction: BMTransaction, isPaymentProof:Bool) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.isPaymentProof = isPaymentProof
+       
+        transactionId = transaction.id
+        viewModel = DetailTransactionViewModel(transaction: transaction, isPaymentProof: isPaymentProof)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -110,49 +114,24 @@ class TransactionViewController: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register([BMMultiLinesCell.self, TransactionUTXOCell.self, TransactionDetailCell.self, TransactionPaymentProofCell.self])
+        tableView.register([BMMultiLinesCell.self, BMDetailAmountCell.self])
         tableView.contentInsetAdjustmentBehavior = .never
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 1))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
-        
+        tableView.separatorStyle = .none
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 40))
+
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
-        
-        if !isPreview {
-            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
-            
-            title = Localizable.shared.strings.transaction_id.uppercased().replacingOccurrences(of: Localizable.shared.strings.id.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: String.empty())
-            
-            addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
-        }
-        else {
-            removeLeftButton()
-        }
         
         subscribeToUpdates()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        if isPreview {
-            tableView.y = 0
-            tableView.h = 450
-        }        
     }
     
     public func didShow() {
-        isPreview = false
-        
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
-        
-        title = Localizable.shared.strings.transaction_id.uppercased().replacingOccurrences(of: Localizable.shared.strings.id.uppercased(), with: String.empty()).replacingOccurrences(of: " ", with: String.empty())
-        
-        addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
-        
-        addCustomBackButton(target: self, selector: #selector(onLeftBackButton))
-        
-        viewDidLayoutSubviews()
     }
     
     private func subscribeToUpdates() {
@@ -180,7 +159,7 @@ class TransactionViewController: BaseTableViewController {
         AppModel.sharedManager().getWalletStatus()
     }
     
-    @objc private func onMore(sender: UIBarButtonItem) {
+    @objc func onMore(sender: UIBarButtonItem) {
         BMPopoverMenu.show(menuArray: viewModel.actionItems(), done: { selectedItem in
             if let item = selectedItem {
                 switch item.action {
@@ -202,96 +181,92 @@ class TransactionViewController: BaseTableViewController {
             }
         }, cancel: {})
     }
-    
-    @objc private func onMoreDetails() {
-        viewModel.detailsExpand = !viewModel.detailsExpand
-        tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
-    }
-    
-    @objc private func onMoreUtxo() {
-        viewModel.utxoExpand = !viewModel.utxoExpand
-        tableView.reloadSections(IndexSet(arrayLiteral: 3), with: .fade)
-    }
 }
 
-extension TransactionViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 1:
-            return BMTableHeaderTitleView.height
-        case 3:
-            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView.height : 0
-        default:
-            return 0
-        }
-    }
+extension TransactionViewController {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 }
 
-extension TransactionViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
-    }
+extension TransactionViewController {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return (viewModel.detailsExpand ? viewModel.details.count : 0)
-        case 2:
-            return (viewModel.paymentProof != nil) ? 1 : 0
-        case 3:
-            return (Settings.sharedManager().isHideAmounts) ? 0 : (viewModel.utxoExpand ? viewModel.utxos.count : 0)
-        default:
-            return 0
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40))
+            view.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+            
+            let line = UIView(frame: CGRect(x: 15, y: view.h/2, width: UIScreen.main.bounds.width - 30, height: 1))
+            line.backgroundColor = .white
+            line.alpha = 0.1
+            view.addSubview(line)
+            
+            return view
         }
+        
+        return nil
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView
-                .dequeueReusableCell(withType: TransactionDetailCell.self, for: indexPath)
-                .configured(with: viewModel.transaction!)
-            return cell
-        case 1:
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 40
+        }
+        
+        return 0
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return isPaymentProof ? 2 : 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? viewModel.details.count : viewModel.proofDetail.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            if let item = viewModel.details[indexPath.row] as? BMMultiLineItem {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+                    .configured(with: item)
+                cell.increaseSpace = true
+                cell.delegate = self
+                cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+                cell.addDots()
+                return cell
+            }
+            else if let item = viewModel.details[indexPath.row] as? BMThreeLineItem {
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMDetailAmountCell.self, for: indexPath)
+                cell.increaseSpace = true
+                cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+                if item.title == Localizable.shared.strings.fee.uppercased() {
+                    cell.configure(asset: AssetsManager.shared().getAsset(0), item: item)
+                }
+                else {
+                    cell.configure(asset: viewModel.transaction?.asset, item: item)
+                }
+                cell.addDots()
+                return cell
+            }
+            else {
+                return UITableViewCell()
+            }
+        }
+        else {
+            let item = viewModel.proofDetail[indexPath.row]
+            
             let cell = tableView
                 .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
-                .configured(with: viewModel.details[indexPath.row])
+                .configured(with: item)
             cell.increaseSpace = true
-           // cell.maxLines = 2
             cell.delegate = self
             cell.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+            cell.addDots()
+
             return cell
-        case 2:
-            let cell = tableView
-                .dequeueReusableCell(withType: TransactionPaymentProofCell.self, for: indexPath)
-            cell.delegate = self
-            return cell
-        case 3:
-            let cell = tableView
-                .dequeueReusableCell(withType: TransactionUTXOCell.self, for: indexPath)
-            cell.configure(with: viewModel.utxos[indexPath.row])
-            return cell
-        default:
-            return UITableViewCell()
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0:
-            return nil
-        case 1:
-            return BMTableHeaderTitleView(title: Localizable.shared.strings.details.uppercased(), handler: #selector(onMoreDetails), target: self, expand: viewModel.detailsExpand)
-        case 3:
-            return (viewModel.utxos.count > 0 && !Settings.sharedManager().isHideAmounts) ? BMTableHeaderTitleView(title: Localizable.shared.strings.utxo_list.uppercased(), handler: #selector(onMoreUtxo), target: self, expand: viewModel.utxoExpand) : nil
-        default:
-            return nil
         }
     }
 }
@@ -315,11 +290,13 @@ extension TransactionViewController: TransactionPaymentProofCellDelegate {
 extension TransactionViewController: GeneralInfoCellDelegate {
     func onClickToCell(cell: UITableViewCell) {
         if let path = tableView.indexPath(for: cell) {
-            if viewModel.details[path.row].title == Localizable.shared.strings.kernel_id.uppercased() {
-                let kernelId = viewModel.transaction!.kernelId
-                let link = Settings.sharedManager().explorerAddress + kernelId
-                if let url = URL(string: link) {
-                    openUrl(url: url)
+            if let item = viewModel.details[path.row] as? BMMultiLineItem {
+                if item.title == Localizable.shared.strings.kernel_id.uppercased() {
+                    let kernelId = viewModel.transaction!.kernelId
+                    let link = Settings.sharedManager().explorerAddress + kernelId
+                    if let url = URL(string: link) {
+                        openUrl(url: url)
+                    }
                 }
             }
         }

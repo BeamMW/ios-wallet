@@ -2,7 +2,7 @@
 "restore_wallet_title" = "Restore wallet";
 "no_space_title" = "Not enough storage";
 "no_space_info" = "At least 200MB of free space is required on the device to restore the wallet";
-"beam_title" = "Confidential, fast, easy to use";
+"beam_title" = "Confidential DeFi Platform and\nCryptocurrency";
 "create_new_wallet" = "Create new wallet";
 "enter_password_title" = "Enter your password to access the wallet";
 "empty_password" = "Password can not be empty";
@@ -147,7 +147,7 @@ and never kept on the blockchain.";
 "delete" = "Delete";
 "beams_send" = "Beams sent";
 "undo" = "Undo";
-"cancelled" = "Cancelled";
+"canceled" = "canceled";
 "delete_transaction_title" = "Delete transaction";
 "delete_transaction_text" = "Are you sure you want to delete this transaction from your wallet?";
 "current_password_error" = "Current password is incorrect";

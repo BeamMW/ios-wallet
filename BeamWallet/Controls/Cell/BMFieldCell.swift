@@ -61,7 +61,7 @@ class BMFieldCell: BaseCell {
             if let hide = hideNameLabel {
                 nameLabel.isHidden = hide
                 nameLabel.text = nil
-                topOffset?.constant = -5
+                topOffset?.constant = 0
                 bottomOffset?.constant = 20
             }
         }

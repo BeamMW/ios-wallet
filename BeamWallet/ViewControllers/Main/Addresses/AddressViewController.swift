@@ -136,7 +136,7 @@ extension AddressViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
-            let vc = TransactionViewController(transaction: addressViewModel.transactions[indexPath.row])
+            let vc = TransactionPageViewController(transaction: addressViewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
@@ -182,10 +182,16 @@ extension AddressViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 && addressViewModel.transactions.count > 0 {
             let header =  BMTableHeaderTitleView(title: Localizable.shared.strings.transactions_list.uppercased(), bold: true)
-            header.backgroundColor = UIColor.main.marineThree
+            if Settings.sharedManager().isDarkMode {
+                header.backgroundColor = UIColor.main.marineThree
+            }
+            else {
+                header.backgroundColor = UIColor.init(red: 28 / 255, green: 28 / 255, blue: 28 / 255, alpha: 1)
+            }
             header.letterSpacing = 1.5
             header.titleLabel.textColor = UIColor.white
             header.isCenter = true
+        
             return header
         }
         

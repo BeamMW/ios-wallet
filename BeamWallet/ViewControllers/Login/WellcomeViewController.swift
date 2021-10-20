@@ -33,19 +33,6 @@ class WellcomeViewController: BaseViewController {
         
         setTitles()
         
-        if Settings.sharedManager().isDarkMode {
-            bgView.image = BackgroundDark()
-        }
-        else {
-            switch Settings.sharedManager().target {
-            case Testnet:
-                bgView.image = BackgroundTestnet()
-            case Masternet:
-                bgView.image = BackgroundMasternet()
-            default:
-                break
-            }
-        }
 
         bgView.addParallaxEffect()
     }

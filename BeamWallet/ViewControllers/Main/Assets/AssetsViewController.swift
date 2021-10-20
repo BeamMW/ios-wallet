@@ -50,10 +50,12 @@ class AssetsViewController: BaseTableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        Settings.sharedManager().removeDelegate(self)
     }
 
+    deinit {
+        Settings.sharedManager().removeDelegate(self)
+    }
+    
     private func rightButton() {
         addRightButtons(image: [Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), IconFilter()].reversed(), target: self, selector: [#selector(onHideAmounts), #selector(onFilter)].reversed())
     }

@@ -18,6 +18,7 @@
 
 -(BOOL)appSupported:(BMApp*_Nonnull)app;
 -(void)launchApp:(BMApp*_Nonnull)app;
+-(void)stopApp;
 -(void)callWalletApi:(NSString*_Nonnull)json;
 -(void)contractInfoApproved:(NSString*_Nonnull)json;
 -(void)contractInfoRejected:(NSString*_Nonnull)json;

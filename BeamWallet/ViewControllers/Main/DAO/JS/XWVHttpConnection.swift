@@ -49,10 +49,10 @@ final class XWVHttpConnection : NSObject {
     func open() -> Bool {
         let ptr1 = UnsafeMutablePointer<Unmanaged<CFReadStream>?>.allocate(capacity: 1)
         let ptr2 = UnsafeMutablePointer<Unmanaged<CFWriteStream>?>.allocate(capacity: 1)
-        defer {
-            ptr1.deallocate(capacity: 1)
-            ptr2.deallocate(capacity: 1)
-        }
+//        defer {
+//            ptr1.deallocate(capacity: 1)
+//            ptr2.deallocate(capacity: 1)
+//        }
         CFStreamCreatePairWithSocket(nil, handle, ptr1, ptr2)
         guard ptr1.pointee != nil && ptr2.pointee != nil else {
             return false

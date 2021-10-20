@@ -51,12 +51,44 @@ class NotificationItem {
 
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        icon = UIImage.init(named: "iconNotifictionsFailedReceived")
-                        name = Localizable.shared.strings.failed
-                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
+                        if transaction.isDapps {
+                            if transaction.isExpired() || transaction.isCancelled() {
+                                icon = UIImage.init(named: "iconContractExpired")
+                            }
+                            else {
+                                icon = UIImage.init(named: "iconContractFailed")
+                            }
+                            
+                            if transaction.isExpired() {
+                                name = Localizable.shared.strings.dapp_transaction_expired
+                            }
+                            else if transaction.isCancelled() {
+                                name = Localizable.shared.strings.dapp_transaction_cancelled
+                            }
+                            else {
+                                name = Localizable.shared.strings.dapp_transaction_failed
+                            }
+                            
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: true, comment: transaction.comment)
+                        }
+                        else {
+                            if transaction.isShielded || transaction.isPublicOffline {
+                                icon = UIImage.init(named: "icon-notifictions-offline-receive-failed")
+                            }
+                            else {
+                                icon = UIImage.init(named: "iconNotifictionsFailedReceived")
+                            }
+                            name = Localizable.shared.strings.failed
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
+                        }
                     }
                     else {
-                        if transaction.isMaxPrivacy {
+                        if transaction.isDapps {
+                            icon = UIImage.init(named: "iconContractCompleted")
+                            name = Localizable.shared.strings.dapp_transaction_completed
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: false, comment: transaction.comment)
+                        }
+                        else if transaction.isMaxPrivacy {
                             icon = UIImage(named: "iconNotifictionsReceivedMaxPrivacy")
                             name = Localizable.shared.strings.transaction_received
                             detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: false)
@@ -82,7 +114,25 @@ class NotificationItem {
                 }
                 else {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        if transaction.isMaxPrivacy {
+                        if transaction.isDapps {
+                            if transaction.isExpired() || transaction.isCancelled() {
+                                icon = UIImage.init(named: "iconContractExpired")
+                            }
+                            else {
+                                icon = UIImage.init(named: "iconContractFailed")
+                            }
+                            if transaction.isExpired() {
+                                name = Localizable.shared.strings.dapp_transaction_expired
+                            }
+                            else if transaction.isCancelled() {
+                                name = Localizable.shared.strings.dapp_transaction_cancelled
+                            }
+                            else {
+                                name = Localizable.shared.strings.dapp_transaction_failed
+                            }
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: true, comment: transaction.comment)
+                        }
+                        else if transaction.isMaxPrivacy {
                             icon = UIImage.init(named: "iconNotifictionsFailedSentMaxPrivacy")
                             name = Localizable.shared.strings.failed
                             detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue , address: transaction.receiverAddress, failed: true)
@@ -99,9 +149,16 @@ class NotificationItem {
                         }
                     }
                     else {
-                        if transaction.isMaxPrivacy  {
+                        if transaction.isDapps {
+                            icon = UIImage.init(named: "iconContractCompleted")
+                            name = Localizable.shared.strings.dapp_transaction_completed
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: false, comment: transaction.comment)
+
+                        }
+                        else if transaction.isMaxPrivacy  {
                             icon = UIImage.init(named: "iconNotifictionsSentMaxPrivacy")
                             name = Localizable.shared.strings.transaction_sent
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
                         }
                         else if transaction.isShielded || transaction.isPublicOffline {
                             icon = UIImage.init(named: "iconNotifictionsSendedOffline")
@@ -112,13 +169,13 @@ class NotificationItem {
                             else {
                                 name = Localizable.shared.strings.tr_sent_offline
                             }
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsSent")
                             name = Localizable.shared.strings.transaction_sent
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
                         }
-                        
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
                     }
                 }
             }

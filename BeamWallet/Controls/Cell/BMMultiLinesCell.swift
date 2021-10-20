@@ -29,6 +29,7 @@ class BMMultiLinesCell: BaseCell {
     @IBOutlet weak private var stackView: UIStackView!
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var botOffset: NSLayoutConstraint!
+    @IBOutlet weak private var copyButton: UIButton!
 
     public var increaseSpace = false {
         didSet {
@@ -59,6 +60,12 @@ class BMMultiLinesCell: BaseCell {
         selectionStyle = .none
     }
     
+    func addDots() {
+        let text = (nameLabel.text ?? "") + ":"
+        nameLabel.text = text
+        nameLabel.letterSpacing = 2
+    }
+    
     @objc private func titleLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         
         if let text = self.valueLabel.attributedText {
@@ -81,11 +88,28 @@ class BMMultiLinesCell: BaseCell {
             }
         }
     }
+    
+    @IBAction private func onCopyButton() {
+        if (nameLabel.text ?? "").contains(Localizable.shared.strings.kernel_id.uppercased()) {
+            self.delegate?.onClickToCell(cell: self)
+        }
+        else if let text = valueLabel.copyText {
+            UIPasteboard.general.string = text
+            if AppModel.sharedManager().isValidAddress(text) {
+                ShowCopied(text: Localizable.shared.strings.address_copied)
+            }
+            else {
+                ShowCopied()
+            }
+        }
+    }
 }
 
 extension BMMultiLinesCell: Configurable {
     
     func configure(with item:BMMultiLineItem) {
+        copyButton.setImage(UIImage(named: "iconCopyWhite"), for: .normal)
+        
         valueLabel.isUserInteractionEnabled = item.canCopy
         valueLabel.copiedText = item.copiedText
         
@@ -111,6 +135,13 @@ extension BMMultiLinesCell: Configurable {
         }
         else if item.title == nil {
             nameLabel.isHidden = true
+        }
+        
+        if item.showCopyButton == true {
+            copyButton.isHidden = false
+        }
+        else {
+            copyButton.isHidden = true
         }
         
         nameLabel.letterSpacing = 2
@@ -153,26 +184,8 @@ extension BMMultiLinesCell: Configurable {
             valueLabel.attributedText = att
         }
         else if item.title == Localizable.shared.strings.kernel_id.uppercased() {
-            
-            if !(item.detail?.contains("00000000"))! {
-                valueLabel.isUserInteractionEnabled = true
-                
-                let text = item.detail! + "\n" + Localizable.shared.strings.open_in_explorer
-                let range = (text as NSString).range(of: String(Localizable.shared.strings.open_in_explorer))
-                
-                let imageAttachment = NSTextAttachment()
-                imageAttachment.image = ExternalLinkGreen()
-                let imageString = NSAttributedString(attachment: imageAttachment)
-                
-                let attributedString = NSMutableAttributedString(string:text)
-                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightTeal , range: range)
-                attributedString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: range)
-
-                attributedString.append(NSAttributedString(string: " "))
-                attributedString.append(imageString)
-                
-                valueLabel.attributedText = attributedString
-            }
+            copyButton.isHidden = false
+            copyButton.setImage(UIImage(named: "iconExternalLinkGreen"), for: .normal)
         }
         else if item.title == Localizable.shared.strings.my_send_address.uppercased() ||
             item.title == Localizable.shared.strings.my_rec_address.uppercased() || item.title == Localizable.shared.strings.contact.uppercased() || item.title == Localizable.shared.strings.my_address.uppercased() || item.title == Localizable.shared.strings.sender.uppercased() || item.title == Localizable.shared.strings.receiver.uppercased() {

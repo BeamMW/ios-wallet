@@ -29,6 +29,7 @@
 @property (nonatomic,strong) NSString * _Nonnull comment;
 @property (nonatomic,strong) NSString * _Nonnull ID;
 @property (nonatomic,strong) NSString * _Nullable from;
+@property (nonatomic,strong) NSString * _Nullable name;
 @property (nonatomic,assign) BOOL saveContact;
 @property (nonatomic,assign) BOOL isOffline;
 @property (nonatomic,assign) int assetId;

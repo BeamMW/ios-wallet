@@ -19,6 +19,7 @@
 
 import UIKit
 import AVFoundation
+import SDWebImage
 
 protocol BMNotificationViewDelegate: AnyObject {
     func onOpenNotification(id: String)
@@ -36,7 +37,7 @@ class BMNotificationView: UIView {
 
     weak var delegate: BMNotificationViewDelegate?
 
-    private static func showNews (notification: BMNotification, delegate:BMNotificationViewDelegate) {
+    private static func showNews (notification: BMNotification, delegate:BMNotificationViewDelegate?) {
         DispatchQueue.main.async {
             let detail = NSMutableAttributedString(string: Localizable.shared.strings.new_notifications_text)
             detail.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: NSRange(location: 0, length: Localizable.shared.strings.new_notifications_text.count))
@@ -52,7 +53,7 @@ class BMNotificationView: UIView {
         }
     }
     
-    private static func showVersion (notification: BMNotification, delegate:BMNotificationViewDelegate) {
+    private static func showVersion (notification: BMNotification, delegate:BMNotificationViewDelegate?) {
         DispatchQueue.main.async {
             let detail = NSMutableAttributedString(string: Localizable.shared.strings.new_version_available_notif_detail)
             detail.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: NSRange(location: 0, length: Localizable.shared.strings.new_version_available_notif_detail.count))            
@@ -61,8 +62,12 @@ class BMNotificationView: UIView {
         }
     }
     
-    static func showTransaction (transaction: BMTransaction, delegate:BMNotificationViewDelegate) {
+    static func showTransaction (transaction: BMTransaction, delegate:BMNotificationViewDelegate?, delay:Double = 2.0) {
         DispatchQueue.main.async {
+            if transaction.enumStatus == BMTransactionStatusInProgress && transaction.isDapps {
+                return
+            }
+            
             var icon: UIImage?
             var title: String?
             var detail: NSMutableAttributedString?
@@ -76,7 +81,18 @@ class BMNotificationView: UIView {
             if transaction.isIncome {
                 if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
 
-                    if transaction.isPublicOffline {
+                    if transaction.isDapps {
+                        let apps = AppModel.sharedManager().apps as! [BMApp]
+                        let app = apps.first { b in
+                            b.name == transaction.appName
+                        }
+                        if let app = app {
+                            icon = SDImageCache.shared.imageFromCache(forKey: app.icon)
+                            title = transaction.appName ?? ""
+                            detail = Localizable.shared.strings.muttableDapsTransactionWithdrawing_notif_body(name: assetValue, deposit: false)
+                        }
+                    }
+                    else if transaction.isPublicOffline {
                         title = "Transaction receiving from public offline"
                         icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
                         detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: "shielded pool", failed: false)
@@ -89,17 +105,29 @@ class BMNotificationView: UIView {
                     else {
                         icon = UIImage.init(named: "iconNotifictionsReceived")
                         title = Localizable.shared.strings.new_transaction
-                        detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.senderAddress, failed: false)
+                        detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.source(), failed: false)
                     }
                     
                 }
                 else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                    icon = UIImage.init(named: "iconNotifictionsFailedReceived")
-                    title = Localizable.shared.strings.failed
-                    detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
+                    if transaction.isDapps {
+                        icon = UIImage.init(named: "iconContractFailed")
+                        title = "dapp_transaction_failed".localized
+                        detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: true, comment: transaction.comment)
+                    }
+                    else {
+                        icon = UIImage.init(named: "iconNotifictionsFailedReceived")
+                        title = Localizable.shared.strings.failed
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.source(), failed: true)
+                    }
                 }
                 else {
-                    if transaction.isShielded {
+                    if transaction.isDapps {
+                        icon = UIImage.init(named: "iconContractCompleted")
+                        title = "dapp_transaction_completed".localized
+                        detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: false, comment: transaction.comment)
+                    }
+                    else if transaction.isShielded {
                         title = "Transaction received from offline"
                         icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
                         detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: "shielded pool", failed: false)
@@ -107,22 +135,47 @@ class BMNotificationView: UIView {
                     else {
                         icon = UIImage.init(named: "iconNotifictionsReceived")
                         title = Localizable.shared.strings.transaction_received
-                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: false)
+                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.source(), failed: false)
                     }
               
                 }
             }
             else {
-                if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                    icon = UIImage.init(named: "iconNotifictionsFailed")
-                    title = Localizable.shared.strings.failed
-                    detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: true)
+                if (transaction.enumStatus == BMTransactionStatusRegistering || transaction.enumStatus == BMTransactionStatusPending) && !transaction.isSelf {
+                    if transaction.isDapps {
+                        let apps = AppModel.sharedManager().apps as! [BMApp]
+                        let app = apps.first { b in
+                            b.name == transaction.appName
+                        }
+                        if let app = app {
+                            icon = SDImageCache.shared.imageFromCache(forKey: app.icon)
+                            title = transaction.appName ?? ""
+                            detail = Localizable.shared.strings.muttableDapsTransactionWithdrawing_notif_body(name: assetValue, deposit: true)
+                        }
+                    }
+                }
+                else if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
+                    if transaction.isDapps {
+                        icon = UIImage.init(named: "iconContractFailed")
+                        title = "dapp_transaction_failed".localized
+                        detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: true, comment: transaction.comment)
+                    }
+                    else {
+                        icon = UIImage.init(named: "iconNotifictionsFailed")
+                        title = Localizable.shared.strings.failed
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: true)
+                    }
                 }
                 else {
-                    if transaction.isMaxPrivacy {
+                    if transaction.isDapps {
+                        icon = UIImage.init(named: "iconContractCompleted")
+                        title = "dapp_transaction_completed".localized
+                        detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: false, comment: transaction.comment)
+                    }
+                    else if transaction.isMaxPrivacy {
                         title = Localizable.shared.strings.transaction_sent
                         icon = UIImage.init(named: "iconNotifictionsSentMaxPrivacy")
-                        detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
+                        detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.source(), failed: false)
                     }
                     else if transaction.isPublicOffline {
                         title = "Transaction sent to public offline"
@@ -133,19 +186,19 @@ class BMNotificationView: UIView {
                      {
                         icon = UIImage.init(named: "iconNotifictionsSendedOffline")
                         title = "Transaction sent to offline"
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: false)
                     }
                     else {
                         icon = UIImage.init(named: "iconNotifictionsSent")
                         title = Localizable.shared.strings.transaction_sent
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
+                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: false)
                     }
                
                 }
             }
             
             let view = BMNotificationView(title: title, detail: detail, icon: icon, id: transaction.id, delegate: delegate)
-            view.display()
+            view.display(delay: delay)
         }
     }
     
@@ -163,12 +216,24 @@ class BMNotificationView: UIView {
 
                 if transaction.isIncome {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        icon = UIImage.init(named: "iconNotifictionsFailedReceived")
-                        title = Localizable.shared.strings.failed
-                        detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: true)
+                        if transaction.isDapps {
+                            icon = UIImage.init(named: "iconContractFailed")
+                            title = "dapp_transaction_failed".localized
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: true, comment: transaction.comment)
+                        }
+                        else {
+                            icon = UIImage.init(named: "iconNotifictionsFailedReceived")
+                            title = Localizable.shared.strings.failed
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.source(), failed: true)
+                        }
                     }
                     else {
-                        if transaction.isPublicOffline {
+                        if transaction.isDapps {
+                            icon = UIImage.init(named: "iconContractCompleted")
+                            title = "dapp_transaction_completed".localized
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: false, comment: transaction.comment)
+                        }
+                        else if transaction.isPublicOffline {
                             title = "Transaction receiving from public offline"
                             icon = UIImage.init(named: "iconNotifictionsReceivedOffline")
                             detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: "shielded pool", failed: false)
@@ -181,21 +246,33 @@ class BMNotificationView: UIView {
                         else {
                             icon = UIImage.init(named: "iconNotifictionsReceived")
                             title = Localizable.shared.strings.transaction_received
-                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.senderAddress, failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_received_notif_body(assetValue, address: transaction.source(), failed: false)
                         }
                     }
                 }
                 else {
                     if transaction.isFailed() || transaction.isExpired() || transaction.isCancelled() {
-                        icon = UIImage.init(named: "iconNotifictionsFailed")
-                        title = Localizable.shared.strings.failed
-                        detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: true)
+                        if transaction.isDapps {
+                            icon = UIImage.init(named: "iconContractFailed")
+                            title = "dapp_transaction_failed".localized
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: true, comment: transaction.comment)
+                        }
+                        else {
+                            icon = UIImage.init(named: "iconNotifictionsFailed")
+                            title = Localizable.shared.strings.failed
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: true)
+                        }
                     }
                     else {
-                        if transaction.isMaxPrivacy {
+                        if transaction.isDapps {
+                            icon = UIImage.init(named: "iconContractCompleted")
+                            title = "dapp_transaction_completed".localized
+                            detail = Localizable.shared.strings.muttableDapsTransaction_notif_body(name: transaction.appName ?? "", failed: false, comment: transaction.comment)
+                        }
+                        else if transaction.isMaxPrivacy {
                             title = Localizable.shared.strings.transaction_sent
                             icon = UIImage.init(named: "iconNotifictionsSentMaxPrivacy")
-                            detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
+                            detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.source(), failed: false)
                         }
                         else if transaction.isPublicOffline {
                             title = "Transaction sent to public offline"
@@ -206,12 +283,12 @@ class BMNotificationView: UIView {
                         {
                             icon = UIImage.init(named: "iconNotifictionsSendedOffline")
                             title = "Transaction sent to offline"
-                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: false)
                         }
                         else {
                             icon = UIImage.init(named: "iconNotifictionsSent")
                             title = Localizable.shared.strings.transaction_sent
-                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.receiverAddress, failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: false)
                         }
                         
                     }
@@ -249,7 +326,7 @@ class BMNotificationView: UIView {
         }
     }
     
-    fileprivate init(title: String?, detail: NSMutableAttributedString?, icon: UIImage?, id: String, delegate:BMNotificationViewDelegate) {
+    fileprivate init(title: String?, detail: NSMutableAttributedString?, icon: UIImage?, id: String, delegate:BMNotificationViewDelegate?) {
         
         super.init(frame: CGRect.zero)
         
@@ -296,8 +373,8 @@ class BMNotificationView: UIView {
         BMNotificationView.notificationView = self;
     }
     
-    fileprivate func display() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+    fileprivate func display(delay:Double = 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             AudioServicesPlayAlertSound(SystemSoundID(1003))
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             

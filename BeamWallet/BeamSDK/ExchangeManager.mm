@@ -76,6 +76,37 @@ static NSString *currenciesKey = @"currenciesKey";
     return @"";
 }
 
+-(NSString*_Nonnull)exchangeValueAssetWithCurrency:(int64_t)value amount:(double)amount assetID:(UInt64)assetID {
+    
+    if(amount == 0.0 || [Settings sharedManager].isHideAmounts) {
+        return @"";
+    }
+    
+    BMCurrencyType currency = Settings.sharedManager.currency;
+    
+    if (currency == BMCurrencyUSD) {
+        currencyFormatter.maximumFractionDigits = 2;
+        currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@", @"USD"];
+        currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@", @"USD"];
+    }
+    else if(currency == BMCurrencyETH) {
+        currencyFormatter.maximumFractionDigits = 10;
+        currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@", @"ETH"];
+        currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@", @"ETH"];
+    }
+    else {
+        currencyFormatter.positiveSuffix = [NSString stringWithFormat:@" %@", @"BTC"];
+        currencyFormatter.negativeSuffix = [NSString stringWithFormat:@" %@", @"BTC"];
+        currencyFormatter.maximumFractionDigits = 10;
+    }
+    
+
+    
+    double valueResult = double(int64_t(value)) / beam::Rules::Coin;
+    double rate = valueResult * amount;
+    return [currencyFormatter stringFromNumber:[NSNumber numberWithDouble:rate]];
+}
+
 -(NSString*_Nonnull)exchangeValueAsset:(double)amount assetID:(UInt64)assetID {
     if(amount == 0.0 || [Settings sharedManager].isHideAmounts) {
         return @"";

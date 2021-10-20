@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon-icon-in-progress-max-offline.png",
+      "filename" : "icon-icon-sending.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon-icon-in-progress-max-offline@2x.png",
+      "filename" : "icon-icon-sending@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon-icon-in-progress-max-offline@3x.png",
+      "filename" : "icon-icon-sending@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

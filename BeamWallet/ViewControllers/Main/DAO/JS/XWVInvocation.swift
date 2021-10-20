@@ -123,7 +123,7 @@ var NSInvocation: NSInvocationProtocol.Type = {
             let obj = UnsafeRawPointer(buffer).load(as: AnyObject.self)
             Unmanaged.passUnretained(obj).release()
         }
-        buffer.deallocate(capacity: Int(sig.methodReturnLength))
+       // buffer.deallocate(capacity: Int(sig.methodReturnLength))
     }
     return octype.loadValue(from: buffer)
 }

@@ -83,17 +83,19 @@ class BMNetworkStatusView: UIView {
         statusLabel.font = RegularFont(size: 14)
         statusLabel.numberOfLines = 2
         statusLabel.adjustFontSize = true
+        statusLabel.minimumScaleFactor = 0.5
+        statusLabel.adjustsFontSizeToFitWidth = true
         addSubview(statusLabel)
         
         indicatorView = MaterialActivityIndicatorView(frame: statusView.frame)
         indicatorView.color = UIColor.main.green
         addSubview(indicatorView)
         
-        changeButton.isHidden = true
+        changeButton.isHidden = false
         changeButton.addTarget(self, action: #selector(onChangeNode), for: .touchUpInside)
-        changeButton.setTitleColor(UIColor.main.green, for: .normal)
-        changeButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        changeButton.setTitle(Localizable.shared.strings.change.lowercased(), for: .normal)
+        changeButton.setImage(UIImage(named: "iconNextArrow"), for: .normal)
+        changeButton.contentHorizontalAlignment = .right
+        changeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
         addSubview(changeButton)
 
         if (AppModel.sharedManager().isUpdating && AppModel.sharedManager().isConnected)
@@ -150,8 +152,6 @@ class BMNetworkStatusView: UIView {
     }
     
     private func changeStatus(connected: Bool) {
-        self.changeButton.isHidden = true
-
         if AppModel.sharedManager().isNodeChanging {
             return
         }
@@ -172,11 +172,16 @@ class BMNetworkStatusView: UIView {
                 self.statusView.backgroundColor = UIColor.main.orange
                 self.statusView.glow()
                 
-                self.statusLabel.text = "\(self.onlineString) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
+                self.statusLabel.text = "\(Localizable.shared.strings.online.lowercased()) (exchange rate to \(Settings.sharedManager().currencyName()) wasn’t received)"
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
             else {
-                if !Settings.sharedManager().isNodeProtocolEnabled && !Settings.sharedManager().connectToRandomNode && AppModel.sharedManager().checkIsOwnNode() {
+                if Settings.sharedManager().isNodeProtocolEnabled || AppModel.sharedManager().checkIsOwnNode() {
+                    self.statusView.backgroundColor = UIColor.clear
+                    self.statusView.removeGlow()
+                    self.statusView.image = UIImage(named: "ic_trusted_node")
+                }
+                else if !Settings.sharedManager().connectToRandomNode {
                     self.statusView.backgroundColor = UIColor.clear
                     self.statusView.removeGlow()
                     self.statusView.image = UIImage(named: "ic_trusted_node")
@@ -189,11 +194,13 @@ class BMNetworkStatusView: UIView {
                 if Settings.sharedManager().connectToRandomNode && !Settings.sharedManager().isNodeProtocolEnabled {
                     self.numberOfLines = 2
                     self.statusLabel.text = Localizable.shared.strings.online_new_status
-                    self.changeButton.isHidden = false
+                }
+                else if !Settings.sharedManager().connectToRandomNode && !Settings.sharedManager().isNodeProtocolEnabled {
+                    self.statusLabel.text = Localizable.shared.strings.online.lowercased()
                 }
                 else {
                     self.numberOfLines = 1
-                    self.statusLabel.text = self.onlineString
+                    self.statusLabel.text = Localizable.shared.strings.online.lowercased()
                 }
                 
                 
@@ -210,18 +217,17 @@ class BMNetworkStatusView: UIView {
                 self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
             }
             else{
-                if Settings.sharedManager().isChangedNode() {
-                    
-                    self.statusLabel.text = Localizable.shared.strings.cannot_connect_node(Settings.sharedManager().nodeAddress)
-                    
-                    if self.numberOfLines != 3 {
-                        self.numberOfLines = 2
-                    }
-
-                    self.changeButton.isHidden = false
+                if Settings.sharedManager().isNodeProtocolEnabled {
+                    self.statusLabel.text = Localizable.shared.strings.canot_connect_node_mobile.lowercased()
+                    self.numberOfLines = 2
                 }
-                else{
-                    self.statusLabel.text = Localizable.shared.strings.offline.lowercased()
+                else if Settings.sharedManager().connectToRandomNode {
+                    self.statusLabel.text = Localizable.shared.strings.canot_connect_node_random.lowercased()
+                    self.numberOfLines = 2
+                }
+                else {
+                    self.statusLabel.text = String(format: Localizable.shared.strings.canot_connect_node_own_node.localized, Settings.sharedManager().nodeAddress).lowercased()
+                    self.numberOfLines = 3
                 }
             }
             
@@ -247,7 +253,17 @@ extension BMNetworkStatusView: WalletModelDelegate {
             self.indicatorView.startAnimating()
             
             self.statusLabel.x = self.fromNib ? 22 : 37
-            self.statusLabel.text = Localizable.shared.strings.reconnect.lowercased()
+            
+            if Settings.sharedManager().isNodeProtocolEnabled {
+                self.statusLabel.text = Localizable.shared.strings.reconnect_mobile_node.lowercased()
+            }
+            else if Settings.sharedManager().connectToRandomNode {
+                self.statusLabel.text = Localizable.shared.strings.reconnect_random_node.lowercased()
+            }
+            else {
+                self.statusLabel.text = Localizable.shared.strings.reconnect.lowercased()
+            }
+            
             self.statusView.alpha = 0
             self.statusLabel.textColor = UIColor.main.blueyGrey
         }
@@ -275,7 +291,23 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 self.indicatorView.startAnimating()
                 
                 self.statusLabel.x = self.fromNib ? 22 : 37
-                self.statusLabel.text = Localizable.shared.strings.updating.lowercased() + " \(Int(percent))%"
+                
+                if Settings.sharedManager().isNodeProtocolEnabled {
+                    self.statusLabel.text = Localizable.shared.strings.updating_mobile_node.lowercased() + " \(Int(percent))%" + ", " + Localizable.shared.strings.change_node_to_faster_sync.lowercased()
+                    
+                    self.numberOfLines = 2
+                }
+                else if Settings.sharedManager().connectToRandomNode {
+                    self.statusLabel.text = Localizable.shared.strings.updating_random_node.lowercased() + " \(Int(percent))%"
+                    
+                    self.numberOfLines = 1
+                }
+                else {
+                    self.statusLabel.text = Localizable.shared.strings.updating_mobile_own.lowercased() + " \(Int(percent))%"
+                    
+                    self.numberOfLines = 1
+                }
+                
                 self.statusView.alpha = 0
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }

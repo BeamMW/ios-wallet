@@ -41,17 +41,17 @@ extension DAOAppsViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return 10
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 84
+        return 100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        AppModel.sharedManager().startTestApp(self)
+        AppModel.sharedManager().startApp(self, app: viewModel.items[indexPath.row])
     }
 }
 

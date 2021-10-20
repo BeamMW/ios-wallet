@@ -68,7 +68,7 @@ class NavigationPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
 }
 
-class BaseNavigationController: UINavigationController, UINavigationControllerDelegate {
+class BaseNavigationController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
     public static func navigationController(rootViewController:UIViewController) -> BaseNavigationController {
         let navigation = BaseNavigationController(rootViewController: rootViewController)
@@ -81,6 +81,7 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
         return navigation
     }
     
+    
     public var enableSwipeToDismiss = true {
         didSet{
             if !enableSwipeToDismiss {
@@ -92,6 +93,7 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
         }
     }
     
+    var gesture:UIPanGestureRecognizer? = nil
     var interactivePopTransition: UIPercentDrivenInteractiveTransition!
     
     override func viewDidLoad() {
@@ -121,8 +123,37 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     }
     
     private func addPanGesture(_ viewController: UIViewController){
-        let popRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer(recognizer:)))
-        viewController.view.addGestureRecognizer(popRecognizer)
+        gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer(recognizer:)))
+        gesture?.delegate = self
+        viewController.view.addGestureRecognizer(gesture!)
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let top = UIApplication.getTopMostViewController() {
+            if top is WalletViewController {
+                return false
+            }
+            else if top is SettingsViewController {
+                return false
+            }
+            else if top is AddressesViewController {
+                return false
+            }
+            else if top is DAOAppsViewController {
+                return false
+            }
+            else if top is NotificationsViewController {
+                return false
+            }
+            else if top is DAOViewController {
+                if let dao = top as? DAOViewController {
+                    if dao.app.name.uppercased() == "BEAMX DAO" {
+                        return false
+                    }
+                }
+            }
+        }
+        return true
     }
     
     @objc func handlePanRecognizer(recognizer: UIPanGestureRecognizer){

@@ -194,7 +194,7 @@ class TransactionsTableView: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if  viewModel.transactions.count > 0 {
-            let vc = TransactionViewController(transaction: viewModel.transactions[indexPath.row])
+            let vc = TransactionPageViewController(transaction: viewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }

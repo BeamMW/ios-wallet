@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -19,29 +21,31 @@
                         <viewControllerLayoutGuide type="bottom" id="PmF-zm-gFK"/>
                     </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="8c9-H9-Xgu">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="initial_background" translatesAutoresizingMaskIntoConstraints="NO" id="rsg-bQ-I5o">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bgNew" translatesAutoresizingMaskIntoConstraints="NO" id="rsg-bQ-I5o">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="150" translatesAutoresizingMaskIntoConstraints="NO" id="xG3-7V-btI">
-                                <rect key="frame" x="194" y="209.5" width="212" height="181"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="150" translatesAutoresizingMaskIntoConstraints="NO" id="6o7-S7-OD4">
+                                <rect key="frame" x="95.5" y="347.5" width="223.5" height="201"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="pkE-DR-h3L">
-                                        <rect key="frame" x="0.0" y="0.0" width="212" height="181"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Sna-La-rpX">
+                                        <rect key="frame" x="0.0" y="0.0" width="223.5" height="201"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="aVD-XH-nKK">
-                                                <rect key="frame" x="26.5" y="0.0" width="159" height="142"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="VNC-6s-RjA">
+                                                <rect key="frame" x="32" y="0.0" width="159" height="142"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="159" id="2iB-TM-36D"/>
-                                                    <constraint firstAttribute="height" constant="142" id="RuL-NL-ptB"/>
+                                                    <constraint firstAttribute="width" constant="159" id="5vF-S4-hij"/>
+                                                    <constraint firstAttribute="height" constant="142" id="dRW-Uy-uFv"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confidential, fast, easy to use" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fyw-0i-IbL">
-                                                <rect key="frame" x="0.0" y="162" width="212" height="19"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lQi-u2-fgp">
+                                                <rect key="frame" x="0.0" y="162" width="223.5" height="39"/>
+                                                <string key="text">Confidential DeFi Platform and
+Cryptocurrency</string>
                                                 <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="16"/>
-                                                <color key="textColor" red="0.1450980392" green="0.75686274509999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="textColor" red="0.53725490200000003" green="0.53333333329999999" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -54,8 +58,8 @@
                             <constraint firstItem="rsg-bQ-I5o" firstAttribute="leading" secondItem="8c9-H9-Xgu" secondAttribute="leading" id="1pR-mt-EuO"/>
                             <constraint firstAttribute="bottom" secondItem="rsg-bQ-I5o" secondAttribute="bottom" id="3Ig-Vw-tUO"/>
                             <constraint firstItem="rsg-bQ-I5o" firstAttribute="top" secondItem="8c9-H9-Xgu" secondAttribute="top" id="71h-Yf-zsu"/>
-                            <constraint firstItem="xG3-7V-btI" firstAttribute="centerY" secondItem="8c9-H9-Xgu" secondAttribute="centerY" id="D3P-Mh-CPQ"/>
-                            <constraint firstItem="xG3-7V-btI" firstAttribute="centerX" secondItem="8c9-H9-Xgu" secondAttribute="centerX" id="Lo8-1m-9cq"/>
+                            <constraint firstItem="6o7-S7-OD4" firstAttribute="centerX" secondItem="8c9-H9-Xgu" secondAttribute="centerX" id="9bf-cz-ILt"/>
+                            <constraint firstItem="6o7-S7-OD4" firstAttribute="centerY" secondItem="8c9-H9-Xgu" secondAttribute="centerY" id="gC7-i7-Owu"/>
                             <constraint firstAttribute="trailing" secondItem="rsg-bQ-I5o" secondAttribute="trailing" id="mKp-AO-ypA"/>
                         </constraints>
                     </view>
@@ -66,7 +70,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="initial_background" width="1125" height="2001"/>
-        <image name="logo" width="159" height="142"/>
+        <image name="bgNew" width="375" height="812"/>
+        <image name="logo" width="243" height="242"/>
     </resources>
 </document>

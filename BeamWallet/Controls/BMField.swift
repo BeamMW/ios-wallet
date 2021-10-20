@@ -61,7 +61,7 @@ class BMClearField: UITextField {
             button.backgroundColor = UIColor.clear
             button.setImage(ClearIcon(), for: .normal)
             button.tintColor = UIColor.main.steel
-            button.frame = CGRect(x: button.x, y: 6, width: 14, height: 14)
+            button.frame = CGRect(x: self.bounds.width - 24, y: (45 - 14)/2, width: 14, height: 14)
         }
     }
 }
@@ -75,12 +75,28 @@ class BMField: BMClearField {
         case normal
         case error
     }
-    
-    var line = UIView()
-    
-    private var _defaultHeight:CGFloat = 30
-    private var _errorHeight:CGFloat = 50
+        
+    private var _defaultHeight:CGFloat = 45
+    private var _errorHeight:CGFloat = 45
 
+    var additionalRightOffset:CGFloat = 0
+    
+    var showEye = false {
+        didSet {
+            self.rightViewMode = (self.text ?? "").isEmpty ? .never : .whileEditing
+
+            let eyeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 45))
+            eyeButton.setImage(UIImage(named: "iconEyePass2"), for: .normal)
+            eyeButton.setImage(UIImage(named: "iconEyePass1"), for: .selected)
+            eyeButton.addTarget(self, action: #selector(onEye), for: .touchUpInside)
+            eyeButton.backgroundColor = .clear
+            eyeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)
+            self.rightView = eyeButton
+
+        }
+    }
+    
+    
     @IBInspectable
     var defaultHeight: CGFloat {
         get {
@@ -91,8 +107,20 @@ class BMField: BMClearField {
         }
     }
     
-    private var _lineColor:UIColor?
-    private var _lineHeight:CGFloat = 2
+    private var isInFocus = false {
+        didSet {
+            if self.status != .error {
+                if self.isInFocus {
+                    self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+                }
+                else {
+                    self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+                }
+            }
+        }
+    }
+    
+    private var bgView = UIView()
     private var _error:String?
     private var _oldColor:UIColor?
     
@@ -105,7 +133,7 @@ class BMField: BMClearField {
             switch status {
             case .error?:
                 if error != nil {
-                    errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: 0)
+                    errorLabel.frame = CGRect(x: 10, y: _defaultHeight + 5, width: self.frame.size.width-20, height: 0)
                     errorLabel.sizeToFit()
                     if status == .error {
                         _errorHeight = defaultHeight + errorLabel.frame.size.height + 5
@@ -113,14 +141,19 @@ class BMField: BMClearField {
                     self.heightConstraint.constant = _errorHeight
                 }
                 self.textColor = UIColor.main.red
-                self.line.backgroundColor = UIColor.main.red
+                self.bgView.backgroundColor = UIColor.main.red.withAlphaComponent(0.15)
                 self.errorLabel.isHidden = false
                 self.layoutSubviews()
                 self.statusDelegate?.didChangeStatus()
             case .normal?:
+                if self.isInFocus {
+                    self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+                }
+                else {
+                    self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+                }
                 self.heightConstraint.constant = defaultHeight
                 self.textColor = _oldColor
-                self.line.backgroundColor = lineColor
                 self.errorLabel.isHidden = true
             case .none:
                 break
@@ -150,27 +183,6 @@ class BMField: BMClearField {
         return label
     }()
     
-    @IBInspectable
-    var lineColor: UIColor? {
-        get {
-            return _lineColor
-        }
-        set{
-            _lineColor = newValue
-            line.backgroundColor = _lineColor
-        }
-    }
-    
-    @IBInspectable
-    var lineHeight: CGFloat {
-        get {
-            return _lineHeight
-        }
-        set{
-            _lineHeight = newValue
-            layoutSubviews()
-        }
-    }
     
     @IBInspectable
     var error: String? {
@@ -180,7 +192,7 @@ class BMField: BMClearField {
         set{
             _error = newValue
             errorLabel.text = newValue
-            errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: 0)
+            errorLabel.frame = CGRect(x: 10, y: _defaultHeight + 5, width: self.frame.size.width-20, height: 0)
             errorLabel.sizeToFit()
             if status == .error {
                 _errorHeight = defaultHeight + errorLabel.frame.size.height + 5
@@ -198,13 +210,6 @@ class BMField: BMClearField {
         super.awakeFromNib()
         
         _oldColor = self.textColor
-
-        if lineColor == nil {
-            line.backgroundColor = UIColor.white.withAlphaComponent(0.1)
-            lineColor = UIColor.white.withAlphaComponent(0.1)
-        }
-        
-        addSubview(line)
         
         NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: self, queue: nil) { [weak self] notification in
             guard let strongSelf = self else { return }
@@ -215,6 +220,24 @@ class BMField: BMClearField {
                 strongSelf.layoutSubviews()
                 strongSelf.statusDelegate?.didChangeStatus()
             }
+            
+            if strongSelf.showEye {
+                strongSelf.rightViewMode = (strongSelf.text ?? "").isEmpty ? .never : .whileEditing
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: UITextField.textDidBeginEditingNotification, object: self, queue: nil) { [weak self] notification in
+            guard let strongSelf = self else { return }
+            guard let object = notification.object as? BMField, object == strongSelf else { return }
+            
+            strongSelf.isInFocus = true
+        }
+        
+        NotificationCenter.default.addObserver(forName: UITextField.textDidEndEditingNotification, object: self, queue: nil) { [weak self] notification in
+            guard let strongSelf = self else { return }
+            guard let object = notification.object as? BMField, object == strongSelf else { return }
+            
+            strongSelf.isInFocus = false
         }
         
         if isSecureTextEntry {
@@ -226,20 +249,31 @@ class BMField: BMClearField {
         neededConstraint.append(heightConstraint)
         
         NSLayoutConstraint.activate(neededConstraint)
+        
+        bgView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: _defaultHeight))
+        bgView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        bgView.cornerRadius = 10
+        bgView.isUserInteractionEnabled = false
+        self.insertSubview(bgView, at: 0)
+        
+        self.placeHolderColor = UIColor.white.withAlphaComponent(0.20)
+        self.placeHolderFont = ItalicFont(size: 16)
+        
+        self.errorLabel.font = ItalicFont(size: 14)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let w = self.frame.size.width
-
-        if let view = self.rightView {
+        if let view = self.rightView, !self.showEye {
             view.y = 0
         }
-        
-        line.frame = CGRect(x: 0, y: defaultHeight - lineHeight, width: w, height: lineHeight)
-        
-        errorLabel.frame = CGRect(x: 0, y: line.frame.size.height + line.frame.origin.y + 5, width: self.frame.size.width, height: errorLabel.frame.size.height)
+        else if let view = self.rightView, self.showEye {
+            view.x = self.bounds.width - 40
+        }
+                
+        bgView.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: _defaultHeight)
+        errorLabel.frame = CGRect(x: 10, y: _defaultHeight + 5, width: self.frame.size.width-20, height: errorLabel.frame.size.height)
     }
 
     override var text: String? {
@@ -256,13 +290,16 @@ class BMField: BMClearField {
             isNormal = true
         }
         
-        var right:CGFloat = 0
+        var right:CGFloat = 15
         
         if let view = self.rightView {
             right = view.frame.size.width + 10
+            if self.showEye {
+                right = right + 10
+            }
         }
         
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 0, bottom: 0, right: right)
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 15, bottom: 0, right: right + additionalRightOffset)
         return bounds.inset(by: padding)
     }
     
@@ -271,14 +308,25 @@ class BMField: BMClearField {
         if !isNormal && error == nil {
             isNormal = true
         }
-        var right:CGFloat = 0
+        var right:CGFloat = 15
         
         if let view = self.rightView {
             right = view.frame.size.width + 10
+            if self.showEye {
+                right = right + 10
+            }
         }
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 0, bottom: 0, right: right)
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 15, bottom: 0, right: right + additionalRightOffset)
         
         return bounds.inset(by: padding)
+    }
+    
+    open override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        if self.rightView != nil && self.showEye {
+            return CGRect(x: self.width-85, y: 0, width: 70, height: 45)
+        }
+        
+        return super.rightViewRect(forBounds: bounds)
     }
     
     open override func editingRect(forBounds bounds: CGRect) -> CGRect {
@@ -286,19 +334,22 @@ class BMField: BMClearField {
         if !isNormal && error == nil {
             isNormal = true
         }
-        var right:CGFloat = 0
+        var right:CGFloat = 15
         
         if let view = self.rightView {
             right = view.frame.size.width + 10
+            if self.showEye {
+                right = right + 10
+            }
         }
         else if clearButtonMode == .whileEditing {
             if (self.text ?? String.empty()).isEmpty == false {
-                right = 25
+                right = 30
             }
         }
         
         
-        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 0, bottom: 0, right: right)
+        let padding = UIEdgeInsets(top: (isNormal ? 0 : (errorLabel.frame.size.height + 5) * (-1)), left: 15, bottom: 0, right: right + additionalRightOffset)
         return bounds.inset(by: padding)
     }
     
@@ -318,5 +369,10 @@ class BMField: BMClearField {
     
     @objc private func onHide() {
         _ = self.resignFirstResponder()
+    }
+    
+    @objc private func onEye(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        self.isSecureTextEntry = !self.isSecureTextEntry
     }
 }

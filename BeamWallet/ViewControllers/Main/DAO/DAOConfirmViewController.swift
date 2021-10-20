@@ -8,58 +8,9 @@
 
 import UIKit
 
-class DAOConfirmViewController: BaseTableViewController {
-
-    private lazy var footerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 170))
-        
-        let mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-(Device.isLarge ? 320 : 300))/2, y: 90, width: (Device.isLarge ? 320 : 300), height: 44))
-        
-        let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.marineThree)
-        buttonCancel.setImage(IconCancel(), for: .normal)
-        buttonCancel.setTitle(Localizable.shared.strings.cancel.lowercased(), for: .normal)
-        buttonCancel.setTitleColor(UIColor.white, for: .normal)
-        buttonCancel.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .highlighted)
-        buttonCancel.addTarget(self, action: #selector(onCancelClicked), for: .touchUpInside)
-        mainView.addSubview(buttonCancel)
-        
-        let buttonConfirm = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: (!viewModel.isSpend ? UIColor.main.brightSkyBlue : UIColor.main.heliotrope))
-        buttonConfirm.setImage(IconDoneBlue(), for: .normal)
-        buttonConfirm.setTitle(Localizable.shared.strings.confirm_accept.lowercased(), for: .normal)
-        buttonConfirm.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-        buttonConfirm.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        buttonConfirm.addTarget(self, action: #selector(onConfirmClicked), for: .touchUpInside)
-        mainView.addSubview(buttonConfirm)
-        
-        view.addSubview(mainView)
-        
-        let infoLabel = UILabel()
-        infoLabel.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.width-40, height: 0)
-        infoLabel.numberOfLines = 0
-        infoLabel.font = ItalicFont(size: 16)
-        infoLabel.textAlignment = .center
-        if viewModel.isSpend {
-            infoLabel.text = String.init(format: Localizable.shared.strings.will_take_funds, app.name)
-        }
-        else {
-            infoLabel.text = String.init(format: Localizable.shared.strings.will_send_funds, app.name)
-        }
-        if Settings.sharedManager().isDarkMode {
-            infoLabel.textColor = UIColor.main.steel;
-        }
-        else {
-            infoLabel.textColor = UIColor.main.blueyGrey
-        }
-        infoLabel.adjustFontSize = true
-        infoLabel.sizeToFit()
-        infoLabel.frame = CGRect(x: 20, y: 35, width: UIScreen.main.bounds.width-40, height: infoLabel.frame.size.height)
-        
-        view.addSubview(infoLabel)
-        
-        return view
-    }()
+class DAOConfirmViewController: BaseViewController {
     
-    @objc public var onConfirm: (() -> Void)?
+    @objc public var onConfirm: ((Bool, Int, Double) -> Void)?
     @objc public var onReject: (() -> Void)?
     @objc public var infoJson:String!
     @objc public var amountJson:String!
@@ -67,79 +18,177 @@ class DAOConfirmViewController: BaseTableViewController {
 
     private var viewModel: DAOConfirmViewModel!
     
+    @IBOutlet private weak var detailTitleLabel:UILabel!
+    @IBOutlet private weak var hintLabel:UILabel!
+    @IBOutlet private weak var amountLabel:UILabel!
+    @IBOutlet private weak var amountSecondLabel:UILabel!
+    @IBOutlet private weak var feeLabel:UILabel!
+    @IBOutlet private weak var feeSecondLabel:UILabel!
+    @IBOutlet private weak var confirmButton:BMButton!
+    @IBOutlet private weak var cancelButton:BMButton!
+    @IBOutlet private weak var assetIcon:AssetIconView!
+    @IBOutlet private weak var assetFeeIcon:AssetIconView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+
+    @IBOutlet private weak var passStackView:UIStackView!
+    @IBOutlet private weak var passField:BMField!
+    @IBOutlet private weak var viewWidth:NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         viewModel = DAOConfirmViewModel(infoJson: infoJson, amountJson: amountJson)
         
-        if !viewModel.isSpend {
-            setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue)
+
+        title = Localizable.shared.strings.confirm.uppercased()
+        passStackView.isHidden = !Settings.sharedManager().isNeedaskPasswordForSend
+        
+        viewWidth.constant = UIScreen.main.bounds.width
+        
+        if viewModel.isSpend {
+            confirmButton.setBackgroundColor(color: UIColor.main.heliotrope, forState: .normal)
+            confirmButton.setImage(IconSendBlue(), for: .normal)
+            
+            hintLabel.text = String.init(format: Localizable.shared.strings.will_take_funds, self.app.name)
+            detailTitleLabel.text = Localizable.shared.strings.deposit_to_wallet
         }
         else {
-            setGradientTopBar(mainColor: UIColor.main.heliotrope)
+            hintLabel.text = String.init(format: Localizable.shared.strings.will_send_funds, self.app.name)
+
+            detailTitleLabel.text = Localizable.shared.strings.withdraw_to_wallet
         }
         
-        title = Localizable.shared.strings.confirm.uppercased()
+        if let beam = AssetsManager.shared().getAsset(0) {
+            let amount = Double(self.viewModel.info?.fee ?? "0") ?? 0.0
+            feeLabel.text = "\(amount) BEAM"
+            feeSecondLabel.text = ExchangeManager.shared().exchangeValueAsset(amount, assetID: 0)
+            assetFeeIcon.setAsset(beam)
+        }
         
-        tableView.register([BMMultiLinesCell2.self, BMFieldCell.self])
+        var suffix = ""
+        if viewModel.isSpend {
+            amountLabel.textColor = UIColor.main.heliotrope
+            suffix = "-"
+        }
+        else {
+            amountLabel.textColor = UIColor.main.brightSkyBlue
+            suffix = "+"
+        }
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.keyboardDismissMode = .interactive
-        tableView.tableFooterView = footerView
+        if let asset = AssetsManager.shared().getAsset(Int32(self.viewModel.amountInfo?.assetID ?? 0)) {
+            let amount = Double(self.viewModel.amountInfo?.amount ?? "0") ?? 0.0
+
+            amountLabel.text = suffix + StringManager.shared().realAmountStringAsset(asset, value: amount)
+            
+            let second = ExchangeManager.shared().exchangeValueAsset(amount, assetID: asset.assetId)
+            if !second.isEmpty {
+                amountSecondLabel.text = suffix + second
+            }
+            else {
+                amountSecondLabel.text = ""
+            }
+
+            assetIcon.setAsset(asset)
+        }
+        
+        
+        if let value = topOffset?.constant, Device.isXDevice {
+            topOffset?.constant = value - 30
+        }
+        
+        cancelButton.setTitleColor(.white, for: .normal)
+        
+        passField.showEye = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     
-    @objc private func onCancelClicked() {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @IBAction private func onCancelClicked() {
         self.onReject?()
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc private func onConfirmClicked() {
-        self.onConfirm?()
+    @IBAction private func onConfirmClicked() {
+        if Settings.sharedManager().isNeedaskPasswordForSend {
+            if passField.text?.isEmpty ?? true {
+                passField.error = Localizable.shared.strings.empty_password
+                passField.status = BMField.Status.error
+            }
+            else if let pass = passField.text {
+                let password = KeychainManager.getPassword() ?? String.empty()
+                let valid = password == pass
+                if !valid {
+                    passField.error = Localizable.shared.strings.incorrect_password
+                    passField.status = BMField.Status.error
+                }
+                else {
+                    onSend()
+                }
+            }
+        }
+        else {
+            onSend()
+        }
+    }
+    
+    private func onSend() {
+        self.onConfirm?(self.viewModel.isSpend, self.viewModel.amountInfo?.assetID ?? 0, Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0)
         self.navigationController?.popViewController(animated: true)
     }
 }
 
-
-extension DAOConfirmViewController : UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = UIColor.clear
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+extension DAOConfirmViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 
-
-extension DAOConfirmViewController : UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.items.count
+extension DAOConfirmViewController {
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+           let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+           let animationCurveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber {
+            let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: UIView.AnimationOptions.RawValue(truncating: animationCurveRaw))
+            var offset = scrollView.contentSize.height - keyboardSize.height
+            offset = 250
+            
+            let contentInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: offset, right: 0.0)
+            UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
+                self.scrollView.contentInset = contentInsets
+                self.scrollView.scrollIndicatorInsets = contentInsets
+                var aRect: CGRect = self.view.frame
+                aRect.size.height -= keyboardSize.height
+                if !aRect.contains(self.passField.frame.origin) {
+                    self.scrollView.scrollRectToVisible(self.passField.frame, animated: false)
+                }
+            }, completion: nil)
+        }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell =  tableView
-            .dequeueReusableCell(withType: BMMultiLinesCell2.self, for: indexPath)
-            .configured(with: viewModel.items[indexPath.section])
-        
-        return cell
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let userInfo = notification.userInfo,
+           let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+           let animationCurveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber {
+            let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: UIView.AnimationOptions.RawValue(truncating: animationCurveRaw))
+            UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
+                self.scrollView.contentInset = .zero
+                self.scrollView.scrollIndicatorInsets = .zero
+            }, completion: nil)
+        }
     }
 }

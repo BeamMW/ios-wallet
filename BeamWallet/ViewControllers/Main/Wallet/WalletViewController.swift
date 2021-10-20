@@ -54,7 +54,6 @@ class WalletViewController: BaseTableViewController {
         
         subscribeToUpdates()
         
-        AppModel.sharedManager().refreshAddressesFrom()
         AppModel.sharedManager().loadApps()
         
         if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
@@ -76,7 +75,7 @@ class WalletViewController: BaseTableViewController {
         }
         else if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
             if let transaction = transactionViewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
-                let vc = TransactionViewController(transaction: transaction)
+                let vc = TransactionPageViewController(transaction: transaction)
                 pushViewController(vc: vc)
             }
             
@@ -239,7 +238,7 @@ extension WalletViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
-            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
+            let vc = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row])
             pushViewController(vc: vc)
         }
         else if indexPath.section == 1 {

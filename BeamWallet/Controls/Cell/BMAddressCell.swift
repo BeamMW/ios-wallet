@@ -79,7 +79,12 @@ extension BMAddressCell: Configurable {
             nameLabel.text = options.address.label
         }
         
-        idLabel.text = options.address.walletId
+        if let display = options.address.displayAddress {
+            idLabel.text = display
+        }
+        else {
+            idLabel.text = options.address.walletId
+        }
 
         transactionCommentIcon.image = nil
         transactionCommentLabel.text = nil

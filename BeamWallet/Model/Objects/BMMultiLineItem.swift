@@ -47,6 +47,7 @@ class BMMultiLineItem {
     public var canCopy = false
     public var copiedText: String? = nil
     public var copyValue: String? = nil
+    public var showCopyButton: Bool? = nil
 
     required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
         self.title = title
@@ -63,6 +64,15 @@ class BMMultiLineItem {
         self.canCopy = copy
     }
     
+    required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?, copy:Bool, showCopyButton: Bool) {
+        self.title = title
+        self.detail = detail
+        self.detailFont = detailFont
+        self.detailColor = detailColor
+        self.canCopy = copy
+        self.showCopyButton = showCopyButton
+    }
+    
     required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?, copy:Bool, copiedText:String?) {
         self.title = title
         self.detail = detail
@@ -70,5 +80,15 @@ class BMMultiLineItem {
         self.detailColor = detailColor
         self.canCopy = copy
         self.copiedText = copiedText
+    }
+    
+    required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?, copy:Bool, copiedText:String?, showCopyButton: Bool) {
+        self.title = title
+        self.detail = detail
+        self.detailFont = detailFont
+        self.detailColor = detailColor
+        self.canCopy = copy
+        self.copiedText = copiedText
+        self.showCopyButton = showCopyButton
     }
 }

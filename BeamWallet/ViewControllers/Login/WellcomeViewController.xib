@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -38,29 +38,25 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="initial_background" translatesAutoresizingMaskIntoConstraints="NO" id="iAW-fu-nfK">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bgNew" translatesAutoresizingMaskIntoConstraints="NO" id="iAW-fu-nfK">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                 </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="150" translatesAutoresizingMaskIntoConstraints="NO" id="Prf-e9-uhW">
-                    <rect key="frame" x="75" y="257.5" width="264" height="181"/>
+                    <rect key="frame" x="75" y="147.5" width="264" height="301"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="XS3-jK-PB8">
-                            <rect key="frame" x="0.0" y="0.0" width="264" height="181"/>
+                            <rect key="frame" x="0.0" y="0.0" width="264" height="301"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="t3a-Bl-DlH">
-                                    <rect key="frame" x="52.5" y="0.0" width="159" height="142"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="142" id="4Rm-nu-emj"/>
-                                        <constraint firstAttribute="width" constant="159" id="HG5-Od-VgI"/>
-                                    </constraints>
+                                    <rect key="frame" x="10.5" y="0.0" width="243" height="242"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confidential, fast, easy to use" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
-                                    <rect key="frame" x="0.0" y="162" width="264" height="19"/>
+                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confidential DeFi Platform and\nCryptocurrency" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-BH-n39">
+                                    <rect key="frame" x="0.0" y="262" width="264" height="39"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="264" id="z8M-cN-IIy"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="16"/>
-                                    <color key="textColor" red="0.14509803921568626" green="0.75686274509803919" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
@@ -72,7 +68,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="qyg-x7-z6S">
-                    <rect key="frame" x="80.5" y="553.5" width="253" height="118"/>
+                    <rect key="frame" x="80.5" y="563.5" width="253" height="118"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Iu-PO-y9I" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="253" height="44"/>
@@ -122,7 +118,7 @@
                         </button>
                     </subviews>
                 </stackView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gaV-vA-BtB">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gaV-vA-BtB">
                     <rect key="frame" x="341" y="59" width="58" height="32"/>
                     <color key="backgroundColor" red="0.0" green="0.96470588239999999" blue="0.82352941180000006" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -149,7 +145,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 1.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSx-nV-P2m">
-                    <rect key="frame" x="177.5" y="838" width="59.5" height="14"/>
+                    <rect key="frame" x="179.5" y="837.5" width="55.5" height="14.5"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -167,7 +163,7 @@
                 <constraint firstItem="qyg-x7-z6S" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UNc-wS-U9l"/>
                 <constraint firstAttribute="bottom" secondItem="iAW-fu-nfK" secondAttribute="bottom" id="aDv-bD-yyo"/>
                 <constraint firstItem="iAW-fu-nfK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cGL-e8-ndK"/>
-                <constraint firstItem="Prf-e9-uhW" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-100" id="cnb-Qa-trn"/>
+                <constraint firstItem="Prf-e9-uhW" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-150" id="cnb-Qa-trn"/>
                 <constraint firstAttribute="trailing" secondItem="iAW-fu-nfK" secondAttribute="trailing" id="h0y-mt-lbA"/>
                 <constraint firstItem="LSx-nV-P2m" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" constant="-10" id="hWW-qR-tKS"/>
                 <constraint firstItem="LSx-nV-P2m" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ium-Sq-H0D"/>
@@ -179,12 +175,12 @@
     </objects>
     <designables>
         <designable name="1Iu-PO-y9I">
-            <size key="intrinsicContentSize" width="145" height="17"/>
+            <size key="intrinsicContentSize" width="128" height="17"/>
         </designable>
     </designables>
     <resources>
+        <image name="bgNew" width="375" height="812"/>
         <image name="iconAddBlue" width="16" height="16"/>
-        <image name="initial_background" width="1125" height="2001"/>
-        <image name="logo" width="159" height="139"/>
+        <image name="logo" width="243" height="242"/>
     </resources>
 </document>

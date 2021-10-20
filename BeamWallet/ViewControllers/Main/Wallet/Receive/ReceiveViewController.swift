@@ -94,6 +94,21 @@ class ReceiveViewController: BaseTableViewController {
                     if self?.assetId != 0 && self?.assetId != self?.viewModel.selectedAssetId {
                         self?.viewModel.selectedAssetId = self?.assetId ?? 0
                     }
+                    if self?.viewModel.isSavedAddress == true {
+                        self?.viewModel.isShared = true
+                        
+                        let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                        if isOwn {
+                            let token = AppModel.sharedManager().isToken(self?.viewModel.address.address ?? "")
+                            if token {
+                                let params = AppModel.sharedManager().getTransactionParameters(self?.viewModel.address.address ?? "")
+                                if params.newAddressType == BMAddressTypeMaxPrivacy {
+                                    self?.viewModel.transaction = .privacy
+                                }
+                            }
+                        }
+                    }
+                    
                     self?.tableView.delegate = self
                     self?.tableView.dataSource = self
                     self?.tableView.reloadData()
@@ -113,10 +128,10 @@ class ReceiveViewController: BaseTableViewController {
                     }
                     else if let tokenCell = cell as? ReceiveTokenCell {
                         if strongSelf.viewModel.transaction == .regular {
-                            tokenCell.configure(with: strongSelf.viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased())
+                            tokenCell.configure(with: strongSelf.viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)
                         }
                         else {
-                            tokenCell.configure(with: strongSelf.viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased())")
+                            tokenCell.configure(with: strongSelf.viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
                         }
                     }
                 }
@@ -125,20 +140,29 @@ class ReceiveViewController: BaseTableViewController {
         }
         
         if let a = address {
-            viewModel.isShared = true
+            viewModel.isSavedAddress = true
             viewModel.address = a
+            viewModel.isShared = true
             viewModel.generateTokens()
+            viewModel.transactionComment = a.label
             tableView.delegate = self
             tableView.dataSource = self
+            
+            if AppModel.sharedManager().isToken(a.address) {
+                let params = AppModel.sharedManager().getTransactionParameters(a.address ?? "")
+                if params.assetId != 0 {
+                    viewModel.selectedAssetId = Int(params.assetId)
+                }
+                
+                if params.amount > 0 {
+                    viewModel.amount = String.currency(value: params.amount).replacingOccurrences(of: " BEAM", with: "")
+                }
+            }
+            
             tableView.reloadData()
         }
         else {
             viewModel.createAddress()
-
-            if self.assetId == 0 {
-            }
-            else {
-            }
         }
         
         
@@ -237,14 +261,14 @@ extension ReceiveViewController : UITableViewDataSource {
             cell.delegate = self
             if viewModel.transaction == .regular {
                 if !AppModel.sharedManager().checkIsOwnNode() {
-                    cell.configure(with: viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased())
+                    cell.configure(with: viewModel.address._id, title: Localizable.shared.strings.address.uppercased(), showHint: true)
                 }
                 else {
-                    cell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased())
+                    cell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)
                 }
             }
             else {
-                cell.configure(with: viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))")
+                cell.configure(with: viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
             }
             return cell
         }
@@ -318,7 +342,10 @@ extension ReceiveViewController : UITableViewDataSource {
                 }
                 cell.botOffset?.constant = 20
                 cell.delegate = self
-                
+                cell.backgroundColor = UIColor.clear
+                cell.mainView.backgroundColor = UIColor.main.marineThree
+                cell.contentView.backgroundColor = UIColor.main.marine
+
                 return cell
             }
         }
@@ -334,7 +361,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     text = Localizable.shared.strings.transaction_indefinitely + text
                 }
                 else {
-                    text = String(format: Localizable.shared.strings.transaction_time, locValue.name) + text
+                    text = String(format: Localizable.shared.strings.transaction_time, locValue.title) + text
                 }
                 
                 cell.setText(text: text)
@@ -384,6 +411,7 @@ extension ReceiveViewController : BMCellProtocol {
         if let path = tableView.indexPath(for: sender) {
              if path.section == 2 {
                 viewModel.transactionComment = text
+                
             }
             else if path.section == 1 {
                 viewModel.amount = text
@@ -396,10 +424,15 @@ extension ReceiveViewController : BMCellProtocol {
                         }
                         else if let tokenCell = cell as? ReceiveTokenCell {
                             if viewModel.transaction == .regular {
-                                tokenCell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased())
+                                if !AppModel.sharedManager().checkIsOwnNode() {
+                                    tokenCell.configure(with: viewModel.address._id, title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                                }
+                                else {
+                                    tokenCell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                                }
                             }
                             else {
-                                tokenCell.configure(with: viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased())")
+                                tokenCell.configure(with: viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
                             }
                         }
                     }
@@ -467,7 +500,7 @@ extension ReceiveViewController : BMCellProtocol {
                 menu.append(m)
             }
             
-            BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
+            BMPopoverMenu.showForSenderAssets(sender: cell.currencyView, with: menu) { item in
                 let asset = AssetsManager.shared().getAsset(Int32(item?.id ?? 0))
                 self.viewModel.selectedAssetId = Int(asset?.assetId ?? 0)
                 self.viewModel.amount = nil

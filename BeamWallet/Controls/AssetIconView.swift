@@ -38,7 +38,7 @@ class AssetIconView: BMGradientView {
     
     public func setAsset(_ asset:BMAsset) {
         if isBig {
-            if asset.isDemoX() {
+            if asset.isBeamX() {
                 imageView.frame = self.bounds
                 imageView.image = UIImage(named: "assetbeamx")
             }
@@ -52,7 +52,7 @@ class AssetIconView: BMGradientView {
             }
         }
         else {
-            if asset.isDemoX() {
+            if asset.isBeamX() {
                 imageView.frame = self.bounds
                 imageView.image = UIImage(named: "assetbeamx")
             }
@@ -76,7 +76,7 @@ class AssetIconView: BMGradientView {
         self.borderWidth = 2
         self.borderColor = UIColor(hexString: asset.color)
         
-        if asset.isDemoX() {
+        if asset.isBeamX() {
             self.borderWidth = 0
             self.gradientLayer.colors = nil
         }

@@ -11,7 +11,8 @@
 
 @interface BMMaxPrivacyLock : NSObject
 
-@property (nonatomic,strong) NSString * _Nonnull name;
+@property (nonatomic,strong) NSString * _Nonnull detail;
+@property (nonatomic,strong) NSString * _Nonnull title;
 @property (nonatomic,assign) int hours;
 
 @end

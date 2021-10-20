@@ -47,7 +47,7 @@ class ReceiveListViewController: BaseTableViewController {
         field.tintColor = UIColor.white
         field.autocorrectionType = .no
         field.spellCheckingType = .no
-        field.lineHeight = 1
+       // field.lineHeight = 1
         field.textColor = UIColor.white
         field.delegate = self
         return field

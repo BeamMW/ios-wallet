@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,7 +26,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="140" height="38"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OH4-vY-X9Q">
-                                <rect key="frame" x="0.0" y="9" width="20" height="20"/>
+                                <rect key="frame" x="8" y="9" width="20" height="20"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Phw-Fa-Ngy"/>
@@ -51,11 +49,8 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dVj-JA-4Xf" customClass="BMWordField" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="30" y="6.5" width="105" height="25"/>
+                                <rect key="frame" x="0.0" y="5" width="135" height="28"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="45V-Jr-Txt"/>
-                                </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
@@ -69,12 +64,13 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="38" id="5lA-9s-T47"/>
+                            <constraint firstAttribute="bottom" secondItem="dVj-JA-4Xf" secondAttribute="bottom" constant="5" id="3hK-Me-SrP"/>
                             <constraint firstAttribute="trailing" secondItem="dVj-JA-4Xf" secondAttribute="trailing" constant="5" id="FaL-bp-ast"/>
+                            <constraint firstItem="dVj-JA-4Xf" firstAttribute="leading" secondItem="pDb-cY-p2y" secondAttribute="leading" id="M7c-Ng-L4E"/>
                             <constraint firstItem="OH4-vY-X9Q" firstAttribute="centerY" secondItem="pDb-cY-p2y" secondAttribute="centerY" id="aNG-6P-wea"/>
+                            <constraint firstItem="dVj-JA-4Xf" firstAttribute="top" secondItem="pDb-cY-p2y" secondAttribute="top" constant="5" id="adk-Zu-2El"/>
                             <constraint firstItem="dVj-JA-4Xf" firstAttribute="centerY" secondItem="pDb-cY-p2y" secondAttribute="centerY" id="nXU-IL-41g"/>
-                            <constraint firstItem="dVj-JA-4Xf" firstAttribute="leading" secondItem="OH4-vY-X9Q" secondAttribute="trailing" constant="10" id="tgx-mF-cLq"/>
-                            <constraint firstItem="OH4-vY-X9Q" firstAttribute="leading" secondItem="pDb-cY-p2y" secondAttribute="leading" id="wzL-ec-DYh"/>
+                            <constraint firstItem="OH4-vY-X9Q" firstAttribute="leading" secondItem="pDb-cY-p2y" secondAttribute="leading" constant="8" id="wzL-ec-DYh"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -90,17 +86,20 @@
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="xe8-wg-wRf"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="pDb-cY-p2y" secondAttribute="trailing" id="8Hq-0C-qDb"/>
+                <constraint firstItem="pDb-cY-p2y" firstAttribute="top" secondItem="CCv-KC-rV9" secondAttribute="top" id="GDc-fg-cyI"/>
+                <constraint firstAttribute="bottom" secondItem="pDb-cY-p2y" secondAttribute="bottom" id="W2f-U3-qv2"/>
                 <constraint firstItem="pDb-cY-p2y" firstAttribute="centerY" secondItem="CCv-KC-rV9" secondAttribute="centerY" id="XyN-j5-MD8"/>
                 <constraint firstItem="pDb-cY-p2y" firstAttribute="leading" secondItem="CCv-KC-rV9" secondAttribute="leading" id="YbO-b4-VtQ"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="xe8-wg-wRf"/>
             <connections>
                 <outlet property="numberLabel" destination="OH4-vY-X9Q" id="TLr-W5-SYF"/>
                 <outlet property="wordField" destination="dVj-JA-4Xf" id="e6G-IN-SXH"/>
             </connections>
+            <point key="canvasLocation" x="122" y="98"/>
         </collectionViewCell>
     </objects>
 </document>

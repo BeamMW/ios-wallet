@@ -43,8 +43,9 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
 
     private var webView:WKWebView!
     private var loadingImage = UIImageView()
+    private var loadingLabel = UILabel()
 
-    @objc private var beam = WBBEAM()
+    @objc private var beam:WBBEAM? = WBBEAM()
 
     @objc public var app:BMApp!
     @objc public var onCallWalletApi: ((NSString) -> Void)?
@@ -58,11 +59,12 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         
         stupWebView()
         
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+        
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: self.navigationController?.viewControllers.count == 1)
         
         title = app.name
                 
-        beam.onCallWalletApi = { json in
+        beam?.onCallWalletApi = { json in
             self.onCallWalletApi?(json)
         }
         
@@ -87,7 +89,7 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         webView.configuration.userContentController.addUserScript(WKUserScript(source: jsLogScript2, injectionTime: .atDocumentStart, forMainFrameOnly: true))
         webView.configuration.userContentController.add(self, name: "logHandler")
         webView.configuration.userContentController.add(self, name: "log")
-        webView.loadPlugin(beam, namespace: "BEAM")
+        webView.loadPlugin(beam!, namespace: "BEAM")
         webView.backgroundColor = self.view.backgroundColor
         webView.isOpaque = false
         webView.scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
@@ -97,6 +99,13 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         loadingImage.image = UIImage(named: "dapp-loading")
         loadingImage.frame = CGRect(x: (UIScreen.main.bounds.width-245)/2, y: (UIScreen.main.bounds.height-137)/2, width: 245, height: 137)
         self.view.addSubview(loadingImage)
+        
+        loadingLabel.font = ItalicFont(size: 16)
+        loadingLabel.text = String.init(format: Localizable.shared.strings.please_wait_is_loading, app.name)
+        loadingLabel.textColor =  Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
+        loadingLabel.textAlignment = .center
+        loadingLabel.frame = CGRect(x: 20, y: loadingImage.y - 60, width: UIScreen.main.bounds.width-40, height: 30)
+        self.view.addSubview(loadingLabel)
 
     }
     
@@ -126,8 +135,18 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
             vc.onReject = {
                 self.onRejected?(NSString(string: self.jsonRequest))
             }
-            vc.onConfirm = {
-                self.onApproved?(NSString(string: self.jsonRequest))
+            vc.onConfirm = { isSpend, assetId, amount in
+                let transaction = BMTransaction()
+                transaction.isDapps = true
+                transaction.enumStatus = BMTransactionStatus(BMTransactionStatusRegistering)
+                transaction.appName = self.app.name
+                transaction.isIncome = !isSpend
+                transaction.assetId = Int32(assetId)
+                transaction.asset = AssetsManager.shared().getAsset(Int32(assetId))
+                transaction.realAmount = amount
+                BMNotificationView.showTransaction(transaction: transaction, delegate: nil, delay: 0.0)
+
+                self.onApproved?(NSString(string: self.jsonRequest))                
             }
             self.pushViewController(vc: vc)
         }
@@ -135,12 +154,13 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     
     @objc func sendDAOApiResult(json:NSString) {
         do {
-           _ = try beam.resultObject?.call(arguments: [json])
+           _ = try beam?.resultObject?.call(arguments: [json])
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 DispatchQueue.main.async {
-                    self.webView.isHidden = false
+                    self.webView?.isHidden = false
                     self.loadingImage.isHidden = true
+                    self.loadingLabel.isHidden = true
                 }
             }
         }

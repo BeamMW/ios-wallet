@@ -22,9 +22,8 @@ import UIKit
 class BMSearchAddressCell: BaseCell {
     weak var delegate: BMCellProtocol?
     
-    @IBOutlet private weak var textField: BMTextView!
+    @IBOutlet private weak var textField: BMField!
     @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var showTokenButton: UIButton!
     @IBOutlet private weak var additionalErrorLabel: UILabel!
     @IBOutlet private weak var addressTypeLabel: UILabel!
@@ -33,10 +32,7 @@ class BMSearchAddressCell: BaseCell {
     @IBOutlet private weak var contactName: UILabel!
     @IBOutlet private weak var contactCategory: UILabel!
     @IBOutlet private weak var iconView: UIView!
-    @IBOutlet private weak var buttonsStackView: UIStackView!
     @IBOutlet private weak var qrButton: UIButton!
-
-   // private var rightButtons = [UIButton]()
     
     @IBOutlet var nameLabelTopOffset: NSLayoutConstraint!
     @IBOutlet var stackBotOffset: NSLayoutConstraint!
@@ -68,21 +64,11 @@ class BMSearchAddressCell: BaseCell {
         selectionStyle = .none
         allowHighlighted = false
 
+        showTokenButton.frame = CGRect(x: 200, y: 0, width: 110, height: 45)
+        textField.addSubview(showTokenButton)
+        
         nameLabel.isUserInteractionEnabled = true
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
-        
-        textField.alwaysVisibleClearButton = true
-        if Device.isXDevice {
-            textField.placholderFont = ItalicFont(size: 16)
-        }
-        else {
-            textField.placholderFont = ItalicFont(size: 14)
-        }
-        textField.placholderColor = UIColor.white.withAlphaComponent(0.2)
-        textField.placeholder = Localizable.shared.strings.send_address_placholder
-        textField.allowsEditingTextAttributes = true
-        textField.defaultOffset = 4
-        textField.lineColor = UIColor.white.withAlphaComponent(0.1)
         
         if Settings.sharedManager().isDarkMode {
             nameLabel.textColor = UIColor.main.steel;
@@ -90,7 +76,20 @@ class BMSearchAddressCell: BaseCell {
             additionalErrorLabel.textColor = UIColor.main.steel;
         }
         
+        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: nil) { [weak self] notification in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.showTokenButton.isHidden = true
+            strongSelf.delegate?.textValueDidChange?(strongSelf, strongSelf.textField.text ?? String.empty(), true)
+        }
+        
         contentView.backgroundColor = UIColor.main.marineThree
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        showTokenButton.frame = CGRect(x: self.frame.size.width - 195, y: 0, width: 110, height: 45)
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
@@ -108,7 +107,8 @@ class BMSearchAddressCell: BaseCell {
     public func setAddressType(_ type:BMAddressType, _ offline:Bool, _ left:Int) {
         addressType = type
         
-        if(!textField.text.isEmpty && type != BMAddressTypeUnknown) {
+        let text = textField.text ?? ""
+        if(!text.isEmpty && type != BMAddressTypeUnknown) {
             let title = AppModel.sharedManager().getAddressTypeString(type)
             addressTypeLabel.isHidden = false
             if offline && type == BMAddressTypeShielded {
@@ -161,18 +161,13 @@ class BMSearchAddressCell: BaseCell {
     public var error: String? {
         didSet {
             if error != nil {
-                textField.lineColor = UIColor.main.red
-                textField.textColor = UIColor.main.red
-                errorLabel.textColor = UIColor.main.red
-                errorLabel.text = error
-                errorLabel.isHidden = false
+                stackBotOffset.constant = 10
+                textField.error = error
+                textField.status = .error
             }
             else {
-                textField.lineColor = UIColor.white.withAlphaComponent(0.1)
-                textField.textColor = UIColor.white
-                errorLabel.text = nil
-                errorLabel.textColor = UIColor.main.red
-                errorLabel.isHidden = true
+                textField.error = nil
+                textField.status = .normal
             }
         }
     }
@@ -196,20 +191,12 @@ class BMSearchAddressCell: BaseCell {
             if AppModel.sharedManager().isValidAddress(text) {
                 textField.text = "\(text.prefix(6))...\(text.suffix(6))"
                 showTokenButton.isHidden = false
-                
-//                for btn in rightButtons {
-//                    btn.isHidden = true
-//                }
             }
             else {
                 textField.text = string
             }
         }
         else {
-//            for btn in rightButtons {
-//                btn.isHidden = false
-//            }
-//
             token = ""
             textField.text = string
         }
@@ -232,9 +219,10 @@ class BMSearchAddressCell: BaseCell {
     }
 }
 
-extension BMSearchAddressCell: UITextViewDelegate {
-    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        textView.inputAccessoryView = nil
+extension BMSearchAddressCell: UITextFieldDelegate {
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        textField.inputAccessoryView = nil
         
         if let copy = copyText {
             let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy: copy)
@@ -247,50 +235,45 @@ extension BMSearchAddressCell: UITextViewDelegate {
                     self.checkAttributes(string: text)
                 }
             }
-            textView.inputAccessoryView = inputBar
-            textView.layoutIfNeeded()
-            textView.layoutSubviews()
+            textField.inputAccessoryView = inputBar
+            textField.layoutIfNeeded()
+            textField.layoutSubviews()
         }
         
         return true
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        buttonsStackView.isHidden = false
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        qrButton.isHidden = false
         delegate?.textValueDidReturn?(self)
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.textValueDidBegin?(self)
         showTokenButton.isHidden = true
-        buttonsStackView.isHidden = true
+        qrButton.isHidden = true
     }
+
     
-    func textViewDidChange(_ textView: UITextView) {
-        showTokenButton.isHidden = true
-        delegate?.textValueDidChange?(self, textView.text ?? String.empty(), true)
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == Localizable.shared.strings.new_line {
-            textView.resignFirstResponder()
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == Localizable.shared.strings.new_line {
+            textField.resignFirstResponder()
             return false
         }
-        else if text == UIPasteboard.general.string {
-            delegate?.textValueDidChange?(self, text, false)
+        else if string == UIPasteboard.general.string {
+            delegate?.textValueDidChange?(self, string, false)
             _ = textField.resignFirstResponder()
-            checkAttributes(string: text)
+            checkAttributes(string: string)
             return false
         }
         else if validateAddress {
-          let alphaNumericSet = CharacterSet(charactersIn: "abcdefABCDEF0123456789")
-            if text.rangeOfCharacter(from: alphaNumericSet.inverted) != nil {
+            let alphaNumericSet = CharacterSet(charactersIn: "abcdefABCDEF0123456789")
+            if string.rangeOfCharacter(from: alphaNumericSet.inverted) != nil {
                 return false
             }
         }
-        
-        error = nil
-        
+                
         return true
     }
 }
@@ -314,25 +297,6 @@ extension BMSearchAddressCell: Configurable {
             qrButton.isHidden = false
         }
         
-//        for button in rightButtons {
-//            buttonsStackView.removeArrangedSubview(button)
-//        }
-//        rightButtons.removeAll()
-//
-//
-//        if let icons = options.rightIcons {
-//            for icon in icons {
-//                let button = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
-//                button.setImage(icon, for: .normal)
-//                button.tag = buttonsStackView.arrangedSubviews.count
-//                button.addTarget(self, action: #selector(onRightButton(sender:)), for: .touchUpInside)
-//                button.heightAnchor.constraint(equalToConstant: 36).isActive = true
-//                button.widthAnchor.constraint(equalToConstant: 36).isActive = true
-//                buttonsStackView.insertArrangedSubview(button, at: 1)
-//                rightButtons.append(button)
-//            }
-//        }
-     //   buttonsStackView.setNeedsLayout()
         checkAttributes(string: options.value)
     }
 }

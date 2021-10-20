@@ -20,35 +20,65 @@
 import UIKit
 
 class CreateWalletPasswordViewController: BaseWizardViewController {
+    @IBOutlet private weak var oldPassField: BMField!
+    @IBOutlet private weak var oldPassView: UIStackView!
+
     @IBOutlet private weak var passField: BMField!
     @IBOutlet private weak var confirmPassField: BMField!
     @IBOutlet private weak var passProgressView: BMStepView!
     @IBOutlet private weak var saveButton: UIButton!
     @IBOutlet private weak var scrollView: UIScrollView!
+   
     @IBOutlet private weak var subTitleLabel: UILabel!
-    @IBOutlet var constraintContentHeight: NSLayoutConstraint!
-    
+    @IBOutlet private weak var passwordHintLabel: UILabel!
+
+    @IBOutlet private weak var passTitleLabel: UILabel!
+    @IBOutlet private weak var confirmPassTitleLabel: UILabel!
+    @IBOutlet private weak var hintLabel: UILabel!
+    @IBOutlet private weak var nextButton: BMButton!
+
     private var phrase: String!
     private var activeField: UITextField?
+    
+    @IBOutlet private weak var topViewOffset: NSLayoutConstraint!
+
+    
+    private var isChangePassword = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if AppModel.sharedManager().isLoggedin {
-            subTitleLabel.text = Localizable.shared.strings.create_new_password_short
+        nextButton.isEnabled = false
+        
+        passField.showEye = true
+        oldPassField.showEye = true
+        confirmPassField.showEye = true
+
+        isChangePassword = AppModel.sharedManager().isLoggedin
+        
+        if  isChangePassword {
+            oldPassView.isHidden = false
+            
+            subTitleLabel.isHidden = true
+            subTitleLabel.text = nil
+            topViewOffset.constant = 5
+            
             saveButton.setTitle(Localizable.shared.strings.save, for: .normal)
             saveButton.setImage(IconSaveDone(), for: .normal)
+            
+            passTitleLabel.text = Localizable.shared.strings.new_password.uppercased()
+            passTitleLabel.letterSpacing = 1.2
         }
         
- 
         
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: false)
+        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: isChangePassword)
         
-        title = AppModel.sharedManager().isLoggedin ? Localizable.shared.strings.change_password : Localizable.shared.strings.create_password
+        title = isChangePassword ? Localizable.shared.strings.change_password : Localizable.shared.strings.create_password
         
         passField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         confirmPassField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        
+        oldPassField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+
         addCustomBackButton(target: self, selector: #selector(onBack))
     }
     
@@ -66,11 +96,17 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    
+    private func checkButton() {
+        let p1 = passField.text ?? ""
+        let p2 = confirmPassField.text ?? ""
+        let p3 = oldPassField.text ?? ""
         
-        if AppModel.sharedManager().isLoggedin {
-            _ = passField.becomeFirstResponder()
+        if isChangePassword {
+            nextButton.isEnabled = !p1.isEmpty && !p2.isEmpty && !p3.isEmpty
+        }
+        else {
+            nextButton.isEnabled = !p1.isEmpty && !p2.isEmpty
         }
     }
     
@@ -95,26 +131,20 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     @IBAction func onNext(sender: UIButton) {
         let pass = passField.text ?? String.empty()
         let confirmPass = confirmPassField.text ?? String.empty()
-        
-        if pass.isEmpty {
-            confirmPassField.error = Localizable.shared.strings.empty_password
-            
-            passField.status = BMField.Status.error
+        let oldPass = oldPassField.text ?? String.empty()
+       
+        if isChangePassword && !AppModel.sharedManager().isValidPassword(oldPass) {
+            oldPassField.error = Localizable.shared.strings.current_password_error
+            oldPassField.status = BMField.Status.error
+            nextButton.isEnabled = false
         }
-        
-        if confirmPass.isEmpty {
-            confirmPassField.error = Localizable.shared.strings.empty_password
-            
-            confirmPassField.status = BMField.Status.error
-        }
-        
-        if !pass.isEmpty, !confirmPass.isEmpty {
+        else if !pass.isEmpty, !confirmPass.isEmpty {
             if pass == confirmPass {
-                if AppModel.sharedManager().isLoggedin {
+                if isChangePassword {
                     if AppModel.sharedManager().isValidPassword(pass) {
                         confirmPassField.error = Localizable.shared.strings.old_password
                         confirmPassField.status = BMField.Status.error
-                        passField.status = BMField.Status.error
+                        nextButton.isEnabled = false
                     }
                     else {
                         goNext(pass: pass)
@@ -145,13 +175,13 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
             else {
                 confirmPassField.error = Localizable.shared.strings.passwords_dont_match
                 confirmPassField.status = BMField.Status.error
-                passField.status = BMField.Status.error
+                nextButton.isEnabled = false
             }
         }
     }
     
     private func goNext(pass: String) {
-        if AppModel.sharedManager().isLoggedin {
+        if isChangePassword {
             AppModel.sharedManager().changePassword(pass)
             _ = KeychainManager.addPassword(password: pass)
             
@@ -191,34 +221,6 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                     vc.phrase = phrase
                     self.pushViewController(vc: vc)
                 }
-                                
-
-//
-//                AppModel.sharedManager().stopChangeWallet()
-//                AppModel.sharedManager().refreshAddresses()
-//                AppModel.sharedManager().getUTXO()
-//
-//                let mainVC = BaseNavigationController.navigationController(rootViewController: WalletViewController())
-//                let menuViewController = LeftMenuViewController()
-//
-//                let sideMenuController = LGSideMenuController(rootViewController: mainVC,
-//                                                              leftViewController: menuViewController,
-//                                                              rightViewController: nil)
-//
-//                sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-//                sideMenuController.leftViewPresentationStyle = .slideAbove;
-//                sideMenuController.rootViewLayerShadowRadius = 0
-//                sideMenuController.rootViewLayerShadowColor = UIColor.clear
-//                sideMenuController.leftViewLayerShadowRadius = 0
-//                sideMenuController.rootViewCoverAlphaForLeftView = 0.5
-//                sideMenuController.rootViewCoverAlphaForRightView = 0.5
-//                sideMenuController.leftViewCoverAlpha = 0.5
-//                sideMenuController.rightViewCoverAlpha = 0.5
-//                sideMenuController.modalTransitionStyle = .crossDissolve
-//
-//                self.navigationController?.setViewControllers([sideMenuController], animated: true)
-//
-//                BMLockScreen.shared.onTapEvent()
             }
         }
     }
@@ -235,30 +237,47 @@ extension CreateWalletPasswordViewController: UITextFieldDelegate {
             
             switch state {
             case .none:
+                passwordHintLabel.text = nil
+                passwordHintLabel.isHidden = true
                 passProgressView.currentStep = 0
             case .veryWeak:
+                passwordHintLabel.isHidden = false
+                passwordHintLabel.text = Localizable.shared.strings.very_weak_password
                 passProgressView.finishedStepColor = UIColor.main.red
                 passProgressView.currentStep = 1
             case .weak:
+                passwordHintLabel.isHidden = false
+                passwordHintLabel.text = Localizable.shared.strings.weak_password
                 passProgressView.finishedStepColor = UIColor.main.red
                 passProgressView.currentStep = 2
             case .medium:
+                passwordHintLabel.isHidden = false
+                passwordHintLabel.text = Localizable.shared.strings.medium_password
                 passProgressView.finishedStepColor = UIColor.main.maize
                 passProgressView.currentStep = 3
             case .medium_two:
+                passwordHintLabel.isHidden = false
+                passwordHintLabel.text = Localizable.shared.strings.medium_password
                 passProgressView.finishedStepColor = UIColor.main.maize
                 passProgressView.currentStep = 4
             case .strong:
+                passwordHintLabel.isHidden = false
+                passwordHintLabel.text = Localizable.shared.strings.strong_password
                 passProgressView.finishedStepColor = UIColor.main.brightTeal
                 passProgressView.currentStep = 5
             case .veryStrong:
+                passwordHintLabel.isHidden = false
+                passwordHintLabel.text = Localizable.shared.strings.very_strong_password
                 passProgressView.finishedStepColor = UIColor.main.brightTeal
                 passProgressView.currentStep = 6
             }
         }
         
+        oldPassField.status = BMField.Status.normal
         passField.status = BMField.Status.normal
         confirmPassField.status = BMField.Status.normal
+        
+        checkButton()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -292,7 +311,10 @@ extension CreateWalletPasswordViewController {
             let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
             let animationCurveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber {
             let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: UIView.AnimationOptions.RawValue(truncating: animationCurveRaw))
-            let contentInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
+            var offset = scrollView.contentSize.height - keyboardSize.height
+            offset = 150
+
+            let contentInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: offset, right: 0.0)
             UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
                 self.scrollView.contentInset = contentInsets
                 self.scrollView.scrollIndicatorInsets = contentInsets
