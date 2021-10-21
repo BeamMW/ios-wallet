@@ -56,10 +56,14 @@ class WalletViewController: BaseTableViewController {
         
         AppModel.sharedManager().loadApps()
         
-        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: tableView)
-        }
+      //  if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
+            //registerForPreviewing(with: self, sourceView: view)
+       // }
         
+        if #available(iOS 13.0, *) {
+            let interaction = UIContextMenuInteraction(delegate: self)
+            tableView.addInteraction(interaction)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -246,6 +250,75 @@ extension WalletViewController: UITableViewDelegate {
             pushViewController(vc: vc)
         }
     }
+        
+    @available(iOS 13.0, *)
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
+            let detailVC = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row], preview: true)
+            detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
+            
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+                return detailVC
+            }, actionProvider: { suggestedActions in
+                return self.makeContextMenu(transaction: self.transactionViewModel.transactions[indexPath.row])
+            })
+        }
+        
+        return nil
+    }
+    
+    @available(iOS 13.0, *)
+    func makeContextMenu(transaction:BMTransaction) -> UIMenu {
+        var array = [UIAction]()
+        let viewModel = DetailTransactionViewModel(transaction: transaction)
+        
+        if transaction.canSaveContact() {
+            let action1 = UIAction(title: Localizable.shared.strings.save_contact_title, image: nil) { action in
+                viewModel.saveContact()
+            }
+            array.append(action1)
+        }
+        
+        let action1 = UIAction(title: Localizable.shared.strings.share_details, image: nil) { action in
+            viewModel.share()
+        }
+        array.append(action1)
+        
+        let action2 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { action in
+            viewModel.copyDetails()
+        }
+        array.append(action2)
+        
+        if !transaction.isIncome && !transaction.isDapps {
+            let action3 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { action in
+                viewModel.repeatTransation(transaction: viewModel.transaction!)
+            }
+            array.append(action3)
+        }
+        
+        if transaction.canCancel && !transaction.isDapps {
+            let action4 = UIAction(title: Localizable.shared.strings.cancel_transaction, image: nil) { action in
+                viewModel.cancelTransation(indexPath: nil)
+            }
+            array.append(action4)
+        }
+        
+        if transaction.canDelete {
+            let action5 = UIAction(title: Localizable.shared.strings.delete_transaction, image: nil) { action in
+                viewModel.deleteTransationNew(indexPath: nil)
+            }
+            array.append(action5)
+        }
+        
+        if transaction.isDapps {
+            let action6 = UIAction(title: Localizable.shared.strings.open_dapp, image: nil) { action in
+                viewModel.openDapp()
+            }
+            array.append(action6)
+        }
+        return UIMenu(title: "", children: array)
+    }
 }
 
 extension WalletViewController: UITableViewDataSource {
@@ -428,6 +501,27 @@ extension WalletViewController: OnboardCellDelegate {
                         BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
                     }
                 }
+            }
+        }
+    }
+}
+
+
+extension WalletViewController: UIContextMenuInteractionDelegate {
+    
+    @available(iOS 13.0, *)
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return nil
+    }
+    
+    @available(iOS 13.0, *)
+    func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        animator.addCompletion {
+            if let viewController = animator.previewViewController as? TransactionPageViewController {
+                viewController.isPreview = false
+                self.navigationController?.pushViewController(viewController, animated: false)
+                viewController.viewDidLoad()
+                viewController.viewDidLayoutSubviews()
             }
         }
     }

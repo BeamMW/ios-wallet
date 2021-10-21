@@ -588,6 +588,12 @@ class LocalizableStrings : NSObject {
     var asset_id = "asset_id".localized
     var password_approve_transaction = "password_approve_transaction".localized
 
+    var open_dapp = "open_dapp".localized
+    var dapp_not_found_title = "dapp_not_found_title".localized
+    var dapp_not_found_text = "dapp_not_found_text".localized
+    var conf_asset_id = "conf_asset_id".localized
+
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

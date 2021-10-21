@@ -141,6 +141,10 @@ class DetailTransactionViewModel: TransactionViewModel {
                 details.append(BMMultiLineItem(title: Localizable.shared.strings.app_shader_id.uppercased(), detail: shader, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
         }
+        
+        if transaction.assetId > 0 {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.conf_asset_id.uppercased(), detail: "\(transaction.assetId )", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+        }
 
         
         if !transaction.comment.isEmpty && !isPaymentProof {
@@ -181,12 +185,16 @@ class DetailTransactionViewModel: TransactionViewModel {
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
 
         
-        if !transaction.isIncome && !transaction.isShielded {
+        if !transaction.isIncome && !transaction.isShielded && !transaction.isDapps {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
         }
         
-        if transaction.canCancel {
+        if transaction.canCancel && !transaction.isDapps {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.cancel_transaction, icon: nil, action: .cancel_transaction))
+        }
+        
+        if transaction.isDapps {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.open_dapp, icon: nil, action: .open_dapp))
         }
         
         if transaction.canDelete {
@@ -206,6 +214,23 @@ class DetailTransactionViewModel: TransactionViewModel {
             vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
             
             top.present(vc, animated: true)
+        }
+    }
+    
+    public func openDapp() {
+        if let apps = AppModel.sharedManager().apps as? [BMApp] {
+            if let find = apps.first(where: { a in
+                a.name == self.transaction?.appName
+            }) {
+                if let top = UIApplication.getTopMostViewController() {
+                    AppModel.sharedManager().startApp(top, app: find)
+                }
+            }
+            else {
+                UIApplication.getTopMostViewController()?.alert(title: Localizable.shared.strings.dapp_not_found_title, message: Localizable.shared.strings.dapp_not_found_text, handler: { _ in
+                    
+                })
+            }
         }
     }
     

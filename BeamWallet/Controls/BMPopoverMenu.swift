@@ -99,6 +99,7 @@ class BMPopoverMenu: NSObject {
         case share_online_token = 19
         case share_pool_token = 20
         case asset = 21
+        case open_dapp = 22
     }
     
     class BMPopoverMenuItem {

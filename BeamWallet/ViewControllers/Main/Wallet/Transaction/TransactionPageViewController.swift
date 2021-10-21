@@ -22,6 +22,13 @@ import UIKit
 
 class TransactionPageViewController: BaseTableViewController {
     
+    init(transaction: BMTransaction, preview: Bool = false) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.transaction = transaction
+        self.isPreview = preview
+    }
+    
     init(transaction: BMTransaction) {
         super.init(nibName: nil, bundle: nil)
         
@@ -42,6 +49,8 @@ class TransactionPageViewController: BaseTableViewController {
     private var titles = [Localizable.shared.strings.general, Localizable.shared.strings.payment_proof]
     
     private var controllers: [Int : Any] = [:]
+    
+    var isPreview = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,17 +84,25 @@ class TransactionPageViewController: BaseTableViewController {
         view.addSubview(pagingViewController.view)
         pagingViewController.didMove(toParent: self)
                 
-        setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
-       
-        title = Localizable.shared.strings.transaction.uppercased()
+        if !isPreview {
+            setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
+            
+            title = Localizable.shared.strings.transaction.uppercased()
+            
+            addRightButtons(image: [MoreIcon()], target: self, selector: [#selector(onMore)])
+        }
         
-        addRightButtons(image: [MoreIcon()], target: self, selector: [#selector(onMore)])
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        pagingViewController.view.frame = CGRect(x: 0, y: self.statusView.frame.size.height + self.statusView.frame.origin.y + 10, width: view.width, height: self.view.frame.size.height - (self.statusView.frame.size.height + self.statusView.frame.origin.y + 10))
+        if !isPreview {
+            pagingViewController.view.frame = CGRect(x: 0, y: self.statusView.frame.size.height + self.statusView.frame.origin.y + 10, width: view.width, height: self.view.frame.size.height - (self.statusView.frame.size.height + self.statusView.frame.origin.y + 10))
+        }
+        else {
+            pagingViewController.view.frame = CGRect(x: 0, y: -10, width: view.width, height: self.view.frame.size.height + 20)
+        }
     }
     
     @objc private func onMore(sender:UIBarButtonItem) {

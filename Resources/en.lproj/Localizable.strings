@@ -666,3 +666,7 @@ and never kept on the blockchain.";
 "address_expire_active_transaction" = "There is an active transaction for this address, therefore it cannot be expired.";
 "asset_id" = "Asset ID";
 "password_approve_transaction" = "To approve the transaction please enter your password";
+"open_dapp" = "Open the DAPP";
+"dapp_not_found_title" = "DAPP not found";
+"dapp_not_found_text" = "DAPP has been removed";
+"conf_asset_id" = "Confidential asset ID";

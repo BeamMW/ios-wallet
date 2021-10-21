@@ -38,9 +38,9 @@ class AddressTableView: UITableViewController {
         tableView.separatorStyle = .none
         tableView.register([BMEmptyCell.self, BMAddressCell.self])
         
-        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: tableView)
-        }
+//        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
+//            registerForPreviewing(with: self, sourceView: tableView)
+//        }
         
         subscribeToChages()
     }

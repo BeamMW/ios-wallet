@@ -96,11 +96,11 @@ class ShowTokenViewController: BaseTableViewController {
         if AppModel.sharedManager().isToken(token) {
             let params = AppModel.sharedManager().getTransactionParameters(token)
             
-            if(params.amount > 0) {
-                let asset = AssetsManager.shared().getAsset(Int32(params.assetId))?.unitName ?? "BEAM"
-                let amount = String.currency(value: params.amount, name: asset)
-                items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            }
+//            if(params.amount > 0) {
+//                let asset = AssetsManager.shared().getAsset(Int32(params.assetId))?.unitName ?? "BEAM"
+//                let amount = String.currency(value: params.amount, name: asset)
+//                items.append(BMMultiLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+//            }
             
             
             if !isNewStyle {

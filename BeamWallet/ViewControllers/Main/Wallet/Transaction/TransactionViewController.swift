@@ -175,6 +175,8 @@ class TransactionViewController: UITableViewController {
                     self.viewModel.share()
                 case .copy:
                     self.viewModel.copyDetails()
+                case .open_dapp:
+                    self.viewModel.openDapp()
                 default:
                     return
                 }

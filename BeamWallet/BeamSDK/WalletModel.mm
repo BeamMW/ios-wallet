@@ -322,6 +322,10 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
                             amount += contractFee;
                         }
                     }
+                    else {
+                        transaction.assetId = info.first;
+                        transaction.asset = [[AssetsManager sharedManager] getAsset:info.first];
+                    }
                     
                     transaction.realAmount = transaction.realAmount + (double(int64_t(amount)) / Rules::Coin);
                 }
