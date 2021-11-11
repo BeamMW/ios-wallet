@@ -27,7 +27,8 @@ enum {
     BMTransactionStatusCancelled = 2,
     BMTransactionStatusCompleted = 3,
     BMTransactionStatusFailed = 4,
-    BMTransactionStatusRegistering = 5
+    BMTransactionStatusRegistering = 5,
+    BMTransactionStatusConfirming = 6
 };
 typedef UInt64 BMTransactionStatus;
 

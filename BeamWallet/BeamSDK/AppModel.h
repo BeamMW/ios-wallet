@@ -219,6 +219,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 // send
 -(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount;
+-(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline;

@@ -46,7 +46,11 @@ class Device {
     }
     
     static var isXDevice: Bool {
-        return Device.screenType == .iPhone_XR || Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_X_XS
+        if #available(iOS 11.0, *) {
+            let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+            return keyWindow?.safeAreaInsets.bottom ?? 0 > 0
+        }
+        return false
     }
     
     static var isLarge: Bool {

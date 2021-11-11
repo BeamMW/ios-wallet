@@ -592,6 +592,10 @@ class LocalizableStrings : NSObject {
     var dapp_not_found_title = "dapp_not_found_title".localized
     var dapp_not_found_text = "dapp_not_found_text".localized
     var conf_asset_id = "conf_asset_id".localized
+    var sender_wallet_signature = "sender_wallet_signature".localized
+    var receiver_wallet_signature = "receiver_wallet_signature".localized
+    var shielded = "shielded".localized
+    var no_funds_dao = "no_funds_dao".localized
 
     
     public func new_version_available_title(version: String) -> String {

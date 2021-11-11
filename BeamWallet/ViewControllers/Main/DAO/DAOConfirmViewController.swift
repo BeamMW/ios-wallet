@@ -34,6 +34,8 @@ class DAOConfirmViewController: BaseViewController {
     @IBOutlet private weak var passField:BMField!
     @IBOutlet private weak var viewWidth:NSLayoutConstraint!
 
+    private var hintText:String? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +60,8 @@ class DAOConfirmViewController: BaseViewController {
 
             detailTitleLabel.text = Localizable.shared.strings.withdraw_to_wallet
         }
+        
+        hintText = hintLabel.text
         
         if let beam = AssetsManager.shared().getAsset(0) {
             let amount = Double(self.viewModel.info?.fee ?? "0") ?? 0.0
@@ -100,6 +104,17 @@ class DAOConfirmViewController: BaseViewController {
         cancelButton.setTitleColor(.white, for: .normal)
         
         passField.showEye = true
+        
+        if self.viewModel.isSpend {
+            let error = AppModel.sharedManager().sendError(Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0, assetId: Int32(self.viewModel.amountInfo?.assetID ?? 0), fee: Double(self.viewModel.info?.fee ?? "0.0") ?? 0.0, checkMinAmount: false)
+            
+            if error != nil {
+                self.hintLabel.textColor = UIColor.main.red
+                self.hintLabel.text = Localizable.shared.strings.no_funds_dao
+                self.confirmButton.alpha = 0.5
+                self.confirmButton.isUserInteractionEnabled = false
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -145,12 +160,30 @@ class DAOConfirmViewController: BaseViewController {
     }
     
     private func onSend() {
-        self.onConfirm?(self.viewModel.isSpend, self.viewModel.amountInfo?.assetID ?? 0, Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0)
-        self.navigationController?.popViewController(animated: true)
+        if self.viewModel.isSpend {
+            let error = AppModel.sharedManager().sendError(Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0, assetId: Int32(self.viewModel.amountInfo?.assetID ?? 0), fee: Double(self.viewModel.info?.fee ?? "0.0") ?? 0.0, checkMinAmount: false)
+            
+            if error != nil {
+                self.hintLabel.textColor = UIColor.main.red
+                self.hintLabel.text = Localizable.shared.strings.no_funds_dao
+                self.confirmButton.alpha = 0.5
+                self.confirmButton.isUserInteractionEnabled = false
+            }
+            else {
+                self.onConfirm?(self.viewModel.isSpend, self.viewModel.amountInfo?.assetID ?? 0, Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        else {
+            self.onConfirm?(self.viewModel.isSpend, self.viewModel.amountInfo?.assetID ?? 0, Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 }
 
 extension DAOConfirmViewController: UITextFieldDelegate {
+    
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

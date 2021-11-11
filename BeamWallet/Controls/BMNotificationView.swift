@@ -272,12 +272,12 @@ class BMNotificationView: UIView {
                         else if transaction.isMaxPrivacy {
                             title = Localizable.shared.strings.transaction_sent
                             icon = UIImage.init(named: "iconNotifictionsSentMaxPrivacy")
-                            detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: transaction.source(), failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: transaction.source(), failed: false)
                         }
                         else if transaction.isPublicOffline {
                             title = "Transaction sent to public offline"
                             icon = UIImage.init(named: "iconNotifictionsSendedOffline")
-                            detail = Localizable.shared.strings.transaction_receiving_notif_body(assetValue, address: "shielded pool", failed: false)
+                            detail = Localizable.shared.strings.muttableTransaction_sent_notif_body(assetValue, address: "shielded pool", failed: false)
                         }
                         else if transaction.isShielded
                         {

@@ -126,29 +126,31 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     @objc func showConfirmDialog(json:String, info:String, amount:String) {
-        self.jsonRequest = json
-        DispatchQueue.main.async {
-            let vc = DAOConfirmViewController()
-            vc.amountJson = amount
-            vc.infoJson = info
-            vc.app = self.app
-            vc.onReject = {
-                self.onRejected?(NSString(string: self.jsonRequest))
+        if amount.count > 5 {
+            DispatchQueue.main.async {
+                self.jsonRequest = json
+                let vc = DAOConfirmViewController()
+                vc.amountJson = amount
+                vc.infoJson = info
+                vc.app = self.app
+                vc.onReject = {
+                    self.onRejected?(NSString(string: self.jsonRequest))
+                }
+                vc.onConfirm = { isSpend, assetId, amount in
+                    let transaction = BMTransaction()
+                    transaction.isDapps = true
+                    transaction.enumStatus = BMTransactionStatus(BMTransactionStatusRegistering)
+                    transaction.appName = self.app.name
+                    transaction.isIncome = !isSpend
+                    transaction.assetId = Int32(assetId)
+                    transaction.asset = AssetsManager.shared().getAsset(Int32(assetId))
+                    transaction.realAmount = amount
+                    BMNotificationView.showTransaction(transaction: transaction, delegate: nil, delay: 0.0)
+                    
+                    self.onApproved?(NSString(string: self.jsonRequest))
+                }
+                self.pushViewController(vc: vc)
             }
-            vc.onConfirm = { isSpend, assetId, amount in
-                let transaction = BMTransaction()
-                transaction.isDapps = true
-                transaction.enumStatus = BMTransactionStatus(BMTransactionStatusRegistering)
-                transaction.appName = self.app.name
-                transaction.isIncome = !isSpend
-                transaction.assetId = Int32(assetId)
-                transaction.asset = AssetsManager.shared().getAsset(Int32(assetId))
-                transaction.realAmount = amount
-                BMNotificationView.showTransaction(transaction: transaction, delegate: nil, delay: 0.0)
-
-                self.onApproved?(NSString(string: self.jsonRequest))                
-            }
-            self.pushViewController(vc: vc)
         }
     }
     

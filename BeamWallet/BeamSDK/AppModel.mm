@@ -1424,8 +1424,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 }
             }
             
-            [[AppModel sharedManager] deleteAddress:_preparedDeleteAddresses[i]._id];
-            
+            NSString *_id = _preparedDeleteAddresses[i]._id;
+            if ([_id isEmpty] || _id == nil) {
+                [[AppModel sharedManager] addIgnoredContact:address];
+            }
+            else {
+                [[AppModel sharedManager] deleteAddress:_preparedDeleteAddresses[i]._id];
+            }
             [_preparedDeleteAddresses removeObjectAtIndex:i];
             
             break;
@@ -1460,8 +1465,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         [_transactions removeObjectsAtIndexes:set];
         
-              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onReceivedTransactions:)]) {
                 [delegate onReceivedTransactions:_transactions];
@@ -1593,10 +1598,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     for (BMTransaction *tr in array)
     {
-        if ([tr.senderAddress isEqualToString:address._id]
-            || [tr.receiverAddress isEqualToString:address._id]
-            || [tr.token isEqualToString:address.address]) {
-            [result addObject:tr];
+        if(address.identity.length > 2) {
+            if ([tr.senderIdentity isEqualToString:address.identity]
+                || [tr.receiverIdentity isEqualToString:address.identity]) {
+                [result addObject:tr];
+            }
+        }
+        else {
+            if([tr.token isEqualToString:address.address] && tr.token.length > 1) {
+                [result addObject:tr];
+            }
         }
     }
 
@@ -1638,7 +1649,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)editAddress:(BMAddress*_Nonnull)address {
     BMContact *contact = [self getContactFromId:address.walletId];
-    
+        
     if(contact != nil)
     {
         WalletID walletID(Zero);
@@ -1748,13 +1759,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
         [[NSUserDefaults standardUserDefaults] setObject:array forKey:ignoredContactsKey];
         
         
+        NSString *_identity = identidy;
+        
         BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
+        
+        if(_identity == nil) {
+            _identity = params.identity;
+        }
 
         WalletID walletID(Zero);
         walletID.FromHex(params.address.string);
             
         bool isValid = false;
-        auto buf = from_hex(identidy.string, &isValid);
+        auto buf = from_hex(_identity.string, &isValid);
         PeerID m_Identity = Blob(buf);
         
         WalletAddress savedAddress;
@@ -2069,6 +2086,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
         CopyParameter(TxParameterID::Voucher, _txParameters, params);
         params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, [Settings sharedManager].lockMaxPrivacyValue);
     }
+    
+//    if (!beam::wallet::CheckReceiverAddress(to.string)) {
+//        params.SetParameter(TxParameterID::OriginalToken, to.string);
+//    }
     
     params.SetParameter(TxParameterID::OriginalToken, to.string);
     

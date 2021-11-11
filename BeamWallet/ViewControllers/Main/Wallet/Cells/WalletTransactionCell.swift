@@ -19,7 +19,7 @@
 
 import UIKit
 
-class WalletTransactionCell: RippleCell {
+class WalletTransactionCell: UITableViewCell {
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var statusLabel: UILabel!
@@ -51,7 +51,7 @@ extension WalletTransactionCell: Configurable {
         
         if rate > 0 {
             let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(options.transaction.realRate), amount: options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
-            secondAvailableLabel.text = second
+            secondAvailableLabel.text = (options.transaction.isIncome ? "+" : "-") + second
         }
         else {
             secondAvailableLabel.text = ""

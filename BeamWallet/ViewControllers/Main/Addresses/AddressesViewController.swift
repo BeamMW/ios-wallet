@@ -30,6 +30,7 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         emptyView.text = Localizable.shared.strings.addresses_empty
         emptyView.image = IconAddressbookEmpty()
         
@@ -58,6 +59,7 @@ class AddressesViewController: BaseTableViewController {
         checkIsEmpty()
         
         AppModel.sharedManager().addDelegate(self)
+        AppModel.sharedManager().refreshContacts()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -28,7 +28,11 @@ class BMDetailAmountCell: BaseCell {
 
     @IBOutlet weak private var stackView: UIStackView!
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
-    @IBOutlet weak private var botOffset: NSLayoutConstraint!
+    
+    @IBOutlet weak private var assetIdView: UIView!
+    @IBOutlet weak private var assetIdLabel: UILabel!
+
+    var assetId:UInt64 = 0
     
     public var increaseSpace = false {
         didSet {
@@ -48,6 +52,14 @@ class BMDetailAmountCell: BaseCell {
         nameLabel.textColor = UIColor.main.blueyGrey
         nameLabel.textAlignment = .left
         nameLabel.adjustFontSize = true
+        
+        assetIdView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onAssetIdClicked)))
+    }
+    
+    @objc func onAssetIdClicked() {
+        if let url = URL(string: Settings.sharedManager().assetBlockchainUrl(Int32(self.assetId))) {
+            UIApplication.getTopMostViewController()?.openUrl(url: url)
+        }
     }
     
     func addDots() {
@@ -65,17 +77,29 @@ class BMDetailAmountCell: BaseCell {
         secondDetailLabel.text = item.subDetail
 
         if let asset = asset {
+            self.assetId = asset.assetId
+            
+            if asset.assetId == 0 {
+                assetIdView.isHidden = true
+            }
+            else {
+                assetIdView.isHidden = false
+            }
+            assetIdLabel.text = "\(asset.assetId)"
             iconView.setAsset(asset)
+        }
+        else {
+            assetIdView.isHidden = true
         }
         
         stackView.spacing = 10
         topOffset.constant = 15
         
         if item.subDetail.isEmpty {
-            botOffset.constant = 5
+            secondDetailLabel.isHidden = true
         }
         else {
-            botOffset.constant = 10
+            secondDetailLabel.isHidden = false
         }
     }
 }

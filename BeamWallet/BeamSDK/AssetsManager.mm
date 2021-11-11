@@ -47,7 +47,7 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         _assets = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:data error:nil];
     }
     
-    if (_assets == nil) {
+    if (_assets == nil || _assets.count == 0) {
         _assets = [[NSMutableArray alloc] init];
         
         BMAsset *asset = [[BMAsset alloc] init];

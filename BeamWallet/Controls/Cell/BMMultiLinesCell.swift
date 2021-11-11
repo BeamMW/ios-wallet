@@ -109,7 +109,8 @@ extension BMMultiLinesCell: Configurable {
     
     func configure(with item:BMMultiLineItem) {
         copyButton.setImage(UIImage(named: "iconCopyWhite"), for: .normal)
-        
+        copyButton.imageEdgeInsets = .zero
+
         valueLabel.isUserInteractionEnabled = item.canCopy
         valueLabel.copiedText = item.copiedText
         
@@ -187,56 +188,64 @@ extension BMMultiLinesCell: Configurable {
             copyButton.isHidden = false
             copyButton.setImage(UIImage(named: "iconExternalLinkGreen"), for: .normal)
         }
-        else if item.title == Localizable.shared.strings.my_send_address.uppercased() ||
-            item.title == Localizable.shared.strings.my_rec_address.uppercased() || item.title == Localizable.shared.strings.contact.uppercased() || item.title == Localizable.shared.strings.my_address.uppercased() || item.title == Localizable.shared.strings.sender.uppercased() || item.title == Localizable.shared.strings.receiver.uppercased() {
-
-            var attributedString = NSMutableAttributedString(string:item.detail!)
-
-            if let address = AppModel.sharedManager().findAddress(byID: item.detail!) {
+        else if item.title != nil {
+            if Localizable.shared.strings.sending_address.lowercased().contains(item.title.lowercased())
+                        || Localizable.shared.strings.receiving_address.lowercased().contains(item.title.lowercased()) {
                 
-                var fontSizeOffset:CGFloat = 0
                 
-                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
-                    fontSizeOffset = 1.0
-                }
-                else if Device.screenType == .iPhones_5{
-                    fontSizeOffset = -1.5
-                }
                 
-                if !address.label.isEmpty {
-                    attributedString = NSMutableAttributedString(string:"")
+                var attributedString = NSMutableAttributedString(string:item.detail!)
+                
+                if let address = AppModel.sharedManager().findAddress(byID: item.detail!) {
                     
-                    let style = NSMutableParagraphStyle()
-                    style.lineSpacing = 8
-                    style.lineBreakMode = .byCharWrapping
+                    var fontSizeOffset:CGFloat = 0
                     
-                    let style2 = NSMutableParagraphStyle()
-                    style2.lineSpacing = 0
-                    style2.lineBreakMode = .byCharWrapping
-
-                    let imageAttachment = NSTextAttachment()
-                    imageAttachment.image = IconContact()
-                    imageAttachment.bounds = CGRect(x: 0, y: -2, width: 16, height: 16)
-
-                    let imageString = NSAttributedString(attachment: imageAttachment)
+                    if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
+                        fontSizeOffset = 1.0
+                    }
+                    else if Device.screenType == .iPhones_5{
+                        fontSizeOffset = -1.5
+                    }
                     
-                    let nameString = NSMutableAttributedString(string:address.label)
-                    nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSMakeRange(0, nameString.string.count))
-                    
-                    let detailString = NSMutableAttributedString(string:item.detail!)
-                    detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSMakeRange(0, detailString.string.count))
-
-                    attributedString.append(imageString)
-                    attributedString.append(NSAttributedString(string: "  "))
-                    attributedString.append(nameString)
-                    attributedString.append(NSAttributedString(string: "\n"))
-                    attributedString.append(detailString)
-                   
-                    attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
+                    if !address.label.isEmpty {
+                        attributedString = NSMutableAttributedString(string:"")
+                        
+                        let style = NSMutableParagraphStyle()
+                        style.lineSpacing = 8
+                        style.lineBreakMode = .byCharWrapping
+                        
+                        let style2 = NSMutableParagraphStyle()
+                        style2.lineSpacing = 0
+                        style2.lineBreakMode = .byCharWrapping
+                        
+                        let imageAttachment = NSTextAttachment()
+                        imageAttachment.image = IconContact()
+                        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 16, height: 16)
+                        
+                        let imageString = NSAttributedString(attachment: imageAttachment)
+                        
+                        let nameString = NSMutableAttributedString(string:address.label)
+                        nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSMakeRange(0, nameString.string.count))
+                        
+                        let detailString = NSMutableAttributedString(string:item.detail!)
+                        detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSMakeRange(0, detailString.string.count))
+                        
+                        attributedString.append(imageString)
+                        attributedString.append(NSAttributedString(string: "  "))
+                        attributedString.append(nameString)
+                        attributedString.append(NSAttributedString(string: "\n"))
+                        attributedString.append(detailString)
+                        
+                        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
+                        
+                        copyButton.imageEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+                    }
                 }
+                valueLabel.attributedText = attributedString
             }
-            
-            valueLabel.attributedText = attributedString
+            else if item.detailAttributedString != nil {
+                valueLabel.attributedText = item.detailAttributedString
+            }
         }
         else if item.detailAttributedString != nil {
             valueLabel.attributedText = item.detailAttributedString

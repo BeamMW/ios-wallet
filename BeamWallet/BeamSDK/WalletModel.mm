@@ -176,23 +176,35 @@ void WalletModel::onStatus(const WalletStatus& status)
     }
 }
 
+//GetAddressTo
+//if (m_tx.m_sender)
+//{
+//    auto token = m_tx.getToken();
+//    if (token.length() == 0) {
+//        if(!m_tx.m_selfTx) {
+//            return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
+//        }
+//        return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+//    }
+//    auto params = beam::wallet::ParseParameters(token);
+//    if (auto peerIdentity = params->GetParameter<WalletID>(TxParameterID::PeerID); peerIdentity)
+//    {
+//        auto s = std::to_string(*peerIdentity);
+//        return [NSString stringWithUTF8String:s.c_str()];
+//    }
+//    return [NSString stringWithUTF8String:token.c_str()];
+//}
+//return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+
 NSString* WalletModel::GetAddressTo(TxDescription m_tx)
 {
     if (m_tx.m_sender)
     {
         auto token = m_tx.getToken();
         if (token.length() == 0) {
-            if(!m_tx.m_selfTx) {
-                return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
-            }
-            return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+            return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
         }
-        auto params = beam::wallet::ParseParameters(token);
-        if (auto peerIdentity = params->GetParameter<WalletID>(TxParameterID::PeerID); peerIdentity)
-        {
-            auto s = std::to_string(*peerIdentity);
-            return [NSString stringWithUTF8String:s.c_str()];
-        }
+        
         return [NSString stringWithUTF8String:token.c_str()];
     }
     return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
@@ -228,19 +240,13 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         auto kernelId = to_hex(item.m_kernelID.m_pData, item.m_kernelID.nBytes);
         std::string comment(item.m_message.begin(), item.m_message.end());
               
-        auto rate = item.getExchangeRate(currenCurrency);
         
         BMTransaction *transaction = [BMTransaction new];
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
         transaction.status = [GetTransactionStatusString(item, transaction.isIncome) lowercaseString];
-        if (item.m_status == TxStatus::Confirming) {
-            transaction.enumStatus = BMTransactionStatusInProgress;
-        }
-        else {
-            transaction.enumStatus = (UInt64)item.m_status;
-        }
+        transaction.enumStatus = (UInt64)item.m_status;
         transaction.enumType = (UInt64)item.m_txType;
         if (item.m_failureReason != TxFailureReason::Unknown) {
             transaction.failureReason = GetTransactionFailurString(item.m_failureReason);
@@ -253,7 +259,6 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.isSelf = item.m_selfTx;
         transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
         transaction.realFee = int64_t(item.m_fee);
-        transaction.realRate = int64_t(rate);
         transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
         transaction.canCancel = item.canCancel();
         transaction.canResume = item.canResume();
@@ -261,7 +266,6 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.comment = [NSString stringWithUTF8String:comment.c_str()];
         transaction.senderIdentity = [NSString stringWithUTF8String:item.getSenderIdentity().c_str()];
         transaction.receiverIdentity = [NSString stringWithUTF8String:item.getReceiverIdentity().c_str()];
-
         transaction.senderAddress = GetAddressFrom(item);
         transaction.receiverAddress = GetAddressTo(item);
         transaction.assetId = item.m_assetId;
@@ -377,6 +381,9 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
             }
         }
         
+        auto rate = item.getExchangeRate(currenCurrency, transaction.assetId);
+        transaction.realRate = int64_t(rate);
+
         transaction.token = [NSString stringWithUTF8String:item.getToken().c_str()];
         
         [transactions addObject:transaction];      
@@ -688,10 +695,20 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [contacts removeObjectsAtIndexes:set];
         
+        for(int j = 0; j < [contacts count]; j++){
+            for(int k = j+1;k < [contacts count];k++){
+                BMContact *str1 = [contacts objectAtIndex:j];
+                BMContact *str2 = [contacts objectAtIndex:k];
+                if([str1.address.identity isEqualToString:str2.address.identity]) {
+                    [contacts removeObjectAtIndex:k];
+                }
+            }
+        }
+        
         [[AppModel sharedManager] setContacts:contacts];
         
-      NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onContactsChange:)]) {
                 [delegate onContactsChange:contacts];
@@ -1115,6 +1132,16 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
     }
     
     if(hasContacts) {
+        for(int j = 0; j < [[AppModel sharedManager].contacts count]; j++){
+            for(int k = j+1;k < [[AppModel sharedManager].contacts count];k++){
+                BMContact *str1 = [[AppModel sharedManager].contacts objectAtIndex:j];
+                BMContact *str2 = [[AppModel sharedManager].contacts objectAtIndex:k];
+                if([str1.address.identity isEqualToString:str2.address.identity]) {
+                    [[AppModel sharedManager].contacts removeObjectAtIndex:k];
+                }
+            }
+        }
+        
         NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
         for(id<WalletModelDelegate> delegate in delegates)
         {
@@ -1677,7 +1704,7 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction, BOO
     bool isIncome = income;
     
     switch (transaction.m_status)
-    {        
+    {
         case TxStatus::Pending:
         {
             if (transaction.m_selfTx)
@@ -1693,10 +1720,7 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction, BOO
             return isIncome ? [[@"waiting_for_sender" localized]lowercaseString] : [[@"waiting_for_receiver" localized]lowercaseString];
         }
         case TxStatus::Confirming:{
-            if (transaction.m_selfTx)  {
-                return [[@"sending_to_own" localized] lowercaseString];
-            }
-            return isIncome ? [[@"in_progress" localized]lowercaseString] : [[@"in_progress" localized] lowercaseString];
+            return [[@"confirming" localized] lowercaseString];
         }
         case TxStatus::Registering:{
             if (transaction.m_selfTx)  {

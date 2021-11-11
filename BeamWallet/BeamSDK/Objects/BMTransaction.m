@@ -258,16 +258,26 @@
 }
 
 -(NSString*)statusType {
+    NSString *statusValue = @"";
+    
     if (_isPublicOffline) {
-        return [NSString stringWithFormat:@"%@ (%@ %@)", _status, [[@"public" localized]lowercaseString], [[@"offline" localized]lowercaseString]];
+        statusValue =  [NSString stringWithFormat:@"%@ (%@ %@)", _status, [[@"public" localized]lowercaseString], [[@"offline" localized]lowercaseString]];
     }
     else if (_isMaxPrivacy) {
-        return [NSString stringWithFormat:@"%@ (%@)", _status, [[@"maximum_anonymity" localized]lowercaseString]];
+        statusValue = [NSString stringWithFormat:@"%@ (%@)", _status, [[@"maximum_anonymity" localized]lowercaseString]];
     }
     else if (_isShielded || _enumType == BMTransactionTypePushTransaction){
-        return [NSString stringWithFormat:@"%@ (%@)", _status, [[@"offline" localized]lowercaseString]];
+        statusValue = [NSString stringWithFormat:@"%@ (%@)", _status, [[@"offline" localized]lowercaseString]];
     }
-    return _status;
+    else {
+        statusValue = _status;
+    }
+    
+    if (self.enumStatus == BMTransactionStatusConfirming) {
+        statusValue = [NSString stringWithFormat:@"%@ (%@)", statusValue, _minConfirmationsProgress];
+    }
+    
+    return statusValue;
 }
 
 -(NSString*_Nonnull)source {
@@ -311,10 +321,10 @@
     NSString *number = [[StringManager sharedManager] realAmountStringAsset:_asset value:_realAmount];
 
     if (_isIncome) {
-        return [NSString stringWithFormat:@"+ %@", number];
+        return [NSString stringWithFormat:@"+%@", number];
     }
     else {
-        return [NSString stringWithFormat:@"- %@", number];
+        return [NSString stringWithFormat:@"-%@", number];
     }
 }
 
@@ -338,6 +348,8 @@
                 switch (_enumStatus) {
                     case BMTransactionStatusCompleted:
                         return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
+                    case BMTransactionStatusConfirming:
+                        return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
                     default:
                         return !_isShielded ? [UIImage imageNamed:@"icon-seding-max-privacy-own"] : [UIImage imageNamed:@"icon-send-own-offline"];
                 }
@@ -350,6 +362,8 @@
             }
             else if (_isPublicOffline || _isMaxPrivacy) {
                 switch (_enumStatus) {
+                    case BMTransactionStatusConfirming:
+                        return [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     case BMTransactionStatusCompleted:
                         return [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     default:
@@ -366,6 +380,8 @@
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                     case BMTransactionStatusCompleted:
                         return [UIImage imageNamed:@"icon-received-max-privacy-offline"];
+                    case BMTransactionStatusConfirming:
+                        return [UIImage imageNamed:@"icon-received-max-privacy-offline"];
                     default:
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-offline"] : [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                 }
@@ -375,6 +391,8 @@
             if (_isSelf && !self.isFailed) {
                 switch (_enumStatus) {
                     case BMTransactionStatusCompleted:
+                        return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
+                    case BMTransactionStatusConfirming:
                         return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
                     default:
                         return !_isShielded ? [UIImage imageNamed:@"icon-seding-max-privacy-own"] : [UIImage imageNamed:@"icon-send-own-offline"];
@@ -406,6 +424,8 @@
                         return [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusCompleted:
                         return [UIImage imageNamed:@"icon-send-max-online"];
+                    case BMTransactionStatusConfirming:
+                        return [UIImage imageNamed:@"icon-send-max-online"];
                     default:
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                 }
@@ -419,6 +439,8 @@
                     case BMTransactionStatusRegistering:
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusCompleted:
+                        return _isShielded ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
+                    case BMTransactionStatusConfirming:
                         return _isShielded ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
                     default:
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
@@ -458,6 +480,8 @@
                 return [UIImage imageNamed:@"icon-sending-own"];
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-sent-own"];
+            case BMTransactionStatusConfirming:
+                return [UIImage imageNamed:@"icon-sent-own"];
             default:
                 return [UIImage imageNamed:@"icon-sent-own"];
         }
@@ -472,6 +496,8 @@
                 return [UIImage imageNamed:@"icon-receiving"];
             case BMTransactionStatusCompleted:
                 return [UIImage imageNamed:@"icon-received"];
+            case BMTransactionStatusConfirming:
+                return [UIImage imageNamed:@"icon-received"];
             default:
                 return [UIImage imageNamed:@"icon-receiving"];
         }
@@ -485,6 +511,8 @@
             case BMTransactionStatusInProgress:
                 return [UIImage imageNamed:@"icon-icon-sending"];
             case BMTransactionStatusCompleted:
+                return [UIImage imageNamed:@"icon-sent"];
+            case BMTransactionStatusConfirming:
                 return [UIImage imageNamed:@"icon-sent"];
             default:
                 return [UIImage imageNamed:@"icon-icon-sending"];

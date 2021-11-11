@@ -70,16 +70,34 @@ class DetailTransactionViewModel: TransactionViewModel {
         }
         
   
-        if (transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded) && transaction.isIncome && !transaction.isDapps  {
+        if isPaymentProof {
+            let isToken = AppModel.sharedManager().isToken(transaction.receiverAddress)
             
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            if isToken {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.sender_wallet_signature.uppercased(), detail: transaction.senderIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiver_wallet_signature.uppercased(), detail: transaction.receiverIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }            
+        }
+        else if (transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded) && transaction.isIncome && !transaction.isDapps  {
+            
+            if transaction.isIncome {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
+            else {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
             
             details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if(!transaction.isDapps) {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.sending_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
             
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            if transaction.isIncome {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
+            else {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
             
             details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
@@ -100,10 +118,10 @@ class DetailTransactionViewModel: TransactionViewModel {
         var amount = String.currency(value: transaction.realAmount, name: transaction.asset?.unitName ?? "")
 
         if transaction.isIncome {
-            amount = "+ " + amount
+            amount = "+" + amount
         }
         else {
-            amount = "- " + amount
+            amount = "-" + amount
         }
         
         
@@ -117,10 +135,10 @@ class DetailTransactionViewModel: TransactionViewModel {
             let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(transaction.realRate), amount: transaction.realAmount, assetID: UInt64(transaction.assetId))
             
             if transaction.isIncome {
-                rateString = "+ \(second) " + "(" + rateString + ")"
+                rateString = "+\(second) " + "(" + rateString + ")"
             }
             else {
-                rateString = "- \(second) " + "(" + rateString + ")"
+                rateString = "-\(second) " + "(" + rateString + ")"
             }
         }
         else {
@@ -141,12 +159,7 @@ class DetailTransactionViewModel: TransactionViewModel {
                 details.append(BMMultiLineItem(title: Localizable.shared.strings.app_shader_id.uppercased(), detail: shader, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
         }
-        
-        if transaction.assetId > 0 {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.conf_asset_id.uppercased(), detail: "\(transaction.assetId )", detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-        }
-
-        
+                
         if !transaction.comment.isEmpty && !isPaymentProof {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.desc.uppercased(), detail: transaction.comment, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }

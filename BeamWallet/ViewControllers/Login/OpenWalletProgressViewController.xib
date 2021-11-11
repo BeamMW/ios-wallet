@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,13 +37,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="Pob-fL-4oD">
-                    <rect key="frame" x="52" y="225.5" width="310" height="245"/>
+                    <rect key="frame" x="52" y="225.5" width="310" height="245.5"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logoNew" translatesAutoresizingMaskIntoConstraints="NO" id="tiL-BA-jJU">
                             <rect key="frame" x="74.5" y="0.0" width="161" height="160"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Creating wallet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZqN-A1-TIj">
-                            <rect key="frame" x="95" y="190" width="120" height="21"/>
+                            <rect key="frame" x="93.5" y="190" width="123.5" height="21.5"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -53,7 +53,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ptl-BF-NdL">
-                            <rect key="frame" x="155" y="226" width="0.0" height="0.0"/>
+                            <rect key="frame" x="155" y="226.5" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                             <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>
@@ -62,7 +62,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YX2-nC-HFt">
-                            <rect key="frame" x="28.5" y="241" width="253" height="4"/>
+                            <rect key="frame" x="28.5" y="241.5" width="253" height="4"/>
                             <subviews>
                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bZD-dB-5UV">
                                     <rect key="frame" x="-2" y="0.0" width="257" height="4"/>
@@ -91,7 +91,7 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tzy-Nw-Qka">
-                            <rect key="frame" x="0.0" y="245" width="310" height="0.0"/>
+                            <rect key="frame" x="0.0" y="245.5" width="310" height="0.0"/>
                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                             <color key="textColor" red="1" green="0.38431372549999998" blue="0.36078431370000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>
@@ -100,7 +100,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOp-KF-vke">
-                            <rect key="frame" x="-101" y="245" width="512" height="0.0"/>
+                            <rect key="frame" x="-86.5" y="245.5" width="483" height="0.0"/>
                             <string key="text">Only the wallet balance (UTXO) can be restored,  transaction info is always private
 and never kept in the blockchain.</string>
                             <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
@@ -140,7 +140,7 @@ and never kept in the blockchain.</string>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.30000001192092896" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 1.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GU4-Iw-o1B">
-                    <rect key="frame" x="177.5" y="838" width="59.5" height="14"/>
+                    <rect key="frame" x="179.5" y="837.5" width="55.5" height="14.5"/>
                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -164,7 +164,7 @@ and never kept in the blockchain.</string>
     </objects>
     <designables>
         <designable name="FIX-uE-nue">
-            <size key="intrinsicContentSize" width="53" height="17"/>
+            <size key="intrinsicContentSize" width="55" height="17"/>
         </designable>
     </designables>
     <resources>

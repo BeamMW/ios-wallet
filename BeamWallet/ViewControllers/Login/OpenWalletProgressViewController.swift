@@ -41,7 +41,8 @@ class OpenWalletProgressViewController: BaseViewController {
     private var onlyConnect = false
 
     public var cancelCallback : (() -> Void)?
-
+    public var isRescan = false
+    
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
@@ -83,7 +84,13 @@ class OpenWalletProgressViewController: BaseViewController {
         
         if onlyConnect {
             if AppModel.sharedManager().isLoggedin {
-                if Settings.sharedManager().isNodeProtocolEnabled {
+                if self.isRescan {
+                    cancelButton.isHidden = true
+                    cancelButton.alpha = 0
+                    cancelButton.isUserInteractionEnabled = false
+                    progressTitleLabel.text = Localizable.shared.strings.rescan
+                }
+                else if Settings.sharedManager().isNodeProtocolEnabled {
                     progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
                 }
                 else {

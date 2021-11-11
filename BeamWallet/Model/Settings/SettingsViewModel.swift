@@ -427,6 +427,12 @@ extension SettingsViewModel {
                 
             }) { _ in
                 AppModel.sharedManager().rescan()
+                
+                let vc = OpenWalletProgressViewController(onlyConnect: true)
+                vc.isRescan = true
+                vc.cancelCallback = {
+                }
+                top.pushViewController(vc: vc)
             }
         }
     }
