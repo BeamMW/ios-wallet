@@ -30,6 +30,7 @@ class WalletModel : public beam::wallet::WalletClient
 public:
     using Ptr = std::shared_ptr<WalletModel>;
 
+  //  WalletClient(const beam::Rules& rules, beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     WalletModel(beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
     

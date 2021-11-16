@@ -36,7 +36,13 @@ class WalletTransactionCell: RippleCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        self.selectedBackgroundView = UIView()
         selectionStyle = .none
+    }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        print("SET \(highlighted)")
     }
 }
 

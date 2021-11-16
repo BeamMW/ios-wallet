@@ -19,7 +19,7 @@
 
 import UIKit
 
-class WalletTransactionSearchCell: RippleCell {
+class WalletTransactionSearchCell: UITableViewCell {
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var statusLabel: UILabel!

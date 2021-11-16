@@ -22,7 +22,8 @@
 #import "AppModel.h"
 #include "wallet/core/wallet.h"
 
-static NSString *assetsKey = @"assetsKeyNew";
+static NSString *assetsKey = @"assetsKeyNew_21";
+
 
 NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff746b",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
 
@@ -62,12 +63,35 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         asset.site = @"";
         asset.paper = @"";
         [_assets addObject:asset];
+
+        BMAsset *beamX = [[BMAsset alloc] init];
+        if ([[Settings sharedManager] target] == Testnet) {
+            beamX.assetId = 12;
+        }
+        else if ([[Settings sharedManager] target] == Masternet) {
+            beamX.assetId = 31;
+        }
+        beamX.nthUnitName = @"BEAMX";
+        beamX.unitName = @"BEAMX";
+        beamX.color = @"#977dff";
+        beamX.shortName = @"BEAMX";
+        beamX.shortDesc = @"";
+        beamX.longDesc = @"";
+        beamX.site = @"";
+        beamX.paper = @"";
+        [_assets addObject:beamX];
     }
     
     return self;
 }
 
 -(NSString*_Nonnull)getAssetColor:(int)value {
+    if (value == 12 && [[Settings sharedManager] target] == Testnet) {
+        return  @"#977dff";
+    }
+    else if (value == 31 && [[Settings sharedManager] target] == Masternet) {
+        return  @"#977dff";
+    }
     int idx = (value % colors.count);
     return colors[idx];
 }

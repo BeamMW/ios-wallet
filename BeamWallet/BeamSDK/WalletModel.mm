@@ -565,6 +565,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         NSMutableArray <BMContact*>*contacts = [[NSMutableArray alloc] init];
 
+        BOOL isOwn = [[AppModel sharedManager] checkIsOwnNode];
+        
         for (const auto& walletAddr : addrs)
         {
             BMAddress *address = [[BMAddress alloc] init];
@@ -579,7 +581,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
                 BMContact *contact = [[BMContact alloc] init];
                 contact.address = address;
                 contact.name = address.label;
-                
+                                
                 [contacts addObject:contact];
             }
         }
