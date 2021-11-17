@@ -20,25 +20,32 @@
 import UIKit
 
 class AssetIconView: BMGradientView {
-
+    
     private let imageView = UIImageView(image: UIImage(named: "ic_asset"))
+    private let verify = UIImageView(image: UIImage(named: "ic_verify-1"))
+    
     public var isBig = false
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        verify.frame = CGRect(x: self.width-10, y: -3, width: 13, height: 13)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         self.cornerRadius = self.frame.width/2
-
+        
         self.addSubview(imageView)
     }
     
     public func setAsset(_ asset:BMAsset) {
+        verify.removeFromSuperview()
+        
         if isBig {
             if asset.isBeamX() {
+                addSubview(verify)
                 imageView.frame = self.bounds
                 imageView.image = UIImage(named: "assetbeamx")
             }
@@ -53,6 +60,7 @@ class AssetIconView: BMGradientView {
         }
         else {
             if asset.isBeamX() {
+                addSubview(verify)
                 imageView.frame = self.bounds
                 imageView.image = UIImage(named: "assetbeamx")
             }
@@ -64,22 +72,22 @@ class AssetIconView: BMGradientView {
                 imageView.image = UIImage(named: "ic_asset")
                 imageView.frame = CGRect(x:7, y: 7, width: 12, height: 10)
             }
-        }
-        
-        self.gradientLayer.type = .radial
-        self.gradientLayer.colors = [
-            UIColor(hexString: asset.color).withAlphaComponent(0.7).cgColor,
-            UIColor.black]
-        self.gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
-        self.gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        
-        self.borderWidth = 2
-        self.borderColor = UIColor(hexString: asset.color)
-        
-        if asset.isBeamX() {
-            self.borderWidth = 0
-            self.gradientLayer.colors = nil
+            
+            self.gradientLayer.type = .radial
+            self.gradientLayer.colors = [
+                UIColor(hexString: asset.color).withAlphaComponent(0.7).cgColor,
+                UIColor.black]
+            self.gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
+            self.gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+            
+            self.borderWidth = 2
+            self.borderColor = UIColor(hexString: asset.color)
+            
+            if asset.isBeamX() {
+                self.borderWidth = 0
+                self.gradientLayer.colors = nil
+            }
         }
     }
-
 }
+

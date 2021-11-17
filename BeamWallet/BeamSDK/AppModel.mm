@@ -70,7 +70,7 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-#import "BeamWalletMasterNet-Swift.h"
+#import "BeamWallet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -2083,8 +2083,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
 
     if (type == TxAddressType::MaxPrivacy) {
+        uint64_t limit = 64;
         CopyParameter(TxParameterID::Voucher, _txParameters, params);
-        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, [Settings sharedManager].lockMaxPrivacyValue);
+        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, limit);
     }
     
 //    if (!beam::wallet::CheckReceiverAddress(to.string)) {

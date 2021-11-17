@@ -1631,7 +1631,9 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
             else if(asset.assetId == 5 && [Settings.sharedManager target] == Masternet) {
                 asset.color = @"#977dff";
             }
-
+            else if(asset.assetId == 7 && [Settings.sharedManager target] == Mainnet) {
+                asset.color = @"#977dff";
+            }
             [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
         }
     }

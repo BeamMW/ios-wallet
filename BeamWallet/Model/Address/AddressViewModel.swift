@@ -99,8 +99,17 @@ class AddressViewModel: NSObject {
                 for (index, element) in self.addresses.enumerated() {
                     self.addresses[index].displayAddress = element._id
                 }
-
+                
+                for (index, element) in self.contacts.enumerated() {
+                    let params = AppModel.sharedManager().getTransactionParameters(element.address.address ?? "")
+                    if params.isMaxPrivacy {
+                        self.contacts[index].address.displayAddress = element.address.address
+                    }
+                }
             }
+            
+         
+            
             self.onDataChanged?()
         }
     }

@@ -126,7 +126,7 @@
 }
 
 -(BOOL)isBeamX {
-    return _assetId == 31;
+    return _assetId == 7;
 }
 
 -(double)USD {
