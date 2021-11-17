@@ -22,9 +22,18 @@ class ReceiveTokenCell: BaseCell {
     @IBOutlet private var nameLabel: UILabel!
     @IBOutlet private var detailLabel: BMCopyLabel!
     @IBOutlet private var detailButton: UIButton!
-    
+    @IBOutlet private var hintLabel: UILabel!
+    @IBOutlet private var hintLabelTopOffset: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        if Settings.sharedManager().isDarkMode {
+            hintLabel.textColor = UIColor.main.steel;
+        }
+        else {
+            hintLabel.textColor = UIColor.main.blueyGrey
+        }
         
         selectionStyle = .none
         allowHighlighted = false
@@ -59,9 +68,12 @@ class ReceiveTokenCell: BaseCell {
         }
     }
     
-    func configure(with value: String, title:String) {
+    func configure(with value: String, title:String, showHint:Bool) {
         detailLabel.text = value
         nameLabel.text = title
         nameLabel.letterSpacing = 2
+        hintLabel.isHidden = !showHint
+        hintLabel.text = showHint ? Localizable.shared.strings.receive_address_hint : nil
+        hintLabelTopOffset.constant = showHint ? 10 : 0
     }
 }

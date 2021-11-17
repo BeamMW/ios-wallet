@@ -24,10 +24,10 @@ class WalletViewController: BaseTableViewController {
     private let transactionViewModel = TransactionViewModel()
     private let statusViewModel = StatusViewModel()
     private let assetViewModel = AssetViewModel()
-
+    
     private let maximumAssetsCount = 4
     private let maximumTransactionsCount = 4
-
+    
     deinit {
         Settings.sharedManager().removeDelegate(self)
     }
@@ -47,30 +47,22 @@ class WalletViewController: BaseTableViewController {
         tableView.addPullToRefresh(target: self, handler: #selector(refreshData(_:)))
         
         AppModel.sharedManager().isLoggedin = true
-                        
+        
         Settings.sharedManager().addDelegate(self)
-                
+        
         rightButton()
         
         subscribeToUpdates()
         
-        AppModel.sharedManager().loadApps()
-        
-      //  if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
-            //registerForPreviewing(with: self, sourceView: view)
-       // }
-        
-        if #available(iOS 13.0, *) {
-            let interaction = UIContextMenuInteraction(delegate: self)
-            tableView.addInteraction(interaction)
+                
+        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-       // AppModel.sharedManager().startTestApp(self)
-
         if WithdrawViewModel.isOpenFromGame {
             WithdrawViewModel.isOpenFromGame = false
             
@@ -79,7 +71,7 @@ class WalletViewController: BaseTableViewController {
         }
         else if !NotificationManager.sharedManager.clickedTransaction.isEmpty {
             if let transaction = transactionViewModel.transactions.first(where: { $0.id == NotificationManager.sharedManager.clickedTransaction }) {
-                let vc = TransactionPageViewController(transaction: transaction)
+                let vc = TransactionViewController(transaction: transaction)
                 pushViewController(vc: vc)
             }
             
@@ -233,7 +225,7 @@ extension WalletViewController: UITableViewDelegate {
         }
         return BMTableHeaderTitleView.height
     }
-        
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         return transactionViewModel.trailingSwipeActions(indexPath: indexPath)
     }
@@ -242,7 +234,7 @@ extension WalletViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
-            let vc = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row])
+            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
             pushViewController(vc: vc)
         }
         else if indexPath.section == 1 {
@@ -250,7 +242,7 @@ extension WalletViewController: UITableViewDelegate {
             pushViewController(vc: vc)
         }
     }
-        
+    
     @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
@@ -322,7 +314,7 @@ extension WalletViewController: UITableViewDelegate {
 }
 
 extension WalletViewController: UITableViewDataSource {
-   
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 2, transactionViewModel.transactions.count > 0 {
             let header = BMTableHeaderTitleView(title: Localizable.shared.strings.transactions.uppercased(), handler: #selector(onMore), target: self)
@@ -422,7 +414,7 @@ extension WalletViewController: WalletStatusCellDelegate {
 
 
 extension WalletViewController: SettingsModelDelegate {
-  
+    
     func onChangeHideAmounts() {
         rightButton()
         
@@ -433,7 +425,7 @@ extension WalletViewController: SettingsModelDelegate {
 extension WalletViewController: UIViewControllerPreviewingDelegate {
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-       
+        
         if transactionViewModel.transactions.count > 0 {
             guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
             
@@ -506,7 +498,6 @@ extension WalletViewController: OnboardCellDelegate {
     }
 }
 
-
 extension WalletViewController: UIContextMenuInteractionDelegate {
     
     @available(iOS 13.0, *)
@@ -522,7 +513,7 @@ extension WalletViewController: UIContextMenuInteractionDelegate {
         
         let targetedPreview = UITargetedPreview(view: cell)
         targetedPreview.parameters.backgroundColor = .clear
-
+        
         return targetedPreview
     }
     
@@ -538,7 +529,7 @@ extension WalletViewController: UIContextMenuInteractionDelegate {
         
         let targetedPreview = UITargetedPreview(view: cell)
         targetedPreview.parameters.backgroundColor = .clear
-
+        
         return targetedPreview
     }
     

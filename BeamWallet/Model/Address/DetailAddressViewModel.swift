@@ -57,16 +57,17 @@ class DetailAddressViewModel: AddressViewModel {
         let isOwn = AppModel.sharedManager().checkIsOwnNode()
 
         if !isOwn {
-            self.address?.displayAddress = self.address?._id
-
             if isContact {
                 let params = AppModel.sharedManager().getTransactionParameters(self.address?.address ?? "")
-                
-                if params.newAddressType == BMAddressTypeMaxPrivacy  {
+                if params.isMaxPrivacy {
                     self.address?.displayAddress = self.address?.address
                 }
             }
+            else {
+                self.address?.displayAddress = self.address?._id
+            }
         }
+        
         
         let displayAddress = self.address?.displayAddress ?? self.address!.walletId
         

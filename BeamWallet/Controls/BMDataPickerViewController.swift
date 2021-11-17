@@ -31,6 +31,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case notifications
         case sendCurrency
         case max_privacy_lock
+        case confirmations
     }
     
     private var type: DataType!
@@ -85,7 +86,10 @@ class BMDataPickerViewController: BaseTableViewController {
         case .notifications:
             title = Localizable.shared.strings.notifications
         case .max_privacy_lock:
-            title = Localizable.shared.strings.lock_time_limit
+            title = Localizable.shared.strings.transaction_time_max_privacy
+        case .confirmations:
+            title = Localizable.shared.strings.confirmations
+            tableView.tableFooterView = footerView(text: Localizable.shared.strings.confirmations_hint)
         default:
             title = String.empty()
         }
@@ -103,6 +107,33 @@ class BMDataPickerViewController: BaseTableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
+    }
+    
+    private func footerView(text:String)-> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
+        
+        let infoLabel = UILabel()
+        infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0)
+        infoLabel.numberOfLines = 0
+        infoLabel.text = text
+        infoLabel.font = ItalicFont(size: 14)
+        infoLabel.textAlignment = .center
+        if Settings.sharedManager().isDarkMode {
+            infoLabel.textColor = UIColor.main.steel;
+        }
+        else {
+            infoLabel.textColor = UIColor.main.blueyGrey
+        }
+        
+        infoLabel.adjustFontSize = true
+        infoLabel.sizeToFit()
+        infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: infoLabel.frame.size.height)
+        
+        view.addSubview(infoLabel)
+        
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: infoLabel.frame.origin.y + infoLabel.frame.size.height + 40)
+        
+        return view
     }
     
     @objc private func onRightButton() {
@@ -216,7 +247,7 @@ class BMDataPickerViewController: BaseTableViewController {
             }
         case .address_expire:
           //  values.append(BMPickerData(title: Localizable.shared.strings.as_set, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: selectedValue))
-            values.append(BMPickerData(title: Localizable.shared.strings.in_24_hours_now, detail: nil, titleColor: UIColor.white, arrowType: selectedValue as! Int32 == 24 ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(24)))
+            values.append(BMPickerData(title: Localizable.shared.strings.extend, detail: nil, titleColor: UIColor.white, arrowType: selectedValue as! Int32 == 24 ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(24)))
             values.append(BMPickerData(title: Localizable.shared.strings.never, detail: nil, titleColor: UIColor.white, arrowType: selectedValue as! Int32 == 0 ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Int32(0)))
         case .clear:
             values.append(BMPickerData(title: Localizable.shared.strings.delete_all_addresses, detail: nil, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.unselected, unique: 1, multiplie: true))
@@ -257,8 +288,14 @@ class BMDataPickerViewController: BaseTableViewController {
         case .max_privacy_lock:
             let locks = Settings.sharedManager().maxPrivacyLockValues()
             for lock in locks {
-                values.append(BMPickerData(title: lock.name, detail: nil, titleColor: UIColor.white, arrowType: (lock.hours == Settings.sharedManager().lockMaxPrivacyValue) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: lock.hours))
+                values.append(BMPickerData(title: lock.detail, detail: nil, titleColor: UIColor.white, arrowType: (lock.hours == Settings.sharedManager().lockMaxPrivacyValue) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: lock.hours))
             }
+        case .confirmations:
+            for n in 0...10 {
+                let value = UInt32(n)
+                values.append(BMPickerData(title: "\(n)", detail: nil, titleColor: UIColor.white, arrowType: (value == Settings.sharedManager().minConfirmations) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: value))
+            }
+
         default:
             break
         }
@@ -318,6 +355,10 @@ class BMDataPickerViewController: BaseTableViewController {
             completion?(data.unique)
             
             back()
+        case .confirmations:
+            completion?(data.unique)
+            back()
+            
         default:
             break
         }

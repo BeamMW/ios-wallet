@@ -30,7 +30,6 @@ class WalletModel : public beam::wallet::WalletClient
 public:
     using Ptr = std::shared_ptr<WalletModel>;
 
-  //  WalletClient(const beam::Rules& rules, beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     WalletModel(beam::wallet::IWalletDB::Ptr walletDB, const std::string& nodeAddr, beam::io::Reactor::Ptr reactor);
     ~WalletModel() override;
     
@@ -46,12 +45,13 @@ private:
     NSString *GetAddressTo(beam::wallet::TxDescription transaction);
     NSString *GetAddressFrom(beam::wallet::TxDescription transaction);
     NSString *GetErrorString(beam::wallet::ErrorType type);
-    NSString *GetTransactionStatusString(beam::wallet::TxDescription transaction);
+    NSString *GetTransactionStatusString(beam::wallet::TxDescription transaction, BOOL income);
     NSString *GetTransactionFailurString(beam::wallet::TxFailureReason reason);
     NSString *GetUTXOStatusString(beam::wallet::Coin coin);
     NSString *GetUTXOTypeString(beam::wallet::Coin coin);
     NSString *GetShildedUTXOStatusString(beam::wallet::ShieldedCoin coin);
     NSString *GetShildedUTXOTypeString(beam::wallet::ShieldedCoin coin);
+    NSString *GetConfirmationProgress(beam::wallet::TxDescription transaction, uint32_t minConfirmations);
     int getCurrency(beam::wallet::Currency currency);
     
     void doFunction(const std::function<void()>& func);

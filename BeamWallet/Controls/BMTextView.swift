@@ -21,47 +21,47 @@
 import UIKit
 
 class BMTextView: UITextViewPlacholder {
-    
-    var line = UIView()
-    
-    public var defaultOffset:CGFloat = 12
+        
+    private var bgView = UIView()
 
-    private var _lineColor:UIColor?
-    private var _lineHeight:CGFloat = 2
-    
-    @IBInspectable
-    var lineColor: UIColor? {
-        get {
-            return _lineColor
-        }
-        set{
-            _lineColor = newValue
-            line.backgroundColor = _lineColor
-        }
+    enum Status {
+        case normal
+        case error
     }
     
-    @IBInspectable
-    var lineHeight: CGFloat {
-        get {
-            return _lineHeight
-        }
-        set{
-            _lineHeight = newValue
-            layoutSubviews()
+    var status: Status?  {
+        didSet {
+            switch status {
+            case .error?:
+                self.textColor = UIColor.main.red
+                self.bgView.backgroundColor = UIColor.main.red.withAlphaComponent(0.15)
+                self.layoutSubviews()
+            case .normal?:
+                if self.isInput {
+                    self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+                }
+                else {
+                    self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+                }
+                self.textColor = UIColor.white
+            case .none:
+                break
+            }
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        if lineColor == nil {
-            line.backgroundColor = UIColor.main.marineThree
-        }
         
-        addSubview(line)
+        bgView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.frame.size.height))
+        bgView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        bgView.cornerRadius = 10
+        bgView.isUserInteractionEnabled = false
+        self.insertSubview(bgView, at: 0)
         
         textContainer.lineFragmentPadding = 0
-        contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        textContainerInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
         
         tintColor = UIColor.white
         tintColorDidChange()
@@ -76,18 +76,14 @@ class BMTextView: UITextViewPlacholder {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if self.frame.size.height <= 42 {
-            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - defaultOffset + 4, width: self.frame.size.width, height: lineHeight)
-        }
-        else{
-            line.frame = CGRect(x: 0, y: self.frame.size.height - lineHeight - 4, width: self.frame.size.width, height: lineHeight)
-        }
-        
+        bgView.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
+
         clearButton.frame = CGRect(x: self.width - 25, y: 8, width: 20, height: 20)
     }
     
     override func becomeFirstResponder() -> Bool {
         isInput = true
+        self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
 
         if let text = self.attributedText, text.string.isEmpty == false {
             clearButton.isHidden = false
@@ -95,11 +91,11 @@ class BMTextView: UITextViewPlacholder {
         }
         else if let text = self.text, text.isEmpty == false {
             clearButton.isHidden = false
-            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 15)
         }
         else if alwaysVisibleClearButton {
             clearButton.isHidden = false
-            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
+            textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 15)
         }
 
         return super.becomeFirstResponder()
@@ -107,9 +103,10 @@ class BMTextView: UITextViewPlacholder {
     
     override func resignFirstResponder() -> Bool {
         isInput = false
-        
+        self.bgView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+
         clearButton.isHidden = true
-        textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 0)
+        textContainerInset = UIEdgeInsets(top: textContainerInset.top, left: textContainerInset.left, bottom: textContainerInset.bottom, right: 15)
 
         return super.resignFirstResponder()
     }

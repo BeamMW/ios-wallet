@@ -439,7 +439,7 @@ extension SeedPhraseViewController: UICollectionViewDelegateFlowLayout {
         
         let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
         
-        let height = (event == .intro) ? introHeight(row: indexPath.row) : 38
+        let height = (event == .intro) ? introHeight(row: indexPath.row) : 55
         
         return CGSize(width: size, height: height)
     }

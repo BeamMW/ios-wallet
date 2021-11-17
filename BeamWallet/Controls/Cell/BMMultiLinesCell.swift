@@ -29,6 +29,7 @@ class BMMultiLinesCell: BaseCell {
     @IBOutlet weak private var stackView: UIStackView!
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var botOffset: NSLayoutConstraint!
+    @IBOutlet weak private var copyButton: UIButton!
 
     public var increaseSpace = false {
         didSet {
@@ -59,6 +60,12 @@ class BMMultiLinesCell: BaseCell {
         selectionStyle = .none
     }
     
+    func addDots() {
+        let text = (nameLabel.text ?? "") + ":"
+        nameLabel.text = text
+        nameLabel.letterSpacing = 2
+    }
+    
     @objc private func titleLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         
         if let text = self.valueLabel.attributedText {
@@ -81,11 +88,29 @@ class BMMultiLinesCell: BaseCell {
             }
         }
     }
+    
+    @IBAction private func onCopyButton() {
+        if (nameLabel.text ?? "").contains(Localizable.shared.strings.kernel_id.uppercased()) {
+            self.delegate?.onClickToCell(cell: self)
+        }
+        else if let text = valueLabel.copyText {
+            UIPasteboard.general.string = text
+            if AppModel.sharedManager().isValidAddress(text) {
+                ShowCopied(text: Localizable.shared.strings.address_copied)
+            }
+            else {
+                ShowCopied()
+            }
+        }
+    }
 }
 
 extension BMMultiLinesCell: Configurable {
     
     func configure(with item:BMMultiLineItem) {
+        copyButton.setImage(UIImage(named: "iconCopyWhite"), for: .normal)
+        copyButton.imageEdgeInsets = .zero
+
         valueLabel.isUserInteractionEnabled = item.canCopy
         valueLabel.copiedText = item.copiedText
         
@@ -111,6 +136,13 @@ extension BMMultiLinesCell: Configurable {
         }
         else if item.title == nil {
             nameLabel.isHidden = true
+        }
+        
+        if item.showCopyButton == true {
+            copyButton.isHidden = false
+        }
+        else {
+            copyButton.isHidden = true
         }
         
         nameLabel.letterSpacing = 2
@@ -153,77 +185,67 @@ extension BMMultiLinesCell: Configurable {
             valueLabel.attributedText = att
         }
         else if item.title == Localizable.shared.strings.kernel_id.uppercased() {
-            
-            if !(item.detail?.contains("00000000"))! {
-                valueLabel.isUserInteractionEnabled = true
+            copyButton.isHidden = false
+            copyButton.setImage(UIImage(named: "iconExternalLinkGreen"), for: .normal)
+        }
+        else if item.title != nil {
+            if Localizable.shared.strings.sending_address.lowercased().contains(item.title.lowercased())
+                        || Localizable.shared.strings.receiving_address.lowercased().contains(item.title.lowercased()) {
                 
-                let text = item.detail! + "\n" + Localizable.shared.strings.open_in_explorer
-                let range = (text as NSString).range(of: String(Localizable.shared.strings.open_in_explorer))
                 
-                let imageAttachment = NSTextAttachment()
-                imageAttachment.image = ExternalLinkGreen()
-                let imageString = NSAttributedString(attachment: imageAttachment)
                 
-                let attributedString = NSMutableAttributedString(string:text)
-                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightTeal , range: range)
-                attributedString.addAttribute(NSAttributedString.Key.font, value: RegularFont(size: 14) , range: range)
-
-                attributedString.append(NSAttributedString(string: " "))
-                attributedString.append(imageString)
+                var attributedString = NSMutableAttributedString(string:item.detail!)
                 
+                if let address = AppModel.sharedManager().findAddress(byID: item.detail!) {
+                    
+                    var fontSizeOffset:CGFloat = 0
+                    
+                    if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
+                        fontSizeOffset = 1.0
+                    }
+                    else if Device.screenType == .iPhones_5{
+                        fontSizeOffset = -1.5
+                    }
+                    
+                    if !address.label.isEmpty {
+                        attributedString = NSMutableAttributedString(string:"")
+                        
+                        let style = NSMutableParagraphStyle()
+                        style.lineSpacing = 8
+                        style.lineBreakMode = .byCharWrapping
+                        
+                        let style2 = NSMutableParagraphStyle()
+                        style2.lineSpacing = 0
+                        style2.lineBreakMode = .byCharWrapping
+                        
+                        let imageAttachment = NSTextAttachment()
+                        imageAttachment.image = IconContact()
+                        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 16, height: 16)
+                        
+                        let imageString = NSAttributedString(attachment: imageAttachment)
+                        
+                        let nameString = NSMutableAttributedString(string:address.label)
+                        nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSMakeRange(0, nameString.string.count))
+                        
+                        let detailString = NSMutableAttributedString(string:item.detail!)
+                        detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSMakeRange(0, detailString.string.count))
+                        
+                        attributedString.append(imageString)
+                        attributedString.append(NSAttributedString(string: "  "))
+                        attributedString.append(nameString)
+                        attributedString.append(NSAttributedString(string: "\n"))
+                        attributedString.append(detailString)
+                        
+                        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
+                        
+                        copyButton.imageEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+                    }
+                }
                 valueLabel.attributedText = attributedString
             }
-        }
-        else if item.title == Localizable.shared.strings.my_send_address.uppercased() ||
-            item.title == Localizable.shared.strings.my_rec_address.uppercased() || item.title == Localizable.shared.strings.contact.uppercased() || item.title == Localizable.shared.strings.my_address.uppercased() || item.title == Localizable.shared.strings.sender.uppercased() || item.title == Localizable.shared.strings.receiver.uppercased() {
-
-            var attributedString = NSMutableAttributedString(string:item.detail!)
-
-            if let address = AppModel.sharedManager().findAddress(byID: item.detail!) {
-                
-                var fontSizeOffset:CGFloat = 0
-                
-                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
-                    fontSizeOffset = 1.0
-                }
-                else if Device.screenType == .iPhones_5{
-                    fontSizeOffset = -1.5
-                }
-                
-                if !address.label.isEmpty {
-                    attributedString = NSMutableAttributedString(string:"")
-                    
-                    let style = NSMutableParagraphStyle()
-                    style.lineSpacing = 8
-                    style.lineBreakMode = .byCharWrapping
-                    
-                    let style2 = NSMutableParagraphStyle()
-                    style2.lineSpacing = 0
-                    style2.lineBreakMode = .byCharWrapping
-
-                    let imageAttachment = NSTextAttachment()
-                    imageAttachment.image = IconContact()
-                    imageAttachment.bounds = CGRect(x: 0, y: -2, width: 16, height: 16)
-
-                    let imageString = NSAttributedString(attachment: imageAttachment)
-                    
-                    let nameString = NSMutableAttributedString(string:address.label)
-                    nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSMakeRange(0, nameString.string.count))
-                    
-                    let detailString = NSMutableAttributedString(string:item.detail!)
-                    detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSMakeRange(0, detailString.string.count))
-
-                    attributedString.append(imageString)
-                    attributedString.append(NSAttributedString(string: "  "))
-                    attributedString.append(nameString)
-                    attributedString.append(NSAttributedString(string: "\n"))
-                    attributedString.append(detailString)
-                   
-                    attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
-                }
+            else if item.detailAttributedString != nil {
+                valueLabel.attributedText = item.detailAttributedString
             }
-            
-            valueLabel.attributedText = attributedString
         }
         else if item.detailAttributedString != nil {
             valueLabel.attributedText = item.detailAttributedString

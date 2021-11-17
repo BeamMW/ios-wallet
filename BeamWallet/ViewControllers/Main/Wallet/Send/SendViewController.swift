@@ -115,12 +115,12 @@ class SendViewController: BaseTableViewController {
             guard let strongSelf = self else { return }
             
             if let cell = strongSelf.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
-                cell.error = strongSelf.viewModel.toAddressError
                 cell.additionalError = strongSelf.viewModel.newVersionError
                 cell.copyText = strongSelf.viewModel.copyAddress
                 cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: strongSelf.viewModel.toAddress))
                 cell.contact = strongSelf.viewModel.selectedContact
                 cell.setAddressType(BMAddressType(strongSelf.viewModel.addressType), strongSelf.viewModel.isSendOffline, strongSelf.viewModel.tokensLeft)
+                cell.error = strongSelf.viewModel.toAddressError
             }
         }
         
@@ -287,8 +287,6 @@ class SendViewController: BaseTableViewController {
             pushViewController(vc: vc)
         }
     }
-    
-    
 }
 
 extension SendViewController: UITableViewDelegate {
@@ -344,7 +342,6 @@ extension SendViewController: UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
             cell.delegate = self
-            cell.error = viewModel.toAddressError
             cell.additionalError = viewModel.newVersionError
             cell.copyText = viewModel.copyAddress
             cell.configure(with: (name: Localizable.shared.strings.send_to.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) //IconAddressBookSmall(),
@@ -363,6 +360,8 @@ extension SendViewController: UITableViewDataSource {
             else {
                 cell.stackBotOffset.constant = 20
             }
+            cell.error = viewModel.toAddressError
+
             return cell
         case 1:
             let cell = tableView
@@ -597,27 +596,26 @@ extension SendViewController: BMCellProtocol {
                         var menu = [BMPopoverMenu.BMPopoverMenuItem]()
                         
                         for asset in AssetsManager.shared().getAssetsWithBalanceWithBeam() as! [BMAsset] {
-                            var m = BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId))
+                            let m = BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId))
                             m.id = Int(asset.assetId)
                             menu.append(m)
                         }
                         
-                        BMPopoverMenu.showForSenderAssets(sender: cell.currencyLabel, with: menu) { item in
-                            let itemName = item?.name ?? ""
+                        BMPopoverMenu.showForSenderAssets(sender: cell.currencyView, with: menu) { item in
                             let asset = AssetsManager.shared().getAsset(Int32(item?.id ?? 0))
                             let selected = asset?.assetId ?? 0
-                       
+
                             let old = self.viewModel.selectedAssetId
                             self.viewModel.selectedAssetId = Int(asset?.assetId ?? 0)
-                            
+
                             if selected != old {
                                 self.viewModel.sendAll = false
                                 self.viewModel.amount = ""
                             }
-                            
+
                             self.viewModel.checkAmountError()
                             self.tableView.reloadData()
-                            
+
                         } cancel: {
                             self.tableView.reloadData()
                         }
@@ -679,12 +677,12 @@ extension SendViewController: BMCellProtocol {
             tableView.beginUpdates()
             
             if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
-                cell.error = viewModel.toAddressError
                 cell.additionalError = viewModel.newVersionError
                 cell.copyText = viewModel.copyAddress
                 cell.setData(with: (name: Localizable.shared.strings.transaction_info.uppercased(), value: viewModel.toAddress))
                 cell.contact = viewModel.selectedContact
                 cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline, viewModel.tokensLeft)
+                cell.error = viewModel.toAddressError
             }
             
             tableView.tableFooterView = footerView()

@@ -19,7 +19,7 @@
 
 import UIKit
 
-class WalletTransactionCell: RippleCell {
+class WalletTransactionCell: UITableViewCell {
 
     @IBOutlet weak private var mainView: UIView!
     @IBOutlet weak private var statusLabel: UILabel!
@@ -36,13 +36,7 @@ class WalletTransactionCell: RippleCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
-        self.selectedBackgroundView = UIView()
         selectionStyle = .none
-    }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        print("SET \(highlighted)")
     }
 }
 
@@ -53,7 +47,16 @@ extension WalletTransactionCell: Configurable {
             return
         }
         
-        secondAvailableLabel.text = ExchangeManager.shared().exchangeValueAsset(options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
+        let rate = options.transaction.realRate
+        
+        if rate > 0 {
+            let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(options.transaction.realRate), amount: options.transaction.realAmount, assetID: UInt64(options.transaction.assetId))
+            secondAvailableLabel.text = (options.transaction.isIncome ? "+" : "-") + second
+        }
+        else {
+            secondAvailableLabel.text = ""
+        }
+        
 
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 

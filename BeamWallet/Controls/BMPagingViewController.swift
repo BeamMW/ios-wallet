@@ -24,35 +24,13 @@ import Foundation
 class PagingLargeTitleCell : PagingTitleCell {
     
     private var added = false
-   // private var selectedView = UIView()
     
     override func configureTitleLabel() {
         super.configureTitleLabel()
         
         titleLabel.adjustFontSize = true
         titleLabel.letterSpacing = 1.5
-        
-//        selectedView.backgroundColor = UIColor.main.brightTeal
-//        selectedView.alpha = 0
-//        addSubview(selectedView)
     }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//
-//        selectedView.frame = CGRect(x: 0, y: self.frame.size.height - 5, width: self.frame.size.width, height: 5)
-//    }
-//
-//    override var isSelected: Bool {
-//        didSet{
-//            if isSelected {
-//                self.selectedView.alpha = 1
-//            }
-//            else{
-//                self.selectedView.alpha = 0
-//            }
-//        }
-//    }
 }
 
 class BMPagingViewController: PagingViewController<PagingIndexItem> {
@@ -85,6 +63,12 @@ class BMPagingViewController: PagingViewController<PagingIndexItem> {
         custom.options.borderColor = UIColor.clear
         custom.options.menuItemSpacing = 0
         custom.options.indicatorOptions = .visible(height: 4, zIndex: Int.max, spacing: UIEdgeInsets.zero, insets: UIEdgeInsets.zero)
+        
+        let titles = self.dataSource?.numberOfViewControllers(in: self)
+        
+        if titles == 1 {
+            custom.options.menuItemSize = PagingMenuItemSize.fixed(width: 0, height: 0)
+        }
         
         contentInteraction = .none
         menuItemSource = .class(type: PagingLargeTitleCell.self)

@@ -89,16 +89,6 @@ class TrustedNodeViewController: BMInputViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let base = self.navigationController as? BaseNavigationController {
-            if self.event == .restore {
-                base.enableSwipeToDismiss = false
-            }
-        }
-    }
-    
     override func onNext() {
         view.endEditing(true)
         AppModel.sharedManager().removeDelegate(self)

@@ -260,39 +260,6 @@ extension TransactionsTableView: UIViewControllerPreviewingDelegate {
 extension TransactionsTableView: UIContextMenuInteractionDelegate {
     
     @available(iOS 13.0, *)
-    override func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        
-        guard let indexPath = configuration.identifier as? IndexPath,
-              let cell = tableView.cellForRow(at: indexPath)
-        else
-        {
-            return nil
-        }
-        
-        
-        let targetedPreview = UITargetedPreview(view: cell)
-        targetedPreview.parameters.backgroundColor = .clear
-        
-        return targetedPreview
-    }
-    
-    @available(iOS 13.0, *)
-    override func tableView(_ tableView: UITableView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        
-        guard let indexPath = configuration.identifier as? IndexPath,
-              let cell = tableView.cellForRow(at: indexPath)
-        else
-        {
-            return nil
-        }
-        
-        let targetedPreview = UITargetedPreview(view: cell)
-        targetedPreview.parameters.backgroundColor = .clear
-        
-        return targetedPreview
-    }
-    
-    @available(iOS 13.0, *)
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         return nil
     }
@@ -316,7 +283,7 @@ extension TransactionsTableView: UIContextMenuInteractionDelegate {
             let detailVC = TransactionPageViewController(transaction: viewModel.transactions[indexPath.row], preview: true)
             detailVC.preferredContentSize = CGSize(width: 0.0, height: 400)
             
-            return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: {
                 return detailVC
             }, actionProvider: { suggestedActions in
                 return self.makeContextMenu(transaction: self.viewModel.transactions[indexPath.row])

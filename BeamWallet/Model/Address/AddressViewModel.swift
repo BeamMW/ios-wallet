@@ -102,12 +102,14 @@ class AddressViewModel: NSObject {
                 
                 for (index, element) in self.contacts.enumerated() {
                     let params = AppModel.sharedManager().getTransactionParameters(element.address.address ?? "")
-                    
-                    if params.newAddressType == BMAddressTypeMaxPrivacy  {
+                    if params.isMaxPrivacy {
                         self.contacts[index].address.displayAddress = element.address.address
                     }
                 }
             }
+            
+         
+            
             self.onDataChanged?()
         }
     }

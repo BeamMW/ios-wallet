@@ -28,7 +28,7 @@ extension UIButton {
         }
         set {
             if newValue {
-                if Device.screenType == .iPhone_XSMax || Device.screenType == .iPhones_Plus {
+                if Device.isLarge {
                     self.titleLabel?.adjustFontSize = true
                 }
             }

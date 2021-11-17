@@ -75,6 +75,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, strong) NSString * _Nonnull nodeAddress;
 @property (nonatomic, strong) NSString * _Nonnull whereBuyAddress;
 @property (nonatomic, strong) NSString * _Nonnull language;
+@property (nonatomic, strong) NSString * _Nonnull documentationAddress;
 
 @property (nonatomic, assign) int maxAddressDurationHours;
 @property (nonatomic, assign) int maxAddressDurationSeconds;
@@ -82,6 +83,8 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) int maxTokens;
 
 @property (nonatomic, assign) BOOL isNodeProtocolEnabled;
+
+@property (nonatomic, assign) int minConfirmations;
 
 -(void)setDefaultDarkMode:(BOOL)isSystemMode;
 
@@ -96,7 +99,6 @@ typedef enum Target : NSUInteger {
 -(int)nodePort;
 -(NSString*_Nonnull)localNodeStorage;
 -(NSString*_Nonnull)localNodeTemdDir;
--(NSArray*_Nonnull)localNodePeers;
 
 -(NSString*_Nonnull)languageName;
 -(NSArray <BMLanguage*> * _Nonnull)languages;
@@ -114,6 +116,9 @@ typedef enum Target : NSUInteger {
 
 -(NSArray <BMMaxPrivacyLock*> * _Nonnull)maxPrivacyLockValues;
 -(BMMaxPrivacyLock*_Nonnull)currentMaxPrivacyLockValue;
+
+-(NSString*_Nonnull)dAppUrl;
+-(NSString*_Nonnull)assetBlockchainUrl:(int)assetId;
 
 
 @end

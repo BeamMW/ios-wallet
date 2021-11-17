@@ -30,7 +30,6 @@ class AddressesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AppModel.sharedManager().udpateAddresses()
         
         emptyView.text = Localizable.shared.strings.addresses_empty
         emptyView.image = IconAddressbookEmpty()
@@ -51,6 +50,7 @@ class AddressesViewController: BaseTableViewController {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.addresses
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +59,7 @@ class AddressesViewController: BaseTableViewController {
         checkIsEmpty()
         
         AppModel.sharedManager().addDelegate(self)
+        AppModel.sharedManager().refreshContacts()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,7 +76,7 @@ class AddressesViewController: BaseTableViewController {
     }
     
     private func checkIsEmpty() {
-        let count = AppModel.sharedManager().walletAddresses?.count ?? 0 + AppModel.sharedManager().contacts.count
+        let count = (AppModel.sharedManager().walletAddresses?.count ?? 0) + AppModel.sharedManager().contacts.count
         
         if count == 0 {
             pagingViewController.view.alpha = 0

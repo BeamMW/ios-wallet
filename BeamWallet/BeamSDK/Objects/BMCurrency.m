@@ -21,7 +21,7 @@
 @implementation BMCurrency
 
 + (BOOL)supportsSecureCoding {
-    return YES;
+    return NO;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder

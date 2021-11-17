@@ -21,12 +21,11 @@ import Foundation
 
 class DetailTransactionViewModel: TransactionViewModel {
 
-    public var details = [BMMultiLineItem]()
-    public var utxos = [BMUTXO]()
-    public var paymentProof:BMPaymentProof?
+    public var details = [Any]()
+    public var proofDetail = [BMMultiLineItem]()
 
-    public var detailsExpand = true
-    public var utxoExpand = true
+    public var paymentProof:BMPaymentProof?
+    public var isPaymentProof = false
 
     
     override var transaction: BMTransaction?{
@@ -41,52 +40,23 @@ class DetailTransactionViewModel: TransactionViewModel {
         fillDetails()
     }
     
+    init(transaction: BMTransaction, isPaymentProof:Bool) {
+        super.init(transaction: transaction)
+        
+        self.isPaymentProof = isPaymentProof
+        
+        fillDetails()
+    }
+    
     public func fillDetails() {
         
         let transaction = self.transaction!
         
         details.removeAll()
 
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.date.uppercased(), detail: transaction.formattedDate(), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-        
-        if transaction.isSelf {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_send_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_rec_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+        if !isPaymentProof {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.date.uppercased(), detail: transaction.formattedDate(), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
         }
-        else if transaction.isIncome {
-            if transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded {
-//                details.append(BMMultiLineItem(title: Localizable.shared.strings.sender_identity.uppercased(), detail: transaction.senderIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-                details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: Localizable.shared.strings.shielded_pool, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-
-            }
-            else {
-                details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            }
-            
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            
-//            if transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded {
-//                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiver_identity.uppercased(), detail: transaction.receiverIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-//            }
-        }
-        else{
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.contact.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            
-//            if transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded {
-//                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiver_identity.uppercased(), detail: transaction.receiverIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-//            }
-            
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.my_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-        }
-        
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
-
-        
-        if transaction.realFee > 0 {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_fee.uppercased(), detail: String.currency(value: transaction.fee), detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-        }
-        
         
         if transaction.isIncome {
             if let last = AppModel.sharedManager().getFirstTransactionId(forAddress: transaction.receiverAddress) {
@@ -99,30 +69,117 @@ class DetailTransactionViewModel: TransactionViewModel {
             }
         }
         
-        if !transaction.comment.isEmpty {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.comment.uppercased(), detail: transaction.comment, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+  
+        if isPaymentProof {
+            let isToken = AppModel.sharedManager().isToken(transaction.receiverAddress)
+            
+            if isToken {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.sender_wallet_signature.uppercased(), detail: transaction.senderIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiver_wallet_signature.uppercased(), detail: transaction.receiverIdentity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }            
+        }
+        else if (transaction.isPublicOffline || transaction.isMaxPrivacy || transaction.isShielded) && transaction.isIncome && !transaction.isDapps  {
+            
+            if transaction.isIncome {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
+            else {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
+            
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
+        }
+        else if(!transaction.isDapps) {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.sending_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            
+            if transaction.isIncome {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
+            else {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
+            
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         
-        details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+        if let progress = transaction.minConfirmationsProgress, progress != "unknown" {
+            let first = progress.components(separatedBy: "/").first
+            let last = progress.components(separatedBy: "/").last
 
-        if !transaction.identity.isEmpty {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.wallet_id.uppercased(), detail: transaction.identity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, copiedText: Localizable.shared.strings.copied_to_clipboard))
+            var detailProgress = Localizable.shared.strings.confirming + " (\(progress))"
+            
+            if first == last {
+                detailProgress = Localizable.shared.strings.confirmed + " (\(progress))"
+            }
+            
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.confirmation_status.uppercased(), detail: detailProgress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
+        
+        var amount = String.currency(value: transaction.realAmount, name: transaction.asset?.unitName ?? "")
+
+        if transaction.isIncome {
+            amount = "+" + amount
+        }
+        else {
+            amount = "-" + amount
+        }
+        
+        
+        let current = Settings.sharedManager().currencyName()
+        let notAvailable = Localizable.shared.strings.rate_transaction_not_available.lowercased()
+        var rateString = String(format: notAvailable, current)
+        
+        if transaction.realRate > 0 {
+            rateString = Localizable.shared.strings.rate_transaction.lowercased()
+            
+            let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(transaction.realRate), amount: transaction.realAmount, assetID: UInt64(transaction.assetId))
+            
+            if transaction.isIncome {
+                rateString = "+\(second) " + "(" + rateString + ")"
+            }
+            else {
+                rateString = "-\(second) " + "(" + rateString + ")"
+            }
+        }
+        else {
+            rateString = "(" + rateString + ")"
+        }
+        
+        details.append(BMThreeLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, subDetail: rateString , titleColor: .white, detailColor: transaction.isIncome ? UIColor.main.brightSkyBlue : UIColor.main.heliotrope, subDetailColor: .white, titleFont: .boldSystemFont(ofSize: 15), detailFont: .systemFont(ofSize: 15), subDetailFont: .systemFont(ofSize: 15), hasArrow: false))
+        
+        if transaction.realFee > 0 && !isPaymentProof {
+            let fee = String.currency(value: transaction.fee, name: "BEAM")
+            details.append(BMThreeLineItem(title: Localizable.shared.strings.fee.uppercased(), detail: fee, subDetail: "", titleColor: .white, detailColor: .white, subDetailColor: .white, titleFont: .boldSystemFont(ofSize: 15), detailFont: .systemFont(ofSize: 15), subDetailFont: .systemFont(ofSize: 15), hasArrow: false))
+        }
+        
+        if transaction.isDapps {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.dapp_anme.uppercased(), detail: transaction.source(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            
+            if let shader = transaction.contractCids {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.app_shader_id.uppercased(), detail: shader, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+            }
+        }
+                
+        if !transaction.comment.isEmpty && !isPaymentProof {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.desc.uppercased(), detail: transaction.comment, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+        }
+        
+        if !isPaymentProof {
+            details.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_id.uppercased(), detail: transaction.id, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+        }
+
         
         if !transaction.isExpired() && !transaction.isFailed() && !transaction.kernelId.contains("000000000") {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail:  transaction.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
         }
          
      
-        if transaction.isFailed() {
+        if transaction.isFailed() && !isPaymentProof {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.failure_reason.uppercased(), detail: transaction.failureReason, detailFont: RegularFont(size: 16), detailColor: UIColor.main.red, copy: true))
         }
         
-        if let utxos = AppModel.sharedManager().getUTXOSFrom(transaction) as? [BMUTXO] {
-            self.utxos = utxos
-        }
         
-        if paymentProof == nil && transaction.hasPaymentProof()  {
+        if paymentProof == nil && transaction.hasPaymentProof() && isPaymentProof  {
             AppModel.sharedManager().getPaymentProof(transaction)
         }
     }
@@ -141,12 +198,16 @@ class DetailTransactionViewModel: TransactionViewModel {
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
 
         
-        if !transaction.isIncome && !transaction.isShielded {
+        if !transaction.isIncome && !transaction.isShielded && !transaction.isDapps {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.repeat_transaction, icon: nil, action: .repeat_transaction))
         }
         
-        if transaction.canCancel {
+        if transaction.canCancel && !transaction.isDapps {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.cancel_transaction, icon: nil, action: .cancel_transaction))
+        }
+        
+        if transaction.isDapps {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.open_dapp, icon: nil, action: .open_dapp))
         }
         
         if transaction.canDelete {
@@ -166,6 +227,23 @@ class DetailTransactionViewModel: TransactionViewModel {
             vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
             
             top.present(vc, animated: true)
+        }
+    }
+    
+    public func openDapp() {
+        if let apps = AppModel.sharedManager().apps as? [BMApp] {
+            if let find = apps.first(where: { a in
+                a.name == self.transaction?.appName
+            }) {
+                if let top = UIApplication.getTopMostViewController() {
+                    AppModel.sharedManager().startApp(top, app: find)
+                }
+            }
+            else {
+                UIApplication.getTopMostViewController()?.alert(title: Localizable.shared.strings.dapp_not_found_title, message: Localizable.shared.strings.dapp_not_found_text, handler: { _ in
+                    
+                })
+            }
         }
     }
     
@@ -208,10 +286,17 @@ class DetailTransactionViewModel: TransactionViewModel {
 }
 
 extension DetailTransactionViewModel {
+    
     func onReceive(_ proof: BMPaymentProof) {
         DispatchQueue.main.async {
             if proof.txID == self.transaction?.id {
+                
+                let proofDetail = BMMultiLineItem(title: Localizable.shared.strings.code.uppercased(), detail: proof.code, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true)
+
+                
                 self.paymentProof = proof
+                self.proofDetail = [proofDetail]
+                
                 self.onDataChanged?()
             }
         }

@@ -41,7 +41,8 @@ class OpenWalletProgressViewController: BaseViewController {
     private var onlyConnect = false
 
     public var cancelCallback : (() -> Void)?
-
+    public var isRescan = false
+    
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
@@ -83,7 +84,13 @@ class OpenWalletProgressViewController: BaseViewController {
         
         if onlyConnect {
             if AppModel.sharedManager().isLoggedin {
-                if Settings.sharedManager().isNodeProtocolEnabled {
+                if self.isRescan {
+                    cancelButton.isHidden = true
+                    cancelButton.alpha = 0
+                    cancelButton.isUserInteractionEnabled = false
+                    progressTitleLabel.text = Localizable.shared.strings.rescan
+                }
+                else if Settings.sharedManager().isNodeProtocolEnabled {
                     progressTitleLabel.text = Localizable.shared.strings.connect_to_mobilenode
                 }
                 else {
@@ -98,9 +105,6 @@ class OpenWalletProgressViewController: BaseViewController {
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
             restotingInfoLabel.isHidden = false
-            
-            timeoutTimer?.invalidate()
-            timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
         }
         else if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
@@ -170,18 +174,12 @@ class OpenWalletProgressViewController: BaseViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let base = self.navigationController as? BaseNavigationController {
-            base.enableSwipeToDismiss = false
-        }
-    }
-    
     @objc private func openMainPage() {
         AppModel.sharedManager().removeDelegate(self)
 
         if onlyConnect {
+            AppModel.sharedManager().refreshAddresses()
+            
             var found = false
             if let controllers = self.navigationController?.viewControllers {
                 for vc in controllers {
@@ -418,10 +416,7 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     @objc private func onTimeOut() {
-        if onlyConnect {
-            self.openMainPage()
-        }
-        else if Settings.sharedManager().isChangedNode() {
+        if Settings.sharedManager().isChangedNode() {
             self.openMainPage()
         }
     }
@@ -456,6 +451,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
     }
     
     func onRecoveryProgressUpdated(_ done: Int32, total: Int32, time: Int32) {
+        
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             
@@ -482,7 +478,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             if done == total ||  percent >= 99.9  {
                 if !strongSelf.stopRestore {
                     strongSelf.stopRestore = true
-                    strongSelf.isWaitingRestore = true
+                    strongSelf.isWaitingRestore = false
                     
                     let deadlineTime = DispatchTime.now() + .seconds(4)
                     DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
@@ -498,11 +494,12 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                             }
                         }
                         else{
-                            if strongSelf.isWaitingRestore {
-                                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 50%."
-                            }
-                            
-                            strongSelf.startCreateWallet()
+                            strongSelf.openMainPage()
+//                            if strongSelf.isWaitingRestore {
+//                                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 50%."
+//                            }
+//
+//                            strongSelf.startCreateWallet()
                         }
                     }
                 }

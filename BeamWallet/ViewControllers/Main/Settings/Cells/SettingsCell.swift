@@ -94,9 +94,6 @@ extension SettingsCell: Configurable {
             
         }
         
-        if item.type == .remove_wallet {
-            titleLabel.textColor = UIColor.main.red
-        }
         if item.hasArrow {
             arrowView.isHidden = false
             titleXOffset.constant = 25

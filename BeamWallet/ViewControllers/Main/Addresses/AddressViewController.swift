@@ -186,12 +186,7 @@ extension AddressViewController : UITableViewDataSource {
                 header.backgroundColor = UIColor.main.marineThree
             }
             else {
-                if (Settings.sharedManager().target == Testnet) {
-                    header.backgroundColor = UIColor.init(red: 34 / 255, green: 29 / 255, blue: 47 / 255, alpha: 1)
-                }
-                else {
-                    header.backgroundColor = UIColor.init(red: 28 / 255, green: 28 / 255, blue: 28 / 255, alpha: 1)
-                }
+                header.backgroundColor = UIColor.init(red: 28 / 255, green: 28 / 255, blue: 28 / 255, alpha: 1)
             }
             header.letterSpacing = 1.5
             header.titleLabel.textColor = UIColor.white

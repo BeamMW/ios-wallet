@@ -116,8 +116,13 @@ class LocalizableStrings : NSObject {
     var delete_address = "delete_address".localized
     var delete_address_transaction = "delete_address_transaction".localized
     var delete_address_only = "delete_address_only".localized
-    var in_24_hours = "in_24_hours".localized
-    var in_24_hours_now = "in_24_hours_now".localized
+    var auto = "auto".localized
+    var extend = "extend".localized
+    var this_address_expired = "this_address_expired".localized
+    var confirming = "confirming".localized
+    var confirmed = "confirmed".localized
+    var expires_on = "expires_on".localized    
+    
     var transaction_history = "transaction_history".localized
     var min_fee_error = "min_fee_error".localized
     var never = "never".localized
@@ -153,7 +158,6 @@ class LocalizableStrings : NSObject {
     var logout = "logout".localized
     var logout_text = "logout_text".localized
     var yes = "yes".localized
-    var updating = "updating".localized
     var connecting = "connecting".localized
     var online = "online".localized
     var offline = "offline".localized
@@ -164,7 +168,7 @@ class LocalizableStrings : NSObject {
     var edit = "edit".localized
     var delete = "delete".localized
     var undo = "undo".localized
-    var cancelled = "cancelled".localized
+    var cancelled = "canceled".localized
     var delete_transaction_title = "delete_transaction_title".localized
     var delete_transaction_text = "delete_transaction_text".localized
     var current_password_error = "current_password_error".localized
@@ -312,7 +316,14 @@ class LocalizableStrings : NSObject {
     var node_address = "node_address".localized.lowercased()
     var create_new_password_short = "create_new_password_short".localized
     var create_new_password = "create_new_password".localized
+    var new_password = "new_password".localized
 
+    var very_weak_password = "very_weak_password".localized
+    var weak_password = "weak_password".localized
+    var medium_password = "medium_password".localized
+    var strong_password = "strong_password".localized
+    var very_strong_password = "very_strong_password".localized
+    
     var lock_screen = "lock_screen".localized
     var paste_payment_proof = "paste_payment_proof".localized
 
@@ -412,7 +423,6 @@ class LocalizableStrings : NSObject {
     var regular = "regular".localized
     var identity = "identity".localized
     var for_pool = "for_pool".localized
-    var receive_notice_max_privacy = "receive_notice_max_privacy".localized
     var withdraw = "withdraw".localized
     var withdraw_cofirm = "withdraw_cofirm".localized
     var confirm_2 = "confirm_2".localized
@@ -436,7 +446,7 @@ class LocalizableStrings : NSObject {
     var local_comment = "local_comment".localized
     var choose_currency = "choose_currency".localized
     var max_privacy_lock_time = "max_privacy_lock_time".localized
-    var lock_time_limit = "lock_time_limit".localized
+    var transaction_time_max_privacy = "transaction_time_max_privacy".localized
     var no_limit = "no_limit".localized
     var h24 = "h24".localized
     var h36 = "h36".localized
@@ -529,6 +539,64 @@ class LocalizableStrings : NSObject {
     var only_online_support = "only_online_support".localized
     var max_funds_error = "max_funds_error".localized
     var max_funds_hint = "max_funds_hint".localized
+    var dAppStore = "dAppStore".localized
+    var fee = "fee".localized
+    var confirm_accept = "confirm_accept".localized
+    var will_take_funds = "will_take_funds".localized
+    var will_send_funds = "will_send_funds".localized
+    
+    var dapp_anme = "dapp_anme".localized
+    var app_shader_id = "app_shader_id".localized
+    var beamx_dao = "beamx_dao".localized
+
+    var receive_address_hint = "receive_address_hint".localized
+    var please_wait_is_loading = "please_wait_is_loading".localized
+
+    var receiving_address = "receiving_address".localized
+    var sending_address = "sending_address".localized
+    var general = "general".localized
+    var code = "code".localized
+    var rate_transaction = "rate_transaction".localized
+    var rate_transaction_not_available = "rate_transaction_not_available".localized
+    var desc = "desc".localized
+    var no_limit_with_hint = "no_limit_with_hint".localized
+    var h72_recommended = "h72_recommended".localized
+    var dapp_transaction_completed = "dapp_transaction_completed".localized
+    var dapp_transaction_failed = "dapp_transaction_failed".localized
+    var dapp_transaction_expired = "dapp_transaction_expired".localized
+    var dapp_transaction_cancelled = "dapp_transaction_cancelled".localized
+    var documentation = "documentation".localized
+    var reconnect_random_node = "reconnect_random_node".localized
+    var reconnect_mobile_node = "reconnect_mobile_node".localized
+    var canot_connect_node_mobile = "canot_connect_node_mobile".localized
+    var canot_connect_node_random = "canot_connect_node_random".localized
+    var canot_connect_node_own_node = "canot_connect_node_own_node".localized    
+    var updating_mobile_node = "updating_mobile_node".localized
+    var updating_random_node = "updating_random_node".localized
+    var updating_mobile_own = "updating_mobile_own".localized
+    var change_node_to_faster_sync = "change_node_to_faster_sync".localized
+    var app_not_supported = "app_not_supported".localized
+
+    var min_confirmations = "min_confirmations".localized
+    var confirmations = "confirmations".localized
+    var confirmations_hint = "confirmations_hint".localized
+    var confirmation_status = "confirmation_status".localized
+    var deposit_to_wallet = "deposit_to_wallet".localized
+    var withdraw_to_wallet = "withdraw_to_wallet".localized
+    var never_expires = "never_expires".localized
+    var address_expire_active_transaction = "address_expire_active_transaction".localized
+    var asset_id = "asset_id".localized
+    var password_approve_transaction = "password_approve_transaction".localized
+
+    var open_dapp = "open_dapp".localized
+    var dapp_not_found_title = "dapp_not_found_title".localized
+    var dapp_not_found_text = "dapp_not_found_text".localized
+    var conf_asset_id = "conf_asset_id".localized
+    var sender_wallet_signature = "sender_wallet_signature".localized
+    var receiver_wallet_signature = "receiver_wallet_signature".localized
+    var shielded = "shielded".localized
+    var no_funds_dao = "no_funds_dao".localized
+
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
@@ -544,6 +612,53 @@ class LocalizableStrings : NSObject {
     
     public func transaction_sent_notif_body(_ beam:String, address:String) -> String {
         return "transaction_sent_notif_body".localized.replacingOccurrences(of: "(value)", with: beam).replacingOccurrences(of: "(address)", with: address)
+    }
+    
+    public func muttableDapsTransactionWithdrawing_notif_body(name:String, deposit:Bool) -> NSMutableAttributedString {
+        
+        var string = ""
+        
+        if deposit {
+            string = String.init(format: "deposit_progress".localized, name)
+        }
+        else {
+            string = String.init(format: "withdrawing_progress".localized, name)
+        }
+        
+        let rangeName = (string as NSString).range(of: String(name))
+        
+        let attributedText = NSMutableAttributedString(string: string)
+        attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeName)
+        return attributedText
+    }
+    
+    public func muttableDapsTransaction_notif_body(name:String, failed:Bool, comment:String?) -> NSMutableAttributedString {
+                
+        if let com = comment {
+            return NSMutableAttributedString(string: com.capitalizingFirstLetter())
+        }
+        else {
+            var string = ""
+            var detail = ""
+            
+            if failed {
+                detail = "send_money_failed".localized
+                string = String.init(format: "dapss_transaction_received_notif_body_failed".localized, name, detail)
+            }
+            else {
+                detail = "send_money_completed".localized
+                string = String.init(format: "dapss_transaction_received_notif_body_sucess".localized, name, detail)
+            }
+            
+            let rangeName = (string as NSString).range(of: String(name))
+            let rangeDetail = (string as NSString).range(of: String(detail))
+            
+            let attributedText = NSMutableAttributedString(string: string)
+            attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeName)
+            attributedText.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: rangeDetail)
+            return attributedText
+        }
+        
     }
     
     public func transaction_receiving_notif_body(_ beam:String, address:String, failed:Bool) -> NSMutableAttributedString {
@@ -610,11 +725,7 @@ class LocalizableStrings : NSObject {
     public func beam_amount(_ str:String) -> String {
         return str // + " BEAM"
     }
-    
-    public func cannot_connect_node(_ node:String) -> String {
-        return "canot_connect_node".localized.lowercased() + ": " + node
-    }
-    
+        
     public func buy_send_money(value:String, name:String) -> String {
         return "buy_beam_value".localized.lowercased().replacingOccurrences(of: "(value)", with: value).replacingOccurrences(of: "(name)", with: name).uppercased()
     }

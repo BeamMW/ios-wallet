@@ -24,7 +24,6 @@
 
 static NSString *assetsKey = @"assetsKeyNew_21";
 
-
 NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff746b",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
 
 @implementation AssetsManager
@@ -48,9 +47,8 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         _assets = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:data error:nil];
     }
     
-    if (_assets == nil) {
+    if (_assets == nil || _assets.count == 0) {
         _assets = [[NSMutableArray alloc] init];
-        
         
         BMAsset *asset = [[BMAsset alloc] init];
         asset.assetId = 0;
@@ -63,14 +61,9 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         asset.site = @"";
         asset.paper = @"";
         [_assets addObject:asset];
-
+        
         BMAsset *beamX = [[BMAsset alloc] init];
-        if ([[Settings sharedManager] target] == Testnet) {
-            beamX.assetId = 12;
-        }
-        else if ([[Settings sharedManager] target] == Masternet) {
-            beamX.assetId = 31;
-        }
+        beamX.assetId = 7;
         beamX.nthUnitName = @"BEAMX";
         beamX.unitName = @"BEAMX";
         beamX.color = @"#977dff";
@@ -86,10 +79,7 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
 }
 
 -(NSString*_Nonnull)getAssetColor:(int)value {
-    if (value == 12 && [[Settings sharedManager] target] == Testnet) {
-        return  @"#977dff";
-    }
-    else if (value == 31 && [[Settings sharedManager] target] == Masternet) {
+    if (value == 31) {
         return  @"#977dff";
     }
     int idx = (value % colors.count);
@@ -102,6 +92,11 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
             return asset;
         }
     }
+    
+    if (assetId==31) {
+        
+    }
+    
     return nil;
 }
 

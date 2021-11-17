@@ -135,6 +135,21 @@ class TransactionViewModel: NSObject {
         }
     }
     
+    public func deleteTransationNew(indexPath:IndexPath?) {
+        let transaction:BMTransaction = (indexPath == nil ? self.transaction! : transactions[indexPath!.row])
+        
+        if let top = UIApplication.getTopMostViewController() {
+            top.confirmAlert(title: Localizable.shared.strings.delete_transaction_title, message: Localizable.shared.strings.delete_transaction_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.delete, cancelHandler: { (_ ) in
+                
+            }, confirmHandler: { (_ ) in
+                if indexPath?.row != nil {
+                    self.transactions.remove(at: indexPath!.row)
+                }
+                AppModel.sharedManager().prepareDeleteTransaction(transaction)
+            })
+        }
+    }
+    
     public func repeatTransation(transaction:BMTransaction) {
         if let top = UIApplication.getTopMostViewController() {
             let vc = SendViewController()
@@ -194,6 +209,12 @@ class TransactionViewModel: NSObject {
 //MARK: - Delegate
 
 extension TransactionViewModel : WalletModelDelegate {
+    
+    func onWalletStatusChange(_ status: BMWalletStatus) {
+        if self.transaction != nil {
+            AppModel.sharedManager().refreshTransactions()
+        }
+    }
     
     func onReceivedTransactions(_ transactions: [BMTransaction]) {
         DispatchQueue.main.async {
@@ -282,3 +303,4 @@ extension TransactionViewModel : WalletModelDelegate {
         }
     }
 }
+

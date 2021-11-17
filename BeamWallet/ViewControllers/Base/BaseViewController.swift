@@ -49,28 +49,6 @@ class BaseViewController: UIViewController {
         if self.navigationController?.viewControllers.count ?? 0 > 1 {
             self.addCustomBackButton(target: self, selector: #selector(self.onLeftBackButton))
         }
-        
-        if let base = self.navigationController as? BaseNavigationController {
-            if base.viewControllers.count == 1 {
-                base.enableSwipeToDismiss = false
-            }
-            else {
-                base.enableSwipeToDismiss = true
-            }
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let base = self.navigationController as? BaseNavigationController {
-            if base.viewControllers.count == 1 {
-                base.enableSwipeToDismiss = false
-            }
-            else {
-                base.enableSwipeToDismiss = true
-            }
-        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -104,11 +82,13 @@ class BaseViewController: UIViewController {
         if let navigation = navigationController {
             self.sideMenuController?.isLeftViewSwipeGestureEnabled = (navigation.viewControllers.count == 1)
         }
-        
+                
         if let v = self.view.viewWithTag(11) as? BMNetworkStatusView {
             v.indicatorView.layoutSubviews()
         }
     }
+    
+    
     
     override var title: String? {
         get {
@@ -282,7 +262,8 @@ class BaseViewController: UIViewController {
         let y: CGFloat = Device.isXDevice ? 60 : 35
         
         self.view.viewWithTag(20194)?.removeFromSuperview()
-        
+        self.view.viewWithTag(200)?.removeFromSuperview()
+
         let stackView = UIView()
         var x: CGFloat = 0
         

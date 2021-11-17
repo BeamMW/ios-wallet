@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon-icon-canceled-max-offline-copy-2.png",
+      "filename" : "icon-send-canceled-offline.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon-icon-canceled-max-offline-copy-2@2x.png",
+      "filename" : "icon-send-canceled-offline@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon-icon-canceled-max-offline-copy-2@3x.png",
+      "filename" : "icon-send-canceled-offline@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -18,6 +18,7 @@
 //
 
 import Foundation
+import UIKit
 
 func IconShowBalance() -> UIImage? {
     return UIImage(named: "iconShowBalance")
@@ -75,13 +76,16 @@ func BackgroundDark() -> UIImage? {
     return UIImage(named: "bgBlack.jpg")
 }
 
-
 func IconBack() -> UIImage? {
     return UIImage(named: "iconBack")
 }
 
 func IconWallet() -> UIImage? {
     return UIImage(named: "iconWallet")
+}
+
+func IconHelp() -> UIImage? {
+    return UIImage(named: "icnHelp")
 }
 
 func IconAddresses() -> UIImage? {
@@ -95,6 +99,14 @@ func IconNotifications() -> UIImage? {
 
 func IconSettings() -> UIImage? {
     return UIImage(named: "iconSettings")
+}
+
+func IconDappStore() -> UIImage? {
+    return UIImage(named: "iconDapps")
+}
+
+func IconBeamXDAO() -> UIImage? {
+    return UIImage(named: "iconDao")
 }
 
 func CheckboxFull() -> UIImage? {

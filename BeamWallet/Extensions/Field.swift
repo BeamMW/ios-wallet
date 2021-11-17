@@ -91,7 +91,7 @@ extension UITextField {
                 }
                 var newFontSize = font.pointSize
                 
-                if Device.screenType == .iPhone_XSMax{
+                if Device.isLarge {
                     newFontSize = newFontSize + 1.0
                 }
                 else if Device.screenType == .iPhones_5{

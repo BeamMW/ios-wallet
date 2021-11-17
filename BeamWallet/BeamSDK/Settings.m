@@ -155,6 +155,7 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     }
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
+    _documentationAddress = @"https://documentation.beam.mw/";
     
     if (ENALBE_LANG) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
@@ -225,8 +226,8 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
         _isNotificationTransactionON = YES;
     }
     
-    _maxAddressDurationHours = 24;
-    _maxAddressDurationSeconds = 24 * 60 * 60;
+    _maxAddressDurationHours = 61 * 24;
+    _maxAddressDurationSeconds = (24 * 60 * 60) * 61;
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:nodeProtocolKey]) {
         _isNodeProtocolEnabled = [[[NSUserDefaults standardUserDefaults] objectForKey:nodeProtocolKey] boolValue];
@@ -509,15 +510,6 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     return documentsDirectory;
 }
 
--(NSArray*_Nonnull)localNodePeers {
-    if (self.target == Testnet) {
-        return @[@"us-nodes.testnet.beam.mw:8100",@"eu-nodes.testnet.beam.mw:8100",@"ap-nodes.testnet.beam.mw:8100"];
-    }
-    else{
-        return @[@"ap-nodes.mainnet.beam.mw:8100",@"eu-nodes.mainnet.beam.mw:8100",@"us-nodes.mainnet.beam.mw:8100"];
-    }
-}
-
 -(NSString *)groupDBPath{
     NSString *documentsDirectory = [self groupPath];
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet1"];
@@ -790,30 +782,36 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
 
 -(NSArray <BMMaxPrivacyLock*> * _Nonnull)maxPrivacyLockValues {
     BMMaxPrivacyLock *noLimit = [BMMaxPrivacyLock new];
-    noLimit.name = [@"no_limit" localized];
+    noLimit.detail = [@"no_limit_with_hint" localized];
     noLimit.hours = 0;
+    noLimit.title = [@"no_limit" localized];
 
     BMMaxPrivacyLock *h24 = [BMMaxPrivacyLock new];
-    h24.name = [@"h24" localized];
+    h24.detail = [@"h24" localized];
     h24.hours = 24;
-    
+    h24.title = [@"h24" localized];
+
     BMMaxPrivacyLock *h36 = [BMMaxPrivacyLock new];
-    h36.name = [@"h36" localized];
+    h36.detail = [@"h36" localized];
     h36.hours = 36;
-    
+    h36.title = [@"h36" localized];
+
     BMMaxPrivacyLock *h48 = [BMMaxPrivacyLock new];
-    h48.name = [@"h48" localized];
+    h48.detail = [@"h48" localized];
     h48.hours = 48;
-    
+    h48.title = [@"h48" localized];
+
     BMMaxPrivacyLock *h60 = [BMMaxPrivacyLock new];
-    h60.name = [@"h60" localized];
+    h60.detail = [@"h60" localized];
     h60.hours = 60;
-    
+    h60.title = [@"h60" localized];
+
     BMMaxPrivacyLock *h72 = [BMMaxPrivacyLock new];
-    h72.name = [@"h72" localized];
+    h72.detail = [@"h72_recommended" localized];
     h72.hours = 72;
-    
-    return @[noLimit, h24, h36, h48, h60, h72];
+    h72.title = [@"h72" localized];
+
+    return @[noLimit, h72, h60, h48, h36, h24];
 }
 
 -(BMMaxPrivacyLock*_Nonnull)currentMaxPrivacyLockValue {
@@ -824,6 +822,28 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     }
     
     return nil;
+}
+
+-(NSString*_Nonnull)dAppUrl {
+    if (_target == Testnet) {
+        return @"https://apps-testnet.beam.mw/appslist.json";
+    }
+    else if (_target == Masternet) {
+        return @"http://3.19.141.112/app/appslist.json";;
+    }
+    return @"https://apps.beam.mw/appslist.json";
+}
+
+-(NSString*_Nonnull)assetBlockchainUrl:(int)assetId {
+    if (self.target == Testnet) {
+        return [NSString stringWithFormat:@"https://testnet.explorer.beam.mw/assets/details/%d", assetId];
+    }
+    else if (self.target == Masternet) {
+        return [NSString stringWithFormat:@"https://master-net.explorer.beam.mw/assets/details/%d", assetId];
+    }
+    else{
+        return [NSString stringWithFormat:@"https://explorer.beam.mw/assets/details/%d", assetId];
+    }
 }
 
 @end

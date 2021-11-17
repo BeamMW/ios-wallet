@@ -9,4 +9,4 @@
 #import "UIViewController+LGSideMenuController.h"
 #import <SSZipArchive/SSZipArchive.h>
 #import "Image.h"
-
+#import "SDImageSVGCoder.h"

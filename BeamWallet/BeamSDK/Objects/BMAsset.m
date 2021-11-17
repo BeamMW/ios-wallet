@@ -22,12 +22,11 @@
 #import "ExchangeManager.h"
 #import "BMTransaction.h"
 #import "AssetsManager.h"
-#import "Settings.h"
 
 @implementation BMAsset
 
 + (BOOL)supportsSecureCoding {
-    return YES;
+    return NO;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
@@ -127,13 +126,7 @@
 }
 
 -(BOOL)isBeamX {
-    if (_assetId == 12 && [[Settings sharedManager] target] == Testnet) {
-        return TRUE;
-    }
-    else if (_assetId == 31 && [[Settings sharedManager] target] == Masternet) {
-        return TRUE;
-    }
-    return NO;
+    return _assetId == 7;
 }
 
 -(double)USD {

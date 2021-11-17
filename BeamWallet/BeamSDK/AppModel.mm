@@ -70,8 +70,7 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-//#import "BeamWalletMasterNet-Swift.h"
-#import "BeamWalletTestNet-Swift.h"
+#import "BeamWallet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -140,16 +139,7 @@ struct GetMinConfirmationsFunc
     }
 };
 
-typedef void(^GetAddressTokenBlock)(const boost::optional<WalletAddress>& addr);
 
-struct GetAddressTokenFunc
-{
-    GetAddressTokenBlock block;
-    
-    void operator() (const boost::optional<WalletAddress>& addr){
-        block(addr);
-    }
-};
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -2049,36 +2039,28 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 
 -(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline {
-  
+        
     NSString *_id = to;
     BMAddress *contactAddress = [[AppModel sharedManager] findAddressByID:_id];
     NSString *_name = contactAddress.label;
-    
-    auto address = to.string;
-    auto txParameters = beam::wallet::ParseParameters(address);
-    if (!txParameters)
-    {
-        LOG_ERROR() << "Receiver Address is not valid!!!";
+
+    auto txParameters = beam::wallet::ParseParameters(to.string);
+    if (!txParameters){
         return;
     }
+    _txParameters = *txParameters;
     
-    WalletID m_walletID(Zero);
-    if (!m_walletID.FromHex(from.string))
-    {
-        LOG_ERROR() << "Sender Address is not valid!!!";
-        return;
-    }
-    
-    auto messageString = comment.string;
+
     uint64_t bAmount = round(amount * Rules::Coin);
     uint64_t bfee = fee;
     
-    uint32_t asset = assetId;
-    
-    _txParameters = *txParameters;
+    WalletID m_walletID(Zero);
+    m_walletID.FromHex(from.string);
     
     auto params = CreateSimpleTransactionParameters();
-    const auto type = GetAddressType(address);
+    const auto type = GetAddressType(to.string);
+    
+    auto messageString = comment.string;
     
     if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline && isOffline)) {
         if (!LoadReceiverParams(_txParameters, params, type)) {
@@ -2097,80 +2079,30 @@ bool OnProgress(uint64_t done, uint64_t total) {
     params.SetParameter(TxParameterID::Amount, bAmount)
         .SetParameter(TxParameterID::Fee, bfee)
         .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
-        .SetParameter(TxParameterID::AssetID, beam::Asset::ID(asset))
+        .SetParameter(TxParameterID::AssetID, beam::Asset::ID((uint32_t)assetId))
         .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
-    
+
     if (type == TxAddressType::MaxPrivacy) {
+        uint64_t limit = 64;
         CopyParameter(TxParameterID::Voucher, _txParameters, params);
-        uint32_t lock = 64;
-        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, lock);
+        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, limit);
     }
     
-    params.SetParameter(TxParameterID::OriginalToken, to.string);
-    // params.SetParameter(TxParameterID::SavePeerAddress, false);
-    wallet->getAsync()->startTransaction(std::move(params));
-    
-//
-//    auto txParameters = beam::wallet::ParseParameters(to.string);
-//    if (!txParameters){
-//        return;
-//    }
-//    _txParameters = *txParameters;
-//
-//
-//    uint64_t bAmount = round(amount * Rules::Coin);
-//    uint64_t bfee = fee;
-//
-//    WalletID m_walletID(Zero);
-//    m_walletID.FromHex(from.string);
-//
-//    auto params = CreateSimpleTransactionParameters();
-//    const auto type = GetAddressType(to.string);
-//
-//    auto messageString = comment.string;
-//
-//    if (type == TxAddressType::MaxPrivacy || type == TxAddressType::PublicOffline || (type == TxAddressType::Offline && isOffline)) {
-//        if (!LoadReceiverParams(_txParameters, params, type)) {
-//            assert(false);
-//            return;
-//        }
-//        CopyParameter(TxParameterID::PeerOwnID, _txParameters, params);
-//    }
-//    else {
-//        if(!LoadReceiverParams(_txParameters, params, TxAddressType::Regular)) {
-//            assert(false);
-//            return;
-//        }
-//    }
-//
-//    params.SetParameter(TxParameterID::Amount, bAmount)
-//        .SetParameter(TxParameterID::Fee, bfee)
-//        .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
-//        .SetParameter(TxParameterID::AssetID, beam::Asset::ID((uint32_t)assetId))
-//        .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
-//
-//    if (type == TxAddressType::MaxPrivacy) {
-//        CopyParameter(TxParameterID::Voucher, _txParameters, params);
-//        params.SetParameter(TxParameterID::MaxPrivacyMinAnonimitySet, [Settings sharedManager].lockMaxPrivacyValue);
-//    }
-//
 //    if (!beam::wallet::CheckReceiverAddress(to.string)) {
 //        params.SetParameter(TxParameterID::OriginalToken, to.string);
 //    }
-//
-//    params.SetParameter(TxParameterID::OriginalToken, to.string);
-//
-//    wallet->getAsync()->startTransaction(std::move(params));
-//
+    
+    params.SetParameter(TxParameterID::OriginalToken, to.string);
+    
+    wallet->getAsync()->startTransaction(std::move(params));
+    
     if (contactAddress != nil) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[AppModel sharedManager] editAddress:contactAddress];
         });
     }
-
-   [self refreshContacts];
     
-
+   [self refreshContacts];
 }
 
 void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxParameters& input, beam::wallet::TxParameters& dest)

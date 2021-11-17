@@ -23,10 +23,11 @@ class EditAddressViewController: BaseTableViewController {
     
     private var viewModel:EditAddressViewModel!
     
+    private lazy var mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-(Device.isLarge ? 320 : 300))/2, y: 60, width: (Device.isLarge ? 320 : 300), height: 44))
+    private lazy var buttonSave = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: UIColor.main.brightTeal)
+
     private lazy var footerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 110))
-        
-        let mainView = UIView(frame: CGRect(x: (UIScreen.main.bounds.size.width-(Device.isLarge ? 320 : 300))/2, y: 60, width: (Device.isLarge ? 320 : 300), height: 44))
         
         let buttonCancel = BMButton.defaultButton(frame: CGRect(x:0, y: 0, width: 143, height: 44), color: UIColor.main.marineThree)
         buttonCancel.setImage(IconCancel(), for: .normal)
@@ -36,14 +37,14 @@ class EditAddressViewController: BaseTableViewController {
         buttonCancel.addTarget(self, action: #selector(onBack), for: .touchUpInside)
         mainView.addSubview(buttonCancel)
         
-        let buttonSave = BMButton.defaultButton(frame: CGRect(x: mainView.frame.size.width - 143, y: 0, width: 143, height: 44), color: UIColor.main.brightTeal)
         buttonSave.setImage(IconDoneBlue(), for: .normal)
         buttonSave.setTitle(Localizable.shared.strings.save.lowercased(), for: .normal)
         buttonSave.setTitleColor(UIColor.main.marineOriginal, for: .normal)
         buttonSave.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
         buttonSave.addTarget(self, action: #selector(onSave), for: .touchUpInside)
+        buttonSave.isEnabled = expireChanged || canSave
         mainView.addSubview(buttonSave)
-        
+
         view.addSubview(mainView)
         
         return view
@@ -60,6 +61,13 @@ class EditAddressViewController: BaseTableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError(Localizable.shared.strings.fatalInitCoderError)
     }
+    
+    private var addressOptions = [String]()
+    private var canExtend = false
+    private var canSave = false
+    private var expireChanged = false
+    private var isNeverExpired = false
+    private var hasActiveTransactions = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +94,17 @@ class EditAddressViewController: BaseTableViewController {
             
             self?.navigationController?.popViewControllers(viewsToPop: 2)
         }
+        
+        if viewModel.newAddress.duration == 0 {
+            isNeverExpired = true
+            canExtend = false
+        }
+        else if !viewModel.newAddress.isExpired() && viewModel.newAddress.duration != 0 {
+            canExtend = true
+        }
+        
+        
+        fillAddressOptions()
     }
     
     @objc private func onBack() {
@@ -96,6 +115,26 @@ class EditAddressViewController: BaseTableViewController {
         viewModel.saveChages()
         
         back()
+    }
+    
+    @objc private func fillAddressOptions() {
+        hasActiveTransactions = AppModel.sharedManager().hasActiveTransactions(from: self.viewModel.address!)
+        
+        addressOptions.removeAll()
+        
+        if canExtend {
+            addressOptions.append(Localizable.shared.strings.extend)
+        }
+        if viewModel.newAddress.isExpired() || viewModel.newAddress.isNowExpired {
+            addressOptions.append(Localizable.shared.strings.active_address)
+        }
+        else if !viewModel.newAddress.isExpired() || viewModel.newAddress.isNowActive {
+            addressOptions.append(Localizable.shared.strings.expire_now)
+        }
+        
+        if !hasActiveTransactions {
+            addressOptions.append(Localizable.shared.strings.delete_address)
+        }
     }
 }
 
@@ -113,31 +152,51 @@ extension EditAddressViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if (indexPath.section == 0 && indexPath.row == 2) {
-            viewModel.pickExpire()
+
+        }
+        else if indexPath.row == addressOptions.count {
+
         }
         else if indexPath.section == 2 {
             if viewModel.isContact {
                 viewModel.onDeleteAddress(address: viewModel.address!, indexPath: nil)
             }
             else{
-                switch indexPath.row {
-                case 0:
-                    if viewModel.newAddress.isExpired() {
-                        viewModel.newAddress.isNowActive = !viewModel.newAddress.isNowActive
+                expireChanged = true
+                
+                let title = addressOptions[indexPath.row]
+                
+                if title == Localizable.shared.strings.delete_address {
+                    viewModel.onDeleteAddress(address: viewModel.address!, indexPath: nil)
+                }
+                else if title == Localizable.shared.strings.expire_now {
+                    canExtend = false
+                    
+                    viewModel.newAddress.isNowExpired = true
+                    viewModel.newAddress.isNowActive = false
+                }
+                else if title == Localizable.shared.strings.active_address || title == Localizable.shared.strings.extend {
+                    canExtend = false
+
+                    if isNeverExpired {
+                        viewModel.newAddress.createTime = UInt64(Date().timeIntervalSince1970)
+                        viewModel.newAddress.duration = 0
+                        viewModel.newAddress.isNowActiveDuration = 0
+                        viewModel.newAddress.isNowActive = true
                         viewModel.newAddress.isNowExpired = false
                     }
                     else {
-                        viewModel.newAddress.isNowExpired = !viewModel.newAddress.isNowExpired
-                        viewModel.newAddress.isNowActive = false
+                        viewModel.newAddress.createTime = UInt64(Date().timeIntervalSince1970)
+                        viewModel.newAddress.duration = UInt64(Settings.sharedManager().maxAddressDurationSeconds)
+                        viewModel.newAddress.isNowActive = true
+                        viewModel.newAddress.isNowExpired = false
                     }
-                    
-                    tableView.reloadData()
-                case 1:
-                    viewModel.onDeleteAddress(address: viewModel.address!, indexPath: nil)
-                    break
-                default:
-                    break
                 }
+                
+                buttonSave.isEnabled = expireChanged || canSave
+
+                fillAddressOptions()
+                tableView.reloadData()
             }
         }
     }
@@ -154,7 +213,13 @@ extension EditAddressViewController : UITableViewDataSource {
             return (viewModel.isContact ? 2 : 3)
         }
         else if section == 2 {
-            return (viewModel.isContact ? 1 : 2)
+            if viewModel.isContact {
+                return 1
+            }
+            if hasActiveTransactions {
+                return addressOptions.count + 1
+            }
+            return addressOptions.count
         }
         else if section == 1 {
             return 0
@@ -167,9 +232,10 @@ extension EditAddressViewController : UITableViewDataSource {
         if indexPath.section == 0 {
             switch (indexPath.row) {
             case 0:
+                let displayAddress = viewModel.address!.displayAddress ?? viewModel.address!.walletId
                 let cell = tableView
                     .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
-                    .configured(with: BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail:viewModel.address!.walletId , detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                    .configured(with: BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail:displayAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
                 cell.increaseSpace = true
                 return cell
             case 1:
@@ -180,9 +246,17 @@ extension EditAddressViewController : UITableViewDataSource {
                 cell.topOffset?.constant = 20
                 return cell
             case 2:
+                
+                var detail = viewModel.newAddress.formattedDate()
+                
+                if viewModel.newAddress.isExpired() || viewModel.newAddress.isNowExpired {
+                    detail = Localizable.shared.strings.this_address_expired
+                }
+                
                 let cell = tableView
-                    .dequeueReusableCell(withType: AddressExpiresCell.self, for: indexPath)
-                    .configured(with: viewModel.newAddress)
+                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
+                    .configured(with: BMMultiLineItem(title: Localizable.shared.strings.expires_on.uppercased(), detail:detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+                cell.increaseSpace = true
                 return cell
             default:
                 return BaseCell()
@@ -196,30 +270,43 @@ extension EditAddressViewController : UITableViewDataSource {
                 cell.titleColor = UIColor.main.red
                 return cell
             }
-            else{
-                switch indexPath.row {
-                case 0:
-                    var title = Localizable.shared.strings.expire_now
+            else {
+                if indexPath.row == addressOptions.count {
+                    let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
+                    cell.textLabel?.textColor = UIColor.white.withAlphaComponent(0.5)
+                    cell.textLabel?.text = Localizable.shared.strings.address_expire_active_transaction
+                    cell.textLabel?.font = ItalicFont(size: 14)
+                    cell.textLabel?.numberOfLines = 0
+                    cell.contentView.backgroundColor = .clear
+                    cell.backgroundColor = .clear
+                    cell.isUserInteractionEnabled = false
+                    return cell
+                }
+                else {
+                    var color = UIColor.main.red
                     
-                    if viewModel.newAddress.isNowExpired {
-                        title = Localizable.shared.strings.active_address
+                    let title = addressOptions[indexPath.row]
+                    
+                    if title != Localizable.shared.strings.delete_address
+                        && title != Localizable.shared.strings.expire_now {
+                        color = UIColor.main.brightTeal
                     }
-                    else if viewModel.newAddress.isExpired() && !viewModel.newAddress.isNowActive {
-                        title = Localizable.shared.strings.active_address
-                    }
+                    
                     
                     let cell = tableView
                         .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
-                        .configured(with: (text:title , position: BMGroupedCell.BMGroupedCellPosition.top))
+                        .configured(with: (text: addressOptions[indexPath.row], position: BMGroupedCell.BMGroupedCellPosition.bottom))
+                    cell.titleColor = color
+                    cell.isUserInteractionEnabled = true
+                    
+                    if title == Localizable.shared.strings.expire_now {
+                        if hasActiveTransactions {
+                            cell.isUserInteractionEnabled = false
+                            cell.titleColor = color.withAlphaComponent(0.5)
+                        }
+                    }
+                    
                     return cell
-                case 1:
-                    let cell = tableView
-                        .dequeueReusableCell(withType: BMGroupedCell.self, for: indexPath)
-                        .configured(with: (text: Localizable.shared.strings.delete_address, position: BMGroupedCell.BMGroupedCellPosition.bottom))
-                    cell.titleColor = UIColor.main.red
-                    return cell
-                default:
-                    return BaseCell()
                 }
             }
         }
@@ -236,6 +323,12 @@ extension EditAddressViewController : UITableViewDataSource {
 extension EditAddressViewController : BMCellProtocol {
     func textValueDidChange(_ sender: UITableViewCell, _ text: String, _ input: Bool) {
         viewModel.newAddress.label = text
+        
+        if viewModel.address?.label != text {
+            canSave = true
+        }
+        
+        buttonSave.isEnabled = expireChanged || canSave
     }
 }
 

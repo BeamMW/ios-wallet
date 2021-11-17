@@ -111,7 +111,9 @@ int RecoveryProgress::getEstimate(double bps)
     }
 }
 
-bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {    
+bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
+    NSLog(@"RecoveryProgress %llu - %llu",done, total);
+    
     if (!m_isStart) {
         m_isStart = true;
         

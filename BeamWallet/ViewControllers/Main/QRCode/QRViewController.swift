@@ -90,7 +90,12 @@ class QRViewController: BaseViewController {
             addressLabel.text = "token"//address.token
         }
         else {
-            addressLabel.text = address.walletId
+            if let display = address.displayAddress {
+                addressLabel.text = display
+            }
+            else {
+                addressLabel.text = address.walletId
+            }
         }
         
         if let a = amount, !a.isEmpty {
@@ -110,8 +115,15 @@ class QRViewController: BaseViewController {
         }
         
         
-        let qrString = AppModel.sharedManager().generateQRCodeString((isToken ? "token" : address.walletId) , amount: amount)
-        codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
+        if let display = address.displayAddress {
+            let qrString = AppModel.sharedManager().generateQRCodeString(display, amount: amount)
+            codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
+        }
+        else {
+            let qrString = AppModel.sharedManager().generateQRCodeString((isToken ? "token" : address.walletId) , amount: amount)
+            codeView.generateCode(qrString, foregroundColor: UIColor.white, backgroundColor: UIColor.clear)
+        }
+        
         
         addSwipeToDismiss()
     }

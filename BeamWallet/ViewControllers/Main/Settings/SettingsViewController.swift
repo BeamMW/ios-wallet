@@ -54,7 +54,7 @@ class SettingsViewController: BaseTableViewController {
             self?.tableView.reloadData()
         }
                 
-        tableView.register(SettingsCell.self)
+        tableView.register([SettingsCell.self, SettingsSubTitleCell.self])
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
         tableView.dataSource = self
@@ -139,19 +139,27 @@ extension SettingsViewController : UITableViewDataSource {
         
         let item = viewModel.getItem(indexPath: indexPath)
         
-        let cell = tableView
-            .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
-        cell.configure(with: item)
-        cell.delegate = self
-        
-        if item.type == .blockchain {
-            cell.isUserInteractionEnabled = false
+        if item.isSubDetail {
+            let cell = tableView
+                .dequeueReusableCell(withType: SettingsSubTitleCell.self, for: indexPath)
+            cell.configure(with: item)
+            return cell
         }
         else {
-            cell.isUserInteractionEnabled = true
+            let cell = tableView
+                .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
+            cell.configure(with: item)
+            cell.delegate = self
+            
+            if item.type == .blockchain {
+                cell.isUserInteractionEnabled = false
+            }
+            else {
+                cell.isUserInteractionEnabled = true
+            }
+            return cell
         }
         
-        return cell
     }
 }
 
@@ -184,7 +192,23 @@ extension SettingsViewController : SettingsCellDelegate {
                 present(vc, animated: true, completion: nil)
             }
             else if value == true && item.type == .ask_password {
-                Settings.sharedManager().isNeedaskPasswordForSend = true
+                let vc = UnlockPasswordPopover(event: .settings)
+                vc.completion = { [weak self]
+                    obj in
+                    
+                    if obj == false {
+                        
+                        item.isSwitch = false
+                        
+                        self?.tableView.reloadData()
+                    }
+                    else{
+                        Settings.sharedManager().isNeedaskPasswordForSend = true
+                    }
+                }
+                vc.modalPresentationStyle = .overFullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                present(vc, animated: true, completion: nil)
             }
             else if value == false && item.type == .enable_bio {
                 let vc = UnlockPasswordPopover(event: .settings, allowBiometric: false)

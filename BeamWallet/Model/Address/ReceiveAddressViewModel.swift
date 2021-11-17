@@ -48,15 +48,59 @@ class ReceiveAddressViewModel: NSObject {
 
     public var address: BMAddress!
     public var transaction = TransactionOptions.regular
+    {
+        didSet {
+            if isSavedAddress {
+                isShared = true
+            }
+        }
+    }
 
-    public var isShared = false
+    public var isSavedAddress = false
+    
+    public var isShared = false {
+        didSet {
+            if isSavedAddress && isShared {
+                if transaction == .privacy {
+                    AppModel.sharedManager().saveToken(self.address._id, token: self.address.maxPrivacyToken ?? "")
+                }
+                else {
+                    let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                    if isOwn {
+                        if self.address.offlineToken != nil {
+                            AppModel.sharedManager().saveToken(self.address._id, token: self.address.offlineToken ?? "")
+                        }
+                    }
+                }
+            }
+            else  if isShared {
+                if transaction == .privacy {
+                    AppModel.sharedManager().saveToken(self.address._id, token: self.address.maxPrivacyToken ?? "")
+                }
+                else {
+                    let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                    if isOwn {
+                        if self.address.offlineToken != nil {
+                            AppModel.sharedManager().saveToken(self.address._id, token: self.address.offlineToken ?? "")
+                        }
+                    }
+                    else {
+                        AppModel.sharedManager().saveToken(self.address._id, token: self.address.address ?? "")
+                    }
+                }
+            }
+        }
+    }
     
     public var amount: String? {
         didSet {
-            generateTokens()
-            
+            let isOwn = AppModel.sharedManager().checkIsOwnNode()
+            if isOwn {
+                generateTokens()
+            }
+        
             let amount = Double(self.amount ?? "0") ?? 0
-            let second = ExchangeManager.shared().exchangeValue(withZero: amount)
+            let second = ExchangeManager.shared().exchangeValueAsset(amount, assetID: UInt64(self.selectedAssetId))
             secondAmount = second
         }
     }
@@ -78,7 +122,7 @@ class ReceiveAddressViewModel: NSObject {
         super.init()
         
         let amount = Double(self.amount ?? "0") ?? 0
-        let second = ExchangeManager.shared().exchangeValue(withZero: amount)
+        let second = ExchangeManager.shared().exchangeValueAsset(amount, assetID: UInt64(self.selectedAssetId))
         secondAmount = second
     }
     
@@ -88,13 +132,13 @@ class ReceiveAddressViewModel: NSObject {
         let bamount = Double(amount ?? "0") ?? 0
         
         if isOwn {
-            AppModel.sharedManager().generateMaxPrivacyAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
+            AppModel.sharedManager().generateMaxPrivacyAddress(address._id, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
                 self.address.maxPrivacyToken = token;
             }
         }
         
         if isOwn {
-            AppModel.sharedManager().generateOfflineAddress(address.walletId, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
+            AppModel.sharedManager().generateOfflineAddress(address._id, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
                 DispatchQueue.main.async {
                     if self.address.offlineToken != nil {
                         self.address.offlineToken = token;

@@ -114,7 +114,7 @@ extension UTXODetailViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2 && viewModel.history.count > 0 {
-            let vc = TransactionViewController(transaction: viewModel.history[indexPath.row])
+            let vc = TransactionPageViewController(transaction: viewModel.history[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }

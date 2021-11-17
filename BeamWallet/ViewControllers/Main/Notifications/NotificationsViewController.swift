@@ -150,7 +150,7 @@ extension NotificationsViewController: UITableViewDelegate {
         let item = indexPath.section == 0 ? viewModel.unreads[indexPath.row] : viewModel.reads[indexPath.row]
         if(item.type == TRANSACTION) {
             if let transaction = AppModel.sharedManager().transaction(byId: item.pId) {
-                let vc = TransactionViewController(transaction: transaction)
+                let vc = TransactionPageViewController(transaction: transaction)
                 pushViewController(vc: vc)
             }
         }

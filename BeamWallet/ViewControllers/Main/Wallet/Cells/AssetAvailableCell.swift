@@ -40,11 +40,6 @@ class AssetAvailableCell: RippleCell {
                 UIColor(hexString: asset.color).withAlphaComponent(0.3).cgColor,
                 UIColor(red: 12 / 255, green: 12 / 255, blue: 12 / 255, alpha: 1).cgColor]
         }
-        else if Settings.sharedManager().target == Mainnet {
-            mainView.gradientLayer.colors = [
-                UIColor(hexString: asset.color).withAlphaComponent(0.3).cgColor,
-                UIColor(red: 12 / 255, green: 12 / 255, blue: 12 / 255, alpha: 1).cgColor]
-        }
         else {
             mainView.gradientLayer.colors = [
                 UIColor(hexString: asset.color).withAlphaComponent(0.3).cgColor,

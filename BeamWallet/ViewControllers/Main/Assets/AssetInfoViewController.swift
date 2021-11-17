@@ -42,12 +42,17 @@ class AssetInfoViewController: BaseTableViewController {
     
     private let pagingViewController = BMPagingViewController()
     
-    private let titles = [Localizable.shared.strings.balance, Localizable.shared.strings.asset_info]
+    private var titles = [Localizable.shared.strings.balance, Localizable.shared.strings.asset_info]
     
     private var controllers: [Int : Any] = [:]
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if asset.isBeam() {
+            titles.removeLast()
+        }
+        
         
         statusViewModel.assetId = Int(asset.assetId)
         
@@ -174,10 +179,16 @@ extension AssetInfoViewController : PagingViewControllerDelegate {
         widthForPagingItem pagingItem: T,
         isSelected: Bool) -> CGFloat? {
         
+        
         let index = pagingItem as! PagingIndexItem
         let title = index.title
         let size = title.boundingWidth(with: pagingViewController.options.font, kern: 1.5)
-        return (size + 20 + addWidth)
+        if asset.isBeam() {
+            return (size + 30)
+        }
+        else {
+            return (size + 20 + addWidth)
+        }
     }
     
     func pagingViewController<T>(_ pagingViewController: PagingViewController<T>, didScrollToItem pagingItem: T, startingViewController: UIViewController?, destinationViewController: UIViewController, transitionSuccessful: Bool) where T : PagingItem, T : Comparable, T : Hashable {

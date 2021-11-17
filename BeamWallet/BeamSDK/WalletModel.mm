@@ -28,6 +28,7 @@
 #include "utility/io/asyncevent.h"
 #include "utility/helpers.h"
 #include "utility/common.h"
+#include "wallet/core/strings_resources.h"
 
 #import "StringStd.h"
 
@@ -175,23 +176,35 @@ void WalletModel::onStatus(const WalletStatus& status)
     }
 }
 
+//GetAddressTo
+//if (m_tx.m_sender)
+//{
+//    auto token = m_tx.getToken();
+//    if (token.length() == 0) {
+//        if(!m_tx.m_selfTx) {
+//            return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
+//        }
+//        return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+//    }
+//    auto params = beam::wallet::ParseParameters(token);
+//    if (auto peerIdentity = params->GetParameter<WalletID>(TxParameterID::PeerID); peerIdentity)
+//    {
+//        auto s = std::to_string(*peerIdentity);
+//        return [NSString stringWithUTF8String:s.c_str()];
+//    }
+//    return [NSString stringWithUTF8String:token.c_str()];
+//}
+//return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+
 NSString* WalletModel::GetAddressTo(TxDescription m_tx)
 {
     if (m_tx.m_sender)
     {
         auto token = m_tx.getToken();
         if (token.length() == 0) {
-            if(!m_tx.m_selfTx) {
-                return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
-            }
-            return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+            return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
         }
-        auto params = beam::wallet::ParseParameters(token);
-        if (auto peerIdentity = params->GetParameter<WalletID>(TxParameterID::PeerID); peerIdentity)
-        {
-            auto s = std::to_string(*peerIdentity);
-            return [NSString stringWithUTF8String:s.c_str()];
-        }
+        
         return [NSString stringWithUTF8String:token.c_str()];
     }
     return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
@@ -211,16 +224,28 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
 {
     NSMutableArray *transactions = [NSMutableArray new];
     
+    auto currenCurrency = Currency::USD();
+    
+    BMCurrencyType currency = Settings.sharedManager.currency;
+    
+    if (currency == BMCurrencyETH) {
+        currenCurrency = Currency::ETH();
+    }
+    else if (currency == BMCurrencyBTC) {
+        currenCurrency = Currency::BTC();
+    }
+    
     for (const auto& item : items)
     {
         auto kernelId = to_hex(item.m_kernelID.m_pData, item.m_kernelID.nBytes);
         std::string comment(item.m_message.begin(), item.m_message.end());
-                   
+              
+        
         BMTransaction *transaction = [BMTransaction new];
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
         transaction.isIncome = (item.m_sender == false);
-        transaction.status = [GetTransactionStatusString(item) lowercaseString];
+        transaction.status = [GetTransactionStatusString(item, transaction.isIncome) lowercaseString];
         transaction.enumStatus = (UInt64)item.m_status;
         transaction.enumType = (UInt64)item.m_txType;
         if (item.m_failureReason != TxFailureReason::Unknown) {
@@ -234,7 +259,6 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.isSelf = item.m_selfTx;
         transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
         transaction.realFee = int64_t(item.m_fee);
-
         transaction.kernelId = [NSString stringWithUTF8String:kernelId.c_str()];
         transaction.canCancel = item.canCancel();
         transaction.canResume = item.canResume();
@@ -242,13 +266,83 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.comment = [NSString stringWithUTF8String:comment.c_str()];
         transaction.senderIdentity = [NSString stringWithUTF8String:item.getSenderIdentity().c_str()];
         transaction.receiverIdentity = [NSString stringWithUTF8String:item.getReceiverIdentity().c_str()];
-
         transaction.senderAddress = GetAddressFrom(item);
         transaction.receiverAddress = GetAddressTo(item);
         transaction.assetId = item.m_assetId;
         transaction.asset = [[AssetsManager sharedManager] getAsset:item.m_assetId];
         
-        if(item.m_txType == wallet::TxType::PushTransaction) {
+        if (item.m_txType == wallet::TxType::Simple) {
+            if (auto minConfirmations = item.GetParameter<uint32_t>(beam::wallet::TxParameterID::MinConfirmations))
+            {
+                transaction.minConfirmations = [NSString stringWithFormat:@"%d", *minConfirmations];
+                transaction.minConfirmationsProgress = GetConfirmationProgress(item, *minConfirmations);
+            }
+        }
+        
+        if (item.m_txType == wallet::TxType::Contract) {
+            transaction.isDapps = YES;
+            
+            bvm2::ContractInvokeData vData;
+            Height h = item.m_minHeight;
+
+            if (auto strdesc = item.GetParameter<std::string>(beam::wallet::TxParameterID::AppName))
+            {
+                transaction.appName = [NSString stringWithUTF8String:strdesc->c_str()];
+            }
+            
+            if (auto strid = item.GetParameter<std::string>(beam::wallet::TxParameterID::AppID))
+            {
+                transaction.appID = [NSString stringWithUTF8String:strid->c_str()];
+            }
+            
+            if(item.GetParameter(TxParameterID::ContractDataPacked, vData))
+            {
+                if (!vData.empty())
+                {
+                    std::stringstream ss;
+                    ss << vData[0].m_Cid.str();
+                    
+                    if (vData.size() > 1)
+                    {
+                        ss << " +" << vData.size() - 1;
+                    }
+                    
+                    transaction.contractCids =  [NSString stringWithUTF8String:ss.str().c_str()];
+                }
+                
+                auto contractFee = bvm2::getFullFee(vData, h);
+                auto contractSpend = bvm2::getFullSpend(vData);
+                
+                transaction.realFee = int64_t(contractFee);
+                transaction.fee = double(int64_t(contractFee)) / Rules::Coin;
+
+                for (const auto& info: contractSpend)
+                {
+                    auto amount = info.second;
+                    if (info.first == beam::Asset::s_BeamID)
+                    {
+                        if (amount < 0)
+                        {
+                            amount += contractFee;
+                        }
+                    }
+                    else {
+                        transaction.assetId = info.first;
+                        transaction.asset = [[AssetsManager sharedManager] getAsset:info.first];
+                    }
+                    
+                    transaction.realAmount = transaction.realAmount + (double(int64_t(amount)) / Rules::Coin);
+                }
+                
+                transaction.isIncome = transaction.realAmount <= 0;
+                transaction.status = [GetTransactionStatusString(item, transaction.isIncome) lowercaseString];
+                
+                if (transaction.realAmount < 0) {
+                    transaction.realAmount = transaction.realAmount * (-1.0);
+                }
+            }
+        }
+        else if(item.m_txType == wallet::TxType::PushTransaction) {
             auto token = item.getToken();
             if (token.size() > 0) { //send
                 auto p = wallet::ParseParameters(token);
@@ -287,6 +381,9 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
             }
         }
         
+        auto rate = item.getExchangeRate(currenCurrency, transaction.assetId);
+        transaction.realRate = int64_t(rate);
+
         transaction.token = [NSString stringWithUTF8String:item.getToken().c_str()];
         
         [transactions addObject:transaction];      
@@ -484,8 +581,8 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
        }
 
 
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivedUTXOs:)]) {
             [delegate onReceivedUTXOs:[[AppModel sharedManager]utxos]];
@@ -526,8 +623,6 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
             address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
 
-            NSLog(@"%@", [NSString stringWithFormat:@"IDENTITY %@",address.identity]);
-            
             [addresses addObject:address];
         }
         
@@ -565,8 +660,6 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         NSMutableArray <BMContact*>*contacts = [[NSMutableArray alloc] init];
 
-        BOOL isOwn = [[AppModel sharedManager] checkIsOwnNode];
-        
         for (const auto& walletAddr : addrs)
         {
             BMAddress *address = [[BMAddress alloc] init];
@@ -581,7 +674,7 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
                 BMContact *contact = [[BMContact alloc] init];
                 contact.address = address;
                 contact.name = address.label;
-                                
+                
                 [contacts addObject:contact];
             }
         }
@@ -602,10 +695,20 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [contacts removeObjectsAtIndexes:set];
         
+        for(int j = 0; j < [contacts count]; j++){
+            for(int k = j+1;k < [contacts count];k++){
+                BMContact *str1 = [contacts objectAtIndex:j];
+                BMContact *str2 = [contacts objectAtIndex:k];
+                if([str1.address.identity isEqualToString:str2.address.identity]) {
+                    [contacts removeObjectAtIndex:k];
+                }
+            }
+        }
+        
         [[AppModel sharedManager] setContacts:contacts];
         
-      NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
         {
             if ([delegate respondsToSelector:@selector(onContactsChange:)]) {
                 [delegate onContactsChange:contacts];
@@ -923,7 +1026,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
                     BMAddress *add_1 = [[[AppModel sharedManager]walletAddresses] objectAtIndex:i];
                     for (int j=0;j<addresses.count; j++) {
                         BMAddress *add_2 = [addresses objectAtIndex:j];
-                        if([add_1.getWalletId isEqualToString:add_2.getWalletId])
+                        if([add_1._id isEqualToString:add_2._id])
                         {
                             [set addIndex:i];
                         }
@@ -940,7 +1043,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
                     BMContact *add_1 = [[[AppModel sharedManager]contacts] objectAtIndex:i];
                     for (int j=0;j<contacts.count; j++) {
                         BMContact *add_2 = [contacts objectAtIndex:j];
-                        if([add_1.address.getWalletId isEqualToString:add_2.address.getWalletId])
+                        if([add_1.address._id isEqualToString:add_2.address._id])
                         {
                             [set addIndex:i];
                         }
@@ -959,7 +1062,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
                     BMAddress *add_1 = [[[AppModel sharedManager]walletAddresses] objectAtIndex:i];
                     for (int j=0;j<addresses.count; j++) {
                         BMAddress *add_2 = [addresses objectAtIndex:j];
-                        if([add_1.getWalletId isEqualToString:add_2.getWalletId])
+                        if([add_1._id isEqualToString:add_2._id])
                         {
                             [[[AppModel sharedManager]walletAddresses] replaceObjectAtIndex:i withObject:add_2];
                         }
@@ -972,7 +1075,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
                     BMContact *add_1 = [[[AppModel sharedManager]contacts] objectAtIndex:i];
                     for (int j=0;j<contacts.count; j++) {
                         BMContact *add_2 = [contacts objectAtIndex:j];
-                        if([add_1.address.getWalletId isEqualToString:add_2.address.getWalletId])
+                        if([add_1.address._id isEqualToString:add_2.address._id])
                         {
                             [[[AppModel sharedManager]contacts] replaceObjectAtIndex:i withObject:add_2];
                         }
@@ -1029,6 +1132,16 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
     }
     
     if(hasContacts) {
+        for(int j = 0; j < [[AppModel sharedManager].contacts count]; j++){
+            for(int k = j+1;k < [[AppModel sharedManager].contacts count];k++){
+                BMContact *str1 = [[AppModel sharedManager].contacts objectAtIndex:j];
+                BMContact *str2 = [[AppModel sharedManager].contacts objectAtIndex:k];
+                if([str1.address.identity isEqualToString:str2.address.identity]) {
+                    [[AppModel sharedManager].contacts removeObjectAtIndex:k];
+                }
+            }
+        }
+        
         NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
         for(id<WalletModelDelegate> delegate in delegates)
         {
@@ -1040,8 +1153,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
 }
 
 void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>& rates) {
-    NSLog(@"onExchangeRates %d", rates.size());
-    
+
     for (int i=0; i<rates.size(); i++) {
         
         auto rate = rates[i];
@@ -1214,7 +1326,6 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                         bmNotification.pId = [NSString stringWithFormat:@"v%@.%d",version, revision];
                         bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
                         bmNotification.createdTime = notification.m_createTime;
-                        bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
                     }
                 }
             }
@@ -1229,10 +1340,6 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                         bmNotification.type = ADDRESS;
                         bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
                         bmNotification.createdTime = notification.m_createTime;
-                        bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
-                        if(!bmNotification.isSended) {
-                            bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:bmNotification.pId ] != nil);
-                        }
                     }
                     else {
                         [[[AppModel sharedManager] deletedNotifications] removeObjectForKey:pid];
@@ -1272,8 +1379,6 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                 bmNotification.type = TRANSACTION;
                 bmNotification.isRead = notification.m_state == beam::wallet::Notification::State::Read;
                 bmNotification.createdTime = notification.m_createTime;
-                bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
-                
                 NSLog(@"notification transaction: %@", bmNotification.pId);
             }
             else if(notification.m_type == beam::wallet::Notification::Type::BeamNews && Settings.sharedManager.isNotificationNewsON) {
@@ -1282,7 +1387,6 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
                 bmNotification.type = NEWS;
                 bmNotification.isRead = false;
                 bmNotification.createdTime = notification.m_createTime;
-                bmNotification.isSended = ([[[AppModel sharedManager] presendedNotifications]  objectForKey:nId] != nil);
                 
                 NSLog(@"notification news: %@", bmNotification.nId);
             }
@@ -1311,8 +1415,15 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
     [[[AppModel sharedManager] notifications] removeAllObjects];
     [[[AppModel sharedManager] notifications] addObjectsFromArray:sortedArray];
     
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"sendedNotificationsKey"]];
+    
+    for (int i=0; i < [[AppModel sharedManager] notifications].count; i++) {
+        BOOL isSend = [array containsObject: [[[AppModel sharedManager] notifications]objectAtIndex:i].nId];
+        [[[AppModel sharedManager] notifications]objectAtIndex:i].isSended = isSend;
+    }
+    
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onNotificationsChanged)]) {
             [delegate onNotificationsChanged];
@@ -1514,10 +1625,15 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
             asset.site = site;
             asset.color = color;
             asset.paper = paper;
-            if([asset isDemoX]) {
+            if(asset.assetId == 11 && [Settings.sharedManager target] == Mainnet) {
                 asset.color = @"#977dff";
             }
-
+            else if(asset.assetId == 5 && [Settings.sharedManager target] == Masternet) {
+                asset.color = @"#977dff";
+            }
+            else if(asset.assetId == 7 && [Settings.sharedManager target] == Mainnet) {
+                asset.color = @"#977dff";
+            }
             [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
         }
     }
@@ -1560,42 +1676,58 @@ NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
     }
 }
 
-NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
+NSString* WalletModel::GetConfirmationProgress(TxDescription transaction, uint32_t minConfirmations)
 {
-    bool isIncome = (transaction.m_sender == false);
+    if (minConfirmations)
+    {
+        auto currHeight = this->getCurrentHeight();
+        if (currHeight && minConfirmations)
+        {
+            if (auto proofHeight = transaction.GetParameter<Height>(wallet::TxParameterID::KernelProofHeight); proofHeight)
+            {
+                std::stringstream ss;
+                auto blocksAfter = (currHeight - *proofHeight);
+                ss << (blocksAfter > minConfirmations ? minConfirmations : blocksAfter) << "/" << minConfirmations;
+                return [NSString stringWithUTF8String:ss.str().c_str()];
+            }
+            else
+            {
+                std::stringstream ss;
+                ss << 0 << "/" << minConfirmations;
+                return [NSString stringWithUTF8String:ss.str().c_str()];
+            }
+        }
+    }
+    return @"unknown";
+}
+
+NSString* WalletModel::GetTransactionStatusString(TxDescription transaction, BOOL income)
+{
+    bool isIncome = income;
     
     switch (transaction.m_status)
-    {        
+    {
         case TxStatus::Pending:
         {
             if (transaction.m_selfTx)
             {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-//            else if (transaction.m_txType == TxType::PullTransaction ||
-//                     transaction.m_txType == TxType::PushTransaction ) {
-//                return [[@"in_progress" localized] lowercaseString];
-//            }
             return [[@"pending" localized] lowercaseString];
         }
         case TxStatus::InProgress:{
             if (transaction.m_selfTx)   {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-//            else if (transaction.m_txType == TxType::PullTransaction ||
-//                     transaction.m_txType == TxType::PushTransaction ) {
-//                return [[@"in_progress" localized] lowercaseString];
-//            }
             return isIncome ? [[@"waiting_for_sender" localized]lowercaseString] : [[@"waiting_for_receiver" localized]lowercaseString];
+        }
+        case TxStatus::Confirming:{
+            return [[@"confirming" localized] lowercaseString];
         }
         case TxStatus::Registering:{
             if (transaction.m_selfTx)  {
                 return [[@"sending_to_own" localized] lowercaseString];
             }
-//            else if (transaction.m_txType == TxType::PullTransaction ||
-//                     transaction.m_txType == TxType::PushTransaction ) {
-//                return [[@"in_progress" localized] lowercaseString];
-//            }
             return isIncome ? [[@"in_progress" localized]lowercaseString] : [[@"in_progress" localized] lowercaseString];
         }
         case TxStatus::Completed:
@@ -1603,14 +1735,10 @@ NSString* WalletModel::GetTransactionStatusString(TxDescription transaction)
             if (transaction.m_selfTx)  {
                 return [[@"sent_to_own" localized] lowercaseString];
             }
-//            else if (transaction.m_txType == TxType::PullTransaction ||
-//                     transaction.m_txType == TxType::PushTransaction ) {
-//                return [[@"unlinked" localized] lowercaseString];
-//            }
             return isIncome ? [[@"received" localized] lowercaseString] : [[@"sent" localized] lowercaseString];
         }
         case TxStatus::Canceled:
-            return [[@"cancelled" localized] lowercaseString];
+            return [[@"canceled" localized] lowercaseString];
         case TxStatus::Failed:
             {
                 if (transaction.m_failureReason == TxFailureReason::TransactionExpired)

@@ -119,11 +119,6 @@ class SaveContactViewController: BaseTableViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        if isAddContact {
-            tableView.y = tableView.y + 25
-            tableView.h = tableView.h - 25
-        }
     }
     
     @objc private func onSave() {
@@ -148,7 +143,7 @@ class SaveContactViewController: BaseTableViewController {
             }
             
             let isContactFound = (AppModel.sharedManager().getContactFromId(walletId) != nil)
-            let isMyAddress = AppModel.sharedManager().isMyAddress(walletId)
+            let isMyAddress = AppModel.sharedManager().isMyAddress(walletId, identity: address.identity)
             
             if isContactFound {
                 alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.address_already_exist_1, handler: nil)
@@ -167,7 +162,14 @@ class SaveContactViewController: BaseTableViewController {
     }
     
     @objc private func onBack() {
-        goBack()
+        if self.isFromSendScreen {
+            onSave()
+            let token = address.address ?? address._id
+            AppModel.sharedManager().addIgnoredContact(token)
+        }
+        else {
+            goBack()
+        }
     }
     
     @objc private func goBack() {
@@ -197,14 +199,7 @@ extension SaveContactViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 10
-        case 2:
-            return 40
-        default:
-            return 30
-        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -236,13 +231,13 @@ extension SaveContactViewController : UITableViewDataSource {
                 let cell = tableView
                     .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
                 cell.delegate = self
-                cell.error = addressError
                 cell.contact = nil
-                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: trim, rightIcons: nil))
+                cell.configure(with: (name: Localizable.shared.strings.address.uppercased(), value: trim, rightIcons: isFromSendScreen ? nil : [IconScanQr()]))
                 cell.backgroundColor = UIColor.clear
                 cell.contentView.backgroundColor = UIColor.clear
                 cell.copyText = copyAddress
                 cell.validateAddress = true
+                cell.error = addressError
                 return cell
             }
             else{

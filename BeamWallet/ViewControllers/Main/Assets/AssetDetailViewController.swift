@@ -36,7 +36,7 @@ class AssetDetailViewController: BaseTableViewController {
     private let transactionViewModel = TransactionViewModel()
     private let statusViewModel = StatusViewModel()
     private let assetViewModel = AssetViewModel()
-        
+    
     deinit {
         Settings.sharedManager().removeDelegate(self)
     }
@@ -45,7 +45,7 @@ class AssetDetailViewController: BaseTableViewController {
         super.viewDidLoad()
         
         statusViewModel.assetId = Int(asset.assetId)
-
+        
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         if !asset.isBeam() {
@@ -71,21 +71,16 @@ class AssetDetailViewController: BaseTableViewController {
         rightButton()
         
         subscribeToUpdates()
-         
-        if #available(iOS 13.0, *) {
-            let interaction = UIContextMenuInteraction(delegate: self)
-            tableView.addInteraction(interaction)
+                
+        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
         }
-        
-//        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == .available {
-//            registerForPreviewing(with: self, sourceView: tableView)
-//        }
     }
     
     
-    private func rightButton() {        
+    private func rightButton() {
         addRightButtons(image: [Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(), IconAssetInfo()].reversed(), target: self, selector: [#selector(onHideAmounts), #selector(onInfo)].reversed())
-
+        
     }
     
     private func subscribeToUpdates() {
@@ -223,7 +218,7 @@ extension AssetDetailViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
-            let vc = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row])
+            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
             vc.hidesBottomBarWhenPushed = true
             pushViewController(vc: vc)
         }
@@ -462,4 +457,3 @@ extension AssetDetailViewController: UIContextMenuInteractionDelegate {
         return UIMenu(title: "", children: array)
     }
 }
-

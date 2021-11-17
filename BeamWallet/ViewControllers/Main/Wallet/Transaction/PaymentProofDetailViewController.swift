@@ -135,7 +135,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
     }
     
     private func fillInfoFromPaymentInfo(info: BMPaymentInfo?) {
-        if let info = info {
+        if let info = info, info.realAmount > 0 {
             self.paymentInfo = info
             
             let asset = AssetsManager.shared().getAsset(info.assetId )
@@ -277,14 +277,11 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
             transaction = nil
             
             codeInputLabel.alpha = 1
-            codeInputLabel.textColor = UIColor.main.red
-            codeInputField.textColor = UIColor.main.red
-            codeInputField.lineColor = UIColor.main.red
+            codeInputField.status = .error
         }
         else {
             codeInputLabel.alpha = 0
-            codeInputField.lineColor = UIColor.white.withAlphaComponent(0.1)
-            codeInputField.textColor = UIColor.white
+            codeInputField.status = .normal
         }
         
         resize()
@@ -307,14 +304,11 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
             
             if textView.text.isEmpty {
                 codeInputLabel.alpha = 0
-                codeInputField.lineColor = UIColor.white.withAlphaComponent(0.1)
-                codeInputField.textColor = UIColor.white
+                codeInputField.status = .normal
             }
             else {
                 codeInputLabel.alpha = 1
-                codeInputLabel.textColor = UIColor.main.red
-                codeInputField.textColor = UIColor.main.red
-                codeInputField.lineColor = UIColor.main.red
+                codeInputField.status = .error
             }
             
             fillTransactionInfo()
@@ -324,14 +318,11 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
         else if tr == nil {
             if textView.text.isEmpty {
                 codeInputLabel.alpha = 0
-                codeInputField.lineColor = UIColor.white.withAlphaComponent(0.1)
-                codeInputField.textColor = UIColor.white
+                codeInputField.status = .normal
             }
             else {
                 codeInputLabel.alpha = 1
-                codeInputLabel.textColor = UIColor.main.red
-                codeInputField.textColor = UIColor.main.red
-                codeInputField.lineColor = UIColor.main.red
+                codeInputField.status = .error
             }
         }
         

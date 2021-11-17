@@ -27,6 +27,7 @@ class EditAddressViewModel: DetailAddressViewModel {
         super.init(address: address)
         
         self.newAddress = BMAddress()
+        self.newAddress._id = address._id
         self.newAddress.walletId = address.walletId
         self.newAddress.label = address.label
         self.newAddress.createTime = address.createTime
@@ -36,6 +37,7 @@ class EditAddressViewModel: DetailAddressViewModel {
         self.newAddress.isNowExpired = false
         self.newAddress.isNowActive = false
         self.newAddress.isNowActiveDuration = self.hours_24
+        self.newAddress.displayAddress = address.displayAddress
     }
     
     public func checkIsChanges() -> Bool {
@@ -56,45 +58,16 @@ class EditAddressViewModel: DetailAddressViewModel {
         return false
     }
     
-    public func pickExpire() {
-        if let top = UIApplication.getTopMostViewController() {
-            let vc = BMDataPickerViewController(type: .address_expire, selectedValue: self.newAddress.durationInHours())
-            vc.completion = {
-                obj in
-                
-                let selected = obj as! Int32
-                
-                self.newAddress.isChangedDate = true
-                
-                if selected == Settings.sharedManager().maxAddressDurationHours {
-                    self.newAddress.isNowActive = true
-                    self.newAddress.isNowActiveDuration = self.hours_24
-                    
-                    if self.newAddress.isExpired() == false {
-                        self.newAddress.isNowExpired = false
-                    }
-                }
-                else {
-                    if self.newAddress.isNowActive {
-                        self.newAddress.isNowActiveDuration = 0
-                    }
-                    else {
-                        self.newAddress.duration = 0
-                    }
-                    
-                    if self.newAddress.isExpired() == false {
-                        self.newAddress.isNowExpired = false
-                    }
-                }
-                
-                self.onDataChanged?()
-            }
-            
-            top.pushViewController(vc: vc)
-        }
-    }
     
     public func saveChages() {
-        AppModel.sharedManager().edit(self.newAddress)
+        self.address?.isNowExpired = self.newAddress.isNowExpired
+        self.address?.isNowActive = self.newAddress.isNowActive
+        self.address?.isNowActiveDuration = self.newAddress.isNowActiveDuration
+        self.address?.label = self.newAddress.label
+        self.address?.duration = self.newAddress.duration
+
+        if let address = self.address {
+            AppModel.sharedManager().edit(address)
+        }
     }
 }
