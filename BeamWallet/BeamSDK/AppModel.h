@@ -136,7 +136,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 +(AppModel*_Nonnull)sharedManager;
 
 +(NSString*_Nonnull)chooseRandomNode;
-+(NSArray*_Nonnull)randomNodes;
 
 // delegates
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;

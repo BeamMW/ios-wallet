@@ -218,8 +218,7 @@ extension AssetDetailViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
-            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
-            vc.hidesBottomBarWhenPushed = true
+            let vc = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row], preview: false)
             pushViewController(vc: vc)
         }
     }

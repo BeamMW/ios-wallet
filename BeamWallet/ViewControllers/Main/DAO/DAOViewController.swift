@@ -71,6 +71,12 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         webView.load(URLRequest(url: URL(string: app.url)!))
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        AppModel.sharedManager().stopDAO()
+    }
+    
     private func stupWebView() {
         let controller = WKUserContentController()
         controller.add(self, name: "BEAM")
@@ -172,12 +178,12 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if let msg = message.body as? String {
-            print("--------WEB LOG--------:\n" + msg)
-        }
-        else {
-            print(message.body)
-        }
+//        if let msg = message.body as? String {
+//            print("--------WEB LOG--------:\n" + msg)
+//        }
+//        else {
+//            print(message.body)
+//        }
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
