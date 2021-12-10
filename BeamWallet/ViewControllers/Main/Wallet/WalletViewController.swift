@@ -35,6 +35,8 @@ class WalletViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        AppModel.sharedManager().loadApps()
+
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
         
         title = Localizable.shared.strings.wallet
@@ -234,7 +236,7 @@ extension WalletViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 2, transactionViewModel.transactions.count > 0 {
-            let vc = TransactionViewController(transaction: transactionViewModel.transactions[indexPath.row])
+            let vc = TransactionPageViewController(transaction: transactionViewModel.transactions[indexPath.row], preview: false)
             pushViewController(vc: vc)
         }
         else if indexPath.section == 1 {

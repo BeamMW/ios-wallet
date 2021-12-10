@@ -70,7 +70,8 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-#import "BeamWallet-Swift.h"
+//#import "BeamWallet-Swift.h"
+#import "BeamWalletMasterNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -264,10 +265,12 @@ struct GetMinConfirmationsFunc
 }
 
 +(NSString*_Nonnull)chooseRandomNodeWithoutNodes:(NSArray*)nodes {
+//    return @"eu-node02.masternet.beam.mw:8100";
+    
     auto peers = getDefaultPeers();
-    
+
     NSMutableArray *array = [NSMutableArray array];
-    
+
     for (const auto& item : peers) {
         BOOL found = NO;
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
@@ -277,34 +280,19 @@ struct GetMinConfirmationsFunc
                     found = YES;
                 }
             }
-            
+
             if (!found) {
                 [array addObject:address];
             }
         }
     }
-    
-    
+
+
     if(array.count>0) {
         return array[0];
     }
-    
-    return @"";
-}
 
-+(NSArray*_Nonnull)randomNodes {
-    auto peers = getDefaultPeers();
-    
-    NSMutableArray *array = [NSMutableArray array];
-    
-    for (const auto& item : peers) {
-        NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        if([address rangeOfString:@"shanghai"].location == NSNotFound) {
-            [array addObject:address];
-        }
-    }
-    
-    return array;
+    return @"";
 }
 
 +(NSString*_Nonnull)chooseRandomNode {
@@ -1190,32 +1178,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 
 -(BOOL)isExpiredAddress:(NSString*_Nullable)address {
-    if (address!=nil) {
-        if(address.length)
-        {
-            WalletID walletID(Zero);
-            if (walletID.FromHex(address.string))
-            {
-                try{
-                    auto receiverAddr = walletDb->getAddress(walletID);
-                    
-                    if(receiverAddr) {
-                        if (receiverAddr->m_OwnID && receiverAddr->isExpired())
-                        {
-                            return YES;
-                        }
-                    }
-                }
-                catch (const std::exception& e) {
-                    return NO;
-                }
-                catch (...) {
-                    return NO;
-                }
-            }
-        }
+    BMAddress *addr = [self findAddressByID:address];
+    if (addr != nil && addr.isContact == NO && [addr isExpired]) {
+        return YES;
     }
-    
     return NO;
 }
 
@@ -3106,9 +3072,12 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
 -(void)stopDAO {
     [daoManager stopApp];
+    daoManager = nil;
 }
 
 -(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*)app {
+    daoManager = [[DAOManager alloc] initWithWallet:wallet];
+
     BOOL isSupported = [daoManager appSupported:app];
     
     __weak typeof(self) weakSelf = self;
@@ -3182,22 +3151,24 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
                 NSArray *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
                 
                 if (jsonError == nil) {
-                    [strongSelf->_apps removeAllObjects];
-                    
-                    for (NSDictionary *dct in jsonResponse) {
-                        BMApp *app = [BMApp new];
-                        [app setAPIResult:dct];
-                        [app setIsSupported:[strongSelf->daoManager appSupported:app]];
-                        if(app.icon == nil) {
-                            app.icon = @"";
+                    if(strongSelf->daoManager != nil) {
+                        [strongSelf->_apps removeAllObjects];
+                        
+                        for (NSDictionary *dct in jsonResponse) {
+                            BMApp *app = [BMApp new];
+                            [app setAPIResult:dct];
+                            [app setIsSupported:[strongSelf->daoManager appSupported:app]];
+                            if(app.icon == nil) {
+                                app.icon = @"";
+                            }
+                            [strongSelf->_apps addObject:app];
                         }
-                        [strongSelf->_apps addObject:app];
-                    }
-                    
-                    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-                    for(id<WalletModelDelegate> delegate in delegates) {
-                        if ([delegate respondsToSelector:@selector(onDAPPsLoaded)]) {
-                            [delegate onDAPPsLoaded];
+                        
+                        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+                        for(id<WalletModelDelegate> delegate in delegates) {
+                            if ([delegate respondsToSelector:@selector(onDAPPsLoaded)]) {
+                                [delegate onDAPPsLoaded];
+                            }
                         }
                     }
                 }

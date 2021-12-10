@@ -100,8 +100,9 @@ public class XWVChannel : NSObject, WKScriptMessageHandler {
         // A workaround for crash when postMessage(undefined)
         //guard unsafeBitCast(message.body, to: OpaquePointer!.self) != nil else { return }
 
-        print("msg:")
-        print(message.body)
+        //TODO: logs
+      //  print("msg:")
+      //  print(message.body)
         
         if let body = message.body as? [String: Any], let opcode = body["$opcode"] as? String {
             let target = (body["$target"] as? NSNumber)?.intValue ?? 0

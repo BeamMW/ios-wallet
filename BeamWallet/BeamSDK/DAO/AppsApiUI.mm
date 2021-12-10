@@ -37,37 +37,37 @@ int AppsApiUI::test()
 
 void AppsApiUI::sendApproved(const std::string& request)
 {
-    LOG_INFO() << "Contract send approved: " << getAppName() << ", " << getAppId() << ", " << request;
+   // LOG_INFO() << "Contract send approved: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_callWalletApiDirectly(request);
 }
 
 void AppsApiUI::sendRejected(const std::string& request)
 {
-    LOG_INFO() << "Contract send rejected: " << getAppName() << ", " << getAppId() << ", " << request;
+   // LOG_INFO() << "Contract send rejected: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_sendApiError(request, beam::wallet::ApiError::UserRejected, std::string());
 }
 
 void AppsApiUI::contractInfoApproved(const std::string& request)
 {
-    LOG_INFO() << "Contract tx approved: " << getAppName() << ", " << getAppId() << ", " << request;
+   // LOG_INFO() << "Contract tx approved: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_callWalletApiDirectly(request);
 }
 
 void AppsApiUI::contractInfoRejected(const std::string& request)
 {
-    LOG_INFO() << "Contract tx rejected: " << getAppName() << ", " << getAppId() << ", " << request;
+   // LOG_INFO() << "Contract tx rejected: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_sendApiError(request, beam::wallet::ApiError::UserRejected, std::string());
 }
 
 void AppsApiUI::callWalletApi(const std::string& request)
 {
-    LOG_INFO() << "Call Wallet Api: " << getAppName() << ", " << getAppId() << ", " << request;
+    //LOG_INFO() << "Call Wallet Api: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_callWalletApiChecked(request);
 }
 
 void AppsApiUI::AnyThread_sendApiResponse(const std::string& result)
 {
-    LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
+   // LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
     NSString *json = [NSString stringWithUTF8String:result.c_str()];
     [[AppModel sharedManager] sendDAOApiResult:json];
 }

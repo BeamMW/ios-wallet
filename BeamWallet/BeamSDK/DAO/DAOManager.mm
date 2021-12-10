@@ -43,8 +43,14 @@
 }
 
 -(void)stopApp {
-    webAPICreator._api.~shared_ptr();
-    webAPICreator.~WebAPICreator();
+  //  webAPICreator._api.~shared_ptr();
+    webAPICreator._api.reset();
+//    webAPICreator._api = nil;
+//
+//    webAPICreator = nil;
+    
+//    webAPICreator._api.~shared_ptr();
+   // webAPICreator.~WebAPICreator();
 }
 
 -(void)launchApp:(BMApp*_Nonnull)app {
@@ -64,15 +70,21 @@
 }
 
 -(void)callWalletApi:(NSString*_Nonnull)json {
-    webAPICreator._api->callWalletApi(json.string);
+    if(webAPICreator._api != nil) {
+        webAPICreator._api->callWalletApi(json.string);
+    }
 }
 
 -(void)contractInfoApproved:(NSString*_Nonnull)json {
-    webAPICreator._api->contractInfoApproved(json.string);
+    if(webAPICreator._api != nil) {
+        webAPICreator._api->contractInfoApproved(json.string);
+    }
 }
 
 -(void)contractInfoRejected:(NSString*_Nonnull)json {
-    webAPICreator._api->contractInfoRejected(json.string);
+    if(webAPICreator._api != nil) {
+        webAPICreator._api->contractInfoRejected(json.string);
+    }
 }
 
 @end

@@ -22,6 +22,7 @@
 #import "ExchangeManager.h"
 #import "BMTransaction.h"
 #import "AssetsManager.h"
+#import "Settings.h"
 
 @implementation BMAsset
 
@@ -126,6 +127,9 @@
 }
 
 -(BOOL)isBeamX {
+    if(_assetId == 5 && [Settings.sharedManager target] == Masternet) {
+        return TRUE;
+    }
     return _assetId == 7;
 }
 
