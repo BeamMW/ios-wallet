@@ -21,9 +21,8 @@ public:
     void createApi(const std::string& verWant, const std::string& verMin, const std::string& appName, const std::string& appUrl);
     bool apiSupported(const std::string& apiVersion) const;
     std::string generateAppID(const std::string& appName, const std::string& appUrl);
-    
-    void apiChanged();
-    
+    void destroyApi();
+
     WalletModel::Ptr _walletModel;
     std::shared_ptr<AppsApiUI> _api;
 };

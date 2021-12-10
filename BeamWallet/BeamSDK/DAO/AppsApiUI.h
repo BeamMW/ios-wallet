@@ -24,7 +24,7 @@ public:
     void sendRejected(const std::string& request);
     void contractInfoApproved(const std::string& request);
     void contractInfoRejected(const std::string& request);
-    
+
 private:
     
     friend class beam::wallet::AppsApi<AppsApiUI>;

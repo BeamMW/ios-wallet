@@ -24,6 +24,5 @@
 -(void)contractInfoRejected:(NSString*_Nonnull)json;
 
 
-
 @end
 

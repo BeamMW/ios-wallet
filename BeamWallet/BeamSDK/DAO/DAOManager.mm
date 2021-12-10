@@ -43,14 +43,7 @@
 }
 
 -(void)stopApp {
-  //  webAPICreator._api.~shared_ptr();
-    webAPICreator._api.reset();
-//    webAPICreator._api = nil;
-//
-//    webAPICreator = nil;
-    
-//    webAPICreator._api.~shared_ptr();
-   // webAPICreator.~WebAPICreator();
+    webAPICreator.destroyApi();
 }
 
 -(void)launchApp:(BMApp*_Nonnull)app {

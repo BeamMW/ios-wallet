@@ -19,6 +19,13 @@ WebAPICreator::WebAPICreator()
 {
 }
 
+
+void WebAPICreator::destroyApi()
+{
+    _api.reset();
+}
+
+
 void WebAPICreator::createApi(const std::string& verWant, const std::string& verMin, const std::string &appName, const std::string &appUrl)
 {
     

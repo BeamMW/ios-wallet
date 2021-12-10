@@ -21,7 +21,7 @@ public class XWVChannel : NSObject, WKScriptMessageHandler {
     private(set) public var identifier: String?
     public let runLoop: RunLoop?
     public let queue: DispatchQueue?
-    private(set) public weak var webView: WKWebView?
+    public weak var webView: WKWebView?
     var typeInfo: XWVMetaObject!
 
     private var instances = [Int: XWVBindingObject]()

@@ -23,9 +23,10 @@ extension WKWebView {
         return XWVWindowObject(webView: self)
     }
 
-    @discardableResult public func loadPlugin(_ object: AnyObject, namespace: String) -> XWVScriptObject? {
+    @discardableResult public func loadPlugin(_ object: AnyObject, namespace: String) -> XWVChannel? {
         let channel = XWVChannel(webView: self)
-        return channel.bindPlugin(object, toNamespace: namespace)
+        _ = channel.bindPlugin(object, toNamespace: namespace)
+        return channel
     }
 
     func prepareForPlugin() {

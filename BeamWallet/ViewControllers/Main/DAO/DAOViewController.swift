@@ -41,11 +41,12 @@ import SafariServices
 
 class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
-    private var webView:WKWebView!
+    private var webView:WKWebView?
     private var loadingImage = UIImageView()
     private var loadingLabel = UILabel()
-
-    @objc private var beam:WBBEAM? = WBBEAM()
+    
+    @objc private var channel:XWVChannel? = nil
+    @objc private var beam:WBBEAM?
 
     @objc public var app:BMApp!
     @objc public var onCallWalletApi: ((NSString) -> Void)?
@@ -57,8 +58,9 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        stupWebView()
+        beam = WBBEAM()
         
+        stupWebView()
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: self.navigationController?.viewControllers.count == 1)
         
@@ -68,11 +70,17 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
             self.onCallWalletApi?(json)
         }
         
-        webView.load(URLRequest(url: URL(string: app.url)!))
+        webView?.load(URLRequest(url: URL(string: app.url)!))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        channel?.unbind()
+        beam?.resultObject = nil
+        beam = nil
+        webView = nil
+        channel?.webView = nil
         
         AppModel.sharedManager().stopDAO()
     }
@@ -90,17 +98,17 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         let jsLogScript2 = "console.log = (function(oriLogFunc){ return function(str) { window.webkit.messageHandlers.log.postMessage(str); oriLogFunc.call(console,str);} })(console.log);";
         
         webView = WKWebView(frame: self.view.bounds, configuration: configuration)
-        webView.navigationDelegate = self
-        webView.configuration.userContentController.addUserScript(logScript)
-        webView.configuration.userContentController.addUserScript(WKUserScript(source: jsLogScript2, injectionTime: .atDocumentStart, forMainFrameOnly: true))
-        webView.configuration.userContentController.add(self, name: "logHandler")
-        webView.configuration.userContentController.add(self, name: "log")
-        webView.loadPlugin(beam!, namespace: "BEAM")
-        webView.backgroundColor = self.view.backgroundColor
-        webView.isOpaque = false
-        webView.scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
-        webView.isHidden = true
-        self.view.addSubview(webView)
+        webView?.navigationDelegate = self
+        webView?.configuration.userContentController.addUserScript(logScript)
+        webView?.configuration.userContentController.addUserScript(WKUserScript(source: jsLogScript2, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        webView?.configuration.userContentController.add(self, name: "logHandler")
+        webView?.configuration.userContentController.add(self, name: "log")
+        channel = webView?.loadPlugin(beam!, namespace: "BEAM")
+        webView?.backgroundColor = self.view.backgroundColor
+        webView?.isOpaque = false
+        webView?.scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        webView?.isHidden = true
+        self.view.addSubview(webView!)
         
         loadingImage.image = UIImage(named: "dapp-loading")
         loadingImage.frame = CGRect(x: (UIScreen.main.bounds.width-245)/2, y: (UIScreen.main.bounds.height-137)/2, width: 245, height: 137)
@@ -128,7 +136,7 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         }
         
         let y = navigationBarOffset - offset
-        webView.frame = CGRect(x: 0, y: y , width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+        webView?.frame = CGRect(x: 0, y: y , width: self.view.bounds.width, height: self.view.bounds.size.height - y)
     }
     
     @objc func showConfirmDialog(json:String, info:String, amount:String) {
