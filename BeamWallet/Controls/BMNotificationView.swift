@@ -89,6 +89,9 @@ class BMNotificationView: UIView {
                         if let app = app {
                             icon = SDImageCache.shared.imageFromCache(forKey: app.icon)
                             title = transaction.appName ?? ""
+                            if title?.lowercased() == "beamx dao" {
+                                icon = UIImage(named: "dao_app_icon")
+                            }
                             detail = Localizable.shared.strings.muttableDapsTransactionWithdrawing_notif_body(name: assetValue, deposit: false)
                         }
                     }
@@ -150,6 +153,9 @@ class BMNotificationView: UIView {
                         if let app = app {
                             icon = SDImageCache.shared.imageFromCache(forKey: app.icon)
                             title = transaction.appName ?? ""
+                            if title?.lowercased() == "beamx dao" {
+                                icon = UIImage(named: "dao_app_icon")
+                            }
                             detail = Localizable.shared.strings.muttableDapsTransactionWithdrawing_notif_body(name: assetValue, deposit: true)
                         }
                     }

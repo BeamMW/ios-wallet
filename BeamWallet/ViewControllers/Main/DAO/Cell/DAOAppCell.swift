@@ -32,7 +32,12 @@ extension DAOAppCell: Configurable {
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
                             
         nameLabel.text = options.app.name
-        iconView.sd_setImage(with: URL(string: options.app.icon), completed: nil)
+        if options.app.name.lowercased() == "beamx dao" {
+            iconView.image = UIImage(named: "dao_app_icon")
+        }
+        else {
+            iconView.sd_setImage(with: URL(string: options.app.icon), completed: nil)
+        }
         
         if options.app.isSupported {
             detailLabel.text = options.app.desc

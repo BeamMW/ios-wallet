@@ -60,7 +60,7 @@ class RestoreManager: NSObject {
         self.cancelRestore()
         self.completion = completion
         self.progress = progress
-        
+
         var url:URL?
         
         if Settings.sharedManager().target == Testnet {

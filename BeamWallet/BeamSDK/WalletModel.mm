@@ -1625,10 +1625,10 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
             asset.site = site;
             asset.color = color;
             asset.paper = paper;
-            if(asset.assetId == 11 && [Settings.sharedManager target] == Testnet) {
+            if(asset.assetId == 12 && [Settings.sharedManager target] == Testnet) {
                 asset.color = @"#977dff";
             }
-            else if(asset.assetId == 5 && [Settings.sharedManager target] == Masternet) {
+            else if(asset.assetId == 31 && [Settings.sharedManager target] == Masternet) {
                 asset.color = @"#977dff";
             }
             else if(asset.assetId == 7 && [Settings.sharedManager target] == Mainnet) {

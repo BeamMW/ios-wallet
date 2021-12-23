@@ -22,7 +22,7 @@
 #import "AppModel.h"
 #include "wallet/core/wallet.h"
 
-static NSString *assetsKey = @"assetsKeyNew_2111";
+static NSString *assetsKey = @"assetsKeyNew_01";
 
 NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff746b",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
 
@@ -64,7 +64,10 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         
         BMAsset *beamX = [[BMAsset alloc] init];
         if ([Settings.sharedManager target] == Masternet) {
-            beamX.assetId = 5;
+            beamX.assetId = 31;
+        }
+        else if ([Settings.sharedManager target] == Testnet) {
+            beamX.assetId = 12;
         }
         else {
             beamX.assetId = 7;
@@ -84,10 +87,13 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
 }
 
 -(NSString*_Nonnull)getAssetColor:(int)value {
-    if(value == 5 && [Settings.sharedManager target] == Masternet) {
+    if(value == 31 && [Settings.sharedManager target] == Masternet) {
         return @"#977dff";
     }
-    else if (value == 7) {
+    else if(value == 12 && [Settings.sharedManager target] == Testnet) {
+        return @"#977dff";
+    }
+    else if (value == 7 && [Settings.sharedManager target] == Mainnet) {
         return @"#977dff";
     }
     int idx = (value % colors.count);

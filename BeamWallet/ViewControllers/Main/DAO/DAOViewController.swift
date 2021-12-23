@@ -76,13 +76,15 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        channel?.unbind()
-        beam?.resultObject = nil
-        beam = nil
-        webView = nil
-        channel?.webView = nil
-        
-        AppModel.sharedManager().stopDAO()
+        if isMovingFromParent {
+            channel?.unbind()
+            beam?.resultObject = nil
+            beam = nil
+            webView = nil
+            channel?.webView = nil
+            
+            AppModel.sharedManager().stopDAO()
+        }
     }
     
     private func stupWebView() {
@@ -186,12 +188,12 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-//        if let msg = message.body as? String {
-//            print("--------WEB LOG--------:\n" + msg)
-//        }
-//        else {
-//            print(message.body)
-//        }
+        if let msg = message.body as? String {
+            print("--------WEB LOG--------:\n" + msg)
+        }
+        else {
+            print(message.body)
+        }
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

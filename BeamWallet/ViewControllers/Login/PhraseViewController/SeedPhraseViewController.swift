@@ -243,7 +243,7 @@ class SeedPhraseViewController: BaseViewController {
         else if event == .onlyDisplay {
             back()
         }
-        else if event == .restore, Settings.sharedManager().target != Mainnet {
+        else if event == .restore {
             if let string = UIPasteboard.general.string {
                 let s1 = string.split(separator: ";")
                 let s2 = string.split(separator: "\n")

@@ -127,7 +127,10 @@
 }
 
 -(BOOL)isBeamX {
-    if(_assetId == 5 && [Settings.sharedManager target] == Masternet) {
+    if(_assetId == 31 && [Settings.sharedManager target] == Masternet) {
+        return TRUE;
+    }
+    else if(_assetId == 12 && [Settings.sharedManager target] == Testnet) {
         return TRUE;
     }
     return _assetId == 7;

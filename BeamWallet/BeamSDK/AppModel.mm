@@ -71,7 +71,8 @@
 #import <sys/utsname.h>
 
 //#import "BeamWallet-Swift.h"
-#import "BeamWalletMasterNet-Swift.h"
+//#import "BeamWalletMasterNet-Swift.h"
+#import "BeamWalletTestNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -715,7 +716,7 @@ struct GetMinConfirmationsFunc
     
     [[NSUserDefaults standardUserDefaults] setBool:[Settings sharedManager].connectToRandomNode forKey:@"randomNodeKeyRecover"];
     [[NSUserDefaults standardUserDefaults] setObject:[Settings sharedManager].nodeAddress forKey:@"nodeKeyRecover"];
-    
+
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.isRestoreFlow = YES;
@@ -817,7 +818,8 @@ struct GetMinConfirmationsFunc
             wallet->getAsync()->setNodeAddress(nodeAddrStr);
             
             if ([Settings sharedManager].isNodeProtocolEnabled) {
-                wallet->getAsync()->enableBodyRequests(true);
+                [Settings sharedManager].isNodeProtocolEnabled = NO;
+                wallet->getAsync()->enableBodyRequests(false);
             }
             
             wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
@@ -1564,19 +1566,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     for (BMTransaction *tr in array)
     {
-        if(address.identity.length > 2) {
-            if ([tr.senderIdentity isEqualToString:address.identity]
-                || [tr.receiverIdentity isEqualToString:address.identity]) {
-                [result addObject:tr];
-            }
-        }
-        else {
-            if([tr.token isEqualToString:address.address] && tr.token.length > 1) {
-                [result addObject:tr];
-            }
+        if ([tr.senderAddress isEqualToString:address.walletId]
+            || [tr.receiverAddress isEqualToString:address.walletId]
+            || ([tr.token isEqualToString:address.address] && tr.token.length > 1)) {
+            [result addObject:tr];
         }
     }
-
+    
     return result;
 }
 
@@ -3072,11 +3068,12 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 
 -(void)stopDAO {
     [daoManager stopApp];
-    daoManager = nil;
 }
 
 -(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*)app {
-    daoManager = [[DAOManager alloc] initWithWallet:wallet];
+    if (daoManager == nil) {
+        daoManager = [[DAOManager alloc] initWithWallet:wallet];
+    }
 
     BOOL isSupported = [daoManager appSupported:app];
     
@@ -3104,6 +3101,10 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(void)startBeamXDaoApp:(UINavigationController*_Nonnull)controller app:(BMApp*_Nonnull)app {
+    if (daoManager == nil) {
+        daoManager = [[DAOManager alloc] initWithWallet:wallet];
+    }
+    
     BOOL isSupported = [daoManager appSupported:app];
     
     __weak typeof(self) weakSelf = self;
@@ -3180,6 +3181,12 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(BMApp*_Nonnull)DAOBeamXApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BeamX DAO"]) {
+            return bApp;
+        }
+    }
+    
     BMApp *app = [BMApp new];
     app.name = @"BeamX DAO";
     app.api_version = @"current";
