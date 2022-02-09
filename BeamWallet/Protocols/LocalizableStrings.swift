@@ -548,6 +548,8 @@ class LocalizableStrings : NSObject {
     var dapp_anme = "dapp_anme".localized
     var app_shader_id = "app_shader_id".localized
     var beamx_dao = "beamx_dao".localized
+    var beam_faucet = "beam_faucet".localized
+    var beam_gallery = "beam_gallery".localized
 
     var receive_address_hint = "receive_address_hint".localized
     var please_wait_is_loading = "please_wait_is_loading".localized
@@ -596,7 +598,8 @@ class LocalizableStrings : NSObject {
     var receiver_wallet_signature = "receiver_wallet_signature".localized
     var shielded = "shielded".localized
     var no_funds_dao = "no_funds_dao".localized
-
+    var no_search_transactions = "no_search_transactions".localized
+    
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

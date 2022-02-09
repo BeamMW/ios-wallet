@@ -202,7 +202,9 @@
     NSString *number = [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]];
     number = [number stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    NSString *detail = [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@ BEAM\nKernel ID: %@", _senderAddress, _receiverAddress, number, _kernelId];
+    NSString *assetName = [[AssetsManager sharedManager] getAsset:_assetId].unitName;
+
+    NSString *detail = [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@ %@\nKernel ID: %@", _senderAddress, _receiverAddress, number, assetName, _kernelId];
     detail = [detail stringByReplacingOccurrencesOfString:@"  " withString:@" "];
     return detail;
 }
@@ -581,11 +583,11 @@
         attach.bounds = CGRectMake(0, -3, 16, 16);
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"”%@”",_comment]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"SFProDisplay-Italic" size:fontsize] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"SFProDisplay-Regular" size:fontsize] range:NSMakeRange(0, string.string.length)];
         
         if (commentRange.location!=NSNotFound) {
-            [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:NSMakeRange(commentRange.location+1, commentRange.length)];
+            [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:NSMakeRange(commentRange.location+1, commentRange.length)];
         }
         
         NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
@@ -597,15 +599,15 @@
     }
     
     if (idRange.location!=NSNotFound) {
-        NSString *localizable = [@"transaction_id" localized];
+        NSString *localizable = [[@"transaction_id" localized] uppercaseString];
         
         NSMutableAttributedString *localizableString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: ", localizable]];
-        [localizableString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, localizableString.string.length)];
+        [localizableString addAttribute:NSForegroundColorAttributeName value:[[UIColor colorWithHexString:@"#ffffff"]colorWithAlphaComponent:0.5] range:NSMakeRange(0, localizableString.string.length)];
         [localizableString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, localizableString.string.length)];
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_ID]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
         
         NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
         [result appendAttributedString:localizableString];
@@ -615,15 +617,15 @@
     }
     
     if (kernelRange.location!=NSNotFound) {
-        NSString *localizable = [@"kernel_id" localized];
+        NSString *localizable = [[@"kernel_id" localized] uppercaseString];
         
         NSMutableAttributedString *localizableString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: ", localizable]];
-        [localizableString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, localizableString.string.length)];
+        [localizableString addAttribute:NSForegroundColorAttributeName value:[[UIColor colorWithHexString:@"#ffffff"]colorWithAlphaComponent:0.5] range:NSMakeRange(0, localizableString.string.length)];
         [localizableString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, localizableString.string.length)];
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_kernelId]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
         
         NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
         [result appendAttributedString:localizableString];
@@ -633,15 +635,15 @@
     }
     
     if (senderAddressRange.location!=NSNotFound) {
-        NSString *localizable = [@"sender" localized];
+        NSString *localizable = [[@"sending_address" localized] uppercaseString];
         
         NSMutableAttributedString *localizableString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: ", localizable]];
-        [localizableString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, localizableString.string.length)];
+        [localizableString addAttribute:NSForegroundColorAttributeName value:[[UIColor colorWithHexString:@"#ffffff"]colorWithAlphaComponent:0.5] range:NSMakeRange(0, localizableString.string.length)];
         [localizableString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, localizableString.string.length)];
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_senderAddress]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
         
         NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
         [result appendAttributedString:localizableString];
@@ -651,15 +653,16 @@
     }
     
     if (receiverAddressRange.location!=NSNotFound) {
-        NSString *localizable = [@"receiver" localized];
+        NSString *localizable = [[@"receiving_address" localized] uppercaseString];
         
         NSMutableAttributedString *localizableString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: ", localizable]];
-        [localizableString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, localizableString.string.length)];
+        
+        [localizableString addAttribute:NSForegroundColorAttributeName value:[[UIColor colorWithHexString:@"#ffffff"]colorWithAlphaComponent:0.5] range:NSMakeRange(0, localizableString.string.length)];
         [localizableString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, localizableString.string.length)];
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_receiverAddress]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:[string.string.lowercaseString rangeOfString:searchText.lowercaseString]];
         
         NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
         [result appendAttributedString:localizableString];
@@ -669,13 +672,23 @@
     }
     
     if (senderNameRange.location!=NSNotFound) {
+        NSString *localizable = [[@"sending_address" localized] uppercaseString];
+        
+        NSMutableAttributedString *localizableString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: ", localizable]];
+        [localizableString addAttribute:NSForegroundColorAttributeName value:[[UIColor colorWithHexString:@"#ffffff"]colorWithAlphaComponent:0.5] range:NSMakeRange(0, localizableString.string.length)];
+        [localizableString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, localizableString.string.length)];
+        
+        NSMutableAttributedString *addressString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_senderAddress]];
+        [addressString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, addressString.string.length)];
+        [addressString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:[addressString.string.lowercaseString rangeOfString:searchText.lowercaseString]];
+        
         NSTextAttachment *attach = [[NSTextAttachment alloc] init];
         attach.image = [UIImage imageNamed:@"iconContact"];
         attach.bounds = CGRectMake(0, -3, 16, 16);
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_senderContactName]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:senderNameRange];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:senderNameRange];
         [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.string.length)];
         
         NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
@@ -683,17 +696,30 @@
         [commentString appendAttributedString:[[NSAttributedString alloc]initWithString:@"    "]];
         [commentString appendAttributedString:string];
         
+        
+        [strings addObject:localizableString];
         [strings addObject:commentString];
+        [strings addObject:addressString];
     }
     
     if (receiverNameRange.location!=NSNotFound) {
+        NSString *localizable = [[@"receiving_address" localized] uppercaseString];
+        
+        NSMutableAttributedString *localizableString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: ", localizable]];
+        [localizableString addAttribute:NSForegroundColorAttributeName value:[[UIColor colorWithHexString:@"#ffffff"]colorWithAlphaComponent:0.5] range:NSMakeRange(0, localizableString.string.length)];
+        [localizableString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, localizableString.string.length)];
+        
+        NSMutableAttributedString *addressString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_receiverAddress]];
+        [addressString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, addressString.string.length)];
+        [addressString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:[addressString.string.lowercaseString rangeOfString:searchText.lowercaseString]];
+        
         NSTextAttachment *attach = [[NSTextAttachment alloc] init];
         attach.image = [UIImage imageNamed:@"iconContact"];
         attach.bounds = CGRectMake(0, -3, 16, 16);
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",_receiverContactName]];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8DA1AD"] range:NSMakeRange(0, string.string.length)];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#00F6D2"] range:receiverNameRange];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffffff"] range:NSMakeRange(0, string.string.length)];
+        [string addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#0bccf7"] range:receiverNameRange];
         [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.string.length)];
         
         NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
@@ -701,7 +727,9 @@
         [commentString appendAttributedString:[[NSAttributedString alloc]initWithString:@"    "]];
         [commentString appendAttributedString:string];
         
+        [strings addObject:localizableString];
         [strings addObject:commentString];
+        [strings addObject:addressString];
     }
     
     if (_comment.length > 0 && strings.count > 1) {

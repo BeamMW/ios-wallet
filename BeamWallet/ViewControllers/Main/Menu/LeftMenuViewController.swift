@@ -20,6 +20,15 @@
 import UIKit
 import SafariServices
 
+class MenuCell: UITableViewCell {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.textLabel?.x = 60
+    }
+}
+
 class MenuItem {
     
     public var name:String!
@@ -41,8 +50,9 @@ class LeftMenuViewController: BaseTableViewController {
     
     private var sections_0 = [
         MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected:               true, type: WalletViewController.self),
-        MenuItem(name: Localizable.shared.strings.dAppStore, icon: IconDappStore(), selected: false, type: DAOAppsViewController.self),
-        MenuItem(name: Localizable.shared.strings.beamx_dao, icon: IconBeamXDAO(), selected: false, type: DAOViewController.self)]
+        MenuItem(name: Localizable.shared.strings.beamx_dao, icon: IconBeamXDAO(), selected: false, type: DAOViewController.self),
+        MenuItem(name: Localizable.shared.strings.beam_faucet, icon: IconBeamFaucet(), selected: false, type: DAOViewController.self),
+        MenuItem(name: Localizable.shared.strings.beam_gallery, icon: IconBeamGallery(), selected: false, type: DAOViewController.self)]
     
     private var sections_1 = [
         MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self),
@@ -155,7 +165,7 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
         var cell = tableView.dequeueReusableCell(withIdentifier: "MenuCell")
         
         if(cell == nil) {
-            cell = UITableViewCell(style: .default, reuseIdentifier: "MenuCell")
+            cell = MenuCell(style: .default, reuseIdentifier: "MenuCell")
             cell?.backgroundColor = UIColor.clear
             cell?.contentView.backgroundColor = UIColor.clear
             cell?.textLabel?.highlightedTextColor = UIColor.main.brightTeal
@@ -240,7 +250,8 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
         }
         else {
             if !item.selected {
-                
+                AppModel.sharedManager().stopDAO()
+
                 for _item in self.sections_0 {
                     _item.selected = false
                 }
@@ -273,6 +284,10 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
                     navigationController.setViewControllers([SettingsViewController(type: .main)], animated: false)
                 case Localizable.shared.strings.dAppStore :
                     navigationController.setViewControllers([DAOAppsViewController()], animated: false)
+                case Localizable.shared.strings.beam_faucet :
+                    AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().daoFaucetApp())
+                case Localizable.shared.strings.beam_gallery :
+                    AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().daoGalleryApp())
                 case Localizable.shared.strings.beamx_dao:
                     AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().daoBeamXApp())
                 default :
@@ -305,8 +320,9 @@ extension LeftMenuViewController : SettingsModelDelegate {
         
         sections_0 = [
             MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected:               false, type: WalletViewController.self),
-            MenuItem(name: Localizable.shared.strings.dAppStore, icon: IconDappStore(), selected: false, type: DAOAppsViewController.self),
-            MenuItem(name: Localizable.shared.strings.beamx_dao, icon: IconBeamXDAO(), selected: false, type: DAOViewController.self)]
+            MenuItem(name: Localizable.shared.strings.beamx_dao, icon: IconBeamXDAO(), selected: false, type: DAOViewController.self),
+            MenuItem(name: Localizable.shared.strings.beam_faucet, icon: IconBeamFaucet(), selected: false, type: DAOViewController.self),
+            MenuItem(name: Localizable.shared.strings.beam_gallery, icon: IconBeamGallery(), selected: false, type: DAOViewController.self)]
         
         sections_1 = [
             MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self),

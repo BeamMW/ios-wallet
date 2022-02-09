@@ -70,8 +70,8 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-#import "BeamWallet-Swift.h"
-//#import "BeamWalletMasterNet-Swift.h"
+//#import "BeamWallet-Swift.h"
+#import "BeamWalletMasterNet-Swift.h"
 //#import "BeamWalletTestNet-Swift.h"
 
 using namespace beam;
@@ -3203,6 +3203,52 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     return app;
 }
 
+-(BMApp*_Nonnull)daoFaucetApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BEAM Faucet"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"BEAM Faucet";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/plugin-faucet/index.html";
+        app.icon = @"https://apps.beam.mw/app/plugin-faucet/appicon.svg";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
+    }
+    return app;
+}
+
+-(BMApp*_Nonnull)daoGalleryApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"NFT Gallery"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"NFT Gallery";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/plugin-gallery/index.html";
+        app.icon = @"https://apps.beam.mw/app/plugin-gallery/appicon.svg";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
+    }
+    return app;
+}
 
 @end
-

@@ -674,3 +674,6 @@ and never kept on the blockchain.";
 "sender_wallet_signature" = "Sender's wallet signature";
 "receiver_wallet_signature" = "Receiver's wallet signature";
 "no_funds_dao" = "There is not enough funds to complete the transaction";
+"beam_faucet" = "Beam Faucet";
+"beam_gallery" = "NFT Gallery";
+"no_search_transactions" = "There are no transactions\nmatching search criteria";
