@@ -305,6 +305,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 -(void)rescan;
 -(void)enableBodyRequests:(BOOL)value;
+-(void)resetEstimateProgress;
+-(UInt64)getEstimateProgress:(UInt64)done total:(UInt64)total;
 
 -(double)grothToBeam:(uint64_t)groth;
 

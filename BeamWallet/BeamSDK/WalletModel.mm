@@ -478,16 +478,16 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
 void WalletModel::onSyncProgressUpdated(int done, int total)
 {
     NSLog(@"onSyncProgressUpdated %d/%d",done, total);
-
+    
     [AppModel sharedManager].isUpdating = (done != total);
-
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
             [delegate onSyncProgressUpdated:done total:total];
         }
-    }
+    }    
 }
 
 
@@ -903,9 +903,9 @@ void WalletModel::onPaymentProofExported(const beam::wallet::TxID& txID, const b
     BMPaymentProof *paymentProof = [[BMPaymentProof alloc] init];
     paymentProof.code = [NSString stringWithUTF8String:str.c_str()];
     paymentProof.txID = [NSString stringWithUTF8String:txIDToString(txID).c_str()];
-
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
+    
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onReceivePaymentProof:)]) {
             [delegate onReceivePaymentProof:paymentProof];
@@ -1653,23 +1653,23 @@ NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
 {
     switch (type)
     {
-            case wallet::ErrorType::NodeProtocolBase:
+        case wallet::ErrorType::NodeProtocolBase:
             return @"Node protocol error!";
-            case wallet::ErrorType::NodeProtocolIncompatible:
+        case wallet::ErrorType::NodeProtocolIncompatible:
             return @"You are trying to connect to incompatible peer.";
-            case wallet::ErrorType::ConnectionBase:
+        case wallet::ErrorType::ConnectionBase:
             return @"Connection error.";
-            case wallet::ErrorType::HostResolvedError:
+        case wallet::ErrorType::HostResolvedError:
             return [NSString stringWithFormat:@"Unable to resolve node address: %@", [Settings sharedManager].nodeAddress] ;
-            case wallet::ErrorType::ConnectionTimedOut:
+        case wallet::ErrorType::ConnectionTimedOut:
             return @"Connection timed out.";
-            case wallet::ErrorType::ConnectionRefused:
+        case wallet::ErrorType::ConnectionRefused:
             return @"Cannot connect to node";
-            case wallet::ErrorType::ConnectionHostUnreach:
+        case wallet::ErrorType::ConnectionHostUnreach:
             return @"Node is unreachable";
-            case wallet::ErrorType::ConnectionAddrInUse:
+        case wallet::ErrorType::ConnectionAddrInUse:
             return @"The port is already in use. Check if a wallet is already running on this machine or change the port settings.";
-            case wallet::ErrorType::TimeOutOfSync:
+        case wallet::ErrorType::TimeOutOfSync:
             return @"System time not synchronized.";
         default:
             return @"Unexpected error!";

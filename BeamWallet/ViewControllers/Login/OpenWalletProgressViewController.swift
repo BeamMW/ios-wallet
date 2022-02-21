@@ -24,6 +24,7 @@ class OpenWalletProgressViewController: BaseViewController {
     @IBOutlet private weak var progressView: UIProgressView!
     @IBOutlet private weak var progressTitleLabel: UILabel!
     @IBOutlet private weak var progressValueLabel: UILabel!
+    @IBOutlet private weak var progressTimeValueLabel: UILabel!
     @IBOutlet private weak var restotingInfoLabel: UILabel!
     @IBOutlet private weak var cancelButton: UIButton!
     @IBOutlet private weak var errorLabel: UILabel!
@@ -35,7 +36,6 @@ class OpenWalletProgressViewController: BaseViewController {
     private var password:String?
     private var phrase:String?
     private var isPresented = false
-    private var start = Date.timeIntervalSinceReferenceDate;
     private var stopRestore = false
     private var isWaitingRestore = false
     private var onlyConnect = false
@@ -43,6 +43,10 @@ class OpenWalletProgressViewController: BaseViewController {
     public var cancelCallback : (() -> Void)?
     public var isRescan = false
     
+    private var backgroundTaskID: UIBackgroundTaskIdentifier!
+    
+    private let displayProgress = true
+
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
 
@@ -61,7 +65,15 @@ class OpenWalletProgressViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask (withName: "com.mw.beam.beamwalletiOSMasternet.task") {
+            print("END BG TASK")
+            UIApplication.shared.endBackgroundTask(self.backgroundTaskID!)
+            self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+        }
+            
+        AppModel.sharedManager().resetEstimateProgress()
+        
         removeLeftButton()
         
         if Settings.sharedManager().isDarkMode {
@@ -83,8 +95,10 @@ class OpenWalletProgressViewController: BaseViewController {
         progressView.transform = transformScale
         
         if onlyConnect {
+            progressTitleLabel.isHidden = true
+
             if AppModel.sharedManager().isLoggedin {
-                if self.isRescan {
+                if isRescan {
                     cancelButton.isHidden = true
                     cancelButton.alpha = 0
                     cancelButton.isUserInteractionEnabled = false
@@ -100,11 +114,23 @@ class OpenWalletProgressViewController: BaseViewController {
             else {
                 progressTitleLabel.text = Localizable.shared.strings.loading_wallet
             }
-            progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + " 0%."
+            
+            if displayProgress {
+                progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + " 0%"
+            }
+            else {
+                progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + ": "
+            }
+            
+            
             restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
+            
+            progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+            progressTimeValueLabel.isHidden = false
+            
             progressValueLabel.isHidden = false
             cancelButton.isHidden = false
-            restotingInfoLabel.isHidden = false
+            restotingInfoLabel.isHidden = true
         }
         else if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
@@ -119,11 +145,16 @@ class OpenWalletProgressViewController: BaseViewController {
             
             progressTitleLabel.text = Localizable.shared.strings.loading_wallet
             cancelButton.isHidden = true
+            
+            if Settings.sharedManager().isNodeProtocolEnabled  {
+                progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+                progressTimeValueLabel.isHidden = false
+            }
         }
         else if phrase != nil {
             if Settings.sharedManager().isNodeProtocolEnabled {
                 restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
-                restotingInfoLabel.isHidden = false
+                restotingInfoLabel.isHidden = true
             }
             else {
                 timeoutTimer?.invalidate()
@@ -161,6 +192,9 @@ class OpenWalletProgressViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+        self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
         
         timeoutTimer?.invalidate()
         
@@ -282,10 +316,13 @@ class OpenWalletProgressViewController: BaseViewController {
                     self.progressView.progress = percent
                     
                     if let remaining = time {
-                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%." + " " + Localizable.shared.strings.estimted_time + ": " + remaining + "."
+                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%"
+                        self.progressTimeValueLabel.text = remaining + Localizable.shared.strings.to_completion
                     }
                     else{
-                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%."
+                        self.progressValueLabel.text = Localizable.shared.strings.downloading + " " + "\(Int32(percent * 100))%"
+                        self.progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+                        self.progressTimeValueLabel.isHidden = false
                     }
                 }
             }
@@ -365,7 +402,7 @@ class OpenWalletProgressViewController: BaseViewController {
             strongSelf.restotingInfoLabel.text = Localizable.shared.strings.restor_wallet_warning + "\n\n" + Localizable.shared.strings.restor_wallet_info
             strongSelf.restotingInfoLabel.isHidden = false
             strongSelf.progressView.progress = 0
-            strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(0)%."
+            strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(0)%"
         }
         
         DispatchQueue.global(qos: .background).async {
@@ -455,24 +492,31 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             
+    
             strongSelf.errorLabel.isHidden = true
-
             strongSelf.progressView.progress = Float(Float(done)/Float(total))
             
             let progress_100 = Int32(strongSelf.progressView.progress * 100)
-
+            
             if progress_100 != strongSelf.oldProgress {
                 strongSelf.oldProgress = progress_100
                 
                 if time > 0 {
                     let asDouble = Double(time)
-                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " " + "\(progress_100)%." + " " + Localizable.shared.strings.estimted_time + ": " + asDouble.asTime(style: .abbreviated) + "."
+                    if asDouble <= 60 {
+                        strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.to_completion_minute
+                    }
+                    else {
+                        strongSelf.progressTimeValueLabel.text = asDouble.asTime(style: .short).replacingOccurrences(of: ",", with: "") + Localizable.shared.strings.to_completion
+                    }
+                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " " + "\(progress_100)%"
                 }
                 else{
-                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(progress_100)%."
+                    strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+                    strongSelf.progressValueLabel.text = Localizable.shared.strings.restored + " \(progress_100)%"
                 }
             }
-      
+            
             let percent = (Float64(done) / Float64(total)) * Float64(100)
             
             if done == total ||  percent >= 99.9  {
@@ -495,15 +539,11 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                         }
                         else{
                             strongSelf.openMainPage()
-//                            if strongSelf.isWaitingRestore {
-//                                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 50%."
-//                            }
-//
-//                            strongSelf.startCreateWallet()
                         }
                     }
                 }
             }
+            
         }
     }
     
@@ -512,8 +552,25 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             guard let strongSelf = self else { return }
             strongSelf.errorLabel.isHidden = true
             
+            if done > 0 {
+                if (strongSelf.onlyConnect || strongSelf.isRescan || strongSelf.phrase == nil) {
+                    let timeLeft = AppModel.sharedManager().getEstimateProgress(UInt64(done), total: UInt64(total))
+                    if timeLeft > 0 {
+                        let asDouble = Double(timeLeft)
+                        if asDouble <= 60 {
+                            strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.to_completion_minute
+                        }
+                        else {
+                            strongSelf.progressTimeValueLabel.text = asDouble.asTime(style: .short).replacingOccurrences(of: ",", with: "") + Localizable.shared.strings.to_completion
+                        }
+                    }
+                    else{
+                        strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+                    }
+                }
+            }
+            
             if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
-                //
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
@@ -523,7 +580,13 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 }
                 else if strongSelf.onlyConnect || (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
-                    strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain) \(progress_100)%."
+                    
+                    if strongSelf.displayProgress {
+                        strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain) \(progress_100)%"
+                    }
+                    else {
+                        strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain): "
+                    }
                 }
             }
 
@@ -562,10 +625,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             if error.code == 2 && Settings.sharedManager().isChangedNode() {
                 strongSelf.openMainPage()
             }
-            else if error.code == 1 {
-                strongSelf.openMainPage()
-            }
-            else if error.code == 4 {
+            else if error.code == 1 || error.code == 3 || error.code == 4 {
                 strongSelf.openMainPage()
             }
             else if !strongSelf.isPresented {

@@ -32,6 +32,7 @@
 #import "WalletModel.h"
 #import "StringStd.h"
 #import "DAOManager.h"
+#import "RecoveryProgress.h"
 
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
@@ -171,6 +172,8 @@ struct GetMinConfirmationsFunc
     DAOViewController *daoViewController;
     
     boost::optional<beam::wallet::WalletAddress> _receiverAddress;
+    
+    RecoveryProgress recoveryProgress;
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -1569,6 +1572,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if ([tr.senderAddress isEqualToString:address.walletId]
             || [tr.receiverAddress isEqualToString:address.walletId]
             || ([tr.token isEqualToString:address.address] && tr.token.length > 1)) {
+            [result addObject:tr];
+        }
+        else if([tr.receiverAddress isEqualToString:address._id]) {
             [result addObject:tr];
         }
     }
@@ -3022,7 +3028,6 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         hh = hours - dd * 24;
     }
     
-    
     NSString *res = @"";
     
     if (hh == 1) {
@@ -3043,6 +3048,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     return res;
+}
+
+-(void)resetEstimateProgress {
+    recoveryProgress.OnResetSimpleProgress();
+}
+
+-(UInt64)getEstimateProgress:(UInt64)done total:(UInt64)total {
+    return recoveryProgress.OnSimpleProgress(done, total);
 }
 
 -(void)rescan {

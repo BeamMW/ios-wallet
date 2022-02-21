@@ -11,6 +11,9 @@
         <array key="SF-Pro-Display-Light.otf">
             <string>SFProDisplay-Light</string>
         </array>
+        <array key="SF-Pro-Display-LightItalic.otf">
+            <string>SFProDisplay-LightItalic</string>
+        </array>
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
@@ -88,11 +91,11 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FJZ-bc-UOu">
                                         <rect key="frame" x="0.0" y="47.5" width="249" height="62.5"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wxS-xa-XrJ">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ywZ-8j-hK7">
                                                 <rect key="frame" x="0.0" y="5" width="249" height="57.5"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 Jun 2018   |   3:46 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yMx-9W-PKg">
-                                                        <rect key="frame" x="0.0" y="0.0" width="249" height="57.5"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 Jun 2018   |   3:46 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i7F-TA-dNP">
+                                                        <rect key="frame" x="0.0" y="0.0" width="249" height="31.5"/>
                                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="12"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -100,16 +103,37 @@
                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="NDj-Pu-1Ae">
+                                                        <rect key="frame" x="0.0" y="41.5" width="249" height="16"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconComment" translatesAutoresizingMaskIntoConstraints="NO" id="CCt-3A-NNG">
+                                                                <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="16" id="KvD-Id-ozT"/>
+                                                                    <constraint firstAttribute="width" constant="16" id="TjU-ZC-kkU"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="&quot;comment&quot;" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2L-Zb-k3X">
+                                                                <rect key="frame" x="26" y="0.0" width="223" height="16"/>
+                                                                <fontDescription key="fontDescription" name="SFProDisplay-LightItalic" family="SF Pro Display" pointSize="14"/>
+                                                                <color key="textColor" red="0.55294117649999996" green="0.63137254899999995" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="wxS-xa-XrJ" secondAttribute="bottom" id="B8N-d3-s06"/>
-                                            <constraint firstItem="wxS-xa-XrJ" firstAttribute="leading" secondItem="FJZ-bc-UOu" secondAttribute="leading" id="WBQ-5u-rCR"/>
-                                            <constraint firstAttribute="trailing" secondItem="wxS-xa-XrJ" secondAttribute="trailing" id="lxQ-EV-R9e"/>
-                                            <constraint firstItem="wxS-xa-XrJ" firstAttribute="top" secondItem="FJZ-bc-UOu" secondAttribute="top" constant="5" id="wo2-OP-aZu"/>
+                                            <constraint firstItem="ywZ-8j-hK7" firstAttribute="top" secondItem="FJZ-bc-UOu" secondAttribute="top" constant="5" id="8jt-NS-slb"/>
+                                            <constraint firstAttribute="bottom" secondItem="ywZ-8j-hK7" secondAttribute="bottom" id="C2O-gP-Kb6"/>
+                                            <constraint firstAttribute="trailing" secondItem="ywZ-8j-hK7" secondAttribute="trailing" id="gcg-3D-x3C"/>
+                                            <constraint firstItem="ywZ-8j-hK7" firstAttribute="leading" secondItem="FJZ-bc-UOu" secondAttribute="leading" id="y1J-zM-77Z"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -167,7 +191,9 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="assetIcon" destination="WO9-4s-a5K" id="1rb-lc-cPJ"/>
-                <outlet property="dateLabel" destination="yMx-9W-PKg" id="Uhg-fB-28f"/>
+                <outlet property="commentLabel" destination="K2L-Zb-k3X" id="NRA-u7-ZT6"/>
+                <outlet property="commentView" destination="NDj-Pu-1Ae" id="2mD-ul-5sK"/>
+                <outlet property="dateLabel" destination="i7F-TA-dNP" id="nnv-fu-2LT"/>
                 <outlet property="mainView" destination="Nbc-pK-Hen" id="b21-WJ-Z3P"/>
                 <outlet property="searchLabel" destination="qIn-5S-Clg" id="u8D-4o-0BK"/>
                 <outlet property="secondAvailableLabel" destination="GpF-vk-PmM" id="Lpu-hM-xQp"/>
@@ -180,5 +206,6 @@
     </objects>
     <resources>
         <image name="icon-received-max-privacy-offline" width="20" height="20"/>
+        <image name="iconComment" width="16" height="16"/>
     </resources>
 </document>
