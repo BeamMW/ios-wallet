@@ -680,3 +680,18 @@ and never kept on the blockchain.";
 "calc_estimate_time" = "Calculating estimate time";
 "to_completion" = " to completion";
 "to_completion_minute" = "less than a minute to completion";
+
+"switch_to_own" = "Switch to own node";
+"switch_to_random" = "Switch to random node";
+"switch_to_mobile" = "Switch to mobile node";
+"switch_to_own_from_mobile" = "Are you sure to switch from mobile node to own node\n%@?";
+"switch_to_own_from_random" = "Are you sure to switch from random node to own node\n%@?";
+"switch_to_own_from_own" = "Are you sure to switch from own node %@ to own node\n%@?";
+"switch_to_random_from_mobile" = "Are you sure to switch from mobile node to random node?\nRandom node supports only online transactions.";
+"switch_to_random_from_own" = "Are you sure to switch from own node %@ to random node?\nRandom node supports only online transactions.";
+"cant_switch_random_title" = "Cannot switch to random node";
+"cant_switch_random_text_mobile" = "You can’t switch from mobile node to random node now.\nRandom node supports only online transactions, all offline transactions should be completed first.";
+"cant_switch_random_text_own" = "You can’t switch from own node %@ to random node now.\nRandom node supports only online transactions, all offline transactions should be completed first.";
+"switch_to_mobile_from_random" = "Are you sure to switch from random node to mobile node?";
+"switch_to_mobile_from_own" = "Are you sure to switch from own node %@ to mobile node?";
+"sw" = "Switch";

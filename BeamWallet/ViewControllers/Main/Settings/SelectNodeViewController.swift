@@ -31,6 +31,7 @@ class SelectNodeViewController: BaseTableViewController {
 
     private var items = [SelectNode]()
     private var inputField = BMField()
+    private var oldSelected = 0
 
     public var isNeedDisconnect = true
     public var isCreateWallet = false
@@ -45,14 +46,14 @@ class SelectNodeViewController: BaseTableViewController {
     private func footerView() -> UIView  {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 155))
         
-        if isNeedDisconnect {
-            let disconnectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.red)
-            disconnectButton.setImage(IconDeleteBlue(), for: .normal)
-            disconnectButton.setTitle(Localizable.shared.strings.disconnect.lowercased(), for: .normal)
-            disconnectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-            disconnectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-            disconnectButton.addTarget(self, action: #selector(onDisconnect), for: .touchUpInside)
-            view.addSubview(disconnectButton)
+        if !isCreateWallet && self.items[2].selected {
+            let nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 10, width: 220, height: 44), color: UIColor.main.brightTeal)
+            nextButton.setImage(IconNextBlue(), for: .normal)
+            nextButton.setTitle(Localizable.shared.strings.proceed.lowercased(), for: .normal)
+            nextButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+            nextButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+            nextButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+            view.addSubview(nextButton)
         }
         else if isCreateWallet {
             let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
@@ -63,21 +64,44 @@ class SelectNodeViewController: BaseTableViewController {
             connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
             view.addSubview(connectButton)
         }
-        else {
-            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
-            connectButton.setImage(IconDoneBlue(), for: .normal)
-            connectButton.setTitle(Localizable.shared.strings.connect.lowercased(), for: .normal)
-            connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-            connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-            connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-            view.addSubview(connectButton)
-        }
+//        else if !isNeedDisconnect {
+//            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
+//            connectButton.setImage(IconDoneBlue(), for: .normal)
+//            connectButton.setTitle(Localizable.shared.strings.connect.lowercased(), for: .normal)
+//            connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+//            connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+//            connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+//            view.addSubview(connectButton)
+//        }
         
         return view
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        items.append(SelectNode(title: Localizable.shared.strings.random_node_title, subTitle: Localizable.shared.strings.fast_sync, detail: Localizable.shared.strings.random_node_text, icon: "iconRandomNode", selected: false))
+        items.append(SelectNode(title: Localizable.shared.strings.mobile_node_title, subTitle: Localizable.shared.strings.slow_sync, detail: Localizable.shared.strings.mobile_node_hint, icon: "iconMobbileNode", selected: false))
+        items.append(SelectNode(title: Localizable.shared.strings.own_node_title, subTitle: Localizable.shared.strings.fast_secure_advance, detail: Localizable.shared.strings.own_node_text, icon: "iconSpecificNode", selected: false))
+        
+        if isCreateWallet {
+            oldSelected = 0
+            items[0].selected = true
+        }
+        else {
+            if Settings.sharedManager().isNodeProtocolEnabled {
+                oldSelected = 1
+                items[1].selected = true
+            }
+            else if !Settings.sharedManager().connectToRandomNode {
+                oldSelected = 2
+                items[2].selected = true
+            }
+            else {
+                oldSelected = 0
+                items[0].selected = true
+            }
+        }
         
         inputField.awakeFromNib()
         
@@ -97,26 +121,7 @@ class SelectNodeViewController: BaseTableViewController {
         tableView.tableFooterView = footerView()
         tableView.backgroundColor = UIColor.main.marine
         tableView.keyboardDismissMode = .interactive
-        
-        items.append(SelectNode(title: Localizable.shared.strings.random_node_title, subTitle: Localizable.shared.strings.fast_sync, detail: Localizable.shared.strings.random_node_text, icon: "iconRandomNode", selected: false))
-        items.append(SelectNode(title: Localizable.shared.strings.mobile_node_title, subTitle: Localizable.shared.strings.slow_sync, detail: Localizable.shared.strings.mobile_node_hint, icon: "iconMobbileNode", selected: false))
-        items.append(SelectNode(title: Localizable.shared.strings.own_node_title, subTitle: Localizable.shared.strings.fast_secure_advance, detail: Localizable.shared.strings.own_node_text, icon: "iconSpecificNode", selected: false))
-        
-        if isCreateWallet {
-            items[0].selected = true
-        }
-        else {
-            if Settings.sharedManager().isNodeProtocolEnabled {
-                items[1].selected = true
-            }
-            else if !Settings.sharedManager().connectToRandomNode {
-                items[2].selected = true
-            }
-            else {
-                items[0].selected = true
-            }
-        }
-              
+                      
         inputField.setNormalColor(color: .white)
         inputField.keyboardType = .numbersAndPunctuation
         inputField.spellCheckingType = .no
@@ -180,15 +185,33 @@ class SelectNodeViewController: BaseTableViewController {
             if isCreateWallet {
                 Settings.sharedManager().removeCustomNode()
             }
-            if Settings.sharedManager().isNodeProtocolEnabled {
-                Settings.sharedManager().isNodeProtocolEnabled = false
-                AppModel.sharedManager().enableBodyRequests(false)
+            else if AppModel.sharedManager().hasActiveTransactions() {
+                if oldSelected == 1 {
+                    self.alert(title: Localizable.shared.strings.cant_switch_random_title, message: Localizable.shared.strings.cant_switch_random_text_mobile, handler: nil)
+                }
+                else if oldSelected == 2 {
+                    self.alert(title: Localizable.shared.strings.cant_switch_random_title, message: String.init(format: Localizable.shared.strings.cant_switch_random_text_own, Settings.sharedManager().nodeAddress), handler: nil)
+                }
             }
-            Settings.sharedManager().connectToRandomNode = true
-            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
-            AppModel.sharedManager().changeNodeAddress()
+            else {
+                if Settings.sharedManager().isNodeProtocolEnabled {
+                    Settings.sharedManager().isNodeProtocolEnabled = false
+                    AppModel.sharedManager().enableBodyRequests(false)
+                }
+                Settings.sharedManager().connectToRandomNode = true
+                Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+                AppModel.sharedManager().changeNodeAddress()
+            }
             
             if isCreateWallet {
+                if Settings.sharedManager().isNodeProtocolEnabled {
+                    Settings.sharedManager().isNodeProtocolEnabled = false
+                    AppModel.sharedManager().enableBodyRequests(false)
+                }
+                Settings.sharedManager().connectToRandomNode = true
+                Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+                AppModel.sharedManager().changeNodeAddress()
+                
                 openMain()
             }
         }
@@ -227,23 +250,46 @@ class SelectNodeViewController: BaseTableViewController {
                     alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.enter_node_address, handler: nil)
                 }
                 else if AppModel.sharedManager().isValidNodeAddress(fullAddress) && !fullAddress.isEmpty {
-                    if Settings.sharedManager().isNodeProtocolEnabled {
-                        Settings.sharedManager().isNodeProtocolEnabled = false
-                        AppModel.sharedManager().enableBodyRequests(false)
-                    }
-                    Settings.sharedManager().connectToRandomNode = false
-                    Settings.sharedManager().nodeAddress = fullAddress
-                    AppModel.sharedManager().changeNodeAddress()
                     
                     if isCreateWallet {
+                        if Settings.sharedManager().isNodeProtocolEnabled {
+                            Settings.sharedManager().isNodeProtocolEnabled = false
+                            AppModel.sharedManager().enableBodyRequests(false)
+                        }
+                        Settings.sharedManager().connectToRandomNode = false
+                        Settings.sharedManager().nodeAddress = fullAddress
+                        AppModel.sharedManager().changeNodeAddress()
+                        
                         let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
                         self.pushViewController(vc: vc)
                     }
                     else {
-                        let vc = OpenWalletProgressViewController(onlyConnect: true)
-                        vc.cancelCallback = {
+                        if oldSelected == 0 {
+                            self.confirmAlert(title: Localizable.shared.strings.switch_to_own, message: String.init(format: Localizable.shared.strings.switch_to_own_from_random, fullAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                                
+                            } confirmHandler: { _  in
+                                self.onToOwnNode(fullAddress: fullAddress)
+                            }
                         }
-                        pushViewController(vc: vc)
+                        else if oldSelected == 1 {
+                            self.confirmAlert(title: Localizable.shared.strings.switch_to_own, message: String.init(format: Localizable.shared.strings.switch_to_own_from_mobile, fullAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                                
+                            } confirmHandler: { _  in
+                                self.onToOwnNode(fullAddress: fullAddress)
+                            }
+                        }
+                        else if oldSelected == 2 {
+                            if Settings.sharedManager().nodeAddress != fullAddress {
+                                self.confirmAlert(title: Localizable.shared.strings.switch_to_own, message: String.init(format: Localizable.shared.strings.switch_to_own_from_own, Settings.sharedManager().nodeAddress, fullAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                                    
+                                } confirmHandler: { _  in
+                                    self.onToOwnNode(fullAddress: fullAddress)
+                                }
+                            }
+                            else {
+                                self.onToOwnNode(fullAddress: fullAddress)
+                            }
+                        }
                     }
                 }
                 else {
@@ -255,6 +301,21 @@ class SelectNodeViewController: BaseTableViewController {
                 }
             }
         }
+    }
+    
+    private func onToOwnNode(fullAddress:String) {
+        if Settings.sharedManager().isNodeProtocolEnabled {
+            Settings.sharedManager().isNodeProtocolEnabled = false
+            AppModel.sharedManager().enableBodyRequests(false)
+        }
+        Settings.sharedManager().connectToRandomNode = false
+        Settings.sharedManager().nodeAddress = fullAddress
+        AppModel.sharedManager().changeNodeAddress()
+        
+        let vc = OpenWalletProgressViewController(onlyConnect: true)
+        vc.cancelCallback = {
+        }
+        pushViewController(vc: vc)
     }
 }
 
@@ -270,12 +331,84 @@ extension SelectNodeViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        if isCreateWallet {
+            self.onNextSelected(indexPath: indexPath)
+        }
+        else if items[0].selected {
+            if indexPath.section == 1 {
+                self.confirmAlert(title: Localizable.shared.strings.switch_to_mobile, message: Localizable.shared.strings.switch_to_mobile_from_random, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                    
+                } confirmHandler: { _  in
+                    self.onNextSelected(indexPath: indexPath)
+                    self.onNext()
+                }
+            }
+            else if indexPath.section == 2 {
+                self.onNextSelected(indexPath: indexPath)
+            }
+        }
+        else if items[1].selected {
+            if indexPath.section == 0 {
+                self.confirmAlert(title: Localizable.shared.strings.switch_to_random, message: Localizable.shared.strings.switch_to_random_from_mobile, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                    
+                } confirmHandler: { _  in
+                    self.onNextSelected(indexPath: indexPath)
+                    self.onNext()
+                }
+            }
+            else if indexPath.section == 2 {
+                self.onNextSelected(indexPath: indexPath)
+            }
+        }
+        else if items[2].selected {
+            if !Settings.sharedManager().connectToRandomNode {
+                if indexPath.section == 0 {
+                    self.confirmAlert(title: Localizable.shared.strings.switch_to_random, message: String.init(format: Localizable.shared.strings.switch_to_random_from_own, Settings.sharedManager().connectToRandomNode ? "" : Settings.sharedManager().nodeAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                    } confirmHandler: { _  in
+                        self.onNextSelected(indexPath: indexPath)
+                        self.onNext()
+                    }
+                }
+                else if indexPath.section == 1 {
+                    self.confirmAlert(title: Localizable.shared.strings.switch_to_mobile, message: String.init(format: Localizable.shared.strings.switch_to_random_from_mobile, Settings.sharedManager().connectToRandomNode ? "" : Settings.sharedManager().nodeAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                    } confirmHandler: { _  in
+                        self.onNextSelected(indexPath: indexPath)
+                        self.onNext()
+                    }
+                }
+            }
+            else {
+                if indexPath.section == 0 && Settings.sharedManager().isNodeProtocolEnabled {
+                    self.confirmAlert(title: Localizable.shared.strings.switch_to_random, message: Localizable.shared.strings.switch_to_random_from_mobile, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                        
+                    } confirmHandler: { _  in
+                        self.onNextSelected(indexPath: indexPath)
+                        self.onNext()
+                    }
+                }
+                else if indexPath.section == 1 && !Settings.sharedManager().isNodeProtocolEnabled {
+                    self.confirmAlert(title: Localizable.shared.strings.switch_to_mobile, message: Localizable.shared.strings.switch_to_mobile_from_random, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                        
+                    } confirmHandler: { _  in
+                        self.onNextSelected(indexPath: indexPath)
+                        self.onNext()
+                    }
+                }
+                else {
+                    self.onNextSelected(indexPath: indexPath)
+                }
+            }
+        }
+    }
+    
+    private func onNextSelected(indexPath: IndexPath) {
         for (index, _) in items.enumerated() {
             items[index].selected = false
         }
         
         items[indexPath.section].selected = true
         
+        tableView.tableFooterView = footerView()
         tableView.reloadData()
     }
 }
@@ -316,12 +449,11 @@ extension SelectNodeViewController : UITableViewDataSource {
             if cell == nil {
                 cell = UITableViewCell.init(style: .default, reuseIdentifier: "Cell")
                 
-                cell?.backgroundColor = UIColor.clear
+                cell?.backgroundColor = UIColor.main.cellBackgroundColor
                 cell?.contentView.backgroundColor = UIColor.clear
                 cell?.selectionStyle = .none
                 
-                let view = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 65))
-                view.backgroundColor = UIColor.main.cellBackgroundColor
+                let view = UIView(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.width, height: 65))
                 inputField.frame = CGRect(x: UIScreen.main.bounds.width-265, y: 10, width: 250, height: 45)
                 view.addSubview(inputField)
                 
@@ -331,49 +463,28 @@ extension SelectNodeViewController : UITableViewDataSource {
                 label.font = BoldFont(size: 14)
                 view.addSubview(label)
                 
-                let topLine = UIView(frame: CGRect(x: 0, y: 15, width: UIScreen.main.bounds.width, height: 1))
-                topLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
-                
-                let botLine = UIView(frame: CGRect(x: 0, y: 79, width: UIScreen.main.bounds.width, height: 1))
-                botLine.backgroundColor = UIColor.white.withAlphaComponent(0.13)
-                
                 let mainView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 80))
-                mainView.addSubview(topLine)
-                mainView.addSubview(botLine)
                 mainView.backgroundColor = UIColor.clear
                 mainView.addSubview(view)
                 
                 cell?.contentView.addSubview(mainView)
             }
+  
+            cell?.isUserInteractionEnabled = true
+            cell?.alpha = 1.0
+            cell?.contentView.alpha = 1
             
-            if isNeedDisconnect {
-                cell?.isUserInteractionEnabled = false
-                cell?.alpha = 0.5
-                cell?.contentView.alpha = 0.5
-            }
-            else {
-                cell?.isUserInteractionEnabled = true
-                cell?.alpha = 1.0
-                cell?.contentView.alpha = 1
-            }
             
             return cell ?? UITableViewCell()
         }
         else {
             let cell = tableView
                 .dequeueReusableCell(withType: NodeCell.self, for: indexPath)
-            cell.configure(items[indexPath.section])
+            cell.configure(items[indexPath.section], selected: items[indexPath.section].selected)
             
-            if isNeedDisconnect && !items[indexPath.section].selected {
-                cell.isUserInteractionEnabled = false
-                cell.alpha = 0.5
-                cell.contentView.alpha = 0.5
-            }
-            else {
-                cell.isUserInteractionEnabled = true
-                cell.alpha = 1.0
-                cell.contentView.alpha = 1
-            }
+            cell.isUserInteractionEnabled = true
+            cell.alpha = 1.0
+            cell.contentView.alpha = 1
             
             return cell
         }

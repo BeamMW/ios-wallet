@@ -604,6 +604,22 @@ class LocalizableStrings : NSObject {
     var to_completion = "to_completion".localized
     var to_completion_minute = "to_completion_minute".localized
     
+    var switch_to_own = "switch_to_own".localized
+    var switch_to_random = "switch_to_random".localized
+    var switch_to_mobile = "switch_to_mobile".localized
+    var switch_to_own_from_mobile = "switch_to_own_from_mobile".localized
+    var switch_to_own_from_random = "switch_to_own_from_random".localized
+    var switch_to_own_from_own = "switch_to_own_from_own".localized
+    var switch_to_random_from_mobile = "switch_to_random_from_mobile".localized
+    var switch_to_random_from_own = "switch_to_random_from_own".localized
+    var cant_switch_random_title = "cant_switch_random_title".localized
+    var cant_switch_random_text_mobile = "cant_switch_random_text_mobile".localized
+    var cant_switch_random_text_own = "cant_switch_random_text_own".localized
+    var switch_to_mobile_from_random = "switch_to_mobile_from_random".localized
+    var switch_to_mobile_from_own = "switch_to_mobile_from_own".localized
+    var sw = "sw".localized
+
+    
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)
     }

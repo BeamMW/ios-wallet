@@ -155,6 +155,13 @@ class OpenWalletProgressViewController: BaseViewController {
             if Settings.sharedManager().isNodeProtocolEnabled {
                 restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
                 restotingInfoLabel.isHidden = true
+                
+                progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+                progressTimeValueLabel.isHidden = false
+                
+                progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + " 0%."
+                progressValueLabel.isHidden = false
+                cancelButton.isHidden = true
             }
             else {
                 timeoutTimer?.invalidate()
@@ -553,7 +560,8 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             strongSelf.errorLabel.isHidden = true
             
             if done > 0 {
-                if (strongSelf.onlyConnect || strongSelf.isRescan || strongSelf.phrase == nil) {
+                if (strongSelf.onlyConnect || strongSelf.isRescan || strongSelf.phrase == nil)
+                || (strongSelf.phrase != nil){
                     let timeLeft = AppModel.sharedManager().getEstimateProgress(UInt64(done), total: UInt64(total))
                     if timeLeft > 0 {
                         let asDouble = Double(timeLeft)
@@ -571,6 +579,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             }
             
             if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
+           
             }
             else{
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
