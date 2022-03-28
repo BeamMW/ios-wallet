@@ -24,6 +24,8 @@ class SettingsViewController: BaseTableViewController {
     private var viewModel:SettingsViewModel!
     private var type:SettingsViewModel.SettingsType!
     
+    private var searchView:BMSearchView!
+
     init(type:SettingsViewModel.SettingsType) {
         super.init(nibName: nil, bundle: nil)
         self.type = type
@@ -51,21 +53,62 @@ class SettingsViewController: BaseTableViewController {
         }
         
         viewModel.onDataChanged = { [weak self] in
+            if self?.viewModel.items.count == 0 {
+                self?.tableView.separatorStyle = .none
+            }
+            else {
+                self?.tableView.separatorStyle = .singleLine
+            }
             self?.tableView.reloadData()
         }
                 
-        tableView.register([SettingsCell.self, SettingsSubTitleCell.self])
+        tableView.register([SettingsCell.self, SettingsSubTitleCell.self, BMEmptyCell.self])
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.13)
         tableView.separatorStyle = .singleLine
         tableView.dataSource = self
         tableView.delegate = self
         tableView.contentInsetAdjustmentBehavior = .never
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
+
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
         
         if type == .main {
+            searchView = BMSearchView()
+            searchView.y = 12
+            searchView.searchField.placeholder = Localizable.shared.strings.search_settings
+            
+            searchView.onSearchTextChanged = {
+                [weak self] text in
+                guard let strongSelf = self else { return }
+                if !text.isEmpty {
+                    strongSelf.tableView.sectionHeaderHeight = 5
+                    strongSelf.tableView.sectionFooterHeight = 5
+                    strongSelf.tableView.tableFooterView = nil
+                }
+                else {
+                    strongSelf.tableView.sectionHeaderHeight = 15
+                    strongSelf.tableView.sectionFooterHeight = 15
+                    strongSelf.tableView.tableFooterView = strongSelf.versionView()
+                }
+                strongSelf.viewModel.searchString = text
+            }
+            searchView.onCancelSearch = {
+                [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.tableView.sectionHeaderHeight = 15
+                strongSelf.tableView.sectionFooterHeight = 15
+                strongSelf.viewModel.searchString = ""
+                strongSelf.tableView.tableFooterView = strongSelf.versionView()
+            }
+            
+            let tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
+            tableHeaderView.addSubview(searchView)
+            
+            tableView.tableHeaderView = tableHeaderView
             tableView.tableFooterView = versionView()
+        }
+        else {
+            tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         }
         
         AppModel.sharedManager().addDelegate(self)
@@ -101,6 +144,11 @@ class SettingsViewController: BaseTableViewController {
         label.text = string
         view.addSubview(label)
         
+        if Device.isXDevice {
+            view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 280)
+            label.frame = CGRect(x: 0, y: view.h - 60, width: UIScreen.main.bounds.size.width, height: 20)
+        }
+        
         return view
     }
 }
@@ -108,6 +156,16 @@ class SettingsViewController: BaseTableViewController {
 extension SettingsViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if viewModel.items.count == 0 {
+            var h =  tableView.h - 80
+            if KeyboardListener.shared.isVisible {
+                h = tableView.h - KeyboardListener.shared.keyboardHeight
+            }
+            if h < 100 {
+                h = 150
+            }
+            return h
+        }
         return UITableView.automaticDimension
     }
     
@@ -128,38 +186,51 @@ extension SettingsViewController : UITableViewDelegate {
 extension SettingsViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if viewModel.items.count == 0 {
+            return 1
+        }
         return viewModel.items.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if viewModel.items.count == 0 {
+            return 1
+        }
         return viewModel.items[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let item = viewModel.getItem(indexPath: indexPath)
-        
-        if item.isSubDetail {
+        if viewModel.items.count == 0 {
             let cell = tableView
-                .dequeueReusableCell(withType: SettingsSubTitleCell.self, for: indexPath)
-            cell.configure(with: item)
+                .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
+                .configured(with: (text:Localizable.shared.strings.no_search_settings , image: IconSearchEmpty()))
             return cell
         }
         else {
-            let cell = tableView
-                .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
-            cell.configure(with: item)
-            cell.delegate = self
+            let item = viewModel.getItem(indexPath: indexPath)
             
-            if item.type == .blockchain {
-                cell.isUserInteractionEnabled = false
+            if item.isSubDetail {
+                let cell = tableView
+                    .dequeueReusableCell(withType: SettingsSubTitleCell.self, for: indexPath)
+                cell.configure(with: item, search: viewModel.searchString)
+                return cell
             }
             else {
-                cell.isUserInteractionEnabled = true
+                let cell = tableView
+                    .dequeueReusableCell(withType: SettingsCell.self, for: indexPath)
+                cell.configure(with: item, search: viewModel.searchString)
+                cell.delegate = self
+                
+                if item.type == .blockchain {
+                    cell.isUserInteractionEnabled = false
+                }
+                else {
+                    cell.isUserInteractionEnabled = true
+                }
+                return cell
             }
-            return cell
         }
-        
     }
 }
 
@@ -309,4 +380,8 @@ extension SettingsViewController : SettingsModelDelegate {
         
         tableView.reloadData()
     }
+}
+
+extension SettingsViewController: UITextFieldDelegate {
+    
 }

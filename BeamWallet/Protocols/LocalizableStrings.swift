@@ -600,7 +600,7 @@ class LocalizableStrings : NSObject {
     var no_funds_dao = "no_funds_dao".localized
     var no_search_transactions = "no_search_transactions".localized
     
-    var calc_estimate_time = "calc_estimate_time".localized
+    var calc_estimate_time = "calc_estimate_time".localized.lowercased()
     var to_completion = "to_completion".localized
     var to_completion_minute = "to_completion_minute".localized
     
@@ -618,7 +618,11 @@ class LocalizableStrings : NSObject {
     var switch_to_mobile_from_random = "switch_to_mobile_from_random".localized
     var switch_to_mobile_from_own = "switch_to_mobile_from_own".localized
     var sw = "sw".localized
+    var search_settings = "search_settings".localized
+    var no_search_settings = "no_search_settings".localized
+    var online_own_not_conifg = "online_own_not_conifg".localized
 
+    
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

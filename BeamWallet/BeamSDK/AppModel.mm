@@ -56,6 +56,7 @@
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
+#include "utility/fsutils.h"
 
 #include "mnemonic/mnemonic.h"
 
@@ -143,6 +144,7 @@ struct GetMinConfirmationsFunc
 };
 
 
+static dispatch_once_t * once_token_model;
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -178,8 +180,11 @@ struct GetMinConfirmationsFunc
 
 + (AppModel*_Nonnull)sharedManager {
     static AppModel *sharedMyManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    
+    static dispatch_once_t once_token;
+    once_token_model = &once_token;
+    
+    dispatch_once(&once_token, ^{
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
@@ -436,6 +441,10 @@ struct GetMinConfirmationsFunc
         [self getUTXO];
     }
     _isConnected = isConnected;
+    
+    if (wallet != nil) {
+        _isConfigured = wallet->isConnectionTrusted();
+    }
 }
 
 -(void)setIsConnecting:(BOOL)isConnecting {
@@ -639,14 +648,10 @@ struct GetMinConfirmationsFunc
         wallet.reset();
     }
     
-    if (walletReactor!=nil){
-        walletReactor.reset();
-    }
     if (walletDb!=nil){
         walletDb.reset();
     }
     
-    walletReactor = nil;
     wallet = nil;
     walletDb = nil;
     
@@ -662,31 +667,39 @@ struct GetMinConfirmationsFunc
         self.isRestoreFlow = NO;
     }
     
+    [daoManager destroy];
+    daoManager = nil;
+    
     isStarted = NO;
     isRunning = NO;
+  
+    wallet.reset();
     
-    if (wallet!=nil){
-        wallet.reset();
-    }
+    walletDb.reset();
     
-    if (walletReactor!=nil){
-        walletReactor.reset();
-    }
-    if (walletDb!=nil){
-        walletDb.reset();
-    }
-    
-    walletReactor = nil;
-    wallet = nil;
-    walletDb = nil;
+//    if (wallet!=nil){
+//        wallet.reset();
+//    }
+//
+//    if (walletReactor!=nil){
+//        walletReactor.reset();
+//    }
+//    if (walletDb!=nil){
+//        walletDb.reset();
+//    }
+//
+//    walletReactor = nil;
+//    wallet = nil;
+//    walletDb = nil;
     
     if(removeDatabase) {
         NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
         
+        fsutils::remove([Settings sharedManager].walletStoragePath.string);
+
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
-        
-        
+        [[Settings sharedManager] resetDataBase];
     }
     
     _walletStatus = [BMWalletStatus new];
@@ -699,7 +712,10 @@ struct GetMinConfirmationsFunc
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:walletStatusKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    
     [[Settings sharedManager] resetNode];
+    
+    *once_token_model = 0;
 }
 
 -(void)startChangeWallet {

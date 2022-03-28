@@ -182,9 +182,8 @@ class BMNetworkStatusView: UIView {
                     self.statusView.image = UIImage(named: "ic_trusted_node")
                 }
                 else if !Settings.sharedManager().connectToRandomNode {
-                    self.statusView.backgroundColor = UIColor.clear
-                    self.statusView.removeGlow()
-                    self.statusView.image = UIImage(named: "ic_trusted_node")
+                    self.statusView.backgroundColor = UIColor.main.green
+                    self.statusView.glow()
                 }
                 else  {
                     self.statusView.backgroundColor = UIColor.main.green
@@ -195,6 +194,10 @@ class BMNetworkStatusView: UIView {
                     self.numberOfLines = 2
                     self.statusLabel.text = Localizable.shared.strings.online_new_status
                 }
+                else if (!Settings.sharedManager().connectToRandomNode && !AppModel.sharedManager().isConfigured) {
+                    self.numberOfLines = 2
+                    self.statusLabel.text = Localizable.shared.strings.online_own_not_conifg
+                }
                 else if !Settings.sharedManager().connectToRandomNode && !Settings.sharedManager().isNodeProtocolEnabled {
                     self.statusLabel.text = Localizable.shared.strings.online.lowercased()
                 }
@@ -202,7 +205,6 @@ class BMNetworkStatusView: UIView {
                     self.numberOfLines = 1
                     self.statusLabel.text = Localizable.shared.strings.online.lowercased()
                 }
-                
                 
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }

@@ -56,7 +56,7 @@ class SelectNodeViewController: BaseTableViewController {
             view.addSubview(nextButton)
         }
         else if isCreateWallet {
-            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
+            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 25, width: 220, height: 44), color: UIColor.main.brightTeal)
             connectButton.setImage(IconNextBlue(), for: .normal)
             connectButton.setTitle(Localizable.shared.strings.start_using_wallet.lowercased(), for: .normal)
             connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
@@ -185,33 +185,16 @@ class SelectNodeViewController: BaseTableViewController {
             if isCreateWallet {
                 Settings.sharedManager().removeCustomNode()
             }
-            else if AppModel.sharedManager().hasActiveTransactions() {
-                if oldSelected == 1 {
-                    self.alert(title: Localizable.shared.strings.cant_switch_random_title, message: Localizable.shared.strings.cant_switch_random_text_mobile, handler: nil)
-                }
-                else if oldSelected == 2 {
-                    self.alert(title: Localizable.shared.strings.cant_switch_random_title, message: String.init(format: Localizable.shared.strings.cant_switch_random_text_own, Settings.sharedManager().nodeAddress), handler: nil)
-                }
+     
+            if Settings.sharedManager().isNodeProtocolEnabled {
+                Settings.sharedManager().isNodeProtocolEnabled = false
+                AppModel.sharedManager().enableBodyRequests(false)
             }
-            else {
-                if Settings.sharedManager().isNodeProtocolEnabled {
-                    Settings.sharedManager().isNodeProtocolEnabled = false
-                    AppModel.sharedManager().enableBodyRequests(false)
-                }
-                Settings.sharedManager().connectToRandomNode = true
-                Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
-                AppModel.sharedManager().changeNodeAddress()
-            }
+            Settings.sharedManager().connectToRandomNode = true
+            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+            AppModel.sharedManager().changeNodeAddress()
             
             if isCreateWallet {
-                if Settings.sharedManager().isNodeProtocolEnabled {
-                    Settings.sharedManager().isNodeProtocolEnabled = false
-                    AppModel.sharedManager().enableBodyRequests(false)
-                }
-                Settings.sharedManager().connectToRandomNode = true
-                Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
-                AppModel.sharedManager().changeNodeAddress()
-                
                 openMain()
             }
         }
@@ -280,10 +263,19 @@ class SelectNodeViewController: BaseTableViewController {
                         }
                         else if oldSelected == 2 {
                             if Settings.sharedManager().nodeAddress != fullAddress {
-                                self.confirmAlert(title: Localizable.shared.strings.switch_to_own, message: String.init(format: Localizable.shared.strings.switch_to_own_from_own, Settings.sharedManager().nodeAddress, fullAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
-                                    
-                                } confirmHandler: { _  in
-                                    self.onToOwnNode(fullAddress: fullAddress)
+                                if (Settings.sharedManager().nodeAddress.contains("beam.mw")) {
+                                    self.confirmAlert(title: Localizable.shared.strings.switch_to_own, message: String.init(format: Localizable.shared.strings.switch_to_own_from_random, fullAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                                        
+                                    } confirmHandler: { _  in
+                                        self.onToOwnNode(fullAddress: fullAddress)
+                                    }
+                                }
+                                else {
+                                    self.confirmAlert(title: Localizable.shared.strings.switch_to_own, message: String.init(format: Localizable.shared.strings.switch_to_own_from_own, Settings.sharedManager().nodeAddress, fullAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                                        
+                                    } confirmHandler: { _  in
+                                        self.onToOwnNode(fullAddress: fullAddress)
+                                    }
                                 }
                             }
                             else {
@@ -339,6 +331,7 @@ extension SelectNodeViewController : UITableViewDelegate {
                 self.confirmAlert(title: Localizable.shared.strings.switch_to_mobile, message: Localizable.shared.strings.switch_to_mobile_from_random, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
                     
                 } confirmHandler: { _  in
+                    self.oldSelected = 0
                     self.onNextSelected(indexPath: indexPath)
                     self.onNext()
                 }
@@ -365,12 +358,13 @@ extension SelectNodeViewController : UITableViewDelegate {
                 if indexPath.section == 0 {
                     self.confirmAlert(title: Localizable.shared.strings.switch_to_random, message: String.init(format: Localizable.shared.strings.switch_to_random_from_own, Settings.sharedManager().connectToRandomNode ? "" : Settings.sharedManager().nodeAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
                     } confirmHandler: { _  in
+                        self.oldSelected = 0
                         self.onNextSelected(indexPath: indexPath)
                         self.onNext()
                     }
                 }
                 else if indexPath.section == 1 {
-                    self.confirmAlert(title: Localizable.shared.strings.switch_to_mobile, message: String.init(format: Localizable.shared.strings.switch_to_random_from_mobile, Settings.sharedManager().connectToRandomNode ? "" : Settings.sharedManager().nodeAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
+                    self.confirmAlert(title: Localizable.shared.strings.switch_to_mobile, message: String.init(format: Localizable.shared.strings.switch_to_mobile_from_own, Settings.sharedManager().connectToRandomNode ? "" : Settings.sharedManager().nodeAddress), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
                     } confirmHandler: { _  in
                         self.onNextSelected(indexPath: indexPath)
                         self.onNext()
@@ -382,6 +376,7 @@ extension SelectNodeViewController : UITableViewDelegate {
                     self.confirmAlert(title: Localizable.shared.strings.switch_to_random, message: Localizable.shared.strings.switch_to_random_from_mobile, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.sw) { _  in
                         
                     } confirmHandler: { _  in
+                        self.oldSelected = 0
                         self.onNextSelected(indexPath: indexPath)
                         self.onNext()
                     }

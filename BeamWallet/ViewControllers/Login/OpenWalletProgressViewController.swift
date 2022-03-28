@@ -152,7 +152,7 @@ class OpenWalletProgressViewController: BaseViewController {
             }
         }
         else if phrase != nil {
-            if Settings.sharedManager().isNodeProtocolEnabled {
+            if Settings.sharedManager().isNodeProtocolEnabled || !Settings.sharedManager().connectToRandomNode  {
                 restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
                 restotingInfoLabel.isHidden = true
                 
@@ -587,7 +587,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
                     strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
                 }
-                else if strongSelf.onlyConnect || (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
+                else if strongSelf.onlyConnect || (strongSelf.phrase != nil && (Settings.sharedManager().isNodeProtocolEnabled || !Settings.sharedManager().connectToRandomNode)) {
                     let progress_100 = Int32(strongSelf.progressView.progress * 100)
                     
                     if strongSelf.displayProgress {
@@ -613,7 +613,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                     strongSelf.openMainPage()
                 }
             }
-            else if total == done && (strongSelf.phrase != nil && Settings.sharedManager().isNodeProtocolEnabled) {
+            else if total == done && (strongSelf.phrase != nil && (Settings.sharedManager().isNodeProtocolEnabled || !Settings.sharedManager().connectToRandomNode)) {
                 if total == 0 && AppModel.sharedManager().isSynced() {
                     strongSelf.openMainPage()
                 }

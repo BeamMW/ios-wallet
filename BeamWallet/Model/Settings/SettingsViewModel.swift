@@ -19,6 +19,7 @@
 
 import Foundation
 import MobileCoreServices
+import UIKit
 
 class SettingsViewModel: NSObject {
     public enum SettingsType: Int {
@@ -107,7 +108,14 @@ class SettingsViewModel: NSObject {
     private var type: SettingsType!
     
     public var items = [[SettingsItem]]()
+    public var allItems = [SettingsItem]()
+
     public var onDataChanged: (() -> Void)?
+    public var searchString = "" {
+        didSet {
+            search()
+        }
+    }
     
     init(type: SettingsType) {
         super.init()
@@ -116,11 +124,95 @@ class SettingsViewModel: NSObject {
         
         initItems()
         
+        if self.type == .main {
+            initAllItems()
+        }
+        
         AppModel.sharedManager().addDelegate(self)
     }
     
     deinit {
         AppModel.sharedManager().removeDelegate(self)
+    }
+    
+    private func search() {
+        items.removeAll()
+        
+        if searchString.isEmpty {
+            initItems()
+        }
+        else {
+            let filtered = allItems.filter { item in
+                (item.title ?? "").lowercased().contains(searchString.lowercased()) ||
+                (item.detail ?? "").lowercased().contains(searchString.lowercased())
+            }
+            
+            for item in filtered {
+                var array = [SettingsItem]()
+                array.append(item)
+                if item.title == Localizable.shared.strings.node {
+                    array.append(SettingsItem(title: Localizable.shared.strings.random_node_title.capitalizingFirstLetter(), type: SettingsItemType.node, icon: UIImage.fromColor(color: .clear), hasArrow: false))
+                    array.append(SettingsItem(title: Localizable.shared.strings.mobile_node_title.capitalizingFirstLetter(), type: SettingsItemType.node, icon: UIImage.fromColor(color: .clear), hasArrow: false))
+                    array.append(SettingsItem(title: Localizable.shared.strings.own_node_title.capitalizingFirstLetter(), type: SettingsItemType.node, icon: UIImage.fromColor(color: .clear), hasArrow: false))
+
+                }
+                
+                items.append(array)
+            }
+        }
+        
+        onDataChanged?()
+    }
+    
+    private func initAllItems() {
+        allItems.append(SettingsItem(title: Localizable.shared.strings.general_settings.capitalizingFirstLetter(), type: SettingsItemType.general, icon: IconSettingsGeneral(), hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.notifications.capitalizingFirstLetter(), type: SettingsItemType.notifications, icon: IconNotifications(), hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.node.capitalizingFirstLetter(), type: SettingsItemType.node, icon: IconNode(), hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.privacy.capitalizingFirstLetter(), type: SettingsItemType.privacy, icon: IconSettingsPrivacy(), hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.utilities.capitalizingFirstLetter(), type: SettingsItemType.utilites, icon: IconSettingsUtilities(), hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.rate_app.capitalizingFirstLetter(), type: SettingsItemType.rate_app, icon: IconSettingsRate(), hasArrow: false))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.report_problem.capitalizingFirstLetter(), type: SettingsItemType.report_problem, icon: IconSettingsReport(), hasArrow: false))
+        
+ 
+        allItems.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, type: .allow_open_link, hasArrow: false))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
+        
+        if ENALBE_LANG == true {
+            allItems.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
+        }
+        
+        allItems.append(SettingsItem(title: Localizable.shared.strings.dark_mode, detail: nil, isSwitch: Settings.sharedManager().isDarkMode, type: .dark_mode, hasArrow: false))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, type: .ask_password, hasArrow: false))
+        
+        if BiometricAuthorization.shared.canAuthenticate() {
+            allItems.append(SettingsItem(title: BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.enable_face_id_title : Localizable.shared.strings.enable_touch_id_title, detail: nil, isSwitch: Settings.sharedManager().isEnableBiometric, type: .enable_bio, hasArrow: false))
+        }
+        
+        allItems.append(SettingsItem(title: Localizable.shared.strings.max_privacy_lock_time, detail: Settings.sharedManager().currentMaxPrivacyLockValue().title, isSwitch: nil, type: .max_privacy_limit, hasArrow: true, isSubDetail: true))
+        
+        if OnboardManager.shared.isSkipedSeed() == true {
+            allItems.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
+        }
+        
+        allItems.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
+        
+        allItems.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.show_utxo, detail: nil, isSwitch: nil, type: .utxo, hasArrow: true))
+        
+        if AppModel.sharedManager().checkIsOwnNode() {
+            allItems.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
+        }
+        
+        allItems.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
     }
     
     private func initItems() {
