@@ -30,6 +30,9 @@ class WalletTransactionSearchCell: RippleCell {
     @IBOutlet weak private var secondAvailableLabel: UILabel!
     @IBOutlet weak private var searchLabel: UILabel!
 
+    @IBOutlet weak private var commentView: UIStackView!
+    @IBOutlet weak private var commentLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -77,6 +80,14 @@ extension WalletTransactionSearchCell: Configurable {
         dateLabel.text = options.transaction.formattedDate()
         dateLabel.isHidden = !options.additionalInfo
         statusLabel.text = options.transaction.statusType()
+        
+        if !options.transaction.comment.isEmpty {
+            commentView.isHidden = false
+            commentLabel.text = "”" + options.transaction.comment + "”"
+        }
+        else{
+            commentView.isHidden = true
+        }
         
         if options.transaction.isFailed() || options.transaction.isCancelled() || options.transaction.isExpired() {
             if options.transaction.isFailed() && !options.transaction.isCancelled() && !options.transaction.isExpired() {

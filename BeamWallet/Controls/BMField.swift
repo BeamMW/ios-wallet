@@ -80,7 +80,8 @@ class BMField: BMClearField {
     private var _errorHeight:CGFloat = 45
 
     var additionalRightOffset:CGFloat = 0
-    
+    var ignoreTextChanges = false
+
     var showEye = false {
         didSet {
             self.rightViewMode = (self.text ?? "").isEmpty ? .never : .whileEditing
@@ -214,15 +215,16 @@ class BMField: BMClearField {
         NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: self, queue: nil) { [weak self] notification in
             guard let strongSelf = self else { return }
             guard let object = notification.object as? BMField, object == strongSelf else { return }
-            
-            if strongSelf.status != .normal {
-                strongSelf.status = .normal
-                strongSelf.layoutSubviews()
-                strongSelf.statusDelegate?.didChangeStatus()
-            }
-            
-            if strongSelf.showEye {
-                strongSelf.rightViewMode = (strongSelf.text ?? "").isEmpty ? .never : .whileEditing
+            if !strongSelf.ignoreTextChanges {
+                if strongSelf.status != .normal {
+                    strongSelf.status = .normal
+                    strongSelf.layoutSubviews()
+                    strongSelf.statusDelegate?.didChangeStatus()
+                }
+                
+                if strongSelf.showEye {
+                    strongSelf.rightViewMode = (strongSelf.text ?? "").isEmpty ? .never : .whileEditing
+                }
             }
         }
         

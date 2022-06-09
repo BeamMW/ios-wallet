@@ -81,9 +81,7 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
             beam?.resultObject = nil
             beam = nil
             webView = nil
-            channel?.webView = nil
-            
-            AppModel.sharedManager().stopDAO()
+            channel?.webView = nil            
         }
     }
     

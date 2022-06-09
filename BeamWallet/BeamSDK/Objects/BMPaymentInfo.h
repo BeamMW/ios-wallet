@@ -29,4 +29,6 @@
 @property (nonatomic,assign) int assetId;
 @property (nonatomic,assign) double realAmount;
 
+-(NSString*_Nonnull)details;
+
 @end

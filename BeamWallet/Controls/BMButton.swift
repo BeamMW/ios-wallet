@@ -71,4 +71,11 @@ class BMButton: UIButton {
             }
         }
     }
+    
+    func changeColor(_ color:UIColor) {
+        self.setBackgroundColor(color: UIColor(red: 2 / 255, green: 86 / 255, blue: 100 / 255, alpha: 1), forState: .disabled)
+        self.setBackgroundColor(color: color, forState: .normal)
+        self.setBackgroundColor(color: color.withAlphaComponent(0.5), forState: .highlighted)
+        self.backgroundColor = UIColor.clear
+    }
 }

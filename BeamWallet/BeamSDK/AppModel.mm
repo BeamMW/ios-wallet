@@ -32,6 +32,7 @@
 #import "WalletModel.h"
 #import "StringStd.h"
 #import "DAOManager.h"
+#import "RecoveryProgress.h"
 
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
@@ -55,6 +56,7 @@
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
+#include "utility/fsutils.h"
 
 #include "mnemonic/mnemonic.h"
 
@@ -70,9 +72,9 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-#import "BeamWallet-Swift.h"
+//#import "BeamWallet-Swift.h"
 //#import "BeamWalletMasterNet-Swift.h"
-//#import "BeamWalletTestNet-Swift.h"
+#import "BeamWalletTestNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -142,6 +144,7 @@ struct GetMinConfirmationsFunc
 };
 
 
+static dispatch_once_t * once_token_model;
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -171,12 +174,17 @@ struct GetMinConfirmationsFunc
     DAOViewController *daoViewController;
     
     boost::optional<beam::wallet::WalletAddress> _receiverAddress;
+    
+    RecoveryProgress recoveryProgress;
 }
 
 + (AppModel*_Nonnull)sharedManager {
     static AppModel *sharedMyManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    
+    static dispatch_once_t once_token;
+    once_token_model = &once_token;
+    
+    dispatch_once(&once_token, ^{
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
@@ -433,6 +441,10 @@ struct GetMinConfirmationsFunc
         [self getUTXO];
     }
     _isConnected = isConnected;
+    
+    if (wallet != nil) {
+        _isConfigured = wallet->isConnectionTrusted();
+    }
 }
 
 -(void)setIsConnecting:(BOOL)isConnecting {
@@ -636,14 +648,10 @@ struct GetMinConfirmationsFunc
         wallet.reset();
     }
     
-    if (walletReactor!=nil){
-        walletReactor.reset();
-    }
     if (walletDb!=nil){
         walletDb.reset();
     }
     
-    walletReactor = nil;
     wallet = nil;
     walletDb = nil;
     
@@ -659,31 +667,39 @@ struct GetMinConfirmationsFunc
         self.isRestoreFlow = NO;
     }
     
+    [daoManager destroy];
+    daoManager = nil;
+    
     isStarted = NO;
     isRunning = NO;
+  
+    wallet.reset();
     
-    if (wallet!=nil){
-        wallet.reset();
-    }
+    walletDb.reset();
     
-    if (walletReactor!=nil){
-        walletReactor.reset();
-    }
-    if (walletDb!=nil){
-        walletDb.reset();
-    }
-    
-    walletReactor = nil;
-    wallet = nil;
-    walletDb = nil;
+//    if (wallet!=nil){
+//        wallet.reset();
+//    }
+//
+//    if (walletReactor!=nil){
+//        walletReactor.reset();
+//    }
+//    if (walletDb!=nil){
+//        walletDb.reset();
+//    }
+//
+//    walletReactor = nil;
+//    wallet = nil;
+//    walletDb = nil;
     
     if(removeDatabase) {
         NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
         
+        fsutils::remove([Settings sharedManager].walletStoragePath.string);
+
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
-        
-        
+        [[Settings sharedManager] resetDataBase];
     }
     
     _walletStatus = [BMWalletStatus new];
@@ -696,7 +712,10 @@ struct GetMinConfirmationsFunc
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:walletStatusKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    
     [[Settings sharedManager] resetNode];
+    
+    *once_token_model = 0;
 }
 
 -(void)startChangeWallet {
@@ -1571,6 +1590,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
             || ([tr.token isEqualToString:address.address] && tr.token.length > 1)) {
             [result addObject:tr];
         }
+        else if([tr.receiverAddress isEqualToString:address._id] && !tr.receiverAddress.isEmpty) {
+            [result addObject:tr];
+        }
     }
     
     return result;
@@ -1886,10 +1908,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return realAmount;
 }
 
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount {
-    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to];
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount checkAddress:(BOOL)checkAddress {
+    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to checkAddress: checkAddress];
     if (errorString == nil) {
-        if (amount > maxAmount && maxAmount != 0) {
+        if(maxAmount < 0) {
+            NSString *amountString = @"0";
+            NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
+            NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
+            return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
+        }
+        else if (amount > maxAmount && maxAmount != 0) {
             NSString *amountString = [[StringManager sharedManager] realAmountString:maxAmount];
             NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
             NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
@@ -1919,10 +1947,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(NSString*_Nullable)feeError:(double)fee {
     double need = double(int64_t(fee)) / Rules::Coin;
     
-    NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    NSString *amountString = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    NSString *assetName = @"BEAM";
+    NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
     
-    NSString *s = [@"insufficient_funds" localized];
-    return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
+    return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
 }
 
 -(void)calculateFee:(double)amount assetId:(int)assetId fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
@@ -1957,15 +1986,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (amount==0) {
         return [@"amount_zero" localized];
     }
-    else if(available < bTotal)
-    {
-        double need = double(int64_t(bTotal - available)) / Rules::Coin;
-        
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
-    }
+//    else if(available < bTotal)
+//    {
+//        double need = double(int64_t(bTotal - available)) / Rules::Coin;
+//
+//        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+//
+//        NSString *s = [@"insufficient_funds" localized];
+//        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
+//    }
     else if (bTotal > bMax)
     {
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
@@ -1973,23 +2002,23 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return [NSString stringWithFormat:@"Maximum amount %@ %@", beam, asset.unitName];
     }
     
-    if (asset !=0 && self.walletStatus.available < fee) {
-        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
-    }
+//    if (asset !=0 && self.walletStatus.available < fee) {
+//        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
+//        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+//        NSString *s = [@"insufficient_funds" localized];
+//        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
+//    }
     
     return nil;
 }
 
--(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to {
+-(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to checkAddress:(BOOL)checkAddress {
     NSString *error = [self sendError:amount assetId:assetId fee:fee checkMinAmount:NO];
     
     if (error!=nil) {
         return error;
     }
-    else if(![self isValidAddress:to])
+    else if(![self isValidAddress:to] && checkAddress)
     {
         return [@"incorrect_address" localized];
     }
@@ -3022,7 +3051,6 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         hh = hours - dd * 24;
     }
     
-    
     NSString *res = @"";
     
     if (hh == 1) {
@@ -3043,6 +3071,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     return res;
+}
+
+-(void)resetEstimateProgress {
+    recoveryProgress.OnResetSimpleProgress();
+}
+
+-(UInt64)getEstimateProgress:(UInt64)done total:(UInt64)total {
+    return recoveryProgress.OnSimpleProgress(done, total);
 }
 
 -(void)rescan {
@@ -3180,6 +3216,30 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }] resume];
 }
 
+
+-(BMApp*_Nonnull)votingApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BeamX DAO Voting"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"BeamX DAO Voting";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-voting-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/dao-voting-app/index.html";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app-same-origin/dao-voting-app/index.html";
+    }
+    return app;
+}
+
 -(BMApp*_Nonnull)DAOBeamXApp {
     for(BMApp *bApp in self.apps) {
         if ([bApp.name isEqualToString:@"BeamX DAO"]) {
@@ -3203,6 +3263,52 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     return app;
 }
 
+-(BMApp*_Nonnull)daoFaucetApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BEAM Faucet"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"BEAM Faucet";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/plugin-faucet/index.html";
+        app.icon = @"https://apps.beam.mw/app/plugin-faucet/appicon.svg";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
+    }
+    return app;
+}
+
+-(BMApp*_Nonnull)daoGalleryApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"NFT Gallery"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"NFT Gallery";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/plugin-gallery/index.html";
+        app.icon = @"https://apps.beam.mw/app/plugin-gallery/appicon.svg";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
+    }
+    return app;
+}
 
 @end
-

@@ -31,12 +31,14 @@ class BMNetworkStatusView: UIView {
 
     public var numberOfLines = 1 {
         didSet {
-            statusLabel.backgroundColor = UIColor.clear
+            statusLabel.backgroundColor = .clear
             if numberOfLines == 3 {
                 statusLabel.numberOfLines = 2
                 statusLabel.width = UIScreen.main.bounds.size.width - 180
                 statusLabel.h = 36
                 statusLabel.y = 0
+                statusLabel.adjustFontSize = true
+                statusLabel.minimumScaleFactor = 0.5
             }
             else if numberOfLines > 1 {
                 statusLabel.numberOfLines = 2
@@ -182,9 +184,8 @@ class BMNetworkStatusView: UIView {
                     self.statusView.image = UIImage(named: "ic_trusted_node")
                 }
                 else if !Settings.sharedManager().connectToRandomNode {
-                    self.statusView.backgroundColor = UIColor.clear
-                    self.statusView.removeGlow()
-                    self.statusView.image = UIImage(named: "ic_trusted_node")
+                    self.statusView.backgroundColor = UIColor.main.green
+                    self.statusView.glow()
                 }
                 else  {
                     self.statusView.backgroundColor = UIColor.main.green
@@ -192,17 +193,26 @@ class BMNetworkStatusView: UIView {
                 }
                 
                 if Settings.sharedManager().connectToRandomNode && !Settings.sharedManager().isNodeProtocolEnabled {
-                    self.numberOfLines = 2
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 2
+                    }
                     self.statusLabel.text = Localizable.shared.strings.online_new_status
+                }
+                else if (!Settings.sharedManager().connectToRandomNode && !AppModel.sharedManager().isConfigured) {
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 2
+                    }
+                    self.statusLabel.text = Localizable.shared.strings.online_own_not_conifg
                 }
                 else if !Settings.sharedManager().connectToRandomNode && !Settings.sharedManager().isNodeProtocolEnabled {
                     self.statusLabel.text = Localizable.shared.strings.online.lowercased()
                 }
                 else {
-                    self.numberOfLines = 1
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 1
+                    }
                     self.statusLabel.text = Localizable.shared.strings.online.lowercased()
                 }
-                
                 
                 self.statusLabel.textColor = UIColor.main.blueyGrey
             }
@@ -219,11 +229,15 @@ class BMNetworkStatusView: UIView {
             else{
                 if Settings.sharedManager().isNodeProtocolEnabled {
                     self.statusLabel.text = Localizable.shared.strings.canot_connect_node_mobile.lowercased()
-                    self.numberOfLines = 2
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 2
+                    }
                 }
                 else if Settings.sharedManager().connectToRandomNode {
                     self.statusLabel.text = Localizable.shared.strings.canot_connect_node_random.lowercased()
-                    self.numberOfLines = 2
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 2
+                    }
                 }
                 else {
                     self.statusLabel.text = String(format: Localizable.shared.strings.canot_connect_node_own_node.localized, Settings.sharedManager().nodeAddress).lowercased()
@@ -295,17 +309,23 @@ extension BMNetworkStatusView: WalletModelDelegate {
                 if Settings.sharedManager().isNodeProtocolEnabled {
                     self.statusLabel.text = Localizable.shared.strings.updating_mobile_node.lowercased() + " \(Int(percent))%" + ", " + Localizable.shared.strings.change_node_to_faster_sync.lowercased()
                     
-                    self.numberOfLines = 2
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 2
+                    }
                 }
                 else if Settings.sharedManager().connectToRandomNode {
                     self.statusLabel.text = Localizable.shared.strings.updating_random_node.lowercased() + " \(Int(percent))%"
                     
-                    self.numberOfLines = 1
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 1
+                    }
                 }
                 else {
                     self.statusLabel.text = Localizable.shared.strings.updating_mobile_own.lowercased() + " \(Int(percent))%"
                     
-                    self.numberOfLines = 1
+                    if self.numberOfLines != 3 {
+                        self.numberOfLines = 1
+                    }
                 }
                 
                 self.statusView.alpha = 0

@@ -65,23 +65,36 @@ class SettingsCell: BaseCell {
         
         switchView.layer.cornerRadius = switchView.frame.height / 2
     }
-}
-
-extension SettingsCell: Configurable {
-    func configure(with item: SettingsViewModel.SettingsItem) {
-
-        titleLabel.textColor = UIColor.white
+    
+    func configure(with item: SettingsViewModel.SettingsItem, search:String) {
         
+        titleLabel.textColor = UIColor.white
+        detailLabel?.text = item.detail
+
         if let attr = item.titleAttributed {
             titleLabel?.attributedText = attr
             titleLabel?.numberOfLines = 0
         }
         else {
-            titleLabel?.text = item.title
+            if search.isEmpty {
+                titleLabel?.text = item.title
+            }
+            else {
+                let title = NSMutableAttributedString(string: item.title ?? "")
+                let rangeTitle = (title.string.lowercased() as NSString).range(of: search.lowercased())
+                title.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightSkyBlue, range: rangeTitle)
+                titleLabel?.attributedText = title
+                
+                if let detail = item.detail {
+                    let title = NSMutableAttributedString(string: detail)
+                    let rangeDetail = (detail.lowercased() as NSString).range(of: search.lowercased())
+                    title.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightSkyBlue, range: rangeDetail)
+                    detailLabel?.attributedText = title
+                }
+            }
             titleLabel?.numberOfLines = 1
         }
         
-        detailLabel?.text = item.detail
         
         if let isSwitch = item.isSwitch {
             switchView.isOn = isSwitch

@@ -109,6 +109,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,assign) BOOL isOwnNode;
 @property (nonatomic,assign) BMRestoreType restoreType;
 @property (nonatomic,assign) BOOL isMaxPrivacyRequest;
+@property (nonatomic,assign) BOOL isConfigured;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 
@@ -217,8 +218,9 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSString*_Nonnull)getAddressTypeString:(BMAddressType)type;
 
 // send
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount;
--(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check;
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount checkAddress:(BOOL)checkAddress;
+
+-(NSString*_Nullable)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline;
@@ -305,6 +307,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 -(void)rescan;
 -(void)enableBodyRequests:(BOOL)value;
+-(void)resetEstimateProgress;
+-(UInt64)getEstimateProgress:(UInt64)done total:(UInt64)total;
 
 -(double)grothToBeam:(uint64_t)groth;
 
@@ -319,6 +323,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
                       amounts:(NSString*_Nonnull)amounts;
 
 -(BMApp*_Nonnull)DAOBeamXApp;
-
+-(BMApp*_Nonnull)daoGalleryApp;
+-(BMApp*_Nonnull)daoFaucetApp;
+-(BMApp*_Nonnull)votingApp;
 
 @end

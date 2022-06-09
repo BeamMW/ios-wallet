@@ -155,6 +155,27 @@ class SendViewController: BaseTableViewController {
             }
         }
         
+        viewModel.onAmountError = { [weak self]  in
+            guard let strongSelf = self else { return }
+            if strongSelf.isAppear {
+                
+                UIView.performWithoutAnimation {
+                    strongSelf.tableView.beginUpdates()
+                    if let cell = strongSelf.tableView.findCell(BMAmountCell.self) as? BMAmountCell {
+                        cell.error = strongSelf.viewModel.amountError
+                        cell.fee = Double(strongSelf.viewModel.fee) ?? 0
+                        cell.selectedAssetId = strongSelf.viewModel.selectedAssetId
+                        cell.contentView.backgroundColor = UIColor.main.marineThree
+                        cell.setSecondAmount(amount: strongSelf.viewModel.secondAmount)
+                        cell.topNameOffset.constant = 20
+                        cell.titleColor = UIColor.white
+                        cell.maxAmountError = strongSelf.viewModel.maxAmountError
+                    }
+                    strongSelf.tableView.endUpdates()
+                }
+            }
+        }
+        
         viewModel.onAddressTypeChanged = { [weak self] _ in
             guard let strongSelf = self else { return }
             UIView.performWithoutAnimation {
@@ -307,6 +328,12 @@ extension SendViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 2 && indexPath.row == 0 {
+            if viewModel.amountError == nil {
+                return UITableView.automaticDimension
+            }
+            return UITableView.automaticDimension
+        }
         return UITableView.automaticDimension
     }
     
@@ -377,7 +404,7 @@ extension SendViewController: UITableViewDataSource {
                 cell.delegate = self
                 cell.error = viewModel.amountError
                 cell.fee = Double(viewModel.fee) ?? 0
-                cell.currency = viewModel.selectedCurrencyString
+                cell.selectedAssetId = viewModel.selectedAssetId
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.setSecondAmount(amount: viewModel.secondAmount)
                 cell.topNameOffset.constant = 20

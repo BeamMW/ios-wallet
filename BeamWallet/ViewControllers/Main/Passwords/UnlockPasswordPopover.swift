@@ -30,12 +30,13 @@ class UnlockPasswordPopover: BaseViewController {
     private var event: UnlockEvent!
     private var allowBiometric: Bool = true
     
-    @IBOutlet private var passField: BMField!
-    @IBOutlet private var touchIdButton: UIButton!
-    @IBOutlet private var loginLabel: UILabel!
-    @IBOutlet private var height: NSLayoutConstraint!
-    @IBOutlet private var mainView: UIView!
-    
+    @IBOutlet private weak var passField: BMField!
+    @IBOutlet private weak var touchIdButton: UIButton!
+    @IBOutlet private weak var loginLabel: UILabel!
+    @IBOutlet private weak var height: NSLayoutConstraint!
+    @IBOutlet private weak var mainView: UIView!
+    @IBOutlet private weak var unlockButton: BMButton!
+
     public var completion: ((Bool) -> Void)?
     
     init(event: UnlockEvent, allowBiometric: Bool = true) {
@@ -77,6 +78,10 @@ class UnlockPasswordPopover: BaseViewController {
             else {
                 loginLabel.text = getTextForTouchID()
             }
+        }
+        
+        if event == .transaction {
+            unlockButton.changeColor(UIColor.main.heliotrope) 
         }
         
         addSwipeToDismiss()

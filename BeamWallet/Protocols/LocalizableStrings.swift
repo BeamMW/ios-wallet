@@ -548,6 +548,8 @@ class LocalizableStrings : NSObject {
     var dapp_anme = "dapp_anme".localized
     var app_shader_id = "app_shader_id".localized
     var beamx_dao = "beamx_dao".localized
+    var beam_faucet = "beam_faucet".localized
+    var beam_gallery = "beam_gallery".localized
 
     var receive_address_hint = "receive_address_hint".localized
     var please_wait_is_loading = "please_wait_is_loading".localized
@@ -596,6 +598,30 @@ class LocalizableStrings : NSObject {
     var receiver_wallet_signature = "receiver_wallet_signature".localized
     var shielded = "shielded".localized
     var no_funds_dao = "no_funds_dao".localized
+    var no_search_transactions = "no_search_transactions".localized
+    
+    var calc_estimate_time = "calc_estimate_time".localized.lowercased()
+    var to_completion = "to_completion".localized
+    var to_completion_minute = "to_completion_minute".localized
+    
+    var switch_to_own = "switch_to_own".localized
+    var switch_to_random = "switch_to_random".localized
+    var switch_to_mobile = "switch_to_mobile".localized
+    var switch_to_own_from_mobile = "switch_to_own_from_mobile".localized
+    var switch_to_own_from_random = "switch_to_own_from_random".localized
+    var switch_to_own_from_own = "switch_to_own_from_own".localized
+    var switch_to_random_from_mobile = "switch_to_random_from_mobile".localized
+    var switch_to_random_from_own = "switch_to_random_from_own".localized
+    var cant_switch_random_title = "cant_switch_random_title".localized
+    var cant_switch_random_text_mobile = "cant_switch_random_text_mobile".localized
+    var cant_switch_random_text_own = "cant_switch_random_text_own".localized
+    var switch_to_mobile_from_random = "switch_to_mobile_from_random".localized
+    var switch_to_mobile_from_own = "switch_to_mobile_from_own".localized
+    var sw = "sw".localized
+    var search_settings = "search_settings".localized
+    var no_search_settings = "no_search_settings".localized
+    var online_own_not_conifg = "online_own_not_conifg".localized
+    var beamx_dao_dao_voting = "beamx_dao_dao_voting".localized
 
     
     public func new_version_available_title(version: String) -> String {

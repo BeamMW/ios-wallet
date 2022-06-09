@@ -257,11 +257,13 @@ extension CVarArg {
         return _encodeBitsAsWords(self)
     }
 }
+
 extension Bool: CVarArg {
     public var _cVarArgEncoding: [Int] {
         return _encodeBitsAsWords(self)
     }
 }
+
 extension UnicodeScalar: CVarArg {}
 extension Selector: CVarArg {}
 extension UnsafeRawPointer: CVarArg {}

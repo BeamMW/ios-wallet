@@ -78,16 +78,17 @@ class BMAmountCell: BaseCell {
         }
     }
 
-    public var currency:String?
+    public var selectedAssetId:Int?
     {
         didSet{
             
-            if currency != nil {       
-                let text = currency!
+            if selectedAssetId != nil {
+                let asset = AssetsManager.shared().getAsset(Int32(selectedAssetId ?? 0))
+
+                let text = asset?.unitName!
                 currencyLabel.text = text
                 currencyLabel.letterSpacing = 2
                 
-                let asset = AssetsManager.shared().getAssetByName(currency)
                 if let asset = asset {
                     currencyIcon.setAsset(asset)
                 }
@@ -145,6 +146,7 @@ class BMAmountCell: BaseCell {
 //        erorLabel.text = nil
         
         textField.statusDelegate = self
+        textField.ignoreTextChanges = true
         
         currencyView.isUserInteractionEnabled = false
         currencyView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCurrency(_:))))
@@ -263,9 +265,10 @@ extension BMAmountCell : UITextFieldDelegate {
             return false
         }
         
-        self.error = nil
+//        self.error = nil
         
         self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
+
 
         return true
     }

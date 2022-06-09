@@ -22,7 +22,7 @@
 #import "AppModel.h"
 #include "wallet/core/wallet.h"
 
-static NSString *assetsKey = @"assetsKeyNew_01";
+static NSString *assetsKey = @"assetsKeyNew_011";
 
 NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff746b",@"#91e300",@"#ffe75a",@"#9643ff",@"#395bff",@"#ff3b3b",@"#73ff7c",@"#ffa86c",@"#ff3abe",@"#00aee1",@"#ff5200",@"#6464ff",@"#ff7a21",@"#63afff",@"#c81f68"];
 
@@ -76,10 +76,10 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         beamX.unitName = @"BEAMX";
         beamX.color = @"#977dff";
         beamX.shortName = @"BEAMX";
-        beamX.shortDesc = @"";
-        beamX.longDesc = @"";
-        beamX.site = @"";
-        beamX.paper = @"";
+        beamX.shortDesc = @"BeamX DAO governance token";
+        beamX.longDesc = @"BEAMX token is a Confidential Asset issued on top of the Beam blockchain with a fixed emission of 100,000,000 units (except for the lender of a \"last resort\" scenario). BEAMX is the governance token for the BeamX DAO, managed by the BeamX DAO Core contract. Holders can earn BeamX tokens by participating in the DAO activities: providing liquidity to the DeFi applications governed by the DAO or participating in the governance process.";
+        beamX.site = @"https://www.beamxdao.org/";
+        beamX.paper = @"https://documentation.beam.mw/overview/beamx-tokenomics";
         [_assets addObject:beamX];
     }
     

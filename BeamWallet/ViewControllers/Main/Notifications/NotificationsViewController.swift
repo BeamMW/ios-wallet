@@ -68,7 +68,9 @@ class NotificationsViewController: BaseTableViewController {
         subscribeToUpdates()
         
         if let view = self.view.viewWithTag(11) as? BMNetworkStatusView {
-            view.numberOfLines = 3
+            if !buttonClear.isHidden {
+                view.numberOfLines = 3
+            }
         }
     }
     
@@ -90,6 +92,16 @@ class NotificationsViewController: BaseTableViewController {
                 strongSelf.tableView.reloadData()
                 strongSelf.emptyView.isHidden = !(strongSelf.viewModel.unreads.count == 0 && strongSelf.viewModel.reads.count == 0)
                 strongSelf.buttonClear.isHidden = (strongSelf.viewModel.unreads.count == 0 && strongSelf.viewModel.reads.count == 0)
+                if strongSelf.buttonClear.isHidden {
+                    if let view = strongSelf.view.viewWithTag(11) as? BMNetworkStatusView {
+                        view.numberOfLines = 2
+                    }
+                }
+                else {
+                    if let view = strongSelf.view.viewWithTag(11) as? BMNetworkStatusView {
+                        view.numberOfLines = 3
+                    }
+                }
                 strongSelf.checkStatusView()
             }
         }

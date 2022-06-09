@@ -288,7 +288,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: String.empty(), value: viewModel.amount))
                 cell.delegate = self
                 cell.hideNameLabel = true
-                cell.currency = viewModel.selectedCurrencyString
+                cell.selectedAssetId = viewModel.selectedAssetId
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.setSecondAmount(amount: viewModel.secondAmount ?? "")
                 return cell

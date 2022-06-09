@@ -42,6 +42,11 @@
     return webAPICreator.apiSupported(app.api_version.string) || webAPICreator.apiSupported(app.min_api_version.string);
 }
 
+-(void)destroy {
+    webAPICreator.destroyApi();
+    webAPICreator._walletModel.reset();
+}
+
 -(void)stopApp {
     webAPICreator.destroyApi();
 }
