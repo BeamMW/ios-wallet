@@ -23,6 +23,7 @@ protocol InputWordCellCellDelegate: AnyObject {
     func textValueCellDidBeginEditing(_ sender: InputWordCell, _ text:String)
     func textValueCellDidEndEditing(_ sender: InputWordCell, _ text:String)
     func textValueCellReturn(_ sender: InputWordCell, _ text:String)
+    func textValueDidChange(_ sender: InputWordCell, _ text:String)
 }
 
 class InputWordCell: UICollectionViewCell, Delegating {
@@ -39,19 +40,14 @@ class InputWordCell: UICollectionViewCell, Delegating {
         super.awakeFromNib()
         
         wordField.delegate = self
+        wordField.ignoreTextChanges = true
     }
     
     func startEditing() {
         _ = wordField.becomeFirstResponder()
     }
-}
-
-extension InputWordCell: Configurable {
     
-    func configure(with word:BMWord) {
-        numberLabel.text = String(word.index+1)
-        wordField.text = String(word.value)
-        
+    func updateStatus(word:BMWord) {
         if(word.value.isEmpty){
             numberLabel.backgroundColor = UIColor.clear
             numberLabel.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree.cgColor : UIColor.main.darkSlateBlue.cgColor
@@ -73,9 +69,22 @@ extension InputWordCell: Configurable {
     }
 }
 
+extension InputWordCell: Configurable {
+    
+    func configure(with word:BMWord) {
+        numberLabel.text = String(word.index+1)
+        wordField.text = String(word.value)
+        updateStatus(word: word)
+    }
+}
+
 extension InputWordCell: UITextFieldDelegate {
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        numberLabel.backgroundColor = UIColor.clear
+        numberLabel.layer.borderColor = Settings.sharedManager().target == Testnet ? UIColor.main.marineThree.cgColor : UIColor.main.darkSlateBlue.cgColor
+        numberLabel.textColor =  UIColor.white
+        wordField.fState = BMWordField.FieldState.empty
         return true
     }
     
@@ -97,6 +106,8 @@ extension InputWordCell: UITextFieldDelegate {
         return true
     }
     
+    
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if string == " " {
@@ -111,6 +122,8 @@ extension InputWordCell: UITextFieldDelegate {
         {
             wordField.fState = BMWordField.FieldState.empty
         }
+        
+        delegate?.textValueDidChange(self, txtAfterUpdate)
         
         return true
     }

@@ -115,6 +115,18 @@ class SettingsViewController: BaseTableViewController {
         Settings.sharedManager().addDelegate(self)        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if type == .main {
+            tableView.tableFooterView = versionView()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -137,16 +149,26 @@ class SettingsViewController: BaseTableViewController {
         let v = UIApplication.appVersion()
         let string = "v " + v
     
-        let label = UILabel(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.size.width, height: 20))
+        let label = UILabel(frame: CGRect(x: 0, y: 35, width: UIScreen.main.bounds.size.width, height: 20))
         label.textAlignment = .center
         label.font = BoldFont(size: 14)
         label.textColor = UIColor.main.blueyGrey
         label.text = string
         view.addSubview(label)
         
+        let bHeight = AppModel.sharedManager().walletStatus?.currentHeight ?? ""
+        let height = UILabel(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.size.width, height: 20))
+        height.textAlignment = .center
+        height.font = RegularFont(size: 14)
+        height.textColor = UIColor.main.blueyGrey
+        height.text = Localizable.shared.strings.blockchain_height + ": " + bHeight
+        view.addSubview(height)
+        
         if Device.isXDevice {
             view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 280)
             label.frame = CGRect(x: 0, y: view.h - 60, width: UIScreen.main.bounds.size.width, height: 20)
+            height.frame = CGRect(x: 0, y: view.h - 90, width: UIScreen.main.bounds.size.width, height: 20)
+
         }
         
         return view
@@ -336,10 +358,21 @@ extension SettingsViewController : SettingsCellDelegate {
 }
 
 extension SettingsViewController : WalletModelDelegate {
+   
     func onNetwotkStartReconnecting() {
-        if self.type == SettingsViewModel.SettingsType.node {
-            viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
-            tableView.reloadData()
+        DispatchQueue.main.async {
+            if self.type == SettingsViewModel.SettingsType.node {
+                self.viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func onWalletStatusChange(_ status: BMWalletStatus) {
+        DispatchQueue.main.async {
+            if self.type == .main {
+                self.tableView.tableFooterView = self.versionView()
+            }
         }
     }
 }
@@ -380,8 +413,4 @@ extension SettingsViewController : SettingsModelDelegate {
         
         tableView.reloadData()
     }
-}
-
-extension SettingsViewController: UITextFieldDelegate {
-    
 }

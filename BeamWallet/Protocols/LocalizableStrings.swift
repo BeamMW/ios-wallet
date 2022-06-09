@@ -621,8 +621,8 @@ class LocalizableStrings : NSObject {
     var search_settings = "search_settings".localized
     var no_search_settings = "no_search_settings".localized
     var online_own_not_conifg = "online_own_not_conifg".localized
+    var beamx_dao_dao_voting = "beamx_dao_dao_voting".localized
 
-    
     
     public func new_version_available_title(version: String) -> String {
         return "new_version_available_title".localized.replacingOccurrences(of: "(version)", with: version)

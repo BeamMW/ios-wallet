@@ -258,7 +258,7 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
 }
 
 -(void)resetDataBase {
-    randomId = randomId + 1;
+   // randomId = randomId + 1;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:randomId] forKey:randomDBIdKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -844,7 +844,7 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
         return @"https://apps-testnet.beam.mw/appslist.json";
     }
     else if (_target == Masternet) {
-        return @"http://3.19.141.112/app/appslist.json";;
+        return @"http://3.19.141.112/app/appslist.json";
     }
     return @"https://apps.beam.mw/appslist.json";
 }

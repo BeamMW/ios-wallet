@@ -218,7 +218,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSString*_Nonnull)getAddressTypeString:(BMAddressType)type;
 
 // send
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount;
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount checkAddress:(BOOL)checkAddress;
+
 -(NSString*_Nullable)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
@@ -324,5 +325,6 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BMApp*_Nonnull)DAOBeamXApp;
 -(BMApp*_Nonnull)daoGalleryApp;
 -(BMApp*_Nonnull)daoFaucetApp;
+-(BMApp*_Nonnull)votingApp;
 
 @end

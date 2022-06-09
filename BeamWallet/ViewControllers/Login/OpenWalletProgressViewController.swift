@@ -66,7 +66,8 @@ class OpenWalletProgressViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        backgroundTaskID = UIApplication.shared.beginBackgroundTask (withName: "com.mw.beam.beamwalletiOSMasternet.task") {
+        let name = Bundle.main.bundleIdentifier! + ".task"
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask (withName: name) {
             print("END BG TASK")
             UIApplication.shared.endBackgroundTask(self.backgroundTaskID!)
             self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
@@ -511,7 +512,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 if time > 0 {
                     let asDouble = Double(time)
                     if asDouble <= 60 {
-                        strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.to_completion_minute
+                        strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.to_completion_minute + Localizable.shared.strings.to_completion
                     }
                     else {
                         strongSelf.progressTimeValueLabel.text = asDouble.asTime(style: .short).replacingOccurrences(of: ",", with: "") + Localizable.shared.strings.to_completion
@@ -566,7 +567,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                     if timeLeft > 0 {
                         let asDouble = Double(timeLeft)
                         if asDouble <= 60 {
-                            strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.to_completion_minute
+                            strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.to_completion_minute + Localizable.shared.strings.to_completion
                         }
                         else {
                             strongSelf.progressTimeValueLabel.text = asDouble.asTime(style: .short).replacingOccurrences(of: ",", with: "") + Localizable.shared.strings.to_completion

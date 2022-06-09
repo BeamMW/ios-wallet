@@ -26,6 +26,12 @@ class AssetInfoViewController: BaseTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.asset = asset
+        if self.asset.isBeamX() {
+            self.asset.shortDesc = "BeamX DAO governance token"
+            self.asset.longDesc = "BEAMX token is a Confidential Asset issued on top of the Beam blockchain with a fixed emission of 100,000,000 units (except for the lender of a \"last resort\" scenario). BEAMX is the governance token for the BeamX DAO, managed by the BeamX DAO Core contract. Holders can earn BeamX tokens by participating in the DAO activities: providing liquidity to the DeFi applications governed by the DAO or participating in the governance process."
+            self.asset.site = "https://www.beamxdao.org/"
+            self.asset.paper = "https://documentation.beam.mw/overview/beamx-tokenomics"
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +41,16 @@ class AssetInfoViewController: BaseTableViewController {
     private let statusViewModel = StatusViewModel()
     private let assetViewModel = AssetViewModel()
     
-    private var asset:BMAsset!
+    private var asset:BMAsset!{
+        didSet {
+            if self.asset.isBeamX() {
+                self.asset.shortDesc = "BeamX DAO governance token"
+                self.asset.longDesc = "BEAMX token is a Confidential Asset issued on top of the Beam blockchain with a fixed emission of 100,000,000 units (except for the lender of a \"last resort\" scenario). BEAMX is the governance token for the BeamX DAO, managed by the BeamX DAO Core contract. Holders can earn BeamX tokens by participating in the DAO activities: providing liquidity to the DeFi applications governed by the DAO or participating in the governance process."
+                self.asset.site = "https://www.beamxdao.org/"
+                self.asset.paper = "https://documentation.beam.mw/overview/beamx-tokenomics"
+            }
+        }
+    }
 
     private var addWidth:CGFloat = 0
     private var currentIndex:Int = 0

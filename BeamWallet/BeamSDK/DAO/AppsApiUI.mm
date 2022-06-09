@@ -65,12 +65,22 @@ void AppsApiUI::callWalletApi(const std::string& request)
     AnyThread_callWalletApiChecked(request);
 }
 
-void AppsApiUI::AnyThread_sendApiResponse(const std::string& result)
+void AppsApiUI::AnyThread_sendApiResponse(std::string&& result)
 {
     LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
     NSString *json = [NSString stringWithUTF8String:result.c_str()];
     [[AppModel sharedManager] sendDAOApiResult:json];
 }
+
+//void AppsApiUI::AnyThread_sendApiResponse(const beam::wallet::json& result)
+//{
+//    auto str = result.dump();
+//    NSString *json = [NSString stringWithUTF8String:str.c_str()];
+//    
+//    LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << json;
+//    
+//    [[AppModel sharedManager] sendDAOApiResult:json];
+//}
 
 void AppsApiUI::ClientThread_getSendConsent(const std::string& request, const nlohmann::json& jinfo, const nlohmann::json& jamounts)
 {

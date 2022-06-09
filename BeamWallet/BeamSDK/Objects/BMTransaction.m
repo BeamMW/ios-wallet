@@ -285,7 +285,7 @@
 -(NSString*_Nonnull)source {
     if (_isIncome) {
         if (!_isDapps) {
-            return _receiverAddress;
+            return _senderAddress;
         }
         else {
             if (_appName != nil) {
@@ -295,7 +295,7 @@
     }
     else {
         if (!_isDapps) {
-            return _senderAddress;
+            return _receiverAddress;
         }
         else {
             if (_appName != nil) {
@@ -365,9 +365,9 @@
             else if (_isPublicOffline || _isMaxPrivacy) {
                 switch (_enumStatus) {
                     case BMTransactionStatusConfirming:
-                        return [UIImage imageNamed:@"icon-received-max-privacy-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     case BMTransactionStatusCompleted:
-                        return [UIImage imageNamed:@"icon-received-max-privacy-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-received-max-privacy-offline"] : [UIImage imageNamed:@"icon-received-max-privacy-online"];
                     default:
                         return [UIImage imageNamed:@"icon-in-progress-receive-max-privacy-online"];
                 }
@@ -425,9 +425,9 @@
                     case BMTransactionStatusRegistering:
                         return [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusCompleted:
-                        return [UIImage imageNamed:@"icon-send-max-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
                     case BMTransactionStatusConfirming:
-                        return [UIImage imageNamed:@"icon-send-max-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
                     default:
                         return _isShielded ? [UIImage imageNamed:@"icon-in-progress-max-offline"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                 }

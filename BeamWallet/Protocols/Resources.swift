@@ -113,6 +113,10 @@ func IconBeamFaucet() -> UIImage? {
     return UIImage(named: "icon_faucet")
 }
 
+func IconBeamXDAOVoting() -> UIImage? {
+    return UIImage(named: "iconDaoVote")
+}
+
 func IconBeamGallery() -> UIImage? {
     return UIImage(named: "ic_gallery")
 }

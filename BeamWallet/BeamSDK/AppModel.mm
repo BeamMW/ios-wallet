@@ -73,8 +73,8 @@
 #import <sys/utsname.h>
 
 //#import "BeamWallet-Swift.h"
-#import "BeamWalletMasterNet-Swift.h"
-//#import "BeamWalletTestNet-Swift.h"
+//#import "BeamWalletMasterNet-Swift.h"
+#import "BeamWalletTestNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -1590,7 +1590,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             || ([tr.token isEqualToString:address.address] && tr.token.length > 1)) {
             [result addObject:tr];
         }
-        else if([tr.receiverAddress isEqualToString:address._id]) {
+        else if([tr.receiverAddress isEqualToString:address._id] && !tr.receiverAddress.isEmpty) {
             [result addObject:tr];
         }
     }
@@ -1908,10 +1908,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return realAmount;
 }
 
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount {
-    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to];
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount checkAddress:(BOOL)checkAddress {
+    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to checkAddress: checkAddress];
     if (errorString == nil) {
-        if (amount > maxAmount && maxAmount != 0) {
+        if(maxAmount < 0) {
+            NSString *amountString = @"0";
+            NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
+            NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
+            return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
+        }
+        else if (amount > maxAmount && maxAmount != 0) {
             NSString *amountString = [[StringManager sharedManager] realAmountString:maxAmount];
             NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
             NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
@@ -1941,10 +1947,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(NSString*_Nullable)feeError:(double)fee {
     double need = double(int64_t(fee)) / Rules::Coin;
     
-    NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    NSString *amountString = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    NSString *assetName = @"BEAM";
+    NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
     
-    NSString *s = [@"insufficient_funds" localized];
-    return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
+    return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
 }
 
 -(void)calculateFee:(double)amount assetId:(int)assetId fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
@@ -1979,15 +1986,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (amount==0) {
         return [@"amount_zero" localized];
     }
-    else if(available < bTotal)
-    {
-        double need = double(int64_t(bTotal - available)) / Rules::Coin;
-        
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
-    }
+//    else if(available < bTotal)
+//    {
+//        double need = double(int64_t(bTotal - available)) / Rules::Coin;
+//
+//        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+//
+//        NSString *s = [@"insufficient_funds" localized];
+//        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
+//    }
     else if (bTotal > bMax)
     {
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
@@ -1995,23 +2002,23 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return [NSString stringWithFormat:@"Maximum amount %@ %@", beam, asset.unitName];
     }
     
-    if (asset !=0 && self.walletStatus.available < fee) {
-        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
-    }
+//    if (asset !=0 && self.walletStatus.available < fee) {
+//        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
+//        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+//        NSString *s = [@"insufficient_funds" localized];
+//        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
+//    }
     
     return nil;
 }
 
--(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to {
+-(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to checkAddress:(BOOL)checkAddress {
     NSString *error = [self sendError:amount assetId:assetId fee:fee checkMinAmount:NO];
     
     if (error!=nil) {
         return error;
     }
-    else if(![self isValidAddress:to])
+    else if(![self isValidAddress:to] && checkAddress)
     {
         return [@"incorrect_address" localized];
     }
@@ -3207,6 +3214,30 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
             NSLog(@"error : %@", error.description);
         }
     }] resume];
+}
+
+
+-(BMApp*_Nonnull)votingApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BeamX DAO Voting"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"BeamX DAO Voting";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-voting-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/dao-voting-app/index.html";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app-same-origin/dao-voting-app/index.html";
+    }
+    return app;
 }
 
 -(BMApp*_Nonnull)DAOBeamXApp {

@@ -28,7 +28,11 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var copyAddress:String?
 
     public var maxAmountError:String?
-    public var amountError:String?
+    public var amountError:String? {
+        didSet {
+            onAmountError?()
+        }
+    }
     public var toAddressError:String?
     public var newVersionError:String?
 
@@ -129,6 +133,17 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
                     }
                     else {
                         self.maxAmountError = nil
+                        self.amountError = AppModel.sharedManager().canSend((Double(self.amount) ?? 0), assetId: Int32(self.selectedAssetId), fee: (Double(self.fee) ?? 0), to: self.toAddress, maxAmount: self.maxSendAmount, checkAddress: false)
+
+                    }
+                }
+                else {
+                    let value = (Double(self.amount) ?? 0)
+                    if !self.amount.isEmpty && value == 0 {
+                        self.amountError = Localizable.shared.strings.amount_zero
+                    }
+                    else if self.amountError != nil {
+                        self.amountError = nil
                     }
                 }
             }
@@ -148,6 +163,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public var onAddressTypeChanged : ((Bool) -> Void)?
     public var onTokensCountChanged : ((Int) -> Void)?
     public var onAmountMaxError : (() -> Void)?
+    public var onAmountError: (() -> Void)?
 
     public var saveContactName = String.empty()
     public var sbbsAddress = String.empty()
@@ -205,10 +221,12 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     
     public var inputAmount = String.empty() {
         didSet {
-            amountError = nil
-            maxAmountError = nil
             if !sendAll {
                 calculateFee()
+            }
+            else {
+                amountError = nil
+                maxAmountError = nil
             }
         }
     }
@@ -324,7 +342,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func checkAmountError() {
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount)
+        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount, checkAddress: false)
         
         if canSend != Localizable.shared.strings.incorrect_address && ((Double(amount) ?? 0)) > 0 {
             amountError = canSend
@@ -351,9 +369,11 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     public func canSend() -> Bool {
         let valid = AppModel.sharedManager().isValidAddress(toAddress)
         let expired = AppModel.sharedManager().isExpiredAddress(toAddress)
-        let canSend = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount)
+        let canSendAddress = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount, checkAddress: true)
+        let canSendAmount = AppModel.sharedManager().canSend((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), to: toAddress, maxAmount: self.maxSendAmount, checkAddress: false)
+
         
-        let isError = (!valid || expired || canSend != nil)
+        let isError = (!valid || expired || canSendAddress != nil || canSendAmount != nil)
                
         if isError {
             amountError = nil
@@ -369,8 +389,8 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
             if amount.isEmpty {
                 amountError = Localizable.shared.strings.amount_empty
             }
-            else if canSend != Localizable.shared.strings.incorrect_address {
-                amountError = canSend
+            else if canSendAmount != Localizable.shared.strings.incorrect_address {
+                amountError = canSendAmount
             }
         }
         

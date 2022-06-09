@@ -9,6 +9,10 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>BGTaskSchedulerPermittedIdentifiers</key>
+			<array>
+				<string>com.mw.beam.beamwalletiOS.task</string>
+			</array>
 			<key>CFBundleDocumentTypes</key>
 			<array>
 				<dict>
@@ -144,7 +148,6 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>

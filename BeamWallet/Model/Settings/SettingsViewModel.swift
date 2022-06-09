@@ -290,8 +290,8 @@ class SettingsViewModel: NSObject {
             items.append(section_0)
         case .utilites:
            
-            var section_0 = [SettingsItem]()
-            section_0.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
+//            var section_0 = [SettingsItem]()
+//            section_0.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
             
             var section_1 = [SettingsItem]()
             section_1.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
@@ -309,7 +309,7 @@ class SettingsViewModel: NSObject {
             section_2.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
        
 
-            items.append(section_0)
+          //  items.append(section_0)
             items.append(section_1)
             items.append(section_2)
 
