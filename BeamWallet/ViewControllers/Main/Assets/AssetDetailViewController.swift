@@ -427,7 +427,7 @@ extension AssetDetailViewController: UIContextMenuInteractionDelegate {
         array.append(action2)
         
         if !transaction.isIncome && !transaction.isDapps {
-            let action3 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { action in
+            let action3 = UIAction(title: Localizable.shared.strings.repeat_transaction, image: nil) { action in
                 viewModel.repeatTransation(transaction: viewModel.transaction!)
             }
             array.append(action3)

@@ -347,13 +347,25 @@
     if (self.enumType == BMTransactionTypePushTransaction) {
         if(_isIncome) {
             if (_isSelf && !self.isFailed) {
-                switch (_enumStatus) {
-                    case BMTransactionStatusCompleted:
-                        return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
-                    case BMTransactionStatusConfirming:
-                        return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
-                    default:
-                        return !_isShielded ? [UIImage imageNamed:@"icon-seding-max-privacy-own"] : [UIImage imageNamed:@"icon-send-own-offline"];
+                if (_isPublicOffline) {
+                    switch (_enumStatus) {
+                        case BMTransactionStatusCompleted:
+                            return [UIImage imageNamed:@"icon-sent-own-offline"];
+                        case BMTransactionStatusConfirming:
+                            return [UIImage imageNamed:@"icon-sent-own-offline"];
+                        default:
+                            return [UIImage imageNamed:@"icon-send-own-offline"];
+                    }
+                }
+                else {
+                    switch (_enumStatus) {
+                        case BMTransactionStatusCompleted:
+                            return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
+                        case BMTransactionStatusConfirming:
+                            return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
+                        default:
+                            return !_isShielded ? [UIImage imageNamed:@"icon-seding-max-privacy-own"] : [UIImage imageNamed:@"icon-send-own-offline"];
+                    }
                 }
             }
             else if(self.isCancelled) {
@@ -391,13 +403,25 @@
         }
         else{
             if (_isSelf && !self.isFailed) {
-                switch (_enumStatus) {
-                    case BMTransactionStatusCompleted:
-                        return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
-                    case BMTransactionStatusConfirming:
-                        return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
-                    default:
-                        return !_isShielded ? [UIImage imageNamed:@"icon-seding-max-privacy-own"] : [UIImage imageNamed:@"icon-send-own-offline"];
+                if (_isSelf && _isPublicOffline) {
+                    switch (_enumStatus) {
+                        case BMTransactionStatusCompleted:
+                            return [UIImage imageNamed:@"icon-sent-own-offline"];
+                        case BMTransactionStatusConfirming:
+                            return [UIImage imageNamed:@"icon-sent-own-offline"];
+                        default:
+                            return [UIImage imageNamed:@"icon-send-own-offline"];
+                    }
+                }
+                else {
+                    switch (_enumStatus) {
+                        case BMTransactionStatusCompleted:
+                            return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
+                        case BMTransactionStatusConfirming:
+                            return !_isShielded ? [UIImage imageNamed:@"icon-sent-max-privacy-own"] : [UIImage imageNamed:@"icon-sent-own-offline"];
+                        default:
+                            return !_isShielded ? [UIImage imageNamed:@"icon-seding-max-privacy-own"] : [UIImage imageNamed:@"icon-send-own-offline"];
+                    }
                 }
             }
             else if(self.isCancelled) {
@@ -409,7 +433,10 @@
                 }
             }
             else if(self.isFailed) {
-                if (_isPublicOffline || _isMaxPrivacy) {
+                if(_isPublicOffline) {
+                    return  [UIImage imageNamed:@"icon-failed-max-offline"];
+                }
+                else if (_isMaxPrivacy) {
                     return [UIImage imageNamed:@"icon-failed-max-online"];
                 }
                 else {
@@ -419,11 +446,11 @@
             else if (_isPublicOffline || _isMaxPrivacy) {
                 switch (_enumStatus) {
                     case BMTransactionStatusPending:
-                        return [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-icon-sending-public"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusInProgress:
-                        return [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-icon-sending-public"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusRegistering:
-                        return [UIImage imageNamed:@"icon-in-progress-max-online"];
+                        return _isPublicOffline ? [UIImage imageNamed:@"icon-icon-sending-public"] : [UIImage imageNamed:@"icon-in-progress-max-online"];
                     case BMTransactionStatusCompleted:
                         return _isPublicOffline ? [UIImage imageNamed:@"icon-send-max-offline"] : [UIImage imageNamed:@"icon-send-max-online"];
                     case BMTransactionStatusConfirming:

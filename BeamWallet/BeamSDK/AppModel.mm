@@ -72,9 +72,9 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-//#import "BeamWallet-Swift.h"
+#import "BeamWallet-Swift.h"
 //#import "BeamWalletMasterNet-Swift.h"
-#import "BeamWalletTestNet-Swift.h"
+//#import "BeamWalletTestNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
