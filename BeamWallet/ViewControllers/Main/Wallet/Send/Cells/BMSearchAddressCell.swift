@@ -244,7 +244,7 @@ extension BMSearchAddressCell: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        qrButton.isHidden = false
+//        qrButton.isHidden = false
         delegate?.textValueDidReturn?(self)
     }
     
@@ -252,7 +252,7 @@ extension BMSearchAddressCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.textValueDidBegin?(self)
         showTokenButton.isHidden = true
-        qrButton.isHidden = true
+//        qrButton.isHidden = true
     }
 
     
