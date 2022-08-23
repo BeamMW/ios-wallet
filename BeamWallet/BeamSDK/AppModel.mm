@@ -72,9 +72,9 @@
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
 
-//#import "BeamWallet-Swift.h"
+#import "BeamWallet-Swift.h"
 //#import "BeamWalletMasterNet-Swift.h"
-#import "BeamWalletTestNet-Swift.h"
+//#import "BeamWalletTestNet-Swift.h"
 
 using namespace beam;
 using namespace ECC;
@@ -1364,6 +1364,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if (notificationId!=nil) {
             [self deleteNotification:notificationId];
         }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self->wallet->getAsync()->getAddresses(true);
+            self->wallet->getAsync()->getAddresses(false);
+        });
     }
     else if([self isToken:address]) {
         BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
@@ -1766,7 +1771,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         savedAddress.m_duration = WalletAddress::AddressExpirationNever;
         savedAddress.m_Address = address.string;
         wallet->getAsync()->saveAddress(savedAddress);
-        wallet->getAsync()->getAddresses(false);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self->wallet->getAsync()->getAddresses(false);
+        });
     }
     else {
         WalletID walletID(Zero);
@@ -1799,8 +1806,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 }
             }
             savedAddress.m_createTime = NSDate.date.timeIntervalSince1970;
-            walletDb->saveAddress(savedAddress);
-            wallet->getAsync()->getAddresses(false);
+           // walletDb->saveAddress(savedAddress);
+            wallet->getAsync()->saveAddress(savedAddress);
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self->wallet->getAsync()->getAddresses(false);
+            });
         }
     }
 }

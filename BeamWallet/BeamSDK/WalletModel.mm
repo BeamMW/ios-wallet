@@ -695,15 +695,15 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         
         [contacts removeObjectsAtIndexes:set];
         
-        for(int j = 0; j < [contacts count]; j++){
-            for(int k = j+1;k < [contacts count];k++){
-                BMContact *str1 = [contacts objectAtIndex:j];
-                BMContact *str2 = [contacts objectAtIndex:k];
-                if([str1.address.identity isEqualToString:str2.address.identity]) {
-                    [contacts removeObjectAtIndex:k];
-                }
-            }
-        }
+//        for(int j = 0; j < [contacts count]; j++){
+//            for(int k = j+1;k < [contacts count];k++){
+//                BMContact *str1 = [contacts objectAtIndex:j];
+//                BMContact *str2 = [contacts objectAtIndex:k];
+//                if([str1.address.identity isEqualToString:str2.address.identity]) {
+//                    [contacts removeObjectAtIndex:k];
+//                }
+//            }
+//        }
         
         [[AppModel sharedManager] setContacts:contacts];
         
