@@ -844,7 +844,7 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
         return @"https://apps-testnet.beam.mw/appslist.json";
     }
     else if (_target == Masternet) {
-        return @"http://3.19.141.112/app/appslist.json";
+        return @"http://3.16.160.95/app/appslist.json";
     }
     return @"https://apps.beam.mw/appslist.json";
 }

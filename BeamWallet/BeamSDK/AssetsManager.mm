@@ -87,7 +87,7 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
 }
 
 -(NSString*_Nonnull)getAssetColor:(int)value {
-    if(value == 31 && [Settings.sharedManager target] == Masternet) {
+    if(value == 3 && [Settings.sharedManager target] == Masternet) {
         return @"#977dff";
     }
     else if(value == 12 && [Settings.sharedManager target] == Testnet) {
@@ -107,6 +107,8 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         }
     }
     
+    [[AppModel sharedManager] getAssetInfoAsync:assetId];
+
     return nil;
 }
 
@@ -135,13 +137,18 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
 }
 
 -(void)changeAssets {
-    NSMutableArray *notif = [NSMutableArray arrayWithArray:self->_assets];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    @try {
+        NSMutableArray *notif = [NSMutableArray arrayWithArray:self->_assets];
         NSError *error = nil;
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:notif requiringSecureCoding:YES error:&error];
         [[NSUserDefaults standardUserDefaults] setObject:data forKey:assetsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
-    });
+    }
+    @catch (NSException *exception) {
+
+    }
+    @finally {
+    }
 }
 
 -(double)getRealAvailableAmount:(int)assetId {

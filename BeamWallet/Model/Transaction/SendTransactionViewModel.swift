@@ -323,9 +323,9 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public func revertOutgoingAddress() {
-        if let address = outgoindAdderss {
-            AppModel.sharedManager().deleteAddress(address.walletId)
-        }
+//        if let address = outgoindAdderss {
+//            AppModel.sharedManager().deleteAddress(address.walletId)
+//        }
     }
     
     public func send() {
@@ -491,10 +491,10 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
         
                 
-        if outgoindAdderss != nil {
-            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
-            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-        }
+//        if outgoindAdderss != nil {
+//            let out = "\(outgoindAdderss!.walletId.prefix(6))...\(outgoindAdderss!.walletId.suffix(6))"
+//            items.append(BMMultiLineItem(title: Localizable.shared.strings.outgoing_address.uppercased(), detail: out, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
+//        }
 
         if addressType == BMAddressTypeMaxPrivacy {
             items.append(BMMultiLineItem(title: Localizable.shared.strings.transaction_type.uppercased(), detail: Localizable.shared.strings.max_privacy.localized, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))

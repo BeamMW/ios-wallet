@@ -124,8 +124,8 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     
     private func addPanGesture(_ viewController: UIViewController){
         gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer(recognizer:)))
-//        gesture?.delegate = self
-//        viewController.view.addGestureRecognizer(gesture!)
+        gesture?.delegate = self
+        viewController.view.addGestureRecognizer(gesture!)
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

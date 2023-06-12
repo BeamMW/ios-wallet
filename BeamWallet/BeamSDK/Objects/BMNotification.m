@@ -23,7 +23,7 @@
 @implementation BMNotification
 
 + (BOOL)supportsSecureCoding {
-    return NO;
+    return YES;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder

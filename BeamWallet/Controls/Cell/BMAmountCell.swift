@@ -85,9 +85,17 @@ class BMAmountCell: BaseCell {
             if selectedAssetId != nil {
                 let asset = AssetsManager.shared().getAsset(Int32(selectedAssetId ?? 0))
 
-                let text = asset?.unitName!
-                currencyLabel.text = text
                 currencyLabel.letterSpacing = 2
+                
+                let id = "(\(selectedAssetId ?? 0))"
+                let text = asset?.unitName ?? ""
+                let fullString = text + " " + id
+                
+                let attributedString = NSMutableAttributedString(string: fullString)
+                let range = (fullString as NSString).range(of: id)
+                attributedString.addAttribute(.foregroundColor, value: UIColor.white.withAlphaComponent(0.5), range: range)
+                
+                currencyLabel.attributedText = attributedString
                 
                 if let asset = asset {
                     currencyIcon.setAsset(asset)
@@ -168,6 +176,20 @@ class BMAmountCell: BaseCell {
         textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         textField.placeHolderFont = RegularFont(size: 30)
         textField.additionalRightOffset = currencyView.width
+    }
+    
+    func disable() {
+        currencyLabel.alpha = 0.5
+        currencyArrow.alpha = 0.5
+        currencyIcon.alpha = 0.5
+        textField.alpha = 0.5
+    }
+    
+    func enable() {
+        currencyLabel.alpha = 1.0
+        currencyArrow.alpha = 1.0
+        currencyIcon.alpha = 1.0
+        textField.alpha = 1
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {

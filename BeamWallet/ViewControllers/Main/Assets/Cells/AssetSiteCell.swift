@@ -44,7 +44,7 @@ class AssetSiteCell: BaseCell {
     }
     
     @IBAction private func onSite() {
-        if let url = URL(string: assetInfo.site) {
+        if let url = URL(string: assetInfo.site ?? "") {
             if let top = UIApplication.getTopMostViewController() {
                 top.openUrl(url: url)
             }
@@ -52,7 +52,7 @@ class AssetSiteCell: BaseCell {
     }
     
     @IBAction private func onPaper() {
-        if let url = URL(string: assetInfo.paper) {
+        if let url = URL(string: assetInfo.paper ?? "") {
             if let top = UIApplication.getTopMostViewController() {
                 top.openUrl(url: url)
             }
@@ -71,11 +71,11 @@ class AssetSiteCell: BaseCell {
             nameLabel.text = Localizable.shared.strings.beam_2.uppercased()
         }
         
-        if asset.site.isEmpty {
+        if (asset.site ?? "").isEmpty {
             siteButton.isHidden = true
         }
         
-        if asset.paper.isEmpty {
+        if (asset.paper ?? "").isEmpty {
             paperButton.isHidden = true
         }
     }

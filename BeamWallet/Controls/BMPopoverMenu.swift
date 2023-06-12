@@ -387,6 +387,14 @@ extension BMPopOverMenuView: UITableViewDataSource {
             cell.label.text = menuItems[indexPath.row].name
             
             if let asset = asset {
+                let id = "(\(asset.assetId))"
+                let fullString = menuItems[indexPath.row].name + " " + id
+                
+                let attributedString = NSMutableAttributedString(string: fullString)
+                let range = (fullString as NSString).range(of: id)
+                attributedString.addAttribute(.foregroundColor, value: UIColor.white.withAlphaComponent(0.5), range: range)
+               
+                cell.label.attributedText = attributedString
                 cell.iconView.setAsset(asset)
             }
             

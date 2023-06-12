@@ -28,11 +28,11 @@
 @implementation BMTransaction
 
 + (BOOL)supportsSecureCoding {
-    return NO;
+    return YES;
 }
 
 +(NSArray<Class>*)allowedTopLevelClasses {
-    return @[NSArray.class, NSString.class, NSNumber.class, BMAsset.class];
+    return @[NSArray.class, NSString.class, NSNumber.class, BMAsset.class, NSMutableArray.class];
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
@@ -60,7 +60,7 @@
     [encoder encodeObject:self.comment forKey: @"comment"];
     [encoder encodeObject:self.failureReason forKey: @"failureReason"];
     [encoder encodeObject:self.kernelId forKey: @"kernelId"];
-
+    
     [encoder encodeObject:self.senderContactName forKey: @"senderContactName"];
     [encoder encodeObject:self.receiverContactName forKey: @"receiverContactName"];
     [encoder encodeObject:self.identity forKey: @"identity"];
@@ -75,6 +75,8 @@
     
     [encoder encodeObject:self.minConfirmations forKey: @"minConfirmations"];
     [encoder encodeObject:self.minConfirmationsProgress forKey: @"minConfirmationsProgress"];
+    
+    [encoder encodeObject:self.multiAssets forKey: @"multiAssets"];
 }
 
 -(id)initWithCoder:(NSCoder *)decoder
@@ -90,10 +92,10 @@
         self.enumStatus = [[decoder decodeObjectForKey:@"enumStatus"] integerValue];
         self.enumType = [[decoder decodeObjectForKey:@"enumType"] integerValue];
         self.createdTime = [[decoder decodeObjectForKey:@"createdTime"] longLongValue];
-
+        
         self.fee = [[decoder decodeObjectForKey:@"fee"] doubleValue];
         self.realFee = [[decoder decodeObjectForKey:@"realFee"] longLongValue];
-
+        
         self.realRate =  [[decoder decodeObjectForKey:@"realRate"] longLongValue];
         
         self.senderAddress = [decoder decodeObjectForKey: @"senderAddress"];
@@ -105,7 +107,7 @@
         self.comment = [decoder decodeObjectForKey: @"comment"];
         self.failureReason = [decoder decodeObjectForKey: @"failureReason"];
         self.kernelId = [decoder decodeObjectForKey: @"kernelId"];
-
+        
         self.senderContactName = [decoder decodeObjectForKey: @"senderContactName"];
         self.receiverContactName = [decoder decodeObjectForKey: @"receiverContactName"];
         self.identity = [decoder decodeObjectForKey: @"identity"];
@@ -113,16 +115,18 @@
         self.isMaxPrivacy = [[decoder decodeObjectForKey:@"isMaxPrivacy"] boolValue];
         self.isPublicOffline = [[decoder decodeObjectForKey:@"isPublicOffline"] boolValue];
         self.isShielded = [[decoder decodeObjectForKey:@"isShielded"] boolValue];
-
+        
         self.assetId = [[decoder decodeObjectForKey:@"assetId"] intValue];
         self.asset = [decoder decodeObjectForKey: @"asset"];
-
+        
         self.token = [decoder decodeObjectForKey: @"token"];
         
         self.isDapps = [[decoder decodeObjectForKey: @"isDapps"] boolValue];
         
         self.minConfirmations = [decoder decodeObjectForKey: @"minConfirmations"];
         self.minConfirmationsProgress = [decoder decodeObjectForKey: @"minConfirmationsProgress"];
+        
+        self.multiAssets = [decoder decodeObjectForKey: @"multiAssets"];
     }
     return self;
 }
@@ -203,7 +207,7 @@
     number = [number stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     NSString *assetName = [[AssetsManager sharedManager] getAsset:_assetId].unitName;
-
+    
     NSString *detail = [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@ %@\nKernel ID: %@", _senderAddress, _receiverAddress, number, assetName, _kernelId];
     detail = [detail stringByReplacingOccurrencesOfString:@"  " withString:@" "];
     return detail;
@@ -211,7 +215,7 @@
 
 -(NSString*)csvLine {
     NSString *csvText = @"Type,Date | Time,\"Amount, BEAM\",\"Amount USD\",\"Amount BTC\",\"Transaction fee, BEAM\",Status,Address type,Transaction ID,Kernel ID,Sending address,Sending identity,Receiving address,Receiving identity,Token,Payment proof";
-
+    
     NSNumberFormatter *formatter = [NSNumberFormatter new];
     formatter.currencyCode = @"";
     formatter.currencySymbol = @"";
@@ -225,7 +229,7 @@
     NSString *_amount =  [[formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]] stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *_secondAmountUSD = [[ExchangeManager sharedManager] exchangeValue:_realAmount to:BMCurrencyUSD];
     NSString *_secondAmountBTC = [[ExchangeManager sharedManager] exchangeValue:_realAmount to:BMCurrencyBTC];
-
+    
     NSString *_status = self.status;
     NSString *_sAddress = self.senderAddress;
     NSString *_sIdenitty = self.senderIdentity;
@@ -233,7 +237,7 @@
     NSString *_rIdentity = self.receiverIdentity;
     NSString *_addresstype = [self getAddressType];
     NSString *_proof = @"";
-
+    
     NSString *_fee =  [[formatter stringFromNumber:[NSNumber numberWithDouble:self.fee]] stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *_id = self.ID;
     NSString *_kernel = self.kernelId;
@@ -321,13 +325,48 @@
 
 -(NSString*)amountString {
     NSString *number = [[StringManager sharedManager] realAmountStringAsset:_asset value:_realAmount];
-
+    
     if (_isIncome) {
         return [NSString stringWithFormat:@"+%@", number];
     }
     else {
         return [NSString stringWithFormat:@"-%@", number];
     }
+}
+
+-(BOOL)isMultiAssets {
+    if([_multiAssets count] <= 1 || _multiAssets == nil) {
+        return NO;
+    }
+    return YES;
+}
+
+-(NSMutableAttributedString*_Nullable)attributedAmountString {
+    if([_multiAssets count] == 0 || _multiAssets == nil) {
+        return nil;
+    }
+   
+//    BMAsset *asset = _multiAssets[_multiAssets.count];
+//    NSString *number = [[StringManager sharedManager] realAmountStringAsset:asset value:asset.realAmount];
+//
+//    NSString *count = [NSString stringWithFormat:@" +%d", ((int)_multiAssets.count - 1)];
+//    NSString *string;
+//    if (asset.realAmount > 0) {
+//        string = [NSString stringWithFormat:@"+%@%@", number, count];
+//    }
+//    else {
+//        string = [NSString stringWithFormat:@"-%@%@", number, count];
+//    }
+//
+//    NSRange range = [string rangeOfString: count];
+//    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:string];
+//    [attrString addAttribute:NSForegroundColorAttributeName value:[Settings sharedManager].isDarkMode ?  [UIColor colorWithRed:142.0f/255.0f green:142.0f/255.0f blue:147.0f/255.0f alpha:1] : [UIColor lightGrayColor] range:range];
+//    [attrString addAttribute:NSFontAttributeName value: [UIFont systemFontOfSize:14] range:range];
+
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@"Multiple assets"];
+
+    
+    return attrString;
 }
 
 -(NSString*)statusName {
@@ -766,7 +805,10 @@
 }
 
 -(BOOL)canSaveContact {
-    if (self.isIncome) {
+    if (self.isDapps) {
+        return NO;
+    }
+    else if (self.isIncome) {
         BMAddress *address = [[AppModel sharedManager] findAddressByID:_senderAddress];
         return address == nil;
     }
@@ -785,31 +827,55 @@
     
     NSString *date = [NSString stringWithFormat:@"%@\n%@",[[@"date" localized]uppercaseString], [self formattedDate]];
     
-    NSString *amount = [NSString stringWithFormat:@"%@\n%@",[[@"amount" localized]uppercaseString], [NSString stringWithFormat:@"%@ BEAM",number]];
+    NSString *amount;
+    
+    if ([self isMultiAssets]) {
+        NSMutableArray *amounts = [NSMutableArray new];
+        for(int i=0; i< _multiAssets.count; i++) {
+            BMAsset *asset = _multiAssets[i];
+            NSString *s = [[StringManager sharedManager]realAmountStringAsset:asset value:asset.realAmount];
+            if (asset.realAmount < 0) {
+                s = [NSString stringWithFormat:@"-%@",s];
+            } else {
+                s = [NSString stringWithFormat:@"+%@",s];
+            }
+            [amounts addObject:s];
+        }
+        amount = [amounts componentsJoinedByString:@"\n"];
+    } else {
+        amount = [self amountString];
+    }
     
     NSString *status = [NSString stringWithFormat:@"%@\n%@",[[@"status" localized]uppercaseString], _status];
     
     NSString *sender;
     NSString *receiver;
     
-    if (_isSelf) {
-        sender = [NSString stringWithFormat:@"%@\n%@",[[@"my_send_address" localized]uppercaseString], _senderAddress];
-        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_rec_address" localized]uppercaseString], _receiverAddress];
-    }
-    else if(_isIncome)
-    {
-        if (self.isShielded || self.isMaxPrivacy || self.isPublicOffline) {
-            sender = [NSString stringWithFormat:@"%@\n%@",[[@"sender_identity" localized]uppercaseString], _senderIdentity];
+
+    if([self isDapps]) {
+        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"app_shader_id" localized]uppercaseString], _appID];
+        sender = [NSString stringWithFormat:@"%@\n%@",[[@"dapp_anme" localized]uppercaseString], _appName];
+    } else {
+        if (_isSelf) {
+            sender = [NSString stringWithFormat:@"%@\n%@",[[@"my_send_address" localized]uppercaseString], _senderAddress];
+            receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_rec_address" localized]uppercaseString], _receiverAddress];
         }
-        else {
-            sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _senderAddress];
+        else if(_isIncome)
+        {
+            if (self.isShielded || self.isMaxPrivacy || self.isPublicOffline) {
+                sender = [NSString stringWithFormat:@"%@\n%@",[[@"sender_identity" localized]uppercaseString], _senderIdentity];
+            }
+            else {
+                sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _senderAddress];
+            }
+            receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _receiverAddress];
         }
-        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _receiverAddress];
+        else{
+            sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _receiverAddress];
+            receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _senderAddress];
+        }
     }
-    else{
-        sender = [NSString stringWithFormat:@"%@\n%@",[[@"contact" localized]uppercaseString], _receiverAddress];
-        receiver = [NSString stringWithFormat:@"%@\n%@",[[@"my_address" localized]uppercaseString], _senderAddress];
-    }
+    
     
     NSString *fee = [NSString stringWithFormat:@"%@\n%@",[[@"transaction_fee" localized]uppercaseString], [NSString stringWithFormat:@"%llu GROTH",_realFee]];
     
@@ -825,7 +891,9 @@
     if (_realFee > 0) {
         [details addObject:fee];
     }
-    [details addObject:addressType];
+    if(![self isDapps]) {
+        [details addObject:addressType];
+    }
     [details addObject:trid];
     
     if(_identity.length > 0){

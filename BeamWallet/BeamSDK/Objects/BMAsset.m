@@ -26,8 +26,23 @@
 
 @implementation BMAsset
 
+- (id)copyWithZone:(NSZone *)zone {
+    BMAsset *copy = [[[self class] allocWithZone:zone] init];
+    copy.unitName = self.unitName;
+    copy.nthUnitName = self.nthUnitName;
+    copy.shortName = self.shortName;
+    copy.shortDesc = self.shortDesc;
+    copy.longDesc = self.longDesc;
+    copy.name = self.name;
+    copy.color = self.color;
+    copy.site = self.site;
+    copy.paper = self.paper;
+    copy.assetId = self.assetId;
+    return copy;
+}
+
 + (BOOL)supportsSecureCoding {
-    return NO;
+    return YES;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
@@ -55,8 +70,8 @@
     [encoder encodeObject:_longDesc forKey: @"longDesc"];
     [encoder encodeObject:_name forKey: @"name"];
     [encoder encodeObject:_color forKey: @"color"];
-    [encoder encodeObject:_site forKey: @"site"];
-    [encoder encodeObject:_paper forKey: @"paper"];
+//    [encoder encodeObject:_site forKey: @"site"];
+ //   [encoder encodeObject:_paper forKey: @"paper"];
 }
 
 -(id)initWithCoder:(NSCoder *)decoder
@@ -71,8 +86,10 @@
         self.longDesc = [decoder decodeObjectForKey: @"longDesc"];
         self.name = [decoder decodeObjectForKey: @"name"];
         self.color = [decoder decodeObjectForKey: @"color"];
-        self.site = [decoder decodeObjectForKey: @"site"];
-        self.paper = [decoder decodeObjectForKey: @"paper"];
+//        self.site = [decoder decodeObjectForKey: @"site"];
+ //       self.paper = [decoder decodeObjectForKey: @"paper"];
+        self.site = @"";
+        self.paper = @"";
 
         self.available = [[decoder decodeObjectForKey: @"available"] longLongValue];
         self.receiving = [[decoder decodeObjectForKey: @"receiving"] longLongValue];
@@ -127,7 +144,7 @@
 }
 
 -(BOOL)isBeamX {
-    if(_assetId == 31 && [Settings.sharedManager target] == Masternet) {
+    if(_assetId == 3 && [Settings.sharedManager target] == Masternet) {
         return TRUE;
     }
     else if(_assetId == 12 && [Settings.sharedManager target] == Testnet) {

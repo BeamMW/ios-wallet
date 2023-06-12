@@ -196,28 +196,36 @@ void WalletModel::onStatus(const WalletStatus& status)
 //}
 //return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
 
-NSString* WalletModel::GetAddressTo(TxDescription m_tx)
+NSString* WalletModel::GetAddressTo(TxDescription transaction)
 {
-    if (m_tx.m_sender)
+    if (transaction.m_sender)
     {
-        auto token = m_tx.getToken();
+        auto token = transaction.getToken();
         if (token.length() == 0) {
-            return [NSString stringWithUTF8String:to_string(m_tx.m_peerId).c_str()];
+            return [NSString stringWithUTF8String:to_string(transaction.m_peerAddr).c_str()];
         }
-        
+
         return [NSString stringWithUTF8String:token.c_str()];
     }
-    return [NSString stringWithUTF8String:to_string(m_tx.m_myId).c_str()];
+    return [NSString stringWithUTF8String:to_string(transaction.m_myAddr).c_str()];
 }
 
 NSString* WalletModel::GetAddressFrom(TxDescription transaction)
 {
     if (transaction.m_txType == wallet::TxType::PushTransaction && !transaction.m_sender)
     {
-        return [NSString stringWithUTF8String:transaction.getSenderIdentity().c_str()];
+        return [NSString stringWithUTF8String:transaction.getSenderEndpoint().c_str()];
     }
+    return transaction.m_sender ? [NSString stringWithUTF8String:to_string(transaction.m_myAddr).c_str()] : [NSString stringWithUTF8String:to_string(transaction.m_peerAddr).c_str()];
+        
+//    return [NSString stringWithUTF8String:transaction.getSenderEndpoint().c_str()];
     
-    return transaction.m_sender ? [NSString stringWithUTF8String:to_string(transaction.m_myId).c_str()] : [NSString stringWithUTF8String:to_string(transaction.m_peerId).c_str()];
+//    if (transaction.m_txType == wallet::TxType::PushTransaction && !transaction.m_sender)
+//    {
+//        return [NSString stringWithUTF8String:transaction.getSenderIdentity().c_str()];
+//    }
+//
+//    return transaction.m_sender ? [NSString stringWithUTF8String:to_string(transaction.m_myId).c_str()] : [NSString stringWithUTF8String:to_string(transaction.m_peerId).c_str()];
 }
 
 void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vector<beam::wallet::TxDescription>& items)
@@ -240,7 +248,6 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         auto kernelId = to_hex(item.m_kernelID.m_pData, item.m_kernelID.nBytes);
         std::string comment(item.m_message.begin(), item.m_message.end());
               
-        
         BMTransaction *transaction = [BMTransaction new];
         transaction.realAmount = double(int64_t(item.m_amount)) / Rules::Coin;
         transaction.createdTime = item.m_createTime;
@@ -254,7 +261,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         else{
             transaction.failureReason = @"";
         }
-        transaction.identity = [NSString stringWithUTF8String:item.getIdentity(item.m_sender).c_str()];
+        transaction.identity = [NSString stringWithUTF8String:item.getSender().c_str()];
+        //[NSString stringWithUTF8String:item.getIdentity(item.m_sender).c_str()];
         transaction.ID = [NSString stringWithUTF8String:txIDToString(item.m_txId).c_str()];
         transaction.isSelf = item.m_selfTx;
         transaction.fee = double(int64_t(item.m_fee)) / Rules::Coin;
@@ -264,8 +272,8 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
         transaction.canResume = item.canResume();
         transaction.canDelete = item.canDelete();
         transaction.comment = [NSString stringWithUTF8String:comment.c_str()];
-        transaction.senderIdentity = [NSString stringWithUTF8String:item.getSenderIdentity().c_str()];
-        transaction.receiverIdentity = [NSString stringWithUTF8String:item.getReceiverIdentity().c_str()];
+        transaction.senderIdentity = [NSString stringWithUTF8String:item.getSender().c_str()];
+        transaction.receiverIdentity = [NSString stringWithUTF8String:item.getReceiver().c_str()];
         transaction.senderAddress = GetAddressFrom(item);
         transaction.receiverAddress = GetAddressTo(item);
         transaction.assetId = item.m_assetId;
@@ -297,25 +305,25 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
             
             if(item.GetParameter(TxParameterID::ContractDataPacked, vData))
             {
-                if (!vData.empty())
-                {
-                    std::stringstream ss;
-                    ss << vData[0].m_Cid.str();
-                    
-                    if (vData.size() > 1)
-                    {
-                        ss << " +" << vData.size() - 1;
-                    }
-                    
-                    transaction.contractCids =  [NSString stringWithUTF8String:ss.str().c_str()];
-                }
+                auto contractFee = vData.get_FullFee(h);
+                auto contractSpend = vData.get_FullSpend();
                 
-                auto contractFee = bvm2::getFullFee(vData, h);
-                auto contractSpend = bvm2::getFullSpend(vData);
+                std::stringstream ss;
+                ss << vData.m_vec[0].m_Cid.str();
+                
+                if (vData.m_vec.size() > 1)
+                {
+                    ss << " +" << vData.m_vec.size() - 1;
+                }
                 
                 transaction.realFee = int64_t(contractFee);
                 transaction.fee = double(int64_t(contractFee)) / Rules::Coin;
+                transaction.contractCids = [NSString stringWithUTF8String:ss.str().c_str()];
 
+                if (contractSpend.size() > 1) {
+                    transaction.multiAssets = [NSMutableArray new];
+                }
+                
                 for (const auto& info: contractSpend)
                 {
                     auto amount = info.second;
@@ -332,6 +340,23 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
                     }
                     
                     transaction.realAmount = transaction.realAmount + (double(int64_t(amount)) / Rules::Coin);
+                    
+                    if (contractSpend.size() > 1) {
+                        BMAsset *asset = [[[AssetsManager sharedManager] getAsset:info.first] copy];
+                        BOOL isIncome = amount < 0;
+                        if(asset != nil) {
+                            asset.realAmount = (double(int64_t(amount)) / Rules::Coin) * (-1);
+
+                            if (!isIncome) {
+                                asset.sending = int64_t(amount);
+                                asset.realSending = (double(int64_t(amount)) / Rules::Coin);
+                            } else {
+                                asset.receiving = int64_t(amount);
+                                asset.realReceiving = (double(int64_t(amount)) / Rules::Coin);
+                            }
+                            [transaction.multiAssets addObject:asset];
+                        }
+                    }
                 }
                 
                 transaction.isIncome = transaction.realAmount <= 0;
@@ -339,6 +364,12 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
                 
                 if (transaction.realAmount < 0) {
                     transaction.realAmount = transaction.realAmount * (-1.0);
+                }
+                
+                if ([transaction isMultiAssets]) {
+                    auto last = transaction.multiAssets.lastObject;
+                    transaction.isIncome = last.realAmount > 0;
+                    transaction.status = [GetTransactionStatusString(item, last.realAmount > 0) lowercaseString];
                 }
             }
         }
@@ -592,10 +623,11 @@ void WalletModel::onNormalCoinsChanged(beam::wallet::ChangeAction action, const 
 
 void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAddress>& addrs)
 {
-    NSLog(@"onAddresses");
     
     if (own)
     {
+        NSLog(@"onAddresses OWN %lu", addrs.size());
+
         this->ownAddresses.clear();
 
         for (int i=0; i<addrs.size(); i++)
@@ -619,9 +651,9 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
             {
                 address.label = [@"default" localized];
             }
-            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
-            address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_BbsAddr).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Token.c_str()];
 
             [addresses addObject:address];
         }
@@ -653,6 +685,8 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         }
     }
     else{
+        NSLog(@"onAddresses Contacts %lu", addrs.size());
+
         this->contacts.clear();
 
         for (int i=0; i<addrs.size(); i++)
@@ -664,9 +698,9 @@ void WalletModel::onAddresses(bool own, const std::vector<beam::wallet::WalletAd
         {
             BMAddress *address = [[BMAddress alloc] init];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
-            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
-            address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_BbsAddr).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Token.c_str()];
 
             BOOL ignored = [[AppModel sharedManager] containsIgnoredContact:address.walletId];
             
@@ -721,7 +755,7 @@ void WalletModel::onGeneratedNewAddress(const beam::wallet::WalletAddress& walle
 {
     NSLog(@"onGeneratedNewAddress");
 
-    [AppModel sharedManager].addressGeneratedID = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+    [AppModel sharedManager].addressGeneratedID = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
 
     getAsync()->saveAddress(walletAddr);
 
@@ -795,8 +829,8 @@ void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
             }
         }
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            if ([[AppModel sharedManager] isInternetAvailable] && !isNodeConnected) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            if ([[AppModel sharedManager] isInternetAvailable] && !pre_connected_status) {
                 [[AppModel sharedManager] reconnect];
             }
         }); 
@@ -977,9 +1011,9 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
             {
                 address.label = [@"default" localized];
             }
-            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
-            address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_BbsAddr).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Token.c_str()];
             
             [addresses addObject:address];
         }
@@ -988,9 +1022,9 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
             
             BMAddress *address = [[BMAddress alloc] init];
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
-            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
-            address.address = [NSString stringWithUTF8String:walletAddr.m_Address.c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_BbsAddr).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Token.c_str()];
             
             BOOL ignored = [[AppModel sharedManager] containsIgnoredContact:address.walletId];
             
@@ -1106,7 +1140,7 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
     
     if(action == beam::wallet::ChangeAction::Added && items.size() == 1) {
         auto walletAddr = items[0];
-        NSString *walletID = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
+        NSString *walletID = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
         
         if([[AppModel sharedManager].addressGeneratedID isEqualToString:walletID]) {
             BMAddress *address = [[BMAddress alloc] init];
@@ -1114,8 +1148,9 @@ void WalletModel::onAddressesChanged (beam::wallet::ChangeAction action, const s
             address.ownerId = walletAddr.m_OwnID;
             address.createTime = walletAddr.m_createTime;
             address.label = [NSString stringWithUTF8String:walletAddr.m_label.c_str()];
-            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_walletID).c_str()];
-            address.identity = [NSString stringWithUTF8String:to_string(walletAddr.m_Identity).c_str()];
+            address.walletId = [NSString stringWithUTF8String:to_string(walletAddr.m_BbsAddr).c_str()];
+            address.identity = [NSString stringWithUTF8String:to_base58(walletAddr.m_Endpoint).c_str()];
+            address.address = [NSString stringWithUTF8String:walletAddr.m_Token.c_str()];
             [AppModel sharedManager].generatedNewAddressBlock(address, nil);
             [AppModel sharedManager].addressGeneratedID = @"";
         }
@@ -1332,7 +1367,7 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
             else if(notification.m_type == beam::wallet::Notification::Type::AddressStatusChanged && Settings.sharedManager.isNotificationAddressON) {
                 beam::wallet::WalletAddress address;
                 if (beam::wallet::fromByteBuffer(notification.m_content, address))  {
-                    NSString *pid = [NSString stringWithUTF8String:to_string(address.m_walletID).c_str()];
+                    NSString *pid = [NSString stringWithUTF8String:to_base58(address.m_Endpoint).c_str()];
                     if(address.isExpired() && ![[AppModel sharedManager].deletedNotifications valueForKey:pid]) {
                         bmNotification = [BMNotification new];
                         bmNotification.nId = nId;
@@ -1614,28 +1649,45 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     if(color.isEmpty) {
         color = [[AssetsManager sharedManager] getAssetColor:assetId];
     }
-    for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
-        BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
-        if (asset.assetId == assetId) {
-            asset.nthUnitName = nthName;
-            asset.unitName = unitName;
-            asset.shortName = shortName;
-            asset.shortDesc = shortDesc;
-            asset.longDesc = longDesc;
-            asset.site = site;
-            asset.color = color;
-            asset.paper = paper;
-            if(asset.assetId == 12 && [Settings.sharedManager target] == Testnet) {
-                asset.color = @"#977dff";
-            }
-            else if(asset.assetId == 31 && [Settings.sharedManager target] == Masternet) {
-                asset.color = @"#977dff";
-            }
-            else if(asset.assetId == 7 && [Settings.sharedManager target] == Mainnet) {
-                asset.color = @"#977dff";
-            }
-            [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
-        }
+    
+    NSUInteger index = [[[AssetsManager sharedManager]assets] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        BMAsset *myObject = (BMAsset *)obj;
+        return myObject.assetId == UInt64(assetId);
+    }];
+    
+    BMAsset* bmAsset;
+    if (index == NSNotFound) {
+        bmAsset = [[BMAsset alloc] init];
+    }
+    else {
+        bmAsset = [[[AssetsManager sharedManager]assets] objectAtIndex:index];
+    }
+    
+    bmAsset.assetId = UInt64(assetId);
+    bmAsset.nthUnitName = nthName;
+    bmAsset.unitName = unitName;
+    bmAsset.shortName = shortName;
+    bmAsset.shortDesc = shortDesc;
+    bmAsset.longDesc = longDesc;
+    bmAsset.site = site;
+    bmAsset.color = color;
+    bmAsset.paper = paper;
+    if(bmAsset.assetId == 12 && [Settings.sharedManager target] == Testnet) {
+        bmAsset.color = @"#977dff";
+    }
+    else if(bmAsset.assetId == 3 && [Settings.sharedManager target] == Masternet) {
+        bmAsset.color = @"#977dff";
+    }
+    else if(bmAsset.assetId == 7 && [Settings.sharedManager target] == Mainnet) {
+        bmAsset.color = @"#977dff";
+    }
+    
+    if(index == NSNotFound) {
+        [[[AssetsManager sharedManager]assets] addObject:bmAsset];
+    }
+    else {
+        [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:index withObject:bmAsset];
+
     }
     
     [[AssetsManager sharedManager] changeAssets];

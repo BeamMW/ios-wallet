@@ -107,19 +107,19 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         webView?.backgroundColor = self.view.backgroundColor
         webView?.isOpaque = false
         webView?.scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
-        webView?.isHidden = true
+        webView?.isHidden = false
         self.view.addSubview(webView!)
         
         loadingImage.image = UIImage(named: "dapp-loading")
         loadingImage.frame = CGRect(x: (UIScreen.main.bounds.width-245)/2, y: (UIScreen.main.bounds.height-137)/2, width: 245, height: 137)
-        self.view.addSubview(loadingImage)
+       // self.view.addSubview(loadingImage)
         
         loadingLabel.font = ItalicFont(size: 16)
         loadingLabel.text = String.init(format: Localizable.shared.strings.please_wait_is_loading, app.name)
         loadingLabel.textColor =  Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.blueyGrey
         loadingLabel.textAlignment = .center
         loadingLabel.frame = CGRect(x: 20, y: loadingImage.y - 60, width: UIScreen.main.bounds.width-40, height: 30)
-        self.view.addSubview(loadingLabel)
+      //  self.view.addSubview(loadingLabel)
 
     }
     

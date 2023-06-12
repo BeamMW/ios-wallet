@@ -51,10 +51,10 @@
     else {
         NSString *number = [formatter stringFromNumber:[NSNumber numberWithDouble:value]];
         if(asset.isBeam) {
-            return [NSString stringWithFormat:@"%@ %@", number, @"BEAM"];
+            return [[[NSString stringWithFormat:@"%@ %@", number, @"BEAM"] stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""];
         }
         else {
-            return [NSString stringWithFormat:@"%@ %@", number, asset.unitName];
+            return [[[NSString stringWithFormat:@"%@ %@", number, asset.unitName] stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""];
         }
     }
 }

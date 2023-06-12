@@ -25,9 +25,13 @@ class WalletTransactionCell: UITableViewCell {
     @IBOutlet weak private var statusLabel: UILabel!
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
-    @IBOutlet weak private var assetIcon: AssetIconView!
     @IBOutlet weak private var statusIcon: UIImageView!
 
+    @IBOutlet weak private var assetIconsWidth: NSLayoutConstraint!
+    @IBOutlet weak private var assetIcon1: AssetIconView!
+    @IBOutlet weak private var assetIcon2: AssetIconView!
+    @IBOutlet weak private var assetIcon3: AssetIconView!
+    
     @IBOutlet weak private var detailView: UIView!
     @IBOutlet weak private var commentView: UIStackView!
     @IBOutlet weak private var commentLabel: UILabel!
@@ -38,11 +42,18 @@ class WalletTransactionCell: UITableViewCell {
         
         selectionStyle = .none
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+//        assetIcon2.x = 20
+//        assetIcon3.x = 40
+    }
 }
 
 extension WalletTransactionCell: Configurable {
     
-    func configure(with options: (row: Int, transaction:BMTransaction, additionalInfo:Bool)) {
+    func configure(with options: (row: Int, transaction: BMTransaction, additionalInfo: Bool)) {
         guard let asset = options.transaction.asset else {
             return
         }
@@ -60,11 +71,42 @@ extension WalletTransactionCell: Configurable {
 
         mainView.backgroundColor = (options.row % 2 == 0) ? UIColor.main.cellBackgroundColor : UIColor.main.marine
                 
-        assetIcon.setAsset(asset)
         
         statusIcon.image = options.transaction.statusIcon()
         
-        typeLabel.text = options.transaction.amountString()
+        assetIcon2.isHidden = true
+        assetIcon3.isHidden = true
+        
+        if options.transaction.isMultiAssets() {
+            
+            let assets = options.transaction.multiAssets as! [BMAsset]
+            if assets.count >= 3 {
+                assetIconsWidth.constant = 58
+            }
+            else {
+                assetIconsWidth.constant = 42
+            }
+            var index = 1
+            assets.forEach { asset in
+                if index == 1 {
+                    assetIcon1.setAsset(asset)
+                }
+                else if index == 2 {
+                    assetIcon2.isHidden = false
+                    assetIcon2.setAsset(asset)
+                }
+                else if index == 3 {
+                    assetIcon3.isHidden = false
+                    assetIcon3.setAsset(asset)
+                }
+                index += 1
+            }
+            typeLabel.attributedText = options.transaction.attributedAmountString()
+        } else {
+            assetIconsWidth.constant = 26
+            assetIcon1.setAsset(asset)
+            typeLabel.text = options.transaction.amountString()
+        }
         
         dateLabel.text = options.transaction.formattedDate()
         dateLabel.isHidden = !options.additionalInfo

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,10 +24,25 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DAOConfirmViewController" customModule="BeamWallet" customModuleProvider="target">
             <connections>
-                <outlet property="amountLabel" destination="Arw-y3-TiU" id="IN7-ey-2i1"/>
-                <outlet property="amountSecondLabel" destination="dIy-vr-RzA" id="pgB-zN-aJj"/>
+                <outlet property="amountLabel1" destination="Arw-y3-TiU" id="tje-JU-5eA"/>
+                <outlet property="amountLabel2" destination="iE3-Ye-ljW" id="Dx6-xS-HSe"/>
+                <outlet property="amountLabel3" destination="qrG-dv-e9w" id="fZH-95-PlY"/>
+                <outlet property="amountSecondLabel1" destination="dIy-vr-RzA" id="x9u-oY-uiW"/>
+                <outlet property="amountSecondLabel2" destination="JDJ-CS-izN" id="b7z-Gq-WoP"/>
+                <outlet property="amountSecondLabel3" destination="Dz9-mK-Gdb" id="VnM-lL-QvI"/>
                 <outlet property="assetFeeIcon" destination="PE9-QF-ssk" id="o4S-KC-P7k"/>
-                <outlet property="assetIcon" destination="jev-oG-KkT" id="Mfq-Q6-6v8"/>
+                <outlet property="assetIcon1" destination="jev-oG-KkT" id="YSJ-d4-EvG"/>
+                <outlet property="assetIcon2" destination="wnh-zi-hDu" id="uqo-sx-a3C"/>
+                <outlet property="assetIcon3" destination="62a-Wp-n1h" id="UYn-oQ-TDw"/>
+                <outlet property="assetIdLabel1" destination="P2n-Y7-mf1" id="UEK-CT-06F"/>
+                <outlet property="assetIdLabel2" destination="VWV-ge-7yM" id="eXA-bT-adW"/>
+                <outlet property="assetIdLabel3" destination="PM7-Vd-FzW" id="faB-xC-zt0"/>
+                <outlet property="assetIdView1" destination="rsf-dr-4px" id="jGP-Ux-ACY"/>
+                <outlet property="assetIdView2" destination="cIF-Z2-YKo" id="fdh-s0-msQ"/>
+                <outlet property="assetIdView3" destination="IbV-BE-7Bz" id="A2h-1o-hOv"/>
+                <outlet property="assetStackView1" destination="tRE-v9-SGK" id="hhT-d3-Tti"/>
+                <outlet property="assetStackView2" destination="09a-jy-pHf" id="Se0-Js-GUk"/>
+                <outlet property="assetStackView3" destination="Ub0-fW-i7B" id="QC7-9z-6NK"/>
                 <outlet property="cancelButton" destination="g9e-w8-13B" id="pOe-s4-CJ0"/>
                 <outlet property="confirmButton" destination="M7t-cw-zun" id="eIY-lz-Oqa"/>
                 <outlet property="detailTitleLabel" destination="JQ5-oJ-Ghq" id="Kz7-k5-EkX"/>
@@ -48,10 +63,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" delaysContentTouches="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biO-H1-4aG">
-                    <rect key="frame" x="0.0" y="64" width="414" height="832"/>
+                    <rect key="frame" x="0.0" y="68" width="414" height="828"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="von-UV-r3I">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="476.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="592"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Withdraw to the wallet" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JQ5-oJ-Ghq">
                                     <rect key="frame" x="20" y="30" width="374" height="21.5"/>
@@ -71,38 +86,235 @@
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </label>
-                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tRE-v9-SGK">
-                                    <rect key="frame" x="20" y="103.5" width="184" height="26"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KXd-aT-NIZ">
+                                    <rect key="frame" x="20" y="103.5" width="289" height="141.5"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jev-oG-KkT" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="26" height="26"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="26" id="HU8-kc-M4E"/>
-                                                <constraint firstAttribute="width" constant="26" id="yxL-0q-36v"/>
-                                            </constraints>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Arw-y3-TiU" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
-                                            <rect key="frame" x="34" y="0.0" width="150" height="26"/>
-                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="17"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
+                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tRE-v9-SGK">
+                                            <rect key="frame" x="0.0" y="0.0" width="289" height="40.5"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jev-oG-KkT" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="26" height="26"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="26" id="HU8-kc-M4E"/>
+                                                        <constraint firstAttribute="width" constant="26" id="yxL-0q-36v"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="uBQ-Qg-dDQ">
+                                                    <rect key="frame" x="34" y="0.0" width="255" height="40.5"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Arw-y3-TiU" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="255" height="20.5"/>
+                                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-vr-RzA">
+                                                            <rect key="frame" x="0.0" y="20.5" width="255" height="0.0"/>
+                                                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
+                                                            <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rsf-dr-4px">
+                                                            <rect key="frame" x="0.0" y="20.5" width="255" height="20"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Confidential asset ID:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tzo-mL-ZVH">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="121" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="1" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2n-Y7-mf1">
+                                                                    <rect key="frame" x="123" y="0.0" width="6" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </label>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconExternalLinkGreen" translatesAutoresizingMaskIntoConstraints="NO" id="4YV-HX-1YE">
+                                                                    <rect key="frame" x="134" y="0.0" width="12" height="20"/>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstItem="P2n-Y7-mf1" firstAttribute="leading" secondItem="Tzo-mL-ZVH" secondAttribute="trailing" constant="2" id="9JH-Bi-x2l"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Tzo-mL-ZVH" secondAttribute="bottom" id="A8P-2a-tFF"/>
+                                                                <constraint firstAttribute="bottom" secondItem="P2n-Y7-mf1" secondAttribute="bottom" id="Kwh-LO-nzA"/>
+                                                                <constraint firstItem="4YV-HX-1YE" firstAttribute="top" secondItem="rsf-dr-4px" secondAttribute="top" id="MiM-kS-l4q"/>
+                                                                <constraint firstItem="Tzo-mL-ZVH" firstAttribute="leading" secondItem="rsf-dr-4px" secondAttribute="leading" id="X15-Ey-bWj"/>
+                                                                <constraint firstAttribute="bottom" secondItem="4YV-HX-1YE" secondAttribute="bottom" id="aq8-Oj-25o"/>
+                                                                <constraint firstItem="Tzo-mL-ZVH" firstAttribute="top" secondItem="rsf-dr-4px" secondAttribute="top" id="cbL-6U-c7N"/>
+                                                                <constraint firstItem="4YV-HX-1YE" firstAttribute="leading" secondItem="P2n-Y7-mf1" secondAttribute="trailing" constant="5" id="hRm-p1-Ogh"/>
+                                                                <constraint firstAttribute="height" constant="20" id="y9k-5s-ZAt"/>
+                                                                <constraint firstItem="P2n-Y7-mf1" firstAttribute="top" secondItem="rsf-dr-4px" secondAttribute="top" id="zPK-oV-PmW"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                        </stackView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="09a-jy-pHf">
+                                            <rect key="frame" x="0.0" y="50.5" width="289" height="40.5"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wnh-zi-hDu" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="26" height="26"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="26" id="0rg-G1-JT9"/>
+                                                        <constraint firstAttribute="height" constant="26" id="r3q-0x-EO8"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6l6-f8-1vR">
+                                                    <rect key="frame" x="34" y="0.0" width="255" height="40.5"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iE3-Ye-ljW" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="255" height="20.5"/>
+                                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDJ-CS-izN">
+                                                            <rect key="frame" x="0.0" y="20.5" width="255" height="0.0"/>
+                                                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
+                                                            <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cIF-Z2-YKo">
+                                                            <rect key="frame" x="0.0" y="20.5" width="255" height="20"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Confidential asset ID:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xzc-UV-3an">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="121" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="1" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VWV-ge-7yM">
+                                                                    <rect key="frame" x="123" y="0.0" width="6" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </label>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconExternalLinkGreen" translatesAutoresizingMaskIntoConstraints="NO" id="bpl-8q-ixx">
+                                                                    <rect key="frame" x="134" y="0.0" width="12" height="20"/>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstItem="bpl-8q-ixx" firstAttribute="top" secondItem="cIF-Z2-YKo" secondAttribute="top" id="76m-um-CVp"/>
+                                                                <constraint firstItem="xzc-UV-3an" firstAttribute="top" secondItem="cIF-Z2-YKo" secondAttribute="top" id="NVZ-4W-JE7"/>
+                                                                <constraint firstAttribute="height" constant="20" id="PQq-ZT-sSj"/>
+                                                                <constraint firstItem="VWV-ge-7yM" firstAttribute="leading" secondItem="xzc-UV-3an" secondAttribute="trailing" constant="2" id="Vrx-mR-Jy1"/>
+                                                                <constraint firstAttribute="bottom" secondItem="xzc-UV-3an" secondAttribute="bottom" id="esX-ZI-Yeq"/>
+                                                                <constraint firstAttribute="bottom" secondItem="bpl-8q-ixx" secondAttribute="bottom" id="hV9-jU-cDq"/>
+                                                                <constraint firstItem="bpl-8q-ixx" firstAttribute="leading" secondItem="VWV-ge-7yM" secondAttribute="trailing" constant="5" id="rs7-Fj-Bqg"/>
+                                                                <constraint firstItem="VWV-ge-7yM" firstAttribute="top" secondItem="cIF-Z2-YKo" secondAttribute="top" id="sG3-qK-L50"/>
+                                                                <constraint firstItem="xzc-UV-3an" firstAttribute="leading" secondItem="cIF-Z2-YKo" secondAttribute="leading" id="woP-xu-kDE"/>
+                                                                <constraint firstAttribute="bottom" secondItem="VWV-ge-7yM" secondAttribute="bottom" id="zZW-XZ-aOB"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                        </stackView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ub0-fW-i7B">
+                                            <rect key="frame" x="0.0" y="101" width="289" height="40.5"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="62a-Wp-n1h" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="26" height="26"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="26" id="h2z-bD-e9o"/>
+                                                        <constraint firstAttribute="height" constant="26" id="swg-X7-czH"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bfV-1w-h8U">
+                                                    <rect key="frame" x="34" y="0.0" width="255" height="40.5"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="2345.28273 BEAM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qrG-dv-e9w" customClass="BMCopyLabel" customModule="BeamWallet" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="255" height="20.5"/>
+                                                            <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dz9-mK-Gdb">
+                                                            <rect key="frame" x="0.0" y="20.5" width="255" height="0.0"/>
+                                                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
+                                                            <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IbV-BE-7Bz">
+                                                            <rect key="frame" x="0.0" y="20.5" width="255" height="20"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Confidential asset ID:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rxZ-zH-wQR">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="121" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="1" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PM7-Vd-FzW">
+                                                                    <rect key="frame" x="123" y="0.0" width="6" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </label>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconExternalLinkGreen" translatesAutoresizingMaskIntoConstraints="NO" id="Lw2-oP-QYU">
+                                                                    <rect key="frame" x="134" y="0.0" width="12" height="20"/>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstItem="rxZ-zH-wQR" firstAttribute="top" secondItem="IbV-BE-7Bz" secondAttribute="top" id="3nT-1d-17B"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Lw2-oP-QYU" secondAttribute="bottom" id="6Vu-xw-tk9"/>
+                                                                <constraint firstAttribute="bottom" secondItem="rxZ-zH-wQR" secondAttribute="bottom" id="AFs-Xq-M4H"/>
+                                                                <constraint firstAttribute="height" constant="20" id="Dy9-L6-Ts4"/>
+                                                                <constraint firstItem="rxZ-zH-wQR" firstAttribute="leading" secondItem="IbV-BE-7Bz" secondAttribute="leading" id="NVy-oa-zE0"/>
+                                                                <constraint firstItem="PM7-Vd-FzW" firstAttribute="leading" secondItem="rxZ-zH-wQR" secondAttribute="trailing" constant="2" id="a1N-rR-hSW"/>
+                                                                <constraint firstItem="Lw2-oP-QYU" firstAttribute="leading" secondItem="PM7-Vd-FzW" secondAttribute="trailing" constant="5" id="jW9-BR-GEE"/>
+                                                                <constraint firstItem="Lw2-oP-QYU" firstAttribute="top" secondItem="IbV-BE-7Bz" secondAttribute="top" id="jbn-iH-l0B"/>
+                                                                <constraint firstAttribute="bottom" secondItem="PM7-Vd-FzW" secondAttribute="bottom" id="kG4-b2-op8"/>
+                                                                <constraint firstItem="PM7-Vd-FzW" firstAttribute="top" secondItem="IbV-BE-7Bz" secondAttribute="top" id="xge-xo-As9"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                        </stackView>
                                     </subviews>
                                 </stackView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-vr-RzA">
-                                    <rect key="frame" x="55" y="129.5" width="0.0" height="0.0"/>
-                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
-                                    <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    </userDefinedRuntimeAttributes>
-                                </label>
                                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" text="Fee" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ibj-mb-S45">
-                                    <rect key="frame" x="20" y="159.5" width="21.5" height="17"/>
+                                    <rect key="frame" x="20" y="275" width="21.5" height="17"/>
                                     <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -111,7 +323,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="wnc-7I-gxs">
-                                    <rect key="frame" x="20" y="181.5" width="184" height="26"/>
+                                    <rect key="frame" x="20" y="297" width="184" height="26"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PE9-QF-ssk" customClass="AssetIconView" customModule="BeamWallet" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="26" height="26"/>
@@ -132,7 +344,7 @@
                                     </subviews>
                                 </stackView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfL-vn-e6f">
-                                    <rect key="frame" x="55" y="207.5" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="55" y="323" width="0.0" height="0.0"/>
                                     <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -141,7 +353,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Staking Dapp will send the funds to your wallet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5uo-r5-eB3">
-                                    <rect key="frame" x="20" y="247.5" width="374" height="17"/>
+                                    <rect key="frame" x="20" y="363" width="374" height="17"/>
                                     <fontDescription key="fontDescription" name="SFProDisplay-Italic" family="SF Pro Display" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -150,7 +362,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="kfg-zK-mAL">
-                                    <rect key="frame" x="20" y="289.5" width="374" height="162"/>
+                                    <rect key="frame" x="20" y="405" width="374" height="162"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="CF8-7s-yaV">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="93"/>
@@ -252,27 +464,25 @@
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <constraints>
+                                <constraint firstItem="Ibj-mb-S45" firstAttribute="top" secondItem="KXd-aT-NIZ" secondAttribute="bottom" constant="30" id="2hF-yp-6po"/>
                                 <constraint firstItem="U1e-l4-f2k" firstAttribute="top" secondItem="JQ5-oJ-Ghq" secondAttribute="bottom" constant="30" id="3F7-gi-a2N"/>
                                 <constraint firstItem="kfg-zK-mAL" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="6MB-OB-pBt"/>
                                 <constraint firstAttribute="width" constant="414" id="82i-TB-44n"/>
                                 <constraint firstItem="5uo-r5-eB3" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="EcP-Hd-Dj7"/>
                                 <constraint firstItem="U1e-l4-f2k" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="KUS-S8-ZYi"/>
                                 <constraint firstAttribute="bottom" secondItem="kfg-zK-mAL" secondAttribute="bottom" constant="25" id="LEm-3f-8IE"/>
-                                <constraint firstItem="tRE-v9-SGK" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="Mao-6z-6du"/>
                                 <constraint firstAttribute="trailing" secondItem="5uo-r5-eB3" secondAttribute="trailing" constant="20" id="QgE-k8-JeA"/>
                                 <constraint firstItem="yfL-vn-e6f" firstAttribute="top" secondItem="wnc-7I-gxs" secondAttribute="bottom" id="SCn-XG-Khd"/>
-                                <constraint firstItem="dIy-vr-RzA" firstAttribute="top" secondItem="tRE-v9-SGK" secondAttribute="bottom" id="VZ3-VD-uIL"/>
                                 <constraint firstItem="wnc-7I-gxs" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="XfB-li-eZN"/>
-                                <constraint firstItem="dIy-vr-RzA" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="55" id="Yh5-cG-I6l"/>
+                                <constraint firstItem="KXd-aT-NIZ" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" symbolic="YES" id="YK4-6A-iNj"/>
                                 <constraint firstItem="kfg-zK-mAL" firstAttribute="top" secondItem="5uo-r5-eB3" secondAttribute="bottom" constant="25" id="cTB-nc-yTv"/>
-                                <constraint firstItem="Ibj-mb-S45" firstAttribute="top" secondItem="tRE-v9-SGK" secondAttribute="bottom" constant="30" id="e5o-fy-cLy"/>
+                                <constraint firstItem="KXd-aT-NIZ" firstAttribute="top" secondItem="U1e-l4-f2k" secondAttribute="bottom" constant="5" id="gGY-fl-AGL"/>
                                 <constraint firstItem="5uo-r5-eB3" firstAttribute="top" secondItem="yfL-vn-e6f" secondAttribute="bottom" constant="40" id="iiF-L2-2t7"/>
                                 <constraint firstItem="JQ5-oJ-Ghq" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="lK0-f5-nn6"/>
                                 <constraint firstItem="wnc-7I-gxs" firstAttribute="top" secondItem="Ibj-mb-S45" secondAttribute="bottom" constant="5" id="mdl-3d-mJs"/>
                                 <constraint firstAttribute="trailing" secondItem="kfg-zK-mAL" secondAttribute="trailing" constant="20" id="ntz-Er-EbV"/>
                                 <constraint firstItem="Ibj-mb-S45" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="20" id="pFp-HX-0gP"/>
                                 <constraint firstAttribute="trailing" secondItem="JQ5-oJ-Ghq" secondAttribute="trailing" constant="20" id="qWt-Cr-KLi"/>
-                                <constraint firstItem="tRE-v9-SGK" firstAttribute="top" secondItem="U1e-l4-f2k" secondAttribute="bottom" constant="5" id="se8-Zw-0gr"/>
                                 <constraint firstItem="yfL-vn-e6f" firstAttribute="leading" secondItem="von-UV-r3I" secondAttribute="leading" constant="55" id="x3Q-Js-QXx"/>
                                 <constraint firstItem="JQ5-oJ-Ghq" firstAttribute="top" secondItem="von-UV-r3I" secondAttribute="top" constant="30" id="xlm-u3-Kgx"/>
                             </constraints>
@@ -308,6 +518,7 @@
     </designables>
     <resources>
         <image name="iconCancel" width="12" height="12"/>
+        <image name="iconExternalLinkGreen" width="12" height="12"/>
         <image name="iconReceiveBlue" width="16" height="16"/>
     </resources>
 </document>

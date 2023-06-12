@@ -182,6 +182,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
 
+-(void)generateNewWalletAddressWithBlockAndAmount:(int)assetId amount:(double)amount result:(NewAddressGeneratedBlock _Nonnull)block;
 -(void)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
@@ -321,6 +322,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)sendDAOApiResult:(NSString*_Nonnull)json;
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
                       amounts:(NSString*_Nonnull)amounts;
+-(void)getAssetInfoAsync:(int)assetId;
 
 -(BMApp*_Nonnull)DAOBeamXApp;
 -(BMApp*_Nonnull)daoGalleryApp;

@@ -422,6 +422,7 @@ class LocalizableStrings : NSObject {
     var type = "type".localized
     var regular = "regular".localized
     var identity = "identity".localized
+    var sbbs_address_new = "sbbs_address_new".localized
     var for_pool = "for_pool".localized
     var withdraw = "withdraw".localized
     var withdraw_cofirm = "withdraw_cofirm".localized

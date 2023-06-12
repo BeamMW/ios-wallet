@@ -63,14 +63,21 @@ class BMDetailAmountCell: BaseCell {
     }
     
     func addDots() {
-        let text = (self.nameLabel.text ?? "") + ":"
-        self.nameLabel.text = text
-        nameLabel.letterSpacing = 2
+        if !(self.nameLabel.text ?? "").isEmpty {
+            let text = (self.nameLabel.text ?? "") + ":"
+            self.nameLabel.text = text
+            nameLabel.letterSpacing = 2
+        }
     }
     
     func configure(asset:BMAsset?, item:BMThreeLineItem) {
         nameLabel.text = item.title.uppercased()
         nameLabel.letterSpacing = 2
+        if item.title.isEmpty {
+            nameLabel.isHidden = true
+        } else {
+            nameLabel.isHidden = false
+        }
         
         detailLabel.textColor = item.detailColor
         detailLabel.text = item.detail

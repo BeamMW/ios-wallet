@@ -248,7 +248,15 @@ extension TransactionViewController {
                     cell.configure(asset: AssetsManager.shared().getAsset(0), item: item)
                 }
                 else {
-                    cell.configure(asset: viewModel.transaction?.asset, item: item)
+                    if viewModel.transaction?.isMultiAssets() == true {
+                        if let asset = item.customObject as? BMAsset {
+                            cell.configure(asset: asset, item: item)
+                        } else {
+                            cell.configure(asset: viewModel.transaction?.asset, item: item)
+                        }
+                    } else {
+                        cell.configure(asset: viewModel.transaction?.asset, item: item)
+                    }
                 }
                 cell.addDots()
                 return cell

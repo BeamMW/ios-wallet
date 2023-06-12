@@ -65,6 +65,10 @@ class WalletViewController: BaseTableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        if let base = self.navigationController as? BaseNavigationController {
+            base.enableSwipeToDismiss = true
+        }
+        
         if WithdrawViewModel.isOpenFromGame {
             WithdrawViewModel.isOpenFromGame = false
             

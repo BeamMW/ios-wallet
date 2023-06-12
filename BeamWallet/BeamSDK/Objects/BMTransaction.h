@@ -94,6 +94,8 @@ typedef UInt64 BMTransactionType;
 @property (nonatomic,strong) NSString * _Nullable minConfirmations;
 @property (nonatomic,strong) NSString * _Nullable minConfirmationsProgress;
 
+@property (nonatomic,strong) NSMutableArray<BMAsset*> * _Nullable multiAssets;
+
 
 -(NSString*_Nonnull)amountString;
 -(UIImage*_Nonnull)statusIcon;
@@ -109,6 +111,7 @@ typedef UInt64 BMTransactionType;
 -(BOOL)isNew;
 -(BOOL)isExpired;
 -(BOOL)canSaveContact;
+-(BOOL)isMultiAssets;
 
 -(NSString*_Nonnull)details;
 -(NSString*_Nonnull)csvLine;
@@ -117,6 +120,7 @@ typedef UInt64 BMTransactionType;
 -(NSString*_Nonnull)source;
 
 -(NSMutableAttributedString*_Nonnull)searchString:(NSString*_Nonnull)searchText;
+-(NSMutableAttributedString*_Nullable)attributedAmountString;
 
 @end
 

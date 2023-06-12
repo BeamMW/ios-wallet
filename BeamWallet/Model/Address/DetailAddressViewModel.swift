@@ -64,7 +64,7 @@ class DetailAddressViewModel: AddressViewModel {
                 }
             }
             else {
-                self.address?.displayAddress = self.address?._id
+                self.address?.displayAddress = self.address?.walletId
             }
         }
         
@@ -76,16 +76,37 @@ class DetailAddressViewModel: AddressViewModel {
         idItem.copyValue = displayAddress
         
         details.append(idItem)
+  
+        let sbbs = self.address?.getSBBSAddress()
+        if let sbbs = sbbs, sbbs.count > 1 {
+            let identityItem = BMMultiLineItem(title: Localizable.shared.strings.sbbs_address_new, detail: sbbs , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+            identityItem.canCopy = true
+            identityItem.copyValue = sbbs
+            identityItem.copiedText = Localizable.shared.strings.copied_to_clipboard
+            details.append(identityItem)
+        }
         
         if self.address?.identity != nil && self.address?.identity?.isEmpty == false {
             let detail = self.address!.identity
             if detail!.count > 1 {
-                let identityItem = BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail:detail , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+                let identityItem = BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail: detail?.to_base58() , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
                 identityItem.canCopy = true
+                identityItem.copyValue = detail
                 identityItem.copiedText = Localizable.shared.strings.copied_to_clipboard
                 details.append(identityItem)
             }
         }
+        
+    
+//        if self.address?.identity != nil && self.address?.identity?.isEmpty == false {
+//            let detail = self.address!.identity
+//            if detail!.count > 1 {
+//                let identityItem = BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail:detail , detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+//                identityItem.canCopy = true
+//                identityItem.copiedText = Localizable.shared.strings.copied_to_clipboard
+//                details.append(identityItem)
+//            }
+//        }
     }
     
     public func actionItems() -> [BMPopoverMenu.BMPopoverMenuItem] {
