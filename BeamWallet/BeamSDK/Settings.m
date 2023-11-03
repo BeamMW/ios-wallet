@@ -158,7 +158,7 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
     }
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
-    _documentationAddress = @"https://documentation.beam.mw/";
+    _documentationAddress = @"https://beam.mw/docs";
     
     if (ENALBE_LANG) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
