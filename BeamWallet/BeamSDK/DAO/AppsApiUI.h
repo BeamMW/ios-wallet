@@ -29,7 +29,8 @@ private:
     
     friend class beam::wallet::AppsApi<AppsApiUI>;
     
-    void AnyThread_sendApiResponse(const std::string& result) override;
+    void AnyThread_sendApiResponse(std::string&& result) override;
+//    void AnyThread_sendApiResponse(const beam::wallet::json& result) override;
     void ClientThread_getSendConsent(const std::string& request, const nlohmann::json& info, const nlohmann::json& amounts) override;
     void ClientThread_getContractConsent(const std::string& request, const nlohmann::json& info, const nlohmann::json& amounts) override;
     

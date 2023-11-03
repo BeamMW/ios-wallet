@@ -9,6 +9,10 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>BGTaskSchedulerPermittedIdentifiers</key>
+			<array>
+				<string>com.mw.beam.beamwalletiOS.task</string>
+			</array>
 			<key>CFBundleDocumentTypes</key>
 			<array>
 				<dict>

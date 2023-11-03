@@ -43,19 +43,25 @@ class SettingsSubTitleCell: BaseCell {
         
         detailLabel.textColor = Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey
     }
-}
-
-extension SettingsSubTitleCell: Configurable {
-    func configure(with item: SettingsViewModel.SettingsItem) {
+    
+    func configure(with item: SettingsViewModel.SettingsItem, search:String) {
         titleLabel.textColor = UIColor.white
         titleLabel?.numberOfLines = 0
-
+        
         if let attr = item.titleAttributed {
             titleLabel?.attributedText = attr
             titleLabel?.numberOfLines = 0
         }
         else {
-            titleLabel?.text = item.title
+            if search.isEmpty {
+                titleLabel?.text = item.title
+            }
+            else {
+                let detail = NSMutableAttributedString(string: item.title ?? "")
+                let rangeName = (detail.string.lowercased() as NSString).range(of: search.lowercased())
+                detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.main.brightSkyBlue, range: rangeName)
+                titleLabel?.attributedText = detail
+            }
         }
         
         detailLabel?.text = item.detail

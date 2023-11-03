@@ -26,12 +26,16 @@ struct DAOAmount: Codable {
 class DAOConfirmViewModel: NSObject {
     
     var info:DAOInfo?
-    var amountInfo:DAOAmount?
+    var amountInfos:[DAOAmount]?
 
     public var items = [BMMultiLineItem]()
 
     var isSpend:Bool {
         return info?.isSpend == true
+    }
+    
+    var amountInfo:DAOAmount? {
+        return amountInfos?.first
     }
     
     init(infoJson: String, amountJson:String) {
@@ -44,7 +48,7 @@ class DAOConfirmViewModel: NSObject {
             
             if let amountData = amountJson.data(using: .utf8) {
                 let array = try JSONDecoder().decode([DAOAmount].self, from: amountData)
-                self.amountInfo = array.first
+                self.amountInfos = array
             }
         }
         catch {

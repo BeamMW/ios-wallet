@@ -57,48 +57,47 @@ class ReceiveAddressViewModel: NSObject {
     }
 
     public var isSavedAddress = false
+    public var isShared = true
     
-    public var isShared = false {
-        didSet {
-            if isSavedAddress && isShared {
-                if transaction == .privacy {
-                    AppModel.sharedManager().saveToken(self.address._id, token: self.address.maxPrivacyToken ?? "")
-                }
-                else {
-                    let isOwn = AppModel.sharedManager().checkIsOwnNode()
-                    if isOwn {
-                        if self.address.offlineToken != nil {
-                            AppModel.sharedManager().saveToken(self.address._id, token: self.address.offlineToken ?? "")
-                        }
-                    }
-                }
-            }
-            else  if isShared {
-                if transaction == .privacy {
-                    AppModel.sharedManager().saveToken(self.address._id, token: self.address.maxPrivacyToken ?? "")
-                }
-                else {
-                    let isOwn = AppModel.sharedManager().checkIsOwnNode()
-                    if isOwn {
-                        if self.address.offlineToken != nil {
-                            AppModel.sharedManager().saveToken(self.address._id, token: self.address.offlineToken ?? "")
-                        }
-                    }
-                    else {
-                        AppModel.sharedManager().saveToken(self.address._id, token: self.address.address ?? "")
-                    }
-                }
-            }
-        }
-    }
+//    public var isShared = false {
+//        didSet {
+//            if isSavedAddress && isShared {
+//                if transaction == .privacy {
+//                    AppModel.sharedManager().saveToken(self.address._id, token: self.address.maxPrivacyToken ?? "")
+//                }
+//                else {
+//                    let isOwn = AppModel.sharedManager().checkIsOwnNode()
+//                    if isOwn {
+//                        if self.address.offlineToken != nil {
+//                            AppModel.sharedManager().saveToken(self.address._id, token: self.address.offlineToken ?? "")
+//                        }
+//                    }
+//                }
+//            }
+//            else  if isShared {
+//                if transaction == .privacy {
+//                    AppModel.sharedManager().saveToken(self.address._id, token: self.address.maxPrivacyToken ?? "")
+//                }
+//                else {
+//                    let isOwn = AppModel.sharedManager().checkIsOwnNode()
+//                    if isOwn {
+//                        if self.address.offlineToken != nil {
+//                            AppModel.sharedManager().saveToken(self.address._id, token: self.address.offlineToken ?? "")
+//                        }
+//                    }
+//                    else {
+//                        AppModel.sharedManager().saveToken(self.address._id, token: self.address.address ?? "")
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     public var amount: String? {
         didSet {
-            let isOwn = AppModel.sharedManager().checkIsOwnNode()
-            if isOwn {
-                generateTokens()
-            }
-        
+            generateTokens()
+
+
             let amount = Double(self.amount ?? "0") ?? 0
             let second = ExchangeManager.shared().exchangeValueAsset(amount, assetID: UInt64(self.selectedAssetId))
             secondAmount = second
@@ -151,16 +150,33 @@ class ReceiveAddressViewModel: NSObject {
                 }
             }
         }
+        
+        if !isOwn {
+            AppModel.sharedManager().generateNewWalletAddress(withBlockAndAmount: Int32(selectedAssetId), amount: bamount) { address, error in
+                if let result = address {
+                    self.address = result
+                }
+                DispatchQueue.main.async {
+                    self.onAddressUpdate?(nil)
+                }
+            }
+        }
     }
     
     public func createAddress() {
-        AppModel.sharedManager().generateNewWalletAddress({ (address, error) in
+        let isOwn = AppModel.sharedManager().checkIsOwnNode()
+        let bamount = Double(amount ?? "0") ?? 0
+        AppModel.sharedManager().generateNewWalletAddress(withBlockAndAmount: Int32(selectedAssetId), amount: bamount) { address, error in
             if let result = address {
                 self.address = result
-                self.generateTokens()
+                if isOwn {
+                    self.generateTokens()
+                }
             }
-            self.onAddressCreated?(error)
-        })
+            DispatchQueue.main.async {
+                self.onAddressCreated?(error)
+            }
+        }
     }
     
     public func revertChanges() {
@@ -179,9 +195,9 @@ class ReceiveAddressViewModel: NSObject {
     }
     
     public func isNeedAskToSave() -> ReceiveAddressViewModelSaveState {
-        if !isShared {
-            return .new
-        }
+//        if !isShared {
+//            return .new
+//        }
         return .none
     }
     

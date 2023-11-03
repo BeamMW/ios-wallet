@@ -18,7 +18,28 @@
 //
 
 #import "BMPaymentInfo.h"
+#import "BMAsset.h"
+#import "AssetsManager.h"
 
 @implementation BMPaymentInfo
+
+-(NSString*_Nonnull)details {
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    formatter.currencyCode = @"";
+    formatter.currencySymbol = @"";
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 10;
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    formatter.numberStyle = NSNumberFormatterCurrencyAccountingStyle;
+    
+    NSString *number = [formatter stringFromNumber:[NSNumber numberWithDouble:_realAmount]];
+    number = [number stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSString *assetName = [[AssetsManager sharedManager] getAsset:_assetId].unitName;
+    
+    NSString *detail = [NSString stringWithFormat:@"Sender: %@\nReceiver: %@\nAmount: %@ %@\nKernel ID: %@", _sender, _receiver, number, assetName, _kernelId];
+    detail = [detail stringByReplacingOccurrencesOfString:@"  " withString:@" "];
+    return detail;
+}
 
 @end

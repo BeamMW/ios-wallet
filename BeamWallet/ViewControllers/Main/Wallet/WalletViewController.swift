@@ -65,6 +65,10 @@ class WalletViewController: BaseTableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        if let base = self.navigationController as? BaseNavigationController {
+            base.enableSwipeToDismiss = true
+        }
+        
         if WithdrawViewModel.isOpenFromGame {
             WithdrawViewModel.isOpenFromGame = false
             
@@ -285,7 +289,7 @@ extension WalletViewController: UITableViewDelegate {
         array.append(action2)
         
         if !transaction.isIncome && !transaction.isDapps {
-            let action3 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { action in
+            let action3 = UIAction(title: Localizable.shared.strings.repeat_transaction, image: nil) { action in
                 viewModel.repeatTransation(transaction: viewModel.transaction!)
             }
             array.append(action3)

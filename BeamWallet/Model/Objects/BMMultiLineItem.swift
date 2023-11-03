@@ -36,6 +36,8 @@ struct BMThreeLineItem {
     public var expand = true
     
     public var accessoryName:String? = nil
+    
+    public var customObject:Any? = nil
 }
 
 class BMMultiLineItem {

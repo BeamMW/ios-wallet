@@ -22,7 +22,7 @@
 -(void)callWalletApi:(NSString*_Nonnull)json;
 -(void)contractInfoApproved:(NSString*_Nonnull)json;
 -(void)contractInfoRejected:(NSString*_Nonnull)json;
-
+-(void)destroy;
 
 @end
 

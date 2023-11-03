@@ -18,6 +18,7 @@
 //
 
 #import "RecoveryProgress.h"
+#import <Foundation/Foundation.h>
 #import "AppModel.h"
 #include <cmath>
 #include <memory>
@@ -76,6 +77,7 @@ double RecoveryProgress::getWindowedBps()
     (m_previousUpdateTimestamp
      ? m_previousUpdateTimestamp
      : m_startTimestamp);
+   
     if (timeDiff < 1)
         timeDiff = 1;
     
@@ -111,6 +113,75 @@ int RecoveryProgress::getEstimate(double bps)
     }
 }
 
+void RecoveryProgress::OnResetSimpleProgress() {
+    m_isStart = false;
+    avgTime = 0;
+    start = [NSDate timeIntervalSinceReferenceDate];
+    m_isStart = true;
+    
+    m_bpsWholeTimeFilter = std::make_unique<Filter>(kFilterRange);
+    m_bpsWindowedFilter = std::make_unique<Filter>(kFilterRange*3);
+    m_estimateFilter = std::make_unique<Filter>(kFilterRange);
+    
+    m_startTimestamp = beam::getTimestamp();
+}
+
+uint64_t RecoveryProgress::OnSimpleProgress(uint64_t done, uint64_t total) {
+    avgTime = avgTime + 1;
+    
+//    double speed = double(done) / double(([NSDate timeIntervalSinceReferenceDate] - start));
+//
+//    if (speed > 0 && avgTime >= 5) {
+//        double sizeLeft = double(total-done);
+//        double timeLeft = sizeLeft / speed;
+//
+//        if (timeLeft < 1) {
+//            timeLeft = 1;
+//        }
+//
+//        return uint64_t(timeLeft);
+//    }
+//
+//    return 0;
+
+    if (!m_isStart) {
+        m_isStart = true;
+        
+        m_bpsWholeTimeFilter = std::make_unique<Filter>(kFilterRange);
+        m_bpsWindowedFilter = std::make_unique<Filter>(kFilterRange*3);
+        m_estimateFilter = std::make_unique<Filter>(kFilterRange);
+        
+        m_startTimestamp = beam::getTimestamp();
+    }
+    
+    m_previousUpdateTimestamp = m_lastUpdateTimestamp;
+    m_lastUpdateTimestamp = beam::getTimestamp();
+    m_lastDone = m_done;
+    m_done = done;
+    m_total = total;
+    
+    auto wbps = getWindowedBps();
+    auto bps = (getWholeTimeBps() + wbps) / 2;
+    
+    if (fabs(bps) < std::numeric_limits<double>::epsilon())
+    {
+        m_estimate = 0;
+        return m_estimate;
+    }
+    else if (bps) {
+        m_estimate = getEstimate(bps);
+        if (m_estimate == 1) {
+            return 0;
+        }
+        NSLog(@"OnSimpleProgress %llu", m_estimate);
+        
+        return m_estimate;
+    }
+
+    
+    return 0;
+}
+
 bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
     NSLog(@"RecoveryProgress %llu - %llu",done, total);
     
@@ -133,12 +204,16 @@ bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
     auto wbps = getWindowedBps();
     auto bps = (getWholeTimeBps() + wbps) / 2;
     
-    if (bps) {
+    if (fabs(bps) < std::numeric_limits<double>::epsilon())
+    {
+        m_estimate = 0;
+    }
+    else if (bps) {
         m_estimate = getEstimate(bps);
     }
 
-          NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates){
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates){
         if ([delegate respondsToSelector:@selector(onRecoveryProgressUpdated: total: time:)]) {
             [delegate onRecoveryProgressUpdated:(int)done total:(int)total time:(int)m_estimate];
         }

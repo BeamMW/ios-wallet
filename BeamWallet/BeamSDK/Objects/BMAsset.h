@@ -19,21 +19,20 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BMAsset : NSObject <NSSecureCoding> {
+@interface BMAsset : NSObject <NSSecureCoding, NSCopying> {
     
     
 }
 
-@property (nonatomic,strong) NSString *unitName;
-@property (nonatomic,strong) NSString *nthUnitName;
-@property (nonatomic,strong) NSString *shortName;
-@property (nonatomic,strong) NSString *shortDesc;
-@property (nonatomic,strong) NSString *longDesc;
-@property (nonatomic,strong) NSString *name;
-@property (nonatomic,strong) NSString *color;
-@property (nonatomic,strong) NSString *site;
-@property (nonatomic,strong) NSString *paper;
-
+@property (nonatomic,strong) NSString  * _Nonnull unitName;
+@property (nonatomic,strong) NSString  * _Nonnull nthUnitName;
+@property (nonatomic,strong) NSString  * _Nonnull shortName;
+@property (nonatomic,strong) NSString  * _Nonnull shortDesc;
+@property (nonatomic,strong) NSString  * _Nonnull longDesc;
+@property (nonatomic,strong) NSString  * _Nonnull name;
+@property (nonatomic,strong) NSString  * _Nonnull color;
+@property (nonatomic,strong) NSString  * _Nullable site;
+@property (nonatomic,strong) NSString  * _Nullable paper;
 @property (nonatomic,assign) UInt64 assetId;
 
 @property (nonatomic,assign) UInt64 available;

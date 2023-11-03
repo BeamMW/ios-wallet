@@ -42,7 +42,9 @@ typedef enum Target : NSUInteger {
 -(void)onChangeDarkMode;
 @end
 
-@interface Settings : NSObject
+@interface Settings : NSObject {
+    int randomId;
+}
 
 +(Settings*_Nonnull)sharedManager;
 
@@ -92,6 +94,7 @@ typedef enum Target : NSUInteger {
 -(void)resetSettings;
 -(void)resetNode;
 -(void)removeCustomNode;
+-(void)resetDataBase;
 
 -(NSString*_Nonnull)walletStoragePath;
 -(NSString*_Nonnull)logPath;

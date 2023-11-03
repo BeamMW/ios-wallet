@@ -109,6 +109,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,assign) BOOL isOwnNode;
 @property (nonatomic,assign) BMRestoreType restoreType;
 @property (nonatomic,assign) BOOL isMaxPrivacyRequest;
+@property (nonatomic,assign) BOOL isConfigured;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 
@@ -181,6 +182,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BOOL)isToken:(NSString*_Nullable)address;
 -(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
 
+-(void)generateNewWalletAddressWithBlockAndAmount:(int)assetId amount:(double)amount result:(NewAddressGeneratedBlock _Nonnull)block;
 -(void)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
@@ -217,8 +219,9 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSString*_Nonnull)getAddressTypeString:(BMAddressType)type;
 
 // send
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount;
--(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check;
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount checkAddress:(BOOL)checkAddress;
+
+-(NSString*_Nullable)sendError:(double)amount assetId:(int)assetId fee:(double)fee checkMinAmount:(BOOL)check;
 -(NSString*_Nullable)feeError:(double)fee;
 -(NSString*_Nullable)canReceive:(double)amount fee:(double)fee;
 -(void)send:(double)amount fee:(double)fee assetId:(int)assetId to:(NSString*_Nonnull)to from:(NSString*_Nonnull)from comment:(NSString*_Nonnull)comment isOffline:(BOOL)isOffline;
@@ -305,6 +308,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 
 -(void)rescan;
 -(void)enableBodyRequests:(BOOL)value;
+-(void)resetEstimateProgress;
+-(UInt64)getEstimateProgress:(UInt64)done total:(UInt64)total;
 
 -(double)grothToBeam:(uint64_t)groth;
 
@@ -317,8 +322,11 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)sendDAOApiResult:(NSString*_Nonnull)json;
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
                       amounts:(NSString*_Nonnull)amounts;
+-(void)getAssetInfoAsync:(int)assetId;
 
 -(BMApp*_Nonnull)DAOBeamXApp;
-
+-(BMApp*_Nonnull)daoGalleryApp;
+-(BMApp*_Nonnull)daoFaucetApp;
+-(BMApp*_Nonnull)votingApp;
 
 @end

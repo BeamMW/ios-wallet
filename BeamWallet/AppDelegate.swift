@@ -66,9 +66,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         
         NotificationManager.sharedManager.requestPermissions()
         
-        if Settings.sharedManager().target != Mainnet {
-            CrowdinManager.updateLocalizations()
-        }
+//        if Settings.sharedManager().target != Mainnet {
+//            CrowdinManager.updateLocalizations()
+//        }
         
         AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)

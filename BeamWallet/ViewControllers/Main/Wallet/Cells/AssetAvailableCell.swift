@@ -31,9 +31,27 @@ class AssetAvailableCell: RippleCell {
     @IBOutlet weak private var topOffset: NSLayoutConstraint!
     @IBOutlet weak private var botOffset: NSLayoutConstraint!
 
+    @IBOutlet weak private var assedIdLabel: UILabel!
+    @IBOutlet weak private var assedIdStackView: UIStackView!
+
+    var assetId = 0
+    @objc func onAssetIdClicked() {
+        if let url = URL(string: Settings.sharedManager().assetBlockchainUrl(Int32(self.assetId))) {
+            UIApplication.getTopMostViewController()?.openUrl(url: url)
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        assedIdStackView.isUserInteractionEnabled = true
+        assedIdStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onAssetIdClicked)))
+    }
     
     public func setAsset(_ asset:BMAsset) {
+        assetId = Int(asset.assetId)
         iconView.setAsset(asset)
+        assedIdLabel.text = "#\(asset.assetId)"
         
         if Settings.sharedManager().target == Testnet {
             mainView.gradientLayer.colors = [

@@ -28,7 +28,6 @@ class PaymentProofDetailViewController: BaseTableViewController {
     
     private var detailsExpand = true
     
-    @IBOutlet private weak var footerView: UIView!
     @IBOutlet private weak var codeInputView: UIView!
     @IBOutlet private weak var codeInputField: BMTextView!
     @IBOutlet private weak var codeInputLabel: UILabel!
@@ -36,6 +35,20 @@ class PaymentProofDetailViewController: BaseTableViewController {
     @IBOutlet private weak var headerdHeight: NSLayoutConstraint!
     @IBOutlet private weak var keyKodeTitle: UILabel!
     
+    private lazy var footerView: UIView = {
+        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
+        
+        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 30, width: 143, height: 44), color: UIColor.main.brightTeal)
+        sendButton.setImage(IconCopyBlue(), for: .normal)
+        sendButton.setTitle(Localizable.shared.strings.copy_details.lowercased(), for: .normal)
+        sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+        sendButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+        sendButton.addTarget(self, action: #selector(onCopyCodeDetails), for: .touchUpInside)
+        view.addSubview(sendButton)
+        
+        
+        return view
+    }()
     
     override var tableStyle: UITableView.Style {
         get {
@@ -89,10 +102,13 @@ class PaymentProofDetailViewController: BaseTableViewController {
         super.viewDidLayoutSubviews()
     }
     
-    @IBAction func onCopyCodeDetails(sender: UIButton) {
+    @objc private func onCopyCodeDetails() {
         if let transactionDetail = transaction?.details() {
             UIPasteboard.general.string = transactionDetail
-            
+            ShowCopied()
+        }
+        else if let transactionDetail = paymentInfo?.details() {
+            UIPasteboard.general.string = transactionDetail
             ShowCopied()
         }
     }
@@ -124,12 +140,10 @@ class PaymentProofDetailViewController: BaseTableViewController {
         
         if let info = AppModel.sharedManager().getPaymentProofInfo(self.paymentProof?.code ?? String.empty()){
             self.fillInfoFromPaymentInfo(info: info)
+            tableView.tableFooterView = footerView
         }
         else {
             self.paymentInfo = nil
-        }
-        
-        if transaction == nil, paymentProof == nil {
             tableView.tableFooterView = nil
         }
     }

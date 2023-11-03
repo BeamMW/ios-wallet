@@ -40,6 +40,7 @@ static NSString *notificationsNewsKey = @"notificationsNewsKey";
 static NSString *notificationsTransactionKey = @"notificationsTransactionKey";
 static NSString *notificationsAddressKey = @"notificationsAddressKey";
 static NSString *nodeProtocolKey = @"nodeProtocolKey";
+static NSString *randomDBIdKey = @"randomDBIdKey";
 
 
 
@@ -54,6 +55,8 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
 
 -(id)init {
     self = [super init];
+    
+    randomId = [[[NSUserDefaults standardUserDefaults] objectForKey:randomDBIdKey] intValue];
     
     _lockMaxPrivacyValue = 0;
     
@@ -155,7 +158,7 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     }
     
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
-    _documentationAddress = @"https://documentation.beam.mw/";
+    _documentationAddress = @"https://beam.mw/docs";
     
     if (ENALBE_LANG) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
@@ -252,6 +255,12 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
     self.isAskForHideAmounts = YES;
     self.isHideAmounts = NO;
     self.isNodeProtocolEnabled = NO;
+}
+
+-(void)resetDataBase {
+   // randomId = randomId + 1;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:randomId] forKey:randomDBIdKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(NSString*_Nonnull)customNode {
@@ -375,8 +384,14 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
 -(NSString*_Nonnull)walletStoragePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
-    return oldPath;
+    if (randomId == 0) {
+        NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:@"/wallet.db"];
+        return oldPath;
+    }
+    else {
+        NSString *oldPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/wallet_%d.db", randomId]];
+        return oldPath;
+    }
 }
 
 -(void)setLanguage:(NSString *_Nonnull)language {
@@ -829,7 +844,7 @@ static NSString *nodeProtocolKey = @"nodeProtocolKey";
         return @"https://apps-testnet.beam.mw/appslist.json";
     }
     else if (_target == Masternet) {
-        return @"http://3.19.141.112/app/appslist.json";;
+        return @"http://3.16.160.95/app/appslist.json";
     }
     return @"https://apps.beam.mw/appslist.json";
 }

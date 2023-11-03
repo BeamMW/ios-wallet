@@ -109,6 +109,22 @@ func IconBeamXDAO() -> UIImage? {
     return UIImage(named: "iconDao")
 }
 
+func IconBeamFaucet() -> UIImage? {
+    return UIImage(named: "icon_faucet")
+}
+
+func IconBeamXDAOVoting() -> UIImage? {
+    return UIImage(named: "iconDaoVote")
+}
+
+func IconBeamGallery() -> UIImage? {
+    return UIImage(named: "ic_gallery")
+}
+
+func IconBeamDao() -> UIImage? {
+    return UIImage(named: "iconDao")
+}
+
 func CheckboxFull() -> UIImage? {
     return UIImage(named: "checkboxFull")
 }
@@ -333,6 +349,10 @@ func IconAddressbookEmpty() -> UIImage? {
 
 func IconWalletEmpty() -> UIImage? {
     return UIImage(named: "iconWalletEmpty")
+}
+
+func IconSearchEmpty() -> UIImage? {
+    return UIImage(named: "icNoResults")
 }
 
 func IconCloud() -> UIImage? {

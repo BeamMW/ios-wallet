@@ -24,12 +24,18 @@ class DAOListViewModel: NSObject, WalletModelDelegate {
         AppModel.sharedManager().addDelegate(self)
         AppModel.sharedManager().loadApps()
         items.append(contentsOf: AppModel.sharedManager().apps as! [BMApp])
+        items.removeAll { app in
+            app.name.contains("Name Service")
+        }
     }
     
     func onDAPPsLoaded() {
         DispatchQueue.main.async { [weak self] in
             self?.items.removeAll()
             self?.items.append(contentsOf: AppModel.sharedManager().apps as! [BMApp])
+            self?.items.removeAll { app in
+                app.name.contains("Name Service")
+            }
         }
     }
 }

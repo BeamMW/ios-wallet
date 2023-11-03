@@ -448,6 +448,23 @@ extension SeedPhraseViewController: UICollectionViewDelegateFlowLayout {
 // MARK: InputWordCellCellDelegate Handling
 
 extension SeedPhraseViewController: InputWordCellCellDelegate {
+    
+    func textValueDidChange(_ sender: InputWordCell, _ text: String) {
+        if let path = collectionView.indexPath(for: sender) {
+            if event == .restore {
+                inputWords[path.row].value = text
+                inputWords[path.row].correct = MnemonicModel.isValidWord(text)
+            }
+            else {
+                let index = inputWords[path.row].index
+                inputWords[path.row].value = text
+                inputWords[path.row].correct = (words[Int(index)] == text)
+            }
+            
+            sender.updateStatus(word: inputWords[path.row])
+        }
+    }
+    
     func updateInputValue(path: Int, text: String) {
         if event == .restore {
             inputWords[path].value = text
@@ -458,6 +475,7 @@ extension SeedPhraseViewController: InputWordCellCellDelegate {
             inputWords[path].value = text
             inputWords[path].correct = (words[Int(index)] == text)
         }
+        
     }
     
     func textValueCellDidBeginEditing(_ sender: InputWordCell, _ text: String) {

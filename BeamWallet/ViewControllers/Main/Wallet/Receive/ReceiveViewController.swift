@@ -49,6 +49,8 @@ class ReceiveViewController: BaseTableViewController {
     
     public var assetId = 0
     
+    private let isNewAddressStyle = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -127,8 +129,13 @@ class ReceiveViewController: BaseTableViewController {
                         amoutnCell.setSecondAmount(amount: strongSelf.viewModel.secondAmount ?? "")
                     }
                     else if let tokenCell = cell as? ReceiveTokenCell {
-                        if strongSelf.viewModel.transaction == .regular {
-                            tokenCell.configure(with: strongSelf.viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                        let isOwn = AppModel.sharedManager().checkIsOwnNode()
+
+                        if !isOwn {
+                            tokenCell.configure(with: strongSelf.viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased(), showHint: false)
+                        }
+                        else if strongSelf.viewModel.transaction == .regular {
+                            tokenCell.configure(with: strongSelf.viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: false)
                         }
                         else {
                             tokenCell.configure(with: strongSelf.viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
@@ -218,6 +225,9 @@ extension ReceiveViewController : UITableViewDelegate {
         if section == 0 {
             return 0
         }
+        else if section == 2 && isNewAddressStyle {
+            return 0
+        }
         return 20
     }
     
@@ -244,7 +254,11 @@ extension ReceiveViewController : UITableViewDataSource {
             return showRequestAmount ? 2 : 1
         }
         else if section == 2 {
-            return showComment ? 2 : 1
+            if isNewAddressStyle {
+                return 0
+            } else {
+                return showComment ? 2 : 1
+            }
         }
         else if section == 3 {
             return showAdvanced ? 2 : 1
@@ -261,10 +275,10 @@ extension ReceiveViewController : UITableViewDataSource {
             cell.delegate = self
             if viewModel.transaction == .regular {
                 if !AppModel.sharedManager().checkIsOwnNode() {
-                    cell.configure(with: viewModel.address._id, title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                    cell.configure(with: viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased(), showHint: false)
                 }
                 else {
-                    cell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                    cell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: false)
                 }
             }
             else {
@@ -288,9 +302,18 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: String.empty(), value: viewModel.amount))
                 cell.delegate = self
                 cell.hideNameLabel = true
-                cell.currency = viewModel.selectedCurrencyString
+                cell.selectedAssetId = viewModel.selectedAssetId
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.setSecondAmount(amount: viewModel.secondAmount ?? "")
+                
+                let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                if !isOwn  {
+                    cell.disable()
+                    cell.isUserInteractionEnabled = false
+                } else {
+                    cell.enable()
+                }
+                
                 return cell
             }
         }
@@ -306,6 +329,8 @@ extension ReceiveViewController : UITableViewDataSource {
                 return cell
             }
             else if indexPath.row == 1  {
+                let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                
                 let cell = tableView
                     .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
                     .configured(with: (name: Localizable.shared.strings.comment.uppercased(), value: viewModel.transactionComment))
@@ -314,6 +339,15 @@ extension ReceiveViewController : UITableViewDataSource {
                 cell.isItalicPlacholder = true
                 cell.hideNameLabel = true
                 cell.contentView.backgroundColor = UIColor.main.marineThree
+                
+                if !isOwn  {
+                    cell.alpha = 0.5
+                    cell.isUserInteractionEnabled = false
+                } else {
+                    cell.alpha = 1
+                    cell.isUserInteractionEnabled = true
+                }
+                
                 return cell
             }
         }
@@ -425,7 +459,7 @@ extension ReceiveViewController : BMCellProtocol {
                         else if let tokenCell = cell as? ReceiveTokenCell {
                             if viewModel.transaction == .regular {
                                 if !AppModel.sharedManager().checkIsOwnNode() {
-                                    tokenCell.configure(with: viewModel.address._id, title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                                    tokenCell.configure(with: viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased(), showHint: true)
                                 }
                                 else {
                                     tokenCell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)

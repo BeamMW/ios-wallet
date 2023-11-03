@@ -37,7 +37,7 @@
 }
 
 + (BOOL)supportsSecureCoding {
-    return NO;
+    return YES;
 }
 
 +(NSArray<Class>*)allowedTopLevelClasses {

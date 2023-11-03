@@ -78,16 +78,25 @@ class BMAmountCell: BaseCell {
         }
     }
 
-    public var currency:String?
+    public var selectedAssetId:Int?
     {
         didSet{
             
-            if currency != nil {       
-                let text = currency!
-                currencyLabel.text = text
+            if selectedAssetId != nil {
+                let asset = AssetsManager.shared().getAsset(Int32(selectedAssetId ?? 0))
+
                 currencyLabel.letterSpacing = 2
                 
-                let asset = AssetsManager.shared().getAssetByName(currency)
+                let id = "(\(selectedAssetId ?? 0))"
+                let text = asset?.unitName ?? ""
+                let fullString = text + " " + id
+                
+                let attributedString = NSMutableAttributedString(string: fullString)
+                let range = (fullString as NSString).range(of: id)
+                attributedString.addAttribute(.foregroundColor, value: UIColor.white.withAlphaComponent(0.5), range: range)
+                
+                currencyLabel.attributedText = attributedString
+                
                 if let asset = asset {
                     currencyIcon.setAsset(asset)
                 }
@@ -145,6 +154,7 @@ class BMAmountCell: BaseCell {
 //        erorLabel.text = nil
         
         textField.statusDelegate = self
+        textField.ignoreTextChanges = true
         
         currencyView.isUserInteractionEnabled = false
         currencyView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCurrency(_:))))
@@ -166,6 +176,20 @@ class BMAmountCell: BaseCell {
         textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
         textField.placeHolderFont = RegularFont(size: 30)
         textField.additionalRightOffset = currencyView.width
+    }
+    
+    func disable() {
+        currencyLabel.alpha = 0.5
+        currencyArrow.alpha = 0.5
+        currencyIcon.alpha = 0.5
+        textField.alpha = 0.5
+    }
+    
+    func enable() {
+        currencyLabel.alpha = 1.0
+        currencyArrow.alpha = 1.0
+        currencyIcon.alpha = 1.0
+        textField.alpha = 1
     }
     
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
@@ -263,9 +287,10 @@ extension BMAmountCell : UITextFieldDelegate {
             return false
         }
         
-        self.error = nil
+//        self.error = nil
         
         self.delegate?.textValueDidChange?(self, txtAfterUpdate, true)
+
 
         return true
     }

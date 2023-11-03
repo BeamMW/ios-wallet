@@ -20,15 +20,35 @@ class DAOConfirmViewController: BaseViewController {
     
     @IBOutlet private weak var detailTitleLabel:UILabel!
     @IBOutlet private weak var hintLabel:UILabel!
-    @IBOutlet private weak var amountLabel:UILabel!
-    @IBOutlet private weak var amountSecondLabel:UILabel!
+
     @IBOutlet private weak var feeLabel:UILabel!
     @IBOutlet private weak var feeSecondLabel:UILabel!
     @IBOutlet private weak var confirmButton:BMButton!
     @IBOutlet private weak var cancelButton:BMButton!
-    @IBOutlet private weak var assetIcon:AssetIconView!
+    
     @IBOutlet private weak var assetFeeIcon:AssetIconView!
     @IBOutlet private weak var scrollView: UIScrollView!
+
+    @IBOutlet private weak var assetStackView1:UIStackView!
+    @IBOutlet private weak var assetIcon1:AssetIconView!
+    @IBOutlet private weak var amountLabel1:UILabel!
+    @IBOutlet private weak var amountSecondLabel1:UILabel!
+    @IBOutlet private weak var assetIdLabel1:UILabel!
+    @IBOutlet private weak var assetIdView1:UIView!
+    
+    @IBOutlet private weak var assetStackView2:UIStackView!
+    @IBOutlet private weak var assetIcon2:AssetIconView!
+    @IBOutlet private weak var amountLabel2:UILabel!
+    @IBOutlet private weak var amountSecondLabel2:UILabel!
+    @IBOutlet private weak var assetIdLabel2:UILabel!
+    @IBOutlet private weak var assetIdView2:UIView!
+    
+    @IBOutlet private weak var assetStackView3:UIStackView!
+    @IBOutlet private weak var assetIcon3:AssetIconView!
+    @IBOutlet private weak var amountLabel3:UILabel!
+    @IBOutlet private weak var amountSecondLabel3:UILabel!
+    @IBOutlet private weak var assetIdLabel3:UILabel!
+    @IBOutlet private weak var assetIdView3:UIView!
 
     @IBOutlet private weak var passStackView:UIStackView!
     @IBOutlet private weak var passField:BMField!
@@ -39,6 +59,12 @@ class DAOConfirmViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        AppModel.sharedManager().addDelegate(self)
+
+        assetIdView1.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onAssetId1Clicked)))
+        assetIdView2.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onAssetId2Clicked)))
+        assetIdView3.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onAssetId3Clicked)))
+
         viewModel = DAOConfirmViewModel(infoJson: infoJson, amountJson: amountJson)
         
         setGradientTopBar(mainColor: UIColor.main.peacockBlue)
@@ -70,33 +96,8 @@ class DAOConfirmViewController: BaseViewController {
             assetFeeIcon.setAsset(beam)
         }
         
-        var suffix = ""
-        if viewModel.isSpend {
-            amountLabel.textColor = UIColor.main.heliotrope
-            suffix = "-"
-        }
-        else {
-            amountLabel.textColor = UIColor.main.brightSkyBlue
-            suffix = "+"
-        }
-        
-        if let asset = AssetsManager.shared().getAsset(Int32(self.viewModel.amountInfo?.assetID ?? 0)) {
-            let amount = Double(self.viewModel.amountInfo?.amount ?? "0") ?? 0.0
-
-            amountLabel.text = suffix + StringManager.shared().realAmountStringAsset(asset, value: amount)
-            
-            let second = ExchangeManager.shared().exchangeValueAsset(amount, assetID: asset.assetId)
-            if !second.isEmpty {
-                amountSecondLabel.text = suffix + second
-            }
-            else {
-                amountSecondLabel.text = ""
-            }
-
-            assetIcon.setAsset(asset)
-        }
-        
-        
+        setAmounts()
+    
         if let value = topOffset?.constant, Device.isXDevice {
             topOffset?.constant = value - 30
         }
@@ -106,13 +107,18 @@ class DAOConfirmViewController: BaseViewController {
         passField.showEye = true
         
         if self.viewModel.isSpend {
-            let error = AppModel.sharedManager().sendError(Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0, assetId: Int32(self.viewModel.amountInfo?.assetID ?? 0), fee: Double(self.viewModel.info?.fee ?? "0.0") ?? 0.0, checkMinAmount: false)
-            
-            if error != nil {
-                self.hintLabel.textColor = UIColor.main.red
-                self.hintLabel.text = Localizable.shared.strings.no_funds_dao
-                self.confirmButton.alpha = 0.5
-                self.confirmButton.isUserInteractionEnabled = false
+            if let amountInfos = viewModel.amountInfos {
+                for amount in amountInfos {
+                    let error = AppModel.sharedManager().sendError(Double(amount.amount ?? "0.0") ?? 0.0, assetId: Int32(amount.assetID ?? 0), fee: Double(self.viewModel.info?.fee ?? "0.0") ?? 0.0, checkMinAmount: false)
+                    
+                    if error != nil {
+                        self.hintLabel.textColor = UIColor.main.red
+                        self.hintLabel.text = Localizable.shared.strings.no_funds_dao
+                        self.confirmButton.alpha = 0.5
+                        self.confirmButton.isUserInteractionEnabled = false
+                        break
+                    }
+                }
             }
         }
     }
@@ -127,8 +133,121 @@ class DAOConfirmViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        AppModel.sharedManager().removeDelegate(self)
+
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func onAssetId1Clicked() {
+        guard let amountInfo = viewModel.amountInfos else {
+            return
+        }
+        
+        let id = amountInfo[0].assetID ?? 0
+        
+        if let url = URL(string: Settings.sharedManager().assetBlockchainUrl(Int32(id))) {
+            UIApplication.getTopMostViewController()?.openUrl(url: url)
+        }
+    }
+    
+    @objc func onAssetId2Clicked() {
+        guard let amountInfo = viewModel.amountInfos else {
+            return
+        }
+        
+        let id = amountInfo[1].assetID ?? 0
+        
+        if let url = URL(string: Settings.sharedManager().assetBlockchainUrl(Int32(id))) {
+            UIApplication.getTopMostViewController()?.openUrl(url: url)
+        }
+    }
+    
+    @objc func onAssetId3Clicked() {
+        guard let amountInfo = viewModel.amountInfos else {
+            return
+        }
+        
+        let id = amountInfo[2].assetID ?? 0
+        
+        if let url = URL(string: Settings.sharedManager().assetBlockchainUrl(Int32(id))) {
+            UIApplication.getTopMostViewController()?.openUrl(url: url)
+        }
+    }
+    
+    private func setAmounts() {
+        assetStackView1.isHidden = true
+        assetStackView2.isHidden = true
+        assetStackView3.isHidden = true
+        
+        assetIdView1.isHidden = true
+        assetIdView2.isHidden = true
+        assetIdView3.isHidden = true
+
+        guard let amountInfo = viewModel.amountInfos else {
+            return
+        }
+        
+        var index = 0
+        amountInfo.forEach { amount in
+            var amountLabel: UILabel!
+            var amountSecondLabel: UILabel!
+            var assetIcon: AssetIconView!
+            let assetId = amount.assetID ?? 0
+            let amountValue = amount.amount ?? "0"
+
+            if index == 0 {
+                amountLabel = amountLabel1
+                amountSecondLabel = amountSecondLabel1
+                assetIcon = assetIcon1
+                assetStackView1.isHidden = false
+                assetIdLabel1.text = "\(assetId)"
+                assetIdView1.isHidden = false
+            } else if index == 1 {
+                amountLabel = amountLabel2
+                amountSecondLabel = amountSecondLabel2
+                assetIcon = assetIcon2
+                assetStackView2.isHidden = false
+                assetIdLabel2.text = "\(assetId)"
+                assetIdView2.isHidden = false
+            }
+            else if index == 2 {
+                amountLabel = amountLabel3
+                amountSecondLabel = amountSecondLabel3
+                assetIcon = assetIcon3
+                assetStackView3.isHidden = false
+                assetIdLabel3.text = "\(assetId)"
+                assetIdView3.isHidden = false
+            }
+            
+            var suffix = ""
+            if amount.spend == true {
+                amountLabel.textColor = UIColor.main.heliotrope
+                suffix = "-"
+            }
+            else {
+                amountLabel.textColor = UIColor.main.brightSkyBlue
+                suffix = "+"
+            }
+            
+            if let asset = AssetsManager.shared().getAsset(Int32(assetId)) {
+                let amountDouble = Double(amountValue) ?? 0.0
+                
+                amountLabel.text = suffix + StringManager.shared().realAmountStringAsset(asset, value: amountDouble)
+                
+                let second = ExchangeManager.shared().exchangeValueAsset(amountDouble, assetID: UInt64(assetId))
+                if !second.isEmpty {
+                    amountSecondLabel.text = suffix + second
+                }
+                else {
+                    amountSecondLabel.text = ""
+                }
+                
+                assetIcon.setAsset(asset)
+            }
+            
+            index += 1
+        }
     }
     
     @IBAction private func onCancelClicked() {
@@ -161,15 +280,19 @@ class DAOConfirmViewController: BaseViewController {
     
     private func onSend() {
         if self.viewModel.isSpend {
+            var hasError = false
+            
             let error = AppModel.sharedManager().sendError(Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0, assetId: Int32(self.viewModel.amountInfo?.assetID ?? 0), fee: Double(self.viewModel.info?.fee ?? "0.0") ?? 0.0, checkMinAmount: false)
             
             if error != nil {
+                hasError = true
                 self.hintLabel.textColor = UIColor.main.red
                 self.hintLabel.text = Localizable.shared.strings.no_funds_dao
                 self.confirmButton.alpha = 0.5
                 self.confirmButton.isUserInteractionEnabled = false
             }
-            else {
+            
+            if !hasError {
                 self.onConfirm?(self.viewModel.isSpend, self.viewModel.amountInfo?.assetID ?? 0, Double(self.viewModel.amountInfo?.amount ?? "0.0") ?? 0.0)
                 self.navigationController?.popViewController(animated: true)
             }
@@ -222,6 +345,15 @@ extension DAOConfirmViewController {
                 self.scrollView.contentInset = .zero
                 self.scrollView.scrollIndicatorInsets = .zero
             }, completion: nil)
+        }
+    }
+}
+
+extension DAOConfirmViewController: WalletModelDelegate {
+    
+    func onAssetInfoChange() {
+        DispatchQueue.main.async {
+            self.setAmounts()
         }
     }
 }

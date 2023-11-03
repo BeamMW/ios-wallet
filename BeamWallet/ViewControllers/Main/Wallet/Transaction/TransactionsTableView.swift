@@ -157,17 +157,27 @@ class TransactionsTableView: UITableViewController {
         
         if viewModel.transactions.count == 0 {
             var text = String.empty()
+            var img:UIImage?
             
-            if AppModel.sharedManager().transactions?.count == 0 {
-                text = Localizable.shared.strings.transactions_empty
+            if !viewModel.searchString.isEmpty {
+                img = IconSearchEmpty()
+                text = Localizable.shared.strings.no_search_transactions
             }
-            else{
-               text = index == 1 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
+            else {
+                img = IconWalletEmpty()
+                if AppModel.sharedManager().transactions?.count == 0 {
+                    text = Localizable.shared.strings.transactions_empty
+                }
+                else{
+                    text = index == 1 ? Localizable.shared.strings.transactions_empty_progress : Localizable.shared.strings.transactions_empty
+                }
+                
             }
-            
+          
             let cell = tableView
                 .dequeueReusableCell(withType: BMEmptyCell.self, for: indexPath)
-                .configured(with: (text:text , image: IconWalletEmpty()))
+                .configured(with: (text:text , image: img))
+            
             return cell
         }
         else {
@@ -349,7 +359,7 @@ extension TransactionsTableView: UIContextMenuInteractionDelegate {
         array.append(action2)
         
         if !transaction.isIncome && !transaction.isDapps {
-            let action3 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { action in
+            let action3 = UIAction(title: Localizable.shared.strings.repeat_transaction, image: nil) { action in
                 viewModel.repeatTransation(transaction: viewModel.transaction!)
             }
             array.append(action3)

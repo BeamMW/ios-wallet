@@ -83,7 +83,13 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
                     timeLeft = 1
                 }
                 
-                onProgress?(progress, nil, nil, timeLeft.asTime(style: .abbreviated))
+                if timeLeft <= 60 {
+                    onProgress?(progress, nil, nil, Localizable.shared.strings.to_completion_minute)
+
+                }
+                else {
+                    onProgress?(progress, nil, nil, timeLeft.asTime(style: .short).replacingOccurrences(of: ",", with: ""))
+                }
             }
             else{
                 onProgress?(progress, nil, nil, nil)

@@ -38,18 +38,26 @@ class NodeCell: UITableViewCell {
         selectionStyle = .none
     }
     
-    func configure(_ item: SelectNode) {
+    func configure(_ item: SelectNode, selected:Bool) {
         let value = "\(item.title.uppercased()) (\(item.subTitle.lowercased()))"
         nameLabel.setLetterSpacingOnly(value: 2.0, title: value, letter: item.title.uppercased())
         infoLabel.text = item.detail
         iconView.image = UIImage(named: item.icon)
         checkButton.isSelected = item.selected
         checkButton.isUserInteractionEnabled = false
+      
         if item.title == Localizable.shared.strings.random_node_title {
             hintLabel.isHidden = false
         }
         else {
             hintLabel.isHidden = true
+        }
+        
+        if selected {
+            self.backgroundColor = UIColor.main.cellBackgroundColor
+        }
+        else {
+            self.backgroundColor = .clear
         }
     }
 }

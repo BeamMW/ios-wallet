@@ -61,7 +61,9 @@ private: std::unique_ptr<Filter> m_bpsWholeTimeFilter;
 private: std::unique_ptr<Filter> m_bpsWindowedFilter;
 private: std::unique_ptr<Filter> m_estimateFilter;
 
-    
+private: long avgTime = 0;
+private: long start = 0;
+
 private:
     double getWindowedBps();
     double getWholeTimeBps();
@@ -69,4 +71,6 @@ private:
     
 public:
     bool OnProgress(uint64_t done, uint64_t total) override;
+    uint64_t OnSimpleProgress(uint64_t done, uint64_t total);
+    void OnResetSimpleProgress();
 };

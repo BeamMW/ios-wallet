@@ -44,7 +44,7 @@ void WebAPICreator::createApi(const std::string& verWant, const std::string& ver
     
     auto guard = this;
     
-    AppsApiUI::ClientThread_Create(_walletModel.get(), version, appid, appName,
+    AppsApiUI::ClientThread_Create(_walletModel.get(), version, appid, appName, 0 , false,
                                    [this, guard, version, appName, appid] (AppsApiUI::Ptr api) {
         if (guard)
         {

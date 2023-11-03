@@ -54,7 +54,7 @@ class WellcomeViewController: BaseViewController {
     //MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
-        AppModel.sharedManager().resetWallet(true)
+//        AppModel.sharedManager().resetWallet(true)
 
         if AppModel.sharedManager().canRestoreWallet() {
             AppModel.sharedManager().isRestoreFlow = true
@@ -67,7 +67,7 @@ class WellcomeViewController: BaseViewController {
     }
     
     @IBAction func onCreateWallet(sender :UIButton) {
-        AppModel.sharedManager().resetWallet(true)
+//        AppModel.sharedManager().resetWallet(true)
         AppModel.sharedManager().isRestoreFlow = false;
         pushViewController(vc: SeedPhraseViewController(event: .intro, words: nil))
     }

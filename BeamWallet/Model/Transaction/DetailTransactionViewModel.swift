@@ -90,7 +90,9 @@ class DetailTransactionViewModel: TransactionViewModel {
             details.append(BMMultiLineItem(title: Localizable.shared.strings.address_type.uppercased(), detail: transaction.getAddressType(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: false))
         }
         else if(!transaction.isDapps) {
-            details.append(BMMultiLineItem(title: Localizable.shared.strings.sending_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            if !transaction.senderAddress.isEmpty {
+                details.append(BMMultiLineItem(title: Localizable.shared.strings.sending_address.uppercased(), detail: transaction.senderAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
+            }
             
             if transaction.isIncome {
                 details.append(BMMultiLineItem(title: Localizable.shared.strings.receiving_address.uppercased(), detail: transaction.receiverAddress, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, showCopyButton: true))
@@ -124,29 +126,68 @@ class DetailTransactionViewModel: TransactionViewModel {
             amount = "-" + amount
         }
         
-        
         let current = Settings.sharedManager().currencyName()
         let notAvailable = Localizable.shared.strings.rate_transaction_not_available.lowercased()
         var rateString = String(format: notAvailable, current)
         
-        if transaction.realRate > 0 {
-            rateString = Localizable.shared.strings.rate_transaction.lowercased()
-            
-            let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(transaction.realRate), amount: transaction.realAmount, assetID: UInt64(transaction.assetId))
-            
-            if transaction.isIncome {
-                rateString = "+\(second) " + "(" + rateString + ")"
+        if transaction.isMultiAssets() {
+            if let assets = transaction.multiAssets as? [BMAsset] {
+                rateString = String(format: notAvailable, current)
+                var index = 0
+                for asset in assets {
+                    if transaction.realRate > 0 {
+                        rateString = Localizable.shared.strings.rate_transaction.lowercased()
+                        
+                        let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(transaction.realRate), amount: transaction.realAmount, assetID: UInt64(asset.assetId))
+                        
+                        if transaction.isIncome {
+                            rateString = "+\(second) " + "(" + rateString + ")"
+                        }
+                        else {
+                            rateString = "-\(second) " + "(" + rateString + ")"
+                        }
+                    }
+                    
+                    amount = String.currency(value: asset.realAmount, name: asset.unitName).replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+                    
+                    if asset.realAmount > 0 {
+                        amount = "+" + amount
+                    }
+                    else {
+                        amount = "-" + amount
+                    }
+                    
+                    if !asset.isBeam() {
+                        rateString = ""
+                    }
+                    
+                    var item = BMThreeLineItem(title: index == 90 ? Localizable.shared.strings.amount.uppercased() : "", detail: amount, subDetail: rateString , titleColor: .white, detailColor: asset.realAmount > 0 ? UIColor.main.brightSkyBlue : UIColor.main.heliotrope, subDetailColor: .white, titleFont: .boldSystemFont(ofSize: 15), detailFont: .systemFont(ofSize: 15), subDetailFont: .systemFont(ofSize: 15), hasArrow: false)
+                    item.customObject = asset
+                    details.append(item)
+
+                    index += 1
+                }
+            }
+        } else {
+            if transaction.realRate > 0 {
+                rateString = Localizable.shared.strings.rate_transaction.lowercased()
+                
+                let second = ExchangeManager.shared().exchangeValueAsset(withCurrency: Int64(transaction.realRate), amount: transaction.realAmount, assetID: UInt64(transaction.assetId))
+                
+                if transaction.isIncome {
+                    rateString = "+\(second) " + "(" + rateString + ")"
+                }
+                else {
+                    rateString = "-\(second) " + "(" + rateString + ")"
+                }
             }
             else {
-                rateString = "-\(second) " + "(" + rateString + ")"
+                rateString = "(" + rateString + ")"
             }
+            
+            details.append(BMThreeLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, subDetail: rateString , titleColor: .white, detailColor: transaction.isIncome ? UIColor.main.brightSkyBlue : UIColor.main.heliotrope, subDetailColor: .white, titleFont: .boldSystemFont(ofSize: 15), detailFont: .systemFont(ofSize: 15), subDetailFont: .systemFont(ofSize: 15), hasArrow: false))
         }
-        else {
-            rateString = "(" + rateString + ")"
-        }
-        
-        details.append(BMThreeLineItem(title: Localizable.shared.strings.amount.uppercased(), detail: amount, subDetail: rateString , titleColor: .white, detailColor: transaction.isIncome ? UIColor.main.brightSkyBlue : UIColor.main.heliotrope, subDetailColor: .white, titleFont: .boldSystemFont(ofSize: 15), detailFont: .systemFont(ofSize: 15), subDetailFont: .systemFont(ofSize: 15), hasArrow: false))
-        
+                
         if transaction.realFee > 0 && !isPaymentProof {
             let fee = String.currency(value: transaction.fee, name: "BEAM")
             details.append(BMThreeLineItem(title: Localizable.shared.strings.fee.uppercased(), detail: fee, subDetail: "", titleColor: .white, detailColor: .white, subDetailColor: .white, titleFont: .boldSystemFont(ofSize: 15), detailFont: .systemFont(ofSize: 15), subDetailFont: .systemFont(ofSize: 15), hasArrow: false))
@@ -193,7 +234,9 @@ class DetailTransactionViewModel: TransactionViewModel {
             items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.save_contact_title, icon: nil, action: .save_contact))
         }
         
-        items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_details, icon: nil, action: .share))
+        if !transaction.isMultiAssets() {
+            items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.share_details, icon: nil, action: .share))
+        }
 
         items.append(BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.copy_details, icon: nil, action: .copy))
 

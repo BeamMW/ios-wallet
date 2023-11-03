@@ -184,7 +184,7 @@ extension String {
         if Settings.sharedManager().isHideAmounts {
             return assetName
         }
-        return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)"
+        return ((formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
     }
     
     static func currencyShort(value:Double, name: String) -> String {
@@ -198,7 +198,7 @@ extension String {
         if Settings.sharedManager().isHideAmounts {
             return assetName
         }
-        return (formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)"
+        return ((formatter.string(from: NSNumber(value: value)) ?? "0.00") + " \(assetName)").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
     }
     
     func isValidUrl() -> Bool {
@@ -338,4 +338,10 @@ extension String {
     func splitAddress() -> String {
         return "\(self.prefix(6))...\(self.suffix(6))"
     }
+    
+    func to_base58() -> String {
+        let str = self
+        return str
+    }
+
 }

@@ -62,6 +62,8 @@ typedef int BMAddressType;
 
 @property (nonatomic,strong) NSString * _Nullable displayAddress;
 
+-(NSString* _Nonnull)getSBBSAddress;
+
 -(BOOL)isExpired;
 -(UInt64)getExpirationTime;
 -(NSString* _Nonnull)formattedDate;

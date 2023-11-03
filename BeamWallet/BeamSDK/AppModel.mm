@@ -32,6 +32,7 @@
 #import "WalletModel.h"
 #import "StringStd.h"
 #import "DAOManager.h"
+#import "RecoveryProgress.h"
 
 #import "DiskStatusManager.h"
 #import "CurrencyFormatter.h"
@@ -55,6 +56,7 @@
 
 #include "utility/bridge.h"
 #include "utility/string_helpers.h"
+#include "utility/fsutils.h"
 
 #include "mnemonic/mnemonic.h"
 
@@ -141,7 +143,18 @@ struct GetMinConfirmationsFunc
     }
 };
 
+typedef void(^NewTokenGeneratedBlock)(std::string token);
 
+struct NewTokenGeneratedFunc
+{
+    NewTokenGeneratedBlock block;
+    
+    void operator() (std::string token){
+        block(token);
+    }
+};
+
+static dispatch_once_t * once_token_model;
 
 @implementation AppModel  {
     BOOL isStarted;
@@ -171,12 +184,17 @@ struct GetMinConfirmationsFunc
     DAOViewController *daoViewController;
     
     boost::optional<beam::wallet::WalletAddress> _receiverAddress;
+    
+    RecoveryProgress recoveryProgress;
 }
 
 + (AppModel*_Nonnull)sharedManager {
     static AppModel *sharedMyManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    
+    static dispatch_once_t once_token;
+    once_token_model = &once_token;
+    
+    dispatch_once(&once_token, ^{
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
@@ -228,6 +246,7 @@ struct GetMinConfirmationsFunc
                           [NSMutableString self], nil];
         NSError *error;
         _transactions = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:dataTransactions error:&error];
+        NSLog(@"%@", error);
     }
     
     NSData *dataNotifications = [[NSUserDefaults standardUserDefaults] objectForKey:notificationsKey];
@@ -275,7 +294,9 @@ struct GetMinConfirmationsFunc
     for (const auto& item : peers) {
         BOOL found = NO;
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        if ([address rangeOfString:@"shanghai"].location == NSNotFound) {
+        if ([address rangeOfString:@"shanghai"].location == NSNotFound
+            && [address rangeOfString:@"raskul"].location == NSNotFound
+            && [address rangeOfString:@"45."].location == NSNotFound) {
             for (NSString *node in nodes) {
                 if([address isEqualToString:node]) {
                     found = YES;
@@ -303,7 +324,9 @@ struct GetMinConfirmationsFunc
     
     for (const auto& item : peers) {
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        if([address rangeOfString:@"shanghai"].location == NSNotFound) {
+        if([address rangeOfString:@"shanghai"].location == NSNotFound
+           && [address rangeOfString:@"raskul"].location == NSNotFound
+           && [address rangeOfString:@"45."].location == NSNotFound) {
             [array addObject:address];
         }
     }
@@ -433,6 +456,10 @@ struct GetMinConfirmationsFunc
         [self getUTXO];
     }
     _isConnected = isConnected;
+    
+    if (wallet != nil) {
+        _isConfigured = wallet->isConnectionTrusted();
+    }
 }
 
 -(void)setIsConnecting:(BOOL)isConnecting {
@@ -605,11 +632,11 @@ struct GetMinConfirmationsFunc
     io::Reactor::Scope s(*walletReactor); // do it in main thread
     
     // generate default address
-    WalletAddress address;
-    walletDb->createAddress(address);
-    address.m_label = "Default";
-    address.setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
-    walletDb->saveAddress(address);
+//    WalletAddress address;
+//    walletDb->createAddress(address);
+//    address.m_label = "Default";
+//    address.setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
+//    walletDb->saveAddress(address);
     
     [self onWalledOpened:SecString(pass.string)];
         
@@ -636,14 +663,10 @@ struct GetMinConfirmationsFunc
         wallet.reset();
     }
     
-    if (walletReactor!=nil){
-        walletReactor.reset();
-    }
     if (walletDb!=nil){
         walletDb.reset();
     }
     
-    walletReactor = nil;
     wallet = nil;
     walletDb = nil;
     
@@ -659,31 +682,39 @@ struct GetMinConfirmationsFunc
         self.isRestoreFlow = NO;
     }
     
+    [daoManager destroy];
+    daoManager = nil;
+    
     isStarted = NO;
     isRunning = NO;
+  
+    wallet.reset();
     
-    if (wallet!=nil){
-        wallet.reset();
-    }
+    walletDb.reset();
     
-    if (walletReactor!=nil){
-        walletReactor.reset();
-    }
-    if (walletDb!=nil){
-        walletDb.reset();
-    }
-    
-    walletReactor = nil;
-    wallet = nil;
-    walletDb = nil;
+//    if (wallet!=nil){
+//        wallet.reset();
+//    }
+//
+//    if (walletReactor!=nil){
+//        walletReactor.reset();
+//    }
+//    if (walletDb!=nil){
+//        walletDb.reset();
+//    }
+//
+//    walletReactor = nil;
+//    wallet = nil;
+//    walletDb = nil;
     
     if(removeDatabase) {
         NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
         
+        fsutils::remove([Settings sharedManager].walletStoragePath.string);
+
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
-        
-        
+        [[Settings sharedManager] resetDataBase];
     }
     
     _walletStatus = [BMWalletStatus new];
@@ -696,7 +727,10 @@ struct GetMinConfirmationsFunc
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:walletStatusKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    
     [[Settings sharedManager] resetNode];
+    
+    *once_token_model = 0;
 }
 
 -(void)startChangeWallet {
@@ -815,6 +849,8 @@ struct GetMinConfirmationsFunc
 
             wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
             
+            NSLog(@"NODE ADDRESS: %@", [Settings sharedManager].nodeAddress);
+
             wallet->getAsync()->setNodeAddress(nodeAddrStr);
             
             if ([Settings sharedManager].isNodeProtocolEnabled) {
@@ -878,6 +914,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
         
         wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+        
+        NSLog(@"NODE ADDRESS: %@", [Settings sharedManager].nodeAddress);
+
         wallet->getAsync()->setNodeAddress(nodeAddrStr);
         
         wallet->getAsync()->enableBodyRequests([Settings sharedManager].isNodeProtocolEnabled);
@@ -904,9 +943,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
         {
             isRunning = YES;
             
-            auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-            additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
+//            auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
+//            additionalTxCreators->emplace(TxType::DexSimpleSwap, std::make_shared<DexTransaction::Creator>(walletDb));
 
+            auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>([=]() { return walletDb; });
+            auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
+            additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
+            
             if ([Settings sharedManager].isNodeProtocolEnabled) {
                 wallet->getAsync()->enableBodyRequests(true);
             }
@@ -930,6 +973,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+            NSLog(@"NODE ADDRESS: %@", [Settings sharedManager].nodeAddress);
             self->wallet->getAsync()->setNodeAddress(nodeAddrStr);
         });
     }
@@ -1106,65 +1150,82 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 
 -(void)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+    
+    if (wallet!=nil) {
+        uint32_t bAsset = (uint32_t)assetId;
+        uint64_t bAmount = round(amount * Rules::Coin);
         
-    uint64_t bAmount = round(amount * Rules::Coin);
+        auto func = NewTokenGeneratedFunc();
+        func.block = ^(std::string token) {
+            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
+            block(sToken);
+        };
+        wallet->getAsync()->generateToken(TokenType::Offline, bAmount, bAsset, std::string(BEAM_LIB_VERSION), func);
+    }
     
-    WalletID m_walletID(Zero);
-    m_walletID.FromHex(walleetId.string);
+//    uint32_t bAsset = (uint32_t)assetId;
+//    uint64_t bAmount = round(amount * Rules::Coin);
+//
+//    WalletID m_walletID(Zero);
+//    m_walletID.FromHex(walleetId.string);
+//
+//    auto address = walletDb->getAddress(m_walletID);
+//    auto lastVouchers = GenerateVoucherList(walletDb->get_KeyKeeper(), address->m_OwnID, 1);
+//
+//    TxParameters offlineParameters;
+//    offlineParameters.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
+//    offlineParameters.SetParameter(TxParameterID::ShieldedVoucherList, lastVouchers);
+//    offlineParameters.SetParameter(TxParameterID::PeerAddr, address->m_BbsAddr);
+//    offlineParameters.SetParameter(TxParameterID::PeerEndpoint, address->m_Endpoint);
+//    offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, true);
+//    offlineParameters.SetParameter(TxParameterID::AssetID, beam::Asset::ID(bAsset));
+//    if (bAmount > 0) {
+//        offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
+//    }
+//    auto token = to_string(offlineParameters);
+//    block([NSString stringWithUTF8String:token.c_str()]);
     
-    auto address = walletDb->getAddress(m_walletID);
     
-    auto func = GenerateVaucherFunc();
-    func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
-        auto token = GenerateOfflineToken(*address, bAmount, uint32_t(assetId), list, std::string(BEAM_LIB_VERSION));
-        block([NSString stringWithUTF8String:token.c_str()]);
-    };
-    
-    wallet->getAsync()->generateVouchers(address->m_OwnID, 1, func);
 }
 
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
-    uint64_t bAmount = round(amount * Rules::Coin);
         
     WalletID m_walletID(Zero);
     m_walletID.FromHex(walleetId.string);
     
+    uint32_t bAsset = (uint32_t)assetId;
+    uint64_t bAmount = round(amount * Rules::Coin);
     auto address = walletDb->getAddress(m_walletID);
-    
-    TxParameters params;
-    params.SetParameter(TxParameterID::LibraryVersion, std::string(BEAM_LIB_VERSION));
-    if (bAmount > 0) {
-        params.SetParameter(TxParameterID::Amount, bAmount);
-    }
-    params.SetParameter(TxParameterID::PeerID, address->m_walletID);
-    params.SetParameter(TxParameterID::PeerWalletIdentity, address->m_Identity);
-    params.SetParameter(TxParameterID::IsPermanentPeerID, isPermanentAddress);
-    params.SetParameter(TxParameterID::TransactionType, TxType::Simple);
-    params.SetParameter(TxParameterID::AssetID, uint32_t(assetId));
-    params.DeleteParameter(TxParameterID::Voucher);
-    
-    auto token = to_string(params);
-    return [NSString stringWithUTF8String:token.c_str()];
+    auto regularAddress = GenerateRegularNewToken(*address, bAmount, bAsset, std::string(BEAM_LIB_VERSION));
+    return [NSString stringWithUTF8String:regularAddress.c_str()];
 }
 
 
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
-    uint64_t bAmount = round(amount * Rules::Coin);
-    
-    WalletID m_walletID(Zero);
-    m_walletID.FromHex(walleetId.string);
-    
-    WalletAddress address = *walletDb->getAddress(m_walletID);
-    
-    auto func = GenerateVaucherFunc();
-    func.newGenerateVaucherBlock = ^(ShieldedVoucherList list) {
-        auto token = GenerateMaxPrivacyToken(address, bAmount, uint32_t(assetId), list[0], std::string(BEAM_LIB_VERSION));
+    if (wallet!=nil) {
+        uint32_t bAsset = (uint32_t)assetId;
+        uint64_t bAmount = round(amount * Rules::Coin);
         
+        auto func = NewTokenGeneratedFunc();
+        func.block = ^(std::string token) {
+            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
+            block(sToken);
+        };
+        wallet->getAsync()->generateToken(TokenType::MaxPrivacy, bAmount, bAsset, std::string(BEAM_LIB_VERSION), func);
+    }
+//    uint64_t bAmount = round(amount * Rules::Coin);
+//    uint32_t bAsset = (uint32_t)assetId;
+//
+//    WalletID m_walletID(Zero);
+//    m_walletID.FromHex(walleetId.string);
+//
+//    WalletAddress address = *walletDb->getAddress(m_walletID);
+//    auto maxPrivacyAddress = GenerateMaxPrivacyToken(address, *walletDb, bAmount, bAsset, std::string(BEAM_LIB_VERSION));
+//    block([NSString stringWithUTF8String:maxPrivacyAddress.c_str()]);
+}
 
-        block([NSString stringWithUTF8String:token.c_str()]);
-    };
-        
-    wallet->getAsync()->generateVouchers(address.m_OwnID, 1, func);
+-(void)getAssetInfoAsync:(int)assetId {
+    wallet->getAsync()->getAssetInfo((uint)assetId);
 }
 
 
@@ -1200,31 +1261,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 -(void)editBotAddress:(NSString*_Nonnull)address {
-    try{
-        WalletID walletID(Zero);
-        if (walletID.FromHex(address.string))
-        {
-            std::vector<WalletAddress> addresses = wallet->ownAddresses;
-            
-            for (int i=0; i<addresses.size(); i++)
-            {
-                NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
-                
-                if ([wAddress isEqualToString:address])
-                {
-                    wallet->getAsync()->updateAddress(walletID, "telegram bot", WalletAddress::ExpirationStatus::Never);
-                    
-                    break;
-                }
-            }
-        }
-    }
-    catch (const std::exception& e) {
-        NSLog(@"error edit bot address");
-    }
-    catch (...) {
-        NSLog(@"error edit bot address");
-    }
+
 }
 
 -(void)setExpires:(int)hours toAddress:(NSString*)address {
@@ -1235,11 +1272,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         for (int i=0; i<addresses.size(); i++)
         {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_BbsAddr).c_str()];
             
             if ([wAddress isEqualToString:address])
             {
-                
                 try{
                     wallet->getAsync()->updateAddress(walletID, addresses[i].m_label, hours == 0 ? WalletAddress::ExpirationStatus::Never : WalletAddress::ExpirationStatus::Auto);
                 }
@@ -1265,15 +1301,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         for (int i=0; i<addresses.size(); i++)
         {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_BbsAddr).c_str()];
             
             if ([wAddress isEqualToString:address])
             {
                 WalletAddress _address;
                 _address.m_label = comment.string;
-                _address.m_walletID = walletID;
+                _address.m_BbsAddr = walletID;
                 _address.m_createTime = NSDate.date.timeIntervalSince1970;
-                _address.m_Identity = addresses[i].m_Identity;
+                _address.m_Endpoint = addresses[i].m_Endpoint;
 
                 try{
                     wallet->getAsync()->saveAddress(_address);
@@ -1315,7 +1351,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
         
         for (int i=0; i<addresses.size(); i++)
         {
-            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_walletID).c_str()];
+            NSString *wAddress = [NSString stringWithUTF8String:to_string(addresses[i].m_BbsAddr).c_str()];
             
             if ([wAddress isEqualToString:address])
             {
@@ -1345,9 +1381,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
         if (notificationId!=nil) {
             [self deleteNotification:notificationId];
         }
+                
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self->wallet->getAsync()->getAddresses(true);
+            self->wallet->getAsync()->getAddresses(false);
+        });
     }
     else if([self isToken:address]) {
         BMTransactionParameters *params = [[AppModel sharedManager] getTransactionParameters:address];
+
         if (walletID.FromHex(params.address.string)) {
             wallet->getAsync()->deleteAddress(walletID);
         }
@@ -1516,11 +1558,65 @@ bool OnProgress(uint64_t done, uint64_t total) {
     }
 }
 
+
+-(void)generateNewWalletAddressWithBlockAndAmount:(int)assetId amount:(double)amount result:(NewAddressGeneratedBlock _Nonnull)block {
+    self.generatedNewAddressBlock = block;
+
+    if (wallet!=nil) {
+        uint32_t bAsset = (uint32_t)assetId;
+        uint64_t bAmount = round(amount * Rules::Coin);
+        
+        auto func = NewTokenGeneratedFunc();
+        func.block = ^(std::string token) {
+            [AppModel sharedManager].addressGeneratedID = @"";
+            
+            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
+            auto pParams = beam::wallet::ParseParameters(token);
+            
+            BMAddress *address = [[BMAddress alloc] init];
+            address.address = sToken;
+            if (pParams)
+            {
+                beam::wallet::WalletID pid;
+                if (pParams->GetParameter(beam::wallet::TxParameterID::PeerAddr, pid)) {
+                    address.walletId = [NSString stringWithUTF8String:to_string(pid).c_str()];
+                }
+            }
+            self.generatedNewAddressBlock(address, nil);
+            
+            self->wallet->getAsync()->getAddresses(true);
+        };
+        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), func);
+    }
+}
+
 -(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block{
     self.generatedNewAddressBlock = block;
     
     if (wallet!=nil) {
-        wallet->getAsync()->generateNewAddress();
+        uint64_t amount = 0;
+        auto asset = beam::Asset::ID(0);
+        auto func = NewTokenGeneratedFunc();
+        func.block = ^(std::string token) {
+            [AppModel sharedManager].addressGeneratedID = @"";
+
+            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
+            auto pParams = beam::wallet::ParseParameters(token);
+           
+            BMAddress *address = [[BMAddress alloc] init];
+            address.address = sToken;
+            if (pParams)
+            {
+                beam::wallet::WalletID pid;
+                if (pParams->GetParameter(beam::wallet::TxParameterID::PeerAddr, pid)) {
+                    address.walletId = [NSString stringWithUTF8String:to_string(pid).c_str()];
+                }
+            }
+            self.generatedNewAddressBlock(address, nil);
+        };
+        
+        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, amount, asset, std::string(BEAM_LIB_VERSION), func);
+//        wallet->getAsync()->generateNewAddress();
     }
 }
 
@@ -1571,6 +1667,12 @@ bool OnProgress(uint64_t done, uint64_t total) {
             || ([tr.token isEqualToString:address.address] && tr.token.length > 1)) {
             [result addObject:tr];
         }
+        else if([tr.receiverAddress isEqualToString:address._id] && !tr.receiverAddress.isEmpty) {
+            [result addObject:tr];
+        }
+        else if([tr.receiverAddress isEqualToString: [address getSBBSAddress]] || [tr.senderAddress isEqualToString: [address getSBBSAddress]]) {
+            [result addObject:tr];
+        }
     }
     
     return result;
@@ -1604,7 +1706,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
     WalletAddress address = *walletDb->getAddress(m_walletID);
     _receiverAddress = address;
-    _receiverAddress->m_Address = token.string;
+    _receiverAddress->m_Token = token.string;
     _receiverAddress->setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Auto);
     self->wallet->getAsync()->saveAddress(*_receiverAddress);
 }
@@ -1619,13 +1721,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
         {
             bool isValid = false;
             auto buf = from_hex(contact.address.identity.string, &isValid);
-            PeerID m_Identity = Blob(buf);
+            PeerID m_Endpoint = Blob(buf);
             
             WalletAddress _address;
             _address.m_label = address.label.string;
-            _address.m_walletID = walletID;
-            _address.m_Address = address.address.string;
-            _address.m_Identity = m_Identity;
+            _address.m_BbsAddr = walletID;
+            _address.m_Token = address.address.string;
+            _address.m_Endpoint = m_Endpoint;
             _address.m_createTime = NSDate.date.timeIntervalSince1970;
             walletDb->saveAddress(_address);
         }
@@ -1734,17 +1836,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
             
         bool isValid = false;
         auto buf = from_hex(_identity.string, &isValid);
-        PeerID m_Identity = Blob(buf);
+        PeerID m_Endpoint = Blob(buf);
         
         WalletAddress savedAddress;
-        savedAddress.m_walletID = walletID;
+        savedAddress.m_BbsAddr = walletID;
         savedAddress.m_createTime = getTimestamp();
-        savedAddress.m_Identity = m_Identity;
+        savedAddress.m_Endpoint = m_Endpoint;
         savedAddress.m_label = name.string;
         savedAddress.m_duration = WalletAddress::AddressExpirationNever;
-        savedAddress.m_Address = address.string;
+        savedAddress.m_Token = address.string;
         wallet->getAsync()->saveAddress(savedAddress);
-        wallet->getAsync()->getAddresses(false);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self->wallet->getAsync()->getAddresses(false);
+        });
     }
     else {
         WalletID walletID(Zero);
@@ -1766,19 +1870,23 @@ bool OnProgress(uint64_t done, uint64_t total) {
             
             WalletAddress savedAddress;
             savedAddress.m_label = name.string;
-            savedAddress.m_walletID = walletID;
+            savedAddress.m_BbsAddr = walletID;
             if (identidy!=nil) {
                 bool isValid = false;
                 auto buf = from_hex(identidy.string, &isValid);
-                PeerID m_Identity = Blob(buf);
-                savedAddress.m_Identity = m_Identity;
+                PeerID m_Endpoint = Blob(buf);
+                savedAddress.m_Endpoint = m_Endpoint;
                 if(address != nil) {
-                    savedAddress.m_Address = address.string;
+                    savedAddress.m_Token = address.string;
                 }
             }
             savedAddress.m_createTime = NSDate.date.timeIntervalSince1970;
-            walletDb->saveAddress(savedAddress);
-            wallet->getAsync()->getAddresses(false);
+           // walletDb->saveAddress(savedAddress);
+            wallet->getAsync()->saveAddress(savedAddress);
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self->wallet->getAsync()->getAddresses(false);
+            });
         }
     }
 }
@@ -1886,10 +1994,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
     return realAmount;
 }
 
--(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount {
-    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to];
+-(NSString*_Nullable)canSend:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to maxAmount:(double)maxAmount checkAddress:(BOOL)checkAddress {
+    NSString *errorString = [self sendError:amount assetId:assetId fee:fee to:to checkAddress: checkAddress];
     if (errorString == nil) {
-        if (amount > maxAmount && maxAmount != 0) {
+        if(maxAmount < 0) {
+            NSString *amountString = @"0";
+            NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
+            NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
+            return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
+        }
+        else if (amount > maxAmount && maxAmount != 0) {
             NSString *amountString = [[StringManager sharedManager] realAmountString:maxAmount];
             NSString *assetName = [[[AssetsManager sharedManager] getAsset:assetId] unitName];
             NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
@@ -1919,10 +2033,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 -(NSString*_Nullable)feeError:(double)fee {
     double need = double(int64_t(fee)) / Rules::Coin;
     
-    NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    NSString *amountString = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+    NSString *assetName = @"BEAM";
+    NSString *fullName = [NSString stringWithFormat:@"%@ %@", amountString, assetName];
     
-    NSString *s = [@"insufficient_funds" localized];
-    return [s stringByReplacingOccurrencesOfString:@"(value)" withString:beam];
+    return [NSString stringWithFormat:[@"max_funds_error" localized], fullName];
 }
 
 -(void)calculateFee:(double)amount assetId:(int)assetId fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block {
@@ -1957,15 +2072,15 @@ bool OnProgress(uint64_t done, uint64_t total) {
     if (amount==0) {
         return [@"amount_zero" localized];
     }
-    else if(available < bTotal)
-    {
-        double need = double(int64_t(bTotal - available)) / Rules::Coin;
-        
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
-    }
+//    else if(available < bTotal)
+//    {
+//        double need = double(int64_t(bTotal - available)) / Rules::Coin;
+//
+//        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+//
+//        NSString *s = [@"insufficient_funds" localized];
+//        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, asset.unitName]];
+//    }
     else if (bTotal > bMax)
     {
         NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:MAX_AMOUNT]];
@@ -1973,23 +2088,23 @@ bool OnProgress(uint64_t done, uint64_t total) {
         return [NSString stringWithFormat:@"Maximum amount %@ %@", beam, asset.unitName];
     }
     
-    if (asset !=0 && self.walletStatus.available < fee) {
-        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
-        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
-        NSString *s = [@"insufficient_funds" localized];
-        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
-    }
+//    if (asset !=0 && self.walletStatus.available < fee) {
+//        double need = double(int64_t(fee - self.walletStatus.available)) / Rules::Coin;
+//        NSString *beam = [CurrencyFormatter currencyFromNumber:[NSNumber numberWithDouble:need]];
+//        NSString *s = [@"insufficient_funds" localized];
+//        return [s stringByReplacingOccurrencesOfString:@"(value)" withString:[NSString stringWithFormat:@"%@ %@",beam, @"BEAM"]];
+//    }
     
     return nil;
 }
 
--(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to {
+-(NSString*)sendError:(double)amount assetId:(int)assetId fee:(double)fee to:(NSString*_Nullable)to checkAddress:(BOOL)checkAddress {
     NSString *error = [self sendError:amount assetId:assetId fee:fee checkMinAmount:NO];
     
     if (error!=nil) {
         return error;
     }
-    else if(![self isValidAddress:to])
+    else if(![self isValidAddress:to] && checkAddress)
     {
         return [@"incorrect_address" localized];
     }
@@ -2016,8 +2131,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
     uint64_t bAmount = round(amount * Rules::Coin);
     uint64_t bfee = fee;
     
-    WalletID m_walletID(Zero);
-    m_walletID.FromHex(from.string);
+//    WalletID m_walletID(Zero);
+//    m_walletID.FromHex(from.string);
     
     auto params = CreateSimpleTransactionParameters();
     const auto type = GetAddressType(to.string);
@@ -2029,7 +2144,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             assert(false);
             return;
         }
-        CopyParameter(TxParameterID::PeerOwnID, _txParameters, params);
+        CopyParameter(TxParameterID::PeerID, _txParameters, params);
     }
     else {
         if(!LoadReceiverParams(_txParameters, params, TxAddressType::Regular)) {
@@ -2037,10 +2152,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
             return;
         }
     }
-    
+
+    //        .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
+
     params.SetParameter(TxParameterID::Amount, bAmount)
         .SetParameter(TxParameterID::Fee, bfee)
-        .SetParameter(beam::wallet::TxParameterID::MyID, m_walletID)
         .SetParameter(TxParameterID::AssetID, beam::Asset::ID((uint32_t)assetId))
         .SetParameter(TxParameterID::Message, beam::ByteBuffer(messageString.begin(), messageString.end()));
 
@@ -2216,7 +2332,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     
     if (auto walletIdentity = params->GetParameter<beam::PeerID>(TxParameterID::PeerWalletIdentity); walletIdentity)
     {
-        auto s = std::to_string(*walletIdentity);
+        auto s = std::to_base58(*walletIdentity);
         p.identity = [NSString stringWithUTF8String:s.c_str()];
     }
     else {
@@ -3022,7 +3138,6 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         hh = hours - dd * 24;
     }
     
-    
     NSString *res = @"";
     
     if (hh == 1) {
@@ -3043,6 +3158,14 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }
     
     return res;
+}
+
+-(void)resetEstimateProgress {
+    recoveryProgress.OnResetSimpleProgress();
+}
+
+-(UInt64)getEstimateProgress:(UInt64)done total:(UInt64)total {
+    return recoveryProgress.OnSimpleProgress(done, total);
 }
 
 -(void)rescan {
@@ -3180,6 +3303,30 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     }] resume];
 }
 
+
+-(BMApp*_Nonnull)votingApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BeamX DAO Voting"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"BeamX DAO Voting";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-voting-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/dao-voting-app/index.html";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app-same-origin/dao-voting-app/index.html";
+    }
+    return app;
+}
+
 -(BMApp*_Nonnull)DAOBeamXApp {
     for(BMApp *bApp in self.apps) {
         if ([bApp.name isEqualToString:@"BeamX DAO"]) {
@@ -3203,6 +3350,52 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     return app;
 }
 
+-(BMApp*_Nonnull)daoFaucetApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"BEAM Faucet"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"BEAM Faucet";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/plugin-faucet/index.html";
+        app.icon = @"https://apps.beam.mw/app/plugin-faucet/appicon.svg";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
+    }
+    return app;
+}
+
+-(BMApp*_Nonnull)daoGalleryApp {
+    for(BMApp *bApp in self.apps) {
+        if ([bApp.name isEqualToString:@"NFT Gallery"]) {
+            return bApp;
+        }
+    }
+    
+    BMApp *app = [BMApp new];
+    app.name = @"NFT Gallery";
+    app.api_version = @"current";
+    
+    if ([Settings sharedManager].target == Testnet) {
+        app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
+    }
+    else if ([Settings sharedManager].target == Mainnet) {
+        app.url = @"https://apps.beam.mw/app/plugin-gallery/index.html";
+        app.icon = @"https://apps.beam.mw/app/plugin-gallery/appicon.svg";
+    }
+    else {
+        app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
+    }
+    return app;
+}
 
 @end
-

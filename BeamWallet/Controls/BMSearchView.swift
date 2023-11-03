@@ -22,7 +22,7 @@ import Foundation
 
 class BMSearchView: UIView {
     
-    private let searchField = UITextField()
+    let searchField = UITextField()
     
     public var onSearchTextChanged : ((String) -> Void)?
     public var onCancelSearch : (() -> Void)?

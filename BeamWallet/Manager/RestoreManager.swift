@@ -70,7 +70,9 @@ class RestoreManager: NSObject {
             url = URL(string: "https://mobile-restore.beam.mw/mainnet/mainnet_recovery.bin")
         }
         else{
-            url = URL(string: "https://mobile-restore.beam.mw/masternet/masternet_recovery.bin")
+            url = URL(string: "https://s3.eu-central-1.amazonaws.com/mobile-restore.beam.mw/dappnet/dappnet_recovery.bin")
+
+//            url = URL(string: "https://mobile-restore.beam.mw/masternet/masternet_recovery.bin")
         }
         
         if let downloadUrl = url {

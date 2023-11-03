@@ -91,13 +91,20 @@ class AddressViewModel: NSObject {
                 self.contacts = AppModel.sharedManager().contacts as! [BMContact]
             }
             
+            
             self.addresses.removeAll(where: {$0.walletId.isEmpty})
             self.contacts.removeAll(where: {$0.address.walletId.isEmpty})
+            
+            let uniqueAddressesObjects = Array(Dictionary(grouping: self.addresses, by: { $0.walletId }).values.compactMap { $0.first })
+            let uniqueContactsObjects = Array(Dictionary(grouping: self.contacts, by: { $0.address.walletId }).values.compactMap { $0.first })
+
+            self.addresses = uniqueAddressesObjects
+            self.contacts = uniqueContactsObjects
             
             let isOwn = AppModel.sharedManager().checkIsOwnNode()
             if !isOwn {
                 for (index, element) in self.addresses.enumerated() {
-                    self.addresses[index].displayAddress = element._id
+                    self.addresses[index].displayAddress = element.walletId
                 }
                 
                 for (index, element) in self.contacts.enumerated() {
@@ -106,9 +113,7 @@ class AddressViewModel: NSObject {
                         self.contacts[index].address.displayAddress = element.address.address
                     }
                 }
-            }
-            
-         
+            }            
             
             self.onDataChanged?()
         }

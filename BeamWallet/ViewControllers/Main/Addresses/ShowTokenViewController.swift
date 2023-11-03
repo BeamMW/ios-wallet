@@ -84,12 +84,17 @@ class ShowTokenViewController: BaseTableViewController {
     }
     
     @objc private func onCopy() {
-        if let token = items.last?.detail {
-            UIPasteboard.general.string = token
-            ShowCopied(text: Localizable.shared.strings.address_copied)
-            didCopyToken?()
-            back()
-        }
+        UIPasteboard.general.string = token
+        ShowCopied(text: Localizable.shared.strings.address_copied)
+        didCopyToken?()
+        back()
+        
+//        if let token = self.token {
+//            UIPasteboard.general.string = token
+//            ShowCopied(text: Localizable.shared.strings.address_copied)
+//            didCopyToken?()
+//            back()
+//        }
     }
     
     private func buildItems() {
@@ -123,39 +128,49 @@ class ShowTokenViewController: BaseTableViewController {
                 }
                 
                 if(!params.identity.isEmpty) {
-                    items.append(BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail: params.identity, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, copiedText: Localizable.shared.strings.copied_to_clipboard))
+                    items.append(BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail: params.identity.to_base58(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true, copiedText: Localizable.shared.strings.copied_to_clipboard))
                 }
                 
                 items.append(BMMultiLineItem(title: Localizable.shared.strings.address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             }
             else {
-                if !params.address.isEmpty && !AppModel.sharedManager().checkIsOwnNode() {
-                    items.append(BMMultiLineItem(title: Localizable.shared.strings.online_sbbs_address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-                }
-                else {
-                    items.append(BMMultiLineItem(title: Localizable.shared.strings.address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-                }
+                items.append(BMMultiLineItem(title: Localizable.shared.strings.address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+
+                
+//                if !params.address.isEmpty && !AppModel.sharedManager().checkIsOwnNode() {
+//                    items.append(BMMultiLineItem(title: Localizable.shared.strings.online_sbbs_address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+//                }
+//                else {
+//                    items.append(BMMultiLineItem(title: Localizable.shared.strings.address, detail: token, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+//                }
                 
                 
-                if !params.address.isEmpty && AppModel.sharedManager().checkIsOwnNode() {
+                //&& AppModel.sharedManager().checkIsOwnNode()
+                if !params.address.isEmpty {
                     items.append(BMMultiLineItem(title: "", detail: "", detailFont: nil, detailColor: nil))
 
-                    items.append(BMMultiLineItem(title: Localizable.shared.strings.online_sbbs_address.uppercased(), detail: params.address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
+                    items.append(BMMultiLineItem(title: Localizable.shared.strings.sbbs_address_new, detail: params.address, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
                 }
                 else if !params.address.isEmpty && !AppModel.sharedManager().checkIsOwnNode() {
                     items.append(BMMultiLineItem(title: "", detail: "", detailFont: nil, detailColor: nil))
+                }
+                
+                if !params.identity.isEmpty {
+                    items.append(BMMultiLineItem(title: Localizable.shared.strings.identity.uppercased(), detail: params.identity.to_base58(), detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
                 }
                 
                 if params.newAddressType == BMAddressTypeMaxPrivacy {
                     title = Localizable.shared.strings.max_anonymity_address
                 }
                 else {
-                    if !AppModel.sharedManager().checkIsOwnNode() {
-                        title = Localizable.shared.strings.online_address
-                    }
-                    else {
-                        title = Localizable.shared.strings.regular_address
-                    }
+                    title = Localizable.shared.strings.regular_address
+
+//                    if !AppModel.sharedManager().checkIsOwnNode() {
+//                        title = Localizable.shared.strings.online_address
+//                    }
+//                    else {
+//                        title = Localizable.shared.strings.regular_address
+//                    }
                 }
             }
         }

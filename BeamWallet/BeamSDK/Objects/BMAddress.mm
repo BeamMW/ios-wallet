@@ -67,9 +67,16 @@
 }
 
 -(NSString*_Nonnull) getMainId {
+//    if(_address != nil && [_address length] > 0) {
+//        return _address;
+//    }
     return _walletId;
+//    return _walletId;
 }
 
+-(NSString* _Nonnull)getSBBSAddress {
+    return _walletId;
+}
 
 -(NSString*_Nonnull)expiredFormattedDate{
     NSDateFormatter *f = [self shortFormatter];
