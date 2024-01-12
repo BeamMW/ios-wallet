@@ -79,7 +79,7 @@ NSArray *colors = @[@"#72fdff",@"#2acf1d",@"#ffbb54",@"#d885ff",@"#008eff",@"#ff
         beamX.shortDesc = @"BeamX DAO governance token";
         beamX.longDesc = @"BEAMX token is a Confidential Asset issued on top of the Beam blockchain with a fixed emission of 100,000,000 units (except for the lender of a \"last resort\" scenario). BEAMX is the governance token for the BeamX DAO, managed by the BeamX DAO Core contract. Holders can earn BeamX tokens by participating in the DAO activities: providing liquidity to the DeFi applications governed by the DAO or participating in the governance process.";
         beamX.site = @"https://www.beamxdao.org/";
-        beamX.paper = @"https://documentation.beam.mw/overview/beamx-tokenomics";
+        beamX.paper = @"https://beam.mw/docs/ecosystem/overview/beamx-tokenomics";
         [_assets addObject:beamX];
     }
     
