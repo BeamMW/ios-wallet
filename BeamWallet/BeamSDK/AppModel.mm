@@ -1149,7 +1149,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 
--(void)generateOfflineAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+-(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
     
     if (wallet!=nil) {
         uint32_t bAsset = (uint32_t)assetId;
@@ -1167,7 +1167,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 //    uint64_t bAmount = round(amount * Rules::Coin);
 //
 //    WalletID m_walletID(Zero);
-//    m_walletID.FromHex(walleetId.string);
+//    m_walletID.FromHex(walletId.string);
 //
 //    auto address = walletDb->getAddress(m_walletID);
 //    auto lastVouchers = GenerateVoucherList(walletDb->get_KeyKeeper(), address->m_OwnID, 1);
@@ -1188,10 +1188,10 @@ bool OnProgress(uint64_t done, uint64_t total) {
     
 }
 
--(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
+-(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
         
     WalletID m_walletID(Zero);
-    m_walletID.FromHex(walleetId.string);
+    m_walletID.FromHex(walletId.string);
     
     uint32_t bAsset = (uint32_t)assetId;
     uint64_t bAmount = round(amount * Rules::Coin);
@@ -1201,7 +1201,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 
--(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walleetId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+-(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
     if (wallet!=nil) {
         uint32_t bAsset = (uint32_t)assetId;
         uint64_t bAmount = round(amount * Rules::Coin);
@@ -1217,7 +1217,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 //    uint32_t bAsset = (uint32_t)assetId;
 //
 //    WalletID m_walletID(Zero);
-//    m_walletID.FromHex(walleetId.string);
+//    m_walletID.FromHex(walletId.string);
 //
 //    WalletAddress address = *walletDb->getAddress(m_walletID);
 //    auto maxPrivacyAddress = GenerateMaxPrivacyToken(address, *walletDb, bAmount, bAsset, std::string(BEAM_LIB_VERSION));
