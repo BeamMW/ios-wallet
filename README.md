@@ -30,4 +30,4 @@ Things that make BEAM special include:
 - https://github.com/BeamMW/ios-wallet/blob/master/BUILD.md
 
 # Support
-
+- [Telegram](https://t.me/BeamSupport)
