@@ -495,7 +495,6 @@ class LocalizableStrings : NSObject {
     var senf_offline_notice = "senf_offline_notice".localized
     var regular_online_only = "regular_online_only".localized
     var regular_offline_only = "regular_offline_only".localized
-    var sender_choice = "sender_choice".localized
     var assets = "assets".localized
     var select_asset = "select_asset".localized
     var search_assets = "search_assets".localized

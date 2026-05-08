@@ -632,3 +632,5 @@
 "sbbs_address_hint" = "use for CEX withdrawals and mining";
 "select_asset" = "Select asset";
 "search_assets" = "Search assets";
+"receive_description" = "Sender will be given a choice between online and offline payment.\n\nFor online payment to complete, you will need to open and connect your wallet sometime within 12 hours after the coins are sent.";
+"receive_description_2" = "For online payment to complete, you will need to open and connect your wallet sometime within 12 hours after the coins are sent.";
