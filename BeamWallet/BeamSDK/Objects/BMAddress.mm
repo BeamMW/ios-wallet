@@ -35,8 +35,9 @@
 
 +(BMAddress*_Nonnull)fromAddress:(BMAddress*_Nonnull)address{
     BMAddress *copied = [BMAddress new];
-    copied.walletId = [NSString stringWithString:address.walletId];
-    copied.label = [NSString stringWithString:address.label];
+    copied.walletId = address.walletId ? [NSString stringWithString:address.walletId] : @"";
+    copied.label = address.label ? [NSString stringWithString:address.label] : @"";
+    copied.address = address.address ? [NSString stringWithString:address.address] : @"";
     copied.duration = address.duration;
     copied.createTime = address.createTime;
     return copied;

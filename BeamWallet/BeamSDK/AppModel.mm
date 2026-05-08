@@ -1679,12 +1679,14 @@ bool OnProgress(uint64_t done, uint64_t total) {
         auto func = NewTokenGeneratedFunc();
         func.block = ^(std::string token) {
             [AppModel sharedManager].addressGeneratedID = @"";
-            
+
             NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
             auto pParams = beam::wallet::ParseParameters(token);
-            
+
             BMAddress *address = [[BMAddress alloc] init];
             address.address = sToken;
+            address.walletId = @"";
+            address.label = @"";
             if (pParams)
             {
                 beam::wallet::WalletID pid;
@@ -1693,7 +1695,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
                 }
             }
             self.generatedNewAddressBlock(address, nil);
-            
+
             self->wallet->getAsync()->getAddresses(true);
         };
         wallet->getAsync()->generateToken(TokenType::RegularNewStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
@@ -1702,7 +1704,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)generateNewWalletAddressWithBlock:(NewAddressGeneratedBlock _Nonnull )block{
     self.generatedNewAddressBlock = block;
-    
+
     if (wallet!=nil) {
         uint64_t amount = 0;
         auto asset = beam::Asset::ID(0);
@@ -1712,9 +1714,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
             NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
             auto pParams = beam::wallet::ParseParameters(token);
-           
+
             BMAddress *address = [[BMAddress alloc] init];
             address.address = sToken;
+            address.walletId = @"";
+            address.label = @"";
             if (pParams)
             {
                 beam::wallet::WalletID pid;
@@ -1724,7 +1728,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             }
             self.generatedNewAddressBlock(address, nil);
         };
-        
+
         wallet->getAsync()->generateToken(TokenType::RegularNewStyle, amount, asset, std::string(BEAM_LIB_VERSION), false, func);
 //        wallet->getAsync()->generateNewAddress();
     }
