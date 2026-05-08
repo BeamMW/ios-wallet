@@ -245,12 +245,6 @@ class SendViewController: BaseTableViewController {
         super.viewDidAppear(animated)
         
         self.isAppear = true
-        
-        if viewModel.isNeedFocus {
-            if let cell = tableView.findCell(BMSearchAddressCell.self) as? BMSearchAddressCell {
-                cell.beginEditing(text: viewModel.copyAddress)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

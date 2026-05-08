@@ -701,4 +701,7 @@ and never kept on the blockchain.";
 "sw" = "Switch";
 "search_settings" = "Search by section name or parameter";
 "beamx_dao_dao_voting" = "BeamX DAO Voting";
-"sbbs_address_new" = "SBBS ADDRESS\n(use for CEX withdrawals)";
+"sbbs_address_new" = "SBBS ADDRESS\n(use for CEX withdrawals and mining)";
+"sbbs_address_hint" = "use for CEX withdrawals and mining";
+"select_asset" = "Select asset";
+"search_assets" = "Search assets";

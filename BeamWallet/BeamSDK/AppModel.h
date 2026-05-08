@@ -325,6 +325,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
                       amounts:(NSString*_Nonnull)amounts;
 -(void)getAssetInfoAsync:(int)assetId;
+-(void)loadFullAssetsList;
 
 -(BMApp*_Nonnull)DAOBeamXApp;
 -(BMApp*_Nonnull)daoGalleryApp;

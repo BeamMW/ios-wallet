@@ -282,9 +282,6 @@
 		922B637C2552F1CA00A2AED2 /* ReceiveTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */; };
 		922B637D2552F1CA00A2AED2 /* ReceiveTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */; };
 		922B637E2552F1CA00A2AED2 /* ReceiveTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */; };
-		922B637F2552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */; };
-		922B63802552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */; };
-		922B63812552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */; };
 		922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
@@ -611,6 +608,9 @@
 		9265CDCF2292F233003C98B2 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */; };
 		9265CDD02292F233003C98B2 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */; };
 		9265CDD12292F233003C98B2 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */; };
+		F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
 		926783832456DE29006F3221 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926783822456DE29006F3221 /* boost.framework */; };
 		926783842456DE29006F3221 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926783822456DE29006F3221 /* boost.framework */; };
 		926783852456DE29006F3221 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926783822456DE29006F3221 /* boost.framework */; };
@@ -1550,7 +1550,6 @@
 		9227AEEA2282F6F800FB221F /* BMDuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMDuration.h; sourceTree = "<group>"; };
 		9227AEEB2282F6F800FB221F /* BMDuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDuration.m; sourceTree = "<group>"; };
 		922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTokenCell.swift; sourceTree = "<group>"; };
-		922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceiveTokenCell.xib; sourceTree = "<group>"; };
 		922EE89222F18C5800BBFDEF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMMultiLineItem.swift; sourceTree = "<group>"; };
 		922FB15D22B3E134007AD689 /* BMSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSearchView.swift; sourceTree = "<group>"; };
@@ -1693,6 +1692,7 @@
 		9261C255228BF55800D666E0 /* AddressExpiresCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressExpiresCell.swift; sourceTree = "<group>"; };
 		9261C259228BF55800D666E0 /* AddressesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressesViewController.swift; sourceTree = "<group>"; };
 		9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewController.swift; sourceTree = "<group>"; };
+		F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSearchViewController.swift; sourceTree = "<group>"; };
 		926783822456DE29006F3221 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boost.framework; sourceTree = "<group>"; };
 		9267D05F270DCA6000804314 /* AssetExporerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetExporerCell.swift; sourceTree = "<group>"; };
 		9267D060270DCA6000804314 /* AssetExporerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssetExporerCell.xib; sourceTree = "<group>"; };
@@ -2530,7 +2530,6 @@
 				9225D556229455CA0067B4EA /* ReceiveAddressButtonsCell.swift */,
 				9225D557229455CA0067B4EA /* ReceiveAddressButtonsCell.xib */,
 				922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */,
-				922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */,
 				9223D538261F480E0086D95C /* ReceiveTransactionTypeCell.swift */,
 				9223D539261F480E0086D95C /* ReceiveTransactionTypeCell.xib */,
 			);
@@ -2855,6 +2854,7 @@
 				92480DAC229547180084512A /* Cells */,
 				9235EB0D2296F6DF00BDC232 /* ReceiveListViewController.swift */,
 				9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */,
+				F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */,
 				92DFD5CA255031FA00B9751C /* OfflineAddressViewController.swift */,
 				92DFD5CB255031FA00B9751C /* OfflineAddressViewController.xib */,
 			);
@@ -3442,7 +3442,6 @@
 				92F68C8F2245070200197D4D /* UTXOTransactionCell.xib in Resources */,
 				9225D54B229449010067B4EA /* BMFieldCell.xib in Resources */,
 				927EDE3F22A6B47C005D5CEA /* BMMultiLinesCell.xib in Resources */,
-				922B637F2552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				92AE366D22383D2300E0810B /* QRScannerViewController.xib in Resources */,
 				925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */,
 				92F6B78C22A541040055C3C3 /* SendAllCell.xib in Resources */,
@@ -3571,7 +3570,6 @@
 				92CC40EC22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				922393A3235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */,
 				92C5EBB7229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */,
-				922B63802552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				9261C269228BF55800D666E0 /* BMPickerCell.xib in Resources */,
 				9288DD8A223A55410020C501 /* QRViewController.xib in Resources */,
 				92F78BC024D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
@@ -3630,7 +3628,6 @@
 				92E2EB4B226F21C700367928 /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				926EB47D231E843800D059BC /* WalletTransactionCell.xib in Resources */,
 				92E2EB4C226F21C700367928 /* InputWordCell.xib in Resources */,
-				922B63812552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				92E4AECC23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92302055262F23AE001A1883 /* NodeCell.xib in Resources */,
 				92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
@@ -4222,6 +4219,7 @@
 				928B0AB222425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
 				92B837492285816D002B385B /* Progress.swift in Sources */,
 				9265CDCF2292F233003C98B2 /* ReceiveViewController.swift in Sources */,
+				F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4545,6 +4543,7 @@
 				928B0AB322425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
 				92B8374A2285816D002B385B /* Progress.swift in Sources */,
 				9265CDD02292F233003C98B2 /* ReceiveViewController.swift in Sources */,
+				F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4868,6 +4867,7 @@
 				92E2EB2E226F21C700367928 /* BMPopoverMenu.swift in Sources */,
 				92B8374B2285816D002B385B /* Progress.swift in Sources */,
 				9265CDD12292F233003C98B2 /* ReceiveViewController.swift in Sources */,
+				F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

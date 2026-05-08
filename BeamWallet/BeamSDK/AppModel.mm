@@ -1338,6 +1338,11 @@ bool OnProgress(uint64_t done, uint64_t total) {
     wallet->getAsync()->getAssetInfo((uint)assetId);
 }
 
+-(void)loadFullAssetsList {
+    if (wallet == nullptr) return;
+    wallet->getAsync()->loadFullAssetsList();
+}
+
 
 #pragma mark - Addresses
 

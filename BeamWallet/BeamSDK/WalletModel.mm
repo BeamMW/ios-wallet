@@ -1715,6 +1715,15 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     }
 }
 
+void WalletModel::onFullAssetsListLoaded() {
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onAssetInfoChange)]) {
+            [delegate onAssetInfoChange];
+        }
+    }
+}
+
 NSString* WalletModel::GetErrorString(beam::wallet::ErrorType type)
 {
     switch (type)

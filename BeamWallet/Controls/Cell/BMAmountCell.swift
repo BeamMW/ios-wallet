@@ -78,37 +78,45 @@ class BMAmountCell: BaseCell {
         }
     }
 
+    public var allowAllAssets: Bool = false {
+        didSet { updateCurrencyInteraction() }
+    }
+
+    private func updateCurrencyInteraction() {
+        guard selectedAssetId != nil else { return }
+        if allowAllAssets || AssetsManager.shared().getAssetsWithBalance().count >= 1 {
+            currencyView.isUserInteractionEnabled = true
+            currencyArrow.isHidden = false
+        } else {
+            currencyView.isUserInteractionEnabled = false
+            currencyArrow.isHidden = true
+        }
+    }
+
     public var selectedAssetId:Int?
     {
         didSet{
-            
+
             if selectedAssetId != nil {
                 let asset = AssetsManager.shared().getAsset(Int32(selectedAssetId ?? 0))
 
                 currencyLabel.letterSpacing = 2
-                
+
                 let id = "(\(selectedAssetId ?? 0))"
                 let text = asset?.unitName ?? ""
                 let fullString = text + " " + id
-                
+
                 let attributedString = NSMutableAttributedString(string: fullString)
                 let range = (fullString as NSString).range(of: id)
                 attributedString.addAttribute(.foregroundColor, value: UIColor.white.withAlphaComponent(0.5), range: range)
-                
+
                 currencyLabel.attributedText = attributedString
-                
+
                 if let asset = asset {
                     currencyIcon.setAsset(asset)
                 }
-                
-                if AssetsManager.shared().getAssetsWithBalance().count >= 1 {
-                    currencyView.isUserInteractionEnabled = true
-                    currencyArrow.isHidden = false
-                }
-                else {
-                    currencyView.isUserInteractionEnabled = false
-                    currencyArrow.isHidden = true
-                }
+
+                updateCurrencyInteraction()
             }
             else {
                 currencyView.isUserInteractionEnabled = false

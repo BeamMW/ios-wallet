@@ -33,6 +33,7 @@ protocol GeneralInfoCellDelegate: AnyObject {
     @objc optional func onClickShare()
     @objc optional func onClickSave()
     @objc optional func onClickCopy()
+    @objc optional func onClickCopyAndClose()
 
     @objc optional func onRightButton(_ sender: UITableViewCell)
 

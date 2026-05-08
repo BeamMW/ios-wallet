@@ -429,6 +429,7 @@ class LocalizableStrings : NSObject {
     var regular = "regular".localized
     var identity = "identity".localized
     var sbbs_address_new = "sbbs_address_new".localized
+    var sbbs_address_hint = "sbbs_address_hint".localized
     var for_pool = "for_pool".localized
     var withdraw = "withdraw".localized
     var withdraw_cofirm = "withdraw_cofirm".localized
@@ -496,6 +497,8 @@ class LocalizableStrings : NSObject {
     var regular_offline_only = "regular_offline_only".localized
     var sender_choice = "sender_choice".localized
     var assets = "assets".localized
+    var select_asset = "select_asset".localized
+    var search_assets = "search_assets".localized
     
     var usage_recent_old = "usage_recent_old".localized
     var usage_old_recent = "usage_old_recent".localized

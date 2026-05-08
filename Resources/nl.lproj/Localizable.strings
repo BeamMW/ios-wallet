@@ -585,3 +585,7 @@ and never kept on the blockchain.";
 "desc_paper" = "Description paper";
 "website" = "Website";
 "beam_conf_asset" = "Beam Confidential Asset";
+"sbbs_address_new" = "SBBS ADDRESS\n(use for CEX withdrawals and mining)";
+"sbbs_address_hint" = "use for CEX withdrawals and mining";
+"select_asset" = "Select asset";
+"search_assets" = "Search assets";

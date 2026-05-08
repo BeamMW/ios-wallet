@@ -53,12 +53,15 @@ class ReceiveViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+
         setGradientTopBar(mainColor: UIColor.main.brightSkyBlue)
-        
+
         title = Localizable.shared.strings.receive.uppercased()
+
+        AppModel.sharedManager().loadFullAssetsList()
         
-        tableView.register([BMFieldCell.self, ReceiveTransactionTypeCell.self, ReceiveTokenCell.self, BMExpandCell.self, BMAmountCell.self, ReceiveAddressButtonsCell.self])
+        tableView.register([BMFieldCell.self, ReceiveTransactionTypeCell.self, BMExpandCell.self, BMAmountCell.self, ReceiveAddressButtonsCell.self])
+        tableView.register(ReceiveTokenCell.self, forCellReuseIdentifier: ReceiveTokenCell.reuseIdentifier)
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
 
         tableView.keyboardDismissMode = .interactive
@@ -132,13 +135,16 @@ class ReceiveViewController: BaseTableViewController {
                         let isOwn = AppModel.sharedManager().checkIsOwnNode()
 
                         if !isOwn {
-                            tokenCell.configure(with: strongSelf.viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased(), showHint: false)
+                            let token = strongSelf.viewModel.address.walletId
+                            tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: nil, showHint: false)
                         }
                         else if strongSelf.viewModel.transaction == .regular {
-                            tokenCell.configure(with: strongSelf.viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: false)
+                            let token = strongSelf.viewModel.address.offlineToken ?? ""
+                            tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: strongSelf.sbbsAddress(for: token), showHint: false)
                         }
                         else {
-                            tokenCell.configure(with: strongSelf.viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
+                            let token = strongSelf.viewModel.address.maxPrivacyToken ?? ""
+                            tokenCell.configure(with: token, title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", sbbsAddress: strongSelf.sbbsAddress(for: token), showHint: false)
                         }
                     }
                 }
@@ -203,6 +209,13 @@ class ReceiveViewController: BaseTableViewController {
         searchTableView.view.frame = CGRect(x: 0, y: y, width: view.bounds.width, height: view.bounds.size.height - y)
     }
     
+    private func sbbsAddress(for token: String) -> String? {
+        guard !token.isEmpty, AppModel.sharedManager().isToken(token) else { return nil }
+        let params = AppModel.sharedManager().getTransactionParameters(token)
+        let sbbs = params.address ?? ""
+        return sbbs.isEmpty ? nil : sbbs
+    }
+
     @objc private func onBack() {
         let state = viewModel.isNeedAskToSave()
         if state != .none {
@@ -275,14 +288,17 @@ extension ReceiveViewController : UITableViewDataSource {
             cell.delegate = self
             if viewModel.transaction == .regular {
                 if !AppModel.sharedManager().checkIsOwnNode() {
-                    cell.configure(with: viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased(), showHint: false)
+                    let token = viewModel.address.walletId
+                    cell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: nil, showHint: false)
                 }
                 else {
-                    cell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: false)
+                    let token = viewModel.address.offlineToken ?? ""
+                    cell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: sbbsAddress(for: token), showHint: false)
                 }
             }
             else {
-                cell.configure(with: viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
+                let token = viewModel.address.maxPrivacyToken ?? ""
+                cell.configure(with: token, title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", sbbsAddress: sbbsAddress(for: token), showHint: false)
             }
             return cell
         }
@@ -302,6 +318,7 @@ extension ReceiveViewController : UITableViewDataSource {
                     .dequeueReusableCell(withType: BMAmountCell.self, for: indexPath).configured(with: (name: String.empty(), value: viewModel.amount))
                 cell.delegate = self
                 cell.hideNameLabel = true
+                cell.allowAllAssets = true
                 cell.selectedAssetId = viewModel.selectedAssetId
                 cell.contentView.backgroundColor = UIColor.main.marineThree
                 cell.setSecondAmount(amount: viewModel.secondAmount ?? "")
@@ -459,14 +476,17 @@ extension ReceiveViewController : BMCellProtocol {
                         else if let tokenCell = cell as? ReceiveTokenCell {
                             if viewModel.transaction == .regular {
                                 if !AppModel.sharedManager().checkIsOwnNode() {
-                                    tokenCell.configure(with: viewModel.address.walletId, title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                                    let token = viewModel.address.walletId
+                                    tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: nil, showHint: true)
                                 }
                                 else {
-                                    tokenCell.configure(with: viewModel.address.offlineToken ?? "", title: Localizable.shared.strings.address.uppercased(), showHint: true)
+                                    let token = viewModel.address.offlineToken ?? ""
+                                    tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: sbbsAddress(for: token), showHint: true)
                                 }
                             }
                             else {
-                                tokenCell.configure(with: viewModel.address.maxPrivacyToken ?? "", title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", showHint: false)
+                                let token = viewModel.address.maxPrivacyToken ?? ""
+                                tokenCell.configure(with: token, title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", sbbsAddress: sbbsAddress(for: token), showHint: false)
                             }
                         }
                     }
@@ -525,25 +545,19 @@ extension ReceiveViewController : BMCellProtocol {
     
     
     func onRightButton(_ sender: UITableViewCell) {
-        if tableView.indexPath(for: sender) != nil, let cell = sender as? BMAmountCell {
-            var menu = [BMPopoverMenu.BMPopoverMenuItem]()
-            
-            for asset in AssetsManager.shared().getAssetsWithBalanceWithBeam() as! [BMAsset] {
-                let m = BMPopoverMenu.BMPopoverMenuItem(name: asset.unitName, icon: nil, action: .asset, selected:  self.viewModel.selectedAssetId == Int(asset.assetId))
-                m.id = Int(asset.assetId)
-                menu.append(m)
-            }
-            
-            BMPopoverMenu.showForSenderAssets(sender: cell.currencyView, with: menu) { item in
-                let asset = AssetsManager.shared().getAsset(Int32(item?.id ?? 0))
-                self.viewModel.selectedAssetId = Int(asset?.assetId ?? 0)
-                self.viewModel.amount = nil
-                self.tableView.reloadData()
-                
-            } cancel: {
-                self.tableView.reloadData()
-            }
+        guard tableView.indexPath(for: sender) != nil, sender is BMAmountCell else { return }
+        view.endEditing(true)
+
+        let picker = AssetSearchViewController(selectedAssetId: viewModel.selectedAssetId ?? 0)
+        picker.completion = { [weak self] asset in
+            guard let self = self else { return }
+            self.viewModel.selectedAssetId = Int(asset.assetId)
+            self.viewModel.amount = nil
+            self.tableView.reloadData()
         }
+        let nav = BaseNavigationController.navigationController(rootViewController: picker)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
     }
 }
 
@@ -608,6 +622,24 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
                 onShareToken(token: viewModel.address.offlineToken ?? "")
             }
         }
+    }
+
+    func onClickCopyAndClose() {
+        let token: String
+        if viewModel.transaction == .privacy {
+            token = viewModel.address.maxPrivacyToken ?? ""
+        }
+        else if !AppModel.sharedManager().checkIsOwnNode() {
+            token = viewModel.address.walletId
+        }
+        else {
+            token = viewModel.address.offlineToken ?? ""
+        }
+        guard !token.isEmpty else { return }
+        UIPasteboard.general.string = token
+        viewModel.isShared = true
+        ShowCopied(text: Localizable.shared.strings.address_copied)
+        back()
     }
 }
 
