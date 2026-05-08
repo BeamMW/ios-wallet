@@ -86,4 +86,8 @@ private:
     void onAssetInfo(beam::Asset::ID assetId, const beam::wallet::WalletAsset&) override;
     void onFullAssetsListLoaded() override;
     void onCoinsSelected(const beam::wallet::CoinsSelectionInfo&) override;
+    void onInstantMessage(beam::Timestamp time, const beam::wallet::WalletID& counterpart, const std::string& message, bool isIncome) override;
+    void onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) override;
+    void onGetChatMessages(const std::vector<beam::wallet::InstantMessage>& messages) override;
+    void onChatRemoved(const beam::wallet::WalletID& counterpart) override;
 };

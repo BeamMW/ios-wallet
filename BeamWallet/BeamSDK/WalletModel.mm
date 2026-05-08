@@ -988,8 +988,192 @@ void WalletModel::doFunction(const std::function<void()>& func)
 
 void WalletModel::onPostFunctionToClientContext(MessageFunction&& func) {
     NSLog(@"onPostFunctionToClientContext");
-        
+
     doFunction(func);
+}
+
+#pragma mark - Messenger callbacks
+
+void WalletModel::onInstantMessage(beam::Timestamp time, const beam::wallet::WalletID& counterpart, const std::string& message, bool isIncome) {
+    NSString *peer = [NSString stringWithUTF8String:to_string(counterpart).c_str()];
+    NSString *text = [[NSString alloc] initWithBytes:message.data() length:message.size() encoding:NSUTF8StringEncoding];
+    if (text == nil) {
+        text = [[NSString alloc] initWithBytes:message.data() length:message.size() encoding:NSISOLatin1StringEncoding] ?: @"";
+    }
+    NSLog(@"[Messenger] onInstantMessage peer=%@ income=%d len=%lu", peer, isIncome ? 1 : 0, (unsigned long)text.length);
+
+    BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
+    bmMessage.timestamp = (UInt64)time;
+    bmMessage.peerWalletId = peer;
+    bmMessage.message = text;
+    bmMessage.isIncome = isIncome ? YES : NO;
+    bmMessage.isRead = isIncome ? NO : YES;
+    bmMessage.myWalletId = @"";
+
+    NSMutableDictionary *byPeer = [AppModel sharedManager].messagesByPeer;
+    NSMutableArray<BMInstantMessage*> *list = byPeer[peer];
+    if (list == nil) {
+        list = [NSMutableArray new];
+        byPeer[peer] = list;
+    }
+    [list addObject:bmMessage];
+
+    NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
+    BMChat *existing = nil;
+    for (BMChat *c in chats) {
+        if ([c.peerWalletId isEqualToString:peer]) {
+            existing = c;
+            break;
+        }
+    }
+    if (existing == nil) {
+        existing = [[BMChat alloc] init];
+        existing.peerWalletId = peer;
+        BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
+        if (contact != nil) {
+            existing.contactName = contact.name;
+        }
+        [chats addObject:existing];
+    }
+    existing.lastMessagePreview = text;
+    existing.lastMessageTimestamp = (UInt64)time;
+    if (isIncome) {
+        existing.hasUnread = YES;
+    }
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for (id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onInstantMessageReceived:)]) {
+            [delegate onInstantMessageReceived:bmMessage];
+        }
+        if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+            [delegate onChatListChanged];
+        }
+    }
+}
+
+void WalletModel::onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) {
+    NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*> *byPeer = [AppModel sharedManager].messagesByPeer;
+
+    NSArray<BMChat*> *previousChats = [[AppModel sharedManager].chats copy];
+    NSMutableSet<NSString*> *peersFromDB = [NSMutableSet new];
+
+    NSMutableArray<BMChat*> *result = [NSMutableArray new];
+
+    for (const auto& entry : chats) {
+        NSString *peer = [NSString stringWithUTF8String:to_string(entry.first).c_str()];
+        [peersFromDB addObject:peer];
+
+        BMChat *chat = [[BMChat alloc] init];
+        chat.peerWalletId = peer;
+        chat.hasUnread = entry.second ? YES : NO;
+
+        BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
+        if (contact != nil) {
+            chat.contactName = contact.name;
+        }
+        for (BMChat *prev in previousChats) {
+            if ([prev.peerWalletId isEqualToString:peer]) {
+                if (prev.contactName.length > 0 && chat.contactName.length == 0) {
+                    chat.contactName = prev.contactName;
+                }
+                if (prev.myWalletId.length > 0) {
+                    chat.myWalletId = prev.myWalletId;
+                }
+                break;
+            }
+        }
+
+        NSArray<BMInstantMessage*> *cached = byPeer[peer];
+        BMInstantMessage *latest = cached.lastObject;
+        if (latest != nil) {
+            chat.lastMessagePreview = latest.message;
+            chat.lastMessageTimestamp = latest.timestamp;
+        }
+
+        [result addObject:chat];
+    }
+
+    for (BMChat *prev in previousChats) {
+        if (![peersFromDB containsObject:prev.peerWalletId]) {
+            [result addObject:prev];
+        }
+    }
+
+    [result sortUsingComparator:^NSComparisonResult(BMChat *a, BMChat *b) {
+        if (a.lastMessageTimestamp == b.lastMessageTimestamp) return NSOrderedSame;
+        return a.lastMessageTimestamp < b.lastMessageTimestamp ? NSOrderedDescending : NSOrderedAscending;
+    }];
+
+    [[AppModel sharedManager].chats removeAllObjects];
+    [[AppModel sharedManager].chats addObjectsFromArray:result];
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for (id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+            [delegate onChatListChanged];
+        }
+    }
+}
+
+void WalletModel::onGetChatMessages(const std::vector<beam::wallet::InstantMessage>& messages) {
+    if (messages.empty()) return;
+
+    NSString *peer = [NSString stringWithUTF8String:to_string(messages.front().m_counterpart).c_str()];
+
+    NSMutableArray<BMInstantMessage*> *result = [NSMutableArray new];
+    for (const auto& im : messages) {
+        BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
+        bmMessage.timestamp = (UInt64)im.m_timestamp;
+        bmMessage.peerWalletId = [NSString stringWithUTF8String:to_string(im.m_counterpart).c_str()];
+        bmMessage.myWalletId = [NSString stringWithUTF8String:to_string(im.m_mySbbs).c_str()];
+        NSString *body = [[NSString alloc] initWithBytes:im.m_message.data() length:im.m_message.size() encoding:NSUTF8StringEncoding];
+        if (body == nil) {
+            body = [[NSString alloc] initWithBytes:im.m_message.data() length:im.m_message.size() encoding:NSISOLatin1StringEncoding] ?: @"";
+        }
+        bmMessage.message = body;
+        bmMessage.isIncome = im.m_is_income ? YES : NO;
+        bmMessage.isRead = im.m_is_read ? YES : NO;
+        [result addObject:bmMessage];
+    }
+
+    [result sortUsingComparator:^NSComparisonResult(BMInstantMessage *a, BMInstantMessage *b) {
+        if (a.timestamp == b.timestamp) return NSOrderedSame;
+        return a.timestamp < b.timestamp ? NSOrderedAscending : NSOrderedDescending;
+    }];
+
+    [AppModel sharedManager].messagesByPeer[peer] = result;
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for (id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onChatMessagesLoaded:messages:)]) {
+            [delegate onChatMessagesLoaded:peer messages:result];
+        }
+    }
+}
+
+void WalletModel::onChatRemoved(const beam::wallet::WalletID& counterpart) {
+    NSString *peer = [NSString stringWithUTF8String:to_string(counterpart).c_str()];
+
+    NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
+    NSMutableIndexSet *indexes = [NSMutableIndexSet new];
+    for (NSUInteger i = 0; i < chats.count; i++) {
+        if ([chats[i].peerWalletId isEqualToString:peer]) {
+            [indexes addIndex:i];
+        }
+    }
+    [chats removeObjectsAtIndexes:indexes];
+    [[AppModel sharedManager].messagesByPeer removeObjectForKey:peer];
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for (id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onChatRemoved:)]) {
+            [delegate onChatRemoved:peer];
+        }
+        if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+            [delegate onChatListChanged];
+        }
+    }
 }
 
 void WalletModel::onExportTxHistoryToCsv(const std::string& data) {

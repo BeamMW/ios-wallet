@@ -243,6 +243,8 @@ static dispatch_once_t * once_token_model;
     
     _isRestoreFlow = [[NSUserDefaults standardUserDefaults] boolForKey:restoreFlowKey];
     _apps = [[NSMutableArray alloc] init];
+    _chats = [[NSMutableArray alloc] init];
+    _messagesByPeer = [[NSMutableDictionary alloc] init];
     
     NSData *dataStatus = [[NSUserDefaults standardUserDefaults] objectForKey:walletStatusKey];
     if(dataStatus != nil) {
@@ -3499,11 +3501,11 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
             return bApp;
         }
     }
-    
+
     BMApp *app = [BMApp new];
     app.name = @"NFT Gallery";
     app.api_version = @"current";
-    
+
     if ([Settings sharedManager].target == Testnet) {
         app.url = @"https://apps-testnet.beam.mw/app/dao-core-app/index.html";
     }
@@ -3515,6 +3517,161 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
         app.url = @"http://3.19.141.112:80/app/plugin-dao-core/index.html";
     }
     return app;
+}
+
+#pragma mark - Messenger
+
+static bool parseMessengerWalletID(NSString *input, beam::wallet::WalletID &out) {
+    if (input == nil || input.length == 0) return false;
+    std::string s = input.string;
+    if (out.FromHex(s)) return true;
+    auto params = beam::wallet::ParseParameters(s);
+    if (params) {
+        beam::wallet::WalletID parsed;
+        if (params->GetParameter(beam::wallet::TxParameterID::PeerAddr, parsed)) {
+            out = parsed;
+            return true;
+        }
+    }
+    return false;
+}
+
+-(NSString*_Nonnull)resolvedPeerWalletId:(NSString*_Nonnull)peerWalletId {
+    WalletID peerID;
+    if (parseMessengerWalletID(peerWalletId, peerID)) {
+        return [NSString stringWithUTF8String:to_string(peerID).c_str()];
+    }
+    return peerWalletId;
+}
+
+-(void)addChatStub:(NSString*_Nonnull)peerWalletId contactName:(NSString*_Nullable)contactName myWalletId:(NSString*_Nullable)myWalletId {
+    NSString *resolved = [self resolvedPeerWalletId:peerWalletId];
+    BOOL changed = NO;
+    BMChat *existing = nil;
+    for (BMChat *chat in self.chats) {
+        if ([chat.peerWalletId isEqualToString:resolved]) {
+            existing = chat;
+            break;
+        }
+    }
+    if (existing != nil) {
+        if (contactName.length > 0 && existing.contactName.length == 0) {
+            existing.contactName = contactName;
+            changed = YES;
+        }
+        if (myWalletId.length > 0 && existing.myWalletId.length == 0) {
+            existing.myWalletId = myWalletId;
+            changed = YES;
+        }
+    } else {
+        BMChat *chat = [[BMChat alloc] init];
+        chat.peerWalletId = resolved;
+        chat.contactName = contactName;
+        chat.myWalletId = myWalletId;
+        chat.hasUnread = NO;
+        chat.lastMessagePreview = @"";
+        chat.lastMessageTimestamp = (UInt64)[[NSDate date] timeIntervalSince1970];
+        [self.chats insertObject:chat atIndex:0];
+        changed = YES;
+    }
+    if (changed) {
+        NSArray *delegates = self.delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
+        }
+    }
+}
+
+-(void)requestChats {
+    if (wallet == nil) return;
+    wallet->getAsync()->getChats();
+}
+
+-(void)requestMessagesForPeer:(NSString*_Nonnull)peerWalletId {
+    if (wallet == nil) return;
+    WalletID peerID;
+    if (!parseMessengerWalletID(peerWalletId, peerID)) return;
+    wallet->getAsync()->getInstantMessages(peerID);
+}
+
+-(void)sendInstantMessage:(NSString*_Nonnull)peerWalletId
+              fromAddress:(NSString*_Nonnull)myWalletId
+                  message:(NSString*_Nonnull)message {
+    if (wallet == nil) {
+        NSLog(@"[Messenger] sendInstantMessage skipped — wallet not running");
+        return;
+    }
+    WalletID peerID;
+    WalletID myID;
+    if (!parseMessengerWalletID(peerWalletId, peerID)) {
+        NSLog(@"[Messenger] sendInstantMessage failed to parse peer=%@", peerWalletId);
+        return;
+    }
+    if (!parseMessengerWalletID(myWalletId, myID)) {
+        NSLog(@"[Messenger] sendInstantMessage failed to parse my=%@", myWalletId);
+        return;
+    }
+
+    std::string text = message.string;
+    ByteBuffer buffer(text.begin(), text.end());
+    NSLog(@"[Messenger] sendInstantMessage peer=%@ from=%@ len=%lu", peerWalletId, myWalletId, (unsigned long)text.length());
+    wallet->getAsync()->sendInstantMessage(peerID, myID, std::move(buffer));
+}
+
+-(void)markChatAsRead:(NSString*_Nonnull)peerWalletId {
+    if (wallet == nil) return;
+    WalletID peerID;
+    if (!parseMessengerWalletID(peerWalletId, peerID)) return;
+
+    NSString *resolved = [NSString stringWithUTF8String:to_string(peerID).c_str()];
+    std::vector<std::pair<Timestamp, WalletID>> ims;
+    NSArray<BMInstantMessage*> *cached = self.messagesByPeer[resolved];
+    for (BMInstantMessage *msg in cached) {
+        if (msg.isIncome && !msg.isRead) {
+            ims.push_back(std::make_pair((Timestamp)msg.timestamp, peerID));
+            msg.isRead = YES;
+        }
+    }
+    if (!ims.empty()) {
+        wallet->getAsync()->markIMsasRead(std::move(ims));
+    }
+
+    for (BMChat *chat in self.chats) {
+        if ([chat.peerWalletId isEqualToString:resolved]) {
+            chat.hasUnread = NO;
+        }
+    }
+}
+
+-(void)removeChat:(NSString*_Nonnull)peerWalletId {
+    if (wallet == nil) return;
+    WalletID peerID;
+    if (!parseMessengerWalletID(peerWalletId, peerID)) return;
+    wallet->getAsync()->removeChat(peerID);
+}
+
+-(NSArray<BMInstantMessage*>*_Nonnull)cachedMessagesForPeer:(NSString*_Nonnull)peerWalletId {
+    NSString *resolved = [self resolvedPeerWalletId:peerWalletId];
+    NSArray<BMInstantMessage*> *messages = self.messagesByPeer[resolved];
+    return messages ?: @[];
+}
+
+-(NSString*_Nullable)lastMyAddressForPeer:(NSString*_Nonnull)peerWalletId {
+    NSString *resolved = [self resolvedPeerWalletId:peerWalletId];
+    NSArray<BMInstantMessage*> *messages = self.messagesByPeer[resolved];
+    for (BMInstantMessage *msg in messages.reverseObjectEnumerator) {
+        if (!msg.isIncome && msg.myWalletId.length > 0) {
+            return msg.myWalletId;
+        }
+    }
+    for (BMInstantMessage *msg in messages) {
+        if (msg.myWalletId.length > 0) {
+            return msg.myWalletId;
+        }
+    }
+    return nil;
 }
 
 @end

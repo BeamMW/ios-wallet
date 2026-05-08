@@ -105,6 +105,10 @@ func IconDappStore() -> UIImage? {
     return UIImage(named: "iconDapps")
 }
 
+func IconMessenger() -> UIImage? {
+    return UIImage(named: "iconMessenger")
+}
+
 func IconBeamXDAO() -> UIImage? {
     return UIImage(named: "iconDao")
 }

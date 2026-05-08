@@ -7,9 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00947887B27F2F825E1E67CC /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		05548629568C6211F87DA630 /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
+		066620C96ABA1816759B7AE3 /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
 		09BB8194C318850B9C687050 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */; };
 		0E952497DFB46C7621546999 /* Pods_BeamWalletTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */; };
+		14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		215454B3AA22BD789F53A90C /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		2361D1F909D78EC50B8C5D5C /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
+		30BE993E2DFFA6452A536125 /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		35726BA6BFE79F50A19E7054 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		434CC206E4AD461CECAD5DFB /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
+		4D7C86E3D4DAAAD7DDFE22E7 /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
 		53E3D6F8F19BD21A69380CBA /* Pods_BeamWalletMasterNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */; };
+		5A1A647678A2061222332D16 /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		5A4A0ACB5C6CA50F1E5FCBE8 /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		69B13BFFB153BF4611F30888 /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		75516585C510BB694A1B9AED /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
+		75B069A9EC9A517ABCACFC1E /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		87B508D6F91B6BCDE6EC712F /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		8E6EABD786898410576636A4 /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
 		9207DD8726778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
 		9207DD8826778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
 		9207DD8926778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
@@ -608,9 +626,6 @@
 		9265CDCF2292F233003C98B2 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */; };
 		9265CDD02292F233003C98B2 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */; };
 		9265CDD12292F233003C98B2 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */; };
-		F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
-		F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
-		F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
 		926783832456DE29006F3221 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926783822456DE29006F3221 /* boost.framework */; };
 		926783842456DE29006F3221 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926783822456DE29006F3221 /* boost.framework */; };
 		926783852456DE29006F3221 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926783822456DE29006F3221 /* boost.framework */; };
@@ -1354,6 +1369,18 @@
 		92FE264122A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264222A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
+		984E5950BBB86D093251AB57 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		9C3478CC0AB10D577E97E53E /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		9E75E31529DE385C7D153631 /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		A04389E8E8EE7AB9E4D87007 /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		B5E7CC16D70E7D12DD9315FC /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
+		DFC07B98C98F293C31F86A8C /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
+		E6218D6C7C5BE83B9707F158 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		EEE47E74C114A85B33A3A618 /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		FD87FA1DDA9C27F19451AB4B /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1434,10 +1461,18 @@
 
 /* Begin PBXFileReference section */
 		024109A68A03B9C8D11B9895 /* Pods-BeamWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.release.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.release.xcconfig"; sourceTree = "<group>"; };
+		13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerNewChatViewController.swift; sourceTree = "<group>"; };
 		18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletMasterNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		20B7F5341703980CD2D3941F /* BMInstantMessage.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = BMInstantMessage.mm; sourceTree = "<group>"; };
+		35296D58A729F092AFF0C821 /* BMChat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMChat.h; sourceTree = "<group>"; };
 		36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletTestNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatCell.swift; sourceTree = "<group>"; };
 		3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		456B838BA83C92E05D36B091 /* Pods-BeamWalletTestNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.release.xcconfig"; sourceTree = "<group>"; };
+		46CAE6BC4C48E30E26AE304F /* BMInstantMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMInstantMessage.h; sourceTree = "<group>"; };
+		7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerConversationViewModel.swift; sourceTree = "<group>"; };
+		8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = BMChat.mm; sourceTree = "<group>"; };
+		8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatListViewController.swift; sourceTree = "<group>"; };
 		9205284E237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9205284F237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9207DD8626778DF900250E80 /* AssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
@@ -1692,7 +1727,6 @@
 		9261C255228BF55800D666E0 /* AddressExpiresCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressExpiresCell.swift; sourceTree = "<group>"; };
 		9261C259228BF55800D666E0 /* AddressesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressesViewController.swift; sourceTree = "<group>"; };
 		9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewController.swift; sourceTree = "<group>"; };
-		F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSearchViewController.swift; sourceTree = "<group>"; };
 		926783822456DE29006F3221 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boost.framework; sourceTree = "<group>"; };
 		9267D05F270DCA6000804314 /* AssetExporerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetExporerCell.swift; sourceTree = "<group>"; };
 		9267D060270DCA6000804314 /* AssetExporerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssetExporerCell.xib; sourceTree = "<group>"; };
@@ -1975,10 +2009,14 @@
 		92FE263822A11E4900102DB4 /* BMPickedAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMPickedAddressCell.xib; sourceTree = "<group>"; };
 		92FE263922A11E4B00102DB4 /* BMExpandCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMExpandCell.swift; sourceTree = "<group>"; };
 		92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMExpandCell.xib; sourceTree = "<group>"; };
+		AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatListViewModel.swift; sourceTree = "<group>"; };
 		BA659A4953BE271B118EB5D6 /* Pods-BeamWalletMasterNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.debug.xcconfig"; sourceTree = "<group>"; };
 		D303009FB5F0DA4093A89DFB /* Pods-BeamWalletTestNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.debug.xcconfig"; sourceTree = "<group>"; };
 		D601ED375D9C9B9FAB70DE0B /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
+		E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerBubbleCell.swift; sourceTree = "<group>"; };
 		EAEED72AAED404575AB9A6E5 /* Pods-BeamWalletMasterNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.release.xcconfig"; sourceTree = "<group>"; };
+		F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSearchViewController.swift; sourceTree = "<group>"; };
+		F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2111,6 +2149,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8110C1340F23638CECA5A0CA /* Messenger */ = {
+			isa = PBXGroup;
+			children = (
+				8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */,
+				F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */,
+				13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */,
+				E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */,
+				390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */,
+			);
+			name = Messenger;
+			path = Messenger;
+			sourceTree = "<group>";
+		};
 		9207DD8526778DD500250E80 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -2361,7 +2412,7 @@
 				9253A76F25A5C6A500E456A2 /* openssl.framework */,
 				92E2EB8D226F24C200367928 /* masternet */,
 				92D3CBF02264B56D007E3C55 /* testnet */,
-				92D3CBD32264B562007E3C55 /* beam-ios-7.5.14432/lib */,
+				92D3CBD32264B562007E3C55 /* lib */,
 				927367212277AB330060CB67 /* UserNotifications.framework */,
 				927367232277AB340060CB67 /* UserNotificationsUI.framework */,
 				3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */,
@@ -2452,6 +2503,10 @@
 				92FA196C266F893D002780DC /* BMAsset.m */,
 				926DB36F26DFC91A00E85F0B /* BMApp.h */,
 				926DB37026DFC91A00E85F0B /* BMApp.m */,
+				46CAE6BC4C48E30E26AE304F /* BMInstantMessage.h */,
+				20B7F5341703980CD2D3941F /* BMInstantMessage.mm */,
+				35296D58A729F092AFF0C821 /* BMChat.h */,
+				8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -2469,6 +2524,7 @@
 				92554D1622896BE600FE6041 /* Addresses */,
 				92F6B79C22A5B6C60055C3C3 /* QRCode */,
 				923A45D5235DE4000084C368 /* Passwords */,
+				8110C1340F23638CECA5A0CA /* Messenger */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -2952,7 +3008,7 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		92D3CBD32264B562007E3C55 /* beam-ios-7.5.14432/lib */ = {
+		92D3CBD32264B562007E3C55 /* lib */ = {
 			isa = PBXGroup;
 			children = (
 				9244A4F12A014658007B03D0 /* libassets.a */,
@@ -3192,6 +3248,7 @@
 				92B7E4E822AFD71B001708E4 /* Transaction */,
 				92B7E4E622AFD70D001708E4 /* UTXO */,
 				92B7E4E922AFD748001708E4 /* Settings */,
+				CD37C67AA40FF44BBFFD57B4 /* Messenger */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3237,6 +3294,16 @@
 				456B838BA83C92E05D36B091 /* Pods-BeamWalletTestNet.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		CD37C67AA40FF44BBFFD57B4 /* Messenger */ = {
+			isa = PBXGroup;
+			children = (
+				AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */,
+				7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */,
+			);
+			name = Messenger;
+			path = Messenger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4220,6 +4287,15 @@
 				92B837492285816D002B385B /* Progress.swift in Sources */,
 				9265CDCF2292F233003C98B2 /* ReceiveViewController.swift in Sources */,
 				F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */,
+				30BE993E2DFFA6452A536125 /* BMInstantMessage.mm in Sources */,
+				8E6EABD786898410576636A4 /* BMChat.mm in Sources */,
+				5A4A0ACB5C6CA50F1E5FCBE8 /* MessengerChatListViewModel.swift in Sources */,
+				066620C96ABA1816759B7AE3 /* MessengerConversationViewModel.swift in Sources */,
+				4D7C86E3D4DAAAD7DDFE22E7 /* MessengerChatListViewController.swift in Sources */,
+				75B069A9EC9A517ABCACFC1E /* MessengerChatViewController.swift in Sources */,
+				14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */,
+				75516585C510BB694A1B9AED /* MessengerBubbleCell.swift in Sources */,
+				35726BA6BFE79F50A19E7054 /* MessengerChatCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4544,6 +4620,15 @@
 				92B8374A2285816D002B385B /* Progress.swift in Sources */,
 				9265CDD02292F233003C98B2 /* ReceiveViewController.swift in Sources */,
 				F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */,
+				87B508D6F91B6BCDE6EC712F /* BMInstantMessage.mm in Sources */,
+				A04389E8E8EE7AB9E4D87007 /* BMChat.mm in Sources */,
+				9C3478CC0AB10D577E97E53E /* MessengerChatListViewModel.swift in Sources */,
+				2361D1F909D78EC50B8C5D5C /* MessengerConversationViewModel.swift in Sources */,
+				DFC07B98C98F293C31F86A8C /* MessengerChatListViewController.swift in Sources */,
+				9E75E31529DE385C7D153631 /* MessengerChatViewController.swift in Sources */,
+				00947887B27F2F825E1E67CC /* MessengerNewChatViewController.swift in Sources */,
+				492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */,
+				984E5950BBB86D093251AB57 /* MessengerChatCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4868,6 +4953,15 @@
 				92B8374B2285816D002B385B /* Progress.swift in Sources */,
 				9265CDD12292F233003C98B2 /* ReceiveViewController.swift in Sources */,
 				F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */,
+				434CC206E4AD461CECAD5DFB /* BMInstantMessage.mm in Sources */,
+				215454B3AA22BD789F53A90C /* BMChat.mm in Sources */,
+				EEE47E74C114A85B33A3A618 /* MessengerChatListViewModel.swift in Sources */,
+				B5E7CC16D70E7D12DD9315FC /* MessengerConversationViewModel.swift in Sources */,
+				05548629568C6211F87DA630 /* MessengerChatListViewController.swift in Sources */,
+				5A1A647678A2061222332D16 /* MessengerChatViewController.swift in Sources */,
+				69B13BFFB153BF4611F30888 /* MessengerNewChatViewController.swift in Sources */,
+				FD87FA1DDA9C27F19451AB4B /* MessengerBubbleCell.swift in Sources */,
+				E6218D6C7C5BE83B9707F158 /* MessengerChatCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

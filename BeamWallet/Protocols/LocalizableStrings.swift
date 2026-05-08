@@ -63,6 +63,15 @@ class LocalizableStrings : NSObject {
     var incorrect_password = "incorrect_password".localized
     var create_new_wallet = "create_new_wallet".localized
     var wallet = "wallet".localized
+    var messenger = "messenger".localized
+    var messenger_new_chat = "messenger_new_chat".localized
+    var messenger_no_chats = "messenger_no_chats".localized
+    var messenger_send_placeholder = "messenger_send_placeholder".localized
+    var messenger_delete_chat = "messenger_delete_chat".localized
+    var messenger_my_address = "messenger_my_address".localized
+    var messenger_peer_address = "messenger_peer_address".localized
+    var messenger_contact_name = "messenger_contact_name".localized
+    var messenger_start = "messenger_start".localized
     var transactions = "transactions".localized
     var export = "export".localized
     var activate = "activate".localized

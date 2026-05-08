@@ -44,6 +44,8 @@
 #import "AssetsManager.h"
 #import "StringManager.h"
 #import "BMApp.h"
+#import "BMInstantMessage.h"
+#import "BMChat.h"
 
 enum {
     BMRestoreManual = 0,
@@ -81,6 +83,10 @@ typedef int BMRestoreType;
 -(void)onMaxPrivacyTokensLeft:(int)tokens;
 -(void)onAssetInfoChange;
 -(void)onDAPPsLoaded;
+-(void)onChatListChanged;
+-(void)onChatMessagesLoaded:(NSString*_Nonnull)peerWalletId messages:(NSArray<BMInstantMessage*>*_Nonnull)messages;
+-(void)onInstantMessageReceived:(BMInstantMessage*_Nonnull)message;
+-(void)onChatRemoved:(NSString*_Nonnull)peerWalletId;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -126,6 +132,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull deletedNotifications;
 @property (nonatomic,strong) NSMutableArray<BMApp*>*_Nonnull apps;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull needSaveContacts;
+@property (nonatomic,strong) NSMutableArray<BMChat*>*_Nonnull chats;
+@property (nonatomic,strong) NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*>*_Nonnull messagesByPeer;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -331,5 +339,18 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BMApp*_Nonnull)daoGalleryApp;
 -(BMApp*_Nonnull)daoFaucetApp;
 -(BMApp*_Nonnull)votingApp;
+
+// Messenger
+-(void)requestChats;
+-(void)requestMessagesForPeer:(NSString*_Nonnull)peerWalletId;
+-(void)sendInstantMessage:(NSString*_Nonnull)peerWalletId
+              fromAddress:(NSString*_Nonnull)myWalletId
+                  message:(NSString*_Nonnull)message;
+-(void)markChatAsRead:(NSString*_Nonnull)peerWalletId;
+-(void)removeChat:(NSString*_Nonnull)peerWalletId;
+-(void)addChatStub:(NSString*_Nonnull)peerWalletId contactName:(NSString*_Nullable)contactName myWalletId:(NSString*_Nullable)myWalletId;
+-(NSArray<BMInstantMessage*>*_Nonnull)cachedMessagesForPeer:(NSString*_Nonnull)peerWalletId;
+-(NSString*_Nullable)lastMyAddressForPeer:(NSString*_Nonnull)peerWalletId;
+-(NSString*_Nonnull)resolvedPeerWalletId:(NSString*_Nonnull)peerWalletId;
 
 @end

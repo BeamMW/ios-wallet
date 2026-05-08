@@ -634,3 +634,13 @@
 "search_assets" = "Search assets";
 "receive_description" = "Sender will be given a choice between online and offline payment.\n\nFor online payment to complete, you will need to open and connect your wallet sometime within 12 hours after the coins are sent.";
 "receive_description_2" = "For online payment to complete, you will need to open and connect your wallet sometime within 12 hours after the coins are sent.";
+
+"messenger" = "Messenger";
+"messenger_new_chat" = "New chat";
+"messenger_no_chats" = "No chats yet. Tap + to start a new conversation.";
+"messenger_send_placeholder" = "Type your message…";
+"messenger_delete_chat" = "Delete this chat?";
+"messenger_my_address" = "My address";
+"messenger_peer_address" = "Recipient address";
+"messenger_contact_name" = "Contact name (optional)";
+"messenger_start" = "Start chat";

@@ -704,3 +704,13 @@ and never kept on the blockchain.";
 "sbbs_address_hint" = "use for CEX withdrawals and mining";
 "select_asset" = "Select asset";
 "search_assets" = "Search assets";
+
+"messenger" = "Messenger";
+"messenger_new_chat" = "New chat";
+"messenger_no_chats" = "No chats yet. Tap + to start a new conversation.";
+"messenger_send_placeholder" = "Type your message…";
+"messenger_delete_chat" = "Delete this chat?";
+"messenger_my_address" = "My address";
+"messenger_peer_address" = "Recipient address";
+"messenger_contact_name" = "Contact name (optional)";
+"messenger_start" = "Start chat";
