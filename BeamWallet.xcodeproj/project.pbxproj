@@ -5116,7 +5116,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
@@ -5193,7 +5193,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
@@ -5436,7 +5436,7 @@
 					"$(PROJECT_DIR)/Frameworks/testnet",
 					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
@@ -5515,7 +5515,7 @@
 					"$(PROJECT_DIR)/Frameworks/testnet",
 					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
