@@ -105,13 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        if #available(iOS 12.0, *) {
-            let isDark = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark
-            Settings.sharedManager().setDefaultDarkMode(isDark)
-        }
-        else {
-            Settings.sharedManager().setDefaultDarkMode(false)
-        }
+        Settings.sharedManager().setDefaultDarkMode(false)
         
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
