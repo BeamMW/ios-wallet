@@ -351,6 +351,8 @@ class OpenWalletProgressViewController: BaseViewController {
                 let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
                 if(!created)
                 {
+                    AppModel.sharedManager().abortCreateAndReset()
+
                     self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { (_ ) in
                         if AppModel.sharedManager().isInternetAvailable {
                             self.navigationController?.popToRootViewController(animated: true)
@@ -370,6 +372,8 @@ class OpenWalletProgressViewController: BaseViewController {
                 let created = AppModel.sharedManager().createWallet(phrase, pass: password!)
                 if(!created)
                 {
+                    AppModel.sharedManager().abortCreateAndReset()
+
                     self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { (_ ) in
                         if AppModel.sharedManager().isInternetAvailable {
                             self.navigationController?.popToRootViewController(animated: true)
@@ -461,8 +465,12 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     @objc private func onTimeOut() {
-        if Settings.sharedManager().isChangedNode() {
-            self.openMainPage()
+        self.openMainPage()
+    }
+
+    fileprivate func hideErrorIfOnline() {
+        if AppModel.sharedManager().isInternetAvailable {
+            errorLabel.isHidden = true
         }
     }
 }
@@ -472,23 +480,31 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
     func onNetwotkStatusChange(_ connected: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
-            
+
+            if connected {
+                strongSelf.errorLabel.isHidden = true
+            }
+
             if !strongSelf.onlyConnect && connected && !AppModel.sharedManager().isRestoreFlow
                 && (strongSelf.phrase != nil && !Settings.sharedManager().isNodeProtocolEnabled){
                 strongSelf.progressView.progress = 1
-                
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     strongSelf.openMainPage()
                 }
             }
         }
     }
-    
+
     func onNoInternetConnection() {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
 
-            if AppModel.sharedManager().isRestoreFlow && !strongSelf.onlyConnect {
+            if strongSelf.onlyConnect {
+                return
+            }
+
+            if AppModel.sharedManager().isRestoreFlow || strongSelf.isWaitingRestore {
                 strongSelf.errorLabel.isHidden = false
                 strongSelf.errorLabel.text = Localizable.shared.strings.no_internet
             }
@@ -496,12 +512,11 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
     }
     
     func onRecoveryProgressUpdated(_ done: Int32, total: Int32, time: Int32) {
-        
+
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
-            
-    
-            strongSelf.errorLabel.isHidden = true
+
+            strongSelf.hideErrorIfOnline()
             strongSelf.progressView.progress = Float(Float(done)/Float(total))
             
             let progress_100 = Int32(strongSelf.progressView.progress * 100)
@@ -530,24 +545,30 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
             if done == total ||  percent >= 99.9  {
                 if !strongSelf.stopRestore {
                     strongSelf.stopRestore = true
-                    strongSelf.isWaitingRestore = false
-                    
-                    let deadlineTime = DispatchTime.now() + .seconds(4)
-                    DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-                        AppModel.sharedManager().isRestoreFlow = false
-                        RestoreManager.shared.cancelRestore()
-                        
-                        if !AppModel.sharedManager().isInternetAvailable {
-                            strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
-                                
-                                AppModel.sharedManager().resetWallet(false)
-                                
-                                strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
-                            }
+
+                    AppModel.sharedManager().isRestoreFlow = false
+                    RestoreManager.shared.cancelRestore()
+
+                    if !AppModel.sharedManager().isInternetAvailable {
+                        strongSelf.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.no_internet) { (_ ) in
+
+                            AppModel.sharedManager().resetWallet(false)
+
+                            strongSelf.navigationController?.setViewControllers( [EnterWalletPasswordViewController()], animated: true)
                         }
-                        else{
-                            strongSelf.openMainPage()
-                        }
+                    }
+                    else {
+                        // Recovery is done; keep the screen up and show node-sync
+                        // progress until it hits 100%. onSyncProgressUpdated will
+                        // call openMainPage() once total == done.
+                        strongSelf.isWaitingRestore = true
+                        strongSelf.progressTitleLabel.text = Localizable.shared.strings.loading_wallet
+                        strongSelf.restotingInfoLabel.isHidden = true
+                        strongSelf.progressView.progress = 0
+                        strongSelf.oldProgress = 0
+                        strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): 0%."
+                        strongSelf.progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
+                        strongSelf.progressTimeValueLabel.isHidden = false
                     }
                 }
             }
@@ -558,7 +579,7 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
     func onSyncProgressUpdated(_ done: Int32, total: Int32) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.errorLabel.isHidden = true
+            strongSelf.hideErrorIfOnline()
             
             if done > 0 {
                 if (strongSelf.onlyConnect || strongSelf.isRescan || strongSelf.phrase == nil)
@@ -579,28 +600,25 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 }
             }
             
-            if total == done && !strongSelf.isPresented && !AppModel.sharedManager().isRestoreFlow {
-           
-            }
-            else{
+            if total > 0 {
                 strongSelf.progressView.progress = Float(Float(done)/Float(total))
-                if strongSelf.isWaitingRestore {
-                    let progress_100 = Int32(strongSelf.progressView.progress * 100)
-                    strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
+            }
+            if strongSelf.isWaitingRestore {
+                let progress_100 = Int32(strongSelf.progressView.progress * 100)
+                strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.sync_with_node): \(progress_100)%."
+            }
+            else if strongSelf.onlyConnect || (strongSelf.phrase != nil && (Settings.sharedManager().isNodeProtocolEnabled || !Settings.sharedManager().connectToRandomNode)) {
+                let progress_100 = Int32(strongSelf.progressView.progress * 100)
+
+                if strongSelf.displayProgress {
+                    strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain) \(progress_100)%"
                 }
-                else if strongSelf.onlyConnect || (strongSelf.phrase != nil && (Settings.sharedManager().isNodeProtocolEnabled || !Settings.sharedManager().connectToRandomNode)) {
-                    let progress_100 = Int32(strongSelf.progressView.progress * 100)
-                    
-                    if strongSelf.displayProgress {
-                        strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain) \(progress_100)%"
-                    }
-                    else {
-                        strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain): "
-                    }
+                else {
+                    strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain): "
                 }
             }
 
-            if total == done && strongSelf.isWaitingRestore {
+            if strongSelf.isWaitingRestore && (total == done || AppModel.sharedManager().isSynced()) {
                 strongSelf.isWaitingRestore = false
                 strongSelf.openMainPage()
             }

@@ -176,16 +176,35 @@ class SelectNodeViewController: BaseTableViewController {
         BMLockScreen.shared.onTapEvent()
     }
     
+    /// Create-flow only: builds the wallet DB now that the chosen node has been
+    /// committed to Settings. createWallet → onWalledOpened → start() must run
+    /// inside the same io::Reactor::Scope, so we defer this to here rather than
+    /// running it earlier in CreateWalletPasswordViewController.
+    private func createWalletForCurrentNode() -> Bool {
+        guard let phrase = phrase, let pass = password else { return false }
+        let created = AppModel.sharedManager().createWallet(phrase, pass: pass)
+        if !created {
+            AppModel.sharedManager().abortCreateAndReset()
+            self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { _ in
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            return false
+        }
+        OnboardManager.shared.saveSeed(seed: phrase)
+        _ = KeychainManager.addPassword(password: pass)
+        return true
+    }
+
     @objc private func onNext() {
         isNeedDisconnect = true
         tableView.tableFooterView = footerView()
         tableView.reloadData()
-        
+
         if items[0].selected {
             if isCreateWallet {
                 Settings.sharedManager().removeCustomNode()
             }
-     
+
             if Settings.sharedManager().isNodeProtocolEnabled {
                 Settings.sharedManager().isNodeProtocolEnabled = false
                 AppModel.sharedManager().enableBodyRequests(false)
@@ -193,25 +212,30 @@ class SelectNodeViewController: BaseTableViewController {
             Settings.sharedManager().connectToRandomNode = true
             Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
             AppModel.sharedManager().changeNodeAddress()
-            
+
             if isCreateWallet {
-                openMain()
+                if createWalletForCurrentNode() {
+                    let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                    self.pushViewController(vc: vc)
+                }
             }
         }
         else if items[1].selected {
             if isCreateWallet {
                 Settings.sharedManager().removeCustomNode()
             }
-            
+
             Settings.sharedManager().connectToRandomNode = true
             Settings.sharedManager().isNodeProtocolEnabled = true
             Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
             AppModel.sharedManager().changeNodeAddress()
             AppModel.sharedManager().enableBodyRequests(true)
-            
+
             if isCreateWallet {
-                let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
-                self.pushViewController(vc: vc)
+                if createWalletForCurrentNode() {
+                    let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                    self.pushViewController(vc: vc)
+                }
             }
             else {
                 let vc = OpenWalletProgressViewController(onlyConnect: true)
@@ -242,9 +266,11 @@ class SelectNodeViewController: BaseTableViewController {
                         Settings.sharedManager().connectToRandomNode = false
                         Settings.sharedManager().nodeAddress = fullAddress
                         AppModel.sharedManager().changeNodeAddress()
-                        
-                        let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
-                        self.pushViewController(vc: vc)
+
+                        if createWalletForCurrentNode() {
+                            let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                            self.pushViewController(vc: vc)
+                        }
                     }
                     else {
                         if oldSelected == 0 {

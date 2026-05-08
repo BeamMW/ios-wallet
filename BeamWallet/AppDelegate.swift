@@ -45,43 +45,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CrashEye.add(delegate: self)
-        
+
         if #available(iOS 15.0, *) {
             UITableView.appearance().sectionHeaderTopPadding = CGFloat(0)
         }
-        
+
         if #available(iOS 13.0, *) {
             let SVGCoder = SDImageSVGCoder.shared
             SDImageCodersManager.shared.addCoder(SVGCoder)
         }
-        
+
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        
+
         UIApplication.shared.isIdleTimerDisabled = true
-                
+
         Localizable.shared.reset()
         Settings.sharedManager()
-        
+
         KeyboardListener.shared.start()
-                        
+
         NotificationManager.sharedManager.requestPermissions()
-        
+
 //        if Settings.sharedManager().target != Mainnet {
 //            CrowdinManager.updateLocalizations()
 //        }
-        
+
         AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)
         Settings.sharedManager().addDelegate(self)
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
-        
-        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : WellcomeViewController())
-        
+
+        // DB file present but integrity marker missing implies a crash between
+        // DB init and onWalledOpened — fall back to onboarding with a recovery prompt.
+        let needsRecovery = added && !OnboardManager.shared.isWalletInitializedFlag()
+
+        let rootViewController: UIViewController = (added && !needsRecovery)
+            ? EnterWalletPasswordViewController()
+            : WellcomeViewController()
+        let rootController = BaseNavigationController.navigationController(rootViewController: rootViewController)
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.main.navy
         self.window?.rootViewController = rootController
         self.window?.makeKeyAndVisible()
+
+        if needsRecovery {
+            DispatchQueue.main.async {
+                rootController.confirmAlert(
+                    title: Localizable.shared.strings.wallet_recovery_title,
+                    message: Localizable.shared.strings.wallet_recovery_message,
+                    cancelTitle: Localizable.shared.strings.cancel,
+                    confirmTitle: Localizable.shared.strings.reset_and_retry,
+                    cancelHandler: { _ in },
+                    confirmHandler: { _ in
+                        AppModel.sharedManager().resetWallet(true)
+                    }
+                )
+            }
+        }
         
         if #available(iOS 12.0, *) {
             let isDark = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark

@@ -37,6 +37,16 @@ using namespace beam::io;
 using namespace beam::wallet;
 using namespace std;
 
+// Defined in AppModel.mm — the fully-configured Rules singleton.
+extern beam::Rules* g_pConfiguredRules;
+
+// Install s_pInstance on whichever thread calls this first.
+// s_pInstance is thread_local; each new thread starts with nullptr.
+static void ensureRulesOnCurrentThread() {
+    if (!beam::Rules::s_pInstance && g_pConfiguredRules) {
+        beam::Rules::s_pInstance = g_pConfiguredRules;
+    }
+}
 
 NSString *const AppErrorDomain = @"beam.mw";
 NSTimer *timer;
@@ -65,6 +75,7 @@ std::string txIDToString(const TxID& txId)
 
 void WalletModel::onStatus(const WalletStatus& status)
 {
+    ensureRulesOnCurrentThread();
     NSLog(@"onStatus");
         
     auto beamStatus = status.GetBeamStatus();
@@ -508,6 +519,7 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
 
 void WalletModel::onSyncProgressUpdated(int done, int total)
 {
+    ensureRulesOnCurrentThread();
     NSLog(@"onSyncProgressUpdated %d/%d",done, total);
     
     [AppModel sharedManager].isUpdating = (done != total);
@@ -779,6 +791,7 @@ void WalletModel::onNewAddressFailed()
 
 void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 {
+    ensureRulesOnCurrentThread();
     NSLog(@"onNodeConnectionChanged %d",isNodeConnected);
 
     if (isNodeConnected) {
@@ -879,6 +892,7 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
 
 void WalletModel::FailedToStartWallet()
 {
+    ensureRulesOnCurrentThread();
     if([AppModel sharedManager].isLoggedin) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[AppModel sharedManager] restartWallet];

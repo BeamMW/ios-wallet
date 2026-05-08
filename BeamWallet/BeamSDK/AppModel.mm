@@ -55,6 +55,7 @@
 #include "build/core/version.h"
 
 #include "utility/bridge.h"
+#include "utility/logger.h"
 #include "utility/string_helpers.h"
 #include "utility/fsutils.h"
 
@@ -69,7 +70,13 @@
 #include "wallet/core/common_utils.h"
 #include "wallet/core/common.h"
 #include "common.h"
+#include "sqlite3.h"
 #include <sys/sysctl.h>
+#include <mutex>
+
+// beam::Rules::s_pInstance is declared thread_local in the header but its
+// out-of-class definition is missing from the provided static libraries.
+thread_local const beam::Rules* beam::Rules::s_pInstance = nullptr;
 #import <sys/utsname.h>
 
 #import "BeamWallet-Swift.h"
@@ -206,7 +213,9 @@ static dispatch_once_t * once_token_model;
 
 -(id)init{
     self = [super init];
-    
+
+    [self loadRules];
+
     [self createLogger];
         
     wallet::g_AssetsEnabled = true;
@@ -272,16 +281,44 @@ static dispatch_once_t * once_token_model;
     [self checkInternetConnection];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [self loadRules];
-    
+
     return self;
 }
 
 
+// Raw storage so we can publish s_pInstance before Rules::Rules() runs —
+// the constructor calls Rules::get() internally and would throw otherwise.
+static unsigned char g_rulesStorage[sizeof(beam::Rules)] __attribute__((aligned(__alignof__(beam::Rules))));
+
+// Non-thread-local handle WalletModel.mm uses to install s_pInstance on worker threads.
+beam::Rules* g_pConfiguredRules = nullptr;
+
+static beam::Rules& getConfiguredRules() {
+    static std::once_flag s_flag;
+    std::call_once(s_flag, []() {
+        beam::Rules* pRules = reinterpret_cast<beam::Rules*>(g_rulesStorage);
+        beam::Rules::s_pInstance = pRules;
+        new(pRules) beam::Rules();
+
+        NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
+        if ([bundleID containsString:@"Masternet"] || [bundleID containsString:@"masternet"]) {
+            pRules->m_Network = beam::Rules::Network::masternet;
+        } else if ([bundleID containsString:@"Mainnet"] || [bundleID containsString:@"mainnet"]) {
+            pRules->m_Network = beam::Rules::Network::mainnet;
+        } else {
+            pRules->m_Network = beam::Rules::Network::testnet;
+        }
+        pRules->SetNetworkParams();
+        pRules->UpdateChecksum();
+        g_pConfiguredRules = pRules;
+    });
+    return *reinterpret_cast<beam::Rules*>(g_rulesStorage);
+}
+
 -(void)loadRules{
-    Rules::get().UpdateChecksum();
-    LOG_INFO() << "Rules signature: " << Rules::get().get_SignatureStr();
+    beam::Rules& rules = getConfiguredRules();
+    beam::Rules::s_pInstance = &rules;  // Install on this thread (s_pInstance is thread_local)
+    BEAM_LOG_INFO() << "Rules signature: " << rules.get_SignatureStr();
 }
 
 +(NSString*_Nonnull)chooseRandomNodeWithoutNodes:(NSArray*)nodes {
@@ -318,6 +355,9 @@ static dispatch_once_t * once_token_model;
 }
 
 +(NSString*_Nonnull)chooseRandomNode {
+    // Settings.init calls this class method before AppModel.init runs, so the
+    // BEAM library hasn't been initialized yet — install Rules first.
+    beam::Rules::s_pInstance = &getConfiguredRules();
     auto peers = getDefaultPeers();
     
     NSMutableArray *array = [NSMutableArray array];
@@ -524,13 +564,17 @@ static dispatch_once_t * once_token_model;
 }
 
 -(BOOL)openWallet:(NSString*)pass {
-    if (walletReactor == nil) {
-        walletReactor = Reactor::create();
-        io::Reactor::Scope s(*walletReactor); // do it in main thread
-    }
-    
+    // BEAM 7.5.14432+ rejects WalletDB::open with SQLITE_MISUSE when the
+    // current reactor has been scoped in/out previously (e.g. the one created
+    // in AppModel.init). Drop and recreate so open runs against a fresh one.
+    walletReactor.reset();
+    walletReactor = Reactor::create();
+    // Scope must outlive WalletDB::open so the reactor is registered as current
+    // when the DB sets up its internal I/O callbacks (required in 7.5.14432+).
+    io::Reactor::Scope s(*walletReactor);
+
     string dbFilePath = Settings.sharedManager.walletStoragePath.string;
-    
+
     if (!walletDb) {
         try{
             walletDb = WalletDB::open(dbFilePath, pass.string);
@@ -552,17 +596,19 @@ static dispatch_once_t * once_token_model;
 }
 
 -(BOOL)canOpenWallet:(NSString*)pass {
-    if (walletReactor == nil) {
-        walletReactor = Reactor::create();
-        io::Reactor::Scope s(*walletReactor); // do it in main thread
-    }
-    
+    // See openWallet: BEAM 7.5.14432+ requires a fresh reactor here.
+    walletReactor.reset();
+    walletReactor = Reactor::create();
+    // Scope must outlive WalletDB::open so the reactor is registered as current
+    // when the DB sets up its internal I/O callbacks (required in 7.5.14432+).
+    io::Reactor::Scope s(*walletReactor);
+
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
-    
+
     if (walletDb != nil) {
         return YES;
     }
-    
+
     try{
         walletDb = WalletDB::open(dbFilePath, pass.string);
     }
@@ -584,63 +630,96 @@ static dispatch_once_t * once_token_model;
 }
 
 -(BOOL)createWallet:(NSString*)phrase pass:(NSString*)pass {
-    if (self.isInternetAvailable == NO) {
-        return NO;
-    }
-    else if (walletDb != nil)
+    // DB init is purely local — do not gate on reachability. If the device is
+    // offline the wallet is created locally and sync resumes when reachability
+    // returns (Reachability already broadcasts onNoInternetConnection).
+    if (walletDb != nil)
     {
         [self onWalledOpened:SecString(pass.string)];
-        
+
         return YES;
     }
     
     string dbFilePath = [Settings sharedManager].walletStoragePath.string;
-    
-    //already created. restore wallet?
-    if (WalletDB::isInitialized(dbFilePath)) {
-        return NO;
-    }
-    
+
     //invalid parameters
     if ((phrase==nil || phrase.length==0) || (pass==nil || pass.length==0)) {
         return NO;
     }
-    
+
     //convert string phrase to mnemonic WordList
     NSArray *wordsArray = [phrase componentsSeparatedByString:@";"];
-    
+
     vector<string> wordList(wordsArray.count);
-    
+
     for(int i=0; i<wordsArray.count; ++i){
         NSString *word = wordsArray[i];
         wordList[i] = word.string;
     }
-    
+
     auto buf = decodeMnemonic(wordList);
-    
+
     beam::SecString seed;
     seed.assign(buf.data(), buf.size());
-    
-    //create wallet db
-    walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash());
-    
+
+    // Reaching this code path means walletDb is nil and the user explicitly
+    // chose to create a new wallet — any file on disk is stale (orphan from a
+    // crashed prior attempt, or left over after a change-wallet that ran with
+    // walletDb already nil). Unlink the file and sidecars so WalletDB::init
+    // gets a clean slate.
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *dbPath = [Settings sharedManager].walletStoragePath;
+    [fm removeItemAtPath:dbPath error:nil];
+    [fm removeItemAtPath:[dbPath stringByAppendingString:@".private"] error:nil];
+    [fm removeItemAtPath:[dbPath stringByAppendingString:@"-wal"] error:nil];
+    [fm removeItemAtPath:[dbPath stringByAppendingString:@"-shm"] error:nil];
+    [fm removeItemAtPath:[dbPath stringByAppendingString:@"-journal"] error:nil];
+
+    // BEAM's sqlite needs a writable temp dir; iOS sandbox blocks /tmp. Point
+    // it at the app's NSTemporaryDirectory so CREATE TABLE / journaling has a
+    // place to spill — otherwise WalletDB::init can fail with SQLITE_MISUSE.
+    NSString *tmpDir = NSTemporaryDirectory();
+    if (tmpDir.length > 0) {
+        sqlite3_temp_directory = sqlite3_mprintf("%s", [tmpDir UTF8String]);
+    }
+
+    BEAM_LOG_INFO() << "createWallet preflight"
+        << " path=" << dbFilePath
+        << " fileExists=" << ([fm fileExistsAtPath:dbPath] ? 1 : 0)
+        << " tmpdir=" << ((tmpDir.length > 0) ? [tmpDir UTF8String] : "(null)")
+        << " rules=" << (beam::Rules::s_pInstance ? 1 : 0)
+        << " seedSize=" << seed.size()
+        << " sqliteVersion=" << sqlite3_libversion()
+        << " sqliteHasCodec=" << (sqlite3_compileoption_used("SQLITE_HAS_CODEC") ? 1 : 0);
+
+    // BEAM 7.5.14432: WalletDB::init must run under a current Reactor::Scope
+    // so DB I/O callbacks bind to that reactor. Recreate, since the reactor
+    // from AppModel.init has already been scoped in/out once.
+    walletReactor.reset();
+    walletReactor = Reactor::create();
+    io::Reactor::Scope s(*walletReactor);
+
+    try {
+        walletDb = WalletDB::init(dbFilePath, SecString(pass.string), seed.hash());
+    }
+    catch (const std::exception& e) {
+        BEAM_LOG_ERROR() << "WalletDB::init failed: " << e.what();
+        walletDb.reset();
+        return NO;
+    }
+
     if (!walletDb) {
         return NO;
     }
-    
-    walletReactor = Reactor::create();
-    io::Reactor::Scope s(*walletReactor); // do it in main thread
-    
-    // generate default address
-//    WalletAddress address;
-//    walletDb->createAddress(address);
-//    address.m_label = "Default";
-//    address.setExpirationStatus(beam::wallet::WalletAddress::ExpirationStatus::Never);
-//    walletDb->saveAddress(address);
-    
+
     [self onWalledOpened:SecString(pass.string)];
-        
+
     return YES;
+}
+
+-(void)abortCreateAndReset {
+    self.isRestoreFlow = NO;
+    [self resetWallet:YES];
 }
 
 -(void)resetOnlyWallet {
@@ -654,7 +733,7 @@ static dispatch_once_t * once_token_model;
 }
 
 -(void)restartWallet {
-    LOG_INFO() << "restart wallet";
+    BEAM_LOG_INFO() << "restart wallet";
     
     isStarted = NO;
     isRunning = NO;
@@ -681,40 +760,32 @@ static dispatch_once_t * once_token_model;
     if (self.isRestoreFlow) {
         self.isRestoreFlow = NO;
     }
-    
+
     [daoManager destroy];
     daoManager = nil;
-    
+
     isStarted = NO;
     isRunning = NO;
-  
-    wallet.reset();
-    
-    walletDb.reset();
-    
-//    if (wallet!=nil){
-//        wallet.reset();
-//    }
-//
-//    if (walletReactor!=nil){
-//        walletReactor.reset();
-//    }
-//    if (walletDb!=nil){
-//        walletDb.reset();
-//    }
-//
-//    walletReactor = nil;
-//    wallet = nil;
-//    walletDb = nil;
-    
-    if(removeDatabase) {
-        NSString *recoverPath = [[Settings sharedManager].walletStoragePath stringByAppendingString:@"_recover"];
-        
-        fsutils::remove([Settings sharedManager].walletStoragePath.string);
 
-        [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].walletStoragePath error:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
+    wallet.reset();
+
+    walletDb.reset();
+
+    if(removeDatabase) {
+        NSString *dbPath = [Settings sharedManager].walletStoragePath;
+
+        NSFileManager *fm = [NSFileManager defaultManager];
+        [fm removeItemAtPath:[dbPath stringByAppendingString:@"-wal"] error:nil];
+        [fm removeItemAtPath:[dbPath stringByAppendingString:@"-shm"] error:nil];
+        [fm removeItemAtPath:[dbPath stringByAppendingString:@"-journal"] error:nil];
+
+        fsutils::remove(dbPath.string);
+        [fm removeItemAtPath:dbPath error:nil];
+
+        [fm removeItemAtPath:[Settings sharedManager].localNodeStorage error:nil];
         [[Settings sharedManager] resetDataBase];
+
+        [[OnboardManager shared] clearWalletInitialized];
     }
     
     _walletStatus = [BMWalletStatus new];
@@ -825,7 +896,11 @@ static dispatch_once_t * once_token_model;
 
 -(void)onWalledOpened:(const SecString&) pass {
     passwordHash = pass.hash();
-    
+
+    // Marker that distinguishes a healthy wallet from a DB file orphaned by
+    // a crash mid-create. AppDelegate checks this on launch.
+    [[OnboardManager shared] markWalletInitialized];
+
     if(!self.isRestoreFlow)
     {
         [self start];
@@ -838,10 +913,18 @@ static dispatch_once_t * once_token_model;
 -(void)restore:(NSString*_Nonnull)path{
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         string recoveryPath = path.string;
-        
+
         try{
+            // Reactor must be current while WalletModel binds to walletDb,
+            // otherwise the worker thread inherits no current reactor and
+            // sqlite calls fail with SQLITE_MISUSE.
+            if (walletReactor == nil) {
+                walletReactor = Reactor::create();
+            }
+            io::Reactor::Scope reactorScope(*walletReactor);
+
             string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-            
+
             auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>([=]() { return walletDb; });
 
             auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
@@ -859,12 +942,21 @@ static dispatch_once_t * once_token_model;
             }
             
             wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
-            
-            daoManager = [[DAOManager alloc] initWithWallet:wallet];
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self->wallet->getAsync()->importRecovery(recoveryPath);
+            __weak typeof(self) weakSelf = self;
+            wallet->getAsync()->makeIWTCall([]() -> boost::any {
+                if (!beam::Rules::s_pInstance && g_pConfiguredRules) {
+                    beam::Rules::s_pInstance = g_pConfiguredRules;
+                }
+                return boost::any{};
+            }, [weakSelf, recoveryPath](const boost::any&) {
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf && strongSelf->wallet) {
+                    strongSelf->wallet->getAsync()->importRecovery(recoveryPath);
+                }
             });
+
+            daoManager = [[DAOManager alloc] initWithWallet:wallet];
         }
         catch (const std::exception& e) {
             NSLog(@"ImportRecovery failed %s",e.what());
@@ -907,35 +999,53 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)start {
     if (isStarted == NO && walletDb != nil) {
-        string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
-                
-        auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>([=]() { return walletDb; });
-        auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
-        additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
-        
-        wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
-        
-        NSLog(@"NODE ADDRESS: %@", [Settings sharedManager].nodeAddress);
+        // Reactor must be current while WalletModel constructs and wallet->start()
+        // runs, so DB callbacks bind to the same reactor walletDb was opened under.
+        if (walletReactor == nil) {
+            walletReactor = Reactor::create();
+        }
+        io::Reactor::Scope reactorScope(*walletReactor);
 
-        wallet->getAsync()->setNodeAddress(nodeAddrStr);
-        
-        wallet->getAsync()->enableBodyRequests([Settings sharedManager].isNodeProtocolEnabled);
-        
-        wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
-        
-        isRunning = YES;
-        isStarted = YES;
-        
-        daoManager = [[DAOManager alloc] initWithWallet:wallet];
+        try {
+            string nodeAddrStr = [Settings sharedManager].nodeAddress.string;
+
+            auto pushTxCreator = std::make_shared<lelantus::PushTransaction::Creator>([=]() { return walletDb; });
+            auto additionalTxCreators = std::make_shared<std::unordered_map<TxType, BaseTransaction::Creator::Ptr>>();
+            additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
+
+            wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
+
+            NSLog(@"NODE ADDRESS: %@", [Settings sharedManager].nodeAddress);
+
+            wallet->getAsync()->setNodeAddress(nodeAddrStr);
+            wallet->getAsync()->enableBodyRequests([Settings sharedManager].isNodeProtocolEnabled);
+            wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
+
+            // Install Rules::s_pInstance on the reactor's worker thread as the
+            // first queued op so DB callbacks find a valid Rules pointer.
+            wallet->getAsync()->makeIWTCall([]() -> boost::any {
+                if (!beam::Rules::s_pInstance && g_pConfiguredRules) {
+                    beam::Rules::s_pInstance = g_pConfiguredRules;
+                }
+                return boost::any{};
+            }, [](const boost::any&){});
+
+            isRunning = YES;
+            isStarted = YES;
+
+            daoManager = [[DAOManager alloc] initWithWallet:wallet];
+        }
+        catch (const std::exception& e) {
+            BEAM_LOG_ERROR() << "AppModel.start failed: " << e.what();
+            wallet.reset();
+            isRunning = NO;
+            isStarted = NO;
+        }
     }
     else if(self.isConnected && isStarted && walletDb != nil && self.isInternetAvailable) {
-              NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-      for(id<WalletModelDelegate> delegate in delegates)
-        {
-            if ([delegate respondsToSelector:@selector(onSyncProgressUpdated: total:)]) {
-                [delegate onSyncProgressUpdated:0 total:0];
-            }
-        }
+        // No-op: previously broadcast onSyncProgressUpdated:0 total:0, which
+        // progress UIs interpret as "starting over" and reset their bars.
+        // Callers that need a fresh status should use getWalletStatus.
     }
     else if(wallet != nil)
     {
@@ -1160,7 +1270,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
             block(sToken);
         };
-        wallet->getAsync()->generateToken(TokenType::Offline, bAmount, bAsset, std::string(BEAM_LIB_VERSION), func);
+        wallet->getAsync()->generateToken(TokenType::Offline, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
     }
     
 //    uint32_t bAsset = (uint32_t)assetId;
@@ -1211,7 +1321,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
             block(sToken);
         };
-        wallet->getAsync()->generateToken(TokenType::MaxPrivacy, bAmount, bAsset, std::string(BEAM_LIB_VERSION), func);
+        wallet->getAsync()->generateToken(TokenType::MaxPrivacy, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
     }
 //    uint64_t bAmount = round(amount * Rules::Coin);
 //    uint32_t bAsset = (uint32_t)assetId;
@@ -1586,7 +1696,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             
             self->wallet->getAsync()->getAddresses(true);
         };
-        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), func);
+        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
     }
 }
 
@@ -1615,7 +1725,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
             self.generatedNewAddressBlock(address, nil);
         };
         
-        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, amount, asset, std::string(BEAM_LIB_VERSION), func);
+        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, amount, asset, std::string(BEAM_LIB_VERSION), false, func);
 //        wallet->getAsync()->generateNewAddress();
     }
 }
@@ -1930,16 +2040,16 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate {
     [_delegates compact];
-    
+
     void * objPtr = (__bridge void *)delegate;
     [_delegates addPointer:objPtr];
 }
 
 -(void)removeDelegate:(id<WalletModelDelegate>_Nullable) delegate {
     [_delegates compact];
-    
+
     void * objPtr = (__bridge void *)delegate;
-    
+
     for(NSUInteger i = 0; i < _delegates.count; i++) {
         void * ptr = [_delegates pointerAtIndex:i];
         if (ptr == objPtr) {
@@ -2426,7 +2536,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     [self clearLogs];
     
     
-    static auto logger = beam::Logger::create(LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,LOG_LEVEL_DEBUG,@"beam_".string, dataPath.string);
+    static auto logger = beam::Logger::create(BEAM_LOG_LEVEL_DEBUG,BEAM_LOG_LEVEL_DEBUG,BEAM_LOG_LEVEL_DEBUG,@"beam_".string, dataPath.string);
     
     auto path = logger->get_current_file_name();
     pathLog =  [NSString stringWithUTF8String:path.c_str()];
@@ -2442,12 +2552,12 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     NSString *appVersion = [NSString stringWithFormat:@"APP VERSION: %@ BUILD %@",version, build];
     NSString *langCode = [NSString stringWithFormat:@"LANGUAGE CODE: %@",[[NSLocale currentLocale] languageCode]];
     
-    LOG_INFO() << "Application has started";
-    LOG_INFO() << ios.string;
-    LOG_INFO() << model.string;
-    LOG_INFO() << modelID.string;
-    LOG_INFO() << appVersion.string;
-    LOG_INFO() << langCode.string;
+    BEAM_LOG_INFO() << "Application has started";
+    BEAM_LOG_INFO() << ios.string;
+    BEAM_LOG_INFO() << model.string;
+    BEAM_LOG_INFO() << modelID.string;
+    BEAM_LOG_INFO() << appVersion.string;
+    BEAM_LOG_INFO() << langCode.string;
     
 }
 
@@ -2885,7 +2995,7 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
     
     if (currentTime_s > currentBlockTime_s)
     {
-        LOG_INFO() << "It seems that node is not up to date";
+        BEAM_LOG_INFO() << "It seems that node is not up to date";
         return false;
     }
     return true;

@@ -104,6 +104,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,assign) BOOL isUpdating;
 @property (nonatomic,assign) BOOL isConnecting;
 @property (nonatomic,assign) BOOL isLoggedin;
+// Read from background queues during restore; BOOL writes are word-atomic.
 @property (nonatomic,assign) BOOL isRestoreFlow;
 @property (nonatomic,assign) BOOL isNodeChanging;
 @property (nonatomic,assign) BOOL isOwnNode;
@@ -153,6 +154,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
 -(void)restore:(NSString*_Nonnull)path;
 -(void)resetWallet:(BOOL)removeDatabase;
+-(void)abortCreateAndReset;
 -(void)resetOnlyWallet;
 -(void)restartWallet;
 -(void)start;

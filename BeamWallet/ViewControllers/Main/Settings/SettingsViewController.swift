@@ -316,6 +316,7 @@ extension SettingsViewController : SettingsCellDelegate {
                     }
                     else{
                         Settings.sharedManager().isEnableBiometric = false
+                        KeychainManager.deletePassword()
                     }
                 }
                 vc.modalPresentationStyle = .overFullScreen

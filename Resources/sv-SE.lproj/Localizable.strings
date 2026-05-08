@@ -51,6 +51,9 @@
 "no_internet" = "Internetåtkomst saknas";
 "wallet_not_created" = "Plånbok ej skapad";
 "wallet_not_opened" = "Plånbok kan ej öppnas";
+"wallet_recovery_title" = "Återställning av plånbok behövs";
+"wallet_recovery_message" = "En tidigare installation slutfördes inte. Återställ för att börja om.";
+"reset_and_retry" = "Återställ och försök igen";
 "restor_wallet_warning" = "Att återställa plånboken kan ta ett tag.\n\nVänta tills noden är helt synkroniserad med blockkedjan, stäng inte eller minimera plånboksappen.";
 "restor_wallet_info" = "Endast plånbokens balans (UTXO) kan återställas, transaktionsinformation är alltid privata och lagras aldrig i block-kedjan.";
 "receive" = "Ta emot";

@@ -143,7 +143,8 @@ class UnlockPasswordPopover: BaseViewController {
     public func biometricAuthorization() {
         if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
-                if let password = KeychainManager.getPassword() {
+                let context = BiometricAuthorization.shared.lastAuthenticatedContext
+                if let password = KeychainManager.getPassword(context: context) {
                     self.passField.text = password
                     self.dismiss(animated: true, completion: {
                         self.completion?(true)

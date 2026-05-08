@@ -118,13 +118,20 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     public func biometricAuthorization() {
         if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
-                if let password = KeychainManager.getPassword() {
+                let context = BiometricAuthorization.shared.lastAuthenticatedContext
+                if let password = KeychainManager.getPassword(context: context) {
                     self.passField.text = password
                     self.onLogin(sender: UIButton())
                 }
-                
+
             }, failure: {
                 self.touchIdButton.tintColor = UIColor.white
+                if let reason = BiometricAuthorization.shared.lastFailureReason, reason != .canceled {
+                    let message = BiometricAuthorization.shared.failureMessage(for: reason)
+                    if !message.isEmpty {
+                        BMToast.show(text: message)
+                    }
+                }
             }, retry: {
                 self.touchIdButton.tintColor = UIColor.white
             })

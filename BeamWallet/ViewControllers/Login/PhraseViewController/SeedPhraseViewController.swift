@@ -203,6 +203,11 @@ class SeedPhraseViewController: BaseViewController {
                 }
             }
             else {
+                // Terminal "confirm seed" path. Clear any stale skip flag a
+                // prior session may have left behind so isSkipedSeed reflects
+                // this final action only.
+                OnboardManager.shared.onSkipSeed(isSkiped: false)
+
                 let vc = CreateWalletPasswordViewController().withPhrase(phrase: words.joined(separator: ";"))
                 pushViewController(vc: vc)
             }

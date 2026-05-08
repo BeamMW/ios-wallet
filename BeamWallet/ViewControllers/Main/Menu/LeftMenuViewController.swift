@@ -69,7 +69,7 @@ class LeftMenuViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         Settings.sharedManager().addDelegate(self)
         AppModel.sharedManager().addDelegate(self)
         

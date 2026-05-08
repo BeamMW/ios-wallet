@@ -12,6 +12,7 @@
 #include "wallet/api/i_wallet_api.h"
 #include "wallet/core/common.h"
 #include "bvm/invoke_data.h"
+#include "utility/logger.h"
 #include "Public.h"
 
 
@@ -49,11 +50,11 @@ void WebAPICreator::createApi(const std::string& verWant, const std::string& ver
         if (guard)
         {
             _api = std::move(api);
-            LOG_INFO() << "API created: " << version << ", " << appName << ", " << appid;
+            BEAM_LOG_INFO() << "API created: " << version << ", " << appName << ", " << appid;
         }
         else
         {
-            LOG_INFO() << "WebAPICreator destroyed before api created:" << version << ", " << appName << ", " << appid;
+            BEAM_LOG_INFO() << "WebAPICreator destroyed before api created:" << version << ", " << appName << ", " << appid;
         }
     });
 }

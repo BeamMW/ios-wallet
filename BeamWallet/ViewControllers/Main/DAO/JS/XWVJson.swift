@@ -119,6 +119,8 @@ public func jsonify(_ value: Any?) -> String? {
             return "{" + mirror.children.compactMap(jsonify).joined(separator: ",") + "}"
         case .enum:
             return jsonify(String(describing: value))
+        @unknown default:
+            return nil
         }
     }
 }

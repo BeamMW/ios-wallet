@@ -47,6 +47,9 @@
 "no_internet" = "No internet connection";
 "wallet_not_created" = "Wallet not created";
 "wallet_not_opened" = "Wallet can not be opened";
+"wallet_recovery_title" = "Wallet recovery needed";
+"wallet_recovery_message" = "A previous setup did not complete. Reset to start fresh.";
+"reset_and_retry" = "Reset and retry";
 "restor_wallet_warning" = "Restoring the wallet may take a while.\n\nPlease wait till the node is fully synchronized with the blockchain, do not close or minimize the wallet app.";
 "restor_wallet_info" = "Only the wallet balance (UTXO) can be restored, transaction info is always private
 and never kept on the blockchain.";

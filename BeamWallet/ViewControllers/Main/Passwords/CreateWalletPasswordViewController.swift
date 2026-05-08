@@ -84,9 +84,18 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let target: BMField? = isChangePassword ? oldPassField : passField
+        DispatchQueue.main.async { [weak target] in
+            _ = target?.becomeFirstResponder()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -197,31 +206,32 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
     }
     
     private func openMainPage() {
-        if let phrase = phrase, let pass = passField.text {
+        guard let phrase = phrase, let pass = passField.text else { return }
+
+        // Restore flow opens the wallet immediately because the chosen node is
+        // already settled. Create flow defers wallet creation to
+        // SelectNodeViewController so the chosen node is in place before
+        // wallet->start() runs — the whole DB-init/start sequence then runs
+        // inside a single io::Reactor::Scope.
+        if AppModel.sharedManager().isRestoreFlow {
             let created = AppModel.sharedManager().createWallet(phrase, pass: pass)
-            if(!created)
-            {
-                self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { (_ ) in
-                 
-                }
+            if !created {
+                AppModel.sharedManager().abortCreateAndReset()
+                self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { _ in }
+                return
             }
-            else {
-                OnboardManager.shared.saveSeed(seed: phrase)
-                _ = KeychainManager.addPassword(password: pass)
-  
-                if AppModel.sharedManager().isRestoreFlow {
-                    let vc = OpenWalletProgressViewController(password: pass, phrase: phrase)
-                    self.pushViewController(vc: vc)
-                }
-                else {
-                    let vc = SelectNodeViewController()
-                    vc.isCreateWallet = true
-                    vc.isNeedDisconnect = false
-                    vc.password = pass
-                    vc.phrase = phrase
-                    self.pushViewController(vc: vc)
-                }
-            }
+            OnboardManager.shared.saveSeed(seed: phrase)
+            _ = KeychainManager.addPassword(password: pass)
+            let vc = OpenWalletProgressViewController(password: pass, phrase: phrase)
+            self.pushViewController(vc: vc)
+        }
+        else {
+            let vc = SelectNodeViewController()
+            vc.isCreateWallet = true
+            vc.isNeedDisconnect = false
+            vc.password = pass
+            vc.phrase = phrase
+            self.pushViewController(vc: vc)
         }
     }
 }

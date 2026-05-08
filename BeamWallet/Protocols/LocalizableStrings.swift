@@ -89,6 +89,9 @@ class LocalizableStrings : NSObject {
     var error = "error".localized
     var wallet_not_created = "wallet_not_created".localized
     var wallet_not_opened = "wallet_not_opened".localized
+    var wallet_recovery_title = "wallet_recovery_title".localized
+    var wallet_recovery_message = "wallet_recovery_message".localized
+    var reset_and_retry = "reset_and_retry".localized
     var external_link_title = "external_link_title".localized
     var external_link_text = "external_link_text".localized
     var open = "open".localized
@@ -262,6 +265,9 @@ class LocalizableStrings : NSObject {
     var auth_face_confirm = "auth_face_confirm".localized
     var auth_touch_confirm = "auth_touch_confirm".localized
     var auth_bio_failed = "auth_bio_failed".localized
+    var auth_bio_locked = "auth_bio_locked".localized
+    var auth_bio_not_enrolled = "auth_bio_not_enrolled".localized
+    var auth_bio_unavailable = "auth_bio_unavailable".localized
     var my_active_addresses = "my_active_addresses".localized
     var contacts_empty = "contacts_empty".localized
     var addresses_empty = "addresses_empty".localized
