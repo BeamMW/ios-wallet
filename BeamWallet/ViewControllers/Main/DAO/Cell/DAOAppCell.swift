@@ -19,24 +19,43 @@ class DAOAppCell: RippleCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         selectionStyle = .none
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        iconView.sd_cancelCurrentImageLoad()
+        iconView.image = nil
     }
 }
 
 extension DAOAppCell: Configurable {
-    
+
     func configure(with options: (row: Int, app:BMApp)) {
-       
+
         iconMainView.backgroundColor = UIColor.main.marineThree
         mainView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
-                            
+
         nameLabel.text = options.app.name
+        iconView.sd_cancelCurrentImageLoad()
         if options.app.name.lowercased() == "beamx dao" {
             iconView.image = UIImage(named: "dao_app_icon")
         }
         else {
-            iconView.sd_setImage(with: URL(string: options.app.icon), completed: nil)
+            // Force the SVG coder onto its bitmap path. The default vector path
+            // returns a UIImage backed by a live CGSVGDocumentRef, which CoreSVG
+            // re-renders on every draw — that crashes when scrolling on iOS 17+.
+            let pixelSize = CGSize(width: 96, height: 96) // 32pt @3x
+            let context: [SDWebImageContextOption: Any] = [
+                .imageThumbnailPixelSize: NSValue(cgSize: pixelSize),
+                .imagePreserveAspectRatio: true,
+            ]
+            iconView.sd_setImage(
+                with: URL(string: options.app.icon),
+                placeholderImage: nil,
+                context: context
+            )
         }
         
         if options.app.isSupported {
