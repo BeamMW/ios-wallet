@@ -70,23 +70,23 @@
     self = [super init];
     if(self)
     {
-        self.currentHeight = [decoder decodeObjectForKey: @"currentHeight"];
-        self.currentStateHash = [decoder decodeObjectForKey: @"currentStateHash"];
-        self.currentStateFullHash = [decoder decodeObjectForKey: @"currentStateFullHash"];
+        self.currentHeight = [decoder decodeObjectOfClass:[NSString class] forKey: @"currentHeight"];
+        self.currentStateHash = [decoder decodeObjectOfClass:[NSString class] forKey: @"currentStateHash"];
+        self.currentStateFullHash = [decoder decodeObjectOfClass:[NSString class] forKey: @"currentStateFullHash"];
 
-        self.available = [[decoder decodeObjectForKey: @"available"] longLongValue];
-        self.receiving = [[decoder decodeObjectForKey: @"receiving"] longLongValue];
-        self.sending = [[decoder decodeObjectForKey: @"sending"] longLongValue];
-        self.maturing = [[decoder decodeObjectForKey: @"maturing"] longLongValue];
-        self.shielded = [[decoder decodeObjectForKey: @"shielded"] longLongValue];
-        self.maxPrivacy = [[decoder decodeObjectForKey: @"maxPrivacy"] longValue];
+        self.available = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"available"] longLongValue];
+        self.receiving = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"receiving"] longLongValue];
+        self.sending = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"sending"] longLongValue];
+        self.maturing = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"maturing"] longLongValue];
+        self.shielded = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"shielded"] longLongValue];
+        self.maxPrivacy = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"maxPrivacy"] longValue];
 
-        self.realAmount = [[decoder decodeObjectForKey: @"realAmount"] doubleValue];
-        self.realReceiving = [[decoder decodeObjectForKey: @"realReceiving"] doubleValue];
-        self.realSending = [[decoder decodeObjectForKey: @"realSending"] doubleValue];
-        self.realMaturing = [[decoder decodeObjectForKey: @"realMaturing"] doubleValue];
-        self.realShielded = [[decoder decodeObjectForKey: @"realShielded"] doubleValue];
-        self.realMaxPrivacy = [[decoder decodeObjectForKey: @"realMaxPrivacy"] doubleValue];
+        self.realAmount = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realAmount"] doubleValue];
+        self.realReceiving = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realReceiving"] doubleValue];
+        self.realSending = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realSending"] doubleValue];
+        self.realMaturing = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realMaturing"] doubleValue];
+        self.realShielded = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realShielded"] doubleValue];
+        self.realMaxPrivacy = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realMaxPrivacy"] doubleValue];
     }
     return self;
 }

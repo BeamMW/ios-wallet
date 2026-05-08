@@ -107,6 +107,9 @@ class BMField: BMClearField {
             _defaultHeight = newValue
         }
     }
+
+    @IBInspectable var lineColor: UIColor?
+    @IBInspectable var lineHeight: CGFloat = 0
     
     private var isInFocus = false {
         didSet {
