@@ -22,13 +22,13 @@ import UIKit
 class MessengerBubbleCell: RippleCell {
 
     private let bubble = UIView()
-    private let stack = UIStackView()
     private let label = UILabel()
-    private let timeLabel = UILabel()
     private var leadingConstraint: NSLayoutConstraint?
     private var trailingConstraint: NSLayoutConstraint?
 
     private static let maxBubbleRatio: CGFloat = 0.75
+    private static let messageFont: UIFont = RegularFont(size: 15)
+    private static let timeFont: UIFont = RegularFont(size: 11)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,24 +42,9 @@ class MessengerBubbleCell: RippleCell {
         contentView.addSubview(bubble)
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = RegularFont(size: 15)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .left
-
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.font = RegularFont(size: 11)
-        timeLabel.textAlignment = .right
-        timeLabel.setContentHuggingPriority(.required, for: .horizontal)
-        timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .vertical
-        stack.alignment = .fill
-        stack.spacing = 2
-        stack.addArrangedSubview(label)
-        stack.addArrangedSubview(timeLabel)
-        bubble.addSubview(stack)
+        bubble.addSubview(label)
 
         let leading = bubble.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
         let trailing = bubble.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
@@ -71,13 +56,11 @@ class MessengerBubbleCell: RippleCell {
         NSLayoutConstraint.activate([
             bubble.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             bubble.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            bubble.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: MessengerBubbleCell.maxBubbleRatio),
 
-            stack.leadingAnchor.constraint(equalTo: bubble.leadingAnchor, constant: 12),
-            stack.trailingAnchor.constraint(equalTo: bubble.trailingAnchor, constant: -12),
-            stack.topAnchor.constraint(equalTo: bubble.topAnchor, constant: 8),
-            stack.bottomAnchor.constraint(equalTo: bubble.bottomAnchor, constant: -8),
-
+            label.leadingAnchor.constraint(equalTo: bubble.leadingAnchor, constant: 12),
+            label.trailingAnchor.constraint(equalTo: bubble.trailingAnchor, constant: -12),
+            label.topAnchor.constraint(equalTo: bubble.topAnchor, constant: 8),
+            label.bottomAnchor.constraint(equalTo: bubble.bottomAnchor, constant: -8),
             label.widthAnchor.constraint(lessThanOrEqualToConstant: maxLabelWidth),
         ])
     }
@@ -87,21 +70,36 @@ class MessengerBubbleCell: RippleCell {
     }
 
     func configure(with message: BMInstantMessage) {
-        label.text = message.message
-        timeLabel.text = message.formattedTime()
-
+        let textColor: UIColor
         if message.isIncome {
             bubble.backgroundColor = UIColor.main.brightSkyBlue
-            label.textColor = UIColor.main.marineOriginal
-            timeLabel.textColor = UIColor.main.marineOriginal.withAlphaComponent(0.6)
+            textColor = UIColor.main.marineOriginal
             leadingConstraint?.isActive = true
             trailingConstraint?.isActive = false
         } else {
             bubble.backgroundColor = UIColor.main.heliotrope
-            label.textColor = UIColor.main.marineOriginal
-            timeLabel.textColor = UIColor.main.marineOriginal.withAlphaComponent(0.6)
+            textColor = UIColor.main.marineOriginal
             leadingConstraint?.isActive = false
             trailingConstraint?.isActive = true
         }
+
+        let attributed = NSMutableAttributedString()
+        attributed.append(NSAttributedString(
+            string: message.message,
+            attributes: [
+                .font: MessengerBubbleCell.messageFont,
+                .foregroundColor: textColor,
+            ]
+        ))
+        attributed.append(NSAttributedString(
+            string: "  \(message.formattedTime())",
+            attributes: [
+                .font: MessengerBubbleCell.timeFont,
+                .foregroundColor: textColor.withAlphaComponent(0.55),
+                .baselineOffset: -1,
+            ]
+        ))
+
+        label.attributedText = attributed
     }
 }
