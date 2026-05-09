@@ -2,7 +2,7 @@
 // WalletViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@
 import UIKit
 
 class SettingsViewController: BaseTableViewController {
-    
+
+    private static let versionFooterMinHeight: CGFloat = 70
+
     private var viewModel:SettingsViewModel!
     private var type:SettingsViewModel.SettingsType!
-    
+
     private var searchView:BMSearchView!
 
     init(type:SettingsViewModel.SettingsType) {
@@ -60,6 +62,9 @@ class SettingsViewController: BaseTableViewController {
                 self?.tableView.separatorStyle = .singleLine
             }
             self?.tableView.reloadData()
+            DispatchQueue.main.async {
+                self?.adjustVersionFooterIfNeeded()
+            }
         }
                 
         tableView.register([SettingsCell.self, SettingsSubTitleCell.self, BMEmptyCell.self])
@@ -123,8 +128,26 @@ class SettingsViewController: BaseTableViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         tableView.frame = CGRect(x: 0, y: tableView.y - 5, width: self.view.bounds.width, height: tableView.h + 10)
+
+        adjustVersionFooterIfNeeded()
+    }
+
+    private func adjustVersionFooterIfNeeded() {
+        guard type == .main, let footer = tableView.tableFooterView else { return }
+
+        let contentExcludingFooter = tableView.contentSize.height - footer.frame.height
+        let bottomInset = view.safeAreaInsets.bottom
+        let available = tableView.bounds.height - bottomInset - contentExcludingFooter
+        let desired = max(SettingsViewController.versionFooterMinHeight, available)
+
+        if abs(footer.frame.height - desired) > 0.5 {
+            var newFrame = footer.frame
+            newFrame.size.height = desired
+            footer.frame = newFrame
+            tableView.tableFooterView = footer
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -137,34 +160,36 @@ class SettingsViewController: BaseTableViewController {
     }
     
     private func versionView() -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 70))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: SettingsViewController.versionFooterMinHeight))
         view.backgroundColor = UIColor.clear
-        
-        let v = UIApplication.appVersion()
-        let string = "v " + v
-    
-        let label = UILabel(frame: CGRect(x: 0, y: 35, width: UIScreen.main.bounds.size.width, height: 20))
-        label.textAlignment = .center
-        label.font = BoldFont(size: 14)
-        label.textColor = UIColor.main.blueyGrey
-        label.text = string
-        view.addSubview(label)
-        
-        let bHeight = AppModel.sharedManager().walletStatus?.currentHeight ?? ""
-        let height = UILabel(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.size.width, height: 20))
-        height.textAlignment = .center
-        height.font = RegularFont(size: 14)
-        height.textColor = UIColor.main.blueyGrey
-        height.text = Localizable.shared.strings.blockchain_height + ": " + bHeight
-        view.addSubview(height)
-        
-        if Device.isXDevice {
-            view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 280)
-            label.frame = CGRect(x: 0, y: view.h - 60, width: UIScreen.main.bounds.size.width, height: 20)
-            height.frame = CGRect(x: 0, y: view.h - 90, width: UIScreen.main.bounds.size.width, height: 20)
 
-        }
-        
+        let bHeight = AppModel.sharedManager().walletStatus?.currentHeight ?? ""
+        let heightLabel = UILabel()
+        heightLabel.translatesAutoresizingMaskIntoConstraints = false
+        heightLabel.textAlignment = .center
+        heightLabel.font = RegularFont(size: 14)
+        heightLabel.textColor = UIColor.main.blueyGrey
+        heightLabel.text = Localizable.shared.strings.blockchain_height + ": " + bHeight
+        view.addSubview(heightLabel)
+
+        let versionLabel = UILabel()
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.textAlignment = .center
+        versionLabel.font = BoldFont(size: 14)
+        versionLabel.textColor = UIColor.main.blueyGrey
+        versionLabel.text = "v" + UIApplication.appVersion()
+        view.addSubview(versionLabel)
+
+        NSLayoutConstraint.activate([
+            versionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            versionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            versionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -15),
+
+            heightLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            heightLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            heightLabel.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -5),
+        ])
+
         return view
     }
 }
