@@ -129,29 +129,13 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let top = UIApplication.getTopMostViewController() {
-            if top is WalletViewController {
-                return false
-            }
-            else if top is SettingsViewController {
-                return false
-            }
-            else if top is AddressesViewController {
-                return false
-            }
-            else if top is DAOAppsViewController {
-                return false
-            }
-            else if top is NotificationsViewController {
-                return false
-            }
-            else if top is DAOViewController {
-                if let dao = top as? DAOViewController {
-                    if dao.app.name.uppercased() == "BEAMX DAO" {
-                        return false
-                    }
-                }
-            }
+        guard let top = UIApplication.getTopMostViewController(),
+              let nav = top.navigationController else { return true }
+        // Side-menu roots have nothing to pop to.
+        if nav.viewControllers.first === top { return false }
+        // BEAMX DAO embeds a WebView whose horizontal pan conflicts with the swipe.
+        if let dao = top as? DAOViewController, dao.app.name.uppercased() == "BEAMX DAO" {
+            return false
         }
         return true
     }
