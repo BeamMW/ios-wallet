@@ -244,9 +244,7 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
-            
-            section_0.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
-            
+
             var section_1 = [SettingsItem]()
             if ENALBE_LANG == true {
                 section_1.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
@@ -311,6 +309,7 @@ class SettingsViewModel: NSObject {
             var section_3 = [SettingsItem]()
             section_3.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
             section_3.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+            section_3.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
             section_3.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
 
             items.append(section_1)
@@ -493,8 +492,7 @@ extension SettingsViewModel {
     func onLockLimit() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .max_privacy_lock)
-            vc.completion = { [weak self]
-                _ in
+            vc.completion = { [weak self] _ in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()
@@ -506,8 +504,7 @@ extension SettingsViewModel {
     func onConfirmationsScreen() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .confirmations)
-            vc.completion = { [weak self]
-                value  in
+            vc.completion = { [weak self] value  in
                 AppModel.sharedManager().setMinConfirmations(value as! UInt32)
                 self?.items.removeAll()
                 self?.initItems()
@@ -520,16 +517,16 @@ extension SettingsViewModel {
     func onRescan() {
         if let top = UIApplication.getTopMostViewController() {
             top.confirmAlert(title: Localizable.shared.strings.rescan, message: Localizable.shared.strings.rescan_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.rescan, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 AppModel.sharedManager().rescan()
-                
+
                 let vc = OpenWalletProgressViewController(onlyConnect: true)
                 vc.isRescan = true
                 vc.cancelCallback = {
                 }
                 top.pushViewController(vc: vc)
-            }
+            })
         }
     }
     
@@ -539,8 +536,7 @@ extension SettingsViewModel {
             modalViewController.completion = { [weak self] obj in
                 if obj {
                     let vc = TrustedNodeViewController(event: .change)
-                    vc.completion = { [weak self]
-                        obj in
+                    vc.completion = { [weak self] obj in
                         if obj == true {
                             self?.items[0][1].detail = Settings.sharedManager().nodeAddress
                         }
@@ -648,14 +644,14 @@ extension SettingsViewModel {
     }
     
     func showSeed() {
-        if let _ = OnboardManager.shared.getSeed(), let top = UIApplication.getTopMostViewController() {
+        if OnboardManager.shared.getSeed() != nil, let top = UIApplication.getTopMostViewController() {
             let vc = BMDoubleAuthViewController(event: .seed)
             top.pushViewController(vc: vc)
         }
     }
-    
+
     func makeSecure() {
-        if let _ = OnboardManager.shared.getSeed(), let top = UIApplication.getTopMostViewController() {
+        if OnboardManager.shared.getSeed() != nil, let top = UIApplication.getTopMostViewController() {
             let vc = BMDoubleAuthViewController(event: .verification)
             top.pushViewController(vc: vc)
         }
@@ -673,10 +669,10 @@ extension SettingsViewModel {
                     }
                     else {
                         top.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
-                            
-                        }) { _ in
+
+                        }, confirmHandler: { _ in
                             BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
-                        }
+                        })
                     }
                 }
             }
@@ -690,8 +686,8 @@ extension SettingsViewModel {
             }
             else {
                 top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { _ in
-                    
-                }) { _ in
+
+                }, confirmHandler: { _ in
                     let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
                     modalViewController.completion = { obj in
                         if obj {
@@ -702,7 +698,7 @@ extension SettingsViewModel {
                     modalViewController.modalPresentationStyle = .overFullScreen
                     modalViewController.modalTransitionStyle = .crossDissolve
                     top.present(modalViewController, animated: true, completion: nil)
-                }
+                })
             }
         }
     }
@@ -741,8 +737,8 @@ extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDel
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if let topVC = UIApplication.getTopMostViewController() {
             topVC.confirmAlert(title: Localizable.shared.strings.import_data_title, message: Localizable.shared.strings.import_data_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.imprt, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 if let url = urls.first {
                     do {
                         let data = try String(contentsOf: url)
@@ -760,7 +756,7 @@ extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDel
                         topVC.alert(title: Localizable.shared.strings.incorrect_file_title, message: Localizable.shared.strings.incorrect_file_text, handler: nil)
                     }
                 }
-            }
+            })
         }
     }
     
