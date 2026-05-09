@@ -42,6 +42,8 @@ public:
     std::map<uint64_t, beam::wallet::ShieldedCoin> shieldedCoins;
 
 private:
+    std::set<beam::Asset::ID> m_pendingAssetInfo;
+
     NSString *GetAddressTo(beam::wallet::TxDescription transaction);
     NSString *GetAddressFrom(beam::wallet::TxDescription transaction);
     NSString *GetErrorString(beam::wallet::ErrorType type);

@@ -162,9 +162,9 @@ void WalletModel::onStatus(const WalletStatus& status)
     for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
         BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
         if (asset.name == nil || asset.name.isEmpty) {
-            NSLog(@"GET ASSET %d",(uint)asset.assetId);
             if(asset.assetId == 0) {
                 asset.assetId = 0;
+                asset.name = @"BEAM";
                 asset.nthUnitName = @"BEAM";
                 asset.unitName = @"BEAM";
                 asset.color = @"#00F6D2";
@@ -175,7 +175,8 @@ void WalletModel::onStatus(const WalletStatus& status)
                 asset.paper = @"";
                 [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
             }
-            else {
+            else if (m_pendingAssetInfo.insert((beam::Asset::ID)asset.assetId).second) {
+                NSLog(@"GET ASSET %d",(uint)asset.assetId);
                 this->getAsync()->getAssetInfo((uint)asset.assetId);
             }
         }
@@ -1936,7 +1937,9 @@ void WalletModel::onPublicAddress(const std::string& publicAddr)
 
 void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     NSLog(@"onAssetInfo :%d", assetId);
-    
+
+    m_pendingAssetInfo.erase(assetId);
+
     auto info = WalletAssetMeta(asset);
 
     NSString *name = [NSString stringWithUTF8String:info.GetName().c_str()];
@@ -1966,6 +1969,7 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     }
     
     bmAsset.assetId = UInt64(assetId);
+    bmAsset.name = name;
     bmAsset.nthUnitName = nthName;
     bmAsset.unitName = unitName;
     bmAsset.shortName = shortName;
