@@ -115,6 +115,34 @@ class EditAddressViewController: BaseTableViewController {
         back()
     }
     
+    private func presentExpiryPicker() {
+        guard !viewModel.isContact else { return }
+        if viewModel.newAddress.isExpired() && !viewModel.newAddress.isNowActive { return }
+
+        let current: Int32 = (viewModel.newAddress.isNowActive ? viewModel.newAddress.isNowActiveDuration : viewModel.newAddress.duration) == 0 ? 0 : 24
+        let picker = BMDataPickerViewController(type: .address_expire, selectedValue: current)
+        picker.completion = { [weak self] selected in
+            guard let self = self, let hours = selected as? Int32 else { return }
+            let duration: UInt64 = hours == 0 ? 0 : UInt64(Settings.sharedManager().maxAddressDurationSeconds)
+
+            self.isNeverExpired = hours == 0
+            self.canExtend = false
+
+            self.viewModel.newAddress.createTime = UInt64(Date().timeIntervalSince1970)
+            self.viewModel.newAddress.duration = duration
+            self.viewModel.newAddress.isNowActiveDuration = duration
+            self.viewModel.newAddress.isNowActive = true
+            self.viewModel.newAddress.isNowExpired = false
+
+            self.expireChanged = true
+            self.buttonSave.isEnabled = self.expireChanged || self.canSave
+
+            self.fillAddressOptions()
+            self.tableView.reloadData()
+        }
+        pushViewController(vc: picker)
+    }
+
     @objc private func fillAddressOptions() {
         hasActiveTransactions = AppModel.sharedManager().hasActiveTransactions(from: self.viewModel.address!)
         
@@ -150,7 +178,7 @@ extension EditAddressViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if (indexPath.section == 0 && indexPath.row == 2) {
-
+            presentExpiryPicker()
         }
         else if indexPath.row == addressOptions.count {
 
@@ -244,17 +272,9 @@ extension EditAddressViewController : UITableViewDataSource {
                 cell.topOffset?.constant = 20
                 return cell
             case 2:
-                
-                var detail = viewModel.newAddress.formattedDate()
-                
-                if viewModel.newAddress.isExpired() || viewModel.newAddress.isNowExpired {
-                    detail = Localizable.shared.strings.this_address_expired
-                }
-                
                 let cell = tableView
-                    .dequeueReusableCell(withType: BMMultiLinesCell.self, for: indexPath)
-                    .configured(with: BMMultiLineItem(title: Localizable.shared.strings.expires_on.uppercased(), detail:detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white))
-                cell.increaseSpace = true
+                    .dequeueReusableCell(withType: AddressExpiresCell.self, for: indexPath)
+                    .configured(with: viewModel.newAddress)
                 return cell
             default:
                 return BaseCell()
