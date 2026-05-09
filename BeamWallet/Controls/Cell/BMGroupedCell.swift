@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 7/19/19.
-//  Copyright © 2019 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import UIKit
