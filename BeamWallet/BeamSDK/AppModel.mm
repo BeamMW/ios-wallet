@@ -2,7 +2,7 @@
 // AppModel.m
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2365,6 +2365,24 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
             [delegate onAddedPrepareTransaction:transaction];
         }
     }
+}
+
+-(void)splitCoins:(int)assetId outputGroths:(NSArray<NSNumber*>*_Nonnull)groths fee:(double)fee {
+    if (wallet == nil || groths.count == 0) {
+        return;
+    }
+
+    AmountList amountList;
+    amountList.reserve(groths.count);
+    for (NSNumber *n in groths) {
+        amountList.push_back((Amount)n.unsignedLongLongValue);
+    }
+
+    auto params = CreateSplitTransactionParameters(amountList);
+    params.SetParameter(TxParameterID::Fee, (Amount)fee)
+          .SetParameter(TxParameterID::AssetID, beam::Asset::ID((uint32_t)assetId));
+
+    wallet->getAsync()->startTransaction(std::move(params));
 }
 
 -(NSString*_Nonnull)allAmount:(double)fee assetId:(int)assetId {

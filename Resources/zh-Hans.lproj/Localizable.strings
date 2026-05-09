@@ -627,3 +627,20 @@ and never kept on the blockchain.";
 "asset_swap_insufficient_funds" = "Insufficient funds for this swap";
 "asset_swap_same_asset_error" = "Send and receive assets must differ";
 "asset_swap_confirm_cancel" = "Cancel this offer?";
+
+
+// MARK: Split Coins
+"split" = "split";
+"split_coins_subtitle" = "Create smaller coins to prevent transaction failures";
+"split_coins_cta" = "split";
+"regular_balance" = "Regular Balance";
+"current_coins" = "Current Coins";
+"coin_count_format" = "(count) coins";
+"largest_coin_format" = "Largest (amount)";
+"more_coins_format" = "+(count) more";
+"split_into" = "Split Into";
+"preview" = "Preview";
+"nx_equal_format" = "(count)x equal · (amount)";
+"split_concentration_warning_format" = "(percent)% in one coin — split into (count) for safety";
+"split_too_small" = "Coin too small to split";
+"split_started_message" = "Your split transaction has been started";

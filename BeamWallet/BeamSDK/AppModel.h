@@ -2,7 +2,7 @@
 // AppModel.h
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -248,6 +248,9 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(double)remainingBeam:(double)amount fee:(double)fee;
 -(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token;
 -(void)calculateFee:(double)amount assetId:(int)assetId fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
+
+// split
+-(void)splitCoins:(int)assetId outputGroths:(NSArray<NSNumber*>*_Nonnull)groths fee:(double)fee;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;

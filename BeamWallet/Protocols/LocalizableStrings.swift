@@ -2,7 +2,7 @@
 // Localizable.shared.strings.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -586,6 +586,22 @@ class LocalizableStrings : NSObject {
     var max_funds_hint = "max_funds_hint".localized
     var dAppStore = "dAppStore".localized
     var fee = "fee".localized
+
+    var split = "split".localized
+    var split_coins_subtitle = "split_coins_subtitle".localized
+    var split_coins_cta = "split_coins_cta".localized
+    var regular_balance = "regular_balance".localized
+    var current_coins = "current_coins".localized
+    var coin_count_format = "coin_count_format".localized
+    var largest_coin_format = "largest_coin_format".localized
+    var more_coins_format = "more_coins_format".localized
+    var split_into = "split_into".localized
+    var preview = "preview".localized
+    var nx_equal_format = "nx_equal_format".localized
+    var split_concentration_warning_format = "split_concentration_warning_format".localized
+    var split_too_small = "split_too_small".localized
+    var split_started_message = "split_started_message".localized
+
     var confirm_accept = "confirm_accept".localized
     var will_take_funds = "will_take_funds".localized
     var will_send_funds = "will_send_funds".localized

@@ -2,7 +2,7 @@
 // UTXODetailViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -75,12 +75,12 @@ class UTXODetailViewController: BaseTableViewController {
     
     @objc private func onMoreDetails() {
         viewModel.detailsExpand = !viewModel.detailsExpand
-        tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
+        tableView.reloadSections([1], with: .fade)
     }
-    
+
     @objc private func onMoreHistory() {
         viewModel.historyExpand = !viewModel.historyExpand
-        tableView.reloadSections(IndexSet(arrayLiteral: 2), with: .fade)
+        tableView.reloadSections([2], with: .fade)
     }
 }
 

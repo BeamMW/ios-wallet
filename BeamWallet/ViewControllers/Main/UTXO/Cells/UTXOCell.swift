@@ -2,7 +2,7 @@
 //  UTXOCell.swift
 //  BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,10 +28,6 @@ class UTXOCell: RippleCell {
     @IBOutlet weak private var typeLabel: UILabel!
     @IBOutlet weak private var dateLabel: UILabel!
     @IBOutlet weak private var assetIconView: AssetIconView!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 }
 
 extension UTXOCell: Configurable {
