@@ -33,7 +33,19 @@ class BaseTableViewController: BaseViewController {
     
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
-    
+
+    /// View pinned above the bottom safe area, outside the table. The table is
+    /// sized to fit the area above it, so content placed here never causes the
+    /// table to scroll. Subclasses set this from viewDidLoad. Toggle visibility
+    /// with `isHidden`; setting to nil removes it entirely.
+    var bottomAccessoryView: UIView? {
+        didSet {
+            oldValue?.removeFromSuperview()
+            if let v = bottomAccessoryView { view.addSubview(v) }
+            view.setNeedsLayout()
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,18 +73,27 @@ class BaseTableViewController: BaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        var offset:CGFloat =  0
-       
+
+        var offset: CGFloat = 0
+
         if !isGradient {
-            offset =  30
+            offset = 30
         }
         else if isGradient && !isAddStatusView {
             offset = 30
         }
-       
+
         let y = navigationBarOffset - offset
-        tableView.frame = CGRect(x: 0, y: y , width: self.view.bounds.width, height: self.view.bounds.size.height - y)
+        let bottomSafe = view.safeAreaInsets.bottom
+        var bottomReserved: CGFloat = bottomSafe
+        if let acc = bottomAccessoryView, !acc.isHidden {
+            let h = acc.frame.height
+            acc.frame = CGRect(x: 0, y: view.bounds.height - bottomSafe - h,
+                               width: view.bounds.width, height: h)
+            bottomReserved = h + bottomSafe
+        }
+        tableView.frame = CGRect(x: 0, y: y, width: view.bounds.width,
+                                 height: view.bounds.height - y - bottomReserved)
     }
     
 //    public func footerView(buttons:[FooterButton]) -> UIView {
@@ -102,13 +123,21 @@ extension BaseTableViewController {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            
+
             tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            tableView.alwaysBounceVertical = true
+
+            let lift = keyboardHeight - view.safeAreaInsets.bottom
+            if lift > 0 {
+                bottomAccessoryView?.transform = CGAffineTransform(translationX: 0, y: -lift)
+            }
         }
     }
-    
+
     @objc func keyboardWillHide(notification: NSNotification) {
         tableView.contentInset = UIEdgeInsets.zero
+        tableView.alwaysBounceVertical = false
+        bottomAccessoryView?.transform = .identity
     }
 }
 

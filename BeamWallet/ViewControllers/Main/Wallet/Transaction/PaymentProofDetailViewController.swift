@@ -35,19 +35,18 @@ class PaymentProofDetailViewController: BaseTableViewController {
     @IBOutlet private weak var headerdHeight: NSLayoutConstraint!
     @IBOutlet private weak var keyKodeTitle: UILabel!
     
-    private lazy var footerView: UIView = {
-        var view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 115))
-        
-        var sendButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-143)/2, y: 30, width: 143, height: 44), color: UIColor.main.brightTeal)
-        sendButton.setImage(IconCopyBlue(), for: .normal)
-        sendButton.setTitle(Localizable.shared.strings.copy_details.lowercased(), for: .normal)
-        sendButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-        sendButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-        sendButton.addTarget(self, action: #selector(onCopyCodeDetails), for: .touchUpInside)
-        view.addSubview(sendButton)
-        
-        
-        return view
+    private lazy var bottomAccessory: UIView = {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 70))
+
+        let copyButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 143) / 2, y: 13, width: 143, height: 44), color: UIColor.main.brightTeal)
+        copyButton.setImage(IconCopyBlue(), for: .normal)
+        copyButton.setTitle(Localizable.shared.strings.copy_details.lowercased(), for: .normal)
+        copyButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+        copyButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+        copyButton.addTarget(self, action: #selector(onCopyCodeDetails), for: .touchUpInside)
+        container.addSubview(copyButton)
+
+        return container
     }()
     
     override var tableStyle: UITableView.Style {
@@ -128,19 +127,19 @@ class PaymentProofDetailViewController: BaseTableViewController {
         if let paymentProof = self.paymentProof {
             var section_1 = [BMMultiLineItem]()
             section_1.append(BMMultiLineItem(title: Localizable.shared.strings.key_code.uppercased(), detail: paymentProof.code, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
-            
+
             details.append(section_1)
-            
-            tableView.tableFooterView = footerView
+
+            bottomAccessoryView = bottomAccessory
         }
-        
+
         if let info = AppModel.sharedManager().getPaymentProofInfo(self.paymentProof?.code ?? String.empty()){
             self.fillInfoFromPaymentInfo(info: info)
-            tableView.tableFooterView = footerView
+            bottomAccessoryView = bottomAccessory
         }
         else {
             self.paymentInfo = nil
-            tableView.tableFooterView = nil
+            bottomAccessoryView = nil
         }
     }
     
@@ -156,8 +155,8 @@ class PaymentProofDetailViewController: BaseTableViewController {
             section_2.append(BMMultiLineItem(title: Localizable.shared.strings.kernel_id.uppercased(), detail: info.kernelId, detailFont: RegularFont(size: 16), detailColor: UIColor.white, copy: true))
             
             details.append(section_2)
-            
-            tableView.tableFooterView = footerView
+
+            bottomAccessoryView = bottomAccessory
         }
     }
     

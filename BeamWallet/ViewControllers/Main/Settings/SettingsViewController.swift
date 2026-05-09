@@ -21,8 +21,6 @@ import UIKit
 
 class SettingsViewController: BaseTableViewController {
 
-    private static let versionFooterMinHeight: CGFloat = 70
-
     private var viewModel:SettingsViewModel!
     private var type:SettingsViewModel.SettingsType!
 
@@ -62,9 +60,6 @@ class SettingsViewController: BaseTableViewController {
                 self?.tableView.separatorStyle = .singleLine
             }
             self?.tableView.reloadData()
-            DispatchQueue.main.async {
-                self?.adjustVersionFooterIfNeeded()
-            }
         }
                 
         tableView.register([SettingsCell.self, SettingsSubTitleCell.self, BMEmptyCell.self])
@@ -73,6 +68,8 @@ class SettingsViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.sectionHeaderHeight = 15
+        tableView.sectionFooterHeight = 15
 
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
@@ -87,13 +84,14 @@ class SettingsViewController: BaseTableViewController {
                 if !text.isEmpty {
                     strongSelf.tableView.sectionHeaderHeight = 5
                     strongSelf.tableView.sectionFooterHeight = 5
-                    strongSelf.tableView.tableFooterView = nil
+                    strongSelf.bottomAccessoryView?.isHidden = true
                 }
                 else {
                     strongSelf.tableView.sectionHeaderHeight = 15
                     strongSelf.tableView.sectionFooterHeight = 15
-                    strongSelf.tableView.tableFooterView = strongSelf.versionView()
+                    strongSelf.bottomAccessoryView?.isHidden = false
                 }
+                strongSelf.view.setNeedsLayout()
                 strongSelf.viewModel.searchString = text
             }
             searchView.onCancelSearch = { [weak self] in
@@ -101,14 +99,15 @@ class SettingsViewController: BaseTableViewController {
                 strongSelf.tableView.sectionHeaderHeight = 15
                 strongSelf.tableView.sectionFooterHeight = 15
                 strongSelf.viewModel.searchString = ""
-                strongSelf.tableView.tableFooterView = strongSelf.versionView()
+                strongSelf.bottomAccessoryView?.isHidden = false
+                strongSelf.view.setNeedsLayout()
             }
-            
+
             let tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
             tableHeaderView.addSubview(searchView)
-            
+
             tableView.tableHeaderView = tableHeaderView
-            tableView.tableFooterView = versionView()
+            bottomAccessoryView = makeVersionAccessory()
         }
         else {
             tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
@@ -120,36 +119,13 @@ class SettingsViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if type == .main {
-            tableView.tableFooterView = versionView()
+            bottomAccessoryView = makeVersionAccessory()
         }
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
 
-        tableView.frame = CGRect(x: 0, y: tableView.y - 5, width: self.view.bounds.width, height: tableView.h + 10)
 
-        adjustVersionFooterIfNeeded()
-    }
-
-    private func adjustVersionFooterIfNeeded() {
-        guard type == .main, let footer = tableView.tableFooterView else { return }
-
-        let contentExcludingFooter = tableView.contentSize.height - footer.frame.height
-        let bottomInset = view.safeAreaInsets.bottom
-        let available = tableView.bounds.height - bottomInset - contentExcludingFooter
-        let desired = max(SettingsViewController.versionFooterMinHeight, available)
-
-        if abs(footer.frame.height - desired) > 0.5 {
-            var newFrame = footer.frame
-            newFrame.size.height = desired
-            footer.frame = newFrame
-            tableView.tableFooterView = footer
-        }
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -159,8 +135,8 @@ class SettingsViewController: BaseTableViewController {
         }
     }
     
-    private func versionView() -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: SettingsViewController.versionFooterMinHeight))
+    private func makeVersionAccessory() -> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 70))
         view.backgroundColor = UIColor.clear
 
         let bHeight = AppModel.sharedManager().walletStatus?.currentHeight ?? ""
@@ -385,7 +361,7 @@ extension SettingsViewController : WalletModelDelegate {
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
             if self.type == .main {
-                self.tableView.tableFooterView = self.versionView()
+                self.bottomAccessoryView = self.makeVersionAccessory()
             }
         }
     }
@@ -397,7 +373,7 @@ extension SettingsViewController : SettingsModelDelegate {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: self.navigationController?.viewControllers.first == self)
         title = viewModel.title()
         if type == .main {
-            tableView.tableFooterView = versionView()
+            bottomAccessoryView = makeVersionAccessory()
         }
         viewModel.reload()
         tableView.reloadData()

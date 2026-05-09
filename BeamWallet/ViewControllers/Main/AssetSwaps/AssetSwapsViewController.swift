@@ -27,7 +27,9 @@ class AssetSwapsViewController: BaseTableViewController {
         Localizable.shared.strings.asset_swap_my_orders,
         Localizable.shared.strings.asset_swap_history,
     ])
+    private let segmentedHeader = UIView()
     private let emptyLabel = UILabel()
+    private let segmentedHeaderHeight: CGFloat = 60
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,15 +48,13 @@ class AssetSwapsViewController: BaseTableViewController {
             segmented.setTitleTextAttributes([.foregroundColor: UIColor.main.marineOriginal], for: .selected)
         }
 
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 60))
-        segmented.frame = CGRect(x: defaultX, y: 12, width: view.bounds.width - 2 * defaultX, height: 36)
-        segmented.autoresizingMask = [.flexibleWidth]
-        header.addSubview(segmented)
+        segmentedHeader.backgroundColor = UIColor.main.marine
+        segmentedHeader.addSubview(segmented)
+        view.addSubview(segmentedHeader)
 
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.tableHeaderView = header
         tableView.register(AssetSwapOrderCell.self, forCellReuseIdentifier: "AssetSwapOrderCell")
         tableView.addPullToRefresh(target: self, handler: #selector(refresh(_:)))
 
@@ -82,6 +82,20 @@ class AssetSwapsViewController: BaseTableViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        let tableTop = tableView.frame.origin.y
+        let width = view.bounds.width
+        segmentedHeader.frame = CGRect(x: 0, y: tableTop, width: width, height: segmentedHeaderHeight)
+        segmented.frame = CGRect(x: defaultX, y: 12, width: width - 2 * defaultX, height: 36)
+        view.bringSubviewToFront(segmentedHeader)
+
+        tableView.frame = CGRect(
+            x: tableView.frame.origin.x,
+            y: tableTop + segmentedHeaderHeight,
+            width: tableView.frame.width,
+            height: tableView.frame.height - segmentedHeaderHeight
+        )
+
         emptyLabel.frame = CGRect(x: 20, y: navigationBarOffset + 120, width: view.bounds.width - 40, height: 60)
     }
 
