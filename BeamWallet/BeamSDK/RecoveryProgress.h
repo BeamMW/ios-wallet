@@ -64,6 +64,11 @@ private: std::unique_ptr<Filter> m_estimateFilter;
 private: long avgTime = 0;
 private: long start = 0;
 
+// BEAM core fires OnProgress thousands of times per second (sub-1KB granularity).
+// Forward to delegates only when integer percent advances or recovery completes,
+// so the iOS side doesn't drown the main queue with redundant UI updates.
+private: int m_lastReportedPercent = -1;
+
 private:
     double getWindowedBps();
     double getWholeTimeBps();
