@@ -3703,6 +3703,11 @@ static bool parseMessengerWalletID(NSString *input, beam::wallet::WalletID &out)
         return NO;
     }
 
+    static const UInt32 kMaxExpirationMinutes = 720; // 12h — SBBS message TTL
+    if (expirationMinutes == 0 || expirationMinutes > kMaxExpirationMinutes) {
+        expirationMinutes = kMaxExpirationMinutes;
+    }
+
     BMAsset *sendAsset = [[AssetsManager sharedManager] getAsset:(int)sendAssetId];
     BMAsset *receiveAsset = [[AssetsManager sharedManager] getAsset:(int)receiveAssetId];
     std::string sendSname = sendAsset.unitName.length > 0 ? sendAsset.unitName.string : "";

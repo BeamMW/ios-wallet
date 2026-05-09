@@ -25,7 +25,7 @@ class AssetSwapCreateViewModel: NSObject {
     public var receiveAsset: BMAsset?
     public var sendAmountString: String = ""
     public var receiveAmountString: String = ""
-    public var expirationMinutes: UInt32 = 360 // 6 hours
+    public var expirationMinutes: UInt32 = 720 // 12 hours — SBBS message TTL cap
 
     public var onDataChanged: (() -> Void)?
 

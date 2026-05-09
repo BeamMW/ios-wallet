@@ -108,8 +108,7 @@ class AssetSwapOrderCell: RippleCell {
             statusLabel.textColor = UIColor.main.brightTeal
             expiryLabel.text = order.displayExpiresIn()
         } else {
-            statusLabel.text = order.isMine ? Localizable.shared.strings.asset_swap_my_orders : Localizable.shared.strings.asset_swap_open_orders
-            statusLabel.textColor = UIColor.main.brightTeal
+            statusLabel.text = ""
             expiryLabel.text = order.displayExpiresIn()
         }
 

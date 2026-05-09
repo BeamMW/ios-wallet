@@ -94,6 +94,11 @@ class AssetSwapCreateViewController: BaseViewController {
     }
 
     private func configureFields() {
+        sendAssetField.placeholder = Localizable.shared.strings.asset_swap_pick_send_asset
+        sendAmountField.placeholder = Localizable.shared.strings.asset_swap_send_amount
+        receiveAssetField.placeholder = Localizable.shared.strings.asset_swap_pick_receive_asset
+        receiveAmountField.placeholder = Localizable.shared.strings.asset_swap_receive_amount
+
         for field in [sendAssetField, sendAmountField, receiveAssetField, receiveAmountField, expirationField] {
             field.font = RegularFont(size: 16)
             field.tintColor = UIColor.white
@@ -104,19 +109,15 @@ class AssetSwapCreateViewController: BaseViewController {
             field.awakeFromNib()
         }
 
-        sendAssetField.placeholder = Localizable.shared.strings.asset_swap_pick_send_asset
         sendAssetField.delegate = self
         sendAssetField.clearButtonMode = .never
 
-        sendAmountField.placeholder = Localizable.shared.strings.asset_swap_send_amount
         sendAmountField.keyboardType = .decimalPad
         sendAmountField.addTarget(self, action: #selector(onAmountChanged), for: .editingChanged)
 
-        receiveAssetField.placeholder = Localizable.shared.strings.asset_swap_pick_receive_asset
         receiveAssetField.delegate = self
         receiveAssetField.clearButtonMode = .never
 
-        receiveAmountField.placeholder = Localizable.shared.strings.asset_swap_receive_amount
         receiveAmountField.keyboardType = .decimalPad
         receiveAmountField.addTarget(self, action: #selector(onAmountChanged), for: .editingChanged)
 
@@ -232,10 +233,7 @@ class AssetSwapCreateViewController: BaseViewController {
         case 60: return "1h"
         case 360: return "6h"
         case 720: return "12h"
-        case 1440: return "24h"
-        case 10080: return "7d"
         default:
-            if minutes >= 1440 { return "\(minutes / 1440)d" }
             if minutes >= 60 { return "\(minutes / 60)h" }
             return "\(minutes)m"
         }
@@ -275,16 +273,20 @@ class AssetSwapCreateViewController: BaseViewController {
     }
 
     @objc private func onPickExpiration() {
-        let alert = UIAlertController(title: Localizable.shared.strings.asset_swap_expiration, message: nil, preferredStyle: .actionSheet)
-        let options: [(String, UInt32)] = [("1 hour", 60), ("6 hours", 360), ("12 hours", 720), ("24 hours", 1440), ("7 days", 10080)]
-        for (title, minutes) in options {
-            alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
-                self?.viewModel.expirationMinutes = minutes
-                self?.refresh()
-            })
+        let options: [BMOptionPickerViewController.Option] = [
+            .init(title: "1 hour", value: 60),
+            .init(title: "6 hours", value: 360),
+            .init(title: "12 hours", value: 720),
+        ]
+        let picker = BMOptionPickerViewController(
+            title: Localizable.shared.strings.asset_swap_expiration,
+            options: options,
+            selectedValue: Int(viewModel.expirationMinutes)
+        ) { [weak self] selected in
+            self?.viewModel.expirationMinutes = UInt32(selected.value)
+            self?.refresh()
         }
-        alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: .cancel))
-        present(alert, animated: true)
+        present(picker, animated: true)
     }
 
     @objc private func onPublish() {
