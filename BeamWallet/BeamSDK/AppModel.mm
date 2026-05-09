@@ -917,6 +917,11 @@ static beam::Rules& getConfiguredRules() {
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         string recoveryPath = path.string;
 
+        // Caller dispatches us onto a background queue, so Rules::s_pInstance
+        // (thread_local) isn't set on this thread yet — install it before any
+        // BEAM API runs, otherwise WalletModel ctor / wallet->start() throw.
+        [self loadRules];
+
         try{
             // Reactor must be current while WalletModel binds to walletDb,
             // otherwise the worker thread inherits no current reactor and
