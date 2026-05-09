@@ -1711,7 +1711,7 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
             self->wallet->getAsync()->getAddresses(true);
         };
-        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
+        wallet->getAsync()->generateToken(TokenType::RegularNewStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), true, func);
     }
 }
 
