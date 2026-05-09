@@ -627,6 +627,12 @@ and never kept on the blockchain.";
 "asset_swap_insufficient_funds" = "Insufficient funds for this swap";
 "asset_swap_same_asset_error" = "Send and receive assets must differ";
 "asset_swap_confirm_cancel" = "Cancel this offer?";
+"asset_swap_created" = "Created";
+"asset_swap_expires_in" = "Expires in";
+"asset_swap_peer_id" = "Peer ID";
+"asset_swap_order_id" = "Order ID";
+"asset_swap_show_details" = "Show technical details";
+"asset_swap_hide_details" = "Hide technical details";
 
 
 // MARK: Split Coins

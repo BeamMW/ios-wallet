@@ -36,6 +36,42 @@ class AssetSwapDetailsViewModel: NSObject {
         return !order.isMine && order.isActive()
     }
 
+    public var sendAsset: BMAsset? {
+        return AssetsManager.shared().getAsset(Int32(order.sendAssetId))
+    }
+
+    public var receiveAsset: BMAsset? {
+        return AssetsManager.shared().getAsset(Int32(order.receiveAssetId))
+    }
+
+    public var statusColor: UIColor {
+        if order.isExpired() {
+            return UIColor.main.red
+        }
+        if order.isCompleted || order.isCanceled {
+            return UIColor.main.steelGrey
+        }
+        return UIColor.main.brightTeal
+    }
+
+    public var isExpiringSoon: Bool {
+        guard order.isActive() else { return false }
+        let now = UInt64(Date().timeIntervalSince1970)
+        guard order.expireTimestamp > now else { return false }
+        return order.expireTimestamp - now < 3600
+    }
+
+    public var validationError: String? {
+        guard canAccept else { return nil }
+        guard let sendAsset = AssetsManager.shared().getAsset(Int32(order.sendAssetId)) else {
+            return Localizable.shared.strings.asset_swap_insufficient_funds
+        }
+        if sendAsset.available < order.sendAmount {
+            return Localizable.shared.strings.asset_swap_insufficient_funds
+        }
+        return nil
+    }
+
     public func cancel() {
         AppModel.sharedManager().cancelDexOrder(withID: order.orderID)
     }

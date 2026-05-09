@@ -97,6 +97,12 @@ class LocalizableStrings : NSObject {
     var asset_swap_insufficient_funds = "asset_swap_insufficient_funds".localized
     var asset_swap_same_asset_error = "asset_swap_same_asset_error".localized
     var asset_swap_confirm_cancel = "asset_swap_confirm_cancel".localized
+    var asset_swap_created = "asset_swap_created".localized
+    var asset_swap_expires_in = "asset_swap_expires_in".localized
+    var asset_swap_peer_id = "asset_swap_peer_id".localized
+    var asset_swap_order_id = "asset_swap_order_id".localized
+    var asset_swap_show_details = "asset_swap_show_details".localized
+    var asset_swap_hide_details = "asset_swap_hide_details".localized
     var transactions = "transactions".localized
     var export = "export".localized
     var activate = "activate".localized
