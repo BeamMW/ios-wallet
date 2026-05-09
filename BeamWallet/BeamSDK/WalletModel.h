@@ -90,4 +90,8 @@ private:
     void onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) override;
     void onGetChatMessages(const std::vector<beam::wallet::InstantMessage>& messages) override;
     void onChatRemoved(const beam::wallet::WalletID& counterpart) override;
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+    void onDexOrdersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::DexOrder>& orders) override;
+    void onFindDexOrder(const beam::wallet::DexOrder& order) override;
+#endif
 };

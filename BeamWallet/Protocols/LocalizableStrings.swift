@@ -72,6 +72,31 @@ class LocalizableStrings : NSObject {
     var messenger_peer_address = "messenger_peer_address".localized
     var messenger_contact_name = "messenger_contact_name".localized
     var messenger_start = "messenger_start".localized
+    var asset_swaps = "asset_swaps".localized
+    var asset_swap_new = "asset_swap_new".localized
+    var asset_swap_open_orders = "asset_swap_open_orders".localized
+    var asset_swap_my_orders = "asset_swap_my_orders".localized
+    var asset_swap_history = "asset_swap_history".localized
+    var asset_swap_send = "asset_swap_send".localized
+    var asset_swap_receive = "asset_swap_receive".localized
+    var asset_swap_send_amount = "asset_swap_send_amount".localized
+    var asset_swap_receive_amount = "asset_swap_receive_amount".localized
+    var asset_swap_expiration = "asset_swap_expiration".localized
+    var asset_swap_publish = "asset_swap_publish".localized
+    var asset_swap_accept = "asset_swap_accept".localized
+    var asset_swap_cancel_order = "asset_swap_cancel_order".localized
+    var asset_swap_no_orders = "asset_swap_no_orders".localized
+    var asset_swap_expired = "asset_swap_expired".localized
+    var asset_swap_completed = "asset_swap_completed".localized
+    var asset_swap_canceled = "asset_swap_canceled".localized
+    var asset_swap_details = "asset_swap_details".localized
+    var asset_swap_rate = "asset_swap_rate".localized
+    var asset_swap_status = "asset_swap_status".localized
+    var asset_swap_pick_send_asset = "asset_swap_pick_send_asset".localized
+    var asset_swap_pick_receive_asset = "asset_swap_pick_receive_asset".localized
+    var asset_swap_insufficient_funds = "asset_swap_insufficient_funds".localized
+    var asset_swap_same_asset_error = "asset_swap_same_asset_error".localized
+    var asset_swap_confirm_cancel = "asset_swap_confirm_cancel".localized
     var transactions = "transactions".localized
     var export = "export".localized
     var activate = "activate".localized
@@ -449,6 +474,8 @@ class LocalizableStrings : NSObject {
     var min_fee_error_offline = "min_fee_error_offline".localized
     var maturity = "maturity".localized
     var show_public_offline = "show_public_offline".localized
+    var sign_message = "sign_message".localized
+    var verify_message = "verify_message".localized
     var offline_address = "offline_address".localized
     var public_offline_address_info = "public_offline_address_info".localized
     var public_offline = "public_offline".localized
@@ -565,7 +592,6 @@ class LocalizableStrings : NSObject {
     
     var dapp_anme = "dapp_anme".localized
     var app_shader_id = "app_shader_id".localized
-    var beamx_dao = "beamx_dao".localized
     var beam_faucet = "beam_faucet".localized
     var beam_gallery = "beam_gallery".localized
 
@@ -639,7 +665,6 @@ class LocalizableStrings : NSObject {
     var search_settings = "search_settings".localized
     var no_search_settings = "no_search_settings".localized
     var online_own_not_conifg = "online_own_not_conifg".localized
-    var beamx_dao_dao_voting = "beamx_dao_dao_voting".localized
 
     
     public func new_version_available_title(version: String) -> String {

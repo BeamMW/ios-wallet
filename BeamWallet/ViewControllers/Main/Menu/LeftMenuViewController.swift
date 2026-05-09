@@ -58,8 +58,7 @@ class LeftMenuViewController: BaseTableViewController {
         MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected:               true, type: WalletViewController.self),
         MenuItem(name: Localizable.shared.strings.messenger, icon: IconMessenger(), selected: false, type: MessengerChatListViewController.self),
         MenuItem(name: Localizable.shared.strings.dAppStore, icon: IconDappStore(), selected: false, type: DAOViewController.self),
-        MenuItem(name: Localizable.shared.strings.beamx_dao, icon: IconBeamXDAO(), selected: false, type: DAOViewController.self),
-        MenuItem(name: Localizable.shared.strings.beamx_dao_dao_voting, icon: IconBeamXDAOVoting(), selected: false, type: DAOViewController.self)]
+        MenuItem(name: Localizable.shared.strings.asset_swaps, icon: IconAssetSwap(), selected: false, type: AssetSwapsViewController.self)]
     
     private var sections_1 = [
         MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self),
@@ -297,10 +296,8 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
                     AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().daoFaucetApp())
                 case Localizable.shared.strings.beam_gallery :
                     AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().daoGalleryApp())
-                case Localizable.shared.strings.beamx_dao:
-                    AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().daoBeamXApp())
-                case Localizable.shared.strings.beamx_dao_dao_voting:
-                    AppModel.sharedManager().startBeamXDaoApp(navigationController, app: AppModel.sharedManager().votingApp())
+                case Localizable.shared.strings.asset_swaps :
+                    navigationController.setViewControllers([AssetSwapsViewController()], animated: false)
                 default :
                     break
                 }
@@ -332,8 +329,7 @@ extension LeftMenuViewController : SettingsModelDelegate {
         sections_0 = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self),
                       MenuItem(name: Localizable.shared.strings.messenger, icon: IconMessenger(), selected: false, type: MessengerChatListViewController.self),
                       MenuItem(name: Localizable.shared.strings.dAppStore, icon: IconDappStore(), selected: false, type: DAOViewController.self),
-                      MenuItem(name: Localizable.shared.strings.beamx_dao, icon: IconBeamXDAO(), selected: false, type: DAOViewController.self),
-                      MenuItem(name: Localizable.shared.strings.beamx_dao_dao_voting, icon: IconBeamXDAOVoting(), selected: false, type: DAOViewController.self)]
+                      MenuItem(name: Localizable.shared.strings.asset_swaps, icon: IconAssetSwap(), selected: false, type: AssetSwapsViewController.self)]
         
         sections_1 = [
             MenuItem(name: Localizable.shared.strings.addresses, icon: IconAddresses(), selected: false, type: AddressesViewController.self),

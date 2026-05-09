@@ -46,6 +46,7 @@
 #import "BMApp.h"
 #import "BMInstantMessage.h"
 #import "BMChat.h"
+#import "BMDexOrder.h"
 
 enum {
     BMRestoreManual = 0,
@@ -87,6 +88,7 @@ typedef int BMRestoreType;
 -(void)onChatMessagesLoaded:(NSString*_Nonnull)peerWalletId messages:(NSArray<BMInstantMessage*>*_Nonnull)messages;
 -(void)onInstantMessageReceived:(BMInstantMessage*_Nonnull)message;
 -(void)onChatRemoved:(NSString*_Nonnull)peerWalletId;
+-(void)onDexOrdersChanged:(NSArray<BMDexOrder*>*_Nonnull)orders;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -134,6 +136,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull needSaveContacts;
 @property (nonatomic,strong) NSMutableArray<BMChat*>*_Nonnull chats;
 @property (nonatomic,strong) NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*>*_Nonnull messagesByPeer;
+@property (nonatomic,strong) NSMutableArray<BMDexOrder*>*_Nonnull dexOrders;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -352,5 +355,15 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(NSArray<BMInstantMessage*>*_Nonnull)cachedMessagesForPeer:(NSString*_Nonnull)peerWalletId;
 -(NSString*_Nullable)lastMyAddressForPeer:(NSString*_Nonnull)peerWalletId;
 -(NSString*_Nonnull)resolvedPeerWalletId:(NSString*_Nonnull)peerWalletId;
+
+// Asset Swaps (DEX)
+-(void)requestDexOrders;
+-(BOOL)publishDexOrderWithSendAsset:(UInt32)sendAssetId
+                         sendAmount:(UInt64)sendAmount
+                       receiveAsset:(UInt32)receiveAssetId
+                      receiveAmount:(UInt64)receiveAmount
+                  expirationMinutes:(UInt32)expirationMinutes;
+-(void)cancelDexOrderWithID:(NSString*_Nonnull)hexOrderID;
+-(BOOL)acceptDexOrder:(BMDexOrder*_Nonnull)order;
 
 @end

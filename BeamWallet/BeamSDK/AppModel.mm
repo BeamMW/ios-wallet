@@ -245,6 +245,7 @@ static dispatch_once_t * once_token_model;
     _apps = [[NSMutableArray alloc] init];
     _chats = [[NSMutableArray alloc] init];
     _messagesByPeer = [[NSMutableDictionary alloc] init];
+    _dexOrders = [[NSMutableArray alloc] init];
     
     NSData *dataStatus = [[NSUserDefaults standardUserDefaults] objectForKey:walletStatusKey];
     if(dataStatus != nil) {
@@ -3672,6 +3673,98 @@ static bool parseMessengerWalletID(NSString *input, beam::wallet::WalletID &out)
         }
     }
     return nil;
+}
+
+#pragma mark - Asset Swaps (DEX)
+
+-(void)requestDexOrders {
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+    if (wallet == nil) return;
+    wallet->getAsync()->getDexOrders();
+#endif
+}
+
+-(BOOL)publishDexOrderWithSendAsset:(UInt32)sendAssetId
+                         sendAmount:(UInt64)sendAmount
+                       receiveAsset:(UInt32)receiveAssetId
+                      receiveAmount:(UInt64)receiveAmount
+                  expirationMinutes:(UInt32)expirationMinutes {
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+    if (wallet == nil || walletDb == nil) {
+        NSLog(@"[AssetSwap] publishDexOrder skipped — wallet not running");
+        return NO;
+    }
+    if (sendAmount == 0 || receiveAmount == 0 || sendAssetId == receiveAssetId) {
+        return NO;
+    }
+
+    BMAsset *sendAsset = [[AssetsManager sharedManager] getAsset:(int)sendAssetId];
+    BMAsset *receiveAsset = [[AssetsManager sharedManager] getAsset:(int)receiveAssetId];
+    std::string sendSname = sendAsset.unitName.length > 0 ? sendAsset.unitName.string : "";
+    std::string receiveSname = receiveAsset.unitName.length > 0 ? receiveAsset.unitName.string : "";
+
+    WalletAddress sbbsAddress;
+    sbbsAddress.m_label = "asset_swap";
+    walletDb->createAddress(sbbsAddress);
+    sbbsAddress.m_duration = WalletAddress::AddressExpiration24h;
+    walletDb->saveAddress(sbbsAddress);
+
+    DexOrder order(DexOrderID::generate(),
+                   sbbsAddress.m_BbsAddr,
+                   sbbsAddress.m_OwnID,
+                   (Asset::ID)sendAssetId,
+                   (Amount)sendAmount,
+                   sendSname,
+                   (Asset::ID)receiveAssetId,
+                   (Amount)receiveAmount,
+                   receiveSname,
+                   expirationMinutes * 60);
+
+    wallet->getAsync()->publishDexOrder(order);
+    return YES;
+#else
+    return NO;
+#endif
+}
+
+-(void)cancelDexOrderWithID:(NSString*_Nonnull)hexOrderID {
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+    if (wallet == nil) return;
+    DexOrderID orderId;
+    if (!orderId.FromHex(hexOrderID.string)) return;
+    wallet->getAsync()->cancelDexOrder(orderId);
+#endif
+}
+
+-(BOOL)acceptDexOrder:(BMDexOrder*_Nonnull)order {
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+    if (wallet == nil) return NO;
+
+    WalletID peerID(Zero);
+    if (!peerID.FromHex(order.sbbsID.string)) {
+        return NO;
+    }
+    DexOrderID orderId;
+    if (!orderId.FromHex(order.orderID.string)) {
+        return NO;
+    }
+
+    Amount fee = (Amount)[self getDefaultFeeInGroth];
+
+    auto params = CreateDexTransactionParams(
+        orderId,
+        peerID,
+        (Asset::ID)order.receiveAssetId,
+        (Amount)order.receiveAmount,
+        (Asset::ID)order.sendAssetId,
+        (Amount)order.sendAmount,
+        fee);
+
+    wallet->getAsync()->startTransaction(std::move(params));
+    return YES;
+#else
+    return NO;
+#endif
 }
 
 @end

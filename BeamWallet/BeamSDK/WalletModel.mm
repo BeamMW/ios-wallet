@@ -29,6 +29,11 @@
 #include "utility/helpers.h"
 #include "utility/common.h"
 #include "wallet/core/strings_resources.h"
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+#include "wallet/client/extensions/dex_board/dex_board.h"
+#include "wallet/client/extensions/dex_board/dex_order.h"
+#endif
+#import "BMDexOrder.h"
 
 #import "StringStd.h"
 
@@ -422,7 +427,15 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
                 }
             }
         }
-        
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+        else if(item.m_txType == wallet::TxType::DexSimpleSwap) {
+            NSString *swapPrefix = NSLocalizedString(@"asset_swaps", nil);
+            transaction.status = [NSString stringWithFormat:@"%@ — %@",
+                                  swapPrefix,
+                                  [GetTransactionStatusString(item, transaction.isIncome) lowercaseString]];
+        }
+#endif
+
         auto rate = item.getExchangeRate(currenCurrency, transaction.assetId);
         transaction.realRate = int64_t(rate);
 
@@ -1175,6 +1188,97 @@ void WalletModel::onChatRemoved(const beam::wallet::WalletID& counterpart) {
         }
     }
 }
+
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+static BMDexOrder *MakeBMDexOrder(const beam::wallet::DexOrder& order) {
+    BMDexOrder *bmo = [[BMDexOrder alloc] init];
+    bmo.orderID = [NSString stringWithUTF8String:order.getID().to_string().c_str()];
+    bmo.sbbsID = [NSString stringWithUTF8String:to_string(order.getSBBSID()).c_str()];
+    bmo.sendAssetId = (UInt32)order.getSendAssetId();
+    bmo.receiveAssetId = (UInt32)order.getReceiveAssetId();
+    bmo.sendAssetSName = [NSString stringWithUTF8String:order.getSendAssetSName().c_str()];
+    bmo.receiveAssetSName = [NSString stringWithUTF8String:order.getReceiveAssetSName().c_str()];
+    bmo.sendAmount = (UInt64)order.getSendAmount();
+    bmo.receiveAmount = (UInt64)order.getReceiveAmount();
+    bmo.createTimestamp = (UInt64)order.getCreation();
+    bmo.expireTimestamp = (UInt64)order.getExpiration();
+    bmo.isMine = order.isMine();
+    bmo.isAccepted = order.isAccepted();
+    bmo.isCanceled = order.isCanceled();
+    return bmo;
+}
+
+void WalletModel::onDexOrdersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::DexOrder>& orders) {
+    NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
+
+    if (action == beam::wallet::ChangeAction::Reset) {
+        [cache removeAllObjects];
+    }
+
+    for (const auto& order : orders) {
+        NSString *orderID = [NSString stringWithUTF8String:order.getID().to_string().c_str()];
+
+        NSUInteger existingIdx = NSNotFound;
+        for (NSUInteger i = 0; i < cache.count; i++) {
+            if ([cache[i].orderID isEqualToString:orderID]) {
+                existingIdx = i;
+                break;
+            }
+        }
+
+        if (action == beam::wallet::ChangeAction::Removed) {
+            if (existingIdx != NSNotFound) {
+                [cache removeObjectAtIndex:existingIdx];
+            }
+            continue;
+        }
+
+        BMDexOrder *bmo = MakeBMDexOrder(order);
+        if (existingIdx != NSNotFound) {
+            [cache replaceObjectAtIndex:existingIdx withObject:bmo];
+        } else {
+            [cache addObject:bmo];
+        }
+    }
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    NSArray *snapshot = [cache copy];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onDexOrdersChanged:)]) {
+                [delegate onDexOrdersChanged:snapshot];
+            }
+        }
+    });
+}
+
+void WalletModel::onFindDexOrder(const beam::wallet::DexOrder& order) {
+    BMDexOrder *bmo = MakeBMDexOrder(order);
+    NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
+    NSUInteger existingIdx = NSNotFound;
+    for (NSUInteger i = 0; i < cache.count; i++) {
+        if ([cache[i].orderID isEqualToString:bmo.orderID]) {
+            existingIdx = i;
+            break;
+        }
+    }
+    if (existingIdx != NSNotFound) {
+        [cache replaceObjectAtIndex:existingIdx withObject:bmo];
+    } else {
+        [cache addObject:bmo];
+    }
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    NSArray *snapshot = [cache copy];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onDexOrdersChanged:)]) {
+                [delegate onDexOrdersChanged:snapshot];
+            }
+        }
+    });
+}
+#endif
 
 void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
     NSString *csv = [NSString stringWithUTF8String:data.c_str()];

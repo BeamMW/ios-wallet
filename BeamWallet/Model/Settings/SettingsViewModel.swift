@@ -67,6 +67,8 @@ class SettingsViewModel: NSObject {
         case utxo = 35
         case blockchain = 36
         case confirmations = 37
+        case sign_message = 38
+        case verify_message = 39
     }
     
     class SettingsItem {
@@ -201,18 +203,22 @@ class SettingsViewModel: NSObject {
         allItems.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
         
-        allItems.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
-        allItems.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.show_utxo, detail: nil, isSwitch: nil, type: .utxo, hasArrow: true))
-        
+
         if AppModel.sharedManager().checkIsOwnNode() {
             allItems.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
         }
-        
-        allItems.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+
         allItems.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
+
+        allItems.append(SettingsItem(title: Localizable.shared.strings.sign_message, detail: nil, isSwitch: nil, type: .sign_message, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.verify_message, detail: nil, isSwitch: nil, type: .verify_message, hasArrow: true))
+
+        allItems.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
     }
     
     private func initItems() {
@@ -289,29 +295,27 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
             items.append(section_0)
         case .utilites:
-           
-//            var section_0 = [SettingsItem]()
-//            section_0.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
-            
             var section_1 = [SettingsItem]()
-            section_1.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
-            section_1.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
             section_1.append(SettingsItem(title: Localizable.shared.strings.show_utxo, detail: nil, isSwitch: nil, type: .utxo, hasArrow: true))
             if AppModel.sharedManager().checkIsOwnNode() {
                 section_1.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
             }
-            section_1.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
 
-            
             var section_2 = [SettingsItem]()
-            section_2.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-            section_2.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
-            section_2.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
-       
+            section_2.append(SettingsItem(title: Localizable.shared.strings.sign_message, detail: nil, isSwitch: nil, type: .sign_message, hasArrow: true))
+            section_2.append(SettingsItem(title: Localizable.shared.strings.verify_message, detail: nil, isSwitch: nil, type: .verify_message, hasArrow: true))
 
-          //  items.append(section_0)
+            var section_3 = [SettingsItem]()
+            section_3.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
+            section_3.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+            section_3.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+
             items.append(section_1)
             items.append(section_2)
+            items.append(section_3)
 
         default:
             break

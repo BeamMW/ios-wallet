@@ -109,16 +109,12 @@ func IconMessenger() -> UIImage? {
     return UIImage(named: "iconMessenger")
 }
 
-func IconBeamXDAO() -> UIImage? {
-    return UIImage(named: "iconDao")
+func IconAssetSwap() -> UIImage? {
+    return UIImage(named: "iconAssetSwap")
 }
 
 func IconBeamFaucet() -> UIImage? {
     return UIImage(named: "icon_faucet")
-}
-
-func IconBeamXDAOVoting() -> UIImage? {
-    return UIImage(named: "iconDaoVote")
 }
 
 func IconBeamGallery() -> UIImage? {

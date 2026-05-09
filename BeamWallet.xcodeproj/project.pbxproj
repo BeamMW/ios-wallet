@@ -13,9 +13,12 @@
 		09BB8194C318850B9C687050 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */; };
 		0E952497DFB46C7621546999 /* Pods_BeamWalletTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */; };
 		14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		15A094B1963EAE81E9B86B33 /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
 		215454B3AA22BD789F53A90C /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
 		2361D1F909D78EC50B8C5D5C /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
+		2C2D70373756666705D14FDE /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
 		30BE993E2DFFA6452A536125 /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		31509E4F991BC56BF7F10098 /* AssetSwapDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */; };
 		35726BA6BFE79F50A19E7054 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
 		434CC206E4AD461CECAD5DFB /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
 		492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
@@ -23,10 +26,19 @@
 		53E3D6F8F19BD21A69380CBA /* Pods_BeamWalletMasterNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */; };
 		5A1A647678A2061222332D16 /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
 		5A4A0ACB5C6CA50F1E5FCBE8 /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		5DAA3CCCB00AECEACD182FBF /* AssetSwapOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */; };
+		610B9971C155D841609ACE0F /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57D7E7F685327E2CAB9E7C69 /* libdex.a */; };
+		62D6B4FFAD6FCD00C5206630 /* AssetSwapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21968CB26C3B977852247761 /* AssetSwapsViewController.swift */; };
+		6315A76D06343C9CEDE2EF77 /* AssetSwapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21968CB26C3B977852247761 /* AssetSwapsViewController.swift */; };
 		69B13BFFB153BF4611F30888 /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
 		75516585C510BB694A1B9AED /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
 		75B069A9EC9A517ABCACFC1E /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		77CF51BBE36DCCD780857772 /* AssetSwapCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */; };
+		7ED2D2980F560C573C46D8CC /* AssetSwapsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */; };
+		83EC213430E0CFD381D45A13 /* AssetSwapDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */; };
+		84D2719B950F43294039957A /* AssetSwapOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */; };
 		87B508D6F91B6BCDE6EC712F /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		88D6972926A283D03D289A48 /* AssetSwapsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */; };
 		8E6EABD786898410576636A4 /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
 		9207DD8726778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
 		9207DD8826778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
@@ -1369,17 +1381,35 @@
 		92FE264122A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264222A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
+		94E405DB59B47772F0662861 /* AssetSwapCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */; };
 		984E5950BBB86D093251AB57 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		9A1790F44DE275FD9644A9F7 /* AssetSwapCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */; };
 		9C3478CC0AB10D577E97E53E /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		9D8BAACCF64EA977E69273F0 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57D7E7F685327E2CAB9E7C69 /* libdex.a */; };
 		9E75E31529DE385C7D153631 /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
 		A04389E8E8EE7AB9E4D87007 /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		A522EB1A22FF64A990518431 /* AssetSwapDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */; };
+		AB6BA79FF389E013065D35C9 /* libdex_board.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F426BB6F15C2E08A3E81B87D /* libdex_board.a */; };
+		B4FE33729385D12603589437 /* AssetSwapDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */; };
 		B5E7CC16D70E7D12DD9315FC /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
+		B6037162941C5AB71A356FF3 /* AssetSwapDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */; };
+		BCB254DF739D2FA8FF92C672 /* AssetSwapDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */; };
+		BE96C4A71A3D47721D003ACF /* AssetSwapOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */; };
+		C07BD2850E0E4E55AC706985 /* AssetSwapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21968CB26C3B977852247761 /* AssetSwapsViewController.swift */; };
+		CCB34673E007AADB0D649F2C /* libdex_board.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F426BB6F15C2E08A3E81B87D /* libdex_board.a */; };
+		DEF279257A2A5B949FBA8B01 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57D7E7F685327E2CAB9E7C69 /* libdex.a */; };
 		DFC07B98C98F293C31F86A8C /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
+		E153DCA098F777EAFAA1D91A /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
+		E167B53AA2D8218D0710AA3E /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
+		E545F78761926F0D8A51E9B2 /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
 		E6218D6C7C5BE83B9707F158 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		E7EA1E52231681BDE3D26C73 /* AssetSwapsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */; };
 		EEE47E74C114A85B33A3A618 /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		F00F7FD991CEA0402E131CFF /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
 		F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
 		F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
 		F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F9C79FBC040297C8E235C660 /* libdex_board.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F426BB6F15C2E08A3E81B87D /* libdex_board.a */; };
 		FD87FA1DDA9C27F19451AB4B /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -1464,13 +1494,19 @@
 		13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerNewChatViewController.swift; sourceTree = "<group>"; };
 		18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletMasterNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		20B7F5341703980CD2D3941F /* BMInstantMessage.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = BMInstantMessage.mm; sourceTree = "<group>"; };
+		21968CB26C3B977852247761 /* AssetSwapsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapsViewController.swift; sourceTree = "<group>"; };
 		35296D58A729F092AFF0C821 /* BMChat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMChat.h; sourceTree = "<group>"; };
 		36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletTestNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatCell.swift; sourceTree = "<group>"; };
 		3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		456B838BA83C92E05D36B091 /* Pods-BeamWalletTestNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.release.xcconfig"; sourceTree = "<group>"; };
+		46577647151F6240CBA9CE2D /* BMDexOrder.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = BMDexOrder.mm; sourceTree = "<group>"; };
 		46CAE6BC4C48E30E26AE304F /* BMInstantMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMInstantMessage.h; sourceTree = "<group>"; };
+		4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapCreateViewController.swift; sourceTree = "<group>"; };
+		57D7E7F685327E2CAB9E7C69 /* libdex.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = libdex.a; sourceTree = "<group>"; };
+		75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapDetailsViewController.swift; sourceTree = "<group>"; };
 		7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerConversationViewModel.swift; sourceTree = "<group>"; };
+		7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapOrderCell.swift; sourceTree = "<group>"; };
 		8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = BMChat.mm; sourceTree = "<group>"; };
 		8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatListViewController.swift; sourceTree = "<group>"; };
 		9205284E237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1892,6 +1928,7 @@
 		92C5EBA1229BE48E00ABFFF7 /* PreviewQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewQRViewController.swift; sourceTree = "<group>"; };
 		92C5EBB1229BFD1100ABFFF7 /* BMDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMDetailCell.swift; sourceTree = "<group>"; };
 		92C5EBB2229BFD1100ABFFF7 /* BMDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMDetailCell.xib; sourceTree = "<group>"; };
+		92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapDetailsViewModel.swift; sourceTree = "<group>"; };
 		92CC40E622E1DC7300006E5C /* BMGroupedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMGroupedCell.swift; sourceTree = "<group>"; };
 		92CC40E722E1DC7300006E5C /* BMGroupedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMGroupedCell.xib; sourceTree = "<group>"; };
 		92CF065822E112570021B9CF /* SearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableView.swift; sourceTree = "<group>"; };
@@ -2010,13 +2047,17 @@
 		92FE263922A11E4B00102DB4 /* BMExpandCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMExpandCell.swift; sourceTree = "<group>"; };
 		92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMExpandCell.xib; sourceTree = "<group>"; };
 		AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatListViewModel.swift; sourceTree = "<group>"; };
+		B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapCreateViewModel.swift; sourceTree = "<group>"; };
 		BA659A4953BE271B118EB5D6 /* Pods-BeamWalletMasterNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.debug.xcconfig"; sourceTree = "<group>"; };
 		D303009FB5F0DA4093A89DFB /* Pods-BeamWalletTestNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.debug.xcconfig"; sourceTree = "<group>"; };
 		D601ED375D9C9B9FAB70DE0B /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
 		E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerBubbleCell.swift; sourceTree = "<group>"; };
 		EAEED72AAED404575AB9A6E5 /* Pods-BeamWalletMasterNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.release.xcconfig"; sourceTree = "<group>"; };
 		F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSearchViewController.swift; sourceTree = "<group>"; };
+		F426BB6F15C2E08A3E81B87D /* libdex_board.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = libdex_board.a; sourceTree = "<group>"; };
 		F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatViewController.swift; sourceTree = "<group>"; };
+		FECECF4C7F96F708C05AAF05 /* BMDexOrder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMDexOrder.h; sourceTree = "<group>"; };
+		FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2059,6 +2100,8 @@
 				9244A5042A01465E007B03D0 /* libwallet_api.a in Frameworks */,
 				9244A50D2A01465E007B03D0 /* libwallet_client.a in Frameworks */,
 				9244A51C2A01465E007B03D0 /* libhw_crypto.a in Frameworks */,
+				610B9971C155D841609ACE0F /* libdex.a in Frameworks */,
+				CCB34673E007AADB0D649F2C /* libdex_board.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2101,6 +2144,8 @@
 				9244A5052A01465E007B03D0 /* libwallet_api.a in Frameworks */,
 				9244A50E2A01465E007B03D0 /* libwallet_client.a in Frameworks */,
 				9244A51D2A01465E007B03D0 /* libhw_crypto.a in Frameworks */,
+				DEF279257A2A5B949FBA8B01 /* libdex.a in Frameworks */,
+				F9C79FBC040297C8E235C660 /* libdex_board.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2143,12 +2188,26 @@
 				9244A5062A01465E007B03D0 /* libwallet_api.a in Frameworks */,
 				9244A50F2A01465E007B03D0 /* libwallet_client.a in Frameworks */,
 				9244A51E2A01465E007B03D0 /* libhw_crypto.a in Frameworks */,
+				9D8BAACCF64EA977E69273F0 /* libdex.a in Frameworks */,
+				AB6BA79FF389E013065D35C9 /* libdex_board.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		78028519D7C340186F689742 /* AssetSwaps */ = {
+			isa = PBXGroup;
+			children = (
+				ECB36A016D50624397AFFA33 /* Cells */,
+				21968CB26C3B977852247761 /* AssetSwapsViewController.swift */,
+				4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */,
+				75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */,
+			);
+			name = AssetSwaps;
+			path = AssetSwaps;
+			sourceTree = "<group>";
+		};
 		8110C1340F23638CECA5A0CA /* Messenger */ = {
 			isa = PBXGroup;
 			children = (
@@ -2160,6 +2219,17 @@
 			);
 			name = Messenger;
 			path = Messenger;
+			sourceTree = "<group>";
+		};
+		838B90CD5474E2AC0F70CB0D /* AssetSwaps */ = {
+			isa = PBXGroup;
+			children = (
+				FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */,
+				B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */,
+				92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */,
+			);
+			name = AssetSwaps;
+			path = AssetSwaps;
 			sourceTree = "<group>";
 		};
 		9207DD8526778DD500250E80 /* Assets */ = {
@@ -2507,6 +2577,8 @@
 				20B7F5341703980CD2D3941F /* BMInstantMessage.mm */,
 				35296D58A729F092AFF0C821 /* BMChat.h */,
 				8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */,
+				FECECF4C7F96F708C05AAF05 /* BMDexOrder.h */,
+				46577647151F6240CBA9CE2D /* BMDexOrder.mm */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -2525,6 +2597,7 @@
 				92F6B79C22A5B6C60055C3C3 /* QRCode */,
 				923A45D5235DE4000084C368 /* Passwords */,
 				8110C1340F23638CECA5A0CA /* Messenger */,
+				78028519D7C340186F689742 /* AssetSwaps */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -3043,8 +3116,10 @@
 				9244A5032A01465E007B03D0 /* libwallet_client_no_ipfs.a */,
 				9244A4E72A014656007B03D0 /* libwallet_client.a */,
 				9244A4E62A014655007B03D0 /* libwallet_core.a */,
+				57D7E7F685327E2CAB9E7C69 /* libdex.a */,
+				F426BB6F15C2E08A3E81B87D /* libdex_board.a */,
 			);
-			path = "beam-ios-7.5.14432/lib";
+			path = "beam-ios-7.5.14459/lib";
 			sourceTree = "<group>";
 		};
 		92D3CBF02264B56D007E3C55 /* testnet */ = {
@@ -3249,6 +3324,7 @@
 				92B7E4E622AFD70D001708E4 /* UTXO */,
 				92B7E4E922AFD748001708E4 /* Settings */,
 				CD37C67AA40FF44BBFFD57B4 /* Messenger */,
+				838B90CD5474E2AC0F70CB0D /* AssetSwaps */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3304,6 +3380,15 @@
 			);
 			name = Messenger;
 			path = Messenger;
+			sourceTree = "<group>";
+		};
+		ECB36A016D50624397AFFA33 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */,
+			);
+			name = Cells;
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4296,6 +4381,14 @@
 				14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */,
 				75516585C510BB694A1B9AED /* MessengerBubbleCell.swift in Sources */,
 				35726BA6BFE79F50A19E7054 /* MessengerChatCell.swift in Sources */,
+				15A094B1963EAE81E9B86B33 /* BMDexOrder.mm in Sources */,
+				7ED2D2980F560C573C46D8CC /* AssetSwapsViewModel.swift in Sources */,
+				2C2D70373756666705D14FDE /* AssetSwapCreateViewModel.swift in Sources */,
+				31509E4F991BC56BF7F10098 /* AssetSwapDetailsViewModel.swift in Sources */,
+				62D6B4FFAD6FCD00C5206630 /* AssetSwapsViewController.swift in Sources */,
+				94E405DB59B47772F0662861 /* AssetSwapCreateViewController.swift in Sources */,
+				B4FE33729385D12603589437 /* AssetSwapDetailsViewController.swift in Sources */,
+				5DAA3CCCB00AECEACD182FBF /* AssetSwapOrderCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4629,6 +4722,14 @@
 				00947887B27F2F825E1E67CC /* MessengerNewChatViewController.swift in Sources */,
 				492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */,
 				984E5950BBB86D093251AB57 /* MessengerChatCell.swift in Sources */,
+				E545F78761926F0D8A51E9B2 /* BMDexOrder.mm in Sources */,
+				E7EA1E52231681BDE3D26C73 /* AssetSwapsViewModel.swift in Sources */,
+				E153DCA098F777EAFAA1D91A /* AssetSwapCreateViewModel.swift in Sources */,
+				BCB254DF739D2FA8FF92C672 /* AssetSwapDetailsViewModel.swift in Sources */,
+				C07BD2850E0E4E55AC706985 /* AssetSwapsViewController.swift in Sources */,
+				9A1790F44DE275FD9644A9F7 /* AssetSwapCreateViewController.swift in Sources */,
+				A522EB1A22FF64A990518431 /* AssetSwapDetailsViewController.swift in Sources */,
+				BE96C4A71A3D47721D003ACF /* AssetSwapOrderCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4962,6 +5063,14 @@
 				69B13BFFB153BF4611F30888 /* MessengerNewChatViewController.swift in Sources */,
 				FD87FA1DDA9C27F19451AB4B /* MessengerBubbleCell.swift in Sources */,
 				E6218D6C7C5BE83B9707F158 /* MessengerChatCell.swift in Sources */,
+				E167B53AA2D8218D0710AA3E /* BMDexOrder.mm in Sources */,
+				88D6972926A283D03D289A48 /* AssetSwapsViewModel.swift in Sources */,
+				F00F7FD991CEA0402E131CFF /* AssetSwapCreateViewModel.swift in Sources */,
+				83EC213430E0CFD381D45A13 /* AssetSwapDetailsViewModel.swift in Sources */,
+				6315A76D06343C9CEDE2EF77 /* AssetSwapsViewController.swift in Sources */,
+				77CF51BBE36DCCD780857772 /* AssetSwapCreateViewController.swift in Sources */,
+				B6037162941C5AB71A356FF3 /* AssetSwapDetailsViewController.swift in Sources */,
+				84D2719B950F43294039957A /* AssetSwapOrderCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5084,6 +5193,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -5147,6 +5257,10 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -5186,15 +5300,19 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5206,14 +5324,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14459/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14459/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5263,15 +5381,19 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5283,14 +5405,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14459/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14459/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5340,15 +5462,19 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5360,14 +5486,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14459/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14459/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5426,16 +5552,17 @@
 					"PB_FIELD_32BIT=1",
 					"PB_NO_PACKED_STRUCTS=1",
 					"PB_ENABLE_MALLOC=1",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5447,14 +5574,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14459/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14459/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5504,15 +5631,19 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5528,12 +5659,12 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14459/lib",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14459/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5583,15 +5714,19 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14432/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14459/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5607,12 +5742,12 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14432/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14459/lib",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14432/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14459/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
