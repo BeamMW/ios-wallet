@@ -82,6 +82,7 @@ typedef int BMRestoreType;
 -(void)onNotificationsChanged;
 -(void)onChangeCalculated:(double)amount;
 -(void)onMaxPrivacyTokensLeft:(int)tokens;
+-(void)onOfflinePaymentsCountForWalletId:(NSString*_Nonnull)walletId count:(int)count;
 -(void)onAssetInfoChange;
 -(void)onDAPPsLoaded;
 -(void)onChatListChanged;
@@ -138,6 +139,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableArray<BMChat*>*_Nonnull chats;
 @property (nonatomic,strong) NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*>*_Nonnull messagesByPeer;
 @property (nonatomic,strong) NSMutableArray<BMDexOrder*>*_Nonnull dexOrders;
+
+@property (nonatomic,strong) NSMutableDictionary<NSString*, NSNumber*>*_Nonnull offlinePaymentsByWalletId;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
@@ -197,9 +200,14 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
 
 -(void)generateNewWalletAddressWithBlockAndAmount:(int)assetId amount:(double)amount result:(NewAddressGeneratedBlock _Nonnull)block;
--(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount offlineCount:(uint32_t)offlineCount result:(PublicAddressBlock _Nonnull)block;
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(void)generateSBBSAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(void)generatePublicOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+
+-(int)offlinePaymentsCountForWalletId:(NSString*_Nonnull)walletId;
+-(void)requestOfflinePaymentsCountForWalletId:(NSString*_Nonnull)walletId;
 
 
 // addresses

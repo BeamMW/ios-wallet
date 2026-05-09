@@ -131,6 +131,15 @@ class BMFieldCell: BaseCell {
             }
         }
     }
+
+    public var keyboardType: UIKeyboardType {
+        get { return textField.keyboardType }
+        set { textField.keyboardType = newValue }
+    }
+
+    public func setText(_ value: String?) {
+        textField.text = value
+    }
 }
 
 extension BMFieldCell : UITextFieldDelegate {
@@ -142,11 +151,9 @@ extension BMFieldCell : UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        textField.inputAccessoryView = nil
-        
         if let copy = copyText {
             let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy:copy)
-            
+
             inputBar.completion = { (obj : String?) in
                 if let text = obj {
                     self.textField.text = text
@@ -155,6 +162,9 @@ extension BMFieldCell : UITextFieldDelegate {
                 }
             }
             textField.inputAccessoryView = inputBar
+        }
+        else if textField.keyboardType != .numberPad && textField.keyboardType != .decimalPad && textField.returnKeyType != .next {
+            textField.inputAccessoryView = nil
         }
         return true
     }

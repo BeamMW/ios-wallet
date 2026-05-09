@@ -25,6 +25,8 @@ class QRCodeSmallViewController: BaseViewController {
     weak var delegate: QRViewControllerDelegate?
     public var onShared : (() -> Void)?
     public var isMaxPrivacy = false
+    public var isSbbsOnly = false
+    public var isPublicOffline = false
     
     @IBOutlet weak private var infoLabel: UILabel!
     @IBOutlet weak private var codeConentView: UIView!
@@ -70,8 +72,12 @@ class QRCodeSmallViewController: BaseViewController {
             
             infoLabel.text = text
         }
+        else if isPublicOffline {
+            infoLabel.text = Localizable.shared.strings.public_offline_address_info
+        }
         else {
-            if !AppModel.sharedManager().checkIsOwnNode() {
+            let isOwn = AppModel.sharedManager().checkIsOwnNode()
+            if isSbbsOnly || !isOwn {
                 infoLabel.text = Localizable.shared.strings.receive_description_2
             }
             else {

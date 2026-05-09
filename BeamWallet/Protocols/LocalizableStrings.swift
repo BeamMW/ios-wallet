@@ -479,7 +479,9 @@ class LocalizableStrings : NSObject {
     var offline_address = "offline_address".localized
     var public_offline_address_info = "public_offline_address_info".localized
     var public_offline = "public_offline".localized
+    var public_offline_address = "public_offline_address".localized
     var max_privacy = "max_privacy".localized
+    var max_privacy_address = "max_privacy_address".localized
     var tr_sent_public_offline = "tr_sent_public_offline".localized
     var tr_sent_offline = "tr_sent_offline".localized
     var tr_received_public_offline = "tr_received_public_offline".localized
@@ -576,6 +578,9 @@ class LocalizableStrings : NSObject {
     var online_address = "online_address".localized
     var offline_left_address = "offline_left_address".localized
     var offline_left_address_warning = "offline_left_address_warning".localized
+    var vouchers_count = "vouchers_count".localized
+    var vouchers_count_hint = "vouchers_count_hint".localized
+    var vouchers_count_error = "vouchers_count_error".localized
     var send_offline_hint = "send_offline_hint".localized
     var send_max_privacy_title = "send_max_privacy_title".localized
     var send_notice_max_privacy = "send_notice_max_privacy".localized

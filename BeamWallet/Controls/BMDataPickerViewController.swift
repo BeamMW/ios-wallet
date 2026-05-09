@@ -32,6 +32,7 @@ class BMDataPickerViewController: BaseTableViewController {
         case sendCurrency
         case max_privacy_lock
         case confirmations
+        case address_type
     }
     
     private var type: DataType!
@@ -90,6 +91,8 @@ class BMDataPickerViewController: BaseTableViewController {
         case .confirmations:
             title = Localizable.shared.strings.confirmations
             tableView.tableFooterView = footerView(text: Localizable.shared.strings.confirmations_hint)
+        case .address_type:
+            title = Localizable.shared.strings.address_type
         default:
             title = String.empty()
         }
@@ -289,6 +292,18 @@ class BMDataPickerViewController: BaseTableViewController {
                 let value = UInt32(n)
                 values.append(BMPickerData(title: "\(n)", detail: nil, titleColor: UIColor.white, arrowType: (value == Settings.sharedManager().minConfirmations) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: value))
             }
+        case .address_type:
+            let selected = (selectedValue as? Int) ?? 0
+            let entries: [(Int, String)] = [
+                (0, Localizable.shared.strings.sbbs_address),
+                (1, Localizable.shared.strings.regular_address),
+                (2, Localizable.shared.strings.max_privacy_address),
+                (3, Localizable.shared.strings.offline_address),
+                (4, Localizable.shared.strings.public_offline_address)
+            ]
+            for (raw, label) in entries {
+                values.append(BMPickerData(title: label, detail: nil, titleColor: UIColor.white, arrowType: (raw == selected) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: raw))
+            }
 
         default:
             break
@@ -350,7 +365,10 @@ class BMDataPickerViewController: BaseTableViewController {
         case .confirmations:
             completion?(data.unique)
             back()
-            
+        case .address_type:
+            completion?(data.unique)
+            back()
+
         default:
             break
         }

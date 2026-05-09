@@ -331,4 +331,10 @@ extension AddressViewModel: WalletModelDelegate {
             self.filterAddresses()
         }
     }
+
+    func onOfflinePaymentsCount(forWalletId walletId: String, count: Int32) {
+        DispatchQueue.main.async {
+            self.onDataChanged?()
+        }
+    }
 }

@@ -40,6 +40,8 @@ typedef int BMAddressType;
 @property (nonatomic,strong, getter = getWalletId) NSString * _Nonnull walletId;
 @property (nonatomic,strong) NSString * _Nullable offlineToken;
 @property (nonatomic,strong) NSString * _Nullable maxPrivacyToken;
+@property (nonatomic,strong) NSString * _Nullable sbbsToken;
+@property (nonatomic,strong) NSString * _Nullable publicOfflineToken;
 @property (nonatomic,strong) NSString * _Nullable address;
 
 @property (nonatomic,strong) NSString * _Nonnull label;

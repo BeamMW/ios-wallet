@@ -63,6 +63,7 @@ class ReceiveViewController: BaseTableViewController {
         tableView.register([BMFieldCell.self, ReceiveTransactionTypeCell.self, BMExpandCell.self, BMAmountCell.self, ReceiveAddressButtonsCell.self])
         tableView.register(ReceiveTokenCell.self, forCellReuseIdentifier: ReceiveTokenCell.reuseIdentifier)
         tableView.register(UINib(nibName: "BMPickerCell3", bundle: nil), forCellReuseIdentifier: "BMPickerCell3")
+        tableView.register(UINib(nibName: "BMPickerCell", bundle: nil), forCellReuseIdentifier: "BMPickerCell")
 
         tableView.keyboardDismissMode = .interactive
         tableView.contentInsetAdjustmentBehavior = .never
@@ -107,7 +108,7 @@ class ReceiveViewController: BaseTableViewController {
                             if token {
                                 let params = AppModel.sharedManager().getTransactionParameters(self?.viewModel.address.address ?? "")
                                 if params.newAddressType == BMAddressTypeMaxPrivacy {
-                                    self?.viewModel.transaction = .privacy
+                                    self?.viewModel.selectedTokenType = .maxPrivacy
                                 }
                             }
                         }
@@ -130,20 +131,8 @@ class ReceiveViewController: BaseTableViewController {
                         amoutnCell.setSecondAmount(amount: strongSelf.viewModel.secondAmount ?? "")
                     }
                     else if let tokenCell = cell as? ReceiveTokenCell {
-                        let isOwn = AppModel.sharedManager().checkIsOwnNode()
-
-                        if !isOwn {
-                            let token = strongSelf.viewModel.address.walletId
-                            tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: nil, showHint: false)
-                        }
-                        else if strongSelf.viewModel.transaction == .regular {
-                            let token = strongSelf.viewModel.address.offlineToken ?? ""
-                            tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: strongSelf.sbbsAddress(for: token), showHint: false)
-                        }
-                        else {
-                            let token = strongSelf.viewModel.address.maxPrivacyToken ?? ""
-                            tokenCell.configure(with: token, title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", sbbsAddress: strongSelf.sbbsAddress(for: token), showHint: false)
-                        }
+                        let token = strongSelf.viewModel.currentToken
+                        tokenCell.configure(with: token, title: strongSelf.tokenCellTitle(), sbbsAddress: strongSelf.tokenCellSbbsAddress(for: token), showHint: false)
                     }
                 }
                 strongSelf.tableView.endUpdates()
@@ -214,6 +203,19 @@ class ReceiveViewController: BaseTableViewController {
         return sbbs.isEmpty ? nil : sbbs
     }
 
+    fileprivate func tokenCellTitle() -> String {
+        let base = Localizable.shared.strings.address.uppercased()
+        if viewModel.selectedTokenType == .maxPrivacy {
+            return "\(base) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))"
+        }
+        return base
+    }
+
+    fileprivate func tokenCellSbbsAddress(for token: String) -> String? {
+        if !AppModel.sharedManager().checkIsOwnNode() { return nil }
+        return sbbsAddress(for: token)
+    }
+
     @objc private func onBack() {
         let state = viewModel.isNeedAskToSave()
         if state != .none {
@@ -248,6 +250,20 @@ extension ReceiveViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+
+        if indexPath.section == 3 && indexPath.row == 1 && AppModel.sharedManager().checkIsOwnNode() {
+            let picker = BMDataPickerViewController(type: .address_type, selectedValue: viewModel.selectedTokenType.rawValue)
+            picker.completion = { [weak self] selected in
+                guard let self = self,
+                      let raw = selected as? Int,
+                      let type = ReceiveAddressViewModel.ReceiveTokenType(rawValue: raw) else { return }
+                self.view.endEditing(true)
+                self.viewModel.selectedTokenType = type
+                self.viewModel.generateTokens()
+                self.tableView.reloadSections(IndexSet([3, 4]), with: .fade)
+            }
+            pushViewController(vc: picker)
+        }
     }
 }
 
@@ -272,7 +288,8 @@ extension ReceiveViewController : UITableViewDataSource {
             }
         }
         else if section == 3 {
-            return showAdvanced ? 2 : 1
+            if !showAdvanced { return 1 }
+            return viewModel.selectedTokenType.supportsVouchers ? 3 : 2
         }
         return 1
     }
@@ -284,20 +301,8 @@ extension ReceiveViewController : UITableViewDataSource {
                 .dequeueReusableCell(withType: ReceiveTokenCell.self, for: indexPath)
             cell.contentView.backgroundColor = UIColor.main.marineThree
             cell.delegate = self
-            if viewModel.transaction == .regular {
-                if !AppModel.sharedManager().checkIsOwnNode() {
-                    let token = viewModel.address.walletId
-                    cell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: nil, showHint: false)
-                }
-                else {
-                    let token = viewModel.address.offlineToken ?? ""
-                    cell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: sbbsAddress(for: token), showHint: false)
-                }
-            }
-            else {
-                let token = viewModel.address.maxPrivacyToken ?? ""
-                cell.configure(with: token, title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", sbbsAddress: sbbsAddress(for: token), showHint: false)
-            }
+            let token = viewModel.currentToken
+            cell.configure(with: token, title: tokenCellTitle(), sbbsAddress: tokenCellSbbsAddress(for: token), showHint: false)
             return cell
         }
         else if indexPath.section == 1  {
@@ -378,22 +383,45 @@ extension ReceiveViewController : UITableViewDataSource {
                 return cell
             }
             else if indexPath.row == 1  {
-                let detail = !AppModel.sharedManager().checkIsOwnNode() ? Localizable.shared.strings.connect_node_offline : nil
-                
+                let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                let detail: String? = isOwn ? viewModel.selectedTokenType.localizedName : Localizable.shared.strings.connect_node_offline
+
                 let cell = tableView
-                    .dequeueReusableCell(withIdentifier: "BMPickerCell3", for: indexPath) as! BMPickerCell
-                cell.configure(data: BMPickerData(title: Localizable.shared.strings.maximum_anonymity_set, detail: nil, titleColor: UIColor.white, arrowType: viewModel.transaction == .privacy ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: 0, multiplie: false, isSwitch: true))
-                
-                if detail != nil {
+                    .dequeueReusableCell(withIdentifier: "BMPickerCell", for: indexPath) as! BMPickerCell
+                cell.configure(data: BMPickerData(title: Localizable.shared.strings.address_type, detail: detail, titleColor: UIColor.white, arrowType: BMPickerData.ArrowType.selected, unique: 0, multiplie: false, isSwitch: false))
+
+                if !isOwn {
                     cell.titleLabel.alpha = 0.5
-                    cell.switchView.alpha = 0.5
                     cell.isUserInteractionEnabled = false
+                } else {
+                    cell.titleLabel.alpha = 1
+                    cell.isUserInteractionEnabled = true
                 }
                 cell.botOffset?.constant = 20
-                cell.delegate = self
                 cell.backgroundColor = UIColor.clear
                 cell.mainView.backgroundColor = UIColor.main.marineThree
                 cell.contentView.backgroundColor = UIColor.main.marine
+
+                return cell
+            }
+            else if indexPath.row == 2 {
+                let isOwn = AppModel.sharedManager().checkIsOwnNode()
+
+                let cell = tableView
+                    .dequeueReusableCell(withType: BMFieldCell.self, for: indexPath)
+                    .configured(with: (name: Localizable.shared.strings.vouchers_count.uppercased(), value: "\(viewModel.vouchersCount)"))
+                cell.delegate = self
+                cell.keyboardType = .numberPad
+                cell.contentView.backgroundColor = UIColor.main.marineThree
+                cell.info = String(format: Localizable.shared.strings.vouchers_count_hint, ReceiveAddressViewModel.maxVouchersCount)
+
+                if !isOwn {
+                    cell.alpha = 0.5
+                    cell.isUserInteractionEnabled = false
+                } else {
+                    cell.alpha = 1
+                    cell.isUserInteractionEnabled = true
+                }
 
                 return cell
             }
@@ -402,26 +430,33 @@ extension ReceiveViewController : UITableViewDataSource {
             let cell = tableView
                 .dequeueReusableCell(withType: ReceiveAddressButtonsCell.self, for: indexPath)
             cell.delegate = self
-            if viewModel.transaction == .privacy {
+            if viewModel.selectedTokenType == .maxPrivacy {
                 var text = "\n\n" + Localizable.shared.strings.max_privacy_fee
                 let locValue = Settings.sharedManager().currentMaxPrivacyLockValue()
-                
+
                 if locValue.hours == 0 {
                     text = Localizable.shared.strings.transaction_indefinitely + text
                 }
                 else {
                     text = String(format: Localizable.shared.strings.transaction_time, locValue.title) + text
                 }
-                
+
                 cell.setText(text: text)
             }
-            else {
-                if !AppModel.sharedManager().checkIsOwnNode() {
+            else if viewModel.selectedTokenType.supportsOnlineReceive {
+                let isOwn = AppModel.sharedManager().checkIsOwnNode()
+                if viewModel.selectedTokenType == .sbbs || !isOwn {
                     cell.setText(text: Localizable.shared.strings.receive_description_2)
                 }
                 else {
                     cell.setText(text: Localizable.shared.strings.receive_description)
                 }
+            }
+            else if viewModel.selectedTokenType == .publicOffline {
+                cell.setText(text: Localizable.shared.strings.public_offline_address_info)
+            }
+            else {
+                cell.setText(text: "")
             }
             return cell
         }
@@ -460,11 +495,11 @@ extension ReceiveViewController : BMCellProtocol {
         if let path = tableView.indexPath(for: sender) {
              if path.section == 2 {
                 viewModel.transactionComment = text
-                
+
             }
             else if path.section == 1 {
                 viewModel.amount = text
-                
+
                 UIView.performWithoutAnimation {
                     tableView.beginUpdates()
                     for cell in tableView.visibleCells {
@@ -472,30 +507,36 @@ extension ReceiveViewController : BMCellProtocol {
                             amoutnCell.setSecondAmount(amount: viewModel.secondAmount ?? "")
                         }
                         else if let tokenCell = cell as? ReceiveTokenCell {
-                            if viewModel.transaction == .regular {
-                                if !AppModel.sharedManager().checkIsOwnNode() {
-                                    let token = viewModel.address.walletId
-                                    tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: nil, showHint: true)
-                                }
-                                else {
-                                    let token = viewModel.address.offlineToken ?? ""
-                                    tokenCell.configure(with: token, title: Localizable.shared.strings.address.uppercased(), sbbsAddress: sbbsAddress(for: token), showHint: true)
-                                }
-                            }
-                            else {
-                                let token = viewModel.address.maxPrivacyToken ?? ""
-                                tokenCell.configure(with: token, title: "\(Localizable.shared.strings.address.uppercased()) (\(Localizable.shared.strings.maximum_anonymity.lowercased()))", sbbsAddress: sbbsAddress(for: token), showHint: false)
-                            }
+                            let token = viewModel.currentToken
+                            tokenCell.configure(with: token, title: tokenCellTitle(), sbbsAddress: tokenCellSbbsAddress(for: token), showHint: viewModel.selectedTokenType != .maxPrivacy)
                         }
                     }
                     tableView.endUpdates()
                 }
             }
+            else if path.section == 3 && path.row == 2 {
+                guard let fieldCell = sender as? BMFieldCell else { return }
+                let trimmed = text.trimmingCharacters(in: .whitespaces)
+                if trimmed.isEmpty {
+                    fieldCell.error = nil
+                    return
+                }
+                if let value = Int(trimmed), (1...ReceiveAddressViewModel.maxVouchersCount).contains(value) {
+                    fieldCell.error = nil
+                    viewModel.vouchersCount = value
+                } else {
+                    fieldCell.error = String(format: Localizable.shared.strings.vouchers_count_error, ReceiveAddressViewModel.maxVouchersCount)
+                }
+            }
         }
     }
-    
-    func textValueDidReturn(_ sender: UITableViewCell) {
 
+    func textValueDidReturn(_ sender: UITableViewCell) {
+        if let path = tableView.indexPath(for: sender), path.section == 3 && path.row == 2,
+           let fieldCell = sender as? BMFieldCell {
+            fieldCell.error = nil
+            fieldCell.setText("\(viewModel.vouchersCount)")
+        }
     }
     
     func onExpandCell(_ sender: UITableViewCell) {
@@ -522,13 +563,7 @@ extension ReceiveViewController : BMCellProtocol {
             }
             else if path.section == 3 {
                 showAdvanced = !showAdvanced
-                
-                if showAdvanced {
-                    self.tableView.insertRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
-                }
-                else{
-                    self.tableView.deleteRows(at: [IndexPath(row: 1, section: 3)], with: .fade)
-                }
+                self.tableView.reloadSections(IndexSet(integer: 3), with: .fade)
             }
         }
     }
@@ -562,8 +597,7 @@ extension ReceiveViewController : BMCellProtocol {
 extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
     
     @objc func onSwitchToPool() {
-        viewModel.transaction = .regular
-       // viewModel.expire = .parmanent
+        viewModel.selectedTokenType = .regular
         viewModel.needReloadButtons = true
         self.tableView.reloadData()
     }
@@ -588,7 +622,9 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
             modalViewController.onShared = { [weak self] in
                 self?.onBack()
             }
-            modalViewController.isMaxPrivacy = viewModel.transaction == ReceiveAddressViewModel.TransactionOptions.privacy
+            modalViewController.isMaxPrivacy = viewModel.selectedTokenType == .maxPrivacy
+            modalViewController.isSbbsOnly = viewModel.selectedTokenType == .sbbs
+            modalViewController.isPublicOffline = viewModel.selectedTokenType == .publicOffline
             
             modalViewController.modalPresentationStyle = .overFullScreen
             modalViewController.modalTransitionStyle = .crossDissolve
@@ -609,30 +645,11 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
     }
     
     func onClickShare() {
-        if viewModel.transaction == .privacy {
-            onShareToken(token: viewModel.address.maxPrivacyToken ?? "")
-        }
-        else {
-            if !AppModel.sharedManager().checkIsOwnNode() {
-                onShareToken(token: viewModel.address.walletId)
-            }
-            else {
-                onShareToken(token: viewModel.address.offlineToken ?? "")
-            }
-        }
+        onShareToken(token: viewModel.currentToken)
     }
 
     func onClickCopyAndClose() {
-        let token: String
-        if viewModel.transaction == .privacy {
-            token = viewModel.address.maxPrivacyToken ?? ""
-        }
-        else if !AppModel.sharedManager().checkIsOwnNode() {
-            token = viewModel.address.walletId
-        }
-        else {
-            token = viewModel.address.offlineToken ?? ""
-        }
+        let token = viewModel.currentToken
         guard !token.isEmpty else { return }
         UIPasteboard.general.string = token
         viewModel.isShared = true
@@ -641,32 +658,20 @@ extension ReceiveViewController : ReceiveAddressTokensCellDelegate {
     }
 }
 
-extension ReceiveViewController : ReceiveTransactionTypeCellDelegate, BMPickerCellDelegate {
-    
+extension ReceiveViewController : ReceiveTransactionTypeCellDelegate {
+
     func onDidSelectTrasactionType(type: ReceiveAddressViewModel.TransactionOptions) {
-        viewModel.transaction = type
-        
+        viewModel.selectedTokenType = (type == .privacy) ? .maxPrivacy : .regular
+        viewModel.generateTokens()
+
         UIView.performWithoutAnimation {
             self.tableView.reloadRow(ReceiveTokenCell.self, animated: false)
             self.tableView.reloadRow(ReceiveAddressButtonsCell.self, animated: false)
         }
     }
-    
+
     func onShareToken() {
         viewModel.isShared = true
-    }
-    
-    func onClickSwitch(value: Bool, cell: BMPickerCell) {
-        if value {
-            viewModel.transaction = .privacy
-        }
-        else {
-            viewModel.transaction = .regular
-        }
-        
-        UIView.performWithoutAnimation {
-            self.tableView.reloadData()
-        }
     }
 }
 

@@ -30,14 +30,18 @@ class DetailAddressViewModel: AddressViewModel {
 
     override init(address: BMAddress) {
         super.init(address: address)
-        
+
         isContact = (AppModel.sharedManager().getContactFromId(address.walletId) != nil)
 
         transactionViewModel = TransactionViewModel(address: address)
         transactionViewModel.onDataChanged = { [weak self] in
             self?.onDataChanged?()
         }
-        
+
+        if !isContact {
+            AppModel.sharedManager().requestOfflinePaymentsCount(forWalletId: address.walletId)
+        }
+
         fillDetails()
     }
     
@@ -83,7 +87,16 @@ class DetailAddressViewModel: AddressViewModel {
             identityItem.copiedText = Localizable.shared.strings.copied_to_clipboard
             details.append(identityItem)
         }
-        
+
+        if !isContact, let walletId = self.address?.walletId {
+            let count = AppModel.sharedManager().offlinePaymentsCount(forWalletId: walletId)
+            if count >= 0 {
+                let detail = String(format: Localizable.shared.strings.offline_left_address, count)
+                let item = BMMultiLineItem(title: Localizable.shared.strings.offline_address.uppercased(), detail: detail, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
+                details.append(item)
+            }
+        }
+
         if self.address?.identity != nil && self.address?.identity?.isEmpty == false {
             let detail = self.address!.identity
             if detail!.count > 1 {
@@ -107,6 +120,15 @@ class DetailAddressViewModel: AddressViewModel {
 //        }
     }
     
+    override func onOfflinePaymentsCount(forWalletId walletId: String, count: Int32) {
+        DispatchQueue.main.async {
+            if walletId == self.address?.walletId {
+                self.fillDetails()
+                self.onDataChanged?()
+            }
+        }
+    }
+
     public func actionItems() -> [BMPopoverMenu.BMPopoverMenuItem] {
         var items = [BMPopoverMenu.BMPopoverMenuItem(name: Localizable.shared.strings.show_qr_code, icon: nil, action: .show_qr_code), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? Localizable.shared.strings.copy_contact : Localizable.shared.strings.copy_address), icon: nil, action:.copy_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? Localizable.shared.strings.edit_contact : Localizable.shared.strings.edit_address), icon: nil, action:.edit_address), BMPopoverMenu.BMPopoverMenuItem(name: (isContact ? Localizable.shared.strings.delete_contact : Localizable.shared.strings.delete_address), icon: nil, action:.delete_address)]
         

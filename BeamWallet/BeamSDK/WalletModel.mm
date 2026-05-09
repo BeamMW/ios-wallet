@@ -1772,14 +1772,23 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
 }
 
 void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) {
-    
+
     NSLog(@"onGetAddress: %d", (int)offlinePayments);
-    
+
+    NSString *walletIdStr = [NSString stringWithUTF8String:to_string(wid).c_str()];
+    int newCount = (int)offlinePayments;
+    NSNumber *prev = [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr];
+    BOOL changed = (prev == nil || prev.intValue != newCount);
+    [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr] = @(newCount);
+
     NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
     for(id<WalletModelDelegate> delegate in delegates)
     {
         if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
-            [delegate onMaxPrivacyTokensLeft:(int)offlinePayments];
+            [delegate onMaxPrivacyTokensLeft:newCount];
+        }
+        if (changed && [delegate respondsToSelector:@selector(onOfflinePaymentsCountForWalletId:count:)]) {
+            [delegate onOfflinePaymentsCountForWalletId:walletIdStr count:newCount];
         }
     }
 }

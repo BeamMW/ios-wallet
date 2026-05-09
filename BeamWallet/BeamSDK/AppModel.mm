@@ -246,6 +246,7 @@ static dispatch_once_t * once_token_model;
     _chats = [[NSMutableArray alloc] init];
     _messagesByPeer = [[NSMutableDictionary alloc] init];
     _dexOrders = [[NSMutableArray alloc] init];
+    _offlinePaymentsByWalletId = [[NSMutableDictionary alloc] init];
     
     NSData *dataStatus = [[NSUserDefaults standardUserDefaults] objectForKey:walletStatusKey];
     if(dataStatus != nil) {
@@ -797,6 +798,7 @@ static beam::Rules& getConfiguredRules() {
     _walletStatus = [BMWalletStatus new];
     [_transactions removeAllObjects];
     [_notifications removeAllObjects];
+    [_offlinePaymentsByWalletId removeAllObjects];
     [[AssetsManager.sharedManager assets] removeAllObjects];
 
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:notificationsKey];
@@ -1275,43 +1277,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
 }
 
 
--(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
-    
-    if (wallet!=nil) {
-        uint32_t bAsset = (uint32_t)assetId;
-        uint64_t bAmount = round(amount * Rules::Coin);
-        
-        auto func = NewTokenGeneratedFunc();
-        func.block = ^(std::string token) {
-            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
-            block(sToken);
-        };
-        wallet->getAsync()->generateToken(TokenType::Offline, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
-    }
-    
-//    uint32_t bAsset = (uint32_t)assetId;
-//    uint64_t bAmount = round(amount * Rules::Coin);
-//
-//    WalletID m_walletID(Zero);
-//    m_walletID.FromHex(walletId.string);
-//
-//    auto address = walletDb->getAddress(m_walletID);
-//    auto lastVouchers = GenerateVoucherList(walletDb->get_KeyKeeper(), address->m_OwnID, 1);
-//
-//    TxParameters offlineParameters;
-//    offlineParameters.SetParameter(TxParameterID::TransactionType, beam::wallet::TxType::PushTransaction);
-//    offlineParameters.SetParameter(TxParameterID::ShieldedVoucherList, lastVouchers);
-//    offlineParameters.SetParameter(TxParameterID::PeerAddr, address->m_BbsAddr);
-//    offlineParameters.SetParameter(TxParameterID::PeerEndpoint, address->m_Endpoint);
-//    offlineParameters.SetParameter(TxParameterID::IsPermanentPeerID, true);
-//    offlineParameters.SetParameter(TxParameterID::AssetID, beam::Asset::ID(bAsset));
-//    if (bAmount > 0) {
-//        offlineParameters.SetParameter(TxParameterID::Amount, bAmount);
-//    }
-//    auto token = to_string(offlineParameters);
-//    block([NSString stringWithUTF8String:token.c_str()]);
-    
-    
+-(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount offlineCount:(uint32_t)offlineCount result:(PublicAddressBlock _Nonnull)block {
+    if (wallet == nil || walletDb == nullptr) return;
+
+    WalletID wid(Zero);
+    if (!wid.FromHex(walletId.string)) return;
+
+    auto address = walletDb->getAddress(wid);
+    if (!address) return;
+
+    uint32_t bAsset = (uint32_t)assetId;
+    uint64_t bAmount = round(amount * Rules::Coin);
+    auto token = GenerateOfflineToken(*address, *walletDb, bAmount, bAsset, std::string(BEAM_LIB_VERSION), offlineCount);
+    block([NSString stringWithUTF8String:token.c_str()]);
 }
 
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress {
@@ -1348,6 +1326,47 @@ bool OnProgress(uint64_t done, uint64_t total) {
 //    WalletAddress address = *walletDb->getAddress(m_walletID);
 //    auto maxPrivacyAddress = GenerateMaxPrivacyToken(address, *walletDb, bAmount, bAsset, std::string(BEAM_LIB_VERSION));
 //    block([NSString stringWithUTF8String:maxPrivacyAddress.c_str()]);
+}
+
+-(void)generateSBBSAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+    if (wallet != nil) {
+        uint32_t bAsset = (uint32_t)assetId;
+        uint64_t bAmount = round(amount * Rules::Coin);
+
+        auto func = NewTokenGeneratedFunc();
+        func.block = ^(std::string token) {
+            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
+            block(sToken);
+        };
+        wallet->getAsync()->generateToken(TokenType::RegularOldStyle, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
+    }
+}
+
+-(void)generatePublicOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block {
+    if (wallet != nil) {
+        uint32_t bAsset = (uint32_t)assetId;
+        uint64_t bAmount = round(amount * Rules::Coin);
+
+        auto func = NewTokenGeneratedFunc();
+        func.block = ^(std::string token) {
+            NSString *sToken = [NSString stringWithUTF8String:token.c_str()];
+            block(sToken);
+        };
+        wallet->getAsync()->generateToken(TokenType::Public, bAmount, bAsset, std::string(BEAM_LIB_VERSION), false, func);
+    }
+}
+
+-(int)offlinePaymentsCountForWalletId:(NSString*_Nonnull)walletId {
+    NSNumber *cached = self.offlinePaymentsByWalletId[walletId];
+    return cached != nil ? cached.intValue : -1;
+}
+
+-(void)requestOfflinePaymentsCountForWalletId:(NSString*_Nonnull)walletId {
+    if (wallet == nil || walletId.length == 0) return;
+    if (self.offlinePaymentsByWalletId[walletId] != nil) return;
+    WalletID wid(Zero);
+    if (!wid.FromHex(walletId.string)) return;
+    wallet->getAsync()->getAddress(wid);
 }
 
 -(void)getAssetInfoAsync:(int)assetId {

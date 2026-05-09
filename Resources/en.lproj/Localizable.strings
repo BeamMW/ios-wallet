@@ -758,3 +758,7 @@ and never kept on the blockchain.";
 "split_concentration_warning_format" = "(percent)% in one coin — split into (count) for safety";
 "split_too_small" = "Coin too small to split";
 "split_started_message" = "Your split transaction has been started";
+
+"vouchers_count" = "Vouchers count";
+"vouchers_count_hint" = "Up to %d vouchers per address";
+"vouchers_count_error" = "Enter a value between 1 and %d";
