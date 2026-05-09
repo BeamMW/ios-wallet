@@ -43,15 +43,12 @@ class BMWordField: BMField {
             case .empty?:
                 self.status = .normal
                 self.textColor = UIColor.white
-                break
             case .error?:
                 self.status = .error
                 self.textColor = errorColor
-                break
             case .correct?:
                 self.status = .normal
                 self.textColor = UIColor.white
-                break
             case .none:
                 break
             }
@@ -73,8 +70,8 @@ class BMWordField: BMField {
         accessoryView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
 
         let toolbar = UIToolbar(frame: accessoryView.bounds)
-        toolbar.autoresizingMask = .flexibleWidth;
-        toolbar.isUserInteractionEnabled = false;
+        toolbar.autoresizingMask = .flexibleWidth
+        toolbar.isUserInteractionEnabled = false
         accessoryView.addSubview(toolbar)
 
         let width_3 = toolbar.frame.size.width / CGFloat(maxWords)
@@ -90,7 +87,7 @@ class BMWordField: BMField {
         }
 
         let separator = UIView(frame: CGRect(x:0, y:43.5, width:accessoryView.frame.size.width, height:0.5))
-        separator.autoresizingMask = .flexibleWidth;
+        separator.autoresizingMask = .flexibleWidth
         separator.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
         accessoryView.addSubview(separator)
         
@@ -143,17 +140,15 @@ class BMWordField: BMField {
 
             if !recommendFirstWord && words.count != 0 && words[0].hasPrefix(prefix) {
 
-                var hasPrefix = false;
+                var hasPrefix = false
 
-                for i in 1...words.count-1 {
-                    if words[i].hasPrefix(prefix) {
-                        hasPrefix = true;
-                        break
-                    }
+                for i in 1...words.count-1 where words[i].hasPrefix(prefix) {
+                    hasPrefix = true
+                    break
                 }
 
                 if !hasPrefix {
-                    recommendFirstWord = true;
+                    recommendFirstWord = true
                 }
             }
 
@@ -189,13 +184,13 @@ class BMWordField: BMField {
             }
 
             if recommendFirstWord {
-                let button = accessoryOptions[0];
+                let button = accessoryOptions[0]
                 button.layer.removeAllAnimations()
 
                 let animate = CABasicAnimation(keyPath: "backgroundColor")
                 animate.fromValue = UIColor.black.cgColor
                 animate.toValue = UIColor.clear.cgColor
-                animate.duration = 1.0;
+                animate.duration = 1.0
 
                 button.layer.add(animate, forKey: "recommend")
             }

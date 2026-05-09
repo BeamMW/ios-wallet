@@ -81,9 +81,7 @@ class FeeCell: BaseCell {
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
         modalViewController.type = self.type
-        modalViewController.completion = {
-            (obj : String) -> Void in
-            
+        modalViewController.completion = { (obj : String) in
             let nFee = Double(obj) ?? 0
             
             if nFee > Double(self.feeSlider.maximumValue) {

@@ -160,8 +160,8 @@ class SelectNodeViewController: BaseTableViewController {
                                                       leftViewController: menuViewController,
                                                       rightViewController: nil)
         
-        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
         sideMenuController.rootViewLayerShadowRadius = 0
         sideMenuController.rootViewLayerShadowColor = UIColor.clear
         sideMenuController.leftViewLayerShadowRadius = 0
@@ -210,7 +210,7 @@ class SelectNodeViewController: BaseTableViewController {
                 AppModel.sharedManager().enableBodyRequests(false)
             }
             Settings.sharedManager().connectToRandomNode = true
-            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
             AppModel.sharedManager().changeNodeAddress()
 
             if isCreateWallet {
@@ -227,7 +227,7 @@ class SelectNodeViewController: BaseTableViewController {
 
             Settings.sharedManager().connectToRandomNode = true
             Settings.sharedManager().isNodeProtocolEnabled = true
-            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
             AppModel.sharedManager().changeNodeAddress()
             AppModel.sharedManager().enableBodyRequests(true)
 
@@ -423,7 +423,7 @@ extension SelectNodeViewController : UITableViewDelegate {
     }
     
     private func onNextSelected(indexPath: IndexPath) {
-        for (index, _) in items.enumerated() {
+        for index in items.indices {
             items[index].selected = false
         }
         

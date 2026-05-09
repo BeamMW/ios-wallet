@@ -40,7 +40,7 @@ class BMStepView: UIView {
         super.layoutSubviews()
         
         let separate:CGFloat = 5.0
-        let stepWidth = round((self.frame.size.width - separate * CGFloat(totalStep)) / CGFloat(totalStep));
+        let stepWidth = round((self.frame.size.width - separate * CGFloat(totalStep)) / CGFloat(totalStep))
         
         if views.count > 0
         {
@@ -49,13 +49,13 @@ class BMStepView: UIView {
                 if view.tag < currentStep {
                     UIView.animate(withDuration: 0.2) {
                         view.layer.borderColor = UIColor.clear.cgColor
-                        view.backgroundColor = self.finishedStepColor;
+                        view.backgroundColor = self.finishedStepColor
                     }
                 }
                 else{
                     UIView.animate(withDuration: 0.2) {
                         view.layer.borderColor = UIColor.main.darkSlateBlue.cgColor
-                        view.backgroundColor = UIColor.clear;
+                        view.backgroundColor = UIColor.clear
                     }
                 }
             }
@@ -65,8 +65,8 @@ class BMStepView: UIView {
                 let view = UIView(frame: CGRect(x: CGFloat(i) * (stepWidth + separate), y: 0, width: stepWidth, height: self.frame.size.height))
                 view.layer.cornerRadius = view.frame.size.height/2
                 view.layer.borderColor = UIColor.main.darkSlateBlue.cgColor
-                view.backgroundColor = UIColor.clear;
-                view.layer.borderWidth = 1;
+                view.backgroundColor = UIColor.clear
+                view.layer.borderWidth = 1
                 view.tag = i
                 views.append(view)
                 self.addSubview(view)

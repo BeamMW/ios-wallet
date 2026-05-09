@@ -27,18 +27,14 @@ class RestoreManager: NSObject {
     private var progress : ((Error?, Float?, String?) -> Void)?
 
     var filePath:URL {
-        get{
-            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-            let documentDirectoryPath:String = path[0]
-            let destinationURLForFile = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/node.bin"))
-            return destinationURLForFile
-        }
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentDirectoryPath:String = path[0]
+        let destinationURLForFile = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/node.bin"))
+        return destinationURLForFile
     }
-    
+
     var isNeedReturnToRestore:Bool {
-        get {
-            return (FileManager.default.fileExists(atPath: filePath.path))
-        }
+        return (FileManager.default.fileExists(atPath: filePath.path))
     }
     
     public func cancelRestore() {
@@ -56,13 +52,13 @@ class RestoreManager: NSObject {
     }
     
     public func startRestore(completion:@escaping ((Bool) -> Void), progress:@escaping ((Error?, Float?, String?) -> Void)) {
-        
+
         self.cancelRestore()
         self.completion = completion
         self.progress = progress
 
         var url:URL?
-        
+
         if Settings.sharedManager().target == Testnet {
             url = URL(string: "https://mobile-restore.beam.mw/testnet/testnet_recovery.bin")
         }
@@ -74,7 +70,7 @@ class RestoreManager: NSObject {
 
 //            url = URL(string: "https://mobile-restore.beam.mw/masternet/masternet_recovery.bin")
         }
-        
+
         if let downloadUrl = url {
             BackgroundDownloader.shared.startDownloading(downloadUrl, filePath)
             BackgroundDownloader.shared.onProgress = { (progress, error, filePath, time) in

@@ -111,7 +111,7 @@ class XWVMetaObject {
                     return true
                 }
 
-            case .Property(_, _):
+            case .Property:
                 if let cls = plugin as? XWVScripting.Type {
                     if let isExcluded = cls.isKeyExcluded(fromScript:), name.withCString(isExcluded) {
                         return true
@@ -140,7 +140,7 @@ class XWVMetaObject {
         }
     }
 
-    private func enumerate(excluding selectors: Set<Selector>, callback: (String, Member)->Bool) -> Bool {
+    private func enumerate(excluding selectors: Set<Selector>, callback: (String, Member) -> Bool) -> Bool {
         var known = selectors
         var count: UInt32 = 0
 
@@ -163,7 +163,7 @@ class XWVMetaObject {
                 known.insert(getter)
 
                 // get setter if readwrite
-                var setter: Selector? = nil
+                var setter: Selector?
                 var attr = property_copyAttributeValue(propertyList[i], "R")
                 if attr == nil {
                     attr = property_copyAttributeValue(propertyList[i], "S")
@@ -219,7 +219,7 @@ class XWVMetaObject {
 extension XWVMetaObject: Collection {
     typealias Element = (key: String, value: Member)
     typealias Index = DictionaryIndex<String, Member>
-    typealias SubSequence = Slice<Dictionary<String, Member>>
+    typealias SubSequence = Slice<[String: Member]>
 
     var startIndex: Index {
         return members.startIndex

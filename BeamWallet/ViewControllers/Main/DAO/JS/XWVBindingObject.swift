@@ -97,7 +97,7 @@ final class XWVBindingObject : XWVScriptObject {
 
         var args = arguments.map(wrapScriptObject)
         if plugin is XWVScripting && name.isEmpty && selector == #selector(XWVScripting.invokeDefaultMethod(withArguments:)) {
-            args = [args];
+            args = [args]
         }
         _ = performSelector(selector, with: args, waitUntilDone: false)
     }

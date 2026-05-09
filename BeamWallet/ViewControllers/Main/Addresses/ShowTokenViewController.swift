@@ -79,10 +79,6 @@ class ShowTokenViewController: BaseTableViewController {
         buildItems()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)        
-    }
-    
     @objc private func onCopy() {
         UIPasteboard.general.string = token
         ShowCopied(text: Localizable.shared.strings.address_copied)
@@ -145,7 +141,7 @@ class ShowTokenViewController: BaseTableViewController {
 //                }
                 
                 
-                //&& AppModel.sharedManager().checkIsOwnNode()
+                // && AppModel.sharedManager().checkIsOwnNode()
                 if !params.address.isEmpty {
                     items.append(BMMultiLineItem(title: "", detail: "", detailFont: nil, detailColor: nil))
 

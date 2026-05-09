@@ -53,17 +53,17 @@ class NavigationPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
                        delay: 0,
                        options: .curveLinear,
                        animations: {
-                        
+
                         dimmingView.alpha = 0
                         toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
                         fromViewController.view.frame = CGRect(x: toViewController.view.frame.size.width, y: fromViewController.view.frame.origin.y, width: fromViewController.view.frame.size.width, height: fromViewController.view.frame.size.height)
-                        
-                       }) { finished in
-            
+
+                       }, completion: { _ in
+
             dimmingView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-            
-        }
+
+        })
     }
     
 }
@@ -93,7 +93,7 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
         }
     }
     
-    var gesture:UIPanGestureRecognizer? = nil
+    var gesture:UIPanGestureRecognizer?
     var interactivePopTransition: UIPercentDrivenInteractiveTransition!
     
     override func viewDidLoad() {

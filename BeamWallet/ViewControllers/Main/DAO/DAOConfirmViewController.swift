@@ -54,7 +54,7 @@ class DAOConfirmViewController: BaseViewController {
     @IBOutlet private weak var passField:BMField!
     @IBOutlet private weak var viewWidth:NSLayoutConstraint!
 
-    private var hintText:String? = nil
+    private var hintText:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()

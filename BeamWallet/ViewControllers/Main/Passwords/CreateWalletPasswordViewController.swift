@@ -127,13 +127,13 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
         }
         else {
             confirmAlert(title: Localizable.shared.strings.return_to_seed_title, message: Localizable.shared.strings.return_to_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.retur, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 let count = OnboardManager.shared.isSkipedSeed() ? 2 : 3
                 let viewControllers = self.navigationController?.viewControllers
                 let vc = viewControllers![(viewControllers?.count)! - count]
                 self.navigationController?.popToViewController(vc, animated: true)
-            }
+            })
         }
     }
     
@@ -167,14 +167,14 @@ class CreateWalletPasswordViewController: BaseWizardViewController {
                         
                         confirmAlert(title: title, message: message, cancelTitle: Localizable.shared.strings.dont_use, confirmTitle: Localizable.shared.strings.enable, cancelHandler: { _ in
                             self.goNext(pass: pass)
-                            
+
                             Settings.sharedManager().isEnableBiometric = false
-                            
-                        }) { _ in
+
+                        }, confirmHandler: { _ in
                             self.goNext(pass: pass)
-                            
+
                             Settings.sharedManager().isEnableBiometric = true
-                        }
+                        })
                     }
                     else {
                         goNext(pass: pass)

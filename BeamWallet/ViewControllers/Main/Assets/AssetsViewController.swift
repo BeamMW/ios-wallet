@@ -47,10 +47,6 @@ class AssetsViewController: BaseTableViewController {
         
         subscribeToUpdates()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
 
     deinit {
         Settings.sharedManager().removeDelegate(self)

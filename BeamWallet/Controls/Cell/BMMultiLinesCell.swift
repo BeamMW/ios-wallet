@@ -225,10 +225,10 @@ extension BMMultiLinesCell: Configurable {
                         let imageString = NSAttributedString(attachment: imageAttachment)
                         
                         let nameString = NSMutableAttributedString(string:address.label)
-                        nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSMakeRange(0, nameString.string.count))
+                        nameString.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 16 + fontSizeOffset), range: NSRange(location: 0, length: nameString.string.count))
                         
                         let detailString = NSMutableAttributedString(string:item.detail!)
-                        detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSMakeRange(0, detailString.string.count))
+                        detailString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style2, range: NSRange(location: 0, length: detailString.string.count))
                         
                         attributedString.append(imageString)
                         attributedString.append(NSAttributedString(string: "  "))
@@ -236,7 +236,7 @@ extension BMMultiLinesCell: Configurable {
                         attributedString.append(NSAttributedString(string: "\n"))
                         attributedString.append(detailString)
                         
-                        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSMakeRange(0, nameString.string.count))
+                        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSRange(location: 0, length: nameString.string.count))
                         
                         copyButton.imageEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
                     }

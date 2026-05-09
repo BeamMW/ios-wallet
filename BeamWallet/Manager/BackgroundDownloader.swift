@@ -21,7 +21,7 @@ import Foundation
 
 class BackgroundDownloader: NSObject {
 
-    typealias ProgressHandler = (Float?,Error?, String?, String?) -> ()
+    typealias ProgressHandler = (Float?,Error?, String?, String?) -> Void
 
     var onProgress : ProgressHandler?
     
@@ -32,10 +32,10 @@ class BackgroundDownloader: NSObject {
     private var destinationURLForFile:URL!
     private var task:URLSessionDownloadTask?
     
-    private var start = Date.timeIntervalSinceReferenceDate;
+    private var start = Date.timeIntervalSinceReferenceDate
 
     public func startDownloading(_ url:URL, _ destinationUrl:URL) {
-        
+
         if FileManager.default.fileExists(atPath: destinationUrl.path)
         {
             do {
@@ -45,9 +45,9 @@ class BackgroundDownloader: NSObject {
                 print(error)
             }
         }
-        
+
         self.destinationURLForFile =  destinationUrl
-        
+
         let config = URLSessionConfiguration.background(withIdentifier: "com.beam.background" + url.lastPathComponent)
 
         let session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue())
@@ -68,9 +68,9 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         if totalBytesExpectedToWrite > 0 {
-            
+
             let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-            
+
             avgTime = avgTime + 1
             
             let speed = Double(totalBytesWritten) / Double((Date.timeIntervalSinceReferenceDate - self.start))
@@ -99,16 +99,16 @@ extension BackgroundDownloader: URLSessionTaskDelegate, URLSessionDownloadDelega
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         print("Download finished: \(location)")
-        
+
         do {
             try FileManager.default.moveItem(at: location, to: destinationURLForFile)
             onProgress?(nil, nil, destinationURLForFile.path, nil)
-            
+
         }catch{
             onProgress?(nil, error, nil, nil)
         }
     }
-    
+
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let reason = error {
             let code = (reason as NSError).code

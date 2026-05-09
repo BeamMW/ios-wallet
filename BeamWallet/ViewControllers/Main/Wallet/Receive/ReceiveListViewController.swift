@@ -63,10 +63,8 @@ class ReceiveListViewController: BaseTableViewController {
         var mainColor = UIColor.main.brightSkyBlue
         
         if let viewControllers = self.navigationController?.viewControllers{
-            for vc in viewControllers {
-                if vc is SendViewController  {
-                    mainColor = UIColor.main.heliotrope
-                }
+            for vc in viewControllers where vc is SendViewController {
+                mainColor = UIColor.main.heliotrope
             }
         }
         

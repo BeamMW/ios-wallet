@@ -50,7 +50,7 @@ class BMAmountCell: BaseCell {
         }
     }
     
-    public var hideNameLabel:Bool? = nil
+    public var hideNameLabel:Bool? 
     {
         didSet {
             if let hide = hideNameLabel {
@@ -172,8 +172,8 @@ class BMAmountCell: BaseCell {
                 
         if Settings.sharedManager().isDarkMode {
             secondCurrencyLabel.textColor = UIColor.main.steel
-            nameLabel.textColor = UIColor.main.steel;
-            maxAmountErrorLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
+            maxAmountErrorLabel.textColor = UIColor.main.steel
         }
     }
     
@@ -223,7 +223,6 @@ extension BMAmountCell: Configurable {
         case 1:
             textField.textColor = UIColor.main.brightTeal
             textField.setNormalColor(color: UIColor.main.brightTeal)
-            break
         default:
             return
         }

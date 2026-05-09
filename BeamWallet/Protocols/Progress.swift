@@ -19,7 +19,7 @@
 
 import Foundation
 
-func ShowCopied (text:String? = nil) {
+func ShowCopied(text:String? = nil) {
     if let s = text {
         BMToast.show(text: s)
     }

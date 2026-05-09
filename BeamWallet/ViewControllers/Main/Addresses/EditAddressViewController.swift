@@ -87,9 +87,7 @@ class EditAddressViewController: BaseTableViewController {
         
         tableView.register([AddressExpiresCell.self, BMMultiLinesCell.self, BMFieldCell.self, BMDetailCell.self, BMGroupedCell.self])
         
-        viewModel.onDataDeleted = { [weak self]
-            indexPath, address in
-            
+        viewModel.onDataDeleted = { [weak self] _, address in
             AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
             
             self?.navigationController?.popViewControllers(viewsToPop: 2)

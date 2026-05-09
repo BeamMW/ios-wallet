@@ -37,7 +37,7 @@ class BMNotificationView: UIView {
 
     weak var delegate: BMNotificationViewDelegate?
 
-    private static func showNews (notification: BMNotification, delegate:BMNotificationViewDelegate?) {
+    private static func showNews(notification: BMNotification, delegate:BMNotificationViewDelegate?) {
         DispatchQueue.main.async {
             let detail = NSMutableAttributedString(string: Localizable.shared.strings.new_notifications_text)
             detail.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: NSRange(location: 0, length: Localizable.shared.strings.new_notifications_text.count))
@@ -46,14 +46,14 @@ class BMNotificationView: UIView {
         }
     }
     
-    private static func showAddress (notification: BMNotification, delegate:BMNotificationViewDelegate) {
+    private static func showAddress(notification: BMNotification, delegate:BMNotificationViewDelegate) {
         DispatchQueue.main.async {
             let view = BMNotificationView(title: Localizable.shared.strings.address_expired_notif, detail: nil, icon: IconNotifictionsExpired()?.maskWithColor(color: UIColor.main.marineOriginal), id: notification.pId, delegate: delegate)
             view.display()
         }
     }
     
-    private static func showVersion (notification: BMNotification, delegate:BMNotificationViewDelegate?) {
+    private static func showVersion(notification: BMNotification, delegate:BMNotificationViewDelegate?) {
         DispatchQueue.main.async {
             let detail = NSMutableAttributedString(string: Localizable.shared.strings.new_version_available_notif_detail)
             detail.addAttribute(NSAttributedString.Key.font, value: BoldFont(size: 14) , range: NSRange(location: 0, length: Localizable.shared.strings.new_version_available_notif_detail.count))            
@@ -62,7 +62,7 @@ class BMNotificationView: UIView {
         }
     }
     
-    static func showTransaction (transaction: BMTransaction, delegate:BMNotificationViewDelegate?, delay:Double = 2.0) {
+    static func showTransaction(transaction: BMTransaction, delegate:BMNotificationViewDelegate?, delay:Double = 2.0) {
         DispatchQueue.main.async {
             if transaction.enumStatus == BMTransactionStatusInProgress && transaction.isDapps {
                 return
@@ -208,7 +208,7 @@ class BMNotificationView: UIView {
         }
     }
     
-    static func showTransaction (notification: BMNotification, delegate:BMNotificationViewDelegate) {
+    static func showTransaction(notification: BMNotification, delegate:BMNotificationViewDelegate) {
         DispatchQueue.main.async {
             if let transaction = AppModel.sharedManager().transaction(byId: notification.pId) {
                 guard let asset = transaction.asset else {
@@ -306,7 +306,7 @@ class BMNotificationView: UIView {
         }
     }
     
-    public static func show (notification: BMNotification, delegate:BMNotificationViewDelegate) {
+    public static func show(notification: BMNotification, delegate:BMNotificationViewDelegate) {
         if(BMNotificationView.notificationView == nil) {
             if(notification.type == ADDRESS) {
                 showAddress(notification: notification, delegate: delegate)
@@ -323,7 +323,7 @@ class BMNotificationView: UIView {
         }
     }
     
-    public static func show (title: String?, detail: NSMutableAttributedString?, icon: UIImage?, id: String, delegate:BMNotificationViewDelegate) {
+    public static func show(title: String?, detail: NSMutableAttributedString?, icon: UIImage?, id: String, delegate:BMNotificationViewDelegate) {
         DispatchQueue.main.async {
             if(BMNotificationView.notificationView == nil) {
                 let view = BMNotificationView(title: title, detail: detail, icon: icon, id: id, delegate: delegate)
@@ -376,7 +376,7 @@ class BMNotificationView: UIView {
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap)))
         self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onPan)))
 
-        BMNotificationView.notificationView = self;
+        BMNotificationView.notificationView = self
     }
     
     fileprivate func display(delay:Double = 2.0) {

@@ -47,7 +47,7 @@ class BMExpandCell: BaseCell {
         selectedBackgroundView = selectedView
         
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
         }
     }
     

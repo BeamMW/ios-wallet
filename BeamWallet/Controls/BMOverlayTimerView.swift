@@ -24,7 +24,7 @@ class BMOverlayTimerView: UIView, BMCountdownViewDelegate {
     private var seconds = 0
     private var url:URL!
     
-    public static func show (text:String, link:URL) {
+    public static func show(text:String, link:URL) {
         let view = BMOverlayTimerView(text: text, link: link)
         view.display()
      }

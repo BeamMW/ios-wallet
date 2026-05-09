@@ -94,9 +94,9 @@ public func jsonify(_ value: Any?) -> String? {
             return n.boolValue.description
         }
         return n.stringValue
-    case let a as Array<Any?>:
+    case let a as [Any?]:
         return jsonify(a)
-    case let d as Dictionary<String, Any?>:
+    case let d as [String: Any?]:
         return jsonify(d)
     case let s as CustomJSONStringable:
         return s.jsonString

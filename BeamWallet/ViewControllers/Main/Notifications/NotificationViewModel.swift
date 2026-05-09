@@ -59,7 +59,7 @@ class NotificationViewModel: NSObject {
     
     public func trailingSwipeActions(indexPath:IndexPath) -> UISwipeActionsConfiguration? {
         
-        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let delete = UIContextualAction(style: .normal, title: nil) { (_, _, handler) in
             handler(true)
             self.deleteNotification(indexPath: indexPath)
         }
@@ -86,7 +86,7 @@ class NotificationViewModel: NSObject {
     }
 }
 
-//MARK: - Delegate
+// MARK: - Delegate
 
 extension NotificationViewModel : WalletModelDelegate {
     

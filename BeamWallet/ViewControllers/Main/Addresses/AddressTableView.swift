@@ -51,9 +51,7 @@ class AddressTableView: UITableViewController {
             
             strongSelf.tableView.reloadData()
         }
-        viewModel.onDataDeleted = { [weak self]
-            indexPath, address in
-            
+        viewModel.onDataDeleted = { [weak self] indexPath, address in
             guard let strongSelf = self else { return }
             
             if let path = indexPath {

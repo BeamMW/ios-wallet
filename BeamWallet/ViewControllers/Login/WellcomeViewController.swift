@@ -51,7 +51,7 @@ class WellcomeViewController: BaseViewController {
         languageButton.setTitle(Settings.sharedManager().shortLanguageName(), for: .normal)
     }
     
-    //MARK: IBAction
+    // MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
 //        AppModel.sharedManager().resetWallet(true)
@@ -68,7 +68,7 @@ class WellcomeViewController: BaseViewController {
     
     @IBAction func onCreateWallet(sender :UIButton) {
 //        AppModel.sharedManager().resetWallet(true)
-        AppModel.sharedManager().isRestoreFlow = false;
+        AppModel.sharedManager().isRestoreFlow = false
         pushViewController(vc: SeedPhraseViewController(event: .intro, words: nil))
     }
 

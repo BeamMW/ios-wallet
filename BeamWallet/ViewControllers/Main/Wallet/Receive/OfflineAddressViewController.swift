@@ -28,7 +28,7 @@ class OfflineAddressViewController: BaseViewController {
         
         topOffset?.constant = topOffset!.constant - 20
 
-        shqreButton.backgroundColor = UIColor.main.marineThree;
+        shqreButton.backgroundColor = UIColor.main.marineThree
         shqreButton.awakeFromNib()
         
         addressTitleLabel.text = Localizable.shared.strings.address.uppercased()
@@ -37,8 +37,8 @@ class OfflineAddressViewController: BaseViewController {
 
         if Settings.sharedManager().isDarkMode {
             shqreButton.setTitleColor(UIColor.white, for: .normal)
-            infoLabel.textColor = UIColor.main.steel;
-            addressTitleLabel.textColor = UIColor.main.steel;
+            infoLabel.textColor = UIColor.main.steel
+            addressTitleLabel.textColor = UIColor.main.steel
         }
         
         
@@ -56,15 +56,11 @@ class OfflineAddressViewController: BaseViewController {
         ShowCopied(text: Localizable.shared.strings.address_copied)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
     @IBAction private func onShare() {
         if let image = codeConentView.snapshot() {
             let activityItem: [AnyObject] = [image]
             let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {
                     self.dismiss(animated: true, completion: {
                         if activityType == UIActivity.ActivityType.copyToPasteboard {

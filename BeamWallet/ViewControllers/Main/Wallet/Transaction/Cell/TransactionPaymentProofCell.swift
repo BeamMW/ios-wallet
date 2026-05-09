@@ -60,10 +60,6 @@ class TransactionPaymentProofCell: BaseCell {
               titleLabel.textColor = UIColor.main.steel
           }
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
     
     @IBAction func onDetails(sender :UIButton) {
 

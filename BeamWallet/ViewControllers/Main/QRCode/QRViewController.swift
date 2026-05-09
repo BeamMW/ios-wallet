@@ -82,12 +82,12 @@ class QRViewController: BaseViewController {
         amountTitleLabel.text = Localizable.shared.strings.requested_amount.uppercased()
         
         infoLabel.text = Localizable.shared.strings.send_qr_secure
-            //+ "\n\n" + Localizable.shared.strings.receive_notice
+            // + "\n\n" + Localizable.shared.strings.receive_notice
         
         addressTitleLabel.text = Localizable.shared.strings.address.uppercased()
        
         if isToken {
-            addressLabel.text = "token"//address.token
+            addressLabel.text = "token"// address.token
         }
         else {
             if let display = address.displayAddress {
@@ -152,7 +152,7 @@ class QRViewController: BaseViewController {
         if let image = codeConentView.snapshot() {
             let activityItem: [AnyObject] = [image]
             let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {
                     self.dismiss(animated: true, completion: {
                         if activityType == UIActivity.ActivityType.copyToPasteboard {

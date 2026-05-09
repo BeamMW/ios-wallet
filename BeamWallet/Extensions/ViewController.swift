@@ -85,8 +85,8 @@ extension UIViewController {
         }
         else {
             self.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 if let info = additionalInfo, let seconds = infoDelay {
                     BMToast.show(text: info, shadow: true, duration: seconds, block: {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -95,7 +95,7 @@ extension UIViewController {
                 else{
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
-            }
+            })
         }
     }
     
@@ -221,10 +221,7 @@ extension UIViewController {
         
         self.present(alertController, animated: true, completion: nil)
         
-        if #available(iOS 13, *) {
-
-        }
-        else {
+        if #unavailable(iOS 13) {
             if Settings.sharedManager().isDarkMode {
                 alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
                 alertController.setValue(NSAttributedString(string: title, attributes: [

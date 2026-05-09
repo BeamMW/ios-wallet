@@ -177,7 +177,7 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.textLabel?.highlightedTextColor = UIColor.main.brightTeal
             cell?.textLabel?.font = RegularFont(size: 17)
             
-            let countView = UIView(frame: CGRect(x: 39, y: 13, width: 12, height: 12));
+            let countView = UIView(frame: CGRect(x: 39, y: 13, width: 12, height: 12))
             countView.layer.cornerRadius = 6
             countView.backgroundColor = UIColor.main.green
             countView.glow()
@@ -205,11 +205,11 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
         
         
         let selectedBackgroundView = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
-        selectedBackgroundView.image = MenuSelectedBackground();
+        selectedBackgroundView.image = MenuSelectedBackground()
         selectedBackgroundView.tag = 12
         
         let selectedBackgroundView1 = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60))
-        selectedBackgroundView1.image = MenuSelectedBackground();
+        selectedBackgroundView1.image = MenuSelectedBackground()
         
         
         cell?.contentView.viewWithTag(12)?.removeFromSuperview()

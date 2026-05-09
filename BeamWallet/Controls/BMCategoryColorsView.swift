@@ -124,7 +124,7 @@ class BMCategoryColorsView: UIView {
         }
     }
     
-    public func colorsWidht()->CGFloat {
+    public func colorsWidht() -> CGFloat {
         if self.subviews.count > 0 {
             if let last = self.subviews.last {
                 return last.frame.origin.x + last.frame.size.width

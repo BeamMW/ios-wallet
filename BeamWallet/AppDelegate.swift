@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let crash = UserDefaults.standard.string(forKey: "crash"), let crash_name = UserDefaults.standard.string(forKey: "crash_name") {
             
-            var name = "";
+            var name = ""
             
             if Settings.sharedManager().target == Mainnet {
                 name = "GoogleServiceMain"
@@ -257,7 +257,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         
-        //options[.sourceApplication] as? String == "com.beam.runner"
+        // options[.sourceApplication] as? String == "com.beam.runner"
         
         if let params = url.queryParameters, params.count == 2,
            let amount = params["amount"],
@@ -341,11 +341,11 @@ extension AppDelegate: WalletModelDelegate {
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().cancelDeleteAddress(result.id)
                 }
-            }) { data in
+            }, ended: { data in
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().deletePreparedAddresses(result.id)
                 }
-            }
+            })
         }
     }
     
@@ -357,11 +357,11 @@ extension AppDelegate: WalletModelDelegate {
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().cancelPreparedTransaction(result.id)
                 }
-            }) { data in
+            }, ended: { data in
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().sendPreparedTransaction(result.id)
                 }
-            }
+            })
         }
     }
     
@@ -379,11 +379,9 @@ extension AppDelegate: WalletModelDelegate {
                 t.isIncome && !t.isSelf
             }
             
-            for transaction in filtered {
-                if oldTransactions.first(where: { $0 == transaction.id }) == nil {
-                    NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
-                    oldTransactions.append(transaction.id)
-                }
+            for transaction in filtered where oldTransactions.first(where: { $0 == transaction.id }) == nil {
+                NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
+                oldTransactions.append(transaction.id)
             }
             
             userDefaults.set(oldTransactions, forKey: "transactions_ids")

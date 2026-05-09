@@ -112,7 +112,7 @@ public class XWVLogging : XWVScripting {
     @objc public func invokeDefaultMethod(withArguments args: [Any]!) -> Any! {
         guard args.count > 0 else { return nil }
         let message = args[0] as? String ?? "\(args[0])"
-        var level: Level? = nil
+        var level: Level?
         if args.count > 1, let num = args[1] as? Int {
             if 3 <= num && num <= 7 {
                 level = Level(rawValue: Int32(num))
@@ -130,7 +130,7 @@ func log(_ message: String, level: XWVLogging.Level? = nil) {
     logger.log(message, level: level)
 }
 
-func die(_ message: @autoclosure ()->String, file: StaticString = #file, line: UInt = #line) -> Never  {
+func die(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) -> Never  {
     logger.log(message(), level: .Alert)
     fatalError(message(), file: file, line: line)
 }

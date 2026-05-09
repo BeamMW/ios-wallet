@@ -42,13 +42,6 @@ class WalletTransactionCell: UITableViewCell {
         
         selectionStyle = .none
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-//        assetIcon2.x = 20
-//        assetIcon3.x = 40
-    }
 }
 
 extension WalletTransactionCell: Configurable {

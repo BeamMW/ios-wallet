@@ -62,11 +62,8 @@ class PasswordTestManager {
         
         let range = NSRange(location: 0, length: password.utf16.count)
 
-        for test in strengthTests {
-            if(test.exp.firstMatch(in: password, options: [], range: range) != nil)
-            {
-                state = test.state
-            }
+        for test in strengthTests where test.exp.firstMatch(in: password, options: [], range: range) != nil {
+            state = test.state
         }
         
         return state

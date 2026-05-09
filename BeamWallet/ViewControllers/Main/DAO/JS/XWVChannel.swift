@@ -98,9 +98,9 @@ public class XWVChannel : NSObject, WKScriptMessageHandler {
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         // A workaround for crash when postMessage(undefined)
-        //guard unsafeBitCast(message.body, to: OpaquePointer!.self) != nil else { return }
+        // guard unsafeBitCast(message.body, to: OpaquePointer!.self) != nil else { return }
 
-        //TODO: logs
+        // TODO: logs
       //  print("msg:")
       //  print(message.body)
         

@@ -166,7 +166,7 @@ class TransactionShareView: UIView {
             amountLabel.textColor = UIColor.main.heliotrope
         }
         
-        addressTypeValueLabel.text = transaction.getAddressType();
+        addressTypeValueLabel.text = transaction.getAddressType()
         
         transactionKernelValueLabel.text = transaction.kernelId
         if transaction.kernelId.contains("000000") || transaction.isExpired() || transaction.isFailed() {

@@ -68,9 +68,9 @@ public class BMAutoSecurityScreen {
     private func removeBlurEffect() {
         UIView.animate(withDuration: 0.3, animations: {
             self.blurView.alpha = 0
-        }) { (_ ) in
+        }, completion: { _ in
             self.blurView.removeFromSuperview()
-        }
+        })
     }
 }
 

@@ -98,10 +98,6 @@ class PaymentProofDetailViewController: BaseTableViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     @objc private func onCopyCodeDetails() {
         if let transactionDetail = transaction?.details() {
             UIPasteboard.general.string = transactionDetail
@@ -123,7 +119,7 @@ class PaymentProofDetailViewController: BaseTableViewController {
     
     @objc private func onMoreDetails() {
         detailsExpand = !detailsExpand
-        tableView.reloadSections(IndexSet(arrayLiteral: tableView.tableHeaderView == codeInputView ? 0 : 1), with: .fade)
+        tableView.reloadSections([tableView.tableHeaderView == codeInputView ? 0 : 1], with: .fade)
     }
     
     private func fillTransactionInfo() {
@@ -268,8 +264,7 @@ extension PaymentProofDetailViewController: UITextViewDelegate {
         if let text = UIPasteboard.general.string {
             if text.lengthOfBytes(using: .utf8) >= 330 {
                 let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44), copy: text)
-                inputBar.completion = {
-                    (obj: String?) -> Void in
+                inputBar.completion = { (obj: String?) in
                     if let text = obj {
                         self.codeInputField.text = text
                         self.textViewDidChange(self.codeInputField)

@@ -20,11 +20,11 @@
 import Foundation
 import LocalAuthentication
 
-public typealias AuthorizationSuccess = (() -> ())
+public typealias AuthorizationSuccess = (() -> Void)
 
-public typealias AuthorizationFailure = (() -> ())
+public typealias AuthorizationFailure = (() -> Void)
 
-public typealias AuthorizationRetry = (() -> ())
+public typealias AuthorizationRetry = (() -> Void)
 
 @objc public enum BiometricFailureReason: Int {
     case canceled

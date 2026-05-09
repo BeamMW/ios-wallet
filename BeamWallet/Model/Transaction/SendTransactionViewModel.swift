@@ -62,9 +62,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     public var isNeedDisplaySegmentCell:Bool {
-        get {
-            return addressType == BMAddressTypeShielded && isToken
-        }
+        return addressType == BMAddressTypeShielded && isToken
     }
     
     public var maxPrivacy:Bool = false
@@ -72,29 +70,25 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
     public var selectedAssetId = 0
     public var selectedCurrencyString: String {
-        get {
-            return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
-        }
+        return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
     }
-    
+
     public var secondAmount:String {
-        get {
-            return ExchangeManager.shared().exchangeValueAsset(Double(inputAmount) ?? 0, assetID: UInt64(selectedAssetId))
-        }
+        return ExchangeManager.shared().exchangeValueAsset(Double(inputAmount) ?? 0, assetID: UInt64(selectedAssetId))
     }
     
     public func calculateFee() {
         let isShielded = (addressType == BMAddressTypeOfflinePublic ||
                             addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
-        //addressType == BMAddressTypeShielded ||
+        // addressType == BMAddressTypeShielded ||
         
         var assetName = (AssetsManager.shared().getAsset(Int32(self.selectedAssetId))?.unitName ?? "") + " "
         if assetName == "assets" {
             assetName = "BEAM"
         }
         
-        AppModel.sharedManager().calculateFee(Double(amount) ?? 0, assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, changed, shieldedInputsFee, max) in
+        AppModel.sharedManager().calculateFee(Double(amount) ?? 0, assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (result, _, shieldedInputsFee, max) in
             DispatchQueue.main.async {
                 self.shieldedInputsFee = shieldedInputsFee
                 let current = UInt64(self.fee) ?? 0
@@ -204,7 +198,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
 
                 isToken = false
 
-                requestedMaxPrivacy = false;
+                requestedMaxPrivacy = false
                 maxPrivacy = false
                 calculateFee()
             }
@@ -231,11 +225,11 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         }
     }
     public var amount: String {
-        set {
-            inputAmount = newValue
-        }
         get {
             return getAmount
+        }
+        set {
+            inputAmount = newValue
         }
     }
     
@@ -279,22 +273,20 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     var isNeedFocus:Bool {
-        get {
-            if !isFocused && transaction == nil {
-                isFocused = true
-                
-                if let address = UIPasteboard.general.string {
-                    if AppModel.sharedManager().isValidAddress(address)
-                    {
-                        copyAddress = address
-                        
-                        return true
-                    }
+        if !isFocused && transaction == nil {
+            isFocused = true
+
+            if let address = UIPasteboard.general.string {
+                if AppModel.sharedManager().isValidAddress(address)
+                {
+                    copyAddress = address
+
+                    return true
                 }
             }
-            
-            return false
         }
+
+        return false
     }
     
 
@@ -313,7 +305,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
     }
     
     private func generateOutgoindAddress() {
-        AppModel.sharedManager().generateNewWalletAddress { (address, error) in
+        AppModel.sharedManager().generateNewWalletAddress { (address, _) in
             if let result = address {
                 DispatchQueue.main.async {
                     self.outgoindAdderss = result
@@ -526,7 +518,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
   
     public func isNeedSaveContact() -> Bool {
         var address = toAddress
-        var identity:String? = nil
+        var identity:String?
         
         if (AppModel.sharedManager().isToken(address)) {
             let params = AppModel.sharedManager().getTransactionParameters(address)
@@ -549,7 +541,7 @@ class SendTransactionViewModel: NSObject, WalletModelDelegate {
         let isShielded = (addressType == BMAddressTypeShielded || addressType == BMAddressTypeOfflinePublic ||
             addressType == BMAddressTypeMaxPrivacy || isSendOffline)
         
-        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (fee, change, shieldedInputsFee, max) in
+        AppModel.sharedManager().calculateFee((Double(amount) ?? 0), assetId: Int32(selectedAssetId), fee: (Double(fee) ?? 0), isShielded: isShielded) { (_, change, _, _) in
             self.onCalculateChanged?(change)
         }
     }

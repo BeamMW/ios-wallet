@@ -31,8 +31,8 @@ class NodeCell: UITableViewCell {
         super.awakeFromNib()
        
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
-            hintLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
+            hintLabel.textColor = UIColor.main.steel
         }
         
         selectionStyle = .none

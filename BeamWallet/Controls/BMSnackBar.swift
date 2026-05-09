@@ -32,12 +32,6 @@ class BMSnackBar: UIView, BMCountdownViewDelegate {
         var type:SnackType!
         var id:String!
         var title:String!
-
-        init(type:SnackType!, id:String!, title:String!) {
-            self.type = type
-            self.id = id
-            self.title = title
-        }
     }
     
     private var data:SnackData!
@@ -129,7 +123,7 @@ extension BMSnackBar {
     
     private static var snack: BMSnackBar?
 
-    public static func show (data:SnackData!, done: @escaping (SnackData?) -> Void, ended: @escaping (SnackData?) -> Void) {
+    public static func show(data:SnackData!, done: @escaping (SnackData?) -> Void, ended: @escaping (SnackData?) -> Void) {
        
         if snack != nil && snack?.data.id == data.id {
             return

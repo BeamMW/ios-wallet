@@ -87,8 +87,7 @@ class ReceiveViewController: BaseTableViewController {
             self?.back()
         }
         
-        viewModel.onAddressCreated = {[weak self]
-            error in
+        viewModel.onAddressCreated = {[weak self] error in
             DispatchQueue.main.async {
                 if let reason = error?.localizedDescription {
                     self?.alert(title: Localizable.shared.strings.error, message: reason, handler: { (_ ) in
@@ -121,8 +120,7 @@ class ReceiveViewController: BaseTableViewController {
             }
         }
         
-        viewModel.onAddressUpdate = {[weak self]
-            error in
+        viewModel.onAddressUpdate = {[weak self] _ in
             UIView.performWithoutAnimation {
                 guard let strongSelf = self else { return }
 
@@ -219,12 +217,12 @@ class ReceiveViewController: BaseTableViewController {
     @objc private func onBack() {
         let state = viewModel.isNeedAskToSave()
         if state != .none {
-            self.confirmAndSkipAlert(title: state == .new ? Localizable.shared.strings.save_address_title : Localizable.shared.strings.save_changes, message: state == .new ? Localizable.shared.strings.save_address_text : Localizable.shared.strings.save_edit_address_text, cancelTitle: Localizable.shared.strings.not_save, confirmTitle: Localizable.shared.strings.save, cancelHandler: { [weak self] (_ ) in
+            self.confirmAndSkipAlert(title: state == .new ? Localizable.shared.strings.save_address_title : Localizable.shared.strings.save_changes, message: state == .new ? Localizable.shared.strings.save_address_text : Localizable.shared.strings.save_edit_address_text, cancelTitle: Localizable.shared.strings.not_save, confirmTitle: Localizable.shared.strings.save, cancelHandler: { [weak self] _ in
                 self?.back()
-            }) { [weak self] (_ ) in
+            }, confirmHandler: { [weak self] _ in
                 self?.viewModel.isShared = true
                 self?.back()
-            }
+            })
         }
         else{
             back()

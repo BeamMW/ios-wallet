@@ -169,7 +169,7 @@ extension XWVHttpServer : XWVHttpConnectionDelegate {
 
         var headers: [String: String] = ["Date": dateFormatter.string(from: Date())]
         var statusCode = 500
-        var fileURL: URL? = nil
+        var fileURL: URL?
         if request == nil {
             // Bad request
             statusCode = 400

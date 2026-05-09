@@ -96,13 +96,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        passField.text = "1"
-//        onLogin(sender: UIButton())
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -161,7 +154,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                     if(!AppModel.sharedManager().isWalletRunning())     {
                         AppModel.sharedManager().openWallet(pass)
                         isLoggedin = true
-                        AppModel.sharedManager().isLoggedin = isLoggedin;
+                        AppModel.sharedManager().isLoggedin = isLoggedin
                         AppModel.sharedManager().isConnected = true
                     }
                     if navigationController?.viewControllers.count == 1 {
@@ -198,12 +191,12 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     @IBAction func onChangeWallet(sender: UIButton) {
         confirmAlert(title: Localizable.shared.strings.restore_create_title, message: Localizable.shared.strings.restore_create_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.proceed, cancelHandler: { _ in
-            
-        }) { _ in
-            AppModel.sharedManager().isLoggedin = false;
+
+        }, confirmHandler: { _ in
+            AppModel.sharedManager().isLoggedin = false
             AppModel.sharedManager().startChangeWallet()
             self.pushViewController(vc: WellcomeViewController())
-        }
+        })
     }
     
     @IBAction func onExport(sender: UIButton) {
@@ -242,8 +235,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                                                           leftViewController: menuViewController,
                                                           rightViewController: nil)
             
-            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-            sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
+            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+            sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
             sideMenuController.rootViewLayerShadowRadius = 0
             sideMenuController.rootViewLayerShadowColor = UIColor.clear
             sideMenuController.leftViewLayerShadowRadius = 0

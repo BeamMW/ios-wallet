@@ -292,9 +292,9 @@ public class XWVInvocation {
     }
 
     // Syntactic sugar for calling method
-    public subscript (selector: Selector) -> (Any?...)->Any? {
+    public subscript (selector: Selector) -> (Any?...) -> Any? {
         return {
-            (args: Any?...)->Any? in
+            (args: Any?...) -> Any? in
             self.call(selector, with: args)
         }
     }
@@ -347,7 +347,7 @@ extension XWVInvocation {
             return nil
         }
 
-        var setter: Selector? = nil
+        var setter: Selector?
         var attr = property_copyAttributeValue(property, "R")
         if attr == nil {
             attr = property_copyAttributeValue(property, "S")

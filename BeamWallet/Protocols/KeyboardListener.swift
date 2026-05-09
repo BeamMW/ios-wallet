@@ -19,8 +19,6 @@
 
 import Foundation
 
-import Foundation
-
 class KeyboardListener: NSObject {
     static let shared = KeyboardListener()
    

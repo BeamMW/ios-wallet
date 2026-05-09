@@ -38,7 +38,6 @@ class CollectionButtonFooter: UICollectionReusableView {
             btn2.isHidden = true
         case .display, .onlyDisplay:
             btn2.setTitle(Localizable.shared.strings.i_will_later, for: .normal)
-            break
         }
         
         if Settings.sharedManager().isDarkMode {

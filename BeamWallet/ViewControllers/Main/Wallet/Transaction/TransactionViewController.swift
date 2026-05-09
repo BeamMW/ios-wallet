@@ -127,10 +127,6 @@ class TransactionViewController: UITableViewController {
         subscribeToUpdates()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     public func didShow() {
     }
     
@@ -142,14 +138,12 @@ class TransactionViewController: UITableViewController {
             }
         }
         
-        viewModel.onDataUpdated = { [weak self]
-            _, transaction in
+        viewModel.onDataUpdated = { [weak self] _, transaction in
             AppModel.sharedManager().cancelTransaction(transaction)
             self?.back()
         }
         
-        viewModel.onDataDeleted = { [weak self]
-            _, transaction in
+        viewModel.onDataDeleted = { [weak self] _, transaction in
             AppModel.sharedManager().prepareDeleteTransaction(transaction)
             self?.back()
         }

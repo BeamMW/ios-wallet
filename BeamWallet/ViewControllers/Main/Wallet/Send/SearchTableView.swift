@@ -38,10 +38,6 @@ class SearchTableView: UITableViewController {
         tableView.keyboardDismissMode = .interactive
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     
     public func reload() {
         tableView.reloadData()

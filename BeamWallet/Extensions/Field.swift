@@ -21,7 +21,7 @@
 import Foundation
 import UIKit
 
-//extension UITextField {
+// extension UITextField {
 //
 //    var clearButtonTintColor: UIColor? {
 //        get {
@@ -30,11 +30,11 @@ import UIKit
 //        set {
 //        }
 //    }
-//}
+// }
 
 extension UITextField {
     
-    public func disablePasswordAutoFill () {
+    public func disablePasswordAutoFill() {
         if #available(iOS 12, *) {
             // iOS 12: Not the best solution, but it works.
             self.textContentType = .oneTimeCode
@@ -69,7 +69,7 @@ extension UITextField {
         }
     }
     
-    @IBInspectable var placeHolderFont: UIFont? {
+    var placeHolderFont: UIFont? {
         get {
             return self.placeHolderFont
         }

@@ -84,15 +84,11 @@ class QRCodeSmallViewController: BaseViewController {
         addSwipeToDismiss()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     @IBAction func onShare(sender :UIButton) {
         if let image = codeConentView.snapshot() {
             let activityItem: [AnyObject] = [image]
             let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {
                     self.dismiss(animated: true, completion: {
                         if activityType == UIActivity.ActivityType.copyToPasteboard {

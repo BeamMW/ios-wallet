@@ -77,8 +77,7 @@ class SettingsViewController: BaseTableViewController {
             searchView.y = 12
             searchView.searchField.placeholder = Localizable.shared.strings.search_settings
             
-            searchView.onSearchTextChanged = {
-                [weak self] text in
+            searchView.onSearchTextChanged = { [weak self] text in
                 guard let strongSelf = self else { return }
                 if !text.isEmpty {
                     strongSelf.tableView.sectionHeaderHeight = 5
@@ -92,8 +91,7 @@ class SettingsViewController: BaseTableViewController {
                 }
                 strongSelf.viewModel.searchString = text
             }
-            searchView.onCancelSearch = {
-                [weak self] in
+            searchView.onCancelSearch = { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.tableView.sectionHeaderHeight = 15
                 strongSelf.tableView.sectionFooterHeight = 15
@@ -121,10 +119,6 @@ class SettingsViewController: BaseTableViewController {
         if type == .main {
             tableView.tableFooterView = versionView()
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
     
     override func viewDidLayoutSubviews() {
@@ -267,9 +261,7 @@ extension SettingsViewController : SettingsCellDelegate {
 
             if value == false && item.type == .ask_password {
                 let vc = UnlockPasswordPopover(event: .settings)
-                vc.completion = { [weak self]
-                    obj in
-                    
+                vc.completion = { [weak self] obj in
                     if obj == false {
                     
                         item.isSwitch = true
@@ -286,9 +278,7 @@ extension SettingsViewController : SettingsCellDelegate {
             }
             else if value == true && item.type == .ask_password {
                 let vc = UnlockPasswordPopover(event: .settings)
-                vc.completion = { [weak self]
-                    obj in
-                    
+                vc.completion = { [weak self] obj in
                     if obj == false {
                         
                         item.isSwitch = false
@@ -305,9 +295,7 @@ extension SettingsViewController : SettingsCellDelegate {
             }
             else if value == false && item.type == .enable_bio {
                 let vc = UnlockPasswordPopover(event: .settings, allowBiometric: false)
-                vc.completion = {
-                    obj in
-                    
+                vc.completion = { obj in
                     if obj == false {
                         
                         item.isSwitch = true
@@ -337,13 +325,13 @@ extension SettingsViewController : SettingsCellDelegate {
                 
                 if(value)
                 {
-                    Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+                    Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
                     AppModel.sharedManager().changeNodeAddress()
                     
                     viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
                 }
                 else if Settings.sharedManager().customNode().isEmpty == false {
-                    Settings.sharedManager().nodeAddress = Settings.sharedManager().customNode();
+                    Settings.sharedManager().nodeAddress = Settings.sharedManager().customNode()
                     AppModel.sharedManager().changeNodeAddress()
                     
                     viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress

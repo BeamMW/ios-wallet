@@ -26,7 +26,7 @@ import SafariServices
 
     @objc var style = WBStyle()
     
-    var resultObject:XWVScriptObject? = nil
+    var resultObject:XWVScriptObject?
         
     @objc public func callWalletApi(_ json:NSString) {
         print("\(json)")
@@ -45,7 +45,7 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     private var loadingImage = UIImageView()
     private var loadingLabel = UILabel()
     
-    @objc private var channel:XWVChannel? = nil
+    @objc private var channel:XWVChannel?
     @objc private var beam:WBBEAM?
 
     @objc public var app:BMApp!
@@ -95,7 +95,7 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
         let logSource = "function captureLog(msg) { window.webkit.messageHandlers.logHandler.postMessage(msg); } window.console.log = captureLog;"
         let logScript = WKUserScript(source: logSource, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         
-        let jsLogScript2 = "console.log = (function(oriLogFunc){ return function(str) { window.webkit.messageHandlers.log.postMessage(str); oriLogFunc.call(console,str);} })(console.log);";
+        let jsLogScript2 = "console.log = (function(oriLogFunc){ return function(str) { window.webkit.messageHandlers.log.postMessage(str); oriLogFunc.call(console,str);} })(console.log);"
         
         webView = WKWebView(frame: self.view.bounds, configuration: configuration)
         webView?.navigationDelegate = self

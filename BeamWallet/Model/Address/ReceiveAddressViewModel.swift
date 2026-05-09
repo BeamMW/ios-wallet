@@ -112,9 +112,7 @@ class ReceiveAddressViewModel: NSObject {
         }
     }
     public var selectedCurrencyString: String {
-        get {
-            return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
-        }
+        return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
     }
     
     override init() {
@@ -132,7 +130,7 @@ class ReceiveAddressViewModel: NSObject {
         
         if isOwn {
             AppModel.sharedManager().generateMaxPrivacyAddress(address._id, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
-                self.address.maxPrivacyToken = token;
+                self.address.maxPrivacyToken = token
             }
         }
         
@@ -140,11 +138,11 @@ class ReceiveAddressViewModel: NSObject {
             AppModel.sharedManager().generateOfflineAddress(address._id, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
                 DispatchQueue.main.async {
                     if self.address.offlineToken != nil {
-                        self.address.offlineToken = token;
+                        self.address.offlineToken = token
                         self.onAddressUpdate?(nil)
                     }
                     else {
-                        self.address.offlineToken = token;
+                        self.address.offlineToken = token
                         self.onAddressCreated?(nil)
                     }
                 }
@@ -152,7 +150,7 @@ class ReceiveAddressViewModel: NSObject {
         }
         
         if !isOwn {
-            AppModel.sharedManager().generateNewWalletAddress(withBlockAndAmount: Int32(selectedAssetId), amount: bamount) { address, error in
+            AppModel.sharedManager().generateNewWalletAddress(withBlockAndAmount: Int32(selectedAssetId), amount: bamount) { address, _ in
                 if let result = address {
                     self.address = result
                 }
@@ -242,15 +240,13 @@ class ReceiveAddressViewModel: NSObject {
                     if let token = self.address.offlineToken {
                         self.showShareDialog(token)
                     }
-                    break
                 case .share_pool_token:
                     self.showShareDialog(self.address.walletId)
-                    break
                 default:
                     return
                 }
             }
-        }) {}
+        }, cancel: {})
     }
     
     private func showShareDialog(_ token:String) {

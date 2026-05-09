@@ -56,8 +56,7 @@ class MaxPrivacyDetailViewModel: NSObject {
     
     func filterUTXOS() {
         
-        DispatchQueue.main.async {
-            [weak self] in
+        DispatchQueue.main.async { [weak self] in
             
             guard let strongSelf = self else { return }
             

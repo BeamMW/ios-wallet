@@ -210,9 +210,9 @@ extension String {
     
     func isValidIp() -> Bool {
         if #available(iOS 12.0, *) {
-            if let _ = IPv4Address(self) {
+            if IPv4Address(self) != nil {
                 return true
-            } else if let _ = IPv6Address(self) {
+            } else if IPv6Address(self) != nil {
                 return true
             } else {
                 return false

@@ -43,7 +43,7 @@ class BMDetailCell: BaseCell {
         arrowIcon.highlightedImage = IconNextArrow()?.maskWithColor(color: UIColor.main.steelGrey)
         
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
         }
     }
     

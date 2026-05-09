@@ -25,9 +25,7 @@ class DetailAddressViewModel: AddressViewModel {
     public var details = [BMMultiLineItem]()
     public var transactionViewModel:TransactionViewModel!
     public var transactions:[BMTransaction] {
-        get{
-            return transactionViewModel.transactions
-        }
+        return transactionViewModel.transactions
     }
 
     override init(address: BMAddress) {

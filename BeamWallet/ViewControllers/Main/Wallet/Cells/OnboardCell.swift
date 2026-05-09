@@ -67,15 +67,15 @@ class OnboardCell: UITableViewCell {
         }
     }
     
-    @IBAction private func onClose (sender :UIButton) {
+    @IBAction private func onClose(sender :UIButton) {
         self.delegate?.onClickCloseFaucet(cell:self)
     }
     
-    @IBAction private func onVerefication (sender :UIButton) {
+    @IBAction private func onVerefication(sender :UIButton) {
         self.delegate?.onClickMakeSecure(cell:self)
     }
     
-    @IBAction private func onReceive (sender :UIButton) {
+    @IBAction private func onReceive(sender :UIButton) {
         self.delegate?.onClickReceiveFaucet(cell: self)
     }
 }

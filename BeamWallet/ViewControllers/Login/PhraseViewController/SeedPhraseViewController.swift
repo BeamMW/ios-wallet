@@ -94,10 +94,8 @@ class SeedPhraseViewController: BaseViewController {
                 if let index = words.firstIndex(of: word) {
                     var added = false
                     
-                    for inWord in inputWords {
-                        if inWord.index == index {
-                            added = true
-                        }
+                    for inWord in inputWords where inWord.index == index {
+                        added = true
                     }
                     
                     if !added {
@@ -148,18 +146,17 @@ class SeedPhraseViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+
+        // swiftlint:disable:next notification_center_detachment
         NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func didTakeScreenshot() {
         if event == .restore {
             var shouldDisplayAlert = false
-            for i in 0 ... confirmCountWords - 1 {
-                if inputWords[i].correct {
-                    shouldDisplayAlert = true
-                    break
-                }
+            for i in 0 ... confirmCountWords - 1 where inputWords[i].correct {
+                shouldDisplayAlert = true
+                break
             }
             if shouldDisplayAlert {
                 alert(message: Localizable.shared.strings.seed_capture_warning)
@@ -179,12 +176,12 @@ class SeedPhraseViewController: BaseViewController {
             }
             else {
                 confirmAlert(title: Localizable.shared.strings.save_seed_title, message: Localizable.shared.strings.save_seed_info, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.done, cancelHandler: { _ in
-                    
-                }) { _ in
+
+                }, confirmHandler: { _ in
                     let vc = SeedPhraseViewController(event: .confirm, words: self.words)
                     vc.increaseSecutirty = self.increaseSecutirty
                     self.pushViewController(vc: vc)
-                }
+                })
             }
         }
         else if event == .confirm {
@@ -281,10 +278,10 @@ class SeedPhraseViewController: BaseViewController {
     
     @objc private func onNavigationBack() {
         confirmAlert(title: Localizable.shared.strings.seed_back_title, message: Localizable.shared.strings.seed_back_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.generate, cancelHandler: { _ in
-            
-        }) { _ in
+
+        }, confirmHandler: { _ in
             self.back()
-        }
+        })
     }
     
     @objc private func handleLongPress(sender: UIGestureRecognizer) {

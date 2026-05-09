@@ -109,7 +109,7 @@ class BMDataPickerViewController: BaseTableViewController {
         tableView.backgroundColor = UIColor.main.marine
     }
     
-    private func footerView(text:String)-> UIView {
+    private func footerView(text:String) -> UIView {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
         
         let infoLabel = UILabel()
@@ -119,7 +119,7 @@ class BMDataPickerViewController: BaseTableViewController {
         infoLabel.font = ItalicFont(size: 14)
         infoLabel.textAlignment = .center
         if Settings.sharedManager().isDarkMode {
-            infoLabel.textColor = UIColor.main.steel;
+            infoLabel.textColor = UIColor.main.steel
         }
         else {
             infoLabel.textColor = UIColor.main.blueyGrey
@@ -140,20 +140,18 @@ class BMDataPickerViewController: BaseTableViewController {
         if type == .clear {
             var deleted = [String]()
             
-            for item in values {
-                if item.arrowType == BMPickerData.ArrowType.selected {
-                    switch item.unique as! Int {
-                    case 1:
-                        deleted.append(Localizable.shared.strings.addresses.lowercased())
-                    case 2:
-                        deleted.append(Localizable.shared.strings.contacts.lowercased())
-                    case 3:
-                        deleted.append(Localizable.shared.strings.transactions.lowercased())
-                    case 4:
-                        deleted.append(Localizable.shared.strings.categories.lowercased())
-                    default:
-                        break
-                    }
+            for item in values where item.arrowType == BMPickerData.ArrowType.selected {
+                switch item.unique as! Int {
+                case 1:
+                    deleted.append(Localizable.shared.strings.addresses.lowercased())
+                case 2:
+                    deleted.append(Localizable.shared.strings.contacts.lowercased())
+                case 3:
+                    deleted.append(Localizable.shared.strings.transactions.lowercased())
+                case 4:
+                    deleted.append(Localizable.shared.strings.categories.lowercased())
+                default:
+                    break
                 }
             }
             
@@ -169,31 +167,27 @@ class BMDataPickerViewController: BaseTableViewController {
             }
             
             confirmAlert(title: Localizable.shared.strings.clear_data, message: Localizable.shared.strings.delete_data_text(str: str), cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.delete, cancelHandler: { _ in
-                
-            }) { _ in
-                for item in self.values {
-                    if item.arrowType == BMPickerData.ArrowType.selected {
-                        switch item.unique as! Int {
-                        case 1:
-                            AppModel.sharedManager().clearAllAddresses()
-                        case 2:
-                            AppModel.sharedManager().clearAllContacts()
-                        case 3:
-                            AppModel.sharedManager().clearAllTransactions()
-                        default:
-                            break
-                        }
+
+            }, confirmHandler: { _ in
+                for item in self.values where item.arrowType == BMPickerData.ArrowType.selected {
+                    switch item.unique as! Int {
+                    case 1:
+                        AppModel.sharedManager().clearAllAddresses()
+                    case 2:
+                        AppModel.sharedManager().clearAllContacts()
+                    case 3:
+                        AppModel.sharedManager().clearAllTransactions()
+                    default:
+                        break
                     }
                 }
                 self.back()
-            }
+            })
         }
         else if  type == .export_data {
             var selectedValues = [String]()
-            for item in values {
-                if item.arrowType == BMPickerData.ArrowType.selected {
-                    selectedValues.append(item.unique as! String)
-                }
+            for item in values where item.arrowType == BMPickerData.ArrowType.selected {
+                selectedValues.append(item.unique as! String)
             }
             
             if type == .export_data {
@@ -209,7 +203,7 @@ class BMDataPickerViewController: BaseTableViewController {
                         try data.write(to: fileURL, atomically: false, encoding: .utf8)
 
                         let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
-                        vc.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+                        vc.completionWithItemsHandler = { (_, completed:Bool, _:[Any]?, _: Error?) in
                            if completed {
                                 self.back()
                            }
@@ -333,10 +327,8 @@ class BMDataPickerViewController: BaseTableViewController {
                 data.arrowType = BMPickerData.ArrowType.selected
             }
             var isAllDisabled = true
-            for item in values {
-                if item.arrowType == BMPickerData.ArrowType.selected {
-                    isAllDisabled = false
-                }
+            for item in values where item.arrowType == BMPickerData.ArrowType.selected {
+                isAllDisabled = false
             }
             enableRightButton(enabled: !isAllDisabled)
         case .currency:

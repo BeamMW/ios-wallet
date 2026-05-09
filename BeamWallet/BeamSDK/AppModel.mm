@@ -939,16 +939,16 @@ static beam::Rules& getConfiguredRules() {
             additionalTxCreators->emplace(TxType::PushTransaction, pushTxCreator);
 
             wallet = make_shared<WalletModel>(walletDb, nodeAddrStr, walletReactor);
-            
+
             NSLog(@"NODE ADDRESS: %@", [Settings sharedManager].nodeAddress);
 
             wallet->getAsync()->setNodeAddress(nodeAddrStr);
-            
+
             if ([Settings sharedManager].isNodeProtocolEnabled) {
                 [Settings sharedManager].isNodeProtocolEnabled = NO;
                 wallet->getAsync()->enableBodyRequests(false);
             }
-            
+
             wallet->start(activeNotifications, isSecondCurrencyEnabled, additionalTxCreators);
 
             __weak typeof(self) weakSelf = self;
@@ -968,7 +968,7 @@ static beam::Rules& getConfiguredRules() {
         }
         catch (const std::exception& e) {
             NSLog(@"ImportRecovery failed %s",e.what());
-            
+
             NSString *erorString = [NSString stringWithUTF8String:e.what()];
             
                   NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
@@ -984,7 +984,7 @@ static beam::Rules& getConfiguredRules() {
         }
         catch (...) {
             NSLog(@"ImportRecovery failed");
-            
+
             NSString *erorString = @"Recovery failed";
             
                   NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
@@ -2357,7 +2357,7 @@ void CopyParameter(beam::wallet::TxParameterID paramID, const beam::wallet::TxPa
     transaction.assetId = assetId;
 
     [_preparedTransactions addObject:transaction];
-    
+
     NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
       for(id<WalletModelDelegate> delegate in delegates)
     {

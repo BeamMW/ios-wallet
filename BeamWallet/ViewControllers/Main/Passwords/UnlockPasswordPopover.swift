@@ -89,46 +89,46 @@ class UnlockPasswordPopover: BaseViewController {
     
     private func getTextForFaceID() -> String {
         switch event {
-            case .transaction:
-                return Localizable.shared.strings.confirm_transaction_2
-            case .node:
-                return Localizable.shared.strings.change_node_text_1
-            case .settings:
-                return Localizable.shared.strings.change_settings_text_1
-            case .clear_wallet:
-                return String.empty()
-            case .none:
-                return String.empty()
+        case .transaction:
+            return Localizable.shared.strings.confirm_transaction_2
+        case .node:
+            return Localizable.shared.strings.change_node_text_1
+        case .settings:
+            return Localizable.shared.strings.change_settings_text_1
+        case .clear_wallet:
+            return String.empty()
+        case .none:
+            return String.empty()
         }
     }
-    
+
     private func getTextForTouchID() -> String {
         switch event {
-            case .transaction:
-                return Localizable.shared.strings.confirm_transaction_1
-            case .node:
-                return Localizable.shared.strings.change_node_text_2
-            case .settings:
-                return Localizable.shared.strings.change_settings_text_2
-            case .clear_wallet:
-                return String.empty()
-            case .none:
-                return String.empty()
+        case .transaction:
+            return Localizable.shared.strings.confirm_transaction_1
+        case .node:
+            return Localizable.shared.strings.change_node_text_2
+        case .settings:
+            return Localizable.shared.strings.change_settings_text_2
+        case .clear_wallet:
+            return String.empty()
+        case .none:
+            return String.empty()
         }
     }
-    
+
     private func getTextForPassword() -> String {
         switch event {
-            case .transaction:
-                return Localizable.shared.strings.confirm_transaction_3
-            case .node:
-                return Localizable.shared.strings.change_node_text_3
-            case .settings:
-                return Localizable.shared.strings.change_settings_text_3
-            case .clear_wallet:
-                return Localizable.shared.strings.clear_wallet_password
-            case .none:
-                return String.empty()
+        case .transaction:
+            return Localizable.shared.strings.confirm_transaction_3
+        case .node:
+            return Localizable.shared.strings.change_node_text_3
+        case .settings:
+            return Localizable.shared.strings.change_settings_text_3
+        case .clear_wallet:
+            return Localizable.shared.strings.clear_wallet_password
+        case .none:
+            return String.empty()
         }
     }
     

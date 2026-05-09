@@ -389,11 +389,11 @@ class BaseViewController: UIViewController {
         if !Settings.sharedManager().isHideAmounts {
             if Settings.sharedManager().isAskForHideAmounts {
                 self.confirmAlert(title: Localizable.shared.strings.activate_security_title, message: Localizable.shared.strings.activate_security_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.activate, cancelHandler: { _ in
-                    
-                }) { _ in
+
+                }, confirmHandler: { _ in
                     Settings.sharedManager().isAskForHideAmounts = false
                     Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-                }
+                })
             }
             else {
                 Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts

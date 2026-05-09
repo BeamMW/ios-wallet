@@ -47,15 +47,15 @@ class BMFieldCell: BaseCell {
         }
     }
     
-    public var titleTextColor: UIColor? = nil {
+    public var titleTextColor: UIColor? {
         didSet {
             if let color = titleTextColor {
-                nameLabel.textColor = color;
+                nameLabel.textColor = color
             }
         }
     }
     
-    public var hideNameLabel:Bool? = nil
+    public var hideNameLabel:Bool? 
     {
         didSet {
             if let hide = hideNameLabel {
@@ -81,7 +81,7 @@ class BMFieldCell: BaseCell {
        // textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
 
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
         }
     }
     
@@ -147,8 +147,7 @@ extension BMFieldCell : UITextFieldDelegate {
         if let copy = copyText {
             let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy:copy)
             
-            inputBar.completion = {
-                (obj : String?) -> Void in
+            inputBar.completion = { (obj : String?) in
                 if let text = obj {
                     self.textField.text = text
                     self.delegate?.textValueDidChange?(self, text, false)

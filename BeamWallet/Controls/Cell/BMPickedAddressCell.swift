@@ -36,7 +36,7 @@ class BMPickedAddressCell: BaseCell {
         selectionStyle = .none
         
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
         }
     }
     

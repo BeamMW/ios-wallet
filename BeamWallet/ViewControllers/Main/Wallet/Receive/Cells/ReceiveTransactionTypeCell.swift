@@ -14,7 +14,7 @@ protocol ReceiveTransactionTypeCellDelegate: AnyObject {
 
 class ReceiveTransactionTypeCell: UITableViewCell {
 
-    public weak var delegate:ReceiveTransactionTypeCellDelegate? = nil
+    public weak var delegate:ReceiveTransactionTypeCellDelegate?
     
     @IBOutlet private var transactionTypeLabel: UILabel!
     @IBOutlet private var errorLabel: UILabel!

@@ -138,7 +138,7 @@ extension UIView {
     }
     
     func removeExternalBorders() {
-        layer.sublayers?.filter() { $0.name == Constants.ExternalBorderName }.forEach() {
+        layer.sublayers?.filter { $0.name == Constants.ExternalBorderName }.forEach {
             $0.removeFromSuperlayer()
         }
     }

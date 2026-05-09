@@ -81,20 +81,20 @@ class RestoreOptionsViewController: BaseViewController {
     @IBAction func onNext(sender: UIButton) {
         if AppModel.sharedManager().restoreType == BMRestoreAutomatic {
             confirmAlert(title: Localizable.shared.strings.restore_wallet_title, message: Localizable.shared.strings.auto_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 Settings.sharedManager().connectToRandomNode = true
                 Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
                 AppModel.sharedManager().changeNodeAddress()
 
                 let vc = OpenWalletProgressViewController(password: self.password, phrase: self.phrase)
                 self.pushViewController(vc: vc)
-            }
+            })
         }
         else {
             confirmAlert(title: Localizable.shared.strings.restore_wallet_title, message: Localizable.shared.strings.manual_restore_warning, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.understand, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 let created = AppModel.sharedManager().createWallet(self.phrase, pass: self.password)
                 if !created {
                     self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { _ in
@@ -114,16 +114,16 @@ class RestoreOptionsViewController: BaseViewController {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         AppModel.sharedManager().exportOwnerKey(self.password) { [weak self] key in
                             SVProgressHUD.dismiss()
-                            
+
                             guard let strongSelf = self else { return }
-                            
+
                             let vc = OwnerKeyViewController()
                             vc.ownerKey = key
                             strongSelf.pushViewController(vc: vc)
                         }
                     }
                 }
-            }
+            })
         }
     }
 }

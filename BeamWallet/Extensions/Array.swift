@@ -19,7 +19,7 @@
 
 import Foundation
 
-func rearrange<T>(array: Array<T>, fromIndex: Int, toIndex: Int) -> Array<T>{
+func rearrange<T>(array: [T], fromIndex: Int, toIndex: Int) -> [T]{
     var arr = array
     let element = arr.remove(at: fromIndex)
     arr.insert(element, at: toIndex)

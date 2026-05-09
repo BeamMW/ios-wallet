@@ -187,7 +187,7 @@ class AddressViewModel: NSObject {
                     return
                 }
             }
-        }) {}
+        }, cancel: {})
     }
     
     public func onEditAddress(address: BMAddress) {

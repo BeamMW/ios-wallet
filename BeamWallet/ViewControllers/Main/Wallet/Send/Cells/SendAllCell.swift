@@ -51,7 +51,7 @@ class SendAllCell: BaseCell {
         allButton.setTitle(Localizable.shared.strings.add_max.lowercased(), for: .normal)
 
         if Settings.sharedManager().isDarkMode {
-            titleLabel.textColor = UIColor.main.steel;
+            titleLabel.textColor = UIColor.main.steel
         }
     }
 
