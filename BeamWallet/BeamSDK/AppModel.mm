@@ -728,7 +728,8 @@ static beam::Rules& getConfiguredRules() {
 -(void)resetOnlyWallet {
     isStarted = NO;
     isRunning = NO;
-    
+    self.didLoadFullAssetsList = NO;
+
     if (wallet!=nil){
         wallet.reset();
     }
@@ -737,10 +738,11 @@ static beam::Rules& getConfiguredRules() {
 
 -(void)restartWallet {
     BEAM_LOG_INFO() << "restart wallet";
-    
+
     isStarted = NO;
     isRunning = NO;
-    
+    self.didLoadFullAssetsList = NO;
+
     if (wallet!=nil){
         wallet.reset();
     }
@@ -769,6 +771,7 @@ static beam::Rules& getConfiguredRules() {
 
     isStarted = NO;
     isRunning = NO;
+    self.didLoadFullAssetsList = NO;
 
     wallet.reset();
 
@@ -911,6 +914,11 @@ static beam::Rules& getConfiguredRules() {
     else if(self.isRestoreFlow && self.restoreType == BMRestoreManual && [Settings sharedManager].isChangedNode) {
         [self start];
     }
+
+    // Prefetch the full asset registry once per session so Receive / Asset
+    // Search / Asset Swap don't pay a network round-trip on first open.
+    // Idempotent: subsequent callers from those screens no-op via the flag.
+    [self loadFullAssetsList];
 }
 
 -(void)restore:(NSString*_Nonnull)path{
@@ -1348,6 +1356,8 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
 -(void)loadFullAssetsList {
     if (wallet == nullptr) return;
+    if (self.didLoadFullAssetsList) return;
+    self.didLoadFullAssetsList = YES;
     wallet->getAsync()->loadFullAssetsList();
 }
 

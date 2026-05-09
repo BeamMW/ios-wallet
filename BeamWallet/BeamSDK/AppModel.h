@@ -119,6 +119,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,assign) BMRestoreType restoreType;
 @property (nonatomic,assign) BOOL isMaxPrivacyRequest;
 @property (nonatomic,assign) BOOL isConfigured;
+@property (nonatomic,assign) BOOL didLoadFullAssetsList;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 
