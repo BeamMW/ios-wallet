@@ -75,6 +75,9 @@ class LeftMenuViewController: BaseTableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.isScrollEnabled = false
+        tableView.bounces = false
+        tableView.alwaysBounceVertical = false
         
         var height:CGFloat = 180
         var offset:CGFloat = 20
