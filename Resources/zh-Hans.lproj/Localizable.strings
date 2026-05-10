@@ -662,3 +662,7 @@ and never kept on the blockchain.";
 "vouchers_count" = "Vouchers count";
 "vouchers_count_hint" = "Up to %d vouchers per address";
 "vouchers_count_error" = "Enter a value between 1 and %d";
+"sync_phase_connecting" = "Connecting to node…";
+"sync_phase_reconnecting" = "Reconnecting to node…";
+"sync_phase_almost_done" = "Almost done…";
+"sync_phase_finalizing" = "Finalizing…";

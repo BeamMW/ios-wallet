@@ -44,8 +44,21 @@ class OpenWalletProgressViewController: BaseViewController {
     public var isRescan = false
     
     private var backgroundTaskID: UIBackgroundTaskIdentifier!
-    
+
     private let displayProgress = true
+
+    // Stabilization window: on the `onlyConnect` resume path the wallet often
+    // jumps from total=1,done=0 → total=1,done=1 in one tick, which renders as
+    // a useless 0% → 100% flash. Suppress the percent UI for the first 500 ms
+    // and decide once: either open the main page (if sync resolved or only a
+    // trivial number of requests remain) or commit to rendering progress.
+    private static let kStabilizationDelay: TimeInterval = 0.5
+    private static let kTrivialSyncThreshold: Int32 = 2
+
+    private var stabilizationTimer: Timer?
+    private var pendingSnapshot: (done: Int32, total: Int32)?
+    private var hasConnected = false
+    private var isReconnecting = false
 
     init(password:String, phrase:String?) {
         super.init(nibName: nil, bundle: nil)
@@ -115,23 +128,22 @@ class OpenWalletProgressViewController: BaseViewController {
             else {
                 progressTitleLabel.text = Localizable.shared.strings.loading_wallet
             }
-            
-            if displayProgress {
-                progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + " 0%"
-            }
-            else {
-                progressValueLabel.text = Localizable.shared.strings.syncing_with_blockchain + ": "
-            }
-            
-            
+
+            // Hide the percent label until the stabilization window closes —
+            // otherwise we'd flash "0%" before either committing to a real
+            // progress render or skipping straight to the main page.
+            progressValueLabel.text = Localizable.shared.strings.sync_phase_connecting
+            progressValueLabel.isHidden = false
+
             restotingInfoLabel.text = Localizable.shared.strings.please_no_lock
-            
+
             progressTimeValueLabel.text = Localizable.shared.strings.calc_estimate_time
             progressTimeValueLabel.isHidden = false
-            
-            progressValueLabel.isHidden = false
+
             cancelButton.isHidden = false
             restotingInfoLabel.isHidden = true
+
+            startStabilizationWindow()
         }
         else if AppModel.sharedManager().isRestoreFlow {
             progressTitleLabel.text = Localizable.shared.strings.restoring_wallet
@@ -203,8 +215,10 @@ class OpenWalletProgressViewController: BaseViewController {
         
         UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
         self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
-        
+
         timeoutTimer?.invalidate()
+        stabilizationTimer?.invalidate()
+        stabilizationTimer = nil
         
         if isMovingFromParent {
             AppModel.sharedManager().removeDelegate(self)
@@ -444,8 +458,68 @@ class OpenWalletProgressViewController: BaseViewController {
         self.pushViewController(vc: vc)
     }
 
+    // MARK: Sync phase / stabilization
+
+    private enum SyncPhase {
+        case connecting
+        case reconnecting
+        case almostDone
+        case finalizing
+    }
+
+    private func resolveBoundaryPhase(done: Int32, total: Int32) -> SyncPhase? {
+        if !hasConnected            { return .connecting   }
+        if isReconnecting           { return .reconnecting }
+        if total > 0 && done == total && !AppModel.sharedManager().isSynced() {
+            return .finalizing
+        }
+        if total > 0 && (total - done) <= OpenWalletProgressViewController.kTrivialSyncThreshold {
+            return .almostDone
+        }
+        return nil
+    }
+
+    private func progressCopy(for phase: SyncPhase) -> String {
+        switch phase {
+        case .connecting:   return Localizable.shared.strings.sync_phase_connecting
+        case .reconnecting: return Localizable.shared.strings.sync_phase_reconnecting
+        case .almostDone:   return Localizable.shared.strings.sync_phase_almost_done
+        case .finalizing:   return Localizable.shared.strings.sync_phase_finalizing
+        }
+    }
+
+    private func startStabilizationWindow() {
+        stabilizationTimer?.invalidate()
+        stabilizationTimer = Timer.scheduledTimer(
+            timeInterval: OpenWalletProgressViewController.kStabilizationDelay,
+            target: self,
+            selector: #selector(onStabilizationFinished),
+            userInfo: nil,
+            repeats: false
+        )
+    }
+
+    @objc private func onStabilizationFinished() {
+        stabilizationTimer = nil
+
+        if AppModel.sharedManager().isSynced() {
+            openMainPage()
+            return
+        }
+        if let snap = pendingSnapshot,
+           snap.total > 0,
+           snap.total - snap.done <= OpenWalletProgressViewController.kTrivialSyncThreshold {
+            openMainPage()
+            return
+        }
+
+        if let snap = pendingSnapshot {
+            onSyncProgressUpdated(snap.done, total: snap.total)
+        }
+    }
+
 // MARK: IBAction
-    
+
     @IBAction func onCancel(sender :UIButton) {
         AppModel.sharedManager().removeDelegate(self)
 
@@ -485,6 +559,8 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
 
             if connected {
                 strongSelf.errorLabel.isHidden = true
+                strongSelf.hasConnected = true
+                strongSelf.isReconnecting = false
             }
 
             if !strongSelf.onlyConnect && connected && !AppModel.sharedManager().isRestoreFlow
@@ -495,6 +571,26 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                     strongSelf.openMainPage()
                 }
             }
+        }
+    }
+
+    func onNetwotkStartConnecting(_ connecting: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            // Only show "Connecting…" before we've ever rendered a percent —
+            // once real progress is visible, flipping back to the connecting
+            // copy mid-sync would be misleading.
+            if connecting && !strongSelf.hasConnected && strongSelf.stabilizationTimer != nil {
+                strongSelf.progressValueLabel.text = Localizable.shared.strings.sync_phase_connecting
+            }
+        }
+    }
+
+    func onNetwotkStartReconnecting() {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.isReconnecting = true
+            strongSelf.progressValueLabel.text = Localizable.shared.strings.sync_phase_reconnecting
         }
     }
 
@@ -589,7 +685,16 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.hideErrorIfOnline()
-            
+
+            // Stabilization: on the resume path, suppress percent rendering
+            // until either the timer fires or the workload is non-trivial.
+            // Recovery (`isWaitingRestore`) and the seed-restore flows are
+            // unaffected — they have real work to display from frame one.
+            if strongSelf.onlyConnect && strongSelf.stabilizationTimer != nil && !strongSelf.isWaitingRestore {
+                strongSelf.pendingSnapshot = (done, total)
+                return
+            }
+
             if done > 0 {
                 if (strongSelf.onlyConnect || strongSelf.isRescan || strongSelf.phrase == nil)
                 || (strongSelf.phrase != nil){
@@ -625,6 +730,14 @@ extension OpenWalletProgressViewController : WalletModelDelegate {
                 else {
                     strongSelf.progressValueLabel.text = "\(Localizable.shared.strings.syncing_with_blockchain): "
                 }
+            }
+
+            // Phase-aware overlay: replace the generic percent copy with a more
+            // descriptive line at the boundaries of sync (reconnecting, almost
+            // done, finalizing). Steady-state (resolver returns nil) keeps the
+            // percent visible during the bulk of the work.
+            if let phase = strongSelf.resolveBoundaryPhase(done: done, total: total) {
+                strongSelf.progressValueLabel.text = strongSelf.progressCopy(for: phase)
             }
 
             if strongSelf.isWaitingRestore && (total == done || AppModel.sharedManager().isSynced()) {

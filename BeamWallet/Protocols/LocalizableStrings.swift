@@ -539,6 +539,10 @@ class LocalizableStrings : NSObject {
 
     var connect_to_mobilenode = "connect_to_mobilenode".localized
     var syncing_with_blockchain = "syncing_with_blockchain".localized
+    var sync_phase_connecting = "sync_phase_connecting".localized
+    var sync_phase_reconnecting = "sync_phase_reconnecting".localized
+    var sync_phase_almost_done = "sync_phase_almost_done".localized
+    var sync_phase_finalizing = "sync_phase_finalizing".localized
     var please_no_lock = "please_no_lock".localized
     var wallet_connected_to_mobile_node = "wallet_connected_to_mobile_node".localized
     var disconnect = "disconnect".localized
