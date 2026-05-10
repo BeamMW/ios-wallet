@@ -352,7 +352,7 @@ extension SettingsViewController : WalletModelDelegate {
     func onNetwotkStartReconnecting() {
         DispatchQueue.main.async {
             if self.type == SettingsViewModel.SettingsType.node {
-                self.viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
+                self.viewModel.reload()
                 self.tableView.reloadData()
             }
         }

@@ -358,28 +358,33 @@ static beam::Rules& getConfiguredRules() {
     return @"";
 }
 
-+(NSString*_Nonnull)chooseRandomNode {
++(NSArray<NSString*>*_Nonnull)defaultPeerAddresses {
     // Settings.init calls this class method before AppModel.init runs, so the
     // BEAM library hasn't been initialized yet — install Rules first.
     beam::Rules::s_pInstance = &getConfiguredRules();
     auto peers = getDefaultPeers();
-    
-    NSMutableArray *array = [NSMutableArray array];
-    
+
+    NSMutableArray<NSString*> *array = [NSMutableArray array];
+
     for (const auto& item : peers) {
         NSString *address = [NSString stringWithUTF8String:item.c_str()];
-        if([address rangeOfString:@"shanghai"].location == NSNotFound
-           && [address rangeOfString:@"raskul"].location == NSNotFound
-           && [address rangeOfString:@"45."].location == NSNotFound) {
+        if ([address rangeOfString:@"shanghai"].location == NSNotFound
+            && [address rangeOfString:@"raskul"].location == NSNotFound
+            && [address rangeOfString:@"45."].location == NSNotFound) {
             [array addObject:address];
         }
     }
-    
-    srand([[NSDate date]  timeIntervalSince1970]);
-    
-    int inx = rand()%[array count];
-    
-    return [array objectAtIndex:inx];
+
+    return array;
+}
+
++(NSString*_Nonnull)chooseRandomNode {
+    NSArray<NSString*> *array = [AppModel defaultPeerAddresses];
+    if (array.count == 0) {
+        return @"";
+    }
+    srand([[NSDate date] timeIntervalSince1970]);
+    return array[rand() % array.count];
 }
 
 -(void)setWalletAddresses:(NSMutableArray<BMAddress *> *)walletAddresses {
@@ -499,8 +504,11 @@ static beam::Rules& getConfiguredRules() {
         [self getWalletStatus];
         [self getUTXO];
     }
+    if (_isConnected != isConnected) {
+        _lastConnectionChangedAt = [NSDate date];
+    }
     _isConnected = isConnected;
-    
+
     if (wallet != nil) {
         _isConfigured = wallet->isConnectionTrusted();
     }

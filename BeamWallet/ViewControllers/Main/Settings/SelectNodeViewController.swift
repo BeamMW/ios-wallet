@@ -337,7 +337,7 @@ extension SelectNodeViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         if isCreateWallet {
             self.onNextSelected(indexPath: indexPath)
         }
@@ -444,16 +444,16 @@ extension SelectNodeViewController : UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return items.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 2 {
             return items[section].selected ? 2 : 1
         }
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         if indexPath.row == 1 {
             var cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
             if cell == nil {

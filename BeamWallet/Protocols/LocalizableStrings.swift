@@ -340,6 +340,14 @@ class LocalizableStrings : NSObject {
     var manual_restore_warning = "manual_restore_warning".localized
     var search_transactions = "search_transactions".localized
     var random_node = "random_node".localized
+    var node_peers = "node_peers".localized
+    var node_type = "node_type".localized
+    var node_peer_active = "node_peer_active".localized
+    var node_peer_pool = "node_peer_pool".localized
+    var node_peer_connected = "node_peer_connected".localized
+    var node_peer_connecting = "node_peer_connecting".localized
+    var node_peer_disconnected = "node_peer_disconnected".localized
+    var node_peer_last_seen = "node_peer_last_seen".localized
 
     var restore_create_title = "restore_create_title".localized
     var restore_create_text = "restore_create_text".localized

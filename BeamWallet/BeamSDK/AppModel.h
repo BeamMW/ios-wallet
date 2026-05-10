@@ -145,6 +145,8 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
 
+@property (nonatomic, strong, readonly) NSDate * _Nullable lastConnectionChangedAt;
+
 @property (nonatomic, strong) NSString * _Nullable addressGeneratedID;
 
 -(void)handleTimer;
@@ -153,6 +155,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 +(AppModel*_Nonnull)sharedManager;
 
 +(NSString*_Nonnull)chooseRandomNode;
++(NSArray<NSString*>*_Nonnull)defaultPeerAddresses;
 
 // delegates
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;

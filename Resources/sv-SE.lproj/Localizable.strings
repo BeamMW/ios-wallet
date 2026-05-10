@@ -425,6 +425,14 @@
 "NSCameraUsageDescription" = "Kameran behövs för att scanna QR-koder";
 "search_transactions" = "Sök med transaktions eller kernel-ID, kommentar, adress eller kontakt";
 "random_node" = "Anslut till slumpmässig nod";
+"node_peers" = "Node peers";
+"node_type" = "Node type";
+"node_peer_active" = "Active node";
+"node_peer_pool" = "Random node pool";
+"node_peer_connected" = "Connected";
+"node_peer_connecting" = "Connecting…";
+"node_peer_disconnected" = "Disconnected";
+"node_peer_last_seen" = "Last seen %@";
 "restore_create_title" = "Återställ plånbok eller skapa en ny";
 "restore_create_text" = "Om du återställer en plånbok så kommer all transaktionshistorik och adresser att förloras.";
 "proceed" = "Fortsätt";

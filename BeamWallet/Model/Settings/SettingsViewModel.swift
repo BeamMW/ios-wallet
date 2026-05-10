@@ -69,6 +69,18 @@ class SettingsViewModel: NSObject {
         case confirmations = 37
         case sign_message = 38
         case verify_message = 39
+        case node_peers = 40
+        case node_type = 41
+    }
+
+    private static func currentNodeTypeLabel() -> String {
+        if Settings.sharedManager().isNodeProtocolEnabled {
+            return Localizable.shared.strings.mobile_node_title
+        }
+        if !Settings.sharedManager().connectToRandomNode {
+            return Localizable.shared.strings.own_node_title
+        }
+        return Localizable.shared.strings.random_node_title
     }
     
     class SettingsItem {
@@ -254,27 +266,10 @@ class SettingsViewModel: NSObject {
             items.append(section_1)
         case .node:
             var section_0 = [SettingsItem]()
-            section_0.append(SettingsItem(title: Localizable.shared.strings.random_node, detail: nil, isSwitch: Settings.sharedManager().connectToRandomNode, type: .random_node, hasArrow: false))
-            section_0.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, type: .ip_port, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.node_type, detail: SettingsViewModel.currentNodeTypeLabel(), isSwitch: nil, type: .node_type, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.node_peers, detail: nil, isSwitch: nil, type: .node_peers, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
             items.append(section_0)
-            
-            let detail = NSMutableAttributedString(string: "\(Localizable.shared.strings.mobile_node_title)\nspace\n\(Localizable.shared.strings.mobile_node_text)")
-            
-            let rangeDetail = (detail.string as NSString).range(of: String(Localizable.shared.strings.mobile_node_text))
-            let spaceRange = (detail.string as NSString).range(of: String("space"))
-            
-            detail.addAttribute(NSAttributedString.Key.font, value: ItalicFont(size: 14), range: rangeDetail)
-            detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeDetail)
-            
-            detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
-            detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
-            
-            let mobileItem = SettingsItem(title: Localizable.shared.strings.mobile_node_title, detail: nil, isSwitch: Settings.sharedManager().isNodeProtocolEnabled, type: .mobile_node, hasArrow: false)
-            mobileItem.titleAttributed = detail
-            
-            var section_1 = [SettingsItem]()
-            section_1.append(mobileItem)
-            items.append(section_1)
         case .privacy:
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, type: .ask_password, hasArrow: false))
@@ -286,10 +281,6 @@ class SettingsViewModel: NSObject {
             if OnboardManager.shared.isSkipedSeed() == true {
                 section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
-            section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
-            //            if OnboardManager.shared.isSkipedSeed() == true {
-            //                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
-            //            }
             section_0.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
             items.append(section_0)
         case .utilites:
@@ -351,12 +342,12 @@ class SettingsViewModel: NSObject {
     
     public func didSelectItem(item: SettingsItem) {
         switch item.type {
-        case .general, .privacy, .tags, .utilites:
+        case .general, .privacy, .tags, .utilites, .node:
             if let top = UIApplication.getTopMostViewController() {
                 let vc = SettingsViewController(type: SettingsType(rawValue: item.type.rawValue)!)
                 top.pushViewController(vc: vc)
             }
-        case .node:
+        case .node_type:
             if let top = UIApplication.getTopMostViewController() {
                 let vc = SelectNodeViewController()
                 top.pushViewController(vc: vc)
@@ -409,6 +400,11 @@ class SettingsViewModel: NSObject {
             onShowUTXO()
         case .confirmations:
             onConfirmationsScreen()
+        case .node_peers:
+            if let top = UIApplication.getTopMostViewController() {
+                let vc = NodePeersViewController()
+                top.pushViewController(vc: vc)
+            }
         default:
             return
         }
