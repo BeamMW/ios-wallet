@@ -327,14 +327,26 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
 }
 
 -(void)setDefaultDarkMode:(BOOL)isSystemMode {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:isSetDarkModeKey]) {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    // Pre-isSetDarkModeKey installs already had darkModeKey persisted; if we
+    // see one without the marker, lock the existing preference in place so
+    // the fresh-install branch below doesn't retroactively flip them.
+    if ([defaults objectForKey:darkModeKey] != nil &&
+        [defaults objectForKey:isSetDarkModeKey] == nil) {
+        [defaults setObject:@"1" forKey:isSetDarkModeKey];
+        [defaults synchronize];
+        _isDarkMode = [[defaults objectForKey:darkModeKey] boolValue];
+        return;
+    }
+
+    if (![defaults objectForKey:isSetDarkModeKey]) {
         self.isDarkMode = isSystemMode;
-        
-        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:isSetDarkModeKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+
+        [defaults setObject:@"1" forKey:isSetDarkModeKey];
+        [defaults synchronize];
     }
     else{
-        _isDarkMode = [[[NSUserDefaults standardUserDefaults] objectForKey:darkModeKey] boolValue];
+        _isDarkMode = [[defaults objectForKey:darkModeKey] boolValue];
     }
 }
 

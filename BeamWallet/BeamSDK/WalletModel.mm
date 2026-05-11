@@ -1016,118 +1016,139 @@ void WalletModel::onInstantMessage(beam::Timestamp time, const beam::wallet::Wal
     }
     NSLog(@"[Messenger] onInstantMessage peer=%@ income=%d len=%lu", peer, isIncome ? 1 : 0, (unsigned long)text.length);
 
-    BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
-    bmMessage.timestamp = (UInt64)time;
-    bmMessage.peerWalletId = peer;
-    bmMessage.message = text;
-    bmMessage.isIncome = isIncome ? YES : NO;
-    bmMessage.isRead = isIncome ? NO : YES;
-    bmMessage.myWalletId = @"";
+    UInt64 timestamp = (UInt64)time;
+    BOOL isIncomeFlag = isIncome ? YES : NO;
 
-    NSMutableDictionary *byPeer = [AppModel sharedManager].messagesByPeer;
-    NSMutableArray<BMInstantMessage*> *list = byPeer[peer];
-    if (list == nil) {
-        list = [NSMutableArray new];
-        byPeer[peer] = list;
-    }
-    [list addObject:bmMessage];
+    // Mutate the messagesByPeer / chats caches and broadcast on main; UI reads
+    // these unguarded (NSMutableArray / NSMutableDictionary) so reactor-thread
+    // writes will eventually crash with `collection mutated while being
+    // enumerated`. Mirrors the dispatch-on-main pattern used by the DEX path.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
+        bmMessage.timestamp = timestamp;
+        bmMessage.peerWalletId = peer;
+        bmMessage.message = text;
+        bmMessage.isIncome = isIncomeFlag;
+        bmMessage.isRead = isIncomeFlag ? NO : YES;
+        bmMessage.myWalletId = @"";
 
-    NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
-    BMChat *existing = nil;
-    for (BMChat *c in chats) {
-        if ([c.peerWalletId isEqualToString:peer]) {
-            existing = c;
-            break;
+        NSMutableDictionary *byPeer = [AppModel sharedManager].messagesByPeer;
+        NSMutableArray<BMInstantMessage*> *list = byPeer[peer];
+        if (list == nil) {
+            list = [NSMutableArray new];
+            byPeer[peer] = list;
         }
-    }
-    if (existing == nil) {
-        existing = [[BMChat alloc] init];
-        existing.peerWalletId = peer;
-        BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
-        if (contact != nil) {
-            existing.contactName = contact.name;
-        }
-        [chats addObject:existing];
-    }
-    existing.lastMessagePreview = text;
-    existing.lastMessageTimestamp = (UInt64)time;
-    if (isIncome) {
-        existing.hasUnread = YES;
-    }
+        [list addObject:bmMessage];
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    for (id<WalletModelDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(onInstantMessageReceived:)]) {
-            [delegate onInstantMessageReceived:bmMessage];
-        }
-        if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
-            [delegate onChatListChanged];
-        }
-    }
-}
-
-void WalletModel::onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) {
-    NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*> *byPeer = [AppModel sharedManager].messagesByPeer;
-
-    NSArray<BMChat*> *previousChats = [[AppModel sharedManager].chats copy];
-    NSMutableSet<NSString*> *peersFromDB = [NSMutableSet new];
-
-    NSMutableArray<BMChat*> *result = [NSMutableArray new];
-
-    for (const auto& entry : chats) {
-        NSString *peer = [NSString stringWithUTF8String:to_string(entry.first).c_str()];
-        [peersFromDB addObject:peer];
-
-        BMChat *chat = [[BMChat alloc] init];
-        chat.peerWalletId = peer;
-        chat.hasUnread = entry.second ? YES : NO;
-
-        BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
-        if (contact != nil) {
-            chat.contactName = contact.name;
-        }
-        for (BMChat *prev in previousChats) {
-            if ([prev.peerWalletId isEqualToString:peer]) {
-                if (prev.contactName.length > 0 && chat.contactName.length == 0) {
-                    chat.contactName = prev.contactName;
-                }
-                if (prev.myWalletId.length > 0) {
-                    chat.myWalletId = prev.myWalletId;
-                }
+        NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
+        BMChat *existing = nil;
+        for (BMChat *c in chats) {
+            if ([c.peerWalletId isEqualToString:peer]) {
+                existing = c;
                 break;
             }
         }
-
-        NSArray<BMInstantMessage*> *cached = byPeer[peer];
-        BMInstantMessage *latest = cached.lastObject;
-        if (latest != nil) {
-            chat.lastMessagePreview = latest.message;
-            chat.lastMessageTimestamp = latest.timestamp;
+        if (existing == nil) {
+            existing = [[BMChat alloc] init];
+            existing.peerWalletId = peer;
+            BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
+            if (contact != nil) {
+                existing.contactName = contact.name;
+            }
+            [chats addObject:existing];
+        }
+        existing.lastMessagePreview = text;
+        existing.lastMessageTimestamp = timestamp;
+        if (isIncomeFlag) {
+            existing.hasUnread = YES;
         }
 
-        [result addObject:chat];
-    }
-
-    for (BMChat *prev in previousChats) {
-        if (![peersFromDB containsObject:prev.peerWalletId]) {
-            [result addObject:prev];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onInstantMessageReceived:)]) {
+                [delegate onInstantMessageReceived:bmMessage];
+            }
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
         }
+    });
+}
+
+void WalletModel::onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) {
+    // Decode WalletIDs into ObjC strings up-front; the rest of the work
+    // (cache mutation + delegate broadcast) hops to main to avoid racing UI
+    // reads of `messagesByPeer` / `chats`.
+    NSMutableArray<NSDictionary*> *entries = [NSMutableArray arrayWithCapacity:chats.size()];
+    for (const auto& entry : chats) {
+        NSString *peer = [NSString stringWithUTF8String:to_string(entry.first).c_str()];
+        [entries addObject:@{ @"peer": peer, @"unread": @(entry.second) }];
     }
 
-    [result sortUsingComparator:^NSComparisonResult(BMChat *a, BMChat *b) {
-        if (a.lastMessageTimestamp == b.lastMessageTimestamp) return NSOrderedSame;
-        return a.lastMessageTimestamp < b.lastMessageTimestamp ? NSOrderedDescending : NSOrderedAscending;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*> *byPeer = [AppModel sharedManager].messagesByPeer;
 
-    [[AppModel sharedManager].chats removeAllObjects];
-    [[AppModel sharedManager].chats addObjectsFromArray:result];
+        NSArray<BMChat*> *previousChats = [[AppModel sharedManager].chats copy];
+        NSMutableSet<NSString*> *peersFromDB = [NSMutableSet new];
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    for (id<WalletModelDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
-            [delegate onChatListChanged];
+        NSMutableArray<BMChat*> *result = [NSMutableArray new];
+
+        for (NSDictionary *entry in entries) {
+            NSString *peer = entry[@"peer"];
+            BOOL unread = [entry[@"unread"] boolValue];
+            [peersFromDB addObject:peer];
+
+            BMChat *chat = [[BMChat alloc] init];
+            chat.peerWalletId = peer;
+            chat.hasUnread = unread ? YES : NO;
+
+            BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
+            if (contact != nil) {
+                chat.contactName = contact.name;
+            }
+            for (BMChat *prev in previousChats) {
+                if ([prev.peerWalletId isEqualToString:peer]) {
+                    if (prev.contactName.length > 0 && chat.contactName.length == 0) {
+                        chat.contactName = prev.contactName;
+                    }
+                    if (prev.myWalletId.length > 0) {
+                        chat.myWalletId = prev.myWalletId;
+                    }
+                    break;
+                }
+            }
+
+            NSArray<BMInstantMessage*> *cached = byPeer[peer];
+            BMInstantMessage *latest = cached.lastObject;
+            if (latest != nil) {
+                chat.lastMessagePreview = latest.message;
+                chat.lastMessageTimestamp = latest.timestamp;
+            }
+
+            [result addObject:chat];
         }
-    }
+
+        for (BMChat *prev in previousChats) {
+            if (![peersFromDB containsObject:prev.peerWalletId]) {
+                [result addObject:prev];
+            }
+        }
+
+        [result sortUsingComparator:^NSComparisonResult(BMChat *a, BMChat *b) {
+            if (a.lastMessageTimestamp == b.lastMessageTimestamp) return NSOrderedSame;
+            return a.lastMessageTimestamp < b.lastMessageTimestamp ? NSOrderedDescending : NSOrderedAscending;
+        }];
+
+        [[AppModel sharedManager].chats removeAllObjects];
+        [[AppModel sharedManager].chats addObjectsFromArray:result];
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
+        }
+    });
 }
 
 void WalletModel::onGetChatMessages(const std::vector<beam::wallet::InstantMessage>& messages) {
@@ -1135,6 +1156,9 @@ void WalletModel::onGetChatMessages(const std::vector<beam::wallet::InstantMessa
 
     NSString *peer = [NSString stringWithUTF8String:to_string(messages.front().m_counterpart).c_str()];
 
+    // Build the BMInstantMessage list off-main (no shared state touched), then
+    // assign the result and broadcast on main so UI readers of messagesByPeer
+    // never observe a half-mutated container.
     NSMutableArray<BMInstantMessage*> *result = [NSMutableArray new];
     for (const auto& im : messages) {
         BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
@@ -1156,38 +1180,43 @@ void WalletModel::onGetChatMessages(const std::vector<beam::wallet::InstantMessa
         return a.timestamp < b.timestamp ? NSOrderedAscending : NSOrderedDescending;
     }];
 
-    [AppModel sharedManager].messagesByPeer[peer] = result;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [AppModel sharedManager].messagesByPeer[peer] = result;
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    for (id<WalletModelDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(onChatMessagesLoaded:messages:)]) {
-            [delegate onChatMessagesLoaded:peer messages:result];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatMessagesLoaded:messages:)]) {
+                [delegate onChatMessagesLoaded:peer messages:result];
+            }
         }
-    }
+    });
 }
 
 void WalletModel::onChatRemoved(const beam::wallet::WalletID& counterpart) {
     NSString *peer = [NSString stringWithUTF8String:to_string(counterpart).c_str()];
 
-    NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
-    NSMutableIndexSet *indexes = [NSMutableIndexSet new];
-    for (NSUInteger i = 0; i < chats.count; i++) {
-        if ([chats[i].peerWalletId isEqualToString:peer]) {
-            [indexes addIndex:i];
+    // Mutate chats / messagesByPeer on main; UI iterates these unguarded.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
+        NSMutableIndexSet *indexes = [NSMutableIndexSet new];
+        for (NSUInteger i = 0; i < chats.count; i++) {
+            if ([chats[i].peerWalletId isEqualToString:peer]) {
+                [indexes addIndex:i];
+            }
         }
-    }
-    [chats removeObjectsAtIndexes:indexes];
-    [[AppModel sharedManager].messagesByPeer removeObjectForKey:peer];
+        [chats removeObjectsAtIndexes:indexes];
+        [[AppModel sharedManager].messagesByPeer removeObjectForKey:peer];
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    for (id<WalletModelDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(onChatRemoved:)]) {
-            [delegate onChatRemoved:peer];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatRemoved:)]) {
+                [delegate onChatRemoved:peer];
+            }
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
         }
-        if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
-            [delegate onChatListChanged];
-        }
-    }
+    });
 }
 
 #ifdef BEAM_ASSET_SWAP_SUPPORT
@@ -1777,20 +1806,27 @@ void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::o
 
     NSString *walletIdStr = [NSString stringWithUTF8String:to_string(wid).c_str()];
     int newCount = (int)offlinePayments;
-    NSNumber *prev = [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr];
-    BOOL changed = (prev == nil || prev.intValue != newCount);
-    [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr] = @(newCount);
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    for(id<WalletModelDelegate> delegate in delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
-            [delegate onMaxPrivacyTokensLeft:newCount];
+    // offlinePaymentsByWalletId is read on main from
+    // AppModel.offlinePaymentsCountForWalletId:; mutate + broadcast on main
+    // so the dictionary is never written from the reactor thread while UI
+    // enumerates it.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSNumber *prev = [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr];
+        BOOL changed = (prev == nil || prev.intValue != newCount);
+        [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr] = @(newCount);
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
+                [delegate onMaxPrivacyTokensLeft:newCount];
+            }
+            if (changed && [delegate respondsToSelector:@selector(onOfflinePaymentsCountForWalletId:count:)]) {
+                [delegate onOfflinePaymentsCountForWalletId:walletIdStr count:newCount];
+            }
         }
-        if (changed && [delegate respondsToSelector:@selector(onOfflinePaymentsCountForWalletId:count:)]) {
-            [delegate onOfflinePaymentsCountForWalletId:walletIdStr count:newCount];
-        }
-    }
+    });
 }
 
 void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::ShieldedCoin>& items) {

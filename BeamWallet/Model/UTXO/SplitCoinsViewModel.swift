@@ -59,6 +59,17 @@ final class SplitCoinsViewModel: NSObject {
         if !arr.isEmpty {
             arr[arr.count - 1] += remainder
         }
+        // For BEAM (assetId == 0) the fee is paid in BEAM from the same UTXO
+        // we are splitting. If we keep the slices summing to largestGroth the
+        // wallet has no headroom for the fee; coin-selection then silently
+        // fails. Subtract the fee from the last slice. Caller is gated on
+        // validationError, which already guards `largestGroth > feeGroth`, so
+        // the subtraction is safe; the > 0 guard is belt-and-braces.
+        if assetId == 0 && !arr.isEmpty && feeGroth > 0 {
+            let last = arr[arr.count - 1]
+            guard last > feeGroth else { return [] }
+            arr[arr.count - 1] = last - feeGroth
+        }
         return arr
     }
 
@@ -79,6 +90,17 @@ final class SplitCoinsViewModel: NSObject {
         }
         if assetId == 0 && largestGroth <= feeGroth {
             return Localizable.shared.strings.asset_swap_insufficient_funds
+        }
+        // For BEAM the fee comes off the last slice (see outputAmounts); if
+        // the per-split base + remainder doesn't leave room for the fee, the
+        // resulting tx would be invalid.
+        if assetId == 0 && splitInto > 0 {
+            let count = UInt64(splitInto)
+            let base = largestGroth / count
+            let remainder = largestGroth - base * count
+            if base + remainder <= feeGroth {
+                return Localizable.shared.strings.asset_swap_insufficient_funds
+            }
         }
         return nil
     }

@@ -34,6 +34,11 @@ class BaseTableViewController: BaseViewController {
     var tableView: UITableView!
     var tableStyle = UITableView.Style.plain
 
+    /// Snapshot of `tableView.alwaysBounceVertical` taken before the keyboard
+    /// shows; restored on hide so subclasses that opt into bouncing aren't
+    /// silently flipped off whenever a field unfocuses.
+    private var savedAlwaysBounce: Bool?
+
     /// View pinned above the bottom safe area, outside the table. The table is
     /// sized to fit the area above it, so content placed here never causes the
     /// table to scroll. Subclasses set this from viewDidLoad. Toggle visibility
@@ -125,6 +130,9 @@ extension BaseTableViewController {
             let keyboardHeight = keyboardRectangle.height
 
             tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            if savedAlwaysBounce == nil {
+                savedAlwaysBounce = tableView.alwaysBounceVertical
+            }
             tableView.alwaysBounceVertical = true
 
             let lift = keyboardHeight - view.safeAreaInsets.bottom
@@ -136,7 +144,8 @@ extension BaseTableViewController {
 
     @objc func keyboardWillHide(notification: NSNotification) {
         tableView.contentInset = UIEdgeInsets.zero
-        tableView.alwaysBounceVertical = false
+        tableView.alwaysBounceVertical = savedAlwaysBounce ?? false
+        savedAlwaysBounce = nil
         bottomAccessoryView?.transform = .identity
     }
 }

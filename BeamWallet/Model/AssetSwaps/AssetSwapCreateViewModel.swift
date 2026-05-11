@@ -79,12 +79,16 @@ class AssetSwapCreateViewModel: NSObject {
         guard canSubmit, let send = sendAsset, let receive = receiveAsset else {
             return false
         }
+        // SBBS message TTL caps the order lifetime at 12h regardless of what
+        // the picker offers; clamp at the model boundary as defense in depth
+        // against any caller writing a larger value.
+        let clampedExpiration = min(expirationMinutes, 720)
         return AppModel.sharedManager().publishDexOrder(
             withSendAsset: UInt32(send.assetId),
             sendAmount: grothFrom(sendAmountString),
             receiveAsset: UInt32(receive.assetId),
             receiveAmount: grothFrom(receiveAmountString),
-            expirationMinutes: expirationMinutes)
+            expirationMinutes: clampedExpiration)
     }
 
     private func grothFrom(_ string: String) -> UInt64 {
