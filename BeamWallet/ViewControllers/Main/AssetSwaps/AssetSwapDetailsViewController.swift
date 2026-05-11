@@ -37,6 +37,9 @@ class AssetSwapDetailsViewController: BaseViewController {
 
     private var technicalExpanded = false
 
+    private var isSubmitting = false
+    private weak var acceptButton: BMButton?
+
     init(order: BMDexOrder) {
         self.viewModel = AssetSwapDetailsViewModel(order: order)
         super.init(nibName: nil, bundle: nil)
@@ -581,6 +584,7 @@ class AssetSwapDetailsViewController: BaseViewController {
             rightButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
             rightButton.titleLabel?.font = BoldFont(size: 14)
             rightButton.addTarget(self, action: #selector(onAccept), for: .touchUpInside)
+            acceptButton = rightButton
         }
 
         leftButton.addTarget(self, action: #selector(onLeftButton), for: .touchUpInside)
@@ -643,12 +647,18 @@ class AssetSwapDetailsViewController: BaseViewController {
     }
 
     @objc private func onAccept() {
+        guard !isSubmitting else { return }
         if let error = viewModel.validationError {
             alert(message: error)
             return
         }
+        isSubmitting = true
+        acceptButton?.isEnabled = false
         if viewModel.accept() {
             navigationController?.popViewController(animated: true)
+        } else {
+            isSubmitting = false
+            acceptButton?.isEnabled = true
         }
     }
 }

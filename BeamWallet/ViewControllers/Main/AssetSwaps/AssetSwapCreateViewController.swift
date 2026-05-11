@@ -40,6 +40,8 @@ class AssetSwapCreateViewController: BaseViewController {
     private let rateValueLabel = UILabel()
     private let errorLabel = UILabel()
 
+    private var isSubmitting = false
+
     private lazy var publishButton: BMButton = {
         let button = BMButton.defaultButton(frame: CGRect(x: 0, y: 0, width: 240, height: 44), color: UIColor.main.brightTeal)
         button.setTitle(Localizable.shared.strings.asset_swap_publish.lowercased(), for: .normal)
@@ -290,11 +292,16 @@ class AssetSwapCreateViewController: BaseViewController {
     }
 
     @objc private func onPublish() {
+        guard !isSubmitting else { return }
         guard viewModel.canSubmit else { return }
+        isSubmitting = true
+        publishButton.isEnabled = false
         if viewModel.submit() {
             navigationController?.popViewController(animated: true)
         } else {
             errorLabel.text = Localizable.shared.strings.error
+            isSubmitting = false
+            publishButton.isEnabled = true
         }
     }
 }

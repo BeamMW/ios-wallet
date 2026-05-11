@@ -67,9 +67,15 @@ class BMFieldCell: BaseCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        copyText = nil
+        keyboardType = .default
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         selectionStyle = .none
         
         nameLabel.isUserInteractionEnabled = true

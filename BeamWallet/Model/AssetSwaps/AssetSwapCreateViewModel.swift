@@ -90,6 +90,8 @@ class AssetSwapCreateViewModel: NSObject {
     private func grothFrom(_ string: String) -> UInt64 {
         let normalized = string.replacingOccurrences(of: ",", with: ".")
         guard let beam = Double(normalized), beam > 0 else { return 0 }
-        return UInt64(beam * 100_000_000.0)
+        let scaled = beam * 100_000_000.0
+        guard scaled.isFinite, scaled >= 0, scaled < Double(UInt64.max) else { return 0 }
+        return UInt64(scaled)
     }
 }
