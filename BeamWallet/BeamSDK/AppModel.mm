@@ -118,6 +118,24 @@ const std::map<Notification::Type,bool> activeNotifications {
 const bool isSecondCurrencyEnabled = true;
 typedef void(^NewGenerateVaucherBlock)(ShieldedVoucherList v);
 
+// BEAM's bundled sqlite needs a writable temp dir; iOS sandbox blocks /tmp.
+// Point sqlite3_temp_directory at the app's NSTemporaryDirectory once per
+// process, before any DB open, so CREATE TABLE / journaling has a place to
+// spill — otherwise WalletDB::open / WalletDB::init can fail with
+// SQLITE_MISUSE on existing installs as well as fresh creates.
+// dispatch_once guarantees a single sqlite3_mprintf allocation; no
+// sqlite3_free needed because the value is owned for the lifetime of the
+// process.
+static void ensureSqliteTempDir(void) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *tmpDir = NSTemporaryDirectory();
+        if (tmpDir.length > 0) {
+            sqlite3_temp_directory = sqlite3_mprintf("%s", [tmpDir UTF8String]);
+        }
+    });
+}
+
 struct GenerateVaucherFunc
 {
     NewGenerateVaucherBlock newGenerateVaucherBlock;
@@ -193,6 +211,12 @@ static dispatch_once_t * once_token_model;
     boost::optional<beam::wallet::WalletAddress> _receiverAddress;
     
     RecoveryProgress recoveryProgress;
+}
+
++ (void)load {
+    // Set sqlite3_temp_directory before any code (incl. AppDelegate's
+    // canOpenWallet probe on warm-launch) touches the BEAM SQLite handle.
+    ensureSqliteTempDir();
 }
 
 + (AppModel*_Nonnull)sharedManager {
@@ -576,6 +600,11 @@ static beam::Rules& getConfiguredRules() {
 }
 
 -(BOOL)openWallet:(NSString*)pass {
+    // Belt-and-braces: +load already set this, but cover the case where a
+    // future caller skips +load (e.g. unit harness) so the DB always sees a
+    // writable temp dir.
+    ensureSqliteTempDir();
+
     // BEAM 7.5.14432+ rejects WalletDB::open with SQLITE_MISUSE when the
     // current reactor has been scoped in/out previously (e.g. the one created
     // in AppModel.init). Drop and recreate so open runs against a fresh one.
@@ -608,6 +637,9 @@ static beam::Rules& getConfiguredRules() {
 }
 
 -(BOOL)canOpenWallet:(NSString*)pass {
+    // Same temp-dir guarantee as openWallet:; idempotent via dispatch_once.
+    ensureSqliteTempDir();
+
     // See openWallet: BEAM 7.5.14432+ requires a fresh reactor here.
     walletReactor.reset();
     walletReactor = Reactor::create();
@@ -687,13 +719,12 @@ static beam::Rules& getConfiguredRules() {
     [fm removeItemAtPath:[dbPath stringByAppendingString:@"-shm"] error:nil];
     [fm removeItemAtPath:[dbPath stringByAppendingString:@"-journal"] error:nil];
 
-    // BEAM's sqlite needs a writable temp dir; iOS sandbox blocks /tmp. Point
-    // it at the app's NSTemporaryDirectory so CREATE TABLE / journaling has a
-    // place to spill — otherwise WalletDB::init can fail with SQLITE_MISUSE.
+    // BEAM's bundled sqlite needs a writable temp dir; iOS sandbox blocks
+    // /tmp. ensureSqliteTempDir() sets sqlite3_temp_directory once per
+    // process so CREATE TABLE / journaling has a place to spill —
+    // otherwise WalletDB::init can fail with SQLITE_MISUSE.
+    ensureSqliteTempDir();
     NSString *tmpDir = NSTemporaryDirectory();
-    if (tmpDir.length > 0) {
-        sqlite3_temp_directory = sqlite3_mprintf("%s", [tmpDir UTF8String]);
-    }
 
     BEAM_LOG_INFO() << "createWallet preflight"
         << " path=" << dbFilePath
@@ -924,11 +955,6 @@ static beam::Rules& getConfiguredRules() {
     else if(self.isRestoreFlow && self.restoreType == BMRestoreManual && [Settings sharedManager].isChangedNode) {
         [self start];
     }
-
-    // Prefetch the full asset registry once per session so Receive / Asset
-    // Search / Asset Swap don't pay a network round-trip on first open.
-    // Idempotent: subsequent callers from those screens no-op via the flag.
-    [self loadFullAssetsList];
 }
 
 -(void)restore:(NSString*_Nonnull)path{
@@ -1058,6 +1084,13 @@ bool OnProgress(uint64_t done, uint64_t total) {
 
             isRunning = YES;
             isStarted = YES;
+
+            // Prefetch the full asset registry once per session so Receive /
+            // Asset Search / Asset Swap don't pay a network round-trip on
+            // first open. Must run after wallet->start() so `wallet` is
+            // non-null — otherwise loadFullAssetsList short-circuits and the
+            // didLoadFullAssetsList flag is never set on the restore path.
+            [self loadFullAssetsList];
 
             daoManager = [[DAOManager alloc] initWithWallet:wallet];
         }
@@ -3606,6 +3639,10 @@ static bool parseMessengerWalletID(NSString *input, beam::wallet::WalletID &out)
 }
 
 -(void)addChatStub:(NSString*_Nonnull)peerWalletId contactName:(NSString*_Nullable)contactName myWalletId:(NSString*_Nullable)myWalletId {
+    // UI-only entry point (called from MessengerNewChatViewController on the
+    // main thread). The reactor-thread paths in WalletModel.mm now also hop
+    // to main before mutating self.chats / self.messagesByPeer, so all writes
+    // serialize on main.
     NSString *resolved = [self resolvedPeerWalletId:peerWalletId];
     BOOL changed = NO;
     BMChat *existing = nil;
@@ -3682,6 +3719,9 @@ static bool parseMessengerWalletID(NSString *input, beam::wallet::WalletID &out)
 }
 
 -(void)markChatAsRead:(NSString*_Nonnull)peerWalletId {
+    // Always invoked from the UI thread (no reactor-side caller); pairs with
+    // the dispatch-on-main writes in WalletModel.mm so cache mutations remain
+    // serialized on the main queue.
     if (wallet == nil) return;
     WalletID peerID;
     if (!parseMessengerWalletID(peerWalletId, peerID)) return;

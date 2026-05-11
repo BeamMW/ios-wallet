@@ -177,8 +177,13 @@ class OpenWalletProgressViewController: BaseViewController {
                 cancelButton.isHidden = true
             }
             else {
+                // Fresh-install random-node create. Use onTimeOut (not
+                // openMainPage directly) so a flaky network won't silently
+                // drop the user into a zero-balance wallet — onTimeOut gates
+                // on isSynced / isChangedNode / isPresented and otherwise
+                // surfaces an error.
                 timeoutTimer?.invalidate()
-                timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(openMainPage), userInfo: nil, repeats: false)
+                timeoutTimer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(onTimeOut), userInfo: nil, repeats: false)
             }
         }
 
@@ -541,7 +546,34 @@ class OpenWalletProgressViewController: BaseViewController {
     }
     
     @objc private func onTimeOut() {
-        self.openMainPage()
+        // Don't surface an error if the underlying flow has already
+        // succeeded or is being handled elsewhere — `isPresented` means
+        // openMainPage already ran, `isSynced` means the wallet is good to
+        // go, and `isChangedNode` means the user is mid-node-swap and
+        // openMainPage is the legitimate next step.
+        if isPresented
+            || AppModel.sharedManager().isSynced()
+            || Settings.sharedManager().isChangedNode() {
+            openMainPage()
+            return
+        }
+
+        // Watchdog fired without progress on a fresh open / random-node
+        // create. Previously we silently advanced into the wallet, which on
+        // a flaky network is indistinguishable from a wipe (zero balance,
+        // no error). Surface the failure and let the user retry from the
+        // login screen instead of guessing.
+        // TODO: dedicated "Connection timed out / Retry" copy. Reusing
+        // wallet_not_opened (already localized in every .lproj) until that
+        // string lands.
+        timeoutTimer?.invalidate()
+        errorLabel.isHidden = false
+        errorLabel.text = Localizable.shared.strings.no_internet
+
+        self.alert(title: Localizable.shared.strings.error,
+                   message: Localizable.shared.strings.wallet_not_opened) { [weak self] _ in
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
     }
 
     fileprivate func hideErrorIfOnline() {
