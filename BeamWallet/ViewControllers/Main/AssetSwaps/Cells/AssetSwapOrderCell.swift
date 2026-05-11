@@ -88,7 +88,9 @@ class AssetSwapOrderCell: RippleCell {
     }
 
     func configure(with order: BMDexOrder, row: Int) {
-        amountsLabel.text = "\(order.displaySendAmount())  →  \(order.displayReceiveAmount())"
+        let sendText = "\(order.displaySendAmount()) (\(order.sendAssetId))"
+        let receiveText = "\(order.displayReceiveAmount()) (\(order.receiveAssetId))"
+        amountsLabel.text = "\(sendText)  →  \(receiveText)"
         rateLabel.text = order.displayRate()
 
         if order.isCompleted {

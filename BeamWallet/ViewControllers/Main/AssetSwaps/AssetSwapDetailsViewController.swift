@@ -130,7 +130,7 @@ class AssetSwapDetailsViewController: BaseViewController {
             asset: viewModel.sendAsset,
             caption: Localizable.shared.strings.asset_swap_send,
             amount: viewModel.order.displaySendAmount(),
-            assetSymbol: viewModel.order.sendAssetSName
+            assetSymbol: "\(viewModel.order.sendAssetSName) (\(viewModel.order.sendAssetId))"
         )
 
         let receiveRow = makeAssetRow(
@@ -138,7 +138,7 @@ class AssetSwapDetailsViewController: BaseViewController {
             asset: viewModel.receiveAsset,
             caption: Localizable.shared.strings.asset_swap_receive,
             amount: viewModel.order.displayReceiveAmount(),
-            assetSymbol: viewModel.order.receiveAssetSName
+            assetSymbol: "\(viewModel.order.receiveAssetSName) (\(viewModel.order.receiveAssetId))"
         )
 
         let separator = UIView()
@@ -206,14 +206,20 @@ class AssetSwapDetailsViewController: BaseViewController {
         captionLabel.translatesAutoresizingMaskIntoConstraints = false
         captionLabel.font = RegularFont(size: 11)
         captionLabel.textColor = UIColor.main.steelGrey
+        captionLabel.numberOfLines = 1
         captionLabel.attributedText = NSAttributedString(string: caption.uppercased(), attributes: [.kern: 1.0])
+        captionLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        captionLabel.setContentHuggingPriority(.required, for: .horizontal)
         row.addSubview(captionLabel)
 
         let symbolLabel = UILabel()
         symbolLabel.translatesAutoresizingMaskIntoConstraints = false
         symbolLabel.font = SemiboldFont(size: 15)
         symbolLabel.textColor = UIColor.white
+        symbolLabel.numberOfLines = 1
         symbolLabel.text = assetSymbol
+        symbolLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        symbolLabel.setContentHuggingPriority(.required, for: .horizontal)
         row.addSubview(symbolLabel)
 
         let amountLabel = UILabel()
@@ -221,9 +227,12 @@ class AssetSwapDetailsViewController: BaseViewController {
         amountLabel.font = BoldFont(size: 22)
         amountLabel.textColor = UIColor.white
         amountLabel.textAlignment = .right
+        amountLabel.numberOfLines = 1
         amountLabel.adjustsFontSizeToFitWidth = true
         amountLabel.minimumScaleFactor = 0.6
         amountLabel.text = amount
+        amountLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        amountLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         row.addSubview(amountLabel)
 
         NSLayoutConstraint.activate([

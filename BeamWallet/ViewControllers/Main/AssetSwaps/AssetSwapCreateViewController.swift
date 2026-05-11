@@ -221,8 +221,8 @@ class AssetSwapCreateViewController: BaseViewController {
     }
 
     private func refresh() {
-        sendAssetField.text = viewModel.sendAsset.map { "\($0.unitName)" } ?? ""
-        receiveAssetField.text = viewModel.receiveAsset.map { "\($0.unitName)" } ?? ""
+        sendAssetField.text = viewModel.sendAsset.map { "\($0.unitName) (\($0.assetId))" } ?? ""
+        receiveAssetField.text = viewModel.receiveAsset.map { "\($0.unitName) (\($0.assetId))" } ?? ""
         expirationField.text = expirationDisplayString(viewModel.expirationMinutes)
         rateValueLabel.text = "\(Localizable.shared.strings.asset_swap_rate): \(viewModel.displayRate())"
         errorLabel.text = viewModel.validationError ?? ""
