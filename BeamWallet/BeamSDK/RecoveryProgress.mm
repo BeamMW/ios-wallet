@@ -187,8 +187,13 @@ bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
     // unless integer percent advanced or we just hit completion — otherwise the
     // dispatch_async-per-callback on the iOS side accumulates blocks on the main
     // queue faster than UIKit can drain them, blowing past the highwater limit.
-    int percent = (total > 0) ? (int)((done * 100) / total) : 0;
-    bool atCompletion = (total > 0 && done >= total);
+    if (total == 0) {
+        // No useful 0/0 update to forward — would just push a meaningless
+        // delegate callback before any real progress has been reported.
+        return [AppModel sharedManager].isRestoreFlow;
+    }
+    int percent = (int)((done * 100) / total);
+    bool atCompletion = (done >= total);
     if (percent == m_lastReportedPercent && !atCompletion) {
         return [AppModel sharedManager].isRestoreFlow;
     }

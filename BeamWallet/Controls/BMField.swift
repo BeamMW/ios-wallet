@@ -108,6 +108,9 @@ class BMField: BMClearField {
         }
     }
 
+    // TODO: stored only to satisfy KVC for legacy xibs that still reference these
+    // keys; the values are not rendered. Do not remove the properties without
+    // also stripping the bindings from every xib that uses BMField.
     @IBInspectable var lineColor: UIColor?
     @IBInspectable var lineHeight: CGFloat = 0
     

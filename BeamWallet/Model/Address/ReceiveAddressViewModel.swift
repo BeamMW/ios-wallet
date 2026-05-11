@@ -105,8 +105,15 @@ class ReceiveAddressViewModel: NSObject {
 
     private var suppressVouchersRegen = false
 
-    public var vouchersCount: Int = ReceiveTokenType.regular.defaultVouchers {
-        didSet {
+    private var _vouchersCount: Int = ReceiveTokenType.regular.defaultVouchers
+    public var vouchersCount: Int {
+        get { _vouchersCount }
+        set {
+            // Mirror the VC's 1...maxVouchersCount clamp so direct/programmatic
+            // writes can't bypass validation.
+            let clamped = max(1, min(ReceiveAddressViewModel.maxVouchersCount, newValue))
+            guard clamped != _vouchersCount else { return }
+            _vouchersCount = clamped
             if !suppressVouchersRegen && selectedTokenType.supportsVouchers {
                 generateTokens()
             }
@@ -211,29 +218,33 @@ class ReceiveAddressViewModel: NSObject {
 
         switch selectedTokenType {
         case .sbbs:
-            AppModel.sharedManager().generateSBBSAddress(walletId, assetId: assetId, amount: bamount) { token in
+            AppModel.sharedManager().generateSBBSAddress(walletId, assetId: assetId, amount: bamount) { [weak self] token in
                 DispatchQueue.main.async {
+                    guard let self = self else { return }
                     self.address.sbbsToken = token
                     self.onAddressUpdate?(nil)
                 }
             }
         case .regular:
-            AppModel.sharedManager().generateOfflineAddress(walletId, assetId: assetId, amount: bamount, offlineCount: UInt32(vouchersCount)) { token in
+            AppModel.sharedManager().generateOfflineAddress(walletId, assetId: assetId, amount: bamount, offlineCount: UInt32(vouchersCount)) { [weak self] token in
                 DispatchQueue.main.async {
+                    guard let self = self else { return }
                     self.address.address = token
                     self.onAddressUpdate?(nil)
                 }
             }
         case .maxPrivacy:
-            AppModel.sharedManager().generateMaxPrivacyAddress(walletId, assetId: assetId, amount: bamount) { token in
+            AppModel.sharedManager().generateMaxPrivacyAddress(walletId, assetId: assetId, amount: bamount) { [weak self] token in
                 DispatchQueue.main.async {
+                    guard let self = self else { return }
                     self.address.maxPrivacyToken = token
                     self.onAddressUpdate?(nil)
                 }
             }
         case .offline:
-            AppModel.sharedManager().generateOfflineAddress(walletId, assetId: assetId, amount: bamount, offlineCount: UInt32(vouchersCount)) { token in
+            AppModel.sharedManager().generateOfflineAddress(walletId, assetId: assetId, amount: bamount, offlineCount: UInt32(vouchersCount)) { [weak self] token in
                 DispatchQueue.main.async {
+                    guard let self = self else { return }
                     let isFirst = (self.address.offlineToken == nil)
                     self.address.offlineToken = token
                     if isFirst {
@@ -244,8 +255,9 @@ class ReceiveAddressViewModel: NSObject {
                 }
             }
         case .publicOffline:
-            AppModel.sharedManager().generatePublicOfflineAddress(walletId, assetId: assetId, amount: bamount) { token in
+            AppModel.sharedManager().generatePublicOfflineAddress(walletId, assetId: assetId, amount: bamount) { [weak self] token in
                 DispatchQueue.main.async {
+                    guard let self = self else { return }
                     self.address.publicOfflineToken = token
                     self.onAddressUpdate?(nil)
                 }

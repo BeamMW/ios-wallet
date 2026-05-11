@@ -129,8 +129,10 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let top = UIApplication.getTopMostViewController(),
-              let nav = top.navigationController else { return true }
+        guard let top = UIApplication.getTopMostViewController() else { return true }
+        // No nav stack means there's nothing to pop — and a transient nil during
+        // a transition shouldn't be treated as "this is a root, allow swipe".
+        guard let nav = top.navigationController else { return false }
         // Side-menu roots have nothing to pop to.
         if nav.viewControllers.first === top { return false }
         // BEAMX DAO embeds a WebView whose horizontal pan conflicts with the swipe.

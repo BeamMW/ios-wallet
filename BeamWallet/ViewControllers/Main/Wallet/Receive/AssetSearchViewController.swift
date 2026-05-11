@@ -150,7 +150,6 @@ private final class AssetSearchCell: UITableViewCell {
         iconView.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
         iconView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(iconView)
-        iconView.awakeFromNib()
 
         unitLabel.font = BoldFont(size: 16)
         unitLabel.textColor = .white
