@@ -165,25 +165,6 @@ class SelectNodeViewController: BaseTableViewController {
         BMLockScreen.shared.onTapEvent()
     }
     
-    /// Create-flow only: builds the wallet DB now that the chosen node has been
-    /// committed to Settings. createWallet → onWalledOpened → start() must run
-    /// inside the same io::Reactor::Scope, so we defer this to here rather than
-    /// running it earlier in CreateWalletPasswordViewController.
-    private func createWalletForCurrentNode() -> Bool {
-        guard let phrase = phrase, let pass = password else { return false }
-        let created = AppModel.sharedManager().createWallet(phrase, pass: pass)
-        if !created {
-            AppModel.sharedManager().abortCreateAndReset()
-            self.alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.wallet_not_created) { _ in
-                self.navigationController?.popToRootViewController(animated: true)
-            }
-            return false
-        }
-        OnboardManager.shared.saveSeed(seed: phrase)
-        _ = KeychainManager.addPassword(password: pass)
-        return true
-    }
-
     @objc private func onNext() {
         isNeedDisconnect = true
         refreshActionButton()
@@ -223,10 +204,12 @@ class SelectNodeViewController: BaseTableViewController {
             AppModel.sharedManager().enableBodyRequests(true)
 
             if isCreateWallet {
-                if createWalletForCurrentNode() {
-                    let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
-                    self.pushViewController(vc: vc)
-                }
+                // OpenWalletProgressViewController owns creation when phrase
+                // is non-nil (see startCreateWallet). Calling createWallet here
+                // too would run it twice and any future failure path would
+                // land in abortCreateAndReset(), wiping the DB we just made.
+                let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                self.pushViewController(vc: vc)
             }
             else {
                 let vc = OpenWalletProgressViewController(onlyConnect: true)
@@ -258,10 +241,12 @@ class SelectNodeViewController: BaseTableViewController {
                         Settings.sharedManager().nodeAddress = fullAddress
                         AppModel.sharedManager().changeNodeAddress()
 
-                        if createWalletForCurrentNode() {
-                            let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
-                            self.pushViewController(vc: vc)
-                        }
+                        // OpenWalletProgressViewController owns creation when phrase
+                        // is non-nil (see startCreateWallet). Calling createWallet here
+                        // too would run it twice and any future failure path would
+                        // land in abortCreateAndReset(), wiping the DB we just made.
+                        let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                        self.pushViewController(vc: vc)
                     }
                     else {
                         if oldSelected == 0 {

@@ -1239,41 +1239,50 @@ static BMDexOrder *MakeBMDexOrder(const beam::wallet::DexOrder& order) {
 }
 
 void WalletModel::onDexOrdersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::DexOrder>& orders) {
-    NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
-
-    if (action == beam::wallet::ChangeAction::Reset) {
-        [cache removeAllObjects];
-    }
-
+    // Snapshot the C++ vector into BMDexOrder objects on the reactor thread
+    // (DexOrder is reactor-thread-only), then mutate the shared `dexOrders`
+    // cache and broadcast on main. UI reads `dexOrders` unguarded, so the
+    // cache mutation must not race with main-thread enumeration. Mirrors the
+    // dispatch-on-main pattern used by the messenger callbacks.
+    NSMutableArray<BMDexOrder*> *converted = [NSMutableArray arrayWithCapacity:orders.size()];
     for (const auto& order : orders) {
-        NSString *orderID = [NSString stringWithUTF8String:order.getID().to_string().c_str()];
-
-        NSUInteger existingIdx = NSNotFound;
-        for (NSUInteger i = 0; i < cache.count; i++) {
-            if ([cache[i].orderID isEqualToString:orderID]) {
-                existingIdx = i;
-                break;
-            }
-        }
-
-        if (action == beam::wallet::ChangeAction::Removed) {
-            if (existingIdx != NSNotFound) {
-                [cache removeObjectAtIndex:existingIdx];
-            }
-            continue;
-        }
-
-        BMDexOrder *bmo = MakeBMDexOrder(order);
-        if (existingIdx != NSNotFound) {
-            [cache replaceObjectAtIndex:existingIdx withObject:bmo];
-        } else {
-            [cache addObject:bmo];
-        }
+        [converted addObject:MakeBMDexOrder(order)];
     }
+    BOOL isReset = (action == beam::wallet::ChangeAction::Reset);
+    BOOL isRemoved = (action == beam::wallet::ChangeAction::Removed);
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    NSArray *snapshot = [cache copy];
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
+
+        if (isReset) {
+            [cache removeAllObjects];
+        }
+
+        for (BMDexOrder *bmo in converted) {
+            NSUInteger existingIdx = NSNotFound;
+            for (NSUInteger i = 0; i < cache.count; i++) {
+                if ([cache[i].orderID isEqualToString:bmo.orderID]) {
+                    existingIdx = i;
+                    break;
+                }
+            }
+
+            if (isRemoved) {
+                if (existingIdx != NSNotFound) {
+                    [cache removeObjectAtIndex:existingIdx];
+                }
+                continue;
+            }
+
+            if (existingIdx != NSNotFound) {
+                [cache replaceObjectAtIndex:existingIdx withObject:bmo];
+            } else {
+                [cache addObject:bmo];
+            }
+        }
+
+        NSArray *snapshot = [cache copy];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
         for (id<WalletModelDelegate> delegate in delegates) {
             if ([delegate respondsToSelector:@selector(onDexOrdersChanged:)]) {
                 [delegate onDexOrdersChanged:snapshot];
@@ -1283,24 +1292,28 @@ void WalletModel::onDexOrdersChanged(beam::wallet::ChangeAction action, const st
 }
 
 void WalletModel::onFindDexOrder(const beam::wallet::DexOrder& order) {
+    // Build the BMDexOrder off-main (no shared state touched), then mutate
+    // the `dexOrders` cache and broadcast on main. UI reads the cache
+    // unguarded, so the mutation must not race with main-thread enumeration.
     BMDexOrder *bmo = MakeBMDexOrder(order);
-    NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
-    NSUInteger existingIdx = NSNotFound;
-    for (NSUInteger i = 0; i < cache.count; i++) {
-        if ([cache[i].orderID isEqualToString:bmo.orderID]) {
-            existingIdx = i;
-            break;
-        }
-    }
-    if (existingIdx != NSNotFound) {
-        [cache replaceObjectAtIndex:existingIdx withObject:bmo];
-    } else {
-        [cache addObject:bmo];
-    }
 
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    NSArray *snapshot = [cache copy];
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
+        NSUInteger existingIdx = NSNotFound;
+        for (NSUInteger i = 0; i < cache.count; i++) {
+            if ([cache[i].orderID isEqualToString:bmo.orderID]) {
+                existingIdx = i;
+                break;
+            }
+        }
+        if (existingIdx != NSNotFound) {
+            [cache replaceObjectAtIndex:existingIdx withObject:bmo];
+        } else {
+            [cache addObject:bmo];
+        }
+
+        NSArray *snapshot = [cache copy];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
         for (id<WalletModelDelegate> delegate in delegates) {
             if ([delegate respondsToSelector:@selector(onDexOrdersChanged:)]) {
                 [delegate onDexOrdersChanged:snapshot];
