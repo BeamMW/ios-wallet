@@ -203,10 +203,12 @@ class SelectNodeViewController: BaseTableViewController {
             AppModel.sharedManager().changeNodeAddress()
 
             if isCreateWallet {
-                if createWalletForCurrentNode() {
-                    let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
-                    self.pushViewController(vc: vc)
-                }
+                // OpenWalletProgressViewController owns creation when phrase
+                // is non-nil (see startCreateWallet). Calling createWallet here
+                // too would run it twice and any future failure path would
+                // land in abortCreateAndReset(), wiping the DB we just made.
+                let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                self.pushViewController(vc: vc)
             }
         }
         else if items[1].selected {

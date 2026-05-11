@@ -76,6 +76,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
 
+        // Backfill the integrity marker for installs that predate the flag
+        // (v7.3 → v7.4 upgrade): if the DB file is on disk, the wallet was
+        // healthy before the upgrade — set the flag so the recovery prompt
+        // below doesn't wipe their data on first launch.
+        if added && !OnboardManager.shared.isWalletInitializedFlag() {
+            OnboardManager.shared.markWalletInitialized()
+        }
+
         // DB file present but integrity marker missing implies a crash between
         // DB init and onWalledOpened — fall back to onboarding with a recovery prompt.
         let needsRecovery = added && !OnboardManager.shared.isWalletInitializedFlag()
