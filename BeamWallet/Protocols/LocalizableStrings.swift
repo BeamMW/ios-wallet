@@ -625,6 +625,11 @@ class LocalizableStrings : NSObject {
     var split_too_small = "split_too_small".localized
     var split_started_message = "split_started_message".localized
 
+    var consolidate = "consolidate".localized
+    var consolidate_coins_subtitle = "consolidate_coins_subtitle".localized
+    var consolidate_coins_cta = "consolidate_coins_cta".localized
+    var consolidate_started_message = "consolidate_started_message".localized
+
     var confirm_accept = "confirm_accept".localized
     var will_take_funds = "will_take_funds".localized
     var will_send_funds = "will_send_funds".localized

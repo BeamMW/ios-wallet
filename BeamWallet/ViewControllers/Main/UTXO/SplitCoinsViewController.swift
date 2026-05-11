@@ -77,9 +77,12 @@ final class SplitCoinsViewController: UIViewController {
         viewModel.onError = { [weak self] msg in self?.alertWithMessage(msg) }
         viewModel.onSubmitted = { [weak self] in
             guard let self = self else { return }
+            let message = self.viewModel.mode == .consolidate
+                ? Localizable.shared.strings.consolidate_started_message
+                : Localizable.shared.strings.split_started_message
             let presenter = self.presentingViewController
             self.dismissAnimated {
-                presenter?.alert(message: Localizable.shared.strings.split_started_message)
+                presenter?.alert(message: message)
             }
         }
 
@@ -150,8 +153,11 @@ final class SplitCoinsViewController: UIViewController {
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentStack)
 
+        let ctaTitle = viewModel.mode == .consolidate
+            ? Localizable.shared.strings.consolidate_coins_cta
+            : Localizable.shared.strings.split_coins_cta
         ctaButton.translatesAutoresizingMaskIntoConstraints = false
-        ctaButton.setTitle(Localizable.shared.strings.split_coins_cta.uppercased(), for: .normal)
+        ctaButton.setTitle(ctaTitle.uppercased(), for: .normal)
         ctaButton.setTitleColor(UIColor.main.marine, for: .normal)
         ctaButton.addTarget(self, action: #selector(onSplitTapped), for: .touchUpInside)
         card.addSubview(ctaButton)
@@ -328,20 +334,30 @@ final class SplitCoinsViewController: UIViewController {
     private func refresh() {
         let group = viewModel.group
         let asset = group.asset
+        let isConsolidate = viewModel.mode == .consolidate
 
-        titleLabel.text = "\(Localizable.shared.strings.split.capitalized) \(asset.unitName.uppercased())"
-        subtitleLabel.text = Localizable.shared.strings.split_coins_subtitle
+        let actionWord = isConsolidate
+            ? Localizable.shared.strings.consolidate
+            : Localizable.shared.strings.split
+        titleLabel.text = "\(actionWord.capitalized) \(asset.unitName.uppercased())"
+        subtitleLabel.text = isConsolidate
+            ? Localizable.shared.strings.consolidate_coins_subtitle
+            : Localizable.shared.strings.split_coins_subtitle
 
         balanceValueLabel.text = formattedAmount(real: asset.realAmount, unit: asset.unitName)
 
         stripeView.setAmounts(group.utxos.map { $0.amount })
 
-        let largestText = formattedAmount(real: group.largestUtxo?.realAmount ?? 0, unit: asset.unitName)
         let countText = Localizable.shared.strings.coin_count_format
             .replacingOccurrences(of: "(count)", with: "\(group.utxos.count)")
-        let largestRow = Localizable.shared.strings.largest_coin_format
-            .replacingOccurrences(of: "(amount)", with: largestText)
-        summaryLabel.text = "\(countText) · \(largestRow)"
+        if isConsolidate {
+            summaryLabel.text = countText
+        } else {
+            let largestText = formattedAmount(real: group.largestUtxo?.realAmount ?? 0, unit: asset.unitName)
+            let largestRow = Localizable.shared.strings.largest_coin_format
+                .replacingOccurrences(of: "(amount)", with: largestText)
+            summaryLabel.text = "\(countText) · \(largestRow)"
+        }
 
         rebuildTiles(group: group)
 
@@ -351,6 +367,9 @@ final class SplitCoinsViewController: UIViewController {
         } else {
             warningContainer.isHidden = true
         }
+
+        splitIntoLabel.isHidden = isConsolidate
+        splitIntoStack.isHidden = isConsolidate
 
         for btn in splitButtons {
             let isSelected = btn.tag == viewModel.splitInto
@@ -362,7 +381,7 @@ final class SplitCoinsViewController: UIViewController {
         }
 
         let perOutputText = formattedAmount(real: grothToBeam(viewModel.perOutputGroth), unit: asset.unitName)
-        previewLeadingLabel.text = "\(viewModel.splitInto)x equal"
+        previewLeadingLabel.text = isConsolidate ? "" : "\(viewModel.splitInto)x equal"
         previewValueLabel.text = perOutputText
 
         feeValueLabel.text = formattedAmount(real: grothToBeam(viewModel.feeGroth), unit: "BEAM")

@@ -40,12 +40,55 @@ class AssetAvailableCell: RippleCell {
             UIApplication.getTopMostViewController()?.openUrl(url: url)
         }
     }
-    
+
+    private var utxoAccessory: UIStackView?
+    private var utxoCountLabel: UILabel?
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         assedIdStackView.isUserInteractionEnabled = true
         assedIdStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onAssetIdClicked)))
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        utxoAccessory?.isHidden = true
+    }
+
+    func setUTXOAccessory(count: Int?) {
+        guard let count = count else {
+            utxoAccessory?.isHidden = true
+            return
+        }
+        if utxoAccessory == nil {
+            let label = UILabel()
+            label.font = RegularFont(size: 12)
+            label.textColor = UIColor.white.withAlphaComponent(0.7)
+
+            let arrow = UIImageView(image: IconNextArrow())
+            arrow.contentMode = .scaleAspectFit
+            arrow.translatesAutoresizingMaskIntoConstraints = false
+            arrow.widthAnchor.constraint(equalToConstant: 6).isActive = true
+            arrow.heightAnchor.constraint(equalToConstant: 10).isActive = true
+
+            let stack = UIStackView(arrangedSubviews: [label, arrow])
+            stack.axis = .horizontal
+            stack.alignment = .center
+            stack.spacing = 6
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            mainView.addSubview(stack)
+            NSLayoutConstraint.activate([
+                stack.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -15),
+                stack.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -15),
+            ])
+
+            utxoAccessory = stack
+            utxoCountLabel = label
+        }
+        utxoAccessory?.isHidden = false
+        utxoCountLabel?.text = Localizable.shared.strings.coin_count_format
+            .replacingOccurrences(of: "(count)", with: "\(count)")
     }
     
     public func setAsset(_ asset:BMAsset) {

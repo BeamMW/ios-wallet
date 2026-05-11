@@ -1,5 +1,5 @@
 //
-// UTXOViewController.swift
+// AssetUTXOListViewController.swift
 // BeamWallet
 //
 // Copyright 2026 Beam Development
@@ -19,16 +19,25 @@
 
 import UIKit
 
-class UTXOViewController: BaseTableViewController {
+final class AssetUTXOListViewController: BaseTableViewController {
 
-    private let viewModel = UTXOViewModel()
-    private var groups: [AssetUTXOGroup] = []
+    private let assetId: Int32
+    private var group: AssetUTXOGroup?
 
     private let emptyView: BMEmptyView = UIView.fromNib()
     private let hideUTXOView: BMEmptyView = UIView.fromNib()
 
+    init(assetId: Int32) {
+        self.assetId = assetId
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError(Localizable.shared.strings.fatalInitCoderError)
+    }
+
     override func viewDidLoad() {
-        tableStyle = .plain
+        tableStyle = .grouped
         super.viewDidLoad()
 
         Settings.sharedManager().addDelegate(self)
@@ -48,15 +57,15 @@ class UTXOViewController: BaseTableViewController {
         view.addSubview(hideUTXOView)
 
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true)
-        title = Localizable.shared.strings.utxo
 
-        tableView.register([AssetAvailableCell.self])
+        tableView.register([UTXOCell.self])
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 120
-
-        rightButton()
+        tableView.sectionFooterHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
 
     deinit {
@@ -68,7 +77,7 @@ class UTXOViewController: BaseTableViewController {
 
         AppModel.sharedManager().addDelegate(self)
         AppModel.sharedManager().getUTXO()
-        reloadGroups()
+        reload()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,64 +93,95 @@ class UTXOViewController: BaseTableViewController {
         hideUTXOView.frame = tableView.frame
     }
 
-    private func reloadGroups() {
-        groups = viewModel.groupedByAsset()
-        emptyView.isHidden = !groups.isEmpty
+    private func reload() {
+        let match = UTXOViewModel().groupedByAsset().first { $0.assetId == assetId }
+        group = match
+
+        if let asset = match?.asset ?? AssetsManager.shared().getAsset(assetId) {
+            title = asset.unitName.uppercased()
+        }
+
+        emptyView.isHidden = match != nil
         tableView.reloadData()
     }
 
-    private func rightButton() {
-        addRightButton(
-            image: Settings.sharedManager().isHideAmounts ? IconShowBalance() : IconHideBalance(),
-            target: self,
-            selector: #selector(onHideAmounts)
-        )
+    private func presentSheet(mode: SplitCoinsViewModel.Mode) {
+        guard let group = group else { return }
+        let vm = SplitCoinsViewModel(group: group, mode: mode)
+        let vc = SplitCoinsViewController(viewModel: vm)
+        present(vc, animated: false, completion: nil)
     }
 }
 
-extension UTXOViewController: UITableViewDataSource, UITableViewDelegate {
+extension AssetUTXOListViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return group == nil ? 0 : 1
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups.count
+        return group?.utxos.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let group = groups[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withType: AssetAvailableCell.self, for: indexPath)
-        cell.setAsset(group.asset)
-        cell.setUTXOAccessory(count: group.utxos.count)
+        guard let utxo = group?.utxos[indexPath.row] else { return UITableViewCell() }
+        let cell = tableView
+            .dequeueReusableCell(withType: UTXOCell.self, for: indexPath)
+            .configured(with: (row: indexPath.row, utxo: utxo))
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let group = groups[indexPath.row]
-        let vc = AssetUTXOListViewController(assetId: group.assetId)
+        guard let utxo = group?.utxos[indexPath.row] else { return }
+        let vc = UTXODetailViewController(utxo: utxo)
         pushViewController(vc: vc)
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let group = group else { return nil }
+        let header = AssetUTXOSectionHeaderView(group: group)
+        header.onSplitTapped = { [weak self] in
+            self?.presentSheet(mode: .split)
+        }
+        header.onConsolidateTapped = { [weak self] in
+            self?.presentSheet(mode: .consolidate)
+        }
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return group == nil ? CGFloat.leastNormalMagnitude : AssetUTXOSectionHeaderView.preferredHeight
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
     }
 }
 
-extension UTXOViewController: SettingsModelDelegate {
+extension AssetUTXOListViewController: SettingsModelDelegate {
     func onChangeHideAmounts() {
-        rightButton()
-
         hideUTXOView.isHidden = !Settings.sharedManager().isHideAmounts
         tableView.isUserInteractionEnabled = !Settings.sharedManager().isHideAmounts
         tableView.reloadData()
     }
 }
 
-extension UTXOViewController: WalletModelDelegate {
+extension AssetUTXOListViewController: WalletModelDelegate {
 
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async { [weak self] in
-            self?.reloadGroups()
+            self?.reload()
         }
     }
 
     func onReceivedUTXOs(_ utxos: [BMUTXO]) {
         DispatchQueue.main.async { [weak self] in
-            self?.reloadGroups()
+            self?.reload()
         }
     }
 }

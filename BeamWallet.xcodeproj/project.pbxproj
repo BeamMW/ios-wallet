@@ -16,7 +16,9 @@
 		0EC9234AAD2DC0A1BF7600B4 /* AssetUTXOSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */; };
 		14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
 		15A094B1963EAE81E9B86B33 /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
+		187B4E604FD2814B8018C796 /* AssetUTXOListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */; };
 		215454B3AA22BD789F53A90C /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		21C1E1B8354DCDBDB0A9ABB8 /* AssetUTXOListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */; };
 		2361D1F909D78EC50B8C5D5C /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
 		275E60FB3A8D4704581DF986 /* SplitCoinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */; };
 		2C2D70373756666705D14FDE /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
@@ -26,6 +28,7 @@
 		3C4B4023BBF6C6624DDC279E /* BMOptionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ECF740A61C5F0D941B8B36 /* BMOptionPickerViewController.swift */; };
 		434CC206E4AD461CECAD5DFB /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
 		492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
+		4B72CD41AF6A8F47020BC536 /* AssetUTXOListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */; };
 		4D7C86E3D4DAAAD7DDFE22E7 /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
 		5101D1DB95B6BECFE333B53C /* AssetUTXOSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */; };
 		532955652A405010EC21607C /* AssetUTXOSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */; };
@@ -2085,6 +2088,7 @@
 		E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerBubbleCell.swift; sourceTree = "<group>"; };
 		E23EA93CE3207A2EBB4D17FD /* SplitCoinsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplitCoinsViewModel.swift; sourceTree = "<group>"; };
 		EAEED72AAED404575AB9A6E5 /* Pods-BeamWalletMasterNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.release.xcconfig"; sourceTree = "<group>"; };
+		F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetUTXOListViewController.swift; sourceTree = "<group>"; };
 		F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSearchViewController.swift; sourceTree = "<group>"; };
 		F426BB6F15C2E08A3E81B87D /* libdex_board.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = libdex_board.a; sourceTree = "<group>"; };
 		F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatViewController.swift; sourceTree = "<group>"; };
@@ -2667,6 +2671,7 @@
 				92F68C762244E37200197D4D /* UTXODetailViewController.swift */,
 				9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */,
 				1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */,
+				F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */,
 			);
 			path = UTXO;
 			sourceTree = "<group>";
@@ -4432,6 +4437,7 @@
 				C6FB138B2A261CBC43626204 /* SplitCoinsStripeView.swift in Sources */,
 				AC3CF90BF3C1ED7E2D19D65A /* SplitCoinPreviewCard.swift in Sources */,
 				CDEA498CC695D89B35B0678E /* NodePeersViewController.swift in Sources */,
+				187B4E604FD2814B8018C796 /* AssetUTXOListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4781,6 +4787,7 @@
 				6854C506C6836F88B8F8484E /* SplitCoinsStripeView.swift in Sources */,
 				ECF8F9E33148D1833480ADFA /* SplitCoinPreviewCard.swift in Sources */,
 				F5BD7F278CC7CCFADF63E7AF /* NodePeersViewController.swift in Sources */,
+				21C1E1B8354DCDBDB0A9ABB8 /* AssetUTXOListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5130,6 +5137,7 @@
 				6EA6E49364A07F3740D84921 /* SplitCoinsStripeView.swift in Sources */,
 				DAFECCA6179EA6FE92C0ABC7 /* SplitCoinPreviewCard.swift in Sources */,
 				B93707F60996A4898F0B88E2 /* NodePeersViewController.swift in Sources */,
+				4B72CD41AF6A8F47020BC536 /* AssetUTXOListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

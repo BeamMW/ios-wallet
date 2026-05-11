@@ -21,7 +21,13 @@ import Foundation
 
 final class SplitCoinsViewModel: NSObject {
 
+    enum Mode {
+        case split
+        case consolidate
+    }
+
     let group: AssetUTXOGroup
+    let mode: Mode
     let allowedSplitCounts: [Int] = [2, 3, 5, 8, 10]
 
     var splitInto: Int {
@@ -39,10 +45,11 @@ final class SplitCoinsViewModel: NSObject {
     var onError: ((String) -> Void)?
     var onSubmitted: (() -> Void)?
 
-    init(group: AssetUTXOGroup) {
+    init(group: AssetUTXOGroup, mode: Mode = .split) {
         self.group = group
+        self.mode = mode
         let suggested = SplitCoinsViewModel.suggestedSplitCount(for: group, allowed: [2, 3, 5, 8, 10])
-        self.splitInto = group.isConcentrated ? suggested : 3
+        self.splitInto = (mode == .consolidate) ? 1 : (group.isConcentrated ? suggested : 3)
         super.init()
         feeGroth = UInt64(AppModel.sharedManager().getDefaultFeeInGroth())
     }
@@ -50,33 +57,50 @@ final class SplitCoinsViewModel: NSObject {
     var assetId: Int32 { group.assetId }
     var largestGroth: UInt64 { group.largestUtxo?.amount ?? 0 }
 
+    // The pool we're rebalancing: largest UTXO for split, total available for
+    // consolidate (coin-selection picks the actual inputs in either case).
+    private var sourceGroth: UInt64 {
+        mode == .consolidate ? group.totalAvailableGroth : largestGroth
+    }
+
     var outputAmounts: [UInt64] {
-        guard splitInto > 0, largestGroth > 0 else { return [] }
-        let count = UInt64(splitInto)
-        let base = largestGroth / count
-        let remainder = largestGroth - base * count
-        var arr = Array(repeating: base, count: splitInto)
-        if !arr.isEmpty {
-            arr[arr.count - 1] += remainder
+        switch mode {
+        case .consolidate:
+            guard group.utxos.count >= 2, sourceGroth > 0 else { return [] }
+            if assetId == 0 {
+                guard sourceGroth > feeGroth else { return [] }
+                return [sourceGroth - feeGroth]
+            }
+            return [sourceGroth]
+
+        case .split:
+            guard splitInto > 0, sourceGroth > 0 else { return [] }
+            let count = UInt64(splitInto)
+            let base = sourceGroth / count
+            let remainder = sourceGroth - base * count
+            var arr = Array(repeating: base, count: splitInto)
+            if !arr.isEmpty {
+                arr[arr.count - 1] += remainder
+            }
+            // For BEAM (assetId == 0) the fee is paid in BEAM from the same UTXO
+            // we are splitting. If we keep the slices summing to sourceGroth the
+            // wallet has no headroom for the fee; coin-selection then silently
+            // fails. Subtract the fee from the last slice. Caller is gated on
+            // validationError, which already guards `sourceGroth > feeGroth`, so
+            // the subtraction is safe; the > 0 guard is belt-and-braces.
+            if assetId == 0 && !arr.isEmpty && feeGroth > 0 {
+                let last = arr[arr.count - 1]
+                guard last > feeGroth else { return [] }
+                arr[arr.count - 1] = last - feeGroth
+            }
+            return arr
         }
-        // For BEAM (assetId == 0) the fee is paid in BEAM from the same UTXO
-        // we are splitting. If we keep the slices summing to largestGroth the
-        // wallet has no headroom for the fee; coin-selection then silently
-        // fails. Subtract the fee from the last slice. Caller is gated on
-        // validationError, which already guards `largestGroth > feeGroth`, so
-        // the subtraction is safe; the > 0 guard is belt-and-braces.
-        if assetId == 0 && !arr.isEmpty && feeGroth > 0 {
-            let last = arr[arr.count - 1]
-            guard last > feeGroth else { return [] }
-            arr[arr.count - 1] = last - feeGroth
-        }
-        return arr
     }
 
     var perOutputGroth: UInt64 { outputAmounts.first ?? 0 }
 
     var concentrationWarning: String? {
-        guard group.isConcentrated else { return nil }
+        guard mode == .split, group.isConcentrated else { return nil }
         let percent = Int((group.concentrationRatio * 100).rounded())
         let suggested = SplitCoinsViewModel.suggestedSplitCount(for: group, allowed: allowedSplitCounts)
         return Localizable.shared.strings.split_concentration_warning_format
@@ -85,10 +109,17 @@ final class SplitCoinsViewModel: NSObject {
     }
 
     var validationError: String? {
-        if largestGroth < UInt64(splitInto) {
+        if mode == .consolidate {
+            if group.utxos.count < 2 { return "" }
+            if assetId == 0 && sourceGroth <= feeGroth {
+                return Localizable.shared.strings.asset_swap_insufficient_funds
+            }
+            return nil
+        }
+        if sourceGroth < UInt64(splitInto) {
             return Localizable.shared.strings.split_too_small
         }
-        if assetId == 0 && largestGroth <= feeGroth {
+        if assetId == 0 && sourceGroth <= feeGroth {
             return Localizable.shared.strings.asset_swap_insufficient_funds
         }
         // For BEAM the fee comes off the last slice (see outputAmounts); if
@@ -96,8 +127,8 @@ final class SplitCoinsViewModel: NSObject {
         // resulting tx would be invalid.
         if assetId == 0 && splitInto > 0 {
             let count = UInt64(splitInto)
-            let base = largestGroth / count
-            let remainder = largestGroth - base * count
+            let base = sourceGroth / count
+            let remainder = sourceGroth - base * count
             if base + remainder <= feeGroth {
                 return Localizable.shared.strings.asset_swap_insufficient_funds
             }
@@ -106,11 +137,12 @@ final class SplitCoinsViewModel: NSObject {
     }
 
     var canSubmit: Bool {
-        validationError == nil && largestGroth > 0 && group.canSplit
+        guard validationError == nil, sourceGroth > 0 else { return false }
+        return mode == .consolidate ? group.utxos.count >= 2 : group.canSplit
     }
 
     func recalculateFee() {
-        let realAmount = Double(largestGroth) / 100_000_000
+        let realAmount = Double(sourceGroth) / 100_000_000
         let defaultFee = Double(AppModel.sharedManager().getDefaultFeeInGroth())
         AppModel.sharedManager().calculateFee(
             realAmount,

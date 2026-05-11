@@ -21,7 +21,7 @@ import UIKit
 
 final class AssetUTXOSectionHeaderView: UIView {
 
-    static let preferredHeight: CGFloat = 76
+    static let preferredHeight: CGFloat = 116
     private static let iconSize: CGFloat = 36
 
     private let card = UIView()
@@ -30,9 +30,12 @@ final class AssetUTXOSectionHeaderView: UIView {
     private let nameLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let labelStack = UIStackView()
-    private let splitButton = UIButton(type: .system)
+    private let splitButton = makePillButton(title: Localizable.shared.strings.split)
+    private let consolidateButton = makePillButton(title: Localizable.shared.strings.consolidate)
+    private let buttonRow = UIStackView()
 
     var onSplitTapped: (() -> Void)?
+    var onConsolidateTapped: (() -> Void)?
 
     init(group: AssetUTXOGroup) {
         self.iconView = AssetIconView(frame: CGRect(x: 0, y: 0, width: Self.iconSize, height: Self.iconSize))
@@ -43,6 +46,20 @@ final class AssetUTXOSectionHeaderView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private static func makePillButton(title: String) -> UIButton {
+        let btn = UIButton(type: .system)
+        btn.setTitle(title.uppercased(), for: .normal)
+        btn.titleLabel?.font = BoldFont(size: 12)
+        btn.setTitleColor(UIColor.main.brightTeal, for: .normal)
+        btn.setTitleColor(UIColor.main.brightTeal.withAlphaComponent(0.4), for: .disabled)
+        btn.layer.borderColor = UIColor.main.brightTeal.cgColor
+        btn.layer.borderWidth = 1
+        btn.layer.cornerRadius = 16
+        btn.contentEdgeInsets = UIEdgeInsets(top: 6, left: 14, bottom: 6, right: 14)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
     }
 
     private func setupViews() {
@@ -72,17 +89,16 @@ final class AssetUTXOSectionHeaderView: UIView {
         labelStack.addArrangedSubview(subtitleLabel)
         card.addSubview(labelStack)
 
-        splitButton.setTitle(Localizable.shared.strings.split.uppercased(), for: .normal)
-        splitButton.titleLabel?.font = BoldFont(size: 12)
-        splitButton.setTitleColor(UIColor.main.brightTeal, for: .normal)
-        splitButton.setTitleColor(UIColor.main.brightTeal.withAlphaComponent(0.4), for: .disabled)
-        splitButton.layer.borderColor = UIColor.main.brightTeal.cgColor
-        splitButton.layer.borderWidth = 1
-        splitButton.layer.cornerRadius = 16
-        splitButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 14, bottom: 6, right: 14)
-        splitButton.translatesAutoresizingMaskIntoConstraints = false
         splitButton.addTarget(self, action: #selector(onSplit), for: .touchUpInside)
-        card.addSubview(splitButton)
+        consolidateButton.addTarget(self, action: #selector(onConsolidate), for: .touchUpInside)
+
+        buttonRow.axis = .horizontal
+        buttonRow.distribution = .fillEqually
+        buttonRow.spacing = 10
+        buttonRow.translatesAutoresizingMaskIntoConstraints = false
+        buttonRow.addArrangedSubview(splitButton)
+        buttonRow.addArrangedSubview(consolidateButton)
+        card.addSubview(buttonRow)
 
         NSLayoutConstraint.activate([
             card.topAnchor.constraint(equalTo: topAnchor, constant: 6),
@@ -91,17 +107,19 @@ final class AssetUTXOSectionHeaderView: UIView {
             card.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
 
             iconHost.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 14),
-            iconHost.centerYAnchor.constraint(equalTo: card.centerYAnchor),
+            iconHost.topAnchor.constraint(equalTo: card.topAnchor, constant: 14),
             iconHost.widthAnchor.constraint(equalToConstant: Self.iconSize),
             iconHost.heightAnchor.constraint(equalToConstant: Self.iconSize),
 
             labelStack.leadingAnchor.constraint(equalTo: iconHost.trailingAnchor, constant: 12),
-            labelStack.centerYAnchor.constraint(equalTo: card.centerYAnchor),
-            labelStack.trailingAnchor.constraint(lessThanOrEqualTo: splitButton.leadingAnchor, constant: -8),
+            labelStack.centerYAnchor.constraint(equalTo: iconHost.centerYAnchor),
+            labelStack.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor, constant: -14),
 
-            splitButton.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -14),
-            splitButton.centerYAnchor.constraint(equalTo: card.centerYAnchor),
-            splitButton.heightAnchor.constraint(equalToConstant: 32),
+            buttonRow.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 14),
+            buttonRow.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -14),
+            buttonRow.topAnchor.constraint(equalTo: iconHost.bottomAnchor, constant: 12),
+            buttonRow.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -14),
+            buttonRow.heightAnchor.constraint(equalToConstant: 32),
         ])
     }
 
@@ -110,9 +128,14 @@ final class AssetUTXOSectionHeaderView: UIView {
         subtitleLabel.text = group.asset.name
         iconView.setAsset(group.asset)
         splitButton.isEnabled = group.canSplit
+        consolidateButton.isEnabled = group.utxos.count >= 2
     }
 
     @objc private func onSplit() {
         onSplitTapped?()
+    }
+
+    @objc private func onConsolidate() {
+        onConsolidateTapped?()
     }
 }
