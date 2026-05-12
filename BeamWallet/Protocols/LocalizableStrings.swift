@@ -629,6 +629,8 @@ class LocalizableStrings : NSObject {
     var consolidate_coins_subtitle = "consolidate_coins_subtitle".localized
     var consolidate_coins_cta = "consolidate_coins_cta".localized
     var consolidate_started_message = "consolidate_started_message".localized
+    var consolidate_offline_toggle = "consolidate_offline_toggle".localized
+    var consolidate_offline_hint = "consolidate_offline_hint".localized
 
     var confirm_accept = "confirm_accept".localized
     var will_take_funds = "will_take_funds".localized

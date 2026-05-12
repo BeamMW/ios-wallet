@@ -46,6 +46,10 @@ final class SplitCoinsViewController: UIViewController {
     private let feeTitleLabel = UILabel()
     private let feeValueLabel = UILabel()
     private let previewLeadingLabel = UILabel()
+    private let offlineContainer = UIView()
+    private let offlineTitleLabel = UILabel()
+    private let offlineHintLabel = UILabel()
+    private let offlineSwitch = UISwitch()
     private let ctaButton: BMButton
 
     private var splitButtons: [UIButton] = []
@@ -254,6 +258,8 @@ final class SplitCoinsViewController: UIViewController {
         contentStack.addArrangedSubview(warningContainer)
         contentStack.setCustomSpacing(20, after: warningContainer)
 
+        setupOfflineToggle()
+
         splitIntoLabel.font = BoldFont(size: 11)
         splitIntoLabel.textColor = UIColor.main.blueyGrey
         splitIntoLabel.letterSpacing = 2
@@ -317,6 +323,48 @@ final class SplitCoinsViewController: UIViewController {
         contentStack.setCustomSpacing(20, after: feeRow)
     }
 
+    private func setupOfflineToggle() {
+        offlineContainer.translatesAutoresizingMaskIntoConstraints = false
+        offlineContainer.backgroundColor = UIColor.white.withAlphaComponent(0.04)
+        offlineContainer.layer.cornerRadius = 10
+
+        offlineTitleLabel.font = SemiboldFont(size: 14)
+        offlineTitleLabel.textColor = UIColor.white
+        offlineTitleLabel.text = Localizable.shared.strings.consolidate_offline_toggle
+        offlineTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        offlineHintLabel.font = RegularFont(size: 12)
+        offlineHintLabel.textColor = UIColor.main.blueyGrey
+        offlineHintLabel.numberOfLines = 0
+        offlineHintLabel.text = Localizable.shared.strings.consolidate_offline_hint
+        offlineHintLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        offlineSwitch.onTintColor = UIColor.main.brightTeal
+        offlineSwitch.translatesAutoresizingMaskIntoConstraints = false
+        offlineSwitch.addTarget(self, action: #selector(onOfflineToggleChanged(_:)), for: .valueChanged)
+
+        offlineContainer.addSubview(offlineTitleLabel)
+        offlineContainer.addSubview(offlineHintLabel)
+        offlineContainer.addSubview(offlineSwitch)
+
+        NSLayoutConstraint.activate([
+            offlineTitleLabel.topAnchor.constraint(equalTo: offlineContainer.topAnchor, constant: 12),
+            offlineTitleLabel.leadingAnchor.constraint(equalTo: offlineContainer.leadingAnchor, constant: 14),
+            offlineTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: offlineSwitch.leadingAnchor, constant: -8),
+
+            offlineHintLabel.topAnchor.constraint(equalTo: offlineTitleLabel.bottomAnchor, constant: 2),
+            offlineHintLabel.leadingAnchor.constraint(equalTo: offlineTitleLabel.leadingAnchor),
+            offlineHintLabel.trailingAnchor.constraint(lessThanOrEqualTo: offlineSwitch.leadingAnchor, constant: -8),
+            offlineHintLabel.bottomAnchor.constraint(equalTo: offlineContainer.bottomAnchor, constant: -12),
+
+            offlineSwitch.trailingAnchor.constraint(equalTo: offlineContainer.trailingAnchor, constant: -14),
+            offlineSwitch.centerYAnchor.constraint(equalTo: offlineContainer.centerYAnchor),
+        ])
+
+        contentStack.addArrangedSubview(offlineContainer)
+        contentStack.setCustomSpacing(20, after: offlineContainer)
+    }
+
     private func makeSplitCountButton(count: Int) -> UIButton {
         let btn = UIButton(type: .system)
         btn.tag = count
@@ -368,8 +416,13 @@ final class SplitCoinsViewController: UIViewController {
             warningContainer.isHidden = true
         }
 
-        splitIntoLabel.isHidden = isConsolidate
-        splitIntoStack.isHidden = isConsolidate
+        // Hide the split-into selector in consolidate mode or whenever the
+        // shielded toggle collapses the output to a single push.
+        let hideSplitInto = isConsolidate || viewModel.isShielded
+        splitIntoLabel.isHidden = hideSplitInto
+        splitIntoStack.isHidden = hideSplitInto
+        offlineContainer.isHidden = false
+        offlineSwitch.isOn = viewModel.sendOffline
 
         for btn in splitButtons {
             let isSelected = btn.tag == viewModel.splitInto
@@ -381,7 +434,9 @@ final class SplitCoinsViewController: UIViewController {
         }
 
         let perOutputText = formattedAmount(real: grothToBeam(viewModel.perOutputGroth), unit: asset.unitName)
-        previewLeadingLabel.text = isConsolidate ? "" : "\(viewModel.splitInto)x equal"
+        previewLeadingLabel.text = (isConsolidate || viewModel.isShielded)
+            ? ""
+            : "\(viewModel.splitInto)x equal"
         previewValueLabel.text = perOutputText
 
         feeValueLabel.text = formattedAmount(real: grothToBeam(viewModel.feeGroth), unit: "BEAM")
@@ -426,6 +481,10 @@ final class SplitCoinsViewController: UIViewController {
 
     @objc private func onSplitCountTapped(_ sender: UIButton) {
         viewModel.splitInto = sender.tag
+    }
+
+    @objc private func onOfflineToggleChanged(_ sender: UISwitch) {
+        viewModel.sendOffline = sender.isOn
     }
 
     @objc private func onSplitTapped() {

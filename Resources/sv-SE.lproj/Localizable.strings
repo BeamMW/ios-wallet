@@ -707,6 +707,8 @@
 "consolidate_coins_subtitle" = "Combine all UTXOs of this asset into one";
 "consolidate_coins_cta" = "Consolidate now";
 "consolidate_started_message" = "Your consolidate transaction has been started";
+"consolidate_offline_toggle" = "Send to shielded pool";
+"consolidate_offline_hint" = "Increases Lelantus pool size and breaks linkability";
 
 "vouchers_count" = "Vouchers count";
 "vouchers_count_hint" = "Up to %d vouchers per address";

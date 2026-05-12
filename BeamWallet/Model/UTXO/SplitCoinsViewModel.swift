@@ -41,6 +41,19 @@ final class SplitCoinsViewModel: NSObject {
 
     private(set) var feeGroth: UInt64 = 0
 
+    // When on, the operation is routed through a Lelantus push tx to a
+    // self-generated offline address instead of splitting/consolidating in
+    // the public pool — breaking input/output linkability and growing the
+    // shielded anonymity set.
+    var sendOffline: Bool = false {
+        didSet {
+            if sendOffline != oldValue {
+                recalculateFee()
+                onDataChanged?()
+            }
+        }
+    }
+
     var onDataChanged: (() -> Void)?
     var onError: ((String) -> Void)?
     var onSubmitted: (() -> Void)?
@@ -54,6 +67,12 @@ final class SplitCoinsViewModel: NSObject {
         feeGroth = UInt64(AppModel.sharedManager().getDefaultFeeInGroth())
     }
 
+    // Lelantus push: applies to both modes. In split-offline the largest
+    // UTXO is pushed into the shielded pool; in consolidate-offline the
+    // entire available pool is pushed. Either way the on-chain result is a
+    // single shielded output, so the split-into selector is meaningless.
+    var isShielded: Bool { sendOffline }
+
     var assetId: Int32 { group.assetId }
     var largestGroth: UInt64 { group.largestUtxo?.amount ?? 0 }
 
@@ -64,9 +83,22 @@ final class SplitCoinsViewModel: NSObject {
     }
 
     var outputAmounts: [UInt64] {
+        guard sourceGroth > 0 else { return [] }
+
+        // Shielded path is the same shape regardless of mode: a single
+        // shielded output equal to the source minus the BEAM fee (or the
+        // full source for non-BEAM assets, where the fee is paid separately).
+        if isShielded {
+            if assetId == 0 {
+                guard sourceGroth > feeGroth else { return [] }
+                return [sourceGroth - feeGroth]
+            }
+            return [sourceGroth]
+        }
+
         switch mode {
         case .consolidate:
-            guard group.utxos.count >= 2, sourceGroth > 0 else { return [] }
+            guard group.utxos.count >= 2 else { return [] }
             if assetId == 0 {
                 guard sourceGroth > feeGroth else { return [] }
                 return [sourceGroth - feeGroth]
@@ -74,7 +106,7 @@ final class SplitCoinsViewModel: NSObject {
             return [sourceGroth]
 
         case .split:
-            guard splitInto > 0, sourceGroth > 0 else { return [] }
+            guard splitInto > 0 else { return [] }
             let count = UInt64(splitInto)
             let base = sourceGroth / count
             let remainder = sourceGroth - base * count
@@ -100,7 +132,7 @@ final class SplitCoinsViewModel: NSObject {
     var perOutputGroth: UInt64 { outputAmounts.first ?? 0 }
 
     var concentrationWarning: String? {
-        guard mode == .split, group.isConcentrated else { return nil }
+        guard mode == .split, !isShielded, group.isConcentrated else { return nil }
         let percent = Int((group.concentrationRatio * 100).rounded())
         let suggested = SplitCoinsViewModel.suggestedSplitCount(for: group, allowed: allowedSplitCounts)
         return Localizable.shared.strings.split_concentration_warning_format
@@ -109,6 +141,12 @@ final class SplitCoinsViewModel: NSObject {
     }
 
     var validationError: String? {
+        if isShielded {
+            if assetId == 0 && sourceGroth <= feeGroth {
+                return Localizable.shared.strings.asset_swap_insufficient_funds
+            }
+            return nil
+        }
         if mode == .consolidate {
             if group.utxos.count < 2 { return "" }
             if assetId == 0 && sourceGroth <= feeGroth {
@@ -143,12 +181,15 @@ final class SplitCoinsViewModel: NSObject {
 
     func recalculateFee() {
         let realAmount = Double(sourceGroth) / 100_000_000
-        let defaultFee = Double(AppModel.sharedManager().getDefaultFeeInGroth())
-        AppModel.sharedManager().calculateFee(
+        let app = AppModel.sharedManager()
+        let defaultFee = isShielded
+            ? Double(app.getMinMaxPrivacyFeeInGroth())
+            : Double(app.getDefaultFeeInGroth())
+        app.calculateFee(
             realAmount,
             assetId: assetId,
             fee: defaultFee,
-            isShielded: false
+            isShielded: isShielded
         ) { [weak self] fee, _, _, _ in
             DispatchQueue.main.async {
                 guard let self = self else { return }
@@ -163,6 +204,10 @@ final class SplitCoinsViewModel: NSObject {
             onError?(validationError ?? "")
             return
         }
+        if isShielded {
+            submitShielded()
+            return
+        }
         let groths = outputAmounts.map { NSNumber(value: $0) }
         AppModel.sharedManager().splitCoins(
             assetId,
@@ -170,6 +215,54 @@ final class SplitCoinsViewModel: NSObject {
             fee: Double(feeGroth)
         )
         onSubmitted?()
+    }
+
+    private func submitShielded() {
+        let outGroth = perOutputGroth
+        guard outGroth > 0 else {
+            onError?(validationError ?? Localizable.shared.strings.error)
+            return
+        }
+        let realAmount = Double(outGroth) / 100_000_000
+        let assetIdCopy = assetId
+        let feeReal = Double(feeGroth)
+
+        // Reuse the wallet's default own address (created on demand by
+        // generateToken / getDefaultAddressAlways). `_id` is the hex WalletID
+        // that generateOfflineAddress expects; the public `walletId` getter
+        // returns the token string and would fail FromHex parsing.
+        AppModel.sharedManager().generateNewWalletAddress { [weak self] address, _ in
+            DispatchQueue.main.async {
+                guard let self = self,
+                      let walletIdHex = address?._id, !walletIdHex.isEmpty else {
+                    self?.onError?(Localizable.shared.strings.error)
+                    return
+                }
+                AppModel.sharedManager().generateOfflineAddress(
+                    walletIdHex,
+                    assetId: assetIdCopy,
+                    amount: realAmount,
+                    offlineCount: 1
+                ) { token in
+                    DispatchQueue.main.async {
+                        guard !token.isEmpty else {
+                            self.onError?(Localizable.shared.strings.error)
+                            return
+                        }
+                        AppModel.sharedManager().send(
+                            realAmount,
+                            fee: feeReal,
+                            assetId: assetIdCopy,
+                            to: token,
+                            from: walletIdHex,
+                            comment: "",
+                            isOffline: true
+                        )
+                        self.onSubmitted?()
+                    }
+                }
+            }
+        }
     }
 
     private static func suggestedSplitCount(for group: AssetUTXOGroup, allowed: [Int]) -> Int {
