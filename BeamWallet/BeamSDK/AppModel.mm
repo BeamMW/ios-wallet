@@ -1256,6 +1256,9 @@ bool OnProgress(uint64_t done, uint64_t total) {
         wallet->getAsync()->getNotifications();
         [self getMinConfirmations];
         [self getMaxPrivacyLock];
+        if ([Settings sharedManager].isOracleEnabled) {
+            [[OraclePriceManager shared] fetchPriceNow];
+        }
     }
 }
 
