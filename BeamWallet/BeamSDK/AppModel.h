@@ -47,6 +47,11 @@
 #import "BMInstantMessage.h"
 #import "BMChat.h"
 #import "BMDexOrder.h"
+#import "BMInstalledDApp.h"
+#import "BMAvailableDApp.h"
+#import "BMPublisher.h"
+
+@class WalletAPIClient;
 
 enum {
     BMRestoreManual = 0,
@@ -346,8 +351,10 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)loadApps;
 -(void)stopDAO;
 -(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*_Nonnull)app;
+-(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*_Nonnull)app installedRoot:(NSURL* _Nullable)installedRoot;
 -(void)startBeamXDaoApp:(UINavigationController*_Nonnull)controller app:(BMApp*_Nonnull)app;
 -(void)sendDAOApiResult:(NSString*_Nonnull)json;
+-(WalletAPIClient*_Nullable)walletAPIClient;
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
                       amounts:(NSString*_Nonnull)amounts;
 -(void)getAssetInfoAsync:(int)assetId;

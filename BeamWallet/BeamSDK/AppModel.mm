@@ -32,6 +32,7 @@
 #import "WalletModel.h"
 #import "StringStd.h"
 #import "DAOManager.h"
+#import "WalletAPIClient+Internal.h"
 #import "RecoveryProgress.h"
 
 #import "DiskStatusManager.h"
@@ -50,6 +51,10 @@
 #include "wallet/client/wallet_model_async.h"
 #include "wallet/client/wallet_client.h"
 #include "wallet/core/default_peers.h"
+
+#ifdef BEAM_IPFS_SUPPORT
+#include "wallet/ipfs/ipfs_config.h"
+#endif
 
 #include "core/block_rw.h"
 #include "build/core/version.h"
@@ -181,6 +186,10 @@ struct NewTokenGeneratedFunc
 
 static dispatch_once_t * once_token_model;
 
+@interface AppModel ()
+- (void)configureEmbeddedIPFS;
+@end
+
 @implementation AppModel  {
     BOOL isStarted;
     BOOL isRunning;
@@ -207,6 +216,7 @@ static dispatch_once_t * once_token_model;
     
     DAOManager *daoManager;
     DAOViewController *daoViewController;
+    WalletAPIClient *walletAPIClient;
     
     boost::optional<beam::wallet::WalletAddress> _receiverAddress;
     
@@ -809,6 +819,13 @@ static beam::Rules& getConfiguredRules() {
     [daoManager destroy];
     daoManager = nil;
 
+    [walletAPIClient destroy];
+    walletAPIClient = nil;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[OraclePriceManager shared] stop];
+    });
+
     isStarted = NO;
     isRunning = NO;
     self.didLoadFullAssetsList = NO;
@@ -1009,6 +1026,19 @@ static beam::Rules& getConfiguredRules() {
             });
 
             daoManager = [[DAOManager alloc] initWithWallet:wallet];
+            // Configure the embedded IPFS daemon *before* the wallet-owned
+            // AppsApi is created. WebAPICreator::createApi requests an IPFS
+            // service handle (ipfsnode=true), which makes the wallet thread
+            // call IWThread_startIPFSNode — and that needs a valid repo path
+            // queued via setIPFSConfig first.
+            [self configureEmbeddedIPFS];
+            walletAPIClient = [[WalletAPIClient alloc] initWithWallet:wallet];
+            [walletAPIClient ensureApi];
+            if ([Settings sharedManager].isOracleEnabled) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[OraclePriceManager shared] start];
+                });
+            }
         }
         catch (const std::exception& e) {
             NSLog(@"ImportRecovery failed %s",e.what());
@@ -1093,6 +1123,19 @@ bool OnProgress(uint64_t done, uint64_t total) {
             [self loadFullAssetsList];
 
             daoManager = [[DAOManager alloc] initWithWallet:wallet];
+            // Configure the embedded IPFS daemon *before* the wallet-owned
+            // AppsApi is created. WebAPICreator::createApi requests an IPFS
+            // service handle (ipfsnode=true), which makes the wallet thread
+            // call IWThread_startIPFSNode — and that needs a valid repo path
+            // queued via setIPFSConfig first.
+            [self configureEmbeddedIPFS];
+            walletAPIClient = [[WalletAPIClient alloc] initWithWallet:wallet];
+            [walletAPIClient ensureApi];
+            if ([Settings sharedManager].isOracleEnabled) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[OraclePriceManager shared] start];
+                });
+            }
         }
         catch (const std::exception& e) {
             BEAM_LOG_ERROR() << "AppModel.start failed: " << e.what();
@@ -3395,7 +3438,40 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(void)sendDAOApiResult:(NSString*_Nonnull)json {
+    // Route store / publishers / IPFS responses (id >= 1_000_000) to the
+    // wallet-owned client. Anything else belongs to the DApp running in
+    // DAOViewController, which uses the per-DApp AppsApiUI context.
+    if ([walletAPIClient routeResult:json]) {
+        return;
+    }
     [daoViewController sendDAOApiResultWithJson:json];
+}
+
+-(WalletAPIClient*_Nullable)walletAPIClient {
+    return walletAPIClient;
+}
+
+-(void)configureEmbeddedIPFS {
+#ifdef BEAM_IPFS_SUPPORT
+    if (!wallet) {
+        return;
+    }
+    // Drop the embedded go-ipfs node's repo under Documents/. The swarm key
+    // is auto-derived from beam::Rules::Network in ipfs_imp.cpp, so the node
+    // joins the right private swarm without explicit configuration —
+    // dappnet/testnet/mainnet/masternet each have their own pre-shared key
+    // baked into the BEAM core. We don't call startIPFSNode here: that's
+    // triggered as part of AppsApi creation (ipfsnode=true in createApi),
+    // which queues IWThread_startIPFSNode on the same wallet-client thread
+    // *after* this setIPFSConfig has run.
+    asio_ipfs::config cfg(asio_ipfs::config::Mode::Desktop);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    NSString *repoPath = [documentsDirectory stringByAppendingPathComponent:@"ipfs-repo"];
+    cfg.repo_root = repoPath.string;
+
+    wallet->getAsync()->setIPFSConfig(std::move(cfg));
+#endif
 }
 
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
@@ -3409,19 +3485,24 @@ bool IsValidTimeStamp(Timestamp currentBlockTime_s)
 }
 
 -(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*)app {
+    [self startApp:controller app:app installedRoot:nil];
+}
+
+-(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*)app installedRoot:(NSURL* _Nullable)installedRoot {
     if (daoManager == nil) {
         daoManager = [[DAOManager alloc] initWithWallet:wallet];
     }
 
     BOOL isSupported = [daoManager appSupported:app];
-    
+
     __weak typeof(self) weakSelf = self;
 
     if (isSupported) {
         [daoManager launchApp:app];
-        
+
         daoViewController = [[DAOViewController alloc] init];
         daoViewController.app = app;
+        daoViewController.installedRoot = installedRoot;
         daoViewController.onRejected = ^(NSString * _Nonnull json) {
             __strong typeof(self) strongSelf = weakSelf;
             [strongSelf->daoManager contractInfoRejected:json];

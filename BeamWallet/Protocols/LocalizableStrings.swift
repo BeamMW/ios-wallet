@@ -442,6 +442,7 @@ class LocalizableStrings : NSObject {
     var faucet_redirect_text = "faucet_redirect_text".localized
     var clear_wallet_transactions_text = "clear_wallet_transactions_text".localized
     var show_amounts_in = "show_amounts_in".localized
+    var use_on_chain_price_oracle = "use_on_chain_price_oracle".localized
     var second_currency = "second_currency".localized
     var notifications = "notifications".localized
     var news = "news".localized
@@ -487,7 +488,6 @@ class LocalizableStrings : NSObject {
     var shielded_pool = "shielded_pool".localized
     var min_fee_error_offline = "min_fee_error_offline".localized
     var maturity = "maturity".localized
-    var show_public_offline = "show_public_offline".localized
     var sign_message = "sign_message".localized
     var verify_message = "verify_message".localized
     var offline_address = "offline_address".localized
@@ -501,7 +501,6 @@ class LocalizableStrings : NSObject {
     var tr_received_public_offline = "tr_received_public_offline".localized
     var tr_received_offline = "tr_received_offline".localized
     var address_details = "address_details".localized
-    var connect_node_offline_public = "connect_node_offline_public".localized
     var send_address_placholder = "send_address_placholder".localized
     var local_comment = "local_comment".localized
     var choose_currency = "choose_currency".localized
@@ -608,6 +607,39 @@ class LocalizableStrings : NSObject {
     var max_funds_error = "max_funds_error".localized
     var max_funds_hint = "max_funds_hint".localized
     var dAppStore = "dAppStore".localized
+
+    // DApp Store / My DApps
+    var myDApps = "myDApps".localized
+    var dapps_empty_title = "dapps_empty_title".localized
+    var dapps_empty_subtitle = "dapps_empty_subtitle".localized
+    var dapps_empty_button = "dapps_empty_button".localized
+    var dapps_get_more = "dapps_get_more".localized
+    var dapps_uninstall = "dapps_uninstall".localized
+    var dapps_remove_confirm = "dapps_remove_confirm".localized
+    var dapps_install_from_file = "dapps_install_from_file".localized
+    var dapps_sideload_desc = "dapps_sideload_desc".localized
+    var dapps_sideload_invalid = "dapps_sideload_invalid".localized
+    var dapps_install_label = "dapps_install_label".localized
+    var dapps_installed_label = "dapps_installed_label".localized
+    var dapps_update = "dapps_update".localized
+    var dapps_installed_toast = "dapps_installed_toast".localized
+    var dapps_updated_toast = "dapps_updated_toast".localized
+    var dapps_install_complete = "dapps_install_complete".localized
+    var dapps_install_failed_msg = "dapps_install_failed_msg".localized
+    var dapps_no_download_source = "dapps_no_download_source".localized
+    var dapps_source_bundled = "dapps_source_bundled".localized
+    var dapps_source_ipfs = "dapps_source_ipfs".localized
+    var dapps_store_title = "dapps_store_title".localized
+    var dapps_store_subtitle = "dapps_store_subtitle".localized
+    var dapps_store_loading = "dapps_store_loading".localized
+    var dapps_store_no_dapps = "dapps_store_no_dapps".localized
+    var dapps_store_empty_hint = "dapps_store_empty_hint".localized
+    var dapps_publishers = "dapps_publishers".localized
+    var dapps_publishers_subtitle = "dapps_publishers_subtitle".localized
+    var dapps_no_publishers = "dapps_no_publishers".localized
+    var dapps_back_button = "dapps_back_button".localized
+    var dapps_sideloaded_name = "dapps_sideloaded_name".localized
+
     var fee = "fee".localized
 
     var split = "split".localized

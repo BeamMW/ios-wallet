@@ -57,6 +57,7 @@ class LeftMenuViewController: BaseTableViewController {
     private var sections_0 = [
         MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected:               true, type: WalletViewController.self),
         MenuItem(name: Localizable.shared.strings.messenger, icon: IconMessenger(), selected: false, type: MessengerChatListViewController.self),
+        MenuItem(name: Localizable.shared.strings.myDApps, icon: IconDappStore(), selected: false, type: MyDAppsViewController.self),
         MenuItem(name: Localizable.shared.strings.dAppStore, icon: IconDappStore(), selected: false, type: DAOViewController.self),
         MenuItem(name: Localizable.shared.strings.asset_swaps, icon: IconAssetSwap(), selected: false, type: AssetSwapsViewController.self)]
     
@@ -293,6 +294,8 @@ extension LeftMenuViewController: UITableViewDelegate, UITableViewDataSource {
                     navigationController.setViewControllers([SettingsViewController(type: .main)], animated: false)
                 case Localizable.shared.strings.dAppStore :
                     navigationController.setViewControllers([DAOAppsViewController()], animated: false)
+                case Localizable.shared.strings.myDApps :
+                    navigationController.setViewControllers([MyDAppsViewController()], animated: false)
                 case Localizable.shared.strings.messenger :
                     navigationController.setViewControllers([MessengerChatListViewController()], animated: false)
                 case Localizable.shared.strings.beam_faucet :
@@ -331,6 +334,7 @@ extension LeftMenuViewController : SettingsModelDelegate {
         
         sections_0 = [MenuItem(name: Localizable.shared.strings.wallet, icon: IconWallet(), selected: true, type: WalletViewController.self),
                       MenuItem(name: Localizable.shared.strings.messenger, icon: IconMessenger(), selected: false, type: MessengerChatListViewController.self),
+                      MenuItem(name: Localizable.shared.strings.myDApps, icon: IconDappStore(), selected: false, type: MyDAppsViewController.self),
                       MenuItem(name: Localizable.shared.strings.dAppStore, icon: IconDappStore(), selected: false, type: DAOViewController.self),
                       MenuItem(name: Localizable.shared.strings.asset_swaps, icon: IconAssetSwap(), selected: false, type: AssetSwapsViewController.self)]
         

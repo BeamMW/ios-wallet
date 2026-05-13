@@ -44,11 +44,18 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     private var webView:WKWebView?
     private var loadingImage = UIImageView()
     private var loadingLabel = UILabel()
-    
+    private var dappURLHandler: DAppURLSchemeHandler?
+
     @objc private var channel:XWVChannel?
     @objc private var beam:WBBEAM?
 
     @objc public var app:BMApp!
+    /// When set, the controller treats `app.url` as the entry HTML and serves
+    /// the DApp through `DAppURLSchemeHandler` under `dapp://app/...` so that
+    /// XHR / fetch get HTTP-style status codes, CORS, and an `application/wasm`
+    /// content-type — none of which iOS WKWebView gives you for native file://
+    /// loads.
+    @objc public var installedRoot:URL?
     @objc public var onCallWalletApi: ((NSString) -> Void)?
     @objc public var onRejected: ((NSString) -> Void)?
     @objc public var onApproved: ((NSString) -> Void)?
@@ -70,7 +77,33 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
             self.onCallWalletApi?(json)
         }
         
-        webView?.load(URLRequest(url: URL(string: app.url)!))
+        loadInitialURL()
+    }
+
+    private func loadInitialURL() {
+        if let root = installedRoot,
+           let url = URL(string: app.url),
+           url.isFileURL {
+            let relative = relativeFilePath(of: url, under: root)
+            if let entry = DAppURLSchemeHandler.entryURL(for: relative) {
+                // Route the load through the dapp:// scheme handler — see
+                // DAppURLSchemeHandler for why file:// is unworkable here.
+                webView?.load(URLRequest(url: entry))
+                return
+            }
+        }
+        guard let url = URL(string: app.url) else { return }
+        webView?.load(URLRequest(url: url))
+    }
+
+    private func relativeFilePath(of file: URL, under root: URL) -> String {
+        let rootPath = root.standardizedFileURL.path
+        let filePath = file.standardizedFileURL.path
+        if filePath.hasPrefix(rootPath) {
+            let suffix = filePath.dropFirst(rootPath.count)
+            return suffix.hasPrefix("/") ? String(suffix.dropFirst()) : String(suffix)
+        }
+        return "app/index.html"
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -88,21 +121,32 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     private func stupWebView() {
         let controller = WKUserContentController()
         controller.add(self, name: "BEAM")
-        
+
         let configuration = WKWebViewConfiguration()
         configuration.userContentController = controller
-        
+
+        // Register the per-DApp scheme handler before the WKWebView is
+        // instantiated — WebKit refuses to register schemes on a live
+        // configuration. The handler is retained by the controller so it
+        // outlives any in-flight requests.
+        if let root = installedRoot {
+            let handler = DAppURLSchemeHandler(rootURL: root)
+            dappURLHandler = handler
+            configuration.setURLSchemeHandler(handler, forURLScheme: DAppURLSchemeHandler.scheme)
+        }
+
         let logSource = "function captureLog(msg) { window.webkit.messageHandlers.logHandler.postMessage(msg); } window.console.log = captureLog;"
         let logScript = WKUserScript(source: logSource, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
-        
+
         let jsLogScript2 = "console.log = (function(oriLogFunc){ return function(str) { window.webkit.messageHandlers.log.postMessage(str); oriLogFunc.call(console,str);} })(console.log);"
-        
+
         webView = WKWebView(frame: self.view.bounds, configuration: configuration)
         webView?.navigationDelegate = self
         webView?.configuration.userContentController.addUserScript(logScript)
         webView?.configuration.userContentController.addUserScript(WKUserScript(source: jsLogScript2, injectionTime: .atDocumentStart, forMainFrameOnly: true))
         webView?.configuration.userContentController.add(self, name: "logHandler")
         webView?.configuration.userContentController.add(self, name: "log")
+        webView?.configuration.userContentController.add(self, name: "dappLog")
         channel = webView?.loadPlugin(beam!, namespace: "BEAM")
         webView?.backgroundColor = self.view.backgroundColor
         webView?.isOpaque = false
@@ -186,11 +230,17 @@ class DAOViewController: BaseViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if let msg = message.body as? String {
-            print("--------WEB LOG--------:\n" + msg)
+        let appName = app?.name ?? "DApp"
+        if message.name == "dappLog", let body = message.body as? [String: Any] {
+            let level = (body["level"] as? String) ?? "info"
+            let text = (body["message"] as? String) ?? ""
+            NSLog("DApp[%@] %@: %@", appName, level, text)
+            return
         }
-        else {
-            print(message.body)
+        if let msg = message.body as? String {
+            NSLog("DApp[%@] log: %@", appName, msg)
+        } else {
+            NSLog("DApp[%@] log: %@", appName, String(describing: message.body))
         }
     }
     

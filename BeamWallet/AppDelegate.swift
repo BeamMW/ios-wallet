@@ -264,9 +264,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        
+
         // options[.sourceApplication] as? String == "com.beam.runner"
-        
+
+        if url.isFileURL && url.pathExtension.lowercased() == "dapp" {
+            return handleSideloadedDApp(url: url)
+        }
+
         if let params = url.queryParameters, params.count == 2,
            let amount = params["amount"],
            let userId = params["user_id"] {
@@ -287,6 +291,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    private func handleSideloadedDApp(url: URL) -> Bool {
+        guard AppModel.sharedManager().isLoggedin else { return false }
+        let secured = url.startAccessingSecurityScopedResource()
+        defer { if secured { url.stopAccessingSecurityScopedResource() } }
+        guard let data = try? Data(contentsOf: url) else { return false }
+
+        do {
+            _ = try DAppManager.shared.installFromZip(data: data,
+                                                     fallbackName: Localizable.shared.strings.dapps_sideloaded_name,
+                                                     fallbackIcon: "")
+        } catch {
+            return false
+        }
+
+        guard let top = UIApplication.getTopMostViewController(),
+              let nav = top.navigationController else { return true }
+        nav.pushViewController(MyDAppsViewController(), animated: true)
+        return true
+    }
+
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     }
     

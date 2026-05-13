@@ -45,7 +45,13 @@ void WebAPICreator::createApi(const std::string& verWant, const std::string& ver
     
     auto guard = this;
     
-    AppsApiUI::ClientThread_Create(_walletModel.get(), version, appid, appName, 0 , false,
+    // `ipfsnode=true` makes ClientThread_Create call IWThread_startIPFSNode on
+    // the wallet thread and stash the IPFS service handle on the resulting
+    // ApiInitData. Without it, `ipfs_get` on this API instance returns
+    // ApiError::NotSupported even when BEAM_IPFS_SUPPORT is on. Callers must
+    // have set the IPFS config (repo_root, swarm key) on the wallet client
+    // before invoking createApi — AppModel does this at wallet-open time.
+    AppsApiUI::ClientThread_Create(_walletModel.get(), version, appid, appName, 0, true,
                                    [this, guard, version, appName, appid] (AppsApiUI::Ptr api) {
         if (guard)
         {

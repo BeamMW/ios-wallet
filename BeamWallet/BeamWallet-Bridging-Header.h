@@ -4,6 +4,10 @@
 
 #import "AppModel.h"
 #import "MnemonicModel.h"
+#import "BMInstalledDApp.h"
+#import "BMAvailableDApp.h"
+#import "BMPublisher.h"
+#import "WalletAPIClient.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "LGSideMenuController.h"
 #import "UIViewController+LGSideMenuController.h"
