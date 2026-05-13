@@ -274,8 +274,10 @@ class BMDataPickerViewController: BaseTableViewController {
             eth.type = BMCurrencyType(BMCurrencyETH)
             
             values.append(BMPickerData(title: usd.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (usd.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: usd.type))
-            values.append(BMPickerData(title: btc.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (btc.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: btc.type))
-            values.append(BMPickerData(title: eth.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (eth.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: eth.type))
+            if !Settings.sharedManager().isOracleEnabled {
+                values.append(BMPickerData(title: btc.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (btc.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: btc.type))
+                values.append(BMPickerData(title: eth.currencyLongName(), detail: nil, titleColor: UIColor.white, arrowType: (eth.type == Settings.sharedManager().currency) ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: eth.type))
+            }
             
         case .notifications:
             values.append(BMPickerData(title: Localizable.shared.strings.wallet_updates, detail: nil, titleColor: UIColor.white, arrowType: Settings.sharedManager().isNotificationWalletON ? BMPickerData.ArrowType.selected : BMPickerData.ArrowType.unselected, unique: Localizable.shared.strings.wallet_updates, multiplie: false, isSwitch: true))

@@ -343,6 +343,19 @@ extension SettingsViewController : SettingsCellDelegate {
             else if item.type == .mobile_node {
                 AppModel.sharedManager().enableBodyRequests(value)
             }
+            else if item.type == .price_oracle {
+                Settings.sharedManager().isOracleEnabled = value
+                if value {
+                    Settings.sharedManager().currency = BMCurrencyType(BMCurrencyUSD)
+                    OraclePriceManager.shared.start()
+                }
+                else {
+                    OraclePriceManager.shared.stop()
+                    AppModel.sharedManager().refreshAddresses()
+                }
+                viewModel.reload()
+                tableView.reloadData()
+            }
         }
     }
 }

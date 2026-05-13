@@ -60,17 +60,17 @@ class SettingsViewModel: NSObject {
         case random_node = 28
         case currency = 29
         case notifications = 30
-        case offline_address = 31
-        case max_privacy_limit = 32
-        case rescan = 33
-        case mobile_node = 34
-        case utxo = 35
-        case blockchain = 36
-        case confirmations = 37
-        case sign_message = 38
-        case verify_message = 39
-        case node_peers = 40
-        case node_type = 41
+        case max_privacy_limit = 31
+        case rescan = 32
+        case mobile_node = 33
+        case utxo = 34
+        case blockchain = 35
+        case confirmations = 36
+        case sign_message = 37
+        case verify_message = 38
+        case node_peers = 39
+        case node_type = 40
+        case price_oracle = 41
     }
 
     private static func currentNodeTypeLabel() -> String {
@@ -191,6 +191,7 @@ class SettingsViewModel: NSObject {
         allItems.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, type: .allow_open_link, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.use_on_chain_price_oracle, detail: nil, isSwitch: Settings.sharedManager().isOracleEnabled, type: .price_oracle, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
         
@@ -222,7 +223,6 @@ class SettingsViewModel: NSObject {
         }
 
         allItems.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-        allItems.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
 
         allItems.append(SettingsItem(title: Localizable.shared.strings.sign_message, detail: nil, isSwitch: nil, type: .sign_message, hasArrow: true))
@@ -255,6 +255,7 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, type: .allow_open_link, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.use_on_chain_price_oracle, detail: nil, isSwitch: Settings.sharedManager().isOracleEnabled, type: .price_oracle, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
 
             var section_1 = [SettingsItem]()
@@ -290,7 +291,6 @@ class SettingsViewModel: NSObject {
                 section_1.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
             }
             section_1.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-            section_1.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
             section_1.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
 
             var section_2 = [SettingsItem]()
@@ -390,8 +390,6 @@ class SettingsViewModel: NSObject {
             onCurrencyScreen()
         case .notifications:
             onNotifications()
-        case .offline_address:
-            onOfflineAddress()
         case .max_privacy_limit:
             onLockLimit()
         case .rescan:
@@ -585,22 +583,6 @@ extension SettingsViewModel {
             let vc = BMDataPickerViewController(type: .notifications)
             top.pushViewController(vc: vc)
         }
-    }
-    
-    func onOfflineAddress() {
-        let isOwn = AppModel.sharedManager().checkIsOwnNode()
-        if isOwn {
-            if let top = UIApplication.getTopMostViewController() {
-                let vc = OfflineAddressViewController()
-                top.pushViewController(vc: vc)
-            }
-        }
-        else {
-            if let top = UIApplication.getTopMostViewController() {
-                top.alert(title: Localizable.shared.strings.show_public_offline, message: Localizable.shared.strings.connect_node_offline_public, handler: nil)
-            }
-        }
-  
     }
     
     func onLockScreen() {

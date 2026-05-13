@@ -68,6 +68,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) int logDays;
 @property (nonatomic, assign) BOOL isDarkMode;
 @property (nonatomic, assign) BMCurrencyType currency;
+@property (nonatomic, assign) BOOL isOracleEnabled;
 @property (nonatomic, assign) BOOL isNotificationWalletON;
 @property (nonatomic, assign) BOOL isNotificationNewsON;
 @property (nonatomic, assign) BOOL isNotificationTransactionON;

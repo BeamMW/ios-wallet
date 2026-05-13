@@ -1544,6 +1544,12 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
         currency.realValue = double(int64_t(rate.m_rate)) / Rules::Coin;
     
         if (rate.m_to == Currency::USD() && rate.m_from == Currency::BEAM()) {
+            // OraclePriceManager owns BEAM/USD when the on-chain feed is on.
+            // Drop the remote tick so the oracle's value isn't clobbered between
+            // its 60s refreshes.
+            if ([Settings sharedManager].isOracleEnabled) {
+                continue;
+            }
             currency.type = BMCurrencyUSD;
             currency.maximumFractionDigits = 2;
             currency.code = @"USD";

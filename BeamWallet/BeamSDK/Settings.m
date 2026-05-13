@@ -41,6 +41,7 @@ static NSString *notificationsTransactionKey = @"notificationsTransactionKey";
 static NSString *notificationsAddressKey = @"notificationsAddressKey";
 static NSString *nodeProtocolKey = @"nodeProtocolKey";
 static NSString *randomDBIdKey = @"randomDBIdKey";
+static NSString *oracleEnabledKey = @"oracleEnabledKey";
 
 
 
@@ -238,7 +239,14 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
     else{
         _isNodeProtocolEnabled = NO;
     }
-    
+
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:oracleEnabledKey]) {
+        _isOracleEnabled = [[[NSUserDefaults standardUserDefaults] objectForKey:oracleEnabledKey] boolValue];
+    }
+    else {
+        _isOracleEnabled = NO;
+    }
+
     return self;
 }
 
@@ -476,6 +484,20 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:NO];
             }
+        }
+    }
+}
+
+-(void)setIsOracleEnabled:(BOOL)isOracleEnabled {
+    _isOracleEnabled = isOracleEnabled;
+
+    [[NSUserDefaults standardUserDefaults] setBool:_isOracleEnabled forKey:oracleEnabledKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
+            [delegate onExchangeRatesChange];
         }
     }
 }
