@@ -100,140 +100,70 @@ extension UIViewController {
     }
     
     func alert(title: String = "", message: String, button: String, handler: ((UIAlertAction) -> Void)? = nil) {
-        if (self.presentedViewController as? UIAlertController) != nil {
-            return
-        }
-        
-        self.addBlur()
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if Settings.sharedManager().isDarkMode {
-            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
-            alertController.setValue(NSAttributedString(string: title, attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedTitle")
-            alertController.setValue(NSAttributedString(string: message, attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedMessage")
-        }
-        let OKAction = UIAlertAction(title: button, style: .default) { action in
-            if handler != nil {
-                handler!(action)
-            }
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
-        }
-        alertController.addAction(OKAction)
-        self.present(alertController, animated: true, completion: nil)
+        BMAlertViewController.present(
+            from: self,
+            title: title,
+            message: message,
+            actions: [makeAlertAction(title: button, isConfirm: true, handler: handler)]
+        )
     }
-    
+
     func alert(title: String = "", message: String, handler: ((UIAlertAction) -> Void)? = nil) {
-        if (self.presentedViewController as? UIAlertController) != nil {
-            return
-        }
-        
-        self.addBlur()
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if Settings.sharedManager().isDarkMode {
-            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
-            alertController.setValue(NSAttributedString(string: title, attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedTitle")
-            alertController.setValue(NSAttributedString(string: message, attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedMessage")
-        }
-        let OKAction = UIAlertAction(title: "OK", style: .default) { action in
-            if handler != nil {
-                handler!(action)
-            }
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
-        }
-        alertController.addAction(OKAction)
-        self.present(alertController, animated: true, completion: nil)
+        alert(title: title, message: message, button: "OK", handler: handler)
     }
-    
+
+    // `cancelTitle` is a meaningful choice (e.g. "Don't save"), not a dismiss — it stays `.default`
+    // styled. The third action is the actual dismiss/cancel.
     func confirmAndSkipAlert(title: String, message: String, cancelTitle: String, confirmTitle: String, cancelHandler: @escaping ((UIAlertAction) -> Void), confirmHandler: @escaping ((UIAlertAction) -> Void)) {
-        if (self.presentedViewController as? UIAlertController) != nil {
-            return
-        }
-        
-        self.addBlur()
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if Settings.sharedManager().isDarkMode {
-            alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
-            alertController.setValue(NSAttributedString(string: title, attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedTitle")
-            alertController.setValue(NSAttributedString(string: message, attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]), forKey: "attributedMessage")
-        }
-        let confirmAction = UIAlertAction(title: confirmTitle, style: .default) { action in
-            confirmHandler(action)
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
-        }
-        alertController.addAction(confirmAction)
-        
-        let cancelAction = UIAlertAction(title: cancelTitle, style: .default) { action in
-            cancelHandler(action)
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
-        }
-        alertController.addAction(cancelAction)
-        
-        let skipAction = UIAlertAction(title: Localizable.shared.strings.cancel, style: .default) { _ in
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
-        }
-        alertController.addAction(skipAction)
-        
-        alertController.preferredAction = confirmAction
-        
-        self.present(alertController, animated: true, completion: nil)
+        BMAlertViewController.present(
+            from: self,
+            title: title,
+            message: message,
+            actions: [
+                makeAlertAction(title: confirmTitle, isConfirm: true, handler: confirmHandler),
+                makeAlertAction(title: cancelTitle, isConfirm: true, handler: cancelHandler),
+                BMAlertViewController.Action(title: Localizable.shared.strings.cancel, style: .cancel, handler: nil)
+            ]
+        )
     }
-    
+
     func confirmAlert(title: String, message: String, cancelTitle: String, confirmTitle: String, cancelHandler: @escaping ((UIAlertAction) -> Void), confirmHandler: @escaping ((UIAlertAction) -> Void)) {
-        if (self.presentedViewController as? UIAlertController) != nil {
-            return
+        BMAlertViewController.present(
+            from: self,
+            title: title,
+            message: message,
+            actions: [
+                makeAlertAction(title: confirmTitle, isConfirm: true, handler: confirmHandler),
+                makeAlertAction(title: cancelTitle, isConfirm: false, handler: cancelHandler)
+            ]
+        )
+    }
+
+    private func makeAlertAction(title: String, isConfirm: Bool, handler: ((UIAlertAction) -> Void)?) -> BMAlertViewController.Action {
+        let style: BMAlertViewController.ActionStyle
+        if !isConfirm {
+            style = .cancel
+        } else if BMAlertViewController.isDestructiveTitle(title) {
+            style = .destructive
+        } else {
+            style = .default
         }
-        
-        self.addBlur()
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: cancelTitle, style: .default) { action in
-            cancelHandler(action)
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
+        let bridged: (() -> Void)? = handler.map { cb in
+            { cb(UIAlertAction(title: title, style: .default, handler: nil)) }
         }
-        alertController.addAction(cancelAction)
-        
-        let confirmAction = UIAlertAction(title: confirmTitle, style: (confirmTitle == Localizable.shared.strings.delete ? .destructive : .default)) { action in
-            confirmHandler(action)
-            self.view.viewWithTag(BLUR_TAG)?.removeFromSuperview()
-        }
-        alertController.addAction(confirmAction)
-        alertController.preferredAction = confirmAction
-        
-        self.present(alertController, animated: true, completion: nil)
-        
-        if #unavailable(iOS 13) {
-            if Settings.sharedManager().isDarkMode {
-                alertController.setBackgroundColor(color: UIColor.main.twilightBlue2)
-                alertController.setValue(NSAttributedString(string: title, attributes: [
-                    NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
-                    NSAttributedString.Key.foregroundColor: UIColor.white
-                ]), forKey: "attributedTitle")
-                alertController.setValue(NSAttributedString(string: message, attributes: [
-                    NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
-                    NSAttributedString.Key.foregroundColor: UIColor.white
-                ]), forKey: "attributedMessage")
-            }
-        }
+        return BMAlertViewController.Action(title: title, style: style, handler: bridged)
+    }
+}
+
+extension BMAlertViewController {
+    static func isDestructiveTitle(_ title: String) -> Bool {
+        let destructive: [String] = [
+            Localizable.shared.strings.delete,
+            Localizable.shared.strings.remove_wallet,
+            Localizable.shared.strings.dapps_uninstall,
+            Localizable.shared.strings.asset_swap_cancel_order
+        ]
+        return destructive.contains { $0.caseInsensitiveCompare(title) == .orderedSame }
     }
 }
 

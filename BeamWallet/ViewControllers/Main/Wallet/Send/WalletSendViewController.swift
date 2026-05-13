@@ -148,22 +148,20 @@ class LegacyWalletSendViewController: BaseViewController {
         if !Settings.sharedManager().isHideAmounts {
             
             if Settings.sharedManager().isAskForHideAmounts {
-                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until the eye icon is tapped again", preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (_)in
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (_)in
-                    
-                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-                    Settings.sharedManager().isAskForHideAmounts = false
-
-                    self.balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
-                    
-                    self.rightButton()
-                }))
-                
-                self.present(alert, animated: true)
+                confirmAlert(
+                    title: "Activate security mode",
+                    message: "All the balances will be hidden until the eye icon is tapped again",
+                    cancelTitle: "Cancel",
+                    confirmTitle: "Activate",
+                    cancelHandler: { _ in },
+                    confirmHandler: { [weak self] _ in
+                        guard let self = self else { return }
+                        Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+                        Settings.sharedManager().isAskForHideAmounts = false
+                        self.balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
+                        self.rightButton()
+                    }
+                )
             }
             else{
                 Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts

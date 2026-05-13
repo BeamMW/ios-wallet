@@ -646,13 +646,17 @@ class AssetSwapDetailsViewController: BaseViewController {
     }
 
     @objc private func onCancel() {
-        let confirm = UIAlertController(title: Localizable.shared.strings.asset_swap_confirm_cancel, message: nil, preferredStyle: .alert)
-        confirm.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: .cancel))
-        confirm.addAction(UIAlertAction(title: Localizable.shared.strings.asset_swap_cancel_order, style: .destructive) { [weak self] _ in
-            self?.viewModel.cancel()
-            self?.navigationController?.popViewController(animated: true)
-        })
-        present(confirm, animated: true)
+        confirmAlert(
+            title: Localizable.shared.strings.asset_swap_confirm_cancel,
+            message: "",
+            cancelTitle: Localizable.shared.strings.cancel,
+            confirmTitle: Localizable.shared.strings.asset_swap_cancel_order,
+            cancelHandler: { _ in },
+            confirmHandler: { [weak self] _ in
+                self?.viewModel.cancel()
+                self?.navigationController?.popViewController(animated: true)
+            }
+        )
     }
 
     @objc private func onAccept() {

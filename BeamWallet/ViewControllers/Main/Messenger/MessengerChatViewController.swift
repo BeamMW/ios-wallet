@@ -207,13 +207,17 @@ class MessengerChatViewController: BaseViewController {
     }
 
     @objc private func onDeleteChat() {
-        let alert = UIAlertController(title: Localizable.shared.strings.messenger_delete_chat, message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Localizable.shared.strings.cancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: Localizable.shared.strings.delete, style: .destructive) { [weak self] _ in
-            self?.viewModel.remove()
-            self?.navigationController?.popViewController(animated: true)
-        })
-        present(alert, animated: true)
+        confirmAlert(
+            title: Localizable.shared.strings.messenger_delete_chat,
+            message: "",
+            cancelTitle: Localizable.shared.strings.cancel,
+            confirmTitle: Localizable.shared.strings.delete,
+            cancelHandler: { _ in },
+            confirmHandler: { [weak self] _ in
+                self?.viewModel.remove()
+                self?.navigationController?.popViewController(animated: true)
+            }
+        )
     }
 
     @objc private func onKeyboard(_ note: Notification) {
