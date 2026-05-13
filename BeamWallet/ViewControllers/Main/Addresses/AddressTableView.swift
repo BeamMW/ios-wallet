@@ -147,10 +147,15 @@ class AddressTableView: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         if viewModel.count > 0 {
             let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-            
+
+            if viewModel.isPublicOfflineEntry(address) {
+                pushViewController(vc: OfflineAddressViewController())
+                return
+            }
+
             let vc = AddressViewController(address: address)
             pushViewController(vc: vc)
         }
