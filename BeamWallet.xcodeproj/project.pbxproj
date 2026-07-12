@@ -3254,7 +3254,7 @@
 				344F317D8FBFA32FFDA811F2 /* libipfs-bindings.a */,
 				7AC8EF915253F6CCEA3788BE /* libwallet_ipfs.a */,
 			);
-			path = "beam-ios-7.5.14464/lib";
+			path = "beam-ios-7.5.14510/lib";
 			sourceTree = "<group>";
 		};
 		92D3CBF02264B56D007E3C55 /* testnet */ = {
@@ -5517,14 +5517,14 @@
 					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
@@ -5536,14 +5536,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14464/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14464/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5599,14 +5599,14 @@
 					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
@@ -5618,14 +5618,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14464/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14464/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5683,14 +5683,14 @@
 					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5702,14 +5702,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14464/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14464/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5772,14 +5772,14 @@
 					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5791,14 +5791,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14464/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14464/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5856,14 +5856,14 @@
 					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5879,12 +5879,12 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14464/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14464/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5940,14 +5940,14 @@
 					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/core\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/utility\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/wallet\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14464/include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5963,12 +5963,12 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14464/lib",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 				);
 				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14464/lib/libsqlite.a",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
