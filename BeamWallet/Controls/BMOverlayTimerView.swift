@@ -2,7 +2,7 @@
 // BMOverlayTimerView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ class BMOverlayTimerView: UIView, BMCountdownViewDelegate {
     private var seconds = 0
     private var url:URL!
     
-    public static func show (text:String, link:URL) {
+    public static func show(text:String, link:URL) {
         let view = BMOverlayTimerView(text: text, link: link)
         view.display()
      }

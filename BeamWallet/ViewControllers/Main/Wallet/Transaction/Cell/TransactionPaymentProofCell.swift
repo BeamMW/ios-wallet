@@ -2,7 +2,7 @@
 // GeneralInfoCell.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,10 +59,6 @@ class TransactionPaymentProofCell: BaseCell {
               
               titleLabel.textColor = UIColor.main.steel
           }
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
     }
     
     @IBAction func onDetails(sender :UIButton) {

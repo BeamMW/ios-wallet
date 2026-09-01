@@ -2,7 +2,7 @@
 // UTXOViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +41,25 @@ class UTXOViewModel: NSObject {
     public var onStatusChanged : (() -> Void)?
 
     public var utxos = [BMUTXO]()
-    
+
+    public func groupedByAsset() -> [AssetUTXOGroup] {
+        var pool = [BMUTXO]()
+        if let utxos = AppModel.sharedManager().utxos {
+            pool.append(contentsOf: utxos as! [BMUTXO])
+        }
+        if let utxos = AppModel.sharedManager().shildedUtxos {
+            pool.append(contentsOf: utxos as! [BMUTXO])
+        }
+        let available = pool.filter { $0.status == BMUTXOAvailable }
+        let byAsset = Dictionary(grouping: available, by: { $0.assetId })
+
+        return byAsset.compactMap { (assetId, utxos) -> AssetUTXOGroup? in
+            guard let asset = AssetsManager.shared().getAsset(Int32(assetId)) else { return nil }
+            return AssetUTXOGroup.make(asset: asset, utxos: utxos)
+        }
+        .sorted { $0.asset.assetId < $1.asset.assetId }
+    }
+
     override init() {
         super.init()
         
@@ -54,8 +72,7 @@ class UTXOViewModel: NSObject {
     
     private func filterUTXOS() {
         
-        DispatchQueue.main.async {
-            [weak self] in
+        DispatchQueue.main.async { [weak self] in
             
             guard let strongSelf = self else { return }
             

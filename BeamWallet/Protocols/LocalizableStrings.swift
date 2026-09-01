@@ -2,7 +2,7 @@
 // Localizable.shared.strings.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,6 +63,46 @@ class LocalizableStrings : NSObject {
     var incorrect_password = "incorrect_password".localized
     var create_new_wallet = "create_new_wallet".localized
     var wallet = "wallet".localized
+    var messenger = "messenger".localized
+    var messenger_new_chat = "messenger_new_chat".localized
+    var messenger_no_chats = "messenger_no_chats".localized
+    var messenger_send_placeholder = "messenger_send_placeholder".localized
+    var messenger_delete_chat = "messenger_delete_chat".localized
+    var messenger_my_address = "messenger_my_address".localized
+    var messenger_peer_address = "messenger_peer_address".localized
+    var messenger_contact_name = "messenger_contact_name".localized
+    var messenger_start = "messenger_start".localized
+    var asset_swaps = "asset_swaps".localized
+    var asset_swap_new = "asset_swap_new".localized
+    var asset_swap_open_orders = "asset_swap_open_orders".localized
+    var asset_swap_my_orders = "asset_swap_my_orders".localized
+    var asset_swap_history = "asset_swap_history".localized
+    var asset_swap_send = "asset_swap_send".localized
+    var asset_swap_receive = "asset_swap_receive".localized
+    var asset_swap_send_amount = "asset_swap_send_amount".localized
+    var asset_swap_receive_amount = "asset_swap_receive_amount".localized
+    var asset_swap_expiration = "asset_swap_expiration".localized
+    var asset_swap_publish = "asset_swap_publish".localized
+    var asset_swap_accept = "asset_swap_accept".localized
+    var asset_swap_cancel_order = "asset_swap_cancel_order".localized
+    var asset_swap_no_orders = "asset_swap_no_orders".localized
+    var asset_swap_expired = "asset_swap_expired".localized
+    var asset_swap_completed = "asset_swap_completed".localized
+    var asset_swap_canceled = "asset_swap_canceled".localized
+    var asset_swap_details = "asset_swap_details".localized
+    var asset_swap_rate = "asset_swap_rate".localized
+    var asset_swap_status = "asset_swap_status".localized
+    var asset_swap_pick_send_asset = "asset_swap_pick_send_asset".localized
+    var asset_swap_pick_receive_asset = "asset_swap_pick_receive_asset".localized
+    var asset_swap_insufficient_funds = "asset_swap_insufficient_funds".localized
+    var asset_swap_same_asset_error = "asset_swap_same_asset_error".localized
+    var asset_swap_confirm_cancel = "asset_swap_confirm_cancel".localized
+    var asset_swap_created = "asset_swap_created".localized
+    var asset_swap_expires_in = "asset_swap_expires_in".localized
+    var asset_swap_peer_id = "asset_swap_peer_id".localized
+    var asset_swap_order_id = "asset_swap_order_id".localized
+    var asset_swap_show_details = "asset_swap_show_details".localized
+    var asset_swap_hide_details = "asset_swap_hide_details".localized
     var transactions = "transactions".localized
     var export = "export".localized
     var activate = "activate".localized
@@ -89,6 +129,9 @@ class LocalizableStrings : NSObject {
     var error = "error".localized
     var wallet_not_created = "wallet_not_created".localized
     var wallet_not_opened = "wallet_not_opened".localized
+    var wallet_recovery_title = "wallet_recovery_title".localized
+    var wallet_recovery_message = "wallet_recovery_message".localized
+    var reset_and_retry = "reset_and_retry".localized
     var external_link_title = "external_link_title".localized
     var external_link_text = "external_link_text".localized
     var open = "open".localized
@@ -262,6 +305,9 @@ class LocalizableStrings : NSObject {
     var auth_face_confirm = "auth_face_confirm".localized
     var auth_touch_confirm = "auth_touch_confirm".localized
     var auth_bio_failed = "auth_bio_failed".localized
+    var auth_bio_locked = "auth_bio_locked".localized
+    var auth_bio_not_enrolled = "auth_bio_not_enrolled".localized
+    var auth_bio_unavailable = "auth_bio_unavailable".localized
     var my_active_addresses = "my_active_addresses".localized
     var contacts_empty = "contacts_empty".localized
     var addresses_empty = "addresses_empty".localized
@@ -294,6 +340,14 @@ class LocalizableStrings : NSObject {
     var manual_restore_warning = "manual_restore_warning".localized
     var search_transactions = "search_transactions".localized
     var random_node = "random_node".localized
+    var node_peers = "node_peers".localized
+    var node_type = "node_type".localized
+    var node_peer_active = "node_peer_active".localized
+    var node_peer_pool = "node_peer_pool".localized
+    var node_peer_connected = "node_peer_connected".localized
+    var node_peer_connecting = "node_peer_connecting".localized
+    var node_peer_disconnected = "node_peer_disconnected".localized
+    var node_peer_last_seen = "node_peer_last_seen".localized
 
     var restore_create_title = "restore_create_title".localized
     var restore_create_text = "restore_create_text".localized
@@ -388,6 +442,7 @@ class LocalizableStrings : NSObject {
     var faucet_redirect_text = "faucet_redirect_text".localized
     var clear_wallet_transactions_text = "clear_wallet_transactions_text".localized
     var show_amounts_in = "show_amounts_in".localized
+    var use_on_chain_price_oracle = "use_on_chain_price_oracle".localized
     var second_currency = "second_currency".localized
     var notifications = "notifications".localized
     var news = "news".localized
@@ -423,6 +478,7 @@ class LocalizableStrings : NSObject {
     var regular = "regular".localized
     var identity = "identity".localized
     var sbbs_address_new = "sbbs_address_new".localized
+    var sbbs_address_hint = "sbbs_address_hint".localized
     var for_pool = "for_pool".localized
     var withdraw = "withdraw".localized
     var withdraw_cofirm = "withdraw_cofirm".localized
@@ -432,17 +488,19 @@ class LocalizableStrings : NSObject {
     var shielded_pool = "shielded_pool".localized
     var min_fee_error_offline = "min_fee_error_offline".localized
     var maturity = "maturity".localized
-    var show_public_offline = "show_public_offline".localized
+    var sign_message = "sign_message".localized
+    var verify_message = "verify_message".localized
     var offline_address = "offline_address".localized
     var public_offline_address_info = "public_offline_address_info".localized
     var public_offline = "public_offline".localized
+    var public_offline_address = "public_offline_address".localized
     var max_privacy = "max_privacy".localized
+    var max_privacy_address = "max_privacy_address".localized
     var tr_sent_public_offline = "tr_sent_public_offline".localized
     var tr_sent_offline = "tr_sent_offline".localized
     var tr_received_public_offline = "tr_received_public_offline".localized
     var tr_received_offline = "tr_received_offline".localized
     var address_details = "address_details".localized
-    var connect_node_offline_public = "connect_node_offline_public".localized
     var send_address_placholder = "send_address_placholder".localized
     var local_comment = "local_comment".localized
     var choose_currency = "choose_currency".localized
@@ -480,6 +538,10 @@ class LocalizableStrings : NSObject {
 
     var connect_to_mobilenode = "connect_to_mobilenode".localized
     var syncing_with_blockchain = "syncing_with_blockchain".localized
+    var sync_phase_connecting = "sync_phase_connecting".localized
+    var sync_phase_reconnecting = "sync_phase_reconnecting".localized
+    var sync_phase_almost_done = "sync_phase_almost_done".localized
+    var sync_phase_finalizing = "sync_phase_finalizing".localized
     var please_no_lock = "please_no_lock".localized
     var wallet_connected_to_mobile_node = "wallet_connected_to_mobile_node".localized
     var disconnect = "disconnect".localized
@@ -488,8 +550,9 @@ class LocalizableStrings : NSObject {
     var senf_offline_notice = "senf_offline_notice".localized
     var regular_online_only = "regular_online_only".localized
     var regular_offline_only = "regular_offline_only".localized
-    var sender_choice = "sender_choice".localized
     var assets = "assets".localized
+    var select_asset = "select_asset".localized
+    var search_assets = "search_assets".localized
     
     var usage_recent_old = "usage_recent_old".localized
     var usage_old_recent = "usage_old_recent".localized
@@ -532,6 +595,9 @@ class LocalizableStrings : NSObject {
     var online_address = "online_address".localized
     var offline_left_address = "offline_left_address".localized
     var offline_left_address_warning = "offline_left_address_warning".localized
+    var vouchers_count = "vouchers_count".localized
+    var vouchers_count_hint = "vouchers_count_hint".localized
+    var vouchers_count_error = "vouchers_count_error".localized
     var send_offline_hint = "send_offline_hint".localized
     var send_max_privacy_title = "send_max_privacy_title".localized
     var send_notice_max_privacy = "send_notice_max_privacy".localized
@@ -541,14 +607,69 @@ class LocalizableStrings : NSObject {
     var max_funds_error = "max_funds_error".localized
     var max_funds_hint = "max_funds_hint".localized
     var dAppStore = "dAppStore".localized
+
+    // DApp Store / My DApps
+    var myDApps = "myDApps".localized
+    var dapps_empty_title = "dapps_empty_title".localized
+    var dapps_empty_subtitle = "dapps_empty_subtitle".localized
+    var dapps_empty_button = "dapps_empty_button".localized
+    var dapps_get_more = "dapps_get_more".localized
+    var dapps_uninstall = "dapps_uninstall".localized
+    var dapps_remove_confirm = "dapps_remove_confirm".localized
+    var dapps_install_from_file = "dapps_install_from_file".localized
+    var dapps_sideload_desc = "dapps_sideload_desc".localized
+    var dapps_sideload_invalid = "dapps_sideload_invalid".localized
+    var dapps_install_label = "dapps_install_label".localized
+    var dapps_installed_label = "dapps_installed_label".localized
+    var dapps_update = "dapps_update".localized
+    var dapps_installed_toast = "dapps_installed_toast".localized
+    var dapps_updated_toast = "dapps_updated_toast".localized
+    var dapps_install_complete = "dapps_install_complete".localized
+    var dapps_install_failed_msg = "dapps_install_failed_msg".localized
+    var dapps_no_download_source = "dapps_no_download_source".localized
+    var dapps_source_bundled = "dapps_source_bundled".localized
+    var dapps_source_ipfs = "dapps_source_ipfs".localized
+    var dapps_store_title = "dapps_store_title".localized
+    var dapps_store_subtitle = "dapps_store_subtitle".localized
+    var dapps_store_loading = "dapps_store_loading".localized
+    var dapps_store_no_dapps = "dapps_store_no_dapps".localized
+    var dapps_store_empty_hint = "dapps_store_empty_hint".localized
+    var dapps_publishers = "dapps_publishers".localized
+    var dapps_publishers_subtitle = "dapps_publishers_subtitle".localized
+    var dapps_no_publishers = "dapps_no_publishers".localized
+    var dapps_back_button = "dapps_back_button".localized
+    var dapps_sideloaded_name = "dapps_sideloaded_name".localized
+
     var fee = "fee".localized
+
+    var split = "split".localized
+    var split_coins_subtitle = "split_coins_subtitle".localized
+    var split_coins_cta = "split_coins_cta".localized
+    var regular_balance = "regular_balance".localized
+    var current_coins = "current_coins".localized
+    var coin_count_format = "coin_count_format".localized
+    var largest_coin_format = "largest_coin_format".localized
+    var more_coins_format = "more_coins_format".localized
+    var split_into = "split_into".localized
+    var preview = "preview".localized
+    var nx_equal_format = "nx_equal_format".localized
+    var split_concentration_warning_format = "split_concentration_warning_format".localized
+    var split_too_small = "split_too_small".localized
+    var split_started_message = "split_started_message".localized
+
+    var consolidate = "consolidate".localized
+    var consolidate_coins_subtitle = "consolidate_coins_subtitle".localized
+    var consolidate_coins_cta = "consolidate_coins_cta".localized
+    var consolidate_started_message = "consolidate_started_message".localized
+    var consolidate_offline_toggle = "consolidate_offline_toggle".localized
+    var consolidate_offline_hint = "consolidate_offline_hint".localized
+
     var confirm_accept = "confirm_accept".localized
     var will_take_funds = "will_take_funds".localized
     var will_send_funds = "will_send_funds".localized
     
     var dapp_anme = "dapp_anme".localized
     var app_shader_id = "app_shader_id".localized
-    var beamx_dao = "beamx_dao".localized
     var beam_faucet = "beam_faucet".localized
     var beam_gallery = "beam_gallery".localized
 
@@ -622,7 +743,6 @@ class LocalizableStrings : NSObject {
     var search_settings = "search_settings".localized
     var no_search_settings = "no_search_settings".localized
     var online_own_not_conifg = "online_own_not_conifg".localized
-    var beamx_dao_dao_voting = "beamx_dao_dao_voting".localized
 
     
     public func new_version_available_title(version: String) -> String {

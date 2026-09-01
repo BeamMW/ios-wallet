@@ -2,7 +2,7 @@
 // SelectNodeViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,51 +32,31 @@ class SelectNodeViewController: BaseTableViewController {
     private var items = [SelectNode]()
     private var inputField = BMField()
     private var oldSelected = 0
+    private let actionButton = BMButton.defaultButton(
+        frame: CGRect(x: 0, y: 0, width: 220, height: 44),
+        color: UIColor.main.brightTeal)
 
     public var isNeedDisconnect = true
     public var isCreateWallet = false
     public var password:String?
     public var phrase:String?
-    
+
     override var tableStyle: UITableView.Style {
         get { return .grouped }
         set { super.tableStyle = newValue }
     }
-    
-    private func footerView() -> UIView  {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 155))
-        
-        if !isCreateWallet && self.items[2].selected {
-            let nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 10, width: 220, height: 44), color: UIColor.main.brightTeal)
-            nextButton.setImage(IconNextBlue(), for: .normal)
-            nextButton.setTitle(Localizable.shared.strings.proceed.lowercased(), for: .normal)
-            nextButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-            nextButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-            nextButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-            view.addSubview(nextButton)
-        }
-        else if isCreateWallet {
-            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 25, width: 220, height: 44), color: UIColor.main.brightTeal)
-            connectButton.setImage(IconNextBlue(), for: .normal)
-            connectButton.setTitle(Localizable.shared.strings.start_using_wallet.lowercased(), for: .normal)
-            connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-            connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-            connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-            view.addSubview(connectButton)
-        }
-//        else if !isNeedDisconnect {
-//            let connectButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width-220)/2, y: 80, width: 220, height: 44), color: UIColor.main.brightTeal)
-//            connectButton.setImage(IconDoneBlue(), for: .normal)
-//            connectButton.setTitle(Localizable.shared.strings.connect.lowercased(), for: .normal)
-//            connectButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
-//            connectButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
-//            connectButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
-//            view.addSubview(connectButton)
-//        }
-        
-        return view
+
+    private func refreshActionButton() {
+        let show = isCreateWallet || items[2].selected
+        bottomAccessoryView?.isHidden = !show
+        let title = isCreateWallet
+            ? Localizable.shared.strings.start_using_wallet.lowercased()
+            : Localizable.shared.strings.proceed.lowercased()
+        actionButton.setTitle(title, for: .normal)
+        view.setNeedsLayout()
     }
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,9 +98,18 @@ class SelectNodeViewController: BaseTableViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
-        tableView.tableFooterView = footerView()
         tableView.backgroundColor = UIColor.main.marine
         tableView.keyboardDismissMode = .interactive
+
+        actionButton.setImage(IconNextBlue(), for: .normal)
+        actionButton.setTitleColor(UIColor.main.marineOriginal, for: .normal)
+        actionButton.setTitleColor(UIColor.main.marineOriginal.withAlphaComponent(0.5), for: .highlighted)
+        actionButton.addTarget(self, action: #selector(onNext), for: .touchUpInside)
+        let accessory = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
+        actionButton.frame = CGRect(x: (accessory.bounds.width - 220) / 2, y: 13, width: 220, height: 44)
+        accessory.addSubview(actionButton)
+        bottomAccessoryView = accessory
+        refreshActionButton()
                       
         inputField.setNormalColor(color: .white)
         inputField.keyboardType = .numbersAndPunctuation
@@ -144,7 +133,7 @@ class SelectNodeViewController: BaseTableViewController {
     
     @objc private func onDisconnect() {
         isNeedDisconnect = false
-        tableView.tableFooterView = footerView()
+        refreshActionButton()
         tableView.reloadData()
     }
     
@@ -160,8 +149,8 @@ class SelectNodeViewController: BaseTableViewController {
                                                       leftViewController: menuViewController,
                                                       rightViewController: nil)
         
-        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
+        sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+        sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
         sideMenuController.rootViewLayerShadowRadius = 0
         sideMenuController.rootViewLayerShadowColor = UIColor.clear
         sideMenuController.leftViewLayerShadowRadius = 0
@@ -178,38 +167,47 @@ class SelectNodeViewController: BaseTableViewController {
     
     @objc private func onNext() {
         isNeedDisconnect = true
-        tableView.tableFooterView = footerView()
+        refreshActionButton()
         tableView.reloadData()
-        
+
         if items[0].selected {
             if isCreateWallet {
                 Settings.sharedManager().removeCustomNode()
             }
-     
+
             if Settings.sharedManager().isNodeProtocolEnabled {
                 Settings.sharedManager().isNodeProtocolEnabled = false
                 AppModel.sharedManager().enableBodyRequests(false)
             }
             Settings.sharedManager().connectToRandomNode = true
-            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
             AppModel.sharedManager().changeNodeAddress()
-            
+
             if isCreateWallet {
-                openMain()
+                // OpenWalletProgressViewController owns creation when phrase
+                // is non-nil (see startCreateWallet). Calling createWallet here
+                // too would run it twice and any future failure path would
+                // land in abortCreateAndReset(), wiping the DB we just made.
+                let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
+                self.pushViewController(vc: vc)
             }
         }
         else if items[1].selected {
             if isCreateWallet {
                 Settings.sharedManager().removeCustomNode()
             }
-            
+
             Settings.sharedManager().connectToRandomNode = true
             Settings.sharedManager().isNodeProtocolEnabled = true
-            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+            Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
             AppModel.sharedManager().changeNodeAddress()
             AppModel.sharedManager().enableBodyRequests(true)
-            
+
             if isCreateWallet {
+                // OpenWalletProgressViewController owns creation when phrase
+                // is non-nil (see startCreateWallet). Calling createWallet here
+                // too would run it twice and any future failure path would
+                // land in abortCreateAndReset(), wiping the DB we just made.
                 let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
                 self.pushViewController(vc: vc)
             }
@@ -227,7 +225,7 @@ class SelectNodeViewController: BaseTableViewController {
             if let fullAddress = inputField.text {
                 if fullAddress.isEmpty {
                     isNeedDisconnect = false
-                    tableView.tableFooterView = footerView()
+                    refreshActionButton()
                     tableView.reloadData()
                     
                     alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.enter_node_address, handler: nil)
@@ -242,7 +240,11 @@ class SelectNodeViewController: BaseTableViewController {
                         Settings.sharedManager().connectToRandomNode = false
                         Settings.sharedManager().nodeAddress = fullAddress
                         AppModel.sharedManager().changeNodeAddress()
-                        
+
+                        // OpenWalletProgressViewController owns creation when phrase
+                        // is non-nil (see startCreateWallet). Calling createWallet here
+                        // too would run it twice and any future failure path would
+                        // land in abortCreateAndReset(), wiping the DB we just made.
                         let vc = OpenWalletProgressViewController(password: self.password ?? "", phrase: self.phrase)
                         self.pushViewController(vc: vc)
                     }
@@ -286,7 +288,7 @@ class SelectNodeViewController: BaseTableViewController {
                 }
                 else {
                     isNeedDisconnect = false
-                    tableView.tableFooterView = footerView()
+                    refreshActionButton()
                     tableView.reloadData()
                     
                     alert(title: Localizable.shared.strings.invalid_address_title, message: Localizable.shared.strings.invalid_address_text, handler: nil)
@@ -322,7 +324,7 @@ extension SelectNodeViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         if isCreateWallet {
             self.onNextSelected(indexPath: indexPath)
         }
@@ -397,13 +399,13 @@ extension SelectNodeViewController : UITableViewDelegate {
     }
     
     private func onNextSelected(indexPath: IndexPath) {
-        for (index, _) in items.enumerated() {
+        for index in items.indices {
             items[index].selected = false
         }
-        
+
         items[indexPath.section].selected = true
-        
-        tableView.tableFooterView = footerView()
+
+        refreshActionButton()
         tableView.reloadData()
     }
 }
@@ -429,16 +431,16 @@ extension SelectNodeViewController : UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return items.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 2 {
             return items[section].selected ? 2 : 1
         }
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         if indexPath.row == 1 {
             var cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
             if cell == nil {

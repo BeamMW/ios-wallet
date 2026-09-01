@@ -2,7 +2,7 @@
 // LegacyWalletSendViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,11 +66,11 @@ class LegacyWalletSendViewController: BaseViewController {
                         
         if (Device.screenType == .iPhone_XR || Device.screenType == .iPhones_X_XS)
         {
-            mainStack.spacing = 45;
+            mainStack.spacing = 45
         }
         else if (Device.screenType == .iPhones_Plus || Device.screenType == .iPhone_XSMax)
         {
-            mainStack.spacing = 55;
+            mainStack.spacing = 55
         }
         
         mainViewWidth.constant = UIScreen.main.bounds.width
@@ -125,10 +125,6 @@ class LegacyWalletSendViewController: BaseViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification , object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
     private func updateLayout() {
         mainViewHeight.constant = mainStack.frame.height + mainStack.frame.origin.y + 20
         
@@ -146,28 +142,26 @@ class LegacyWalletSendViewController: BaseViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(onHideAmounts))
     }
     
-//MARK: - IBAction
+// MARK: - IBAction
     
     @objc private func onHideAmounts() {
         if !Settings.sharedManager().isHideAmounts {
             
             if Settings.sharedManager().isAskForHideAmounts {
-                let alert = UIAlertController(title: "Activate security mode", message: "All the balances will be hidden until the eye icon is tapped again", preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:{ (UIAlertAction)in
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Activate", style: .default, handler:{ (UIAlertAction)in
-                    
-                    Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
-                    Settings.sharedManager().isAskForHideAmounts = false
-
-                    self.balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
-                    
-                    self.rightButton()
-                }))
-                
-                self.present(alert, animated: true)
+                confirmAlert(
+                    title: "Activate security mode",
+                    message: "All the balances will be hidden until the eye icon is tapped again",
+                    cancelTitle: "Cancel",
+                    confirmTitle: "Activate",
+                    cancelHandler: { _ in },
+                    confirmHandler: { [weak self] _ in
+                        guard let self = self else { return }
+                        Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
+                        Settings.sharedManager().isAskForHideAmounts = false
+                        self.balanceTotalView.isHidden = Settings.sharedManager().isHideAmounts
+                        self.rightButton()
+                    }
+                )
             }
             else{
                 Settings.sharedManager().isHideAmounts = !Settings.sharedManager().isHideAmounts
@@ -374,8 +368,7 @@ extension LegacyWalletSendViewController : UITextFieldDelegate {
                 if AppModel.sharedManager().isValidAddress(text)
                 {
                     let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44), copy:text)
-                    inputBar.completion = {
-                        (obj : String?) -> Void in
+                    inputBar.completion = { (obj : String?) in
                         if let text = obj {
                             self.toAddressField.text = text
                             self.amountField.becomeFirstResponder()
@@ -439,7 +432,7 @@ extension LegacyWalletSendViewController {
     }
 }
 
-//MARK: - WalletQRCodeScannerViewControllerDelegate
+// MARK: - WalletQRCodeScannerViewControllerDelegate
 
 extension LegacyWalletSendViewController : WalletQRCodeScannerViewControllerDelegate
 {

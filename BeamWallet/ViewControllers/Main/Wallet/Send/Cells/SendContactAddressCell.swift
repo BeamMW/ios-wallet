@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 13.04.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class SendContactAddressCell: BaseCell {
     @IBOutlet private weak var addressLabel: UILabel!
     @IBOutlet private weak var typeLabel: UILabel!
 
-    private var contact: BMContact? = nil
+    private var contact: BMContact?
     
     weak var delegate: BMCellProtocol?
 
@@ -25,8 +25,8 @@ class SendContactAddressCell: BaseCell {
         nameLabel.letterSpacing = 1.5
 
         if Settings.sharedManager().isDarkMode {
-            addressLabel.textColor = UIColor.main.steel;
-            typeLabel.textColor = UIColor.main.steel;
+            addressLabel.textColor = UIColor.main.steel
+            typeLabel.textColor = UIColor.main.steel
         }
         
         contentView.backgroundColor = UIColor.main.marineThree

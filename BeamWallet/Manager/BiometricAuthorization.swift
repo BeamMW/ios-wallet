@@ -2,7 +2,7 @@
 // BiometricAuthorization.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,34 +20,39 @@
 import Foundation
 import LocalAuthentication
 
-public typealias AuthorizationSuccess = (() -> ())
+public typealias AuthorizationSuccess = (() -> Void)
 
-public typealias AuthorizationFailure = (() -> ())
+public typealias AuthorizationFailure = (() -> Void)
 
-public typealias AuthorizationRetry = (() -> ())
+public typealias AuthorizationRetry = (() -> Void)
+
+@objc public enum BiometricFailureReason: Int {
+    case canceled
+    case notEnrolled
+    case lockout
+    case notAvailable
+    case authenticationFailed
+    case other
+}
 
 class BiometricAuthorization: NSObject {
-    
+
     public static let shared = BiometricAuthorization()
     public var isAuthorizationProccess = false
+    public private(set) var lastFailureReason: BiometricFailureReason?
+    /// The LAContext that was just authenticated. Pass this to
+    /// `KeychainManager.getPassword(context:)` inside the success callback
+    /// to read the password without triggering a second biometric prompt.
+    /// Becomes nil on the next authentication attempt.
+    public private(set) var lastAuthenticatedContext: LAContext?
     private var mechanism = ""
-    
+
     public func canAuthenticate() -> Bool {
-        var isBiometricAuthenticationAvailable = false
-        var error: NSError? = nil
-        
-        if LAContext().canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            isBiometricAuthenticationAvailable = (error == nil)
-        }
-        
-        if error?.code == -8
-        {
-            return true
-        }
-        
-        return isBiometricAuthenticationAvailable
+        var error: NSError?
+        let canEvaluate = LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        return canEvaluate && error == nil
     }
-    
+
     public func faceIDAvailable() -> Bool {
         if #available(iOS 11.0, *) {
             let context = LAContext()
@@ -55,36 +60,47 @@ class BiometricAuthorization: NSObject {
         }
         return false
     }
-    
+
     public func touchIDAvailable() -> Bool {
-        
+
         let context = LAContext()
         var error: NSError?
-        
+
         let canEvaluate = context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &error)
         if #available(iOS 11.0, *) {
             return canEvaluate && context.biometryType == .touchID
         }
         return canEvaluate
     }
-    
+
+    public func failureMessage(for reason: BiometricFailureReason) -> String {
+        let strings = Localizable.shared.strings
+        switch reason {
+        case .lockout:
+            return strings.auth_bio_locked.replacingOccurrences(of: "(Mechanism)", with: mechanism)
+        case .notEnrolled:
+            return strings.auth_bio_not_enrolled.replacingOccurrences(of: "(Mechanism)", with: mechanism)
+        case .notAvailable:
+            return strings.auth_bio_unavailable.replacingOccurrences(of: "(Mechanism)", with: mechanism)
+        case .authenticationFailed, .other:
+            return strings.auth_bio_failed.replacingOccurrences(of: "(Mechanism)", with: mechanism)
+        case .canceled:
+            return ""
+        }
+    }
+
     public func authenticateWithBioMetrics(success successBlock: @escaping AuthorizationSuccess, failure failureBlock: @escaping AuthorizationFailure, retry retryBlock: @escaping AuthorizationRetry, reasonText:String? = nil) {
-        
+
         isAuthorizationProccess = true
-        
+        lastFailureReason = nil
+        lastAuthenticatedContext = nil
+
         if mechanism.isEmpty {
             mechanism = BiometricAuthorization.shared.faceIDAvailable() ? Localizable.shared.strings.face_id : Localizable.shared.strings.touch_id
         }
 
-        var reason = ""
-        
-        if let value = reasonText {
-            reason = value
-        }
-        else{
-            reason = faceIDAvailable() ? Localizable.shared.strings.auth_face_confirm : Localizable.shared.strings.auth_touch_confirm
-        }
-        
+        let reason = reasonText ?? (faceIDAvailable() ? Localizable.shared.strings.auth_face_confirm : Localizable.shared.strings.auth_touch_confirm)
+
         let context = LAContext()
         context.localizedFallbackTitle = ""
         context.touchIDAuthenticationAllowableReuseDuration = 0
@@ -92,37 +108,37 @@ class BiometricAuthorization: NSObject {
         context.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (success, error) in
             DispatchQueue.main.async {
                 if success {
+                    self.lastFailureReason = nil
+                    self.lastAuthenticatedContext = context
                     successBlock()
+                } else {
+                    self.lastFailureReason = Self.classify(error)
+                    self.lastAuthenticatedContext = nil
+                    failureBlock()
                 }
-                else {
-                    if error != nil && (error as NSError?)?.code == -8
-                    {
-                        let context : LAContext = LAContext();
-                        
-                        let reason:String = Localizable.shared.strings.auth_bio_failed.replacingOccurrences(of: "(Mechanism)", with: self.mechanism)
-                        
-                        context.evaluatePolicy(LAPolicy.deviceOwnerAuthentication,
-                                               localizedReason: reason,
-                                               reply: { (success, error) in
-                                                
-                                                DispatchQueue.main.async {
-                                                    if (success) {
-                                                        retryBlock()
-                                                    }
-                                                    else{
-                                                        failureBlock()
-                                                    }
-                                                    
-                                                }
-                        })
-                    }
-                    else{
-                        failureBlock()
-                    }
-                }
-                
                 self.isAuthorizationProccess = false
             }
+        }
+    }
+
+    private static func classify(_ error: Error?) -> BiometricFailureReason {
+        guard let nsError = error as NSError? else { return .other }
+        switch nsError.code {
+        case LAError.userCancel.rawValue,
+             LAError.systemCancel.rawValue,
+             LAError.appCancel.rawValue:
+            return .canceled
+        case LAError.biometryNotEnrolled.rawValue:
+            return .notEnrolled
+        case LAError.biometryLockout.rawValue:
+            return .lockout
+        case LAError.biometryNotAvailable.rawValue,
+             LAError.passcodeNotSet.rawValue:
+            return .notAvailable
+        case LAError.authenticationFailed.rawValue:
+            return .authenticationFailed
+        default:
+            return .other
         }
     }
 }

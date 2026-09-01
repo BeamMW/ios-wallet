@@ -2,7 +2,7 @@
 // NotificationsViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,9 +106,7 @@ class NotificationsViewController: BaseTableViewController {
             }
         }
         
-        viewModel.onDataDeleted = { [weak self]
-            indexPath, notification in
-            
+        viewModel.onDataDeleted = { [weak self] indexPath, notification in
             guard let strongSelf = self else { return }
             
             if strongSelf.viewModel.unreads.count == 0 && strongSelf.viewModel.reads.count == 0 {

@@ -2,7 +2,7 @@
 // QRScannerViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -142,7 +142,7 @@ class QRScannerViewController: BaseViewController {
 
 }
 
-//MARK: - AVCaptureMetadataOutputObjectsDelegate
+// MARK: - AVCaptureMetadataOutputObjectsDelegate
 
 extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
     
@@ -171,7 +171,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
         {
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
 
-            scannedValue = code;
+            scannedValue = code
             
             print(scannedValue)
             
@@ -283,7 +283,7 @@ extension QRScannerViewController : AVCaptureMetadataOutputObjectsDelegate {
 }
 
 
-//MARK: - Permissions
+// MARK: - Permissions
 
 extension QRScannerViewController {
     
@@ -315,13 +315,13 @@ extension QRScannerViewController {
     }
     
     private func camDenied() {
-        self.confirmAlert(title: String.empty(), message: Localizable.shared.strings.camera_denied_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open_settings, cancelHandler: { (_ ) in
-            
-        }) { (_ ) in
+        self.confirmAlert(title: String.empty(), message: Localizable.shared.strings.camera_denied_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open_settings, cancelHandler: { _ in
+
+        }, confirmHandler: { _ in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: { (_ ) in
                 self.back()
             })
-        }
+        })
     }
 }
 
@@ -340,7 +340,7 @@ extension QRScannerViewController: UIImagePickerControllerDelegate {
         
         picker.dismiss(animated: true) {
             guard let image = info[.originalImage] as? UIImage else {
-                return;
+                return
             }
             
             if let features = self.detectQRCode(image) {

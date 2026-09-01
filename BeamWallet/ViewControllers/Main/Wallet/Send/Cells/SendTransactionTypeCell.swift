@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 20.04.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ protocol SendTransactionTypeCellDelegate: AnyObject {
 
 class SendTransactionTypeCell: UITableViewCell {
     
-    public weak var delegate:SendTransactionTypeCellDelegate? = nil
+    public weak var delegate:SendTransactionTypeCellDelegate?
 
     @IBOutlet private var transactionTypeLabel: UILabel!
 
@@ -34,12 +34,6 @@ class SendTransactionTypeCell: UITableViewCell {
             transactionTypeSegment.titlesFont = SemiboldFont(size: 14)
             transactionTypeSegment.segmentedBackGroundColor = UIColor.white.withAlphaComponent(0.1)
         }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-//        transactionTypeSegment.selectedSegmentIndex = selectedIndex
     }
     
     override func awakeFromNib() {

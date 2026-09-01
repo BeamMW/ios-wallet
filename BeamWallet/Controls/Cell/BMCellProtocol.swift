@@ -2,7 +2,7 @@
 // BMCellProtocol.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ protocol GeneralInfoCellDelegate: AnyObject {
     @objc optional func onClickShare()
     @objc optional func onClickSave()
     @objc optional func onClickCopy()
+    @objc optional func onClickCopyAndClose()
 
     @objc optional func onRightButton(_ sender: UITableViewCell)
 

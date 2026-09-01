@@ -2,7 +2,7 @@
 // WalletModel.m
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,6 +29,11 @@
 #include "utility/helpers.h"
 #include "utility/common.h"
 #include "wallet/core/strings_resources.h"
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+#include "wallet/client/extensions/dex_board/dex_board.h"
+#include "wallet/client/extensions/dex_board/dex_order.h"
+#endif
+#import "BMDexOrder.h"
 
 #import "StringStd.h"
 
@@ -37,6 +42,16 @@ using namespace beam::io;
 using namespace beam::wallet;
 using namespace std;
 
+// Defined in AppModel.mm — the fully-configured Rules singleton.
+extern beam::Rules* g_pConfiguredRules;
+
+// Install s_pInstance on whichever thread calls this first.
+// s_pInstance is thread_local; each new thread starts with nullptr.
+static void ensureRulesOnCurrentThread() {
+    if (!beam::Rules::s_pInstance && g_pConfiguredRules) {
+        beam::Rules::s_pInstance = g_pConfiguredRules;
+    }
+}
 
 NSString *const AppErrorDomain = @"beam.mw";
 NSTimer *timer;
@@ -65,6 +80,7 @@ std::string txIDToString(const TxID& txId)
 
 void WalletModel::onStatus(const WalletStatus& status)
 {
+    ensureRulesOnCurrentThread();
     NSLog(@"onStatus");
         
     auto beamStatus = status.GetBeamStatus();
@@ -146,9 +162,9 @@ void WalletModel::onStatus(const WalletStatus& status)
     for (int i=0;i<[[AssetsManager sharedManager]assets].count; i++) {
         BMAsset *asset = [[[AssetsManager sharedManager]assets] objectAtIndex:i];
         if (asset.name == nil || asset.name.isEmpty) {
-            NSLog(@"GET ASSET %d",(uint)asset.assetId);
             if(asset.assetId == 0) {
                 asset.assetId = 0;
+                asset.name = @"BEAM";
                 asset.nthUnitName = @"BEAM";
                 asset.unitName = @"BEAM";
                 asset.color = @"#00F6D2";
@@ -159,7 +175,8 @@ void WalletModel::onStatus(const WalletStatus& status)
                 asset.paper = @"";
                 [[[AssetsManager sharedManager]assets] replaceObjectAtIndex:i withObject:asset];
             }
-            else {
+            else if (m_pendingAssetInfo.insert((beam::Asset::ID)asset.assetId).second) {
+                NSLog(@"GET ASSET %d",(uint)asset.assetId);
                 this->getAsync()->getAssetInfo((uint)asset.assetId);
             }
         }
@@ -411,7 +428,15 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
                 }
             }
         }
-        
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+        else if(item.m_txType == wallet::TxType::DexSimpleSwap) {
+            NSString *swapPrefix = NSLocalizedString(@"asset_swaps", nil);
+            transaction.status = [NSString stringWithFormat:@"%@ — %@",
+                                  swapPrefix,
+                                  [GetTransactionStatusString(item, transaction.isIncome) lowercaseString]];
+        }
+#endif
+
         auto rate = item.getExchangeRate(currenCurrency, transaction.assetId);
         transaction.realRate = int64_t(rate);
 
@@ -508,6 +533,7 @@ void WalletModel::onTxStatus(beam::wallet::ChangeAction action, const std::vecto
 
 void WalletModel::onSyncProgressUpdated(int done, int total)
 {
+    ensureRulesOnCurrentThread();
     NSLog(@"onSyncProgressUpdated %d/%d",done, total);
     
     [AppModel sharedManager].isUpdating = (done != total);
@@ -779,6 +805,7 @@ void WalletModel::onNewAddressFailed()
 
 void WalletModel::onNodeConnectionChanged(bool isNodeConnected)
 {
+    ensureRulesOnCurrentThread();
     NSLog(@"onNodeConnectionChanged %d",isNodeConnected);
 
     if (isNodeConnected) {
@@ -879,6 +906,7 @@ void WalletModel::onWalletError(beam::wallet::ErrorType error)
 
 void WalletModel::FailedToStartWallet()
 {
+    ensureRulesOnCurrentThread();
     if([AppModel sharedManager].isLoggedin) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[AppModel sharedManager] restartWallet];
@@ -974,9 +1002,326 @@ void WalletModel::doFunction(const std::function<void()>& func)
 
 void WalletModel::onPostFunctionToClientContext(MessageFunction&& func) {
     NSLog(@"onPostFunctionToClientContext");
-        
+
     doFunction(func);
 }
+
+#pragma mark - Messenger callbacks
+
+void WalletModel::onInstantMessage(beam::Timestamp time, const beam::wallet::WalletID& counterpart, const std::string& message, bool isIncome) {
+    NSString *peer = [NSString stringWithUTF8String:to_string(counterpart).c_str()];
+    NSString *text = [[NSString alloc] initWithBytes:message.data() length:message.size() encoding:NSUTF8StringEncoding];
+    if (text == nil) {
+        text = [[NSString alloc] initWithBytes:message.data() length:message.size() encoding:NSISOLatin1StringEncoding] ?: @"";
+    }
+    NSLog(@"[Messenger] onInstantMessage peer=%@ income=%d len=%lu", peer, isIncome ? 1 : 0, (unsigned long)text.length);
+
+    UInt64 timestamp = (UInt64)time;
+    BOOL isIncomeFlag = isIncome ? YES : NO;
+
+    // Mutate the messagesByPeer / chats caches and broadcast on main; UI reads
+    // these unguarded (NSMutableArray / NSMutableDictionary) so reactor-thread
+    // writes will eventually crash with `collection mutated while being
+    // enumerated`. Mirrors the dispatch-on-main pattern used by the DEX path.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
+        bmMessage.timestamp = timestamp;
+        bmMessage.peerWalletId = peer;
+        bmMessage.message = text;
+        bmMessage.isIncome = isIncomeFlag;
+        bmMessage.isRead = isIncomeFlag ? NO : YES;
+        bmMessage.myWalletId = @"";
+
+        NSMutableDictionary *byPeer = [AppModel sharedManager].messagesByPeer;
+        NSMutableArray<BMInstantMessage*> *list = byPeer[peer];
+        if (list == nil) {
+            list = [NSMutableArray new];
+            byPeer[peer] = list;
+        }
+        [list addObject:bmMessage];
+
+        NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
+        BMChat *existing = nil;
+        for (BMChat *c in chats) {
+            if ([c.peerWalletId isEqualToString:peer]) {
+                existing = c;
+                break;
+            }
+        }
+        if (existing == nil) {
+            existing = [[BMChat alloc] init];
+            existing.peerWalletId = peer;
+            BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
+            if (contact != nil) {
+                existing.contactName = contact.name;
+            }
+            [chats addObject:existing];
+        }
+        existing.lastMessagePreview = text;
+        existing.lastMessageTimestamp = timestamp;
+        if (isIncomeFlag) {
+            existing.hasUnread = YES;
+        }
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onInstantMessageReceived:)]) {
+                [delegate onInstantMessageReceived:bmMessage];
+            }
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
+        }
+    });
+}
+
+void WalletModel::onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) {
+    // Decode WalletIDs into ObjC strings up-front; the rest of the work
+    // (cache mutation + delegate broadcast) hops to main to avoid racing UI
+    // reads of `messagesByPeer` / `chats`.
+    NSMutableArray<NSDictionary*> *entries = [NSMutableArray arrayWithCapacity:chats.size()];
+    for (const auto& entry : chats) {
+        NSString *peer = [NSString stringWithUTF8String:to_string(entry.first).c_str()];
+        [entries addObject:@{ @"peer": peer, @"unread": @(entry.second) }];
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*> *byPeer = [AppModel sharedManager].messagesByPeer;
+
+        NSArray<BMChat*> *previousChats = [[AppModel sharedManager].chats copy];
+        NSMutableSet<NSString*> *peersFromDB = [NSMutableSet new];
+
+        NSMutableArray<BMChat*> *result = [NSMutableArray new];
+
+        for (NSDictionary *entry in entries) {
+            NSString *peer = entry[@"peer"];
+            BOOL unread = [entry[@"unread"] boolValue];
+            [peersFromDB addObject:peer];
+
+            BMChat *chat = [[BMChat alloc] init];
+            chat.peerWalletId = peer;
+            chat.hasUnread = unread ? YES : NO;
+
+            BMContact *contact = [[AppModel sharedManager] getContactFromId:peer];
+            if (contact != nil) {
+                chat.contactName = contact.name;
+            }
+            for (BMChat *prev in previousChats) {
+                if ([prev.peerWalletId isEqualToString:peer]) {
+                    if (prev.contactName.length > 0 && chat.contactName.length == 0) {
+                        chat.contactName = prev.contactName;
+                    }
+                    if (prev.myWalletId.length > 0) {
+                        chat.myWalletId = prev.myWalletId;
+                    }
+                    break;
+                }
+            }
+
+            NSArray<BMInstantMessage*> *cached = byPeer[peer];
+            BMInstantMessage *latest = cached.lastObject;
+            if (latest != nil) {
+                chat.lastMessagePreview = latest.message;
+                chat.lastMessageTimestamp = latest.timestamp;
+            }
+
+            [result addObject:chat];
+        }
+
+        for (BMChat *prev in previousChats) {
+            if (![peersFromDB containsObject:prev.peerWalletId]) {
+                [result addObject:prev];
+            }
+        }
+
+        [result sortUsingComparator:^NSComparisonResult(BMChat *a, BMChat *b) {
+            if (a.lastMessageTimestamp == b.lastMessageTimestamp) return NSOrderedSame;
+            return a.lastMessageTimestamp < b.lastMessageTimestamp ? NSOrderedDescending : NSOrderedAscending;
+        }];
+
+        [[AppModel sharedManager].chats removeAllObjects];
+        [[AppModel sharedManager].chats addObjectsFromArray:result];
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
+        }
+    });
+}
+
+void WalletModel::onGetChatMessages(const std::vector<beam::wallet::InstantMessage>& messages) {
+    if (messages.empty()) return;
+
+    NSString *peer = [NSString stringWithUTF8String:to_string(messages.front().m_counterpart).c_str()];
+
+    // Build the BMInstantMessage list off-main (no shared state touched), then
+    // assign the result and broadcast on main so UI readers of messagesByPeer
+    // never observe a half-mutated container.
+    NSMutableArray<BMInstantMessage*> *result = [NSMutableArray new];
+    for (const auto& im : messages) {
+        BMInstantMessage *bmMessage = [[BMInstantMessage alloc] init];
+        bmMessage.timestamp = (UInt64)im.m_timestamp;
+        bmMessage.peerWalletId = [NSString stringWithUTF8String:to_string(im.m_counterpart).c_str()];
+        bmMessage.myWalletId = [NSString stringWithUTF8String:to_string(im.m_mySbbs).c_str()];
+        NSString *body = [[NSString alloc] initWithBytes:im.m_message.data() length:im.m_message.size() encoding:NSUTF8StringEncoding];
+        if (body == nil) {
+            body = [[NSString alloc] initWithBytes:im.m_message.data() length:im.m_message.size() encoding:NSISOLatin1StringEncoding] ?: @"";
+        }
+        bmMessage.message = body;
+        bmMessage.isIncome = im.m_is_income ? YES : NO;
+        bmMessage.isRead = im.m_is_read ? YES : NO;
+        [result addObject:bmMessage];
+    }
+
+    [result sortUsingComparator:^NSComparisonResult(BMInstantMessage *a, BMInstantMessage *b) {
+        if (a.timestamp == b.timestamp) return NSOrderedSame;
+        return a.timestamp < b.timestamp ? NSOrderedAscending : NSOrderedDescending;
+    }];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [AppModel sharedManager].messagesByPeer[peer] = result;
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatMessagesLoaded:messages:)]) {
+                [delegate onChatMessagesLoaded:peer messages:result];
+            }
+        }
+    });
+}
+
+void WalletModel::onChatRemoved(const beam::wallet::WalletID& counterpart) {
+    NSString *peer = [NSString stringWithUTF8String:to_string(counterpart).c_str()];
+
+    // Mutate chats / messagesByPeer on main; UI iterates these unguarded.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<BMChat*> *chats = [AppModel sharedManager].chats;
+        NSMutableIndexSet *indexes = [NSMutableIndexSet new];
+        for (NSUInteger i = 0; i < chats.count; i++) {
+            if ([chats[i].peerWalletId isEqualToString:peer]) {
+                [indexes addIndex:i];
+            }
+        }
+        [chats removeObjectsAtIndexes:indexes];
+        [[AppModel sharedManager].messagesByPeer removeObjectForKey:peer];
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onChatRemoved:)]) {
+                [delegate onChatRemoved:peer];
+            }
+            if ([delegate respondsToSelector:@selector(onChatListChanged)]) {
+                [delegate onChatListChanged];
+            }
+        }
+    });
+}
+
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+static BMDexOrder *MakeBMDexOrder(const beam::wallet::DexOrder& order) {
+    BMDexOrder *bmo = [[BMDexOrder alloc] init];
+    bmo.orderID = [NSString stringWithUTF8String:order.getID().to_string().c_str()];
+    bmo.sbbsID = [NSString stringWithUTF8String:to_string(order.getSBBSID()).c_str()];
+    bmo.sendAssetId = (UInt32)order.getSendAssetId();
+    bmo.receiveAssetId = (UInt32)order.getReceiveAssetId();
+    bmo.sendAssetSName = [NSString stringWithUTF8String:order.getSendAssetSName().c_str()];
+    bmo.receiveAssetSName = [NSString stringWithUTF8String:order.getReceiveAssetSName().c_str()];
+    bmo.sendAmount = (UInt64)order.getSendAmount();
+    bmo.receiveAmount = (UInt64)order.getReceiveAmount();
+    bmo.createTimestamp = (UInt64)order.getCreation();
+    bmo.expireTimestamp = (UInt64)order.getExpiration();
+    bmo.isMine = order.isMine();
+    bmo.isAccepted = order.isAccepted();
+    bmo.isCanceled = order.isCanceled();
+    return bmo;
+}
+
+void WalletModel::onDexOrdersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::DexOrder>& orders) {
+    // Snapshot the C++ vector into BMDexOrder objects on the reactor thread
+    // (DexOrder is reactor-thread-only), then mutate the shared `dexOrders`
+    // cache and broadcast on main. UI reads `dexOrders` unguarded, so the
+    // cache mutation must not race with main-thread enumeration. Mirrors the
+    // dispatch-on-main pattern used by the messenger callbacks.
+    NSMutableArray<BMDexOrder*> *converted = [NSMutableArray arrayWithCapacity:orders.size()];
+    for (const auto& order : orders) {
+        [converted addObject:MakeBMDexOrder(order)];
+    }
+    BOOL isReset = (action == beam::wallet::ChangeAction::Reset);
+    BOOL isRemoved = (action == beam::wallet::ChangeAction::Removed);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
+
+        if (isReset) {
+            [cache removeAllObjects];
+        }
+
+        for (BMDexOrder *bmo in converted) {
+            NSUInteger existingIdx = NSNotFound;
+            for (NSUInteger i = 0; i < cache.count; i++) {
+                if ([cache[i].orderID isEqualToString:bmo.orderID]) {
+                    existingIdx = i;
+                    break;
+                }
+            }
+
+            if (isRemoved) {
+                if (existingIdx != NSNotFound) {
+                    [cache removeObjectAtIndex:existingIdx];
+                }
+                continue;
+            }
+
+            if (existingIdx != NSNotFound) {
+                [cache replaceObjectAtIndex:existingIdx withObject:bmo];
+            } else {
+                [cache addObject:bmo];
+            }
+        }
+
+        NSArray *snapshot = [cache copy];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onDexOrdersChanged:)]) {
+                [delegate onDexOrdersChanged:snapshot];
+            }
+        }
+    });
+}
+
+void WalletModel::onFindDexOrder(const beam::wallet::DexOrder& order) {
+    // Build the BMDexOrder off-main (no shared state touched), then mutate
+    // the `dexOrders` cache and broadcast on main. UI reads the cache
+    // unguarded, so the mutation must not race with main-thread enumeration.
+    BMDexOrder *bmo = MakeBMDexOrder(order);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<BMDexOrder*> *cache = [AppModel sharedManager].dexOrders;
+        NSUInteger existingIdx = NSNotFound;
+        for (NSUInteger i = 0; i < cache.count; i++) {
+            if ([cache[i].orderID isEqualToString:bmo.orderID]) {
+                existingIdx = i;
+                break;
+            }
+        }
+        if (existingIdx != NSNotFound) {
+            [cache replaceObjectAtIndex:existingIdx withObject:bmo];
+        } else {
+            [cache addObject:bmo];
+        }
+
+        NSArray *snapshot = [cache copy];
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for (id<WalletModelDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(onDexOrdersChanged:)]) {
+                [delegate onDexOrdersChanged:snapshot];
+            }
+        }
+    });
+}
+#endif
 
 void WalletModel::onExportTxHistoryToCsv(const std::string& data) {
     NSString *csv = [NSString stringWithUTF8String:data.c_str()];
@@ -1199,6 +1544,12 @@ void WalletModel::onExchangeRates(const std::vector<beam::wallet::ExchangeRate>&
         currency.realValue = double(int64_t(rate.m_rate)) / Rules::Coin;
     
         if (rate.m_to == Currency::USD() && rate.m_from == Currency::BEAM()) {
+            // OraclePriceManager owns BEAM/USD when the on-chain feed is on.
+            // Drop the remote tick so the oracle's value isn't clobbered between
+            // its 60s refreshes.
+            if ([Settings sharedManager].isOracleEnabled) {
+                continue;
+            }
             currency.type = BMCurrencyUSD;
             currency.maximumFractionDigits = 2;
             currency.code = @"USD";
@@ -1469,16 +1820,32 @@ void WalletModel::onNotificationsChanged(beam::wallet::ChangeAction action, cons
 }
 
 void WalletModel::onGetAddress(const beam::wallet::WalletID& wid, const boost::optional<beam::wallet::WalletAddress>& address, size_t offlinePayments) {
-    
+
     NSLog(@"onGetAddress: %d", (int)offlinePayments);
-    
-    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
-    for(id<WalletModelDelegate> delegate in delegates)
-    {
-        if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
-            [delegate onMaxPrivacyTokensLeft:(int)offlinePayments];
+
+    NSString *walletIdStr = [NSString stringWithUTF8String:to_string(wid).c_str()];
+    int newCount = (int)offlinePayments;
+
+    // offlinePaymentsByWalletId is read on main from
+    // AppModel.offlinePaymentsCountForWalletId:; mutate + broadcast on main
+    // so the dictionary is never written from the reactor thread while UI
+    // enumerates it.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSNumber *prev = [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr];
+        BOOL changed = (prev == nil || prev.intValue != newCount);
+        [AppModel sharedManager].offlinePaymentsByWalletId[walletIdStr] = @(newCount);
+
+        NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+        for(id<WalletModelDelegate> delegate in delegates)
+        {
+            if ([delegate respondsToSelector:@selector(onMaxPrivacyTokensLeft:)]) {
+                [delegate onMaxPrivacyTokensLeft:newCount];
+            }
+            if (changed && [delegate respondsToSelector:@selector(onOfflinePaymentsCountForWalletId:count:)]) {
+                [delegate onOfflinePaymentsCountForWalletId:walletIdStr count:newCount];
+            }
         }
-    }
+    });
 }
 
 void WalletModel::onShieldedCoinChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::ShieldedCoin>& items) {
@@ -1634,7 +2001,9 @@ void WalletModel::onPublicAddress(const std::string& publicAddr)
 
 void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     NSLog(@"onAssetInfo :%d", assetId);
-    
+
+    m_pendingAssetInfo.erase(assetId);
+
     auto info = WalletAssetMeta(asset);
 
     NSString *name = [NSString stringWithUTF8String:info.GetName().c_str()];
@@ -1664,6 +2033,7 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     }
     
     bmAsset.assetId = UInt64(assetId);
+    bmAsset.name = name;
     bmAsset.nthUnitName = nthName;
     bmAsset.unitName = unitName;
     bmAsset.shortName = shortName;
@@ -1695,6 +2065,15 @@ void WalletModel::onAssetInfo(Asset::ID assetId, const WalletAsset& asset) {
     NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
     for(id<WalletModelDelegate> delegate in delegates)
     {
+        if ([delegate respondsToSelector:@selector(onAssetInfoChange)]) {
+            [delegate onAssetInfoChange];
+        }
+    }
+}
+
+void WalletModel::onFullAssetsListLoaded() {
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates) {
         if ([delegate respondsToSelector:@selector(onAssetInfoChange)]) {
             [delegate onAssetInfoChange];
         }

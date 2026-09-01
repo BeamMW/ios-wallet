@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 31.08.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 #import "AppsApiUI.h"
@@ -37,37 +37,37 @@ int AppsApiUI::test()
 
 void AppsApiUI::sendApproved(const std::string& request)
 {
-    LOG_INFO() << "Contract send approved: " << getAppName() << ", " << getAppId() << ", " << request;
+    BEAM_LOG_INFO() << "Contract send approved: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_callWalletApiDirectly(request);
 }
 
 void AppsApiUI::sendRejected(const std::string& request)
 {
-    LOG_INFO() << "Contract send rejected: " << getAppName() << ", " << getAppId() << ", " << request;
+    BEAM_LOG_INFO() << "Contract send rejected: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_sendApiError(request, beam::wallet::ApiError::UserRejected, std::string());
 }
 
 void AppsApiUI::contractInfoApproved(const std::string& request)
 {
-    LOG_INFO() << "Contract tx approved: " << getAppName() << ", " << getAppId() << ", " << request;
+    BEAM_LOG_INFO() << "Contract tx approved: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_callWalletApiDirectly(request);
 }
 
 void AppsApiUI::contractInfoRejected(const std::string& request)
 {
-    LOG_INFO() << "Contract tx rejected: " << getAppName() << ", " << getAppId() << ", " << request;
+    BEAM_LOG_INFO() << "Contract tx rejected: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_sendApiError(request, beam::wallet::ApiError::UserRejected, std::string());
 }
 
 void AppsApiUI::callWalletApi(const std::string& request)
 {
-    LOG_INFO() << "Call Wallet Api: " << getAppName() << ", " << getAppId() << ", " << request;
+    BEAM_LOG_INFO() << "Call Wallet Api: " << getAppName() << ", " << getAppId() << ", " << request;
     AnyThread_callWalletApiChecked(request);
 }
 
 void AppsApiUI::AnyThread_sendApiResponse(std::string&& result)
 {
-    LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
+    BEAM_LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << result;
     NSString *json = [NSString stringWithUTF8String:result.c_str()];
     [[AppModel sharedManager] sendDAOApiResult:json];
 }
@@ -77,7 +77,7 @@ void AppsApiUI::AnyThread_sendApiResponse(std::string&& result)
 //    auto str = result.dump();
 //    NSString *json = [NSString stringWithUTF8String:str.c_str()];
 //    
-//    LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << json;
+//    BEAM_LOG_INFO() << "Send Api Response: " << getAppName() << ", " << getAppId() << ", " << json;
 //    
 //    [[AppModel sharedManager] sendDAOApiResult:json];
 //}

@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 06.09.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import UIKit
@@ -54,7 +54,7 @@ class DAOConfirmViewController: BaseViewController {
     @IBOutlet private weak var passField:BMField!
     @IBOutlet private weak var viewWidth:NSLayoutConstraint!
 
-    private var hintText:String? = nil
+    private var hintText:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()

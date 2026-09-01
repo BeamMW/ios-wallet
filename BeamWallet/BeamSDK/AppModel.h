@@ -2,7 +2,7 @@
 // AppModel.h
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,6 +44,14 @@
 #import "AssetsManager.h"
 #import "StringManager.h"
 #import "BMApp.h"
+#import "BMInstantMessage.h"
+#import "BMChat.h"
+#import "BMDexOrder.h"
+#import "BMInstalledDApp.h"
+#import "BMAvailableDApp.h"
+#import "BMPublisher.h"
+
+@class WalletAPIClient;
 
 enum {
     BMRestoreManual = 0,
@@ -79,8 +87,14 @@ typedef int BMRestoreType;
 -(void)onNotificationsChanged;
 -(void)onChangeCalculated:(double)amount;
 -(void)onMaxPrivacyTokensLeft:(int)tokens;
+-(void)onOfflinePaymentsCountForWalletId:(NSString*_Nonnull)walletId count:(int)count;
 -(void)onAssetInfoChange;
 -(void)onDAPPsLoaded;
+-(void)onChatListChanged;
+-(void)onChatMessagesLoaded:(NSString*_Nonnull)peerWalletId messages:(NSArray<BMInstantMessage*>*_Nonnull)messages;
+-(void)onInstantMessageReceived:(BMInstantMessage*_Nonnull)message;
+-(void)onChatRemoved:(NSString*_Nonnull)peerWalletId;
+-(void)onDexOrdersChanged:(NSArray<BMDexOrder*>*_Nonnull)orders;
 @end
 
 typedef void(^NewAddressGeneratedBlock)(BMAddress* _Nullable address, NSError* _Nullable error);
@@ -104,12 +118,14 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,assign) BOOL isUpdating;
 @property (nonatomic,assign) BOOL isConnecting;
 @property (nonatomic,assign) BOOL isLoggedin;
+// Read from background queues during restore; BOOL writes are word-atomic.
 @property (nonatomic,assign) BOOL isRestoreFlow;
 @property (nonatomic,assign) BOOL isNodeChanging;
 @property (nonatomic,assign) BOOL isOwnNode;
 @property (nonatomic,assign) BMRestoreType restoreType;
 @property (nonatomic,assign) BOOL isMaxPrivacyRequest;
 @property (nonatomic,assign) BOOL isConfigured;
+@property (nonatomic,assign) BOOL didLoadFullAssetsList;
 
 @property (nonatomic,strong) BMWalletStatus* _Nullable walletStatus;
 
@@ -125,9 +141,16 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull deletedNotifications;
 @property (nonatomic,strong) NSMutableArray<BMApp*>*_Nonnull apps;
 @property (nonatomic,strong) NSMutableDictionary*_Nonnull needSaveContacts;
+@property (nonatomic,strong) NSMutableArray<BMChat*>*_Nonnull chats;
+@property (nonatomic,strong) NSMutableDictionary<NSString*, NSMutableArray<BMInstantMessage*>*>*_Nonnull messagesByPeer;
+@property (nonatomic,strong) NSMutableArray<BMDexOrder*>*_Nonnull dexOrders;
+
+@property (nonatomic,strong) NSMutableDictionary<NSString*, NSNumber*>*_Nonnull offlinePaymentsByWalletId;
 
 @property (nonatomic, strong) NSTimer * _Nullable connectionTimer;
 @property (nonatomic, strong) NSTimer * _Nullable connectionAfterOnlineTimer;
+
+@property (nonatomic, strong, readonly) NSDate * _Nullable lastConnectionChangedAt;
 
 @property (nonatomic, strong) NSString * _Nullable addressGeneratedID;
 
@@ -137,6 +160,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 +(AppModel*_Nonnull)sharedManager;
 
 +(NSString*_Nonnull)chooseRandomNode;
++(NSArray<NSString*>*_Nonnull)defaultPeerAddresses;
 
 // delegates
 -(void)addDelegate:(id<WalletModelDelegate>_Nullable) delegate;
@@ -153,6 +177,7 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(BOOL)canOpenWallet:(NSString*_Nonnull)pass;
 -(void)restore:(NSString*_Nonnull)path;
 -(void)resetWallet:(BOOL)removeDatabase;
+-(void)abortCreateAndReset;
 -(void)resetOnlyWallet;
 -(void)restartWallet;
 -(void)start;
@@ -183,9 +208,14 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)generateWithdrawAddress:(NewAddressGeneratedBlock _Nonnull )block;
 
 -(void)generateNewWalletAddressWithBlockAndAmount:(int)assetId amount:(double)amount result:(NewAddressGeneratedBlock _Nonnull)block;
--(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(void)generateOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount offlineCount:(uint32_t)offlineCount result:(PublicAddressBlock _Nonnull)block;
 -(NSString*_Nonnull)generateRegularAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount isPermanentAddress:(BOOL)isPermanentAddress;
 -(void)generateMaxPrivacyAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(void)generateSBBSAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+-(void)generatePublicOfflineAddress:(NSString*_Nonnull)walletId assetId:(int)assetId amount:(double)amount result:(PublicAddressBlock _Nonnull)block;
+
+-(int)offlinePaymentsCountForWalletId:(NSString*_Nonnull)walletId;
+-(void)requestOfflinePaymentsCountForWalletId:(NSString*_Nonnull)walletId;
 
 
 // addresses
@@ -235,6 +265,9 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(double)remainingBeam:(double)amount fee:(double)fee;
 -(BMTransactionParameters*_Nonnull)getTransactionParameters:(NSString*_Nonnull)token;
 -(void)calculateFee:(double)amount assetId:(int)assetId fee:(double)fee isShielded:(BOOL) isShielded result:(FeecalculatedBlock _Nonnull )block;
+
+// split
+-(void)splitCoins:(int)assetId outputGroths:(NSArray<NSNumber*>*_Nonnull)groths fee:(double)fee;
 
 // logs
 -(NSString*_Nonnull)getZipLogs ;
@@ -318,15 +351,41 @@ typedef void(^ExportCSVBlock)(NSString * _Nonnull data, NSURL * _Nonnull url);
 -(void)loadApps;
 -(void)stopDAO;
 -(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*_Nonnull)app;
+-(void)startApp:(UIViewController*_Nonnull)controller app:(BMApp*_Nonnull)app installedRoot:(NSURL* _Nullable)installedRoot;
 -(void)startBeamXDaoApp:(UINavigationController*_Nonnull)controller app:(BMApp*_Nonnull)app;
 -(void)sendDAOApiResult:(NSString*_Nonnull)json;
+-(WalletAPIClient*_Nullable)walletAPIClient;
 -(void)approveContractInfo:(NSString*_Nonnull)json info:(NSString*_Nonnull)info
                       amounts:(NSString*_Nonnull)amounts;
 -(void)getAssetInfoAsync:(int)assetId;
+-(void)loadFullAssetsList;
 
 -(BMApp*_Nonnull)DAOBeamXApp;
 -(BMApp*_Nonnull)daoGalleryApp;
 -(BMApp*_Nonnull)daoFaucetApp;
 -(BMApp*_Nonnull)votingApp;
+
+// Messenger
+-(void)requestChats;
+-(void)requestMessagesForPeer:(NSString*_Nonnull)peerWalletId;
+-(void)sendInstantMessage:(NSString*_Nonnull)peerWalletId
+              fromAddress:(NSString*_Nonnull)myWalletId
+                  message:(NSString*_Nonnull)message;
+-(void)markChatAsRead:(NSString*_Nonnull)peerWalletId;
+-(void)removeChat:(NSString*_Nonnull)peerWalletId;
+-(void)addChatStub:(NSString*_Nonnull)peerWalletId contactName:(NSString*_Nullable)contactName myWalletId:(NSString*_Nullable)myWalletId;
+-(NSArray<BMInstantMessage*>*_Nonnull)cachedMessagesForPeer:(NSString*_Nonnull)peerWalletId;
+-(NSString*_Nullable)lastMyAddressForPeer:(NSString*_Nonnull)peerWalletId;
+-(NSString*_Nonnull)resolvedPeerWalletId:(NSString*_Nonnull)peerWalletId;
+
+// Asset Swaps (DEX)
+-(void)requestDexOrders;
+-(BOOL)publishDexOrderWithSendAsset:(UInt32)sendAssetId
+                         sendAmount:(UInt64)sendAmount
+                       receiveAsset:(UInt32)receiveAssetId
+                      receiveAmount:(UInt64)receiveAmount
+                  expirationMinutes:(UInt32)expirationMinutes;
+-(void)cancelDexOrderWithID:(NSString*_Nonnull)hexOrderID;
+-(BOOL)acceptDexOrder:(BMDexOrder*_Nonnull)order;
 
 @end

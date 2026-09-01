@@ -2,7 +2,7 @@
 // SVProgressHUDProtocol.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 import Foundation
 
-func ShowCopied (text:String? = nil) {
+func ShowCopied(text:String? = nil) {
     if let s = text {
         BMToast.show(text: s)
     }

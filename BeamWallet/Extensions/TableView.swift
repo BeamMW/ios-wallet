@@ -2,7 +2,7 @@
 // TableView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ extension UITableView {
 
 extension UITableView {
 
-    func performUpdate(_ update: ()->Void, completion: (()->Void)?) {
+    func performUpdate(_ update: () -> Void, completion: (() -> Void)?) {
         
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
@@ -68,35 +68,28 @@ extension UITableView {
     }
     
     public func findPath(_ row:AnyClass) -> IndexPath? {
-        for cell in visibleCells {
-            if cell.isKind(of: row) {
-                return self.indexPath(for: cell)
-            }
+        for cell in visibleCells where cell.isKind(of: row) {
+            return self.indexPath(for: cell)
         }
         return nil
     }
-    
+
     public func findCell(_ row:AnyClass) -> UITableViewCell? {
-        for cell in visibleCells {
-            if cell.isKind(of: row) {
-                return cell
-            }
+        for cell in visibleCells where cell.isKind(of: row) {
+            return cell
         }
         return nil
     }
-    
+
     public func reloadRow(_ row: AnyClass, animated:Bool = true) {
-        
-        for cell in visibleCells {
-            
-            if cell.isKind(of: row) {
-                
-                if let path = indexPath(for: cell) {
-                    
-                    reloadRows(at: [path], with: (animated ? .fade : .none))
-                    
-                    return
-                }
+
+        for cell in visibleCells where cell.isKind(of: row) {
+
+            if let path = indexPath(for: cell) {
+
+                reloadRows(at: [path], with: (animated ? .fade : .none))
+
+                return
             }
         }
         
@@ -147,7 +140,7 @@ extension UICollectionView {
 extension UITableView {
     
     func rowsHeight() -> CGFloat {
-        var cellsHeight:CGFloat = 0;
+        var cellsHeight:CGFloat = 0
         let sections = numberOfSections
         for section in 0..<sections
         {
@@ -160,7 +153,7 @@ extension UITableView {
                 cellsHeight += self.delegate?.tableView?(self, heightForRowAt: indexPath) ?? 0
             }
         }
-        return cellsHeight;
+        return cellsHeight
     }
 }
 

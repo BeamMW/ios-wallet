@@ -2,7 +2,7 @@
 // BMSearchAddressCell.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -71,12 +71,12 @@ class BMSearchAddressCell: BaseCell {
         nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
         
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
-            addressTypeLabel.textColor = UIColor.main.steel;
-            additionalErrorLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
+            addressTypeLabel.textColor = UIColor.main.steel
+            additionalErrorLabel.textColor = UIColor.main.steel
         }
         
-        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: nil) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: nil) { [weak self] _ in
             guard let strongSelf = self else { return }
             
             strongSelf.showTokenButton.isHidden = true
@@ -227,8 +227,7 @@ extension BMSearchAddressCell: UITextFieldDelegate {
         if let copy = copyText {
             let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy: copy)
             
-            inputBar.completion = {
-                (obj: String?) -> Void in
+            inputBar.completion = { (obj: String?) in
                 if let text = obj {
                     self.delegate?.textValueDidChange?(self, text, false)
                     _ = self.textField.resignFirstResponder()

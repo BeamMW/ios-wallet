@@ -2,7 +2,7 @@
 // WalletModel.h
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ public:
     std::map<uint64_t, beam::wallet::ShieldedCoin> shieldedCoins;
 
 private:
+    std::set<beam::Asset::ID> m_pendingAssetInfo;
+
     NSString *GetAddressTo(beam::wallet::TxDescription transaction);
     NSString *GetAddressFrom(beam::wallet::TxDescription transaction);
     NSString *GetErrorString(beam::wallet::ErrorType type);
@@ -84,5 +86,14 @@ private:
     void onAddressesChanged(beam::wallet::ChangeAction, const std::vector<beam::wallet::WalletAddress>& addresses) override;
     void onPublicAddress(const std::string& publicAddr) override;
     void onAssetInfo(beam::Asset::ID assetId, const beam::wallet::WalletAsset&) override;
+    void onFullAssetsListLoaded() override;
     void onCoinsSelected(const beam::wallet::CoinsSelectionInfo&) override;
+    void onInstantMessage(beam::Timestamp time, const beam::wallet::WalletID& counterpart, const std::string& message, bool isIncome) override;
+    void onGetChatList(const std::vector<std::pair<beam::wallet::WalletID, bool>>& chats) override;
+    void onGetChatMessages(const std::vector<beam::wallet::InstantMessage>& messages) override;
+    void onChatRemoved(const beam::wallet::WalletID& counterpart) override;
+#ifdef BEAM_ASSET_SWAP_SUPPORT
+    void onDexOrdersChanged(beam::wallet::ChangeAction action, const std::vector<beam::wallet::DexOrder>& orders) override;
+    void onFindDexOrder(const beam::wallet::DexOrder& order) override;
+#endif
 };

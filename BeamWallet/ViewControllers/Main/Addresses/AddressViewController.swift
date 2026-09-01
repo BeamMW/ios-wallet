@@ -2,7 +2,7 @@
 // AddressViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,26 +51,18 @@ class AddressViewController: BaseTableViewController {
         subscribeToUpdates()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     private func subscribeToUpdates() {
         addressViewModel.onDataChanged = { [weak self] in
             self?.tableView.reloadData()
         }
         
-        addressViewModel.onDataDeleted = { [weak self]
-            indexPath, address in
-            
+        addressViewModel.onDataDeleted = { [weak self] _, address in
             AppModel.sharedManager().prepareDelete(address, removeTransactions: address.isNeedRemoveTransactions)
             
             self?.back()
         }
         
-        addressViewModel.transactionViewModel.onDataDeleted = { [weak self]
-            indexPath, transaction in
-            
+        addressViewModel.transactionViewModel.onDataDeleted = { [weak self] indexPath, transaction in
             if let path = indexPath {
                 self?.tableView.performUpdate({
                     self?.tableView.deleteRows(at: [path], with: .left)
@@ -80,9 +72,7 @@ class AddressViewController: BaseTableViewController {
             }
         }
         
-        addressViewModel.transactionViewModel.onDataUpdated = { [weak self]
-            indexPath, transaction in
-            
+        addressViewModel.transactionViewModel.onDataUpdated = { [weak self] indexPath, transaction in
             if let path = indexPath {
                 self?.tableView.performUpdate({
                     self?.tableView.reloadRows(at: [path], with: .fade)

@@ -2,7 +2,7 @@
 //  BMPopoverMenu.swift
 //  BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,10 +53,7 @@ extension BMPopoverMenu {
             
             rootVC.present(alert, animated: true)
                         
-            if #available(iOS 13, *) {
-                
-            }
-            else {
+            if #unavailable(iOS 13) {
                 if(Settings.sharedManager().isDarkMode) {
                     alert.setBackgroundColor(color: UIColor.black)
                 }
@@ -106,8 +103,8 @@ class BMPopoverMenu: NSObject {
         var name: String
         var icon: String?
         var action: BMPopoverMenuItemAction
-        var selected:Bool? = nil
-        var id:Int? = nil
+        var selected:Bool?
+        var id:Int?
 
         init(name: String, icon: String?, action: BMPopoverMenuItemAction) {
             self.name = name
@@ -180,7 +177,7 @@ class BMPopoverMenu: NSObject {
                        animations: {
                            self.popOverMenu.alpha = 0
                            self.popOverMenu.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        }) { isFinished in
+        }, completion: { isFinished in
             if isFinished {
                 self.backgroundView.removeFromSuperview()
                 if selectedItem == nil {
@@ -194,7 +191,7 @@ class BMPopoverMenu: NSObject {
                     }
                 }
             }
-        }
+        })
     }
     
     fileprivate func showForSenderAssets(sender: UIView?, or senderFrame: CGRect?, with menuItems: [BMPopoverMenuItem]!, done: @escaping (BMPopoverMenuItem?) -> Void, cancel: (() -> Void)? = nil) {

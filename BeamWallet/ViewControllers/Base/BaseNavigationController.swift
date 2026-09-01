@@ -2,7 +2,7 @@
 // BaseNavigationController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,17 +53,17 @@ class NavigationPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
                        delay: 0,
                        options: .curveLinear,
                        animations: {
-                        
+
                         dimmingView.alpha = 0
                         toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
                         fromViewController.view.frame = CGRect(x: toViewController.view.frame.size.width, y: fromViewController.view.frame.origin.y, width: fromViewController.view.frame.size.width, height: fromViewController.view.frame.size.height)
-                        
-                       }) { finished in
-            
+
+                       }, completion: { _ in
+
             dimmingView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-            
-        }
+
+        })
     }
     
 }
@@ -93,7 +93,7 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
         }
     }
     
-    var gesture:UIPanGestureRecognizer? = nil
+    var gesture:UIPanGestureRecognizer?
     var interactivePopTransition: UIPercentDrivenInteractiveTransition!
     
     override func viewDidLoad() {
@@ -129,29 +129,15 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let top = UIApplication.getTopMostViewController() {
-            if top is WalletViewController {
-                return false
-            }
-            else if top is SettingsViewController {
-                return false
-            }
-            else if top is AddressesViewController {
-                return false
-            }
-            else if top is DAOAppsViewController {
-                return false
-            }
-            else if top is NotificationsViewController {
-                return false
-            }
-            else if top is DAOViewController {
-                if let dao = top as? DAOViewController {
-                    if dao.app.name.uppercased() == "BEAMX DAO" {
-                        return false
-                    }
-                }
-            }
+        guard let top = UIApplication.getTopMostViewController() else { return true }
+        // No nav stack means there's nothing to pop — and a transient nil during
+        // a transition shouldn't be treated as "this is a root, allow swipe".
+        guard let nav = top.navigationController else { return false }
+        // Side-menu roots have nothing to pop to.
+        if nav.viewControllers.first === top { return false }
+        // BEAMX DAO embeds a WebView whose horizontal pan conflicts with the swipe.
+        if let dao = top as? DAOViewController, dao.app.name.uppercased() == "BEAMX DAO" {
+            return false
         }
         return true
     }

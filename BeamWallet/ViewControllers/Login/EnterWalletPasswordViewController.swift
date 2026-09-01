@@ -2,7 +2,7 @@
 // EnterWalletPasswordViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -96,13 +96,6 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        passField.text = "1"
-//        onLogin(sender: UIButton())
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -118,13 +111,20 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     public func biometricAuthorization() {
         if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
-                if let password = KeychainManager.getPassword() {
+                let context = BiometricAuthorization.shared.lastAuthenticatedContext
+                if let password = KeychainManager.getPassword(context: context) {
                     self.passField.text = password
                     self.onLogin(sender: UIButton())
                 }
-                
+
             }, failure: {
                 self.touchIdButton.tintColor = UIColor.white
+                if let reason = BiometricAuthorization.shared.lastFailureReason, reason != .canceled {
+                    let message = BiometricAuthorization.shared.failureMessage(for: reason)
+                    if !message.isEmpty {
+                        BMToast.show(text: message)
+                    }
+                }
             }, retry: {
                 self.touchIdButton.tintColor = UIColor.white
             })
@@ -154,7 +154,7 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                     if(!AppModel.sharedManager().isWalletRunning())     {
                         AppModel.sharedManager().openWallet(pass)
                         isLoggedin = true
-                        AppModel.sharedManager().isLoggedin = isLoggedin;
+                        AppModel.sharedManager().isLoggedin = isLoggedin
                         AppModel.sharedManager().isConnected = true
                     }
                     if navigationController?.viewControllers.count == 1 {
@@ -191,12 +191,12 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
     
     @IBAction func onChangeWallet(sender: UIButton) {
         confirmAlert(title: Localizable.shared.strings.restore_create_title, message: Localizable.shared.strings.restore_create_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.proceed, cancelHandler: { _ in
-            
-        }) { _ in
-            AppModel.sharedManager().isLoggedin = false;
+
+        }, confirmHandler: { _ in
+            AppModel.sharedManager().isLoggedin = false
             AppModel.sharedManager().startChangeWallet()
             self.pushViewController(vc: WellcomeViewController())
-        }
+        })
     }
     
     @IBAction func onExport(sender: UIButton) {
@@ -235,8 +235,8 @@ class EnterWalletPasswordViewController: BaseWizardViewController {
                                                           leftViewController: menuViewController,
                                                           rightViewController: nil)
             
-            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60;
-            sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove;
+            sideMenuController.leftViewWidth = UIScreen.main.bounds.size.width - 60
+            sideMenuController.leftViewPresentationStyle = LGSideMenuPresentationStyle.slideAbove
             sideMenuController.rootViewLayerShadowRadius = 0
             sideMenuController.rootViewLayerShadowColor = UIColor.clear
             sideMenuController.leftViewLayerShadowRadius = 0

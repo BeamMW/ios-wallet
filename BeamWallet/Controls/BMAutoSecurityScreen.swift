@@ -2,7 +2,7 @@
 // BMAutoSecurityScreen.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -68,9 +68,9 @@ public class BMAutoSecurityScreen {
     private func removeBlurEffect() {
         UIView.animate(withDuration: 0.3, animations: {
             self.blurView.alpha = 0
-        }) { (_ ) in
+        }, completion: { _ in
             self.blurView.removeFromSuperview()
-        }
+        })
     }
 }
 

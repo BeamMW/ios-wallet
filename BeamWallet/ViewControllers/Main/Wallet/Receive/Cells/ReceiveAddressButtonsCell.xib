@@ -41,47 +41,14 @@ For the transaction to complete, you should get online during the 12 hours after
                             <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wAG-wz-QgD">
-                        <rect key="frame" x="70" y="158" width="180" height="44"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BIb-3V-fCK" customClass="BMButton" customModule="BeamWallet" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="180" height="44"/>
-                                <color key="backgroundColor" red="0.043137254899999998" green="0.80000000000000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="lls-ye-uJh"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Bold" family="SF Pro Display" pointSize="14"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
-                                <state key="normal" title="share address" image="iconShareNew">
-                                    <color key="titleColor" red="0.01176470588" green="0.18039215689999999" blue="0.28627450980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="22"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="adjustFontSize" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="localizationKey" value="share_address"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onShareWithSender:" destination="KuL-Jr-XfQ" eventType="touchUpInside" id="DIn-7h-uAs"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="180" id="5UW-dQ-SlQ"/>
-                        </constraints>
-                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="wAG-wz-QgD" secondAttribute="bottom" constant="33" id="1dw-Hf-1rc"/>
                     <constraint firstItem="ZnL-da-miM" firstAttribute="top" secondItem="cgk-y0-vp1" secondAttribute="top" id="AOI-VP-xVu"/>
                     <constraint firstItem="ZnL-da-miM" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" id="Nz9-oi-8cU"/>
                     <constraint firstAttribute="trailing" secondItem="ZnL-da-miM" secondAttribute="trailing" id="PtQ-Fo-frc"/>
-                    <constraint firstItem="wAG-wz-QgD" firstAttribute="centerX" secondItem="cgk-y0-vp1" secondAttribute="centerX" id="bWc-c0-3oV"/>
                     <constraint firstAttribute="bottom" secondItem="ZnL-da-miM" secondAttribute="bottom" id="egt-qR-mlJ"/>
                     <constraint firstItem="NVr-Vl-UQM" firstAttribute="leading" secondItem="cgk-y0-vp1" secondAttribute="leading" constant="15" id="h7x-yN-UQq"/>
                     <constraint firstAttribute="trailing" secondItem="NVr-Vl-UQM" secondAttribute="trailing" constant="15" id="hlw-FK-uwJ"/>
-                    <constraint firstItem="wAG-wz-QgD" firstAttribute="top" secondItem="NVr-Vl-UQM" secondAttribute="bottom" constant="33" id="jEK-Sc-JtE"/>
                     <constraint firstItem="NVr-Vl-UQM" firstAttribute="top" secondItem="cgk-y0-vp1" secondAttribute="top" constant="10" id="rQw-ZF-jcS"/>
                 </constraints>
             </tableViewCellContentView>
@@ -93,12 +60,4 @@ For the transaction to complete, you should get online during the 12 hours after
             <point key="canvasLocation" x="24.637681159420293" y="98.772321428571431"/>
         </tableViewCell>
     </objects>
-    <designables>
-        <designable name="BIb-3V-fCK">
-            <size key="intrinsicContentSize" width="106" height="17"/>
-        </designable>
-    </designables>
-    <resources>
-        <image name="iconShareNew" width="16" height="16"/>
-    </resources>
 </document>

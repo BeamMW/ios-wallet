@@ -2,7 +2,7 @@
 // RecoveryProgress.h
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,6 +63,11 @@ private: std::unique_ptr<Filter> m_estimateFilter;
 
 private: long avgTime = 0;
 private: long start = 0;
+
+// BEAM core fires OnProgress thousands of times per second (sub-1KB granularity).
+// Forward to delegates only when integer percent advances or recovery completes,
+// so the iOS side doesn't drown the main queue with redundant UI updates.
+private: int m_lastReportedPercent = -1;
 
 private:
     double getWindowedBps();

@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 13.04.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class SendSaveAddressCell: BaseCell, UITextFieldDelegate {
     @IBOutlet private weak var typeLabel: UILabel!
     @IBOutlet private weak var textField: BMField!
 
-    private var token: String? = nil
+    private var token: String?
     
     weak var delegate: BMCellProtocol?
     
@@ -30,7 +30,7 @@ class SendSaveAddressCell: BaseCell, UITextFieldDelegate {
         textField.placeHolderFont = ItalicFont(size: 16)
 
         if Settings.sharedManager().isDarkMode {
-            typeLabel.textColor = UIColor.main.steel;
+            typeLabel.textColor = UIColor.main.steel
         }
         
         contentView.backgroundColor = UIColor.main.marineThree

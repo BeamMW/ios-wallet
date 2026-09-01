@@ -2,7 +2,7 @@
 // TransactionViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -127,10 +127,6 @@ class TransactionViewController: UITableViewController {
         subscribeToUpdates()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     public func didShow() {
     }
     
@@ -142,14 +138,12 @@ class TransactionViewController: UITableViewController {
             }
         }
         
-        viewModel.onDataUpdated = { [weak self]
-            _, transaction in
+        viewModel.onDataUpdated = { [weak self] _, transaction in
             AppModel.sharedManager().cancelTransaction(transaction)
             self?.back()
         }
         
-        viewModel.onDataDeleted = { [weak self]
-            _, transaction in
+        viewModel.onDataDeleted = { [weak self] _, transaction in
             AppModel.sharedManager().prepareDeleteTransaction(transaction)
             self?.back()
         }

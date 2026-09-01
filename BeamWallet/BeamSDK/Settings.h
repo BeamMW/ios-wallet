@@ -2,7 +2,7 @@
 // Settings.h
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
 @class BMLogValue;
 
 static double MAX_AMOUNT = 262800000;
-static Boolean ENALBE_LANG = false;
+static Boolean ENABLE_LANG = false;
 
 typedef enum Target : NSUInteger {
     Testnet = 0,
@@ -68,6 +68,7 @@ typedef enum Target : NSUInteger {
 @property (nonatomic, assign) int logDays;
 @property (nonatomic, assign) BOOL isDarkMode;
 @property (nonatomic, assign) BMCurrencyType currency;
+@property (nonatomic, assign) BOOL isOracleEnabled;
 @property (nonatomic, assign) BOOL isNotificationWalletON;
 @property (nonatomic, assign) BOOL isNotificationNewsON;
 @property (nonatomic, assign) BOOL isNotificationTransactionON;

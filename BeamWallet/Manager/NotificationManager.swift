@@ -2,7 +2,7 @@
 // NotificationManager.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class NotificationManager : NSObject {
         AppModel.sharedManager().addDelegate(self)
     }
     
-    //MARK: - Registration
+    // MARK: - Registration
     
     public func isApnsEnabled(completion: @escaping ((Bool) -> Void)) {
         let current = UNUserNotificationCenter.current()
@@ -61,8 +61,7 @@ class NotificationManager : NSObject {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.requestAuthorization(options: options) {
-            (didAllow, error) in
+        notificationCenter.requestAuthorization(options: options) { (_, _) in
         }
         
         UIApplication.shared.registerForRemoteNotifications()
@@ -77,7 +76,7 @@ class NotificationManager : NSObject {
     }
     
     
-    //MARK: - Send
+    // MARK: - Send
     
     public func scheduleNotification(notification: BMNotification){
         print("-------- scheduleNotification ---------")
@@ -248,12 +247,10 @@ extension NotificationManager: BMNotificationViewDelegate {
             if(id == NotificationManager.notificationID || id == NotificationManager.addressesID) {
                 if let vc = UIApplication.getTopMostViewController() {
                     var notificationFound = false
-                    for v in vc.navigationController?.viewControllers ?? [] {
-                        if v is NotificationsViewController {
-                            notificationFound = true
-                            vc.navigationController?.popToViewController(v, animated: true)
-                            break
-                        }
+                    for v in vc.navigationController?.viewControllers ?? [] where v is NotificationsViewController {
+                        notificationFound = true
+                        vc.navigationController?.popToViewController(v, animated: true)
+                        break
                     }
                     if !notificationFound {
                         vc.navigationController?.pushViewController(NotificationsViewController(), animated: true)
@@ -263,12 +260,10 @@ extension NotificationManager: BMNotificationViewDelegate {
             else if(id == NotificationManager.versionID) {
                 if let vc = UIApplication.getTopMostViewController() {
                     var notificationFound = false
-                    for v in vc.navigationController?.viewControllers ?? [] {
-                        if v is NotificationVersionViewController {
-                            notificationFound = true
-                            vc.navigationController?.popToViewController(v, animated: true)
-                            break
-                        }
+                    for v in vc.navigationController?.viewControllers ?? [] where v is NotificationVersionViewController {
+                        notificationFound = true
+                        vc.navigationController?.popToViewController(v, animated: true)
+                        break
                     }
                     if !notificationFound {
                         if let notification = AppModel.sharedManager().getLastVersionNotification() {

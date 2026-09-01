@@ -2,7 +2,7 @@
 // WalletViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@
 import UIKit
 
 class SettingsViewController: BaseTableViewController {
-    
+
     private var viewModel:SettingsViewModel!
     private var type:SettingsViewModel.SettingsType!
-    
+
     private var searchView:BMSearchView!
 
     init(type:SettingsViewModel.SettingsType) {
@@ -68,6 +68,8 @@ class SettingsViewController: BaseTableViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.sectionHeaderHeight = 15
+        tableView.sectionFooterHeight = 15
 
         tableView.tableHeaderView?.backgroundColor = UIColor.main.marine
         tableView.backgroundColor = UIColor.main.marine
@@ -77,35 +79,35 @@ class SettingsViewController: BaseTableViewController {
             searchView.y = 12
             searchView.searchField.placeholder = Localizable.shared.strings.search_settings
             
-            searchView.onSearchTextChanged = {
-                [weak self] text in
+            searchView.onSearchTextChanged = { [weak self] text in
                 guard let strongSelf = self else { return }
                 if !text.isEmpty {
                     strongSelf.tableView.sectionHeaderHeight = 5
                     strongSelf.tableView.sectionFooterHeight = 5
-                    strongSelf.tableView.tableFooterView = nil
+                    strongSelf.bottomAccessoryView?.isHidden = true
                 }
                 else {
                     strongSelf.tableView.sectionHeaderHeight = 15
                     strongSelf.tableView.sectionFooterHeight = 15
-                    strongSelf.tableView.tableFooterView = strongSelf.versionView()
+                    strongSelf.bottomAccessoryView?.isHidden = false
                 }
+                strongSelf.view.setNeedsLayout()
                 strongSelf.viewModel.searchString = text
             }
-            searchView.onCancelSearch = {
-                [weak self] in
+            searchView.onCancelSearch = { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.tableView.sectionHeaderHeight = 15
                 strongSelf.tableView.sectionFooterHeight = 15
                 strongSelf.viewModel.searchString = ""
-                strongSelf.tableView.tableFooterView = strongSelf.versionView()
+                strongSelf.bottomAccessoryView?.isHidden = false
+                strongSelf.view.setNeedsLayout()
             }
-            
+
             let tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 70))
             tableHeaderView.addSubview(searchView)
-            
+
             tableView.tableHeaderView = tableHeaderView
-            tableView.tableFooterView = versionView()
+            bottomAccessoryView = makeVersionAccessory()
         }
         else {
             tableView.tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 20))
@@ -117,22 +119,13 @@ class SettingsViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if type == .main {
-            tableView.tableFooterView = versionView()
+            bottomAccessoryView = makeVersionAccessory()
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        tableView.frame = CGRect(x: 0, y: tableView.y - 5, width: self.view.bounds.width, height: tableView.h + 10)
-    }
-    
+
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -142,35 +135,37 @@ class SettingsViewController: BaseTableViewController {
         }
     }
     
-    private func versionView() -> UIView {
+    private func makeVersionAccessory() -> UIView {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 70))
         view.backgroundColor = UIColor.clear
-        
-        let v = UIApplication.appVersion()
-        let string = "v " + v
-    
-        let label = UILabel(frame: CGRect(x: 0, y: 35, width: UIScreen.main.bounds.size.width, height: 20))
-        label.textAlignment = .center
-        label.font = BoldFont(size: 14)
-        label.textColor = UIColor.main.blueyGrey
-        label.text = string
-        view.addSubview(label)
-        
-        let bHeight = AppModel.sharedManager().walletStatus?.currentHeight ?? ""
-        let height = UILabel(frame: CGRect(x: 0, y: 5, width: UIScreen.main.bounds.size.width, height: 20))
-        height.textAlignment = .center
-        height.font = RegularFont(size: 14)
-        height.textColor = UIColor.main.blueyGrey
-        height.text = Localizable.shared.strings.blockchain_height + ": " + bHeight
-        view.addSubview(height)
-        
-        if Device.isXDevice {
-            view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 280)
-            label.frame = CGRect(x: 0, y: view.h - 60, width: UIScreen.main.bounds.size.width, height: 20)
-            height.frame = CGRect(x: 0, y: view.h - 90, width: UIScreen.main.bounds.size.width, height: 20)
 
-        }
-        
+        let bHeight = AppModel.sharedManager().walletStatus?.currentHeight ?? ""
+        let heightLabel = UILabel()
+        heightLabel.translatesAutoresizingMaskIntoConstraints = false
+        heightLabel.textAlignment = .center
+        heightLabel.font = RegularFont(size: 14)
+        heightLabel.textColor = UIColor.main.blueyGrey
+        heightLabel.text = Localizable.shared.strings.blockchain_height + ": " + bHeight
+        view.addSubview(heightLabel)
+
+        let versionLabel = UILabel()
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.textAlignment = .center
+        versionLabel.font = BoldFont(size: 14)
+        versionLabel.textColor = UIColor.main.blueyGrey
+        versionLabel.text = "v" + UIApplication.appVersion()
+        view.addSubview(versionLabel)
+
+        NSLayoutConstraint.activate([
+            versionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            versionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            versionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -15),
+
+            heightLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            heightLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            heightLabel.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -5),
+        ])
+
         return view
     }
 }
@@ -267,9 +262,7 @@ extension SettingsViewController : SettingsCellDelegate {
 
             if value == false && item.type == .ask_password {
                 let vc = UnlockPasswordPopover(event: .settings)
-                vc.completion = { [weak self]
-                    obj in
-                    
+                vc.completion = { [weak self] obj in
                     if obj == false {
                     
                         item.isSwitch = true
@@ -286,9 +279,7 @@ extension SettingsViewController : SettingsCellDelegate {
             }
             else if value == true && item.type == .ask_password {
                 let vc = UnlockPasswordPopover(event: .settings)
-                vc.completion = { [weak self]
-                    obj in
-                    
+                vc.completion = { [weak self] obj in
                     if obj == false {
                         
                         item.isSwitch = false
@@ -305,9 +296,7 @@ extension SettingsViewController : SettingsCellDelegate {
             }
             else if value == false && item.type == .enable_bio {
                 let vc = UnlockPasswordPopover(event: .settings, allowBiometric: false)
-                vc.completion = {
-                    obj in
-                    
+                vc.completion = { obj in
                     if obj == false {
                         
                         item.isSwitch = true
@@ -316,6 +305,7 @@ extension SettingsViewController : SettingsCellDelegate {
                     }
                     else{
                         Settings.sharedManager().isEnableBiometric = false
+                        KeychainManager.deletePassword()
                     }
                 }
                 vc.modalPresentationStyle = .overFullScreen
@@ -336,13 +326,13 @@ extension SettingsViewController : SettingsCellDelegate {
                 
                 if(value)
                 {
-                    Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode();
+                    Settings.sharedManager().nodeAddress = AppModel.chooseRandomNode()
                     AppModel.sharedManager().changeNodeAddress()
                     
                     viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
                 }
                 else if Settings.sharedManager().customNode().isEmpty == false {
-                    Settings.sharedManager().nodeAddress = Settings.sharedManager().customNode();
+                    Settings.sharedManager().nodeAddress = Settings.sharedManager().customNode()
                     AppModel.sharedManager().changeNodeAddress()
                     
                     viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
@@ -353,6 +343,19 @@ extension SettingsViewController : SettingsCellDelegate {
             else if item.type == .mobile_node {
                 AppModel.sharedManager().enableBodyRequests(value)
             }
+            else if item.type == .price_oracle {
+                Settings.sharedManager().isOracleEnabled = value
+                if value {
+                    Settings.sharedManager().currency = BMCurrencyType(BMCurrencyUSD)
+                    OraclePriceManager.shared.start()
+                }
+                else {
+                    OraclePriceManager.shared.stop()
+                    AppModel.sharedManager().refreshAddresses()
+                }
+                viewModel.reload()
+                tableView.reloadData()
+            }
         }
     }
 }
@@ -362,7 +365,7 @@ extension SettingsViewController : WalletModelDelegate {
     func onNetwotkStartReconnecting() {
         DispatchQueue.main.async {
             if self.type == SettingsViewModel.SettingsType.node {
-                self.viewModel.items[0][1].detail = Settings.sharedManager().nodeAddress
+                self.viewModel.reload()
                 self.tableView.reloadData()
             }
         }
@@ -371,7 +374,7 @@ extension SettingsViewController : WalletModelDelegate {
     func onWalletStatusChange(_ status: BMWalletStatus) {
         DispatchQueue.main.async {
             if self.type == .main {
-                self.tableView.tableFooterView = self.versionView()
+                self.bottomAccessoryView = self.makeVersionAccessory()
             }
         }
     }
@@ -383,7 +386,7 @@ extension SettingsViewController : SettingsModelDelegate {
         setGradientTopBar(mainColor: UIColor.main.peacockBlue, addedStatusView: true, menu: self.navigationController?.viewControllers.first == self)
         title = viewModel.title()
         if type == .main {
-            tableView.tableFooterView = versionView()
+            bottomAccessoryView = makeVersionAccessory()
         }
         viewModel.reload()
         tableView.reloadData()

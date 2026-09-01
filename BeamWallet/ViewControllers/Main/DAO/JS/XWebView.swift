@@ -61,7 +61,7 @@ extension WKWebView {
         if Thread.isMainThread {
             evaluateJavaScript(script, completionHandler: handler)
         } else {
-            DispatchQueue.main.async() {
+            DispatchQueue.main.async {
                 [weak self] in
                 self?.evaluateJavaScript(script, completionHandler: handler)
             }
@@ -76,7 +76,7 @@ extension WKWebView {
         let timeout = 3.0
         if Thread.isMainThread {
             evaluateJavaScript(script) {
-                (obj: Any?, err: Error?)->Void in
+                (obj: Any?, err: Error?)in
                 result = obj
                 error = err
                 done = true
@@ -89,10 +89,10 @@ extension WKWebView {
             }
         } else {
             let condition: NSCondition = NSCondition()
-            DispatchQueue.main.async() {
+            DispatchQueue.main.async {
                 [weak self] in
                 self?.evaluateJavaScript(script) {
-                    (obj: Any?, err: Error?)->Void in
+                    (obj: Any?, err: Error?)in
                     condition.lock()
                     result = obj
                     error = err

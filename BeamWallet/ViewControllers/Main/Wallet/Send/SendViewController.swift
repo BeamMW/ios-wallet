@@ -2,7 +2,7 @@
 // SendViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class SendViewController: BaseTableViewController {
     private let nextButton = BMButton.defaultButton(frame: CGRect(x: (UIScreen.main.bounds.size.width - 180) / 2, y: 40, width: 180, height: 44), color: UIColor.main.heliotrope.withAlphaComponent(0.1))
     
     
-    private func footerView()-> UIView {
+    private func footerView() -> UIView {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 0))
         
         infoLabel.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.width-40, height: 0)
@@ -55,7 +55,7 @@ class SendViewController: BaseTableViewController {
         infoLabel.font = ItalicFont(size: 16)
         infoLabel.textAlignment = .center
         if Settings.sharedManager().isDarkMode {
-            infoLabel.textColor = UIColor.main.steel;
+            infoLabel.textColor = UIColor.main.steel
         }
         else {
             infoLabel.textColor = UIColor.main.blueyGrey
@@ -104,7 +104,7 @@ class SendViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.onTokensCountChanged = {[weak self] obj in
+        viewModel.onTokensCountChanged = {[weak self] _ in
             guard let strongSelf = self else { return }
             if let cell = strongSelf.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BMSearchAddressCell {
                 cell.setAddressType(BMAddressType(strongSelf.viewModel.addressType), strongSelf.viewModel.isSendOffline, strongSelf.viewModel.tokensLeft)
@@ -245,17 +245,6 @@ class SendViewController: BaseTableViewController {
         super.viewDidAppear(animated)
         
         self.isAppear = true
-        
-        if viewModel.isNeedFocus {
-            if let cell = tableView.findCell(BMSearchAddressCell.self) as? BMSearchAddressCell {
-                cell.beginEditing(text: viewModel.copyAddress)
-            }
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -287,7 +276,7 @@ class SendViewController: BaseTableViewController {
         viewModel.toAddress = value
         
         tableView.reloadData()
-        tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .none)
+        tableView.reloadSections([0], with: .none)
         
         if viewModel.amount.isEmpty {
             if let cell = tableView.findCell(BMAmountCell.self) as? BMAmountCell {
@@ -371,7 +360,7 @@ extension SendViewController: UITableViewDataSource {
             cell.delegate = self
             cell.additionalError = viewModel.newVersionError
             cell.copyText = viewModel.copyAddress
-            cell.configure(with: (name: Localizable.shared.strings.send_to.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) //IconAddressBookSmall(),
+            cell.configure(with: (name: Localizable.shared.strings.send_to.uppercased(), value: viewModel.toAddress, rightIcons: [IconScanQr()])) // IconAddressBookSmall(),
             cell.contact = viewModel.selectedContact
             cell.setAddressType(BMAddressType(viewModel.addressType), viewModel.isSendOffline, viewModel.tokensLeft)
             cell.nameLabelTopOffset.constant = 20

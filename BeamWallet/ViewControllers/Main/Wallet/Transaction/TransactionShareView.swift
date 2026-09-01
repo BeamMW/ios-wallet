@@ -2,7 +2,7 @@
 // TransactionShareView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -166,7 +166,7 @@ class TransactionShareView: UIView {
             amountLabel.textColor = UIColor.main.heliotrope
         }
         
-        addressTypeValueLabel.text = transaction.getAddressType();
+        addressTypeValueLabel.text = transaction.getAddressType()
         
         transactionKernelValueLabel.text = transaction.kernelId
         if transaction.kernelId.contains("000000") || transaction.isExpired() || transaction.isFailed() {

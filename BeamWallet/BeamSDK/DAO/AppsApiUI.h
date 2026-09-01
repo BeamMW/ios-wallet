@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 31.08.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 #include "wallet/api/i_wallet_api.h"

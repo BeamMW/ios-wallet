@@ -85,7 +85,7 @@ public class XWVObject : NSObject {
             return
         }
         webView.asyncEvaluateJavaScript(scriptForRetaining(expression)) {
-            [weak self](result: Any?, error: Error?)->Void in
+            [weak self](result: Any?, error: Error?)in
             if let error = error {
                 completionHandler(nil, error)
             } else if let result = result {

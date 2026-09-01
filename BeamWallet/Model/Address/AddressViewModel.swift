@@ -2,7 +2,7 @@
 // AddressViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,16 +25,55 @@ class AddressViewModel: NSObject {
         case expired = 1
         case contacts = 2
     }
-    
+
     public var onDataChanged: (() -> Void)?
     public var onDataDeleted: ((IndexPath?, BMAddress) -> Void)?
-    
+
     public var addresses = [BMAddress]()
     public var contacts = [BMContact]()
     public var selectedState: AddressesSelectedState = .active {
         didSet {
             filterAddresses()
         }
+    }
+
+    // Shared across instances so the asynchronous fetch only runs once per session.
+    private static var cachedPublicOfflineAddress: String?
+    private static var isFetchingPublicOfflineAddress = false
+
+    public func isPublicOfflineEntry(_ address: BMAddress) -> Bool {
+        guard let cached = AddressViewModel.cachedPublicOfflineAddress, !cached.isEmpty else {
+            return false
+        }
+        return address.walletId == cached
+    }
+
+    private func ensurePublicOfflineAddressLoaded() {
+        if AddressViewModel.cachedPublicOfflineAddress != nil { return }
+        if AddressViewModel.isFetchingPublicOfflineAddress { return }
+        AddressViewModel.isFetchingPublicOfflineAddress = true
+        AppModel.sharedManager().getPublicAddress { [weak self] address in
+            DispatchQueue.main.async {
+                AddressViewModel.isFetchingPublicOfflineAddress = false
+                AddressViewModel.cachedPublicOfflineAddress = address
+                self?.filterAddresses()
+            }
+        }
+    }
+
+    private func makePublicOfflineAddress() -> BMAddress? {
+        guard let token = AddressViewModel.cachedPublicOfflineAddress, !token.isEmpty else {
+            return nil
+        }
+        let entry = BMAddress.empty()
+        entry.walletId = token
+        entry.address = token
+        entry.displayAddress = token
+        entry.label = Localizable.shared.strings.public_offline_address
+        entry.duration = 0
+        entry.createTime = 0
+        entry.isContact = true
+        return entry
     }
     
     public var count: Int {
@@ -58,8 +97,9 @@ class AddressViewModel: NSObject {
     
     init(selected: AddressesSelectedState) {
         super.init()
-        
+
         AppModel.sharedManager().addDelegate(self)
+        ensurePublicOfflineAddressLoaded()
     }
     
     init(address: BMAddress) {
@@ -100,21 +140,26 @@ class AddressViewModel: NSObject {
 
             self.addresses = uniqueAddressesObjects
             self.contacts = uniqueContactsObjects
-            
+
             let isOwn = AppModel.sharedManager().checkIsOwnNode()
             if !isOwn {
                 for (index, element) in self.addresses.enumerated() {
                     self.addresses[index].displayAddress = element.walletId
                 }
-                
+
                 for (index, element) in self.contacts.enumerated() {
                     let params = AppModel.sharedManager().getTransactionParameters(element.address.address ?? "")
                     if params.isMaxPrivacy {
                         self.contacts[index].address.displayAddress = element.address.address
                     }
                 }
-            }            
-            
+            }
+
+            if self.selectedState == .active, let publicOffline = self.makePublicOfflineAddress() {
+                self.addresses.removeAll { $0.walletId == publicOffline.walletId }
+                self.addresses.insert(publicOffline, at: 0)
+            }
+
             self.onDataChanged?()
         }
     }
@@ -187,7 +232,7 @@ class AddressViewModel: NSObject {
                     return
                 }
             }
-        }) {}
+        }, cancel: {})
     }
     
     public func onEditAddress(address: BMAddress) {
@@ -242,20 +287,26 @@ class AddressViewModel: NSObject {
     
     public func trailingSwipeActions(indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let address: BMAddress = selectedState == .contacts ? contacts[indexPath.row].address : addresses[indexPath.row]
-        
-        let delete = UIContextualAction(style: .normal, title: nil) { _, _, handler in
-            handler(true)
-            self.onDeleteAddress(address: address, indexPath: indexPath)
-        }
-        delete.image = IconRowDelete()
-        delete.backgroundColor = UIColor.main.coral
-        
+
         let copy = UIContextualAction(style: .normal, title: nil) { _, _, handler in
             handler(true)
             self.onCopyAddress(address: address)
         }
         copy.image = IconRowCopy()
         copy.backgroundColor = UIColor.main.deepSeaBlue
+
+        if isPublicOfflineEntry(address) {
+            let configuration = UISwipeActionsConfiguration(actions: [copy])
+            configuration.performsFirstActionWithFullSwipe = false
+            return configuration
+        }
+
+        let delete = UIContextualAction(style: .normal, title: nil) { _, _, handler in
+            handler(true)
+            self.onDeleteAddress(address: address, indexPath: indexPath)
+        }
+        delete.image = IconRowDelete()
+        delete.backgroundColor = UIColor.main.coral
         
         let edit = UIContextualAction(style: .normal, title: nil) { _, _, handler in
             handler(true)
@@ -329,6 +380,12 @@ extension AddressViewModel: WalletModelDelegate {
     func onCategoriesChange() {
         DispatchQueue.main.async {
             self.filterAddresses()
+        }
+    }
+
+    func onOfflinePaymentsCount(forWalletId walletId: String, count: Int32) {
+        DispatchQueue.main.async {
+            self.onDataChanged?()
         }
     }
 }

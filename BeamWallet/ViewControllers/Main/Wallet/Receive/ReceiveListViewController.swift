@@ -2,7 +2,7 @@
 // ReceiveListViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,10 +63,8 @@ class ReceiveListViewController: BaseTableViewController {
         var mainColor = UIColor.main.brightSkyBlue
         
         if let viewControllers = self.navigationController?.viewControllers{
-            for vc in viewControllers {
-                if vc is SendViewController  {
-                    mainColor = UIColor.main.heliotrope
-                }
+            for vc in viewControllers where vc is SendViewController {
+                mainColor = UIColor.main.heliotrope
             }
         }
         

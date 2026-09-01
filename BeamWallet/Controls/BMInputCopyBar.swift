@@ -2,7 +2,7 @@
 // BMInputCopyBar.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,12 +31,12 @@ class BMInputCopyBar: UIView {
         addSubview(view)
         
         let toolbar = UIToolbar(frame: view.bounds)
-        toolbar.autoresizingMask = .flexibleWidth;
-        toolbar.isUserInteractionEnabled = false;
+        toolbar.autoresizingMask = .flexibleWidth
+        toolbar.isUserInteractionEnabled = false
         view.addSubview(toolbar)
         
         let separator = UIView(frame: CGRect(x:0, y:43.5, width:view.frame.size.width, height:0.5))
-        separator.autoresizingMask = .flexibleWidth;
+        separator.autoresizingMask = .flexibleWidth
         separator.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
         view.addSubview(separator)
         

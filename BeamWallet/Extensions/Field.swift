@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 // 3/2/19.
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 import Foundation
 import UIKit
 
-//extension UITextField {
+// extension UITextField {
 //
 //    var clearButtonTintColor: UIColor? {
 //        get {
@@ -30,11 +30,11 @@ import UIKit
 //        set {
 //        }
 //    }
-//}
+// }
 
 extension UITextField {
     
-    public func disablePasswordAutoFill () {
+    public func disablePasswordAutoFill() {
         if #available(iOS 12, *) {
             // iOS 12: Not the best solution, but it works.
             self.textContentType = .oneTimeCode
@@ -69,7 +69,7 @@ extension UITextField {
         }
     }
     
-    @IBInspectable var placeHolderFont: UIFont? {
+    var placeHolderFont: UIFont? {
         get {
             return self.placeHolderFont
         }

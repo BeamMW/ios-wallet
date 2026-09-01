@@ -2,7 +2,7 @@
 // AddressTableView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,9 +51,7 @@ class AddressTableView: UITableViewController {
             
             strongSelf.tableView.reloadData()
         }
-        viewModel.onDataDeleted = { [weak self]
-            indexPath, address in
-            
+        viewModel.onDataDeleted = { [weak self] indexPath, address in
             guard let strongSelf = self else { return }
             
             if let path = indexPath {
@@ -149,10 +147,15 @@ class AddressTableView: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         if viewModel.count > 0 {
             let address = viewModel.selectedState == .contacts ? viewModel.contacts[indexPath.row].address : viewModel.addresses[indexPath.row]
-            
+
+            if viewModel.isPublicOfflineEntry(address) {
+                pushViewController(vc: OfflineAddressViewController())
+                return
+            }
+
             let vc = AddressViewController(address: address)
             pushViewController(vc: vc)
         }

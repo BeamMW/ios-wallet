@@ -2,7 +2,7 @@
 // BMField.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -107,6 +107,12 @@ class BMField: BMClearField {
             _defaultHeight = newValue
         }
     }
+
+    // TODO: stored only to satisfy KVC for legacy xibs that still reference these
+    // keys; the values are not rendered. Do not remove the properties without
+    // also stripping the bindings from every xib that uses BMField.
+    @IBInspectable var lineColor: UIColor?
+    @IBInspectable var lineHeight: CGFloat = 0
     
     private var isInFocus = false {
         didSet {

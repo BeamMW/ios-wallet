@@ -2,7 +2,7 @@
 // View.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ extension UIView {
     }
     
     func removeExternalBorders() {
-        layer.sublayers?.filter() { $0.name == Constants.ExternalBorderName }.forEach() {
+        layer.sublayers?.filter { $0.name == Constants.ExternalBorderName }.forEach {
             $0.removeFromSuperlayer()
         }
     }

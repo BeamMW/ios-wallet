@@ -2,7 +2,7 @@
 // BMCategoryColorsView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ class BMCategoryColorsView: UIView {
         }
     }
     
-    public func colorsWidht()->CGFloat {
+    public func colorsWidht() -> CGFloat {
         if self.subviews.count > 0 {
             if let last = self.subviews.last {
                 return last.frame.origin.x + last.frame.size.width

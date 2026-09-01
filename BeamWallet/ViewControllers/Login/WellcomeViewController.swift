@@ -2,7 +2,7 @@
 // WellcomeViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ class WellcomeViewController: BaseViewController {
         languageButton.setTitle(Settings.sharedManager().shortLanguageName(), for: .normal)
     }
     
-    //MARK: IBAction
+    // MARK: IBAction
     
     @IBAction func onRestoreWallet(sender :UIButton) {
 //        AppModel.sharedManager().resetWallet(true)
@@ -68,7 +68,7 @@ class WellcomeViewController: BaseViewController {
     
     @IBAction func onCreateWallet(sender :UIButton) {
 //        AppModel.sharedManager().resetWallet(true)
-        AppModel.sharedManager().isRestoreFlow = false;
+        AppModel.sharedManager().isRestoreFlow = false
         pushViewController(vc: SeedPhraseViewController(event: .intro, words: nil))
     }
 

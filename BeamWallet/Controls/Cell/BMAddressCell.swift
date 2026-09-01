@@ -2,7 +2,7 @@
 // BMAddressCell.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -113,5 +113,15 @@ extension BMAddressCell: Configurable {
         }
         
         expiredLabel.isHidden = true
+
+        if !options.address.isContact {
+            let walletId = options.address.walletId
+            AppModel.sharedManager().requestOfflinePaymentsCount(forWalletId: walletId)
+            let count = AppModel.sharedManager().offlinePaymentsCount(forWalletId: walletId)
+            if count > 0 {
+                expiredLabel.text = String(format: Localizable.shared.strings.offline_left_address, count)
+                expiredLabel.isHidden = false
+            }
+        }
     }
 }

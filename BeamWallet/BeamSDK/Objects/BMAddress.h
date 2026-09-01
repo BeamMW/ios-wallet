@@ -2,7 +2,7 @@
 //  BMAddress.h
 //  BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ typedef int BMAddressType;
 @property (nonatomic,strong, getter = getWalletId) NSString * _Nonnull walletId;
 @property (nonatomic,strong) NSString * _Nullable offlineToken;
 @property (nonatomic,strong) NSString * _Nullable maxPrivacyToken;
+@property (nonatomic,strong) NSString * _Nullable sbbsToken;
+@property (nonatomic,strong) NSString * _Nullable publicOfflineToken;
 @property (nonatomic,strong) NSString * _Nullable address;
 
 @property (nonatomic,strong) NSString * _Nonnull label;

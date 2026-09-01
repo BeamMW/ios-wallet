@@ -2,7 +2,7 @@
 // TransactionsViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,9 +69,8 @@ class TransactionsViewController: BaseTableViewController {
         addRightButton(image: MoreIcon(), target: self, selector: #selector(onMore))
         
         searchView = BMSearchView()
-        searchView.onSearchTextChanged = {
-            [weak self] text in
-            
+        searchView.onSearchTextChanged = { [weak self] text in
+
             guard let strongSelf = self else { return }
            
             for model in strongSelf.viewModels {
@@ -80,8 +79,7 @@ class TransactionsViewController: BaseTableViewController {
                 model.search()
             }
         }
-        searchView.onCancelSearch = {
-            [weak self] in
+        searchView.onCancelSearch = { [weak self] in
             guard let strongSelf = self else { return }
            
             for model in strongSelf.viewModels {
@@ -129,7 +127,7 @@ class TransactionsViewController: BaseTableViewController {
     }
     
     @objc private func onExporToCSV() {
-        AppModel.sharedManager().exportTransactions { (data, url) in
+        AppModel.sharedManager().exportTransactions { (_, url) in
             DispatchQueue.main.async {
                 let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
                 vc.excludedActivityTypes = [UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]

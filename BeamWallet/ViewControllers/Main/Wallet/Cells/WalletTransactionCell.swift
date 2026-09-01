@@ -2,7 +2,7 @@
 // WalletTransactionCell.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,13 +41,6 @@ class WalletTransactionCell: UITableViewCell {
         super.awakeFromNib()
         
         selectionStyle = .none
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-//        assetIcon2.x = 20
-//        assetIcon3.x = 40
     }
 }
 

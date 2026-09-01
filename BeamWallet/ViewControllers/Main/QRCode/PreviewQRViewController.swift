@@ -2,7 +2,7 @@
 // PreviewQRViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ class PreviewQRViewController: BaseViewController {
         if let image = codeView.snapshot(), let topVC = UIApplication.getTopMostViewController() {
             let activityItem: [AnyObject] = [image]
             let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = {(_: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 
                 if completed && self.fromMore {
                     self.back()
@@ -138,13 +138,13 @@ class PreviewQRViewController: BaseViewController {
         
         let action1 = UIPreviewAction(title: Localizable.shared.strings.share_qr_code,
                                       style: .default,
-                                      handler: { previewAction, viewController in
+                                      handler: { _, _ in
                                         self.onShare()
         })
         
         let action2 = UIPreviewAction(title: Localizable.shared.strings.copy_address,
                                       style: .default,
-                                      handler: { previewAction, viewController in
+                                      handler: { _, _ in
                                         self.onCopy()
         })
         

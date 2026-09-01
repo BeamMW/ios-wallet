@@ -2,7 +2,7 @@
 // AssetViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -75,17 +75,14 @@ class AssetViewModel: NSObject {
             self.assets.sort { a1, a2 in
                 return a1.dateUsed() > a2.dateUsed()
             }
-            break
         case .old_recent:
             self.assets.sort { a1, a2 in
                 return a1.dateUsed() < a2.dateUsed()
             }
-            break
         case .amount_large_small:
             self.assets.sort { a1, a2 in
                 return a1.realAmount > a2.realAmount
             }
-            break
         case .amount_small_large:
             self.assets.sort { a1, a2 in
                 return a1.realAmount < a2.realAmount
@@ -156,7 +153,7 @@ class AssetViewModel: NSObject {
         return result
     }
 
-    public func getAssetBalanceInfo(asset:BMAsset)-> [[BMThreeLineItem]] {
+    public func getAssetBalanceInfo(asset:BMAsset) -> [[BMThreeLineItem]] {
         var result = [[BMThreeLineItem]]()
         
         var section_1 = [BMThreeLineItem]()
@@ -203,7 +200,7 @@ class AssetViewModel: NSObject {
     }
 }
 
-//MARK: - Delegate
+// MARK: - Delegate
 
 extension AssetViewModel : WalletModelDelegate {
     

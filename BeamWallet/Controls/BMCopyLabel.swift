@@ -2,7 +2,7 @@
 //  BMCopyLabel.swift
 //  BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,9 +32,7 @@ class BMCopyLabel: UILabel {
     public var copiedText:String?
 
     override public var canBecomeFirstResponder: Bool {
-        get {
-            return true
-        }
+        return true
     }
     
     override init(frame: CGRect) {

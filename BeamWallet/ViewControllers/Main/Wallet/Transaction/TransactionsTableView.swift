@@ -2,7 +2,7 @@
 // TransactionsTableView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ class TransactionsTableView: UITableViewController {
     }
     
     
-//MARK: - Updates
+// MARK: - Updates
 
     @objc private func refreshData(_ sender: Any) {
           AppModel.sharedManager().getWalletStatus()
@@ -99,9 +99,7 @@ class TransactionsTableView: UITableViewController {
             }
         }
         
-        viewModel.onDataDeleted = { [weak self]
-            indexPath, transaction in
-            
+        viewModel.onDataDeleted = { [weak self] indexPath, transaction in
             guard let strongSelf = self else { return }
             
             if strongSelf.viewModel.transactions.count == 0 {
@@ -119,9 +117,7 @@ class TransactionsTableView: UITableViewController {
             }
         }
         
-        viewModel.onDataUpdated = { [weak self]
-            indexPath, transaction in
-            
+        viewModel.onDataUpdated = { [weak self] indexPath, transaction in
             if let path = indexPath {
                 self?.tableView.performUpdate({
                     self?.tableView.reloadRows(at: [path], with: .fade)
@@ -132,7 +128,7 @@ class TransactionsTableView: UITableViewController {
         }
     }
     
-//MARK: - TableView
+// MARK: - TableView
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if viewModel.transactions.count == 0 {
@@ -216,7 +212,7 @@ class TransactionsTableView: UITableViewController {
     }
 }
 
-//MARK: - Keyboard
+// MARK: - Keyboard
 
 extension TransactionsTableView {
     
@@ -328,7 +324,7 @@ extension TransactionsTableView: UIContextMenuInteractionDelegate {
             
             return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
                 return detailVC
-            }, actionProvider: { suggestedActions in
+            }, actionProvider: { _ in
                 return self.makeContextMenu(transaction: self.viewModel.transactions[indexPath.row])
             })
         }
@@ -342,45 +338,45 @@ extension TransactionsTableView: UIContextMenuInteractionDelegate {
         let viewModel = DetailTransactionViewModel(transaction: transaction)
         
         if transaction.canSaveContact() {
-            let action1 = UIAction(title: Localizable.shared.strings.save_contact_title, image: nil) { action in
+            let action1 = UIAction(title: Localizable.shared.strings.save_contact_title, image: nil) { _ in
                 viewModel.saveContact()
             }
             array.append(action1)
         }
         
-        let action1 = UIAction(title: Localizable.shared.strings.share_details, image: nil) { action in
+        let action1 = UIAction(title: Localizable.shared.strings.share_details, image: nil) { _ in
             viewModel.share()
         }
         array.append(action1)
         
-        let action2 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { action in
+        let action2 = UIAction(title: Localizable.shared.strings.copy_details, image: nil) { _ in
             viewModel.copyDetails()
         }
         array.append(action2)
         
         if !transaction.isIncome && !transaction.isDapps {
-            let action3 = UIAction(title: Localizable.shared.strings.repeat_transaction, image: nil) { action in
+            let action3 = UIAction(title: Localizable.shared.strings.repeat_transaction, image: nil) { _ in
                 viewModel.repeatTransation(transaction: viewModel.transaction!)
             }
             array.append(action3)
         }
         
         if transaction.canCancel && !transaction.isDapps {
-            let action4 = UIAction(title: Localizable.shared.strings.cancel_transaction, image: nil) { action in
+            let action4 = UIAction(title: Localizable.shared.strings.cancel_transaction, image: nil) { _ in
                 viewModel.cancelTransation(indexPath: nil)
             }
             array.append(action4)
         }
         
         if transaction.canDelete {
-            let action5 = UIAction(title: Localizable.shared.strings.delete_transaction, image: nil) { action in
+            let action5 = UIAction(title: Localizable.shared.strings.delete_transaction, image: nil) { _ in
                 viewModel.deleteTransationNew(indexPath: nil)
             }
             array.append(action5)
         }
         
         if transaction.isDapps {
-            let action6 = UIAction(title: Localizable.shared.strings.open_dapp, image: nil) { action in
+            let action6 = UIAction(title: Localizable.shared.strings.open_dapp, image: nil) { _ in
                 viewModel.openDapp()
             }
             array.append(action6)

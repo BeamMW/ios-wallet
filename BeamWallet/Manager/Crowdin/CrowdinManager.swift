@@ -2,7 +2,7 @@
 // CrowdinManager.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,28 +23,24 @@ import Foundation
 class CrowdinManager : NSObject {
     
    fileprivate static var zipPath:URL {
-        get{
-            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-            let documentDirectoryPath:String = path[0]
-            let destinationURLForFile = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/all.zip"))
-            return destinationURLForFile
-        }
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentDirectoryPath:String = path[0]
+        let destinationURLForFile = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/all.zip"))
+        return destinationURLForFile
     }
-    
+
     static var localizationPath:URL {
-        get{
-            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-            let documentDirectoryPath:String = path[0]
-            let destinationURLForFile = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/localization"))
-            return destinationURLForFile
-        }
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentDirectoryPath:String = path[0]
+        let destinationURLForFile = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/localization"))
+        return destinationURLForFile
     }
     
     static public func updateLocalizations() {
         let zipLink = URL(string: "https://api.crowdin.com/api/project/\(crowdinProject)/download/all.zip?key=\(crowdinKey)")!
         
         BackgroundDownloader.shared.startDownloading(zipLink, zipPath)
-        BackgroundDownloader.shared.onProgress = { (progress, error, filePath, time) in
+        BackgroundDownloader.shared.onProgress = { (_, error, filePath, _) in
             if filePath != nil {
                 
                 if FileManager.default.fileExists(atPath: localizationPath.path)
@@ -59,7 +55,7 @@ class CrowdinManager : NSObject {
                 
                 SSZipArchive.unzipFile(atPath: filePath!, toDestination: localizationPath.path, overwrite:true, password: nil, progressHandler: { (_ , _ , _ , _ ) in
                 
-                }, completionHandler: { (path, success, error ) in
+                }, completionHandler: { (_, success, error ) in
                     if(success) {
                         do {
                             let items = try FileManager.default.contentsOfDirectory(atPath: localizationPath.path)

@@ -2,7 +2,7 @@
 // PasswordManager.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,11 +62,8 @@ class PasswordTestManager {
         
         let range = NSRange(location: 0, length: password.utf16.count)
 
-        for test in strengthTests {
-            if(test.exp.firstMatch(in: password, options: [], range: range) != nil)
-            {
-                state = test.state
-            }
+        for test in strengthTests where test.exp.firstMatch(in: password, options: [], range: range) != nil {
+            state = test.state
         }
         
         return state

@@ -2,7 +2,7 @@
 // BMAsset.m
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,32 +79,30 @@
     self = [super init];
     if(self)
     {
-        self.unitName = [decoder decodeObjectForKey: @"unitName"];
-        self.nthUnitName = [decoder decodeObjectForKey: @"nthUnitName"];
-        self.shortName = [decoder decodeObjectForKey: @"shortName"];
-        self.shortDesc = [decoder decodeObjectForKey: @"shortDesc"];
-        self.longDesc = [decoder decodeObjectForKey: @"longDesc"];
-        self.name = [decoder decodeObjectForKey: @"name"];
-        self.color = [decoder decodeObjectForKey: @"color"];
-//        self.site = [decoder decodeObjectForKey: @"site"];
- //       self.paper = [decoder decodeObjectForKey: @"paper"];
+        self.unitName = [decoder decodeObjectOfClass:[NSString class] forKey: @"unitName"];
+        self.nthUnitName = [decoder decodeObjectOfClass:[NSString class] forKey: @"nthUnitName"];
+        self.shortName = [decoder decodeObjectOfClass:[NSString class] forKey: @"shortName"];
+        self.shortDesc = [decoder decodeObjectOfClass:[NSString class] forKey: @"shortDesc"];
+        self.longDesc = [decoder decodeObjectOfClass:[NSString class] forKey: @"longDesc"];
+        self.name = [decoder decodeObjectOfClass:[NSString class] forKey: @"name"];
+        self.color = [decoder decodeObjectOfClass:[NSString class] forKey: @"color"];
         self.site = @"";
         self.paper = @"";
 
-        self.available = [[decoder decodeObjectForKey: @"available"] longLongValue];
-        self.receiving = [[decoder decodeObjectForKey: @"receiving"] longLongValue];
-        self.sending = [[decoder decodeObjectForKey: @"sending"] longLongValue];
-        self.assetId = [[decoder decodeObjectForKey: @"assetId"] longLongValue];
-        self.shielded = [[decoder decodeObjectForKey: @"shielded"] longLongValue];
-        self.maturing = [[decoder decodeObjectForKey: @"maturing"] longLongValue];
-        self.maxPrivacy = [[decoder decodeObjectForKey: @"maxPrivacy"] longLongValue];
-        
-        self.realAmount = [[decoder decodeObjectForKey: @"realAmount"] doubleValue];
-        self.realReceiving = [[decoder decodeObjectForKey: @"realReceiving"] doubleValue];
-        self.realSending = [[decoder decodeObjectForKey: @"realSending"] doubleValue];
-        self.realMaturing = [[decoder decodeObjectForKey: @"realMaturing"] doubleValue];
-        self.realShielded = [[decoder decodeObjectForKey: @"realShielded"] doubleValue];
-        self.realMaxPrivacy = [[decoder decodeObjectForKey: @"realMaxPrivacy"] doubleValue];
+        self.available = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"available"] longLongValue];
+        self.receiving = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"receiving"] longLongValue];
+        self.sending = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"sending"] longLongValue];
+        self.assetId = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"assetId"] longLongValue];
+        self.shielded = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"shielded"] longLongValue];
+        self.maturing = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"maturing"] longLongValue];
+        self.maxPrivacy = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"maxPrivacy"] longLongValue];
+
+        self.realAmount = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realAmount"] doubleValue];
+        self.realReceiving = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realReceiving"] doubleValue];
+        self.realSending = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realSending"] doubleValue];
+        self.realMaturing = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realMaturing"] doubleValue];
+        self.realShielded = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realShielded"] doubleValue];
+        self.realMaxPrivacy = [[decoder decodeObjectOfClass:[NSNumber class] forKey: @"realMaxPrivacy"] doubleValue];
     }
     return self;
 }

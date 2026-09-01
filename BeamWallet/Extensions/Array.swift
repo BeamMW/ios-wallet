@@ -2,7 +2,7 @@
 // Array.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 import Foundation
 
-func rearrange<T>(array: Array<T>, fromIndex: Int, toIndex: Int) -> Array<T>{
+func rearrange<T>(array: [T], fromIndex: Int, toIndex: Int) -> [T]{
     var arr = array
     let element = arr.remove(at: fromIndex)
     arr.insert(element, at: toIndex)

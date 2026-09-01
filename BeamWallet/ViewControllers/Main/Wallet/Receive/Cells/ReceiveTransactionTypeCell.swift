@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 08.04.2021.
-//  Copyright © 2021 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ protocol ReceiveTransactionTypeCellDelegate: AnyObject {
 
 class ReceiveTransactionTypeCell: UITableViewCell {
 
-    public weak var delegate:ReceiveTransactionTypeCellDelegate? = nil
+    public weak var delegate:ReceiveTransactionTypeCellDelegate?
     
     @IBOutlet private var transactionTypeLabel: UILabel!
     @IBOutlet private var errorLabel: UILabel!

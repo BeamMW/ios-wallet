@@ -2,7 +2,7 @@
 // KeychainManager.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 //
 
 import Foundation
+import LocalAuthentication
 
 struct Credentials {
     var password: String
@@ -32,87 +33,121 @@ enum KeychainError: Error {
 class KeychainManager {
     private static let passKey = "wallet"
     private static let seedKey = "seed"
-    private static let readLock = NSLock()
+    private static let lock = NSLock()
 
-    public static func addSeed(seed:String) -> Bool {
-        _ = delete(seedKey)
-        
-        let password = seed.data(using: String.Encoding.utf8)!
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecValueData as String: password,
-                                    kSecAttrAccount as String : seedKey]
-        
-        let status = SecItemAdd(query as CFDictionary, nil)
-       
-        return status == errSecSuccess
+    public static func addSeed(seed: String) -> Bool {
+        return write(key: seedKey, value: seed, requireBiometry: false)
     }
-    
-    public static func addPassword(password:String) -> Bool {
-        _ = delete(passKey)
-        
-        let password = password.data(using: String.Encoding.utf8)!
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecValueData as String: password,
-                                    kSecAttrAccount as String : passKey]
-        
-        let status = SecItemAdd(query as CFDictionary, nil)
-       
-        return status == errSecSuccess
+
+    /// Stores the wallet password in the keychain when biometric unlock is on,
+    /// guarded by a `.biometryCurrentSet` access-control so reading the entry
+    /// requires fresh biometric authentication. When the toggle is off, any
+    /// existing entry is removed so the toggle is the single source of truth.
+    public static func addPassword(password: String) -> Bool {
+        if !Settings.sharedManager().isEnableBiometric {
+            _ = delete(passKey)
+            return true
+        }
+        return write(key: passKey, value: password, requireBiometry: true)
     }
-    
+
     public static func getPassword() -> String? {
-        if let data = getData(passKey) {
-            
-            if let currentString = String(data: data, encoding: .utf8) {
-                return currentString
-            }
-        }
-        
-        return nil
+        return getPassword(context: nil)
     }
-    
+
+    /// Reads the password. If `context` is supplied and already authenticated,
+    /// the OS skips the biometric prompt; otherwise SecItemCopyMatching shows
+    /// its own prompt because of the `.biometryCurrentSet` ACL on the entry.
+    public static func getPassword(context: LAContext?) -> String? {
+        guard let data = getData(passKey, context: context) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
     public static func getSeed() -> String? {
-        if let data = getData(seedKey) {
-            
-            if let currentString = String(data: data, encoding: .utf8) {
-                return currentString
+        guard let data = getData(seedKey, context: nil) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
+    @discardableResult
+    public static func deletePassword() -> Bool {
+        return delete(passKey)
+    }
+
+    @discardableResult
+    public static func deleteSeed() -> Bool {
+        return delete(seedKey)
+    }
+
+    // MARK: - Private
+
+    private static func write(key: String, value: String, requireBiometry: Bool) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+
+        _ = deleteLocked(key)
+
+        guard let data = value.data(using: .utf8) else { return false }
+
+        var query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecValueData as String: data,
+        ]
+
+        if requireBiometry {
+            guard let access = SecAccessControlCreateWithFlags(
+                nil,
+                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+                .biometryCurrentSet,
+                nil) else {
+                // Refuse to store a password unprotected on a device that can't
+                // produce a biometry ACL (no biometry / no passcode).
+                return false
             }
+            query[kSecAttrAccessControl as String] = access
+        } else {
+            query[kSecAttrAccessible as String] = kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
         }
-        
-        return nil
+
+        let status = SecItemAdd(query as CFDictionary, nil)
+        return status == errSecSuccess
     }
-    
+
+    @discardableResult
     private static func delete(_ key: String) -> Bool {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String : key
-        ]
-        
-        let lastResultCode = SecItemDelete(query as CFDictionary)
-        
-        return lastResultCode == noErr
+        lock.lock()
+        defer { lock.unlock() }
+        return deleteLocked(key)
     }
-    
-    private static func getData(_ key: String) -> Data? {
-        readLock.lock()
-        defer { readLock.unlock() }
-                
+
+    private static func deleteLocked(_ key: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String : key,
-            kSecReturnData as String  : kCFBooleanTrue as Any,
-            kSecMatchLimit as String  : kSecMatchLimitOne
+            kSecAttrAccount as String: key,
         ]
-        
-        
+        let status = SecItemDelete(query as CFDictionary)
+        return status == errSecSuccess || status == errSecItemNotFound
+    }
+
+    private static func getData(_ key: String, context: LAContext?) -> Data? {
+        lock.lock()
+        defer { lock.unlock() }
+
+        var query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecReturnData as String: kCFBooleanTrue as Any,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+        ]
+        if let context = context {
+            query[kSecUseAuthenticationContext as String] = context
+        }
+
         var result: AnyObject?
-        
-        let lastResultCode = withUnsafeMutablePointer(to: &result) {
+        let status = withUnsafeMutablePointer(to: &result) {
             SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
         }
-        
-        if lastResultCode == noErr { return result as? Data }
-        
-        return nil
+        guard status == errSecSuccess else { return nil }
+        return result as? Data
     }
 }

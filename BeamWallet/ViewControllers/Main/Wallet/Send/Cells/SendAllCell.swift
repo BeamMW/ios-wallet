@@ -2,7 +2,7 @@
 // SendAllCell.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ class SendAllCell: BaseCell {
         allButton.setTitle(Localizable.shared.strings.add_max.lowercased(), for: .normal)
 
         if Settings.sharedManager().isDarkMode {
-            titleLabel.textColor = UIColor.main.steel;
+            titleLabel.textColor = UIColor.main.steel
         }
     }
 

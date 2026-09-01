@@ -2,7 +2,7 @@
 // BMMultiLineItem.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ struct BMThreeLineItem {
     public var hasArrow:Bool
     public var expand = true
     
-    public var accessoryName:String? = nil
+    public var accessoryName:String?
     
-    public var customObject:Any? = nil
+    public var customObject:Any?
 }
 
 class BMMultiLineItem {
@@ -47,9 +47,9 @@ class BMMultiLineItem {
     public var detailColor:UIColor?
     public var detailAttributedString:NSMutableAttributedString?
     public var canCopy = false
-    public var copiedText: String? = nil
-    public var copyValue: String? = nil
-    public var showCopyButton: Bool? = nil
+    public var copiedText: String?
+    public var copyValue: String?
+    public var showCopyButton: Bool?
 
     required init(title:String!, detail:String?, detailFont:UIFont?, detailColor:UIColor?) {
         self.title = title

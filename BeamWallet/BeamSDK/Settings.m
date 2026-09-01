@@ -2,7 +2,7 @@
 // Settings.m
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ static NSString *notificationsTransactionKey = @"notificationsTransactionKey";
 static NSString *notificationsAddressKey = @"notificationsAddressKey";
 static NSString *nodeProtocolKey = @"nodeProtocolKey";
 static NSString *randomDBIdKey = @"randomDBIdKey";
+static NSString *oracleEnabledKey = @"oracleEnabledKey";
 
 
 
@@ -160,7 +161,7 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     _documentationAddress = @"https://beam.mw/docs";
     
-    if (ENALBE_LANG) {
+    if (ENABLE_LANG) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
             _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
         }
@@ -238,7 +239,14 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
     else{
         _isNodeProtocolEnabled = NO;
     }
-    
+
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:oracleEnabledKey]) {
+        _isOracleEnabled = [[[NSUserDefaults standardUserDefaults] objectForKey:oracleEnabledKey] boolValue];
+    }
+    else {
+        _isOracleEnabled = NO;
+    }
+
     return self;
 }
 
@@ -327,14 +335,26 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
 }
 
 -(void)setDefaultDarkMode:(BOOL)isSystemMode {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:isSetDarkModeKey]) {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    // Pre-isSetDarkModeKey installs already had darkModeKey persisted; if we
+    // see one without the marker, lock the existing preference in place so
+    // the fresh-install branch below doesn't retroactively flip them.
+    if ([defaults objectForKey:darkModeKey] != nil &&
+        [defaults objectForKey:isSetDarkModeKey] == nil) {
+        [defaults setObject:@"1" forKey:isSetDarkModeKey];
+        [defaults synchronize];
+        _isDarkMode = [[defaults objectForKey:darkModeKey] boolValue];
+        return;
+    }
+
+    if (![defaults objectForKey:isSetDarkModeKey]) {
         self.isDarkMode = isSystemMode;
-        
-        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:isSetDarkModeKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+
+        [defaults setObject:@"1" forKey:isSetDarkModeKey];
+        [defaults synchronize];
     }
     else{
-        _isDarkMode = [[[NSUserDefaults standardUserDefaults] objectForKey:darkModeKey] boolValue];
+        _isDarkMode = [[defaults objectForKey:darkModeKey] boolValue];
     }
 }
 
@@ -464,6 +484,20 @@ static NSString *randomDBIdKey = @"randomDBIdKey";
             if ([delegate respondsToSelector:@selector(onNetwotkStatusChange:)]) {
                 [delegate onNetwotkStatusChange:NO];
             }
+        }
+    }
+}
+
+-(void)setIsOracleEnabled:(BOOL)isOracleEnabled {
+    _isOracleEnabled = isOracleEnabled;
+
+    [[NSUserDefaults standardUserDefaults] setBool:_isOracleEnabled forKey:oracleEnabledKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    NSArray *delegates = [AppModel sharedManager].delegates.allObjects;
+    for(id<WalletModelDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(onExchangeRatesChange)]) {
+            [delegate onExchangeRatesChange];
         }
     }
 }

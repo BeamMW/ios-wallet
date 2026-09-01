@@ -2,7 +2,7 @@
 // ReceiveAddressViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,34 +25,110 @@ class ReceiveAddressViewModel: NSObject {
         case regular = 0
         case privacy = 1
     }
-    
+
+    enum ReceiveTokenType: Int {
+        case sbbs = 0
+        case regular = 1
+        case maxPrivacy = 2
+        case offline = 3
+        case publicOffline = 4
+
+        var localizedName: String {
+            switch self {
+            case .sbbs: return Localizable.shared.strings.sbbs_address
+            case .regular: return Localizable.shared.strings.regular_address
+            case .maxPrivacy: return Localizable.shared.strings.max_privacy_address
+            case .offline: return Localizable.shared.strings.offline_address
+            case .publicOffline: return Localizable.shared.strings.public_offline_address
+            }
+        }
+
+        var supportsVouchers: Bool {
+            switch self {
+            case .regular, .offline: return true
+            default: return false
+            }
+        }
+
+        var supportsOnlineReceive: Bool {
+            switch self {
+            case .sbbs, .regular, .offline: return true
+            default: return false
+            }
+        }
+
+        var defaultVouchers: Int {
+            switch self {
+            case .offline: return 10
+            default: return 1
+            }
+        }
+    }
+
+    static let maxVouchersCount = 30
+
     enum ExpireOptions: Int {
         case oneTime = 0
         case parmanent = 1
     }
-    
+
     enum ReceiveAddressViewModelSaveState: Int {
         case none = 0
         case new = 1
         case edit = 2
     }
-    
+
     public var needReloadButtons = false
 
     public var transactionComment = String.empty()
-    
+
     public var onAddressCreated: ((Error?) -> Void)?
     public var onDataChanged: (() -> Void)?
     public var onShared: (() -> Void)?
     public var onAddressUpdate: ((Error?) -> Void)?
 
     public var address: BMAddress!
-    public var transaction = TransactionOptions.regular
-    {
+    public var selectedTokenType: ReceiveTokenType = .regular {
         didSet {
             if isSavedAddress {
                 isShared = true
             }
+            suppressVouchersRegen = true
+            vouchersCount = selectedTokenType.defaultVouchers
+            suppressVouchersRegen = false
+        }
+    }
+
+    public var transaction: TransactionOptions {
+        return selectedTokenType == .maxPrivacy ? .privacy : .regular
+    }
+
+    private var suppressVouchersRegen = false
+
+    private var _vouchersCount: Int = ReceiveTokenType.regular.defaultVouchers
+    public var vouchersCount: Int {
+        get { _vouchersCount }
+        set {
+            // Mirror the VC's 1...maxVouchersCount clamp so direct/programmatic
+            // writes can't bypass validation.
+            let clamped = max(1, min(ReceiveAddressViewModel.maxVouchersCount, newValue))
+            guard clamped != _vouchersCount else { return }
+            _vouchersCount = clamped
+            if !suppressVouchersRegen && selectedTokenType.supportsVouchers {
+                generateTokens()
+            }
+        }
+    }
+
+    public var currentToken: String {
+        let isOwn = AppModel.sharedManager().checkIsOwnNode()
+        if !isOwn { return address?.address ?? address?.walletId ?? "" }
+        switch selectedTokenType {
+        case .sbbs: return address?.sbbsToken ?? ""
+        case .regular: return address?.address ?? address?.walletId ?? ""
+        case .maxPrivacy: return address?.maxPrivacyToken ?? ""
+        case .offline: return address?.offlineToken ?? ""
+        case .publicOffline: return address?.publicOfflineToken ?? ""
         }
     }
 
@@ -112,9 +188,7 @@ class ReceiveAddressViewModel: NSObject {
         }
     }
     public var selectedCurrencyString: String {
-        get {
-            return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
-        }
+        return AssetsManager.shared().getAsset(Int32(selectedAssetId))?.unitName ?? ""
     }
     
     override init() {
@@ -127,36 +201,64 @@ class ReceiveAddressViewModel: NSObject {
     
     public func generateTokens() {
         let isOwn = AppModel.sharedManager().checkIsOwnNode()
-        
+
         let bamount = Double(amount ?? "0") ?? 0
-        
-        if isOwn {
-            AppModel.sharedManager().generateMaxPrivacyAddress(address._id, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
-                self.address.maxPrivacyToken = token;
+
+        let walletId = address._id
+        let assetId = Int32(selectedAssetId)
+
+        if !isOwn {
+            let token = AppModel.sharedManager().generateRegularAddress(walletId, assetId: assetId, amount: bamount, isPermanentAddress: false)
+            address.address = token
+            DispatchQueue.main.async {
+                self.onAddressUpdate?(nil)
             }
+            return
         }
-        
-        if isOwn {
-            AppModel.sharedManager().generateOfflineAddress(address._id, assetId: Int32(selectedAssetId), amount: bamount) { (token) in
+
+        switch selectedTokenType {
+        case .sbbs:
+            AppModel.sharedManager().generateSBBSAddress(walletId, assetId: assetId, amount: bamount) { [weak self] token in
                 DispatchQueue.main.async {
-                    if self.address.offlineToken != nil {
-                        self.address.offlineToken = token;
+                    guard let self = self else { return }
+                    self.address.sbbsToken = token
+                    self.onAddressUpdate?(nil)
+                }
+            }
+        case .regular:
+            AppModel.sharedManager().generateOfflineAddress(walletId, assetId: assetId, amount: bamount, offlineCount: UInt32(vouchersCount)) { [weak self] token in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.address.address = token
+                    self.onAddressUpdate?(nil)
+                }
+            }
+        case .maxPrivacy:
+            AppModel.sharedManager().generateMaxPrivacyAddress(walletId, assetId: assetId, amount: bamount) { [weak self] token in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.address.maxPrivacyToken = token
+                    self.onAddressUpdate?(nil)
+                }
+            }
+        case .offline:
+            AppModel.sharedManager().generateOfflineAddress(walletId, assetId: assetId, amount: bamount, offlineCount: UInt32(vouchersCount)) { [weak self] token in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    let isFirst = (self.address.offlineToken == nil)
+                    self.address.offlineToken = token
+                    if isFirst {
+                        self.onAddressCreated?(nil)
+                    } else {
                         self.onAddressUpdate?(nil)
                     }
-                    else {
-                        self.address.offlineToken = token;
-                        self.onAddressCreated?(nil)
-                    }
                 }
             }
-        }
-        
-        if !isOwn {
-            AppModel.sharedManager().generateNewWalletAddress(withBlockAndAmount: Int32(selectedAssetId), amount: bamount) { address, error in
-                if let result = address {
-                    self.address = result
-                }
+        case .publicOffline:
+            AppModel.sharedManager().generatePublicOfflineAddress(walletId, assetId: assetId, amount: bamount) { [weak self] token in
                 DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.address.publicOfflineToken = token
                     self.onAddressUpdate?(nil)
                 }
             }
@@ -242,15 +344,13 @@ class ReceiveAddressViewModel: NSObject {
                     if let token = self.address.offlineToken {
                         self.showShareDialog(token)
                     }
-                    break
                 case .share_pool_token:
                     self.showShareDialog(self.address.walletId)
-                    break
                 default:
                     return
                 }
             }
-        }) {}
+        }, cancel: {})
     }
     
     private func showShareDialog(_ token:String) {

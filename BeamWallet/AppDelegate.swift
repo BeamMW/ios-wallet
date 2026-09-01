@@ -2,7 +2,7 @@
 // AppDelegate.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,58 +45,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         CrashEye.add(delegate: self)
-        
+
         if #available(iOS 15.0, *) {
             UITableView.appearance().sectionHeaderTopPadding = CGFloat(0)
         }
-        
+
         if #available(iOS 13.0, *) {
             let SVGCoder = SDImageSVGCoder.shared
             SDImageCodersManager.shared.addCoder(SVGCoder)
         }
-        
+
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        
+
         UIApplication.shared.isIdleTimerDisabled = true
-                
+
         Localizable.shared.reset()
         Settings.sharedManager()
-        
+
         KeyboardListener.shared.start()
-                        
+
         NotificationManager.sharedManager.requestPermissions()
-        
+
 //        if Settings.sharedManager().target != Mainnet {
 //            CrowdinManager.updateLocalizations()
 //        }
-        
+
         AppModel.sharedManager().checkRecoveryWallet()
         AppModel.sharedManager().addDelegate(self)
         Settings.sharedManager().addDelegate(self)
         
         let added = AppModel.sharedManager().isWalletAlreadyAdded()
-        
-        let rootController = BaseNavigationController.navigationController(rootViewController: added ? EnterWalletPasswordViewController() : WellcomeViewController())
-        
+
+        // Backfill the integrity marker for installs that predate the flag
+        // (v7.3 → v7.4 upgrade): if the DB file is on disk, the wallet was
+        // healthy before the upgrade — set the flag so the recovery prompt
+        // below doesn't wipe their data on first launch.
+        if added && !OnboardManager.shared.isWalletInitializedFlag() {
+            OnboardManager.shared.markWalletInitialized()
+        }
+
+        // DB file present but integrity marker missing implies a crash between
+        // DB init and onWalledOpened — fall back to onboarding with a recovery prompt.
+        let needsRecovery = added && !OnboardManager.shared.isWalletInitializedFlag()
+
+        let rootViewController: UIViewController = (added && !needsRecovery)
+            ? EnterWalletPasswordViewController()
+            : WellcomeViewController()
+        let rootController = BaseNavigationController.navigationController(rootViewController: rootViewController)
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.main.navy
         self.window?.rootViewController = rootController
         self.window?.makeKeyAndVisible()
+
+        if needsRecovery {
+            DispatchQueue.main.async {
+                rootController.confirmAlert(
+                    title: Localizable.shared.strings.wallet_recovery_title,
+                    message: Localizable.shared.strings.wallet_recovery_message,
+                    cancelTitle: Localizable.shared.strings.cancel,
+                    confirmTitle: Localizable.shared.strings.reset_and_retry,
+                    cancelHandler: { _ in },
+                    confirmHandler: { _ in
+                        AppModel.sharedManager().resetWallet(true)
+                    }
+                )
+            }
+        }
         
-        if #available(iOS 12.0, *) {
-            let isDark = self.window?.rootViewController?.traitCollection.userInterfaceStyle == .dark
-            Settings.sharedManager().setDefaultDarkMode(isDark)
-        }
-        else {
-            Settings.sharedManager().setDefaultDarkMode(false)
-        }
+        Settings.sharedManager().setDefaultDarkMode(false)
         
         ShortcutManager.launchWithOptions(launchOptions: launchOptions)
         
         
         if let crash = UserDefaults.standard.string(forKey: "crash"), let crash_name = UserDefaults.standard.string(forKey: "crash_name") {
             
-            var name = "";
+            var name = ""
             
             if Settings.sharedManager().target == Mainnet {
                 name = "GoogleServiceMain"
@@ -240,9 +264,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        
-        //options[.sourceApplication] as? String == "com.beam.runner"
-        
+
+        // options[.sourceApplication] as? String == "com.beam.runner"
+
+        if url.isFileURL && url.pathExtension.lowercased() == "dapp" {
+            return handleSideloadedDApp(url: url)
+        }
+
         if let params = url.queryParameters, params.count == 2,
            let amount = params["amount"],
            let userId = params["user_id"] {
@@ -263,6 +291,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    private func handleSideloadedDApp(url: URL) -> Bool {
+        guard AppModel.sharedManager().isLoggedin else { return false }
+        let secured = url.startAccessingSecurityScopedResource()
+        defer { if secured { url.stopAccessingSecurityScopedResource() } }
+        guard let data = try? Data(contentsOf: url) else { return false }
+
+        do {
+            _ = try DAppManager.shared.installFromZip(data: data,
+                                                     fallbackName: Localizable.shared.strings.dapps_sideloaded_name,
+                                                     fallbackIcon: "")
+        } catch {
+            return false
+        }
+
+        guard let top = UIApplication.getTopMostViewController(),
+              let nav = top.navigationController else { return true }
+        nav.pushViewController(MyDAppsViewController(), animated: true)
+        return true
+    }
+
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     }
     
@@ -325,11 +373,11 @@ extension AppDelegate: WalletModelDelegate {
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().cancelDeleteAddress(result.id)
                 }
-            }) { data in
+            }, ended: { data in
                 if let result = data, result.type == .address {
                     AppModel.sharedManager().deletePreparedAddresses(result.id)
                 }
-            }
+            })
         }
     }
     
@@ -341,11 +389,11 @@ extension AppDelegate: WalletModelDelegate {
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().cancelPreparedTransaction(result.id)
                 }
-            }) { data in
+            }, ended: { data in
                 if let result = data, result.type == .transaction {
                     AppModel.sharedManager().sendPreparedTransaction(result.id)
                 }
-            }
+            })
         }
     }
     
@@ -363,11 +411,9 @@ extension AppDelegate: WalletModelDelegate {
                 t.isIncome && !t.isSelf
             }
             
-            for transaction in filtered {
-                if oldTransactions.first(where: { $0 == transaction.id }) == nil {
-                    NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
-                    oldTransactions.append(transaction.id)
-                }
+            for transaction in filtered where oldTransactions.first(where: { $0 == transaction.id }) == nil {
+                NotificationManager.sharedManager.scheduleNotification(transaction: transaction)
+                oldTransactions.append(transaction.id)
             }
             
             userDefaults.set(oldTransactions, forKey: "transactions_ids")

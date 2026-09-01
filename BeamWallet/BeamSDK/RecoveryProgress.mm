@@ -2,7 +2,7 @@
 // RecoveryProgress.m
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -183,27 +183,43 @@ uint64_t RecoveryProgress::OnSimpleProgress(uint64_t done, uint64_t total) {
 }
 
 bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
-    NSLog(@"RecoveryProgress %llu - %llu",done, total);
-    
+    // Throttle: BEAM fires this thousands of times per second. Skip everything
+    // unless integer percent advanced or we just hit completion — otherwise the
+    // dispatch_async-per-callback on the iOS side accumulates blocks on the main
+    // queue faster than UIKit can drain them, blowing past the highwater limit.
+    if (total == 0) {
+        // No useful 0/0 update to forward — would just push a meaningless
+        // delegate callback before any real progress has been reported.
+        return [AppModel sharedManager].isRestoreFlow;
+    }
+    int percent = (int)((done * 100) / total);
+    bool atCompletion = (done >= total);
+    if (percent == m_lastReportedPercent && !atCompletion) {
+        return [AppModel sharedManager].isRestoreFlow;
+    }
+    m_lastReportedPercent = percent;
+
+    NSLog(@"RecoveryProgress %llu / %llu (%d%%)", done, total, percent);
+
     if (!m_isStart) {
         m_isStart = true;
-        
+
         m_bpsWholeTimeFilter = std::make_unique<Filter>(kFilterRange);
         m_bpsWindowedFilter = std::make_unique<Filter>(kFilterRange*3);
         m_estimateFilter = std::make_unique<Filter>(kFilterRange);
-        
+
         m_startTimestamp = beam::getTimestamp();
     }
-    
+
     m_previousUpdateTimestamp = m_lastUpdateTimestamp;
     m_lastUpdateTimestamp = beam::getTimestamp();
     m_lastDone = m_done;
     m_done = done;
     m_total = total;
-    
+
     auto wbps = getWindowedBps();
     auto bps = (getWholeTimeBps() + wbps) / 2;
-    
+
     if (fabs(bps) < std::numeric_limits<double>::epsilon())
     {
         m_estimate = 0;
@@ -218,7 +234,7 @@ bool RecoveryProgress::OnProgress(uint64_t done, uint64_t total) {
             [delegate onRecoveryProgressUpdated:(int)done total:(int)total time:(int)m_estimate];
         }
     }
-    
+
     return [AppModel sharedManager].isRestoreFlow;
 }
 

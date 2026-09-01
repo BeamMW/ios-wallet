@@ -2,7 +2,7 @@
 // RestoreManager.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,8 +24,9 @@ class OnboardManager: NSObject {
     
     private let faucetKey = "faucetKey"
     private let isSkipedSeedKey = "isSkipedSeedKey"
-    
-    static var shared = OnboardManager()
+    private let walletInitializedKey = "walletInitializedKey"
+
+    @objc static var shared = OnboardManager()
     
     public var isCloseSecure = false
     public var isCloseFaucet = false
@@ -33,10 +34,27 @@ class OnboardManager: NSObject {
     public func reset() {
         isCloseSecure = false
         isCloseFaucet = false
-        
+
         UserDefaults.standard.removeObject(forKey: faucetKey)
         UserDefaults.standard.set(false, forKey: isSkipedSeedKey)
+        UserDefaults.standard.removeObject(forKey: walletInitializedKey)
         UserDefaults.standard.synchronize()
+    }
+
+    // MARK: Wallet integrity marker
+
+    // Distinguishes a healthy wallet from a half-built DB file left by a crash
+    // mid-create; AppDelegate routing branches on this.
+    @objc public func markWalletInitialized() {
+        UserDefaults.standard.set(true, forKey: walletInitializedKey)
+    }
+
+    @objc public func isWalletInitializedFlag() -> Bool {
+        return UserDefaults.standard.bool(forKey: walletInitializedKey)
+    }
+
+    @objc public func clearWalletInitialized() {
+        UserDefaults.standard.removeObject(forKey: walletInitializedKey)
     }
     
     // MARK: Faucet

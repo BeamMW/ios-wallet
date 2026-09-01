@@ -2,7 +2,7 @@
 // SettingsViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -60,13 +60,27 @@ class SettingsViewModel: NSObject {
         case random_node = 28
         case currency = 29
         case notifications = 30
-        case offline_address = 31
-        case max_privacy_limit = 32
-        case rescan = 33
-        case mobile_node = 34
-        case utxo = 35
-        case blockchain = 36
-        case confirmations = 37
+        case max_privacy_limit = 31
+        case rescan = 32
+        case mobile_node = 33
+        case utxo = 34
+        case blockchain = 35
+        case confirmations = 36
+        case sign_message = 37
+        case verify_message = 38
+        case node_peers = 39
+        case node_type = 40
+        case price_oracle = 41
+    }
+
+    private static func currentNodeTypeLabel() -> String {
+        if Settings.sharedManager().isNodeProtocolEnabled {
+            return Localizable.shared.strings.mobile_node_title
+        }
+        if !Settings.sharedManager().connectToRandomNode {
+            return Localizable.shared.strings.own_node_title
+        }
+        return Localizable.shared.strings.random_node_title
     }
     
     class SettingsItem {
@@ -177,10 +191,11 @@ class SettingsViewModel: NSObject {
         allItems.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, type: .allow_open_link, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.use_on_chain_price_oracle, detail: nil, isSwitch: Settings.sharedManager().isOracleEnabled, type: .price_oracle, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
         
-        if ENALBE_LANG == true {
+        if ENABLE_LANG == true {
             allItems.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
         }
         
@@ -201,18 +216,21 @@ class SettingsViewModel: NSObject {
         allItems.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
         
-        allItems.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
-        allItems.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.show_utxo, detail: nil, isSwitch: nil, type: .utxo, hasArrow: true))
-        
+
         if AppModel.sharedManager().checkIsOwnNode() {
             allItems.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
         }
-        
-        allItems.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+
         allItems.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-        allItems.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
         allItems.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
+
+        allItems.append(SettingsItem(title: Localizable.shared.strings.sign_message, detail: nil, isSwitch: nil, type: .sign_message, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.verify_message, detail: nil, isSwitch: nil, type: .verify_message, hasArrow: true))
+
+        allItems.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+        allItems.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
     }
     
     private func initItems() {
@@ -237,12 +255,11 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.allow_open_link, detail: nil, isSwitch: Settings.sharedManager().isAllowOpenLink, type: .allow_open_link, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.lock_screen, detail: Settings.sharedManager().currentLocedValue().shortName, isSwitch: nil, type: .lock_screen, hasArrow: true))
             section_0.append(SettingsItem(title: Localizable.shared.strings.show_amounts_in, detail: Settings.sharedManager().currencyName(), isSwitch: nil, type: .currency, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.use_on_chain_price_oracle, detail: nil, isSwitch: Settings.sharedManager().isOracleEnabled, type: .price_oracle, hasArrow: false))
             section_0.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
-            
-            section_0.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
-            
+
             var section_1 = [SettingsItem]()
-            if ENALBE_LANG == true {
+            if ENABLE_LANG == true {
                 section_1.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
             }
             section_1.append(SettingsItem(title: Localizable.shared.strings.dark_mode, detail: nil, isSwitch: Settings.sharedManager().isDarkMode, type: .dark_mode, hasArrow: false))
@@ -250,27 +267,10 @@ class SettingsViewModel: NSObject {
             items.append(section_1)
         case .node:
             var section_0 = [SettingsItem]()
-            section_0.append(SettingsItem(title: Localizable.shared.strings.random_node, detail: nil, isSwitch: Settings.sharedManager().connectToRandomNode, type: .random_node, hasArrow: false))
-            section_0.append(SettingsItem(title: Localizable.shared.strings.ip_port, detail: Settings.sharedManager().nodeAddress, isSwitch: nil, type: .ip_port, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.node_type, detail: SettingsViewModel.currentNodeTypeLabel(), isSwitch: nil, type: .node_type, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.node_peers, detail: nil, isSwitch: nil, type: .node_peers, hasArrow: true))
+            section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
             items.append(section_0)
-            
-            let detail = NSMutableAttributedString(string: "\(Localizable.shared.strings.mobile_node_title)\nspace\n\(Localizable.shared.strings.mobile_node_text)")
-            
-            let rangeDetail = (detail.string as NSString).range(of: String(Localizable.shared.strings.mobile_node_text))
-            let spaceRange = (detail.string as NSString).range(of: String("space"))
-            
-            detail.addAttribute(NSAttributedString.Key.font, value: ItalicFont(size: 14), range: rangeDetail)
-            detail.addAttribute(NSAttributedString.Key.foregroundColor, value: Settings.sharedManager().isDarkMode ? UIColor.main.steel : UIColor.main.steelGrey, range: rangeDetail)
-            
-            detail.addAttribute(NSAttributedString.Key.font, value: LightFont(size: 5), range: spaceRange)
-            detail.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.clear, range: spaceRange)
-            
-            let mobileItem = SettingsItem(title: Localizable.shared.strings.mobile_node_title, detail: nil, isSwitch: Settings.sharedManager().isNodeProtocolEnabled, type: .mobile_node, hasArrow: false)
-            mobileItem.titleAttributed = detail
-            
-            var section_1 = [SettingsItem]()
-            section_1.append(mobileItem)
-            items.append(section_1)
         case .privacy:
             var section_0 = [SettingsItem]()
             section_0.append(SettingsItem(title: Localizable.shared.strings.ask_password, detail: nil, isSwitch: Settings.sharedManager().isNeedaskPasswordForSend, type: .ask_password, hasArrow: false))
@@ -282,36 +282,30 @@ class SettingsViewModel: NSObject {
             if OnboardManager.shared.isSkipedSeed() == true {
                 section_0.append(SettingsItem(title: Localizable.shared.strings.complete_seed_verification, detail: nil, isSwitch: nil, type: .verification, hasArrow: true))
             }
-            section_0.append(SettingsItem(title: Localizable.shared.strings.show_owner_key, detail: nil, isSwitch: nil, type: .show_owner_key, hasArrow: true))
-            //            if OnboardManager.shared.isSkipedSeed() == true {
-            //                section_0.append(SettingsItem(title: Localizable.shared.strings.show_seed_phrase, detail: nil, isSwitch: nil, type: .show_seed, hasArrow: true))
-            //            }
             section_0.append(SettingsItem(title: Localizable.shared.strings.change_password, detail: nil, isSwitch: nil, type: .change_password, hasArrow: true))
             items.append(section_0)
         case .utilites:
-           
-//            var section_0 = [SettingsItem]()
-//            section_0.append(SettingsItem(title: Localizable.shared.strings.blockchain_height, detail: "\(AppModel.sharedManager().walletStatus?.currentHeight ?? "")", isSwitch: nil, type: .blockchain, hasArrow: false))
-            
             var section_1 = [SettingsItem]()
-            section_1.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
-            section_1.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
             section_1.append(SettingsItem(title: Localizable.shared.strings.show_utxo, detail: nil, isSwitch: nil, type: .utxo, hasArrow: true))
             if AppModel.sharedManager().checkIsOwnNode() {
                 section_1.append(SettingsItem(title: Localizable.shared.strings.rescan, detail: nil, isSwitch: nil, type: .rescan, hasArrow: false))
             }
-            section_1.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
+            section_1.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
 
-            
             var section_2 = [SettingsItem]()
-            section_2.append(SettingsItem(title: Localizable.shared.strings.payment_proof, detail: nil, isSwitch: nil, type: .payment_proof, hasArrow: true))
-            section_2.append(SettingsItem(title: Localizable.shared.strings.show_public_offline, detail: nil, isSwitch: nil, type: .offline_address, hasArrow: false))
-            section_2.append(SettingsItem(title: Localizable.shared.strings.get_beam_faucet, detail: nil, isSwitch: nil, type: .faucet, hasArrow: false))
-       
+            section_2.append(SettingsItem(title: Localizable.shared.strings.sign_message, detail: nil, isSwitch: nil, type: .sign_message, hasArrow: true))
+            section_2.append(SettingsItem(title: Localizable.shared.strings.verify_message, detail: nil, isSwitch: nil, type: .verify_message, hasArrow: true))
 
-          //  items.append(section_0)
+            var section_3 = [SettingsItem]()
+            section_3.append(SettingsItem(title: Localizable.shared.strings.export_wallet_data, detail: nil, isSwitch: nil, type: .export, hasArrow: true))
+            section_3.append(SettingsItem(title: Localizable.shared.strings.import_wallet_data, detail: nil, isSwitch: nil, type: .imprt, hasArrow: true))
+            section_3.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
+            section_3.append(SettingsItem(title: Localizable.shared.strings.clear_wallet.capitalizingFirstLetter(), detail: nil, isSwitch: nil, type: .remove_wallet, hasArrow: false))
+
             items.append(section_1)
             items.append(section_2)
+            items.append(section_3)
 
         default:
             break
@@ -348,12 +342,12 @@ class SettingsViewModel: NSObject {
     
     public func didSelectItem(item: SettingsItem) {
         switch item.type {
-        case .general, .privacy, .tags, .utilites:
+        case .general, .privacy, .tags, .utilites, .node:
             if let top = UIApplication.getTopMostViewController() {
                 let vc = SettingsViewController(type: SettingsType(rawValue: item.type.rawValue)!)
                 top.pushViewController(vc: vc)
             }
-        case .node:
+        case .node_type:
             if let top = UIApplication.getTopMostViewController() {
                 let vc = SelectNodeViewController()
                 top.pushViewController(vc: vc)
@@ -396,8 +390,6 @@ class SettingsViewModel: NSObject {
             onCurrencyScreen()
         case .notifications:
             onNotifications()
-        case .offline_address:
-            onOfflineAddress()
         case .max_privacy_limit:
             onLockLimit()
         case .rescan:
@@ -406,6 +398,11 @@ class SettingsViewModel: NSObject {
             onShowUTXO()
         case .confirmations:
             onConfirmationsScreen()
+        case .node_peers:
+            if let top = UIApplication.getTopMostViewController() {
+                let vc = NodePeersViewController()
+                top.pushViewController(vc: vc)
+            }
         default:
             return
         }
@@ -489,8 +486,7 @@ extension SettingsViewModel {
     func onLockLimit() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .max_privacy_lock)
-            vc.completion = { [weak self]
-                _ in
+            vc.completion = { [weak self] _ in
                 self?.items.removeAll()
                 self?.initItems()
                 self?.onDataChanged?()
@@ -502,8 +498,7 @@ extension SettingsViewModel {
     func onConfirmationsScreen() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .confirmations)
-            vc.completion = { [weak self]
-                value  in
+            vc.completion = { [weak self] value  in
                 AppModel.sharedManager().setMinConfirmations(value as! UInt32)
                 self?.items.removeAll()
                 self?.initItems()
@@ -516,16 +511,16 @@ extension SettingsViewModel {
     func onRescan() {
         if let top = UIApplication.getTopMostViewController() {
             top.confirmAlert(title: Localizable.shared.strings.rescan, message: Localizable.shared.strings.rescan_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.rescan, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 AppModel.sharedManager().rescan()
-                
+
                 let vc = OpenWalletProgressViewController(onlyConnect: true)
                 vc.isRescan = true
                 vc.cancelCallback = {
                 }
                 top.pushViewController(vc: vc)
-            }
+            })
         }
     }
     
@@ -535,8 +530,7 @@ extension SettingsViewModel {
             modalViewController.completion = { [weak self] obj in
                 if obj {
                     let vc = TrustedNodeViewController(event: .change)
-                    vc.completion = { [weak self]
-                        obj in
+                    vc.completion = { [weak self] obj in
                         if obj == true {
                             self?.items[0][1].detail = Settings.sharedManager().nodeAddress
                         }
@@ -591,22 +585,6 @@ extension SettingsViewModel {
         }
     }
     
-    func onOfflineAddress() {
-        let isOwn = AppModel.sharedManager().checkIsOwnNode()
-        if isOwn {
-            if let top = UIApplication.getTopMostViewController() {
-                let vc = OfflineAddressViewController()
-                top.pushViewController(vc: vc)
-            }
-        }
-        else {
-            if let top = UIApplication.getTopMostViewController() {
-                top.alert(title: Localizable.shared.strings.show_public_offline, message: Localizable.shared.strings.connect_node_offline_public, handler: nil)
-            }
-        }
-  
-    }
-    
     func onLockScreen() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = BMDataPickerViewController(type: .lock)
@@ -644,14 +622,14 @@ extension SettingsViewModel {
     }
     
     func showSeed() {
-        if let _ = OnboardManager.shared.getSeed(), let top = UIApplication.getTopMostViewController() {
+        if OnboardManager.shared.getSeed() != nil, let top = UIApplication.getTopMostViewController() {
             let vc = BMDoubleAuthViewController(event: .seed)
             top.pushViewController(vc: vc)
         }
     }
-    
+
     func makeSecure() {
-        if let _ = OnboardManager.shared.getSeed(), let top = UIApplication.getTopMostViewController() {
+        if OnboardManager.shared.getSeed() != nil, let top = UIApplication.getTopMostViewController() {
             let vc = BMDoubleAuthViewController(event: .verification)
             top.pushViewController(vc: vc)
         }
@@ -669,10 +647,10 @@ extension SettingsViewModel {
                     }
                     else {
                         top.confirmAlert(title: Localizable.shared.strings.external_link_title, message: Localizable.shared.strings.external_link_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.open, cancelHandler: { _ in
-                            
-                        }) { _ in
+
+                        }, confirmHandler: { _ in
                             BMOverlayTimerView.show(text: Localizable.shared.strings.faucet_redirect_text, link: result)
-                        }
+                        })
                     }
                 }
             }
@@ -686,8 +664,8 @@ extension SettingsViewModel {
             }
             else {
                 top.confirmAlert(title: Localizable.shared.strings.clear_wallet, message: Localizable.shared.strings.clear_wallet_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.remove_wallet, cancelHandler: { _ in
-                    
-                }) { _ in
+
+                }, confirmHandler: { _ in
                     let modalViewController = UnlockPasswordPopover(event: .clear_wallet, allowBiometric: false)
                     modalViewController.completion = { obj in
                         if obj {
@@ -698,7 +676,7 @@ extension SettingsViewModel {
                     modalViewController.modalPresentationStyle = .overFullScreen
                     modalViewController.modalTransitionStyle = .crossDissolve
                     top.present(modalViewController, animated: true, completion: nil)
-                }
+                })
             }
         }
     }
@@ -737,8 +715,8 @@ extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDel
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if let topVC = UIApplication.getTopMostViewController() {
             topVC.confirmAlert(title: Localizable.shared.strings.import_data_title, message: Localizable.shared.strings.import_data_text, cancelTitle: Localizable.shared.strings.cancel, confirmTitle: Localizable.shared.strings.imprt, cancelHandler: { _ in
-                
-            }) { _ in
+
+            }, confirmHandler: { _ in
                 if let url = urls.first {
                     do {
                         let data = try String(contentsOf: url)
@@ -756,7 +734,7 @@ extension SettingsViewModel: UIDocumentPickerDelegate, UINavigationControllerDel
                         topVC.alert(title: Localizable.shared.strings.incorrect_file_title, message: Localizable.shared.strings.incorrect_file_text, handler: nil)
                     }
                 }
-            }
+            })
         }
     }
     

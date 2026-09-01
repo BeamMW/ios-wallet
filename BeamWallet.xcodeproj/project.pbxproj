@@ -3,13 +3,85 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000A92658A9461591881CE8C /* SplitCoinsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23EA93CE3207A2EBB4D17FD /* SplitCoinsViewModel.swift */; };
+		00947887B27F2F825E1E67CC /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		010A73D4AEEB9251461112AB /* dapps_store_app.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 5FEED174B3A5FDB8D14C9963 /* dapps_store_app.wasm */; };
+		042BE224A8CF0171B513BED0 /* OraclePriceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE8E2F17C9FA369F86F60DB /* OraclePriceManager.swift */; };
+		05548629568C6211F87DA630 /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
+		066620C96ABA1816759B7AE3 /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
 		09BB8194C318850B9C687050 /* Pods_BeamWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */; };
+		0A44DCF3575DA823BA60DEC5 /* OraclePriceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE8E2F17C9FA369F86F60DB /* OraclePriceManager.swift */; };
+		0DB9711D993CFA1D225B53BA /* BMInstalledDApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 788AE10382B92E35A434F2E3 /* BMInstalledDApp.m */; };
 		0E952497DFB46C7621546999 /* Pods_BeamWalletTestNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */; };
+		0EC9234AAD2DC0A1BF7600B4 /* AssetUTXOSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */; };
+		11476E71A287700B5F7CBB8F /* libasio-ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C08DFF83966F34F6D7F6AFC /* libasio-ipfs.a */; };
+		138076EB2F04AEFB33F90387 /* libasio-ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C08DFF83966F34F6D7F6AFC /* libasio-ipfs.a */; };
+		14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		15A094B1963EAE81E9B86B33 /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
+		187B4E604FD2814B8018C796 /* AssetUTXOListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */; };
+		1A6B80C9C9EDCE967358F721 /* BMPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 5947BB8B40C5D62DAA9D01BF /* BMPublisher.m */; };
+		1C28371060472F1EFAF00E7B /* DAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969B64630C2A5874889F91FC /* DAppStore.swift */; };
+		215454B3AA22BD789F53A90C /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		21C1E1B8354DCDBDB0A9ABB8 /* AssetUTXOListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */; };
+		2361D1F909D78EC50B8C5D5C /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
+		26D73AAEC26B985DD2704C90 /* BMAvailableDApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 17A4C97F6AE81EDDEC7DB4B9 /* BMAvailableDApp.m */; };
+		275E60FB3A8D4704581DF986 /* SplitCoinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */; };
+		28B1AF7C15F50CEC869952BD /* DAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86688612ED1A5FF45D1BAD /* DAppManager.swift */; };
+		2964ED046A04435DB6FD977D /* BMAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C2A22B96525EB07D51F607 /* BMAlertViewController.swift */; };
+		2B7C41C938A0B67A9D143E3D /* MyDAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008792DADDD5C9FF28341A31 /* MyDAppsViewController.swift */; };
+		2C2D70373756666705D14FDE /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
+		2F81D3CC162C2FD8201B35C0 /* libipfs-bindings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 344F317D8FBFA32FFDA811F2 /* libipfs-bindings.a */; };
+		30BE993E2DFFA6452A536125 /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		31509E4F991BC56BF7F10098 /* AssetSwapDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */; };
+		35726BA6BFE79F50A19E7054 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		3C4B4023BBF6C6624DDC279E /* BMOptionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ECF740A61C5F0D941B8B36 /* BMOptionPickerViewController.swift */; };
+		434CC206E4AD461CECAD5DFB /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		46E422749DE0BAE1BCF8B4EB /* BMPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 5947BB8B40C5D62DAA9D01BF /* BMPublisher.m */; };
+		492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
+		4B2FC15209C14B359E3651BD /* dapps_store_app.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 5FEED174B3A5FDB8D14C9963 /* dapps_store_app.wasm */; };
+		4B72CD41AF6A8F47020BC536 /* AssetUTXOListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */; };
+		4D7C86E3D4DAAAD7DDFE22E7 /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
+		50B804DB7153D959B75A9D13 /* BMAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C2A22B96525EB07D51F607 /* BMAlertViewController.swift */; };
+		5101D1DB95B6BECFE333B53C /* AssetUTXOSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */; };
+		532955652A405010EC21607C /* AssetUTXOSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */; };
 		53E3D6F8F19BD21A69380CBA /* Pods_BeamWalletMasterNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */; };
+		56DCA641FEC90020A7C2686E /* PublishersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6831B2B28CCBD5D776DCF34B /* PublishersViewController.swift */; };
+		59D5C848EC6C80442BC6A8A3 /* BMOptionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ECF740A61C5F0D941B8B36 /* BMOptionPickerViewController.swift */; };
+		5A1A647678A2061222332D16 /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		5A4A0ACB5C6CA50F1E5FCBE8 /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		5DAA3CCCB00AECEACD182FBF /* AssetSwapOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */; };
+		6029A6A13D53093CF6EC2FB6 /* dapps_store_app.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 5FEED174B3A5FDB8D14C9963 /* dapps_store_app.wasm */; };
+		610B9971C155D841609ACE0F /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57D7E7F685327E2CAB9E7C69 /* libdex.a */; };
+		62D6B4FFAD6FCD00C5206630 /* AssetSwapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21968CB26C3B977852247761 /* AssetSwapsViewController.swift */; };
+		6315A76D06343C9CEDE2EF77 /* AssetSwapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21968CB26C3B977852247761 /* AssetSwapsViewController.swift */; };
+		65A9895370E84E09300D7548 /* PublishersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6831B2B28CCBD5D776DCF34B /* PublishersViewController.swift */; };
+		6854C506C6836F88B8F8484E /* SplitCoinsStripeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CF8C20147C7F9E087C33D /* SplitCoinsStripeView.swift */; };
+		69B13BFFB153BF4611F30888 /* MessengerNewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */; };
+		6EA6E49364A07F3740D84921 /* SplitCoinsStripeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CF8C20147C7F9E087C33D /* SplitCoinsStripeView.swift */; };
+		6F6101D0D3E633F1D68554F9 /* DAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969B64630C2A5874889F91FC /* DAppStore.swift */; };
+		705F9944DC83B6CC6816678F /* BMOptionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ECF740A61C5F0D941B8B36 /* BMOptionPickerViewController.swift */; };
+		7076239CA6CBD5D923ED8EE8 /* libipfs-bindings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 344F317D8FBFA32FFDA811F2 /* libipfs-bindings.a */; };
+		7209CB87405DF7AC0B7CBE89 /* dao-core-app.dapp in Resources */ = {isa = PBXBuildFile; fileRef = 9CC651F674E6883AFB9709D5 /* dao-core-app.dapp */; };
+		75516585C510BB694A1B9AED /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
+		75B069A9EC9A517ABCACFC1E /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		77CF51BBE36DCCD780857772 /* AssetSwapCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */; };
+		7A9AD3ED311827FB6EF39D54 /* BMAvailableDApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 17A4C97F6AE81EDDEC7DB4B9 /* BMAvailableDApp.m */; };
+		7AB2A2A48540A9D102F56D7C /* DAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86688612ED1A5FF45D1BAD /* DAppManager.swift */; };
+		7ED2D2980F560C573C46D8CC /* AssetSwapsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */; };
+		82EC6CA54D5C74FD16085DE0 /* DAppStoreCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E72505C417B965A57BB066 /* DAppStoreCells.swift */; };
+		8313E7C13424087CE8545F59 /* PublishersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6831B2B28CCBD5D776DCF34B /* PublishersViewController.swift */; };
+		83EC213430E0CFD381D45A13 /* AssetSwapDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */; };
+		84D2719B950F43294039957A /* AssetSwapOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */; };
+		87B508D6F91B6BCDE6EC712F /* BMInstantMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20B7F5341703980CD2D3941F /* BMInstantMessage.mm */; };
+		88D6972926A283D03D289A48 /* AssetSwapsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */; };
+		8B70C9ED979CE8D4574FC1EA /* libwallet_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC8EF915253F6CCEA3788BE /* libwallet_ipfs.a */; };
+		8E6EABD786898410576636A4 /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		8F9D17159CF9400338FE47EB /* oracle2-app.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 3149E0903940C330CAE827F5 /* oracle2-app.wasm */; };
+		911AF3DF99FDD7FFD07F4830 /* AssetUTXOGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B63F6E98BA8303EE2FEAD /* AssetUTXOGroup.swift */; };
 		9207DD8726778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
 		9207DD8826778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
 		9207DD8926778DF900250E80 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9207DD8626778DF900250E80 /* AssetsViewController.swift */; };
@@ -282,9 +354,6 @@
 		922B637C2552F1CA00A2AED2 /* ReceiveTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */; };
 		922B637D2552F1CA00A2AED2 /* ReceiveTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */; };
 		922B637E2552F1CA00A2AED2 /* ReceiveTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */; };
-		922B637F2552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */; };
-		922B63802552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */; };
-		922B63812552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */; };
 		922F2E7122E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7222E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
 		922F2E7322E1F7F6005D3F33 /* BMMultiLineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */; };
@@ -373,9 +442,6 @@
 		9244A5102A01465E007B03D0 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4E82A014656007B03D0 /* libkeykeeper.a */; };
 		9244A5112A01465E007B03D0 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4E82A014656007B03D0 /* libkeykeeper.a */; };
 		9244A5122A01465E007B03D0 /* libkeykeeper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4E82A014656007B03D0 /* libkeykeeper.a */; };
-		9244A5132A01465E007B03D0 /* libwallet_api_no_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4E92A014656007B03D0 /* libwallet_api_no_ipfs.a */; };
-		9244A5142A01465E007B03D0 /* libwallet_api_no_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4E92A014656007B03D0 /* libwallet_api_no_ipfs.a */; };
-		9244A5152A01465E007B03D0 /* libwallet_api_no_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4E92A014656007B03D0 /* libwallet_api_no_ipfs.a */; };
 		9244A5162A01465E007B03D0 /* libre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4EA2A014656007B03D0 /* libre2.a */; };
 		9244A5172A01465E007B03D0 /* libre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4EA2A014656007B03D0 /* libre2.a */; };
 		9244A5182A01465E007B03D0 /* libre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A4EA2A014656007B03D0 /* libre2.a */; };
@@ -451,9 +517,6 @@
 		9244A55E2A01465E007B03D0 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A5022A01465D007B03D0 /* libkeccak.a */; };
 		9244A55F2A01465E007B03D0 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A5022A01465D007B03D0 /* libkeccak.a */; };
 		9244A5602A01465E007B03D0 /* libkeccak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A5022A01465D007B03D0 /* libkeccak.a */; };
-		9244A5612A01465E007B03D0 /* libwallet_client_no_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A5032A01465E007B03D0 /* libwallet_client_no_ipfs.a */; };
-		9244A5622A01465E007B03D0 /* libwallet_client_no_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A5032A01465E007B03D0 /* libwallet_client_no_ipfs.a */; };
-		9244A5632A01465E007B03D0 /* libwallet_client_no_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9244A5032A01465E007B03D0 /* libwallet_client_no_ipfs.a */; };
 		9246F75A227C48830091FB0B /* BMEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9246F758227C48830091FB0B /* BMEmptyCell.swift */; };
 		9246F75B227C48830091FB0B /* BMEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9246F758227C48830091FB0B /* BMEmptyCell.swift */; };
 		9246F75C227C48830091FB0B /* BMEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9246F758227C48830091FB0B /* BMEmptyCell.swift */; };
@@ -1354,17 +1417,89 @@
 		92FE264122A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264222A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
 		92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */; };
+		94E405DB59B47772F0662861 /* AssetSwapCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */; };
+		966EF2ACFF217F06AE183E6E /* SplitCoinsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23EA93CE3207A2EBB4D17FD /* SplitCoinsViewModel.swift */; };
+		984E5950BBB86D093251AB57 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		9A1790F44DE275FD9644A9F7 /* AssetSwapCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */; };
+		9C3478CC0AB10D577E97E53E /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		9C5E69AB2AC0AC5E4D122185 /* BMInstalledDApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 788AE10382B92E35A434F2E3 /* BMInstalledDApp.m */; };
+		9D5813AA76650CB6EBA22D34 /* dao-voting-app.dapp in Resources */ = {isa = PBXBuildFile; fileRef = 8923664227A70DFEBE27B5ED /* dao-voting-app.dapp */; };
+		9D8BAACCF64EA977E69273F0 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57D7E7F685327E2CAB9E7C69 /* libdex.a */; };
+		9E75E31529DE385C7D153631 /* MessengerChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */; };
+		A04389E8E8EE7AB9E4D87007 /* BMChat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */; };
+		A4044FC0C7CFF97F7D02D3F5 /* DAppURLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDCB8FF9B7300E47ABEF4D9A /* DAppURLSchemeHandler.swift */; };
+		A4D6D5A9EC5F4DC3DD3E4682 /* oracle2-app.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 3149E0903940C330CAE827F5 /* oracle2-app.wasm */; };
+		A522EB1A22FF64A990518431 /* AssetSwapDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */; };
+		A7290B4EEDC78DFD74B80F6F /* DAppURLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDCB8FF9B7300E47ABEF4D9A /* DAppURLSchemeHandler.swift */; };
+		A8131AC203B7FC699E7DCA45 /* BMAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C2A22B96525EB07D51F607 /* BMAlertViewController.swift */; };
+		AAE84220C256A1EFAB30D9B3 /* DAppURLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDCB8FF9B7300E47ABEF4D9A /* DAppURLSchemeHandler.swift */; };
+		AAFE8C80296CA6DAA3BC3B1F /* AssetUTXOGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B63F6E98BA8303EE2FEAD /* AssetUTXOGroup.swift */; };
+		AB6BA79FF389E013065D35C9 /* libdex_board.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F426BB6F15C2E08A3E81B87D /* libdex_board.a */; };
+		ABA34015221EA45051CC20EB /* SplitCoinsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23EA93CE3207A2EBB4D17FD /* SplitCoinsViewModel.swift */; };
+		AC3CF90BF3C1ED7E2D19D65A /* SplitCoinPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33EC6A5FD1571ED9D1EFFB /* SplitCoinPreviewCard.swift */; };
+		ACD5F2A82D411FA025F5709A /* DAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969B64630C2A5874889F91FC /* DAppStore.swift */; };
+		AD534670E90AA9554A8C5F74 /* DAppStoreCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E72505C417B965A57BB066 /* DAppStoreCells.swift */; };
+		B3476711F58F83C2F1CB8F2C /* AssetUTXOGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B63F6E98BA8303EE2FEAD /* AssetUTXOGroup.swift */; };
+		B4FE33729385D12603589437 /* AssetSwapDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */; };
+		B5918DE6DE94C43C0CBB411F /* libwallet_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC8EF915253F6CCEA3788BE /* libwallet_ipfs.a */; };
+		B5E7CC16D70E7D12DD9315FC /* MessengerConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */; };
+		B6037162941C5AB71A356FF3 /* AssetSwapDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */; };
+		B93707F60996A4898F0B88E2 /* NodePeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13188DF7FB2332EDBB6929F5 /* NodePeersViewController.swift */; };
+		BCB254DF739D2FA8FF92C672 /* AssetSwapDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */; };
+		BDDA78B4E7DDB519C8591B40 /* BMAvailableDApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 17A4C97F6AE81EDDEC7DB4B9 /* BMAvailableDApp.m */; };
+		BE96C4A71A3D47721D003ACF /* AssetSwapOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */; };
+		BFF9839E0FE16D5A8645D394 /* SplitCoinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */; };
+		C07BD2850E0E4E55AC706985 /* AssetSwapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21968CB26C3B977852247761 /* AssetSwapsViewController.swift */; };
+		C51DBD848CA77EC12F48698C /* BMPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 5947BB8B40C5D62DAA9D01BF /* BMPublisher.m */; };
+		C6FB138B2A261CBC43626204 /* SplitCoinsStripeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CF8C20147C7F9E087C33D /* SplitCoinsStripeView.swift */; };
+		CA7E68B52D3092D76CBACF7C /* SplitCoinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */; };
+		CCB34673E007AADB0D649F2C /* libdex_board.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F426BB6F15C2E08A3E81B87D /* libdex_board.a */; };
+		CDEA498CC695D89B35B0678E /* NodePeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13188DF7FB2332EDBB6929F5 /* NodePeersViewController.swift */; };
+		D0154E933CB0A42495F493B4 /* BMInstalledDApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 788AE10382B92E35A434F2E3 /* BMInstalledDApp.m */; };
+		D0CC2976D1595860BB67C58C /* dao-core-app.dapp in Resources */ = {isa = PBXBuildFile; fileRef = 9CC651F674E6883AFB9709D5 /* dao-core-app.dapp */; };
+		D134B7B4257517D9037B6301 /* dao-voting-app.dapp in Resources */ = {isa = PBXBuildFile; fileRef = 8923664227A70DFEBE27B5ED /* dao-voting-app.dapp */; };
+		D28537CD882B83167B426EA0 /* DAppStoreCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7E72505C417B965A57BB066 /* DAppStoreCells.swift */; };
+		D6F2A69901F8BE2CAE4846B0 /* OraclePriceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE8E2F17C9FA369F86F60DB /* OraclePriceManager.swift */; };
+		D91F481FE2DA5BE3465EFEFD /* oracle2-app.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 3149E0903940C330CAE827F5 /* oracle2-app.wasm */; };
+		DA682CA91CC907ACC61E9C6B /* libipfs-bindings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 344F317D8FBFA32FFDA811F2 /* libipfs-bindings.a */; };
+		DAFECCA6179EA6FE92C0ABC7 /* SplitCoinPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33EC6A5FD1571ED9D1EFFB /* SplitCoinPreviewCard.swift */; };
+		DEF279257A2A5B949FBA8B01 /* libdex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57D7E7F685327E2CAB9E7C69 /* libdex.a */; };
+		DFC07B98C98F293C31F86A8C /* MessengerChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */; };
+		E153DCA098F777EAFAA1D91A /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
+		E167B53AA2D8218D0710AA3E /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
+		E28445CBD68FD65137EB5624 /* WalletAPIClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = B48933E92F4932F3A119DBB0 /* WalletAPIClient.mm */; };
+		E4FDD3C6A0F5C3758751901D /* dao-core-app.dapp in Resources */ = {isa = PBXBuildFile; fileRef = 9CC651F674E6883AFB9709D5 /* dao-core-app.dapp */; };
+		E545F78761926F0D8A51E9B2 /* BMDexOrder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46577647151F6240CBA9CE2D /* BMDexOrder.mm */; };
+		E6218D6C7C5BE83B9707F158 /* MessengerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */; };
+		E7EA1E52231681BDE3D26C73 /* AssetSwapsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */; };
+		EA4468F36E3D2550A6D3E783 /* libasio-ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C08DFF83966F34F6D7F6AFC /* libasio-ipfs.a */; };
+		ECF8F9E33148D1833480ADFA /* SplitCoinPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33EC6A5FD1571ED9D1EFFB /* SplitCoinPreviewCard.swift */; };
+		ED06A371AF87628171B6FB9B /* MyDAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008792DADDD5C9FF28341A31 /* MyDAppsViewController.swift */; };
+		EE21FF606586049461645B3E /* WalletAPIClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = B48933E92F4932F3A119DBB0 /* WalletAPIClient.mm */; };
+		EEE47E74C114A85B33A3A618 /* MessengerChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */; };
+		EF72B4145F6E6C9870670B96 /* libwallet_ipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC8EF915253F6CCEA3788BE /* libwallet_ipfs.a */; };
+		F00F7FD991CEA0402E131CFF /* AssetSwapCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */; };
+		F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */; };
+		F43301CC1012AD1BCD74EFFE /* MyDAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008792DADDD5C9FF28341A31 /* MyDAppsViewController.swift */; };
+		F51D4BA4D0687745D2E60254 /* dao-voting-app.dapp in Resources */ = {isa = PBXBuildFile; fileRef = 8923664227A70DFEBE27B5ED /* dao-voting-app.dapp */; };
+		F5BD7F278CC7CCFADF63E7AF /* NodePeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13188DF7FB2332EDBB6929F5 /* NodePeersViewController.swift */; };
+		F7E52918A59C06FDF87D69C9 /* DAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86688612ED1A5FF45D1BAD /* DAppManager.swift */; };
+		F8B20149A3E6BEDAE7F20E57 /* WalletAPIClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = B48933E92F4932F3A119DBB0 /* WalletAPIClient.mm */; };
+		F9C79FBC040297C8E235C660 /* libdex_board.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F426BB6F15C2E08A3E81B87D /* libdex_board.a */; };
+		FD87FA1DDA9C27F19451AB4B /* MessengerBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9217D31E2652AB67006DD6F1 /* Embed App Extensions */ = {
+		9217D31E2652AB67006DD6F1 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		92365AE2222D4039000D7064 /* Embed Frameworks */ = {
@@ -1389,14 +1524,14 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92C4DBDF227906800073AEED /* Embed App Extensions */ = {
+		92C4DBDF227906800073AEED /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		92E2EACC226F102100367928 /* Embed Watch Content */ = {
@@ -1433,11 +1568,48 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		008792DADDD5C9FF28341A31 /* MyDAppsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MyDAppsViewController.swift; sourceTree = "<group>"; };
 		024109A68A03B9C8D11B9895 /* Pods-BeamWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.release.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.release.xcconfig"; sourceTree = "<group>"; };
+		13188DF7FB2332EDBB6929F5 /* NodePeersViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NodePeersViewController.swift; sourceTree = "<group>"; };
+		13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerNewChatViewController.swift; sourceTree = "<group>"; };
+		17A4C97F6AE81EDDEC7DB4B9 /* BMAvailableDApp.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = BMAvailableDApp.m; sourceTree = "<group>"; };
 		18CF009621EA8E5970DA1D87 /* Pods_BeamWalletMasterNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletMasterNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A2828F3DFD5228179C17B8D /* BMInstalledDApp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMInstalledDApp.h; sourceTree = "<group>"; };
+		1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplitCoinsViewController.swift; sourceTree = "<group>"; };
+		1AD88774871E2784A73C35A8 /* BMAvailableDApp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMAvailableDApp.h; sourceTree = "<group>"; };
+		20B7F5341703980CD2D3941F /* BMInstantMessage.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = BMInstantMessage.mm; sourceTree = "<group>"; };
+		21968CB26C3B977852247761 /* AssetSwapsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapsViewController.swift; sourceTree = "<group>"; };
+		2BE8E2F17C9FA369F86F60DB /* OraclePriceManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OraclePriceManager.swift; sourceTree = "<group>"; };
+		3149E0903940C330CAE827F5 /* oracle2-app.wasm */ = {isa = PBXFileReference; includeInIndex = 1; path = "oracle2-app.wasm"; sourceTree = "<group>"; };
+		344F317D8FBFA32FFDA811F2 /* libipfs-bindings.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = "libipfs-bindings.a"; sourceTree = "<group>"; };
+		35296D58A729F092AFF0C821 /* BMChat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMChat.h; sourceTree = "<group>"; };
 		36A85446EDA45DA6335930C5 /* Pods_BeamWalletTestNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWalletTestNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatCell.swift; sourceTree = "<group>"; };
 		3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeamWallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C08DFF83966F34F6D7F6AFC /* libasio-ipfs.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = "libasio-ipfs.a"; sourceTree = "<group>"; };
 		456B838BA83C92E05D36B091 /* Pods-BeamWalletTestNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.release.xcconfig"; sourceTree = "<group>"; };
+		46577647151F6240CBA9CE2D /* BMDexOrder.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = BMDexOrder.mm; sourceTree = "<group>"; };
+		46CAE6BC4C48E30E26AE304F /* BMInstantMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMInstantMessage.h; sourceTree = "<group>"; };
+		4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapCreateViewController.swift; sourceTree = "<group>"; };
+		4B33EC6A5FD1571ED9D1EFFB /* SplitCoinPreviewCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplitCoinPreviewCard.swift; sourceTree = "<group>"; };
+		4C1212B607A6369157662664 /* WalletAPIClient+Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WalletAPIClient+Internal.h"; sourceTree = "<group>"; };
+		4F9B63F6E98BA8303EE2FEAD /* AssetUTXOGroup.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetUTXOGroup.swift; sourceTree = "<group>"; };
+		53ECF740A61C5F0D941B8B36 /* BMOptionPickerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMOptionPickerViewController.swift; sourceTree = "<group>"; };
+		57D7E7F685327E2CAB9E7C69 /* libdex.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = libdex.a; sourceTree = "<group>"; };
+		5947BB8B40C5D62DAA9D01BF /* BMPublisher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = BMPublisher.m; sourceTree = "<group>"; };
+		5FEED174B3A5FDB8D14C9963 /* dapps_store_app.wasm */ = {isa = PBXFileReference; includeInIndex = 1; path = dapps_store_app.wasm; sourceTree = "<group>"; };
+		603CF8C20147C7F9E087C33D /* SplitCoinsStripeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplitCoinsStripeView.swift; sourceTree = "<group>"; };
+		6831B2B28CCBD5D776DCF34B /* PublishersViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PublishersViewController.swift; sourceTree = "<group>"; };
+		75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapDetailsViewController.swift; sourceTree = "<group>"; };
+		788AE10382B92E35A434F2E3 /* BMInstalledDApp.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = BMInstalledDApp.m; sourceTree = "<group>"; };
+		7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerConversationViewModel.swift; sourceTree = "<group>"; };
+		7AC8EF915253F6CCEA3788BE /* libwallet_ipfs.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = libwallet_ipfs.a; sourceTree = "<group>"; };
+		7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapOrderCell.swift; sourceTree = "<group>"; };
+		8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetUTXOSectionHeaderView.swift; sourceTree = "<group>"; };
+		8923664227A70DFEBE27B5ED /* dao-voting-app.dapp */ = {isa = PBXFileReference; includeInIndex = 1; path = "dao-voting-app.dapp"; sourceTree = "<group>"; };
+		8B86688612ED1A5FF45D1BAD /* DAppManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DAppManager.swift; sourceTree = "<group>"; };
+		8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = BMChat.mm; sourceTree = "<group>"; };
+		8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatListViewController.swift; sourceTree = "<group>"; };
 		9205284E237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9205284F237B11F1001F8E31 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9207DD8626778DF900250E80 /* AssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
@@ -1550,7 +1722,6 @@
 		9227AEEA2282F6F800FB221F /* BMDuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMDuration.h; sourceTree = "<group>"; };
 		9227AEEB2282F6F800FB221F /* BMDuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDuration.m; sourceTree = "<group>"; };
 		922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTokenCell.swift; sourceTree = "<group>"; };
-		922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceiveTokenCell.xib; sourceTree = "<group>"; };
 		922EE89222F18C5800BBFDEF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		922F2E7022E1F7F6005D3F33 /* BMMultiLineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMMultiLineItem.swift; sourceTree = "<group>"; };
 		922FB15D22B3E134007AD689 /* BMSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSearchView.swift; sourceTree = "<group>"; };
@@ -1858,6 +2029,7 @@
 		92C5EBA1229BE48E00ABFFF7 /* PreviewQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewQRViewController.swift; sourceTree = "<group>"; };
 		92C5EBB1229BFD1100ABFFF7 /* BMDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMDetailCell.swift; sourceTree = "<group>"; };
 		92C5EBB2229BFD1100ABFFF7 /* BMDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMDetailCell.xib; sourceTree = "<group>"; };
+		92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapDetailsViewModel.swift; sourceTree = "<group>"; };
 		92CC40E622E1DC7300006E5C /* BMGroupedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMGroupedCell.swift; sourceTree = "<group>"; };
 		92CC40E722E1DC7300006E5C /* BMGroupedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BMGroupedCell.xib; sourceTree = "<group>"; };
 		92CF065822E112570021B9CF /* SearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableView.swift; sourceTree = "<group>"; };
@@ -1975,10 +2147,28 @@
 		92FE263822A11E4900102DB4 /* BMPickedAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMPickedAddressCell.xib; sourceTree = "<group>"; };
 		92FE263922A11E4B00102DB4 /* BMExpandCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMExpandCell.swift; sourceTree = "<group>"; };
 		92FE263A22A11E4D00102DB4 /* BMExpandCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMExpandCell.xib; sourceTree = "<group>"; };
+		969B64630C2A5874889F91FC /* DAppStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DAppStore.swift; sourceTree = "<group>"; };
+		9CC651F674E6883AFB9709D5 /* dao-core-app.dapp */ = {isa = PBXFileReference; includeInIndex = 1; path = "dao-core-app.dapp"; sourceTree = "<group>"; };
+		AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatListViewModel.swift; sourceTree = "<group>"; };
+		B48933E92F4932F3A119DBB0 /* WalletAPIClient.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = WalletAPIClient.mm; sourceTree = "<group>"; };
+		B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapCreateViewModel.swift; sourceTree = "<group>"; };
 		BA659A4953BE271B118EB5D6 /* Pods-BeamWalletMasterNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.debug.xcconfig"; sourceTree = "<group>"; };
+		C16867B8CD04CD914FE6A1CA /* WalletAPIClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = WalletAPIClient.h; sourceTree = "<group>"; };
+		C8C2A22B96525EB07D51F607 /* BMAlertViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BMAlertViewController.swift; sourceTree = "<group>"; };
 		D303009FB5F0DA4093A89DFB /* Pods-BeamWalletTestNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletTestNet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWalletTestNet/Pods-BeamWalletTestNet.debug.xcconfig"; sourceTree = "<group>"; };
 		D601ED375D9C9B9FAB70DE0B /* Pods-BeamWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWallet.debug.xcconfig"; path = "Target Support Files/Pods-BeamWallet/Pods-BeamWallet.debug.xcconfig"; sourceTree = "<group>"; };
+		D8EE91DF3849A709C3F01686 /* BMPublisher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMPublisher.h; sourceTree = "<group>"; };
+		E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerBubbleCell.swift; sourceTree = "<group>"; };
+		E23EA93CE3207A2EBB4D17FD /* SplitCoinsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplitCoinsViewModel.swift; sourceTree = "<group>"; };
+		E7E72505C417B965A57BB066 /* DAppStoreCells.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DAppStoreCells.swift; sourceTree = "<group>"; };
 		EAEED72AAED404575AB9A6E5 /* Pods-BeamWalletMasterNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeamWalletMasterNet.release.xcconfig"; path = "Target Support Files/Pods-BeamWalletMasterNet/Pods-BeamWalletMasterNet.release.xcconfig"; sourceTree = "<group>"; };
+		F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetUTXOListViewController.swift; sourceTree = "<group>"; };
+		F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSearchViewController.swift; sourceTree = "<group>"; };
+		F426BB6F15C2E08A3E81B87D /* libdex_board.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; path = libdex_board.a; sourceTree = "<group>"; };
+		F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessengerChatViewController.swift; sourceTree = "<group>"; };
+		FDCB8FF9B7300E47ABEF4D9A /* DAppURLSchemeHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DAppURLSchemeHandler.swift; sourceTree = "<group>"; };
+		FECECF4C7F96F708C05AAF05 /* BMDexOrder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BMDexOrder.h; sourceTree = "<group>"; };
+		FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AssetSwapsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2004,7 +2194,6 @@
 				9244A5282A01465E007B03D0 /* libutility.a in Frameworks */,
 				9244A5342A01465E007B03D0 /* libblake2b.a in Frameworks */,
 				9244A5252A01465E007B03D0 /* libsqlite.a in Frameworks */,
-				9244A5132A01465E007B03D0 /* libwallet_api_no_ipfs.a in Frameworks */,
 				9244A5582A01465E007B03D0 /* libexport.a in Frameworks */,
 				9244A55B2A01465E007B03D0 /* libp2p.a in Frameworks */,
 				9244A55E2A01465E007B03D0 /* libkeccak.a in Frameworks */,
@@ -2017,10 +2206,14 @@
 				9244A5552A01465E007B03D0 /* libmnemonic.a in Frameworks */,
 				9244A5162A01465E007B03D0 /* libre2.a in Frameworks */,
 				9244A52B2A01465E007B03D0 /* libassets.a in Frameworks */,
-				9244A5612A01465E007B03D0 /* libwallet_client_no_ipfs.a in Frameworks */,
 				9244A5042A01465E007B03D0 /* libwallet_api.a in Frameworks */,
 				9244A50D2A01465E007B03D0 /* libwallet_client.a in Frameworks */,
 				9244A51C2A01465E007B03D0 /* libhw_crypto.a in Frameworks */,
+				610B9971C155D841609ACE0F /* libdex.a in Frameworks */,
+				CCB34673E007AADB0D649F2C /* libdex_board.a in Frameworks */,
+				11476E71A287700B5F7CBB8F /* libasio-ipfs.a in Frameworks */,
+				DA682CA91CC907ACC61E9C6B /* libipfs-bindings.a in Frameworks */,
+				8B70C9ED979CE8D4574FC1EA /* libwallet_ipfs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2046,7 +2239,6 @@
 				9244A5292A01465E007B03D0 /* libutility.a in Frameworks */,
 				9244A5352A01465E007B03D0 /* libblake2b.a in Frameworks */,
 				9244A5262A01465E007B03D0 /* libsqlite.a in Frameworks */,
-				9244A5142A01465E007B03D0 /* libwallet_api_no_ipfs.a in Frameworks */,
 				9244A5592A01465E007B03D0 /* libexport.a in Frameworks */,
 				9244A55C2A01465E007B03D0 /* libp2p.a in Frameworks */,
 				9244A55F2A01465E007B03D0 /* libkeccak.a in Frameworks */,
@@ -2059,10 +2251,14 @@
 				9244A5562A01465E007B03D0 /* libmnemonic.a in Frameworks */,
 				9244A5172A01465E007B03D0 /* libre2.a in Frameworks */,
 				9244A52C2A01465E007B03D0 /* libassets.a in Frameworks */,
-				9244A5622A01465E007B03D0 /* libwallet_client_no_ipfs.a in Frameworks */,
 				9244A5052A01465E007B03D0 /* libwallet_api.a in Frameworks */,
 				9244A50E2A01465E007B03D0 /* libwallet_client.a in Frameworks */,
 				9244A51D2A01465E007B03D0 /* libhw_crypto.a in Frameworks */,
+				DEF279257A2A5B949FBA8B01 /* libdex.a in Frameworks */,
+				F9C79FBC040297C8E235C660 /* libdex_board.a in Frameworks */,
+				EA4468F36E3D2550A6D3E783 /* libasio-ipfs.a in Frameworks */,
+				7076239CA6CBD5D923ED8EE8 /* libipfs-bindings.a in Frameworks */,
+				EF72B4145F6E6C9870670B96 /* libwallet_ipfs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2088,7 +2284,6 @@
 				9244A52A2A01465E007B03D0 /* libutility.a in Frameworks */,
 				9244A5362A01465E007B03D0 /* libblake2b.a in Frameworks */,
 				9244A5272A01465E007B03D0 /* libsqlite.a in Frameworks */,
-				9244A5152A01465E007B03D0 /* libwallet_api_no_ipfs.a in Frameworks */,
 				9244A55A2A01465E007B03D0 /* libexport.a in Frameworks */,
 				9244A55D2A01465E007B03D0 /* libp2p.a in Frameworks */,
 				9244A5602A01465E007B03D0 /* libkeccak.a in Frameworks */,
@@ -2101,16 +2296,53 @@
 				9244A5572A01465E007B03D0 /* libmnemonic.a in Frameworks */,
 				9244A5182A01465E007B03D0 /* libre2.a in Frameworks */,
 				9244A52D2A01465E007B03D0 /* libassets.a in Frameworks */,
-				9244A5632A01465E007B03D0 /* libwallet_client_no_ipfs.a in Frameworks */,
 				9244A5062A01465E007B03D0 /* libwallet_api.a in Frameworks */,
 				9244A50F2A01465E007B03D0 /* libwallet_client.a in Frameworks */,
 				9244A51E2A01465E007B03D0 /* libhw_crypto.a in Frameworks */,
+				9D8BAACCF64EA977E69273F0 /* libdex.a in Frameworks */,
+				AB6BA79FF389E013065D35C9 /* libdex_board.a in Frameworks */,
+				138076EB2F04AEFB33F90387 /* libasio-ipfs.a in Frameworks */,
+				2F81D3CC162C2FD8201B35C0 /* libipfs-bindings.a in Frameworks */,
+				B5918DE6DE94C43C0CBB411F /* libwallet_ipfs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		78028519D7C340186F689742 /* AssetSwaps */ = {
+			isa = PBXGroup;
+			children = (
+				ECB36A016D50624397AFFA33 /* Cells */,
+				21968CB26C3B977852247761 /* AssetSwapsViewController.swift */,
+				4A6A43055CFB5C5820B099A1 /* AssetSwapCreateViewController.swift */,
+				75A467070BE6633F1B715DAD /* AssetSwapDetailsViewController.swift */,
+			);
+			path = AssetSwaps;
+			sourceTree = "<group>";
+		};
+		8110C1340F23638CECA5A0CA /* Messenger */ = {
+			isa = PBXGroup;
+			children = (
+				8DFF1052A687C5F2265E618F /* MessengerChatListViewController.swift */,
+				F9E4020D11686B93F29A46DA /* MessengerChatViewController.swift */,
+				13CF5C205DC060CADA96F025 /* MessengerNewChatViewController.swift */,
+				E08B41CEDA5A06EBFD775E76 /* MessengerBubbleCell.swift */,
+				390F813D5F08AC3C0F47183F /* MessengerChatCell.swift */,
+			);
+			path = Messenger;
+			sourceTree = "<group>";
+		};
+		838B90CD5474E2AC0F70CB0D /* AssetSwaps */ = {
+			isa = PBXGroup;
+			children = (
+				FFDAF01730E8C754AA8C5175 /* AssetSwapsViewModel.swift */,
+				B5B1E2B05648164FC49C46F7 /* AssetSwapCreateViewModel.swift */,
+				92C9307A797CCA7FEAABBFD8 /* AssetSwapDetailsViewModel.swift */,
+			);
+			path = AssetSwaps;
+			sourceTree = "<group>";
+		};
 		9207DD8526778DD500250E80 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -2302,6 +2534,7 @@
 			children = (
 				920EBE1526E8D48A003FD0A8 /* DAOAppCell.swift */,
 				920EBE1626E8D48A003FD0A8 /* DAOAppCell.xib */,
+				E7E72505C417B965A57BB066 /* DAppStoreCells.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -2361,7 +2594,7 @@
 				9253A76F25A5C6A500E456A2 /* openssl.framework */,
 				92E2EB8D226F24C200367928 /* masternet */,
 				92D3CBF02264B56D007E3C55 /* testnet */,
-				92D3CBD32264B562007E3C55 /* mainnet */,
+				92D3CBD32264B562007E3C55 /* lib */,
 				927367212277AB330060CB67 /* UserNotifications.framework */,
 				927367232277AB340060CB67 /* UserNotificationsUI.framework */,
 				3B5894AC3136298FE0B7E8E3 /* Pods_BeamWallet.framework */,
@@ -2452,6 +2685,18 @@
 				92FA196C266F893D002780DC /* BMAsset.m */,
 				926DB36F26DFC91A00E85F0B /* BMApp.h */,
 				926DB37026DFC91A00E85F0B /* BMApp.m */,
+				46CAE6BC4C48E30E26AE304F /* BMInstantMessage.h */,
+				20B7F5341703980CD2D3941F /* BMInstantMessage.mm */,
+				35296D58A729F092AFF0C821 /* BMChat.h */,
+				8C5EB5519EB54866BA8DB9A4 /* BMChat.mm */,
+				FECECF4C7F96F708C05AAF05 /* BMDexOrder.h */,
+				46577647151F6240CBA9CE2D /* BMDexOrder.mm */,
+				1A2828F3DFD5228179C17B8D /* BMInstalledDApp.h */,
+				788AE10382B92E35A434F2E3 /* BMInstalledDApp.m */,
+				1AD88774871E2784A73C35A8 /* BMAvailableDApp.h */,
+				17A4C97F6AE81EDDEC7DB4B9 /* BMAvailableDApp.m */,
+				D8EE91DF3849A709C3F01686 /* BMPublisher.h */,
+				5947BB8B40C5D62DAA9D01BF /* BMPublisher.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -2469,6 +2714,8 @@
 				92554D1622896BE600FE6041 /* Addresses */,
 				92F6B79C22A5B6C60055C3C3 /* QRCode */,
 				923A45D5235DE4000084C368 /* Passwords */,
+				8110C1340F23638CECA5A0CA /* Messenger */,
+				78028519D7C340186F689742 /* AssetSwaps */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -2496,6 +2743,7 @@
 				92C00D2222A00E2A00DDB579 /* OwnerKeyViewController.xib */,
 				92B7DA2E22D63EFB00D4F88B /* TrustedNodeViewController.swift */,
 				92302046262F22C5001A1883 /* SelectNodeViewController.swift */,
+				13188DF7FB2332EDBB6929F5 /* NodePeersViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2507,6 +2755,8 @@
 				92435258222E73FC00A0EF37 /* UTXOViewController.swift */,
 				92F68C762244E37200197D4D /* UTXODetailViewController.swift */,
 				9212DBAC22E0A1730053FC99 /* UTXOTableView.swift */,
+				1A5FD8229312777D1D2BB813 /* SplitCoinsViewController.swift */,
+				F0AA87DBB7C958778D72096C /* AssetUTXOListViewController.swift */,
 			);
 			path = UTXO;
 			sourceTree = "<group>";
@@ -2530,7 +2780,6 @@
 				9225D556229455CA0067B4EA /* ReceiveAddressButtonsCell.swift */,
 				9225D557229455CA0067B4EA /* ReceiveAddressButtonsCell.xib */,
 				922B637A2552F1CA00A2AED2 /* ReceiveTokenCell.swift */,
-				922B637B2552F1CA00A2AED2 /* ReceiveTokenCell.xib */,
 				9223D538261F480E0086D95C /* ReceiveTransactionTypeCell.swift */,
 				9223D539261F480E0086D95C /* ReceiveTransactionTypeCell.xib */,
 			);
@@ -2548,6 +2797,9 @@
 				92506BE926DE5C17001804BA /* Public.cpp */,
 				926DB36A26DFC75200E85F0B /* DAOManager.h */,
 				926DB36B26DFC75200E85F0B /* DAOManager.mm */,
+				C16867B8CD04CD914FE6A1CA /* WalletAPIClient.h */,
+				B48933E92F4932F3A119DBB0 /* WalletAPIClient.mm */,
+				4C1212B607A6369157662664 /* WalletAPIClient+Internal.h */,
 			);
 			path = DAO;
 			sourceTree = "<group>";
@@ -2626,6 +2878,10 @@
 				92B13274227B2CE30099B86C /* BeamWalletMasterNet.entitlements */,
 				92B13275227B2CEA0099B86C /* BeamWalletTestNet.entitlements */,
 				927993C822F424D300FF8ECC /* InfoPlist.strings */,
+				5FEED174B3A5FDB8D14C9963 /* dapps_store_app.wasm */,
+				9CC651F674E6883AFB9709D5 /* dao-core-app.dapp */,
+				8923664227A70DFEBE27B5ED /* dao-voting-app.dapp */,
+				3149E0903940C330CAE827F5 /* oracle2-app.wasm */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2696,6 +2952,8 @@
 				92D9F7A5266FAB55006FB555 /* BMGradientView.swift */,
 				92B340AA2670E68C00936168 /* AssetIconView.swift */,
 				9249A5112694584900FF6C00 /* BMRippleCell.swift */,
+				53ECF740A61C5F0D941B8B36 /* BMOptionPickerViewController.swift */,
+				C8C2A22B96525EB07D51F607 /* BMAlertViewController.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -2855,6 +3113,7 @@
 				92480DAC229547180084512A /* Cells */,
 				9235EB0D2296F6DF00BDC232 /* ReceiveListViewController.swift */,
 				9265CDCE2292F233003C98B2 /* ReceiveViewController.swift */,
+				F0F0F0F0AAAA0001ABCD0001 /* AssetSearchViewController.swift */,
 				92DFD5CA255031FA00B9751C /* OfflineAddressViewController.swift */,
 				92DFD5CB255031FA00B9751C /* OfflineAddressViewController.xib */,
 			);
@@ -2898,6 +3157,8 @@
 			children = (
 				92B7E4D422AF0067001708E4 /* UTXOViewModel.swift */,
 				92B7E4D822AF064A001708E4 /* DetailUTXOViewModel.swift */,
+				4F9B63F6E98BA8303EE2FEAD /* AssetUTXOGroup.swift */,
+				E23EA93CE3207A2EBB4D17FD /* SplitCoinsViewModel.swift */,
 			);
 			path = UTXO;
 			sourceTree = "<group>";
@@ -2952,7 +3213,7 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		92D3CBD32264B562007E3C55 /* mainnet */ = {
+		92D3CBD32264B562007E3C55 /* lib */ = {
 			isa = PBXGroup;
 			children = (
 				9244A4F12A014658007B03D0 /* libassets.a */,
@@ -2987,8 +3248,13 @@
 				9244A5032A01465E007B03D0 /* libwallet_client_no_ipfs.a */,
 				9244A4E72A014656007B03D0 /* libwallet_client.a */,
 				9244A4E62A014655007B03D0 /* libwallet_core.a */,
+				57D7E7F685327E2CAB9E7C69 /* libdex.a */,
+				F426BB6F15C2E08A3E81B87D /* libdex_board.a */,
+				3C08DFF83966F34F6D7F6AFC /* libasio-ipfs.a */,
+				344F317D8FBFA32FFDA811F2 /* libipfs-bindings.a */,
+				7AC8EF915253F6CCEA3788BE /* libwallet_ipfs.a */,
 			);
-			path = mainnet;
+			path = "beam-ios-7.5.14510/lib";
 			sourceTree = "<group>";
 		};
 		92D3CBF02264B56D007E3C55 /* testnet */ = {
@@ -3030,6 +3296,8 @@
 				920EBE0D26E8D06D003FD0A8 /* DAOAppsViewController.swift */,
 				92ED772526E63EB000B41B3C /* DAOConfirmViewController.swift */,
 				9293114A2718EA1B005E3023 /* DAOConfirmViewController.xib */,
+				008792DADDD5C9FF28341A31 /* MyDAppsViewController.swift */,
+				6831B2B28CCBD5D776DCF34B /* PublishersViewController.swift */,
 			);
 			path = DAO;
 			sourceTree = "<group>";
@@ -3051,6 +3319,7 @@
 				92D729D726E2369000A92456 /* XWVScripting.swift */,
 				92D729D626E2369000A92456 /* XWVScriptObject.swift */,
 				92D729D426E2368F00A92456 /* XWVUserScript.swift */,
+				FDCB8FF9B7300E47ABEF4D9A /* DAppURLSchemeHandler.swift */,
 			);
 			path = JS;
 			sourceTree = "<group>";
@@ -3093,6 +3362,9 @@
 				92F68C7D2244E77500197D4D /* UTXODetailCell.xib */,
 				92F68C8B2245070200197D4D /* UTXOTransactionCell.swift */,
 				92F68C8C2245070200197D4D /* UTXOTransactionCell.xib */,
+				8865BEE3DDBE9806B38DDE04 /* AssetUTXOSectionHeaderView.swift */,
+				603CF8C20147C7F9E087C33D /* SplitCoinsStripeView.swift */,
+				4B33EC6A5FD1571ED9D1EFFB /* SplitCoinPreviewCard.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3192,6 +3464,11 @@
 				92B7E4E822AFD71B001708E4 /* Transaction */,
 				92B7E4E622AFD70D001708E4 /* UTXO */,
 				92B7E4E922AFD748001708E4 /* Settings */,
+				CD37C67AA40FF44BBFFD57B4 /* Messenger */,
+				838B90CD5474E2AC0F70CB0D /* AssetSwaps */,
+				8B86688612ED1A5FF45D1BAD /* DAppManager.swift */,
+				969B64630C2A5874889F91FC /* DAppStore.swift */,
+				2BE8E2F17C9FA369F86F60DB /* OraclePriceManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3239,6 +3516,23 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		CD37C67AA40FF44BBFFD57B4 /* Messenger */ = {
+			isa = PBXGroup;
+			children = (
+				AFF464435B3D65DCFC432FA3 /* MessengerChatListViewModel.swift */,
+				7A439F6A64EB61AD3DF6945B /* MessengerConversationViewModel.swift */,
+			);
+			path = Messenger;
+			sourceTree = "<group>";
+		};
+		ECB36A016D50624397AFFA33 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				7CDD341D6CFC3AD26C3F4374 /* AssetSwapOrderCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3274,7 +3568,7 @@
 				9288DD93223A55410020C501 /* Embed Frameworks */,
 				9288DD97223A55410020C501 /* ShellScript */,
 				92E2EACC226F102100367928 /* Embed Watch Content */,
-				92C4DBDF227906800073AEED /* Embed App Extensions */,
+				92C4DBDF227906800073AEED /* Embed Foundation Extensions */,
 				2938815B995B37F4BB538A0A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -3298,7 +3592,7 @@
 				92E2EB81226F21C700367928 /* Embed Watch Content */,
 				922474FD24E3E694006FE2B2 /* ShellScript */,
 				03901693440105723276594D /* [CP] Embed Pods Frameworks */,
-				9217D31E2652AB67006DD6F1 /* Embed App Extensions */,
+				9217D31E2652AB67006DD6F1 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -3315,9 +3609,10 @@
 		925AD5D02228254E00DDE66B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1600;
 				ORGANIZATIONNAME = Denis;
 				TargetAttributes = {
 					925AD5D72228254E00DDE66B = {
@@ -3441,7 +3736,6 @@
 				92F68C8F2245070200197D4D /* UTXOTransactionCell.xib in Resources */,
 				9225D54B229449010067B4EA /* BMFieldCell.xib in Resources */,
 				927EDE3F22A6B47C005D5CEA /* BMMultiLinesCell.xib in Resources */,
-				922B637F2552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				92AE366D22383D2300E0810B /* QRScannerViewController.xib in Resources */,
 				925AD60122282C8400DDE66B /* SF-Pro-Display-Bold.otf in Resources */,
 				92F6B78C22A541040055C3C3 /* SendAllCell.xib in Resources */,
@@ -3501,6 +3795,10 @@
 				92DF0D0022CAB69D0092CD4D /* Localizable.strings in Resources */,
 				92C00D2622A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
 				926F4B2C22E0CDB7007755D9 /* README.md in Resources */,
+				010A73D4AEEB9251461112AB /* dapps_store_app.wasm in Resources */,
+				D0CC2976D1595860BB67C58C /* dao-core-app.dapp in Resources */,
+				9D5813AA76650CB6EBA22D34 /* dao-voting-app.dapp in Resources */,
+				A4D6D5A9EC5F4DC3DD3E4682 /* oracle2-app.wasm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3570,7 +3868,6 @@
 				92CC40EC22E1DC7300006E5C /* BMGroupedCell.xib in Resources */,
 				922393A3235D1579002ADA27 /* RestoreOptionsViewController.xib in Resources */,
 				92C5EBB7229BFD1100ABFFF7 /* BMDetailCell.xib in Resources */,
-				922B63802552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				9261C269228BF55800D666E0 /* BMPickerCell.xib in Resources */,
 				9288DD8A223A55410020C501 /* QRViewController.xib in Resources */,
 				92F78BC024D06D2200489229 /* QRCodeSmallViewController.xib in Resources */,
@@ -3604,6 +3901,10 @@
 				92090D0D223A684000A1CFBB /* bgTestnet.jpg in Resources */,
 				92E4AECB23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92C00D2722A00E2A00DDB579 /* OwnerKeyViewController.xib in Resources */,
+				4B2FC15209C14B359E3651BD /* dapps_store_app.wasm in Resources */,
+				E4FDD3C6A0F5C3758751901D /* dao-core-app.dapp in Resources */,
+				D134B7B4257517D9037B6301 /* dao-voting-app.dapp in Resources */,
+				D91F481FE2DA5BE3465EFEFD /* oracle2-app.wasm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3629,7 +3930,6 @@
 				92E2EB4B226F21C700367928 /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				926EB47D231E843800D059BC /* WalletTransactionCell.xib in Resources */,
 				92E2EB4C226F21C700367928 /* InputWordCell.xib in Resources */,
-				922B63812552F1CA00A2AED2 /* ReceiveTokenCell.xib in Resources */,
 				92E4AECC23599D46004062A1 /* CollectionTextHeader.xib in Resources */,
 				92302055262F23AE001A1883 /* NodeCell.xib in Resources */,
 				92FE264322A11E4E00102DB4 /* BMExpandCell.xib in Resources */,
@@ -3709,6 +4009,10 @@
 				920D6C41270AEE3D00D953B8 /* BMDetailAmountCell.xib in Resources */,
 				92E2EB7A226F21C700367928 /* UTXODetailCell.xib in Resources */,
 				92E2EB7B226F21C700367928 /* bgTestnet.jpg in Resources */,
+				6029A6A13D53093CF6EC2FB6 /* dapps_store_app.wasm in Resources */,
+				7209CB87405DF7AC0B7CBE89 /* dao-core-app.dapp in Resources */,
+				F51D4BA4D0687745D2E60254 /* dao-voting-app.dapp in Resources */,
+				8F9D17159CF9400338FE47EB /* oracle2-app.wasm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4209,6 +4513,45 @@
 				928B0AB222425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
 				92B837492285816D002B385B /* Progress.swift in Sources */,
 				9265CDCF2292F233003C98B2 /* ReceiveViewController.swift in Sources */,
+				F0F0F0F0AAAA0002ABCD0001 /* AssetSearchViewController.swift in Sources */,
+				30BE993E2DFFA6452A536125 /* BMInstantMessage.mm in Sources */,
+				8E6EABD786898410576636A4 /* BMChat.mm in Sources */,
+				5A4A0ACB5C6CA50F1E5FCBE8 /* MessengerChatListViewModel.swift in Sources */,
+				066620C96ABA1816759B7AE3 /* MessengerConversationViewModel.swift in Sources */,
+				4D7C86E3D4DAAAD7DDFE22E7 /* MessengerChatListViewController.swift in Sources */,
+				75B069A9EC9A517ABCACFC1E /* MessengerChatViewController.swift in Sources */,
+				14458CA45E1281FAF80D496D /* MessengerNewChatViewController.swift in Sources */,
+				75516585C510BB694A1B9AED /* MessengerBubbleCell.swift in Sources */,
+				35726BA6BFE79F50A19E7054 /* MessengerChatCell.swift in Sources */,
+				15A094B1963EAE81E9B86B33 /* BMDexOrder.mm in Sources */,
+				7ED2D2980F560C573C46D8CC /* AssetSwapsViewModel.swift in Sources */,
+				2C2D70373756666705D14FDE /* AssetSwapCreateViewModel.swift in Sources */,
+				31509E4F991BC56BF7F10098 /* AssetSwapDetailsViewModel.swift in Sources */,
+				62D6B4FFAD6FCD00C5206630 /* AssetSwapsViewController.swift in Sources */,
+				94E405DB59B47772F0662861 /* AssetSwapCreateViewController.swift in Sources */,
+				B4FE33729385D12603589437 /* AssetSwapDetailsViewController.swift in Sources */,
+				5DAA3CCCB00AECEACD182FBF /* AssetSwapOrderCell.swift in Sources */,
+				59D5C848EC6C80442BC6A8A3 /* BMOptionPickerViewController.swift in Sources */,
+				911AF3DF99FDD7FFD07F4830 /* AssetUTXOGroup.swift in Sources */,
+				966EF2ACFF217F06AE183E6E /* SplitCoinsViewModel.swift in Sources */,
+				CA7E68B52D3092D76CBACF7C /* SplitCoinsViewController.swift in Sources */,
+				0EC9234AAD2DC0A1BF7600B4 /* AssetUTXOSectionHeaderView.swift in Sources */,
+				C6FB138B2A261CBC43626204 /* SplitCoinsStripeView.swift in Sources */,
+				AC3CF90BF3C1ED7E2D19D65A /* SplitCoinPreviewCard.swift in Sources */,
+				CDEA498CC695D89B35B0678E /* NodePeersViewController.swift in Sources */,
+				0DB9711D993CFA1D225B53BA /* BMInstalledDApp.m in Sources */,
+				BDDA78B4E7DDB519C8591B40 /* BMAvailableDApp.m in Sources */,
+				46E422749DE0BAE1BCF8B4EB /* BMPublisher.m in Sources */,
+				F8B20149A3E6BEDAE7F20E57 /* WalletAPIClient.mm in Sources */,
+				28B1AF7C15F50CEC869952BD /* DAppManager.swift in Sources */,
+				6F6101D0D3E633F1D68554F9 /* DAppStore.swift in Sources */,
+				F43301CC1012AD1BCD74EFFE /* MyDAppsViewController.swift in Sources */,
+				8313E7C13424087CE8545F59 /* PublishersViewController.swift in Sources */,
+				D28537CD882B83167B426EA0 /* DAppStoreCells.swift in Sources */,
+				187B4E604FD2814B8018C796 /* AssetUTXOListViewController.swift in Sources */,
+				AAE84220C256A1EFAB30D9B3 /* DAppURLSchemeHandler.swift in Sources */,
+				2964ED046A04435DB6FD977D /* BMAlertViewController.swift in Sources */,
+				042BE224A8CF0171B513BED0 /* OraclePriceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4532,6 +4875,45 @@
 				928B0AB322425329003CE9E7 /* BMPopoverMenu.swift in Sources */,
 				92B8374A2285816D002B385B /* Progress.swift in Sources */,
 				9265CDD02292F233003C98B2 /* ReceiveViewController.swift in Sources */,
+				F0F0F0F0AAAA0003ABCD0001 /* AssetSearchViewController.swift in Sources */,
+				87B508D6F91B6BCDE6EC712F /* BMInstantMessage.mm in Sources */,
+				A04389E8E8EE7AB9E4D87007 /* BMChat.mm in Sources */,
+				9C3478CC0AB10D577E97E53E /* MessengerChatListViewModel.swift in Sources */,
+				2361D1F909D78EC50B8C5D5C /* MessengerConversationViewModel.swift in Sources */,
+				DFC07B98C98F293C31F86A8C /* MessengerChatListViewController.swift in Sources */,
+				9E75E31529DE385C7D153631 /* MessengerChatViewController.swift in Sources */,
+				00947887B27F2F825E1E67CC /* MessengerNewChatViewController.swift in Sources */,
+				492305E92FA7A41129BF7346 /* MessengerBubbleCell.swift in Sources */,
+				984E5950BBB86D093251AB57 /* MessengerChatCell.swift in Sources */,
+				E545F78761926F0D8A51E9B2 /* BMDexOrder.mm in Sources */,
+				E7EA1E52231681BDE3D26C73 /* AssetSwapsViewModel.swift in Sources */,
+				E153DCA098F777EAFAA1D91A /* AssetSwapCreateViewModel.swift in Sources */,
+				BCB254DF739D2FA8FF92C672 /* AssetSwapDetailsViewModel.swift in Sources */,
+				C07BD2850E0E4E55AC706985 /* AssetSwapsViewController.swift in Sources */,
+				9A1790F44DE275FD9644A9F7 /* AssetSwapCreateViewController.swift in Sources */,
+				A522EB1A22FF64A990518431 /* AssetSwapDetailsViewController.swift in Sources */,
+				BE96C4A71A3D47721D003ACF /* AssetSwapOrderCell.swift in Sources */,
+				705F9944DC83B6CC6816678F /* BMOptionPickerViewController.swift in Sources */,
+				AAFE8C80296CA6DAA3BC3B1F /* AssetUTXOGroup.swift in Sources */,
+				000A92658A9461591881CE8C /* SplitCoinsViewModel.swift in Sources */,
+				275E60FB3A8D4704581DF986 /* SplitCoinsViewController.swift in Sources */,
+				5101D1DB95B6BECFE333B53C /* AssetUTXOSectionHeaderView.swift in Sources */,
+				6854C506C6836F88B8F8484E /* SplitCoinsStripeView.swift in Sources */,
+				ECF8F9E33148D1833480ADFA /* SplitCoinPreviewCard.swift in Sources */,
+				F5BD7F278CC7CCFADF63E7AF /* NodePeersViewController.swift in Sources */,
+				D0154E933CB0A42495F493B4 /* BMInstalledDApp.m in Sources */,
+				26D73AAEC26B985DD2704C90 /* BMAvailableDApp.m in Sources */,
+				C51DBD848CA77EC12F48698C /* BMPublisher.m in Sources */,
+				EE21FF606586049461645B3E /* WalletAPIClient.mm in Sources */,
+				7AB2A2A48540A9D102F56D7C /* DAppManager.swift in Sources */,
+				ACD5F2A82D411FA025F5709A /* DAppStore.swift in Sources */,
+				2B7C41C938A0B67A9D143E3D /* MyDAppsViewController.swift in Sources */,
+				56DCA641FEC90020A7C2686E /* PublishersViewController.swift in Sources */,
+				82EC6CA54D5C74FD16085DE0 /* DAppStoreCells.swift in Sources */,
+				21C1E1B8354DCDBDB0A9ABB8 /* AssetUTXOListViewController.swift in Sources */,
+				A4044FC0C7CFF97F7D02D3F5 /* DAppURLSchemeHandler.swift in Sources */,
+				50B804DB7153D959B75A9D13 /* BMAlertViewController.swift in Sources */,
+				D6F2A69901F8BE2CAE4846B0 /* OraclePriceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4855,6 +5237,45 @@
 				92E2EB2E226F21C700367928 /* BMPopoverMenu.swift in Sources */,
 				92B8374B2285816D002B385B /* Progress.swift in Sources */,
 				9265CDD12292F233003C98B2 /* ReceiveViewController.swift in Sources */,
+				F0F0F0F0AAAA0004ABCD0001 /* AssetSearchViewController.swift in Sources */,
+				434CC206E4AD461CECAD5DFB /* BMInstantMessage.mm in Sources */,
+				215454B3AA22BD789F53A90C /* BMChat.mm in Sources */,
+				EEE47E74C114A85B33A3A618 /* MessengerChatListViewModel.swift in Sources */,
+				B5E7CC16D70E7D12DD9315FC /* MessengerConversationViewModel.swift in Sources */,
+				05548629568C6211F87DA630 /* MessengerChatListViewController.swift in Sources */,
+				5A1A647678A2061222332D16 /* MessengerChatViewController.swift in Sources */,
+				69B13BFFB153BF4611F30888 /* MessengerNewChatViewController.swift in Sources */,
+				FD87FA1DDA9C27F19451AB4B /* MessengerBubbleCell.swift in Sources */,
+				E6218D6C7C5BE83B9707F158 /* MessengerChatCell.swift in Sources */,
+				E167B53AA2D8218D0710AA3E /* BMDexOrder.mm in Sources */,
+				88D6972926A283D03D289A48 /* AssetSwapsViewModel.swift in Sources */,
+				F00F7FD991CEA0402E131CFF /* AssetSwapCreateViewModel.swift in Sources */,
+				83EC213430E0CFD381D45A13 /* AssetSwapDetailsViewModel.swift in Sources */,
+				6315A76D06343C9CEDE2EF77 /* AssetSwapsViewController.swift in Sources */,
+				77CF51BBE36DCCD780857772 /* AssetSwapCreateViewController.swift in Sources */,
+				B6037162941C5AB71A356FF3 /* AssetSwapDetailsViewController.swift in Sources */,
+				84D2719B950F43294039957A /* AssetSwapOrderCell.swift in Sources */,
+				3C4B4023BBF6C6624DDC279E /* BMOptionPickerViewController.swift in Sources */,
+				B3476711F58F83C2F1CB8F2C /* AssetUTXOGroup.swift in Sources */,
+				ABA34015221EA45051CC20EB /* SplitCoinsViewModel.swift in Sources */,
+				BFF9839E0FE16D5A8645D394 /* SplitCoinsViewController.swift in Sources */,
+				532955652A405010EC21607C /* AssetUTXOSectionHeaderView.swift in Sources */,
+				6EA6E49364A07F3740D84921 /* SplitCoinsStripeView.swift in Sources */,
+				DAFECCA6179EA6FE92C0ABC7 /* SplitCoinPreviewCard.swift in Sources */,
+				B93707F60996A4898F0B88E2 /* NodePeersViewController.swift in Sources */,
+				9C5E69AB2AC0AC5E4D122185 /* BMInstalledDApp.m in Sources */,
+				7A9AD3ED311827FB6EF39D54 /* BMAvailableDApp.m in Sources */,
+				1A6B80C9C9EDCE967358F721 /* BMPublisher.m in Sources */,
+				E28445CBD68FD65137EB5624 /* WalletAPIClient.mm in Sources */,
+				F7E52918A59C06FDF87D69C9 /* DAppManager.swift in Sources */,
+				1C28371060472F1EFAF00E7B /* DAppStore.swift in Sources */,
+				ED06A371AF87628171B6FB9B /* MyDAppsViewController.swift in Sources */,
+				65A9895370E84E09300D7548 /* PublishersViewController.swift in Sources */,
+				AD534670E90AA9554A8C5F74 /* DAppStoreCells.swift in Sources */,
+				4B72CD41AF6A8F47020BC536 /* AssetUTXOListViewController.swift in Sources */,
+				A7290B4EEDC78DFD74B80F6F /* DAppURLSchemeHandler.swift in Sources */,
+				A8131AC203B7FC699E7DCA45 /* BMAlertViewController.swift in Sources */,
+				0A44DCF3575DA823BA60DEC5 /* OraclePriceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4967,8 +5388,11 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
+				ENABLE_DEBUG_DYLIB_OVERRIDE = NO;
+				ENABLE_DEBUG_DYLIB_SUPPORT = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -4976,6 +5400,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -4984,7 +5410,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -5036,8 +5462,14 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -5045,7 +5477,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "-w";
@@ -5065,29 +5497,37 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = KNU2R94BJK;
+				DEVELOPMENT_TEAM = AB54LLK6SM;
 				ENABLE_BITCODE = NO;
+				ENABLE_DEBUG_DYLIB_OVERRIDE = NO;
+				ENABLE_DEBUG_DYLIB_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../include\"",
-					"\"$(SRCROOT)/../include/3rdparty\"",
-					"\"$(SRCROOT)/../include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../include/core\"",
-					"\"$(SRCROOT)/../include/utility\"",
-					"\"$(SRCROOT)/../include/wallet\"",
-					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/../include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5096,13 +5536,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/mainnet",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5122,8 +5563,9 @@
 					"\"UIKit\"",
 					"-w",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mw.beam.beamwalletiOSMainnet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mw.beam.beamwalletiOSMainnet2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "BeamWallet/BeamWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -5140,9 +5582,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_ENUM_CONVERSION = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/BeamWallet.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = KNU2R94BJK;
+				DEVELOPMENT_TEAM = AB54LLK6SM;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5150,18 +5593,23 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../include\"",
-					"\"$(SRCROOT)/../include/3rdparty\"",
-					"\"$(SRCROOT)/../include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../include/core\"",
-					"\"$(SRCROOT)/../include/utility\"",
-					"\"$(SRCROOT)/../include/wallet\"",
-					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/../include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5170,13 +5618,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/mainnet",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5196,8 +5645,9 @@
 					"\"UIKit\"",
 					"-w",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mw.beam.beamwalletiOSMainnet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mw.beam.beamwalletiOSMainnet2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "BeamWallet/BeamWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5208,7 +5658,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D303009FB5F0DA4093A89DFB /* Pods-BeamWalletTestNet.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -5220,21 +5669,28 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
+				ENABLE_DEBUG_DYLIB_OVERRIDE = NO;
+				ENABLE_DEBUG_DYLIB_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../include\"",
-					"\"$(SRCROOT)/../include/3rdparty\"",
-					"\"$(SRCROOT)/../include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../include/core\"",
-					"\"$(SRCROOT)/../include/utility\"",
-					"\"$(SRCROOT)/../include/wallet\"",
-					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/../include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5246,13 +5702,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/mainnet",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5286,7 +5743,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 456B838BA83C92E05D36B091 /* Pods-BeamWalletTestNet.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -5312,16 +5768,18 @@
 					"PB_FIELD_32BIT=1",
 					"PB_NO_PACKED_STRUCTS=1",
 					"PB_ENABLE_MALLOC=1",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../include\"",
-					"\"$(SRCROOT)/../include/3rdparty\"",
-					"\"$(SRCROOT)/../include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../include/core\"",
-					"\"$(SRCROOT)/../include/utility\"",
-					"\"$(SRCROOT)/../include/wallet\"",
-					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/../include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoTestnet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5333,13 +5791,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet/BeamSDK",
 					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/mainnet",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
 				MARKETING_VERSION = 7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5372,7 +5831,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BA659A4953BE271B118EB5D6 /* Pods-BeamWalletMasterNet.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMaster;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -5384,21 +5842,28 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KNU2R94BJK;
 				ENABLE_BITCODE = NO;
+				ENABLE_DEBUG_DYLIB_OVERRIDE = NO;
+				ENABLE_DEBUG_DYLIB_SUPPORT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BeamWallet",
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../include\"",
-					"\"$(SRCROOT)/../include/3rdparty\"",
-					"\"$(SRCROOT)/../include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../include/core\"",
-					"\"$(SRCROOT)/../include/utility\"",
-					"\"$(SRCROOT)/../include/wallet\"",
-					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/../include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5414,11 +5879,12 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)/Frameworks/mainnet",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -5452,7 +5918,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EAEED72AAED404575AB9A6E5 /* Pods-BeamWalletMasterNet.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMaster;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -5469,15 +5934,20 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/Frameworks/boost",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"BEAM_ASSET_SWAP_SUPPORT=1",
+					"BEAM_IPFS_SUPPORT=1",
+				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../include\"",
-					"\"$(SRCROOT)/../include/3rdparty\"",
-					"\"$(SRCROOT)/../include/3rdparty/libuv/include\"",
-					"\"$(SRCROOT)/../include/core\"",
-					"\"$(SRCROOT)/../include/utility\"",
-					"\"$(SRCROOT)/../include/wallet\"",
-					"\"$(SRCROOT)/../include/3rdparty/sqlite\"",
-					"\"$(SRCROOT)/../include/keykeeper\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/libuv/include\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/core\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/utility\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/wallet\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/3rdparty/sqlite\"",
+					"\"$(SRCROOT)/Frameworks/beam-ios-7.5.14510/include/keykeeper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/InfoMasternet.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -5493,11 +5963,12 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks/boost",
 					"$(PROJECT_DIR)/Frameworks/testnet",
-					"$(PROJECT_DIR)/Frameworks/mainnet",
+					"$(PROJECT_DIR)/Frameworks/beam-ios-7.5.14510/lib",
 				);
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl,-force_load,$(SRCROOT)/Frameworks/beam-ios-7.5.14510/lib/libsqlite.a",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",

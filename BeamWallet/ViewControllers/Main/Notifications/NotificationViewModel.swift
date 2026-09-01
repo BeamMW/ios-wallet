@@ -2,7 +2,7 @@
 // NotificationViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ class NotificationViewModel: NSObject {
     
     public func trailingSwipeActions(indexPath:IndexPath) -> UISwipeActionsConfiguration? {
         
-        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let delete = UIContextualAction(style: .normal, title: nil) { (_, _, handler) in
             handler(true)
             self.deleteNotification(indexPath: indexPath)
         }
@@ -86,7 +86,7 @@ class NotificationViewModel: NSObject {
     }
 }
 
-//MARK: - Delegate
+// MARK: - Delegate
 
 extension NotificationViewModel : WalletModelDelegate {
     

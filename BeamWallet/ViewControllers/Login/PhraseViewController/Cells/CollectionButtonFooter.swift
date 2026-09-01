@@ -3,7 +3,7 @@
 //  BeamWallet
 //
 //  Created by Denis on 10/18/19.
-//  Copyright © 2019 Denis. All rights reserved.
+//  Copyright © 2026 Denis. All rights reserved.
 //
 
 import Foundation
@@ -38,7 +38,6 @@ class CollectionButtonFooter: UICollectionReusableView {
             btn2.isHidden = true
         case .display, .onlyDisplay:
             btn2.setTitle(Localizable.shared.strings.i_will_later, for: .normal)
-            break
         }
         
         if Settings.sharedManager().isDarkMode {

@@ -2,7 +2,7 @@
 // QRCodeSmallViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ class QRCodeSmallViewController: BaseViewController {
     weak var delegate: QRViewControllerDelegate?
     public var onShared : (() -> Void)?
     public var isMaxPrivacy = false
+    public var isSbbsOnly = false
+    public var isPublicOffline = false
     
     @IBOutlet weak private var infoLabel: UILabel!
     @IBOutlet weak private var codeConentView: UIView!
@@ -70,8 +72,12 @@ class QRCodeSmallViewController: BaseViewController {
             
             infoLabel.text = text
         }
+        else if isPublicOffline {
+            infoLabel.text = Localizable.shared.strings.public_offline_address_info
+        }
         else {
-            if !AppModel.sharedManager().checkIsOwnNode() {
+            let isOwn = AppModel.sharedManager().checkIsOwnNode()
+            if isSbbsOnly || !isOwn {
                 infoLabel.text = Localizable.shared.strings.receive_description_2
             }
             else {
@@ -84,15 +90,11 @@ class QRCodeSmallViewController: BaseViewController {
         addSwipeToDismiss()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     @IBAction func onShare(sender :UIButton) {
         if let image = codeConentView.snapshot() {
             let activityItem: [AnyObject] = [image]
             let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, _: [Any]?, _: Error?) in
                 if completed {
                     self.dismiss(animated: true, completion: {
                         if activityType == UIActivity.ActivityType.copyToPasteboard {

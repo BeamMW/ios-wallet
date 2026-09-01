@@ -2,7 +2,7 @@
 // AssetIconView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,71 +23,113 @@ class AssetIconView: BMGradientView {
     
     private let imageView = UIImageView(image: UIImage(named: "ic_asset"))
     private let verify = UIImageView(image: UIImage(named: "ic_verify-1"))
-    
+
     public var isBig = false
-    
+
+    private var glyphReferenceSize: CGSize?
+    private var glyphFillsBounds = false
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         verify.frame = CGRect(x: self.width-10, y: -3, width: 13, height: 13)
+        layoutImageView()
     }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        self.cornerRadius = self.frame.width/2
-        
-        self.addSubview(imageView)
+        commonInit()
     }
-    
+
+    private func commonInit() {
+        self.cornerRadius = self.frame.width/2
+        if imageView.superview !== self {
+            self.addSubview(imageView)
+        }
+    }
+
     public func setAsset(_ asset:BMAsset) {
         verify.removeFromSuperview()
-        
+
         if isBig {
             if asset.isBeamX() {
                 addSubview(verify)
-                imageView.frame = self.bounds
                 imageView.image = UIImage(named: "assetbeamx")
+                glyphReferenceSize = nil
+                glyphFillsBounds = true
             }
             else if asset.isBeam() {
                 imageView.image = UIImage(named: "ic_asset_beam_big")
-                imageView.frame = CGRect(x:12, y: 11, width: 24, height: 20)
+                glyphReferenceSize = CGSize(width: 24, height: 20)
+                glyphFillsBounds = false
             }
             else {
                 imageView.image = UIImage(named: "ic_asset_big")
-                imageView.frame = CGRect(x:12, y: 11, width: 23, height: 19)
+                glyphReferenceSize = CGSize(width: 23, height: 19)
+                glyphFillsBounds = false
             }
         }
         else {
             if asset.isBeamX() {
                 addSubview(verify)
-                imageView.frame = self.bounds
                 imageView.image = UIImage(named: "assetbeamx")
+                glyphReferenceSize = nil
+                glyphFillsBounds = true
             }
             else if asset.isBeam() {
                 imageView.image = UIImage(named: "ic_asset_beam")
-                imageView.frame = CGRect(x:6, y: 5, width: 15, height: 13)
+                glyphReferenceSize = CGSize(width: 15, height: 13)
+                glyphFillsBounds = false
             }
             else {
                 imageView.image = UIImage(named: "ic_asset")
-                imageView.frame = CGRect(x:7, y: 7, width: 12, height: 10)
+                glyphReferenceSize = CGSize(width: 12, height: 10)
+                glyphFillsBounds = false
             }
-            
+
             self.gradientLayer.type = .radial
             self.gradientLayer.colors = [
                 UIColor(hexString: asset.color).withAlphaComponent(0.7).cgColor,
                 UIColor.black]
             self.gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
             self.gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-            
+
             self.borderWidth = 2
             self.borderColor = UIColor(hexString: asset.color)
-            
+
             if asset.isBeamX() {
                 self.borderWidth = 0
                 self.gradientLayer.colors = nil
             }
         }
+
+        setNeedsLayout()
+    }
+
+    private func layoutImageView() {
+        if glyphFillsBounds {
+            imageView.frame = bounds
+            return
+        }
+        guard let refSize = glyphReferenceSize, bounds.width > 0 else { return }
+        let referenceFrame: CGFloat = isBig ? 48 : 28
+        let scale = bounds.width / referenceFrame
+        let size = CGSize(width: refSize.width * scale, height: refSize.height * scale)
+        imageView.frame = CGRect(
+            x: (bounds.width - size.width) / 2,
+            y: (bounds.height - size.height) / 2,
+            width: size.width,
+            height: size.height
+        )
     }
 }
 

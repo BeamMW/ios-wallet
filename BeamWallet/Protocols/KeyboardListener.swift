@@ -2,7 +2,7 @@
 // KeyboardListener.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
-import Foundation
 
 import Foundation
 

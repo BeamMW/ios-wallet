@@ -2,7 +2,7 @@
 // BMFieldCell.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,15 +47,15 @@ class BMFieldCell: BaseCell {
         }
     }
     
-    public var titleTextColor: UIColor? = nil {
+    public var titleTextColor: UIColor? {
         didSet {
             if let color = titleTextColor {
-                nameLabel.textColor = color;
+                nameLabel.textColor = color
             }
         }
     }
     
-    public var hideNameLabel:Bool? = nil
+    public var hideNameLabel:Bool? 
     {
         didSet {
             if let hide = hideNameLabel {
@@ -67,9 +67,15 @@ class BMFieldCell: BaseCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        copyText = nil
+        keyboardType = .default
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         selectionStyle = .none
         
         nameLabel.isUserInteractionEnabled = true
@@ -81,7 +87,7 @@ class BMFieldCell: BaseCell {
        // textField.placeHolderColor = UIColor.white.withAlphaComponent(0.2)
 
         if Settings.sharedManager().isDarkMode {
-            nameLabel.textColor = UIColor.main.steel;
+            nameLabel.textColor = UIColor.main.steel
         }
     }
     
@@ -131,6 +137,15 @@ class BMFieldCell: BaseCell {
             }
         }
     }
+
+    public var keyboardType: UIKeyboardType {
+        get { return textField.keyboardType }
+        set { textField.keyboardType = newValue }
+    }
+
+    public func setText(_ value: String?) {
+        textField.text = value
+    }
 }
 
 extension BMFieldCell : UITextFieldDelegate {
@@ -142,13 +157,10 @@ extension BMFieldCell : UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        textField.inputAccessoryView = nil
-        
         if let copy = copyText {
             let inputBar = BMInputCopyBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 44), copy:copy)
-            
-            inputBar.completion = {
-                (obj : String?) -> Void in
+
+            inputBar.completion = { (obj : String?) in
                 if let text = obj {
                     self.textField.text = text
                     self.delegate?.textValueDidChange?(self, text, false)
@@ -156,6 +168,9 @@ extension BMFieldCell : UITextFieldDelegate {
                 }
             }
             textField.inputAccessoryView = inputBar
+        }
+        else if textField.keyboardType != .numberPad && textField.keyboardType != .decimalPad && textField.returnKeyType != .next {
+            textField.inputAccessoryView = nil
         }
         return true
     }

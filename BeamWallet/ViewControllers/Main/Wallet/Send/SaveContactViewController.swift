@@ -2,7 +2,7 @@
 // SaveContactViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ class SaveContactViewController: BaseTableViewController {
 
             if(AppModel.sharedManager().isToken(address!)) {
                 let params = AppModel.sharedManager().getTransactionParameters(address!)
-                self.address.walletId = address!//params.address
+                self.address.walletId = address!// params.address
                 self.address.identity = params.identity
                 self.address.address = address
             }
@@ -117,10 +117,6 @@ class SaveContactViewController: BaseTableViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     @objc private func onSave() {
         var walletId = address.walletId
         var shouldSaveToken = false
@@ -147,12 +143,12 @@ class SaveContactViewController: BaseTableViewController {
             
             if isContactFound {
                 alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.address_already_exist_1, handler: nil)
-                return;
+                return
             }
             
             if isMyAddress {
                 alert(title: Localizable.shared.strings.error, message: Localizable.shared.strings.address_already_exist_2, handler: nil)
-                return;
+                return
             }
         }
         
@@ -226,7 +222,7 @@ extension SaveContactViewController : UITableViewDataSource {
         switch indexPath.section {
         case 0:
             if isAddContact {
-                let trim = self.address.walletId.count > 0 ? "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))" : "";
+                let trim = self.address.walletId.count > 0 ? "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))" : ""
 
                 let cell = tableView
                     .dequeueReusableCell(withType: BMSearchAddressCell.self, for: indexPath)
@@ -241,7 +237,7 @@ extension SaveContactViewController : UITableViewDataSource {
                 return cell
             }
             else{
-                let trim = "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))";
+                let trim = "\(self.address.walletId.prefix(6))...\(self.address.walletId.suffix(6))"
 
                 let item = BMMultiLineItem(title: Localizable.shared.strings.address.uppercased(), detail: trim, detailFont: RegularFont(size: 16), detailColor: UIColor.white)
                 let cell =  tableView

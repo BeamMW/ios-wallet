@@ -2,7 +2,7 @@
 // UnlockPasswordPopover.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -89,46 +89,46 @@ class UnlockPasswordPopover: BaseViewController {
     
     private func getTextForFaceID() -> String {
         switch event {
-            case .transaction:
-                return Localizable.shared.strings.confirm_transaction_2
-            case .node:
-                return Localizable.shared.strings.change_node_text_1
-            case .settings:
-                return Localizable.shared.strings.change_settings_text_1
-            case .clear_wallet:
-                return String.empty()
-            case .none:
-                return String.empty()
+        case .transaction:
+            return Localizable.shared.strings.confirm_transaction_2
+        case .node:
+            return Localizable.shared.strings.change_node_text_1
+        case .settings:
+            return Localizable.shared.strings.change_settings_text_1
+        case .clear_wallet:
+            return String.empty()
+        case .none:
+            return String.empty()
         }
     }
-    
+
     private func getTextForTouchID() -> String {
         switch event {
-            case .transaction:
-                return Localizable.shared.strings.confirm_transaction_1
-            case .node:
-                return Localizable.shared.strings.change_node_text_2
-            case .settings:
-                return Localizable.shared.strings.change_settings_text_2
-            case .clear_wallet:
-                return String.empty()
-            case .none:
-                return String.empty()
+        case .transaction:
+            return Localizable.shared.strings.confirm_transaction_1
+        case .node:
+            return Localizable.shared.strings.change_node_text_2
+        case .settings:
+            return Localizable.shared.strings.change_settings_text_2
+        case .clear_wallet:
+            return String.empty()
+        case .none:
+            return String.empty()
         }
     }
-    
+
     private func getTextForPassword() -> String {
         switch event {
-            case .transaction:
-                return Localizable.shared.strings.confirm_transaction_3
-            case .node:
-                return Localizable.shared.strings.change_node_text_3
-            case .settings:
-                return Localizable.shared.strings.change_settings_text_3
-            case .clear_wallet:
-                return Localizable.shared.strings.clear_wallet_password
-            case .none:
-                return String.empty()
+        case .transaction:
+            return Localizable.shared.strings.confirm_transaction_3
+        case .node:
+            return Localizable.shared.strings.change_node_text_3
+        case .settings:
+            return Localizable.shared.strings.change_settings_text_3
+        case .clear_wallet:
+            return Localizable.shared.strings.clear_wallet_password
+        case .none:
+            return String.empty()
         }
     }
     
@@ -143,7 +143,8 @@ class UnlockPasswordPopover: BaseViewController {
     public func biometricAuthorization() {
         if BiometricAuthorization.shared.canAuthenticate(), Settings.sharedManager().isEnableBiometric {
             BiometricAuthorization.shared.authenticateWithBioMetrics(success: {
-                if let password = KeychainManager.getPassword() {
+                let context = BiometricAuthorization.shared.lastAuthenticatedContext
+                if let password = KeychainManager.getPassword(context: context) {
                     self.passField.text = password
                     self.dismiss(animated: true, completion: {
                         self.completion?(true)

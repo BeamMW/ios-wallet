@@ -2,7 +2,7 @@
 // MaxPrivacyDetailViewController.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,8 +38,7 @@ class MaxPrivacyDetailViewController: BaseTableViewController {
         tableView.delegate = self
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 10))
         
-        viewModel.onDataChanged = {
-            [weak self] in
+        viewModel.onDataChanged = { [weak self] in
             
             guard let strongSelf = self else { return }
             

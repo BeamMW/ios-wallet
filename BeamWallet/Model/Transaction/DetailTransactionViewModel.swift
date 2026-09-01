@@ -2,7 +2,7 @@
 // DetailTransactionViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -264,7 +264,7 @@ class DetailTransactionViewModel: TransactionViewModel {
         if let tr = self.transaction, let top = UIApplication.getTopMostViewController() {
             let activityItem: [String] = [tr.textDetails()]
             let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-            vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            vc.completionWithItemsHandler = {(_: UIActivity.ActivityType?, _: Bool, _: [Any]?, _: Error?) in
             }
             
             vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
@@ -300,7 +300,7 @@ class DetailTransactionViewModel: TransactionViewModel {
             if let image = shareView.snapshot(scale: false) {
                 let activityItem: [AnyObject] = [image]
                 let vc = UIActivityViewController(activityItems: activityItem, applicationActivities: [])
-                vc.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                vc.completionWithItemsHandler = {(_: UIActivity.ActivityType?, _: Bool, _: [Any]?, _: Error?) in
                 }
                 
                 vc.excludedActivityTypes = [UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.print,UIActivity.ActivityType.openInIBooks]
@@ -313,7 +313,7 @@ class DetailTransactionViewModel: TransactionViewModel {
     public func saveContact() {
         if let top = UIApplication.getTopMostViewController() {
             let transaction = self.transaction!
-            var address:String? = nil
+            var address:String?
             
             if transaction.isIncome {
                 address = transaction.senderAddress

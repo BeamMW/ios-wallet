@@ -2,7 +2,7 @@
 // Resources.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -105,16 +105,16 @@ func IconDappStore() -> UIImage? {
     return UIImage(named: "iconDapps")
 }
 
-func IconBeamXDAO() -> UIImage? {
-    return UIImage(named: "iconDao")
+func IconMessenger() -> UIImage? {
+    return UIImage(named: "iconMessenger")
+}
+
+func IconAssetSwap() -> UIImage? {
+    return UIImage(named: "iconAssetSwap")
 }
 
 func IconBeamFaucet() -> UIImage? {
     return UIImage(named: "icon_faucet")
-}
-
-func IconBeamXDAOVoting() -> UIImage? {
-    return UIImage(named: "iconDaoVote")
 }
 
 func IconBeamGallery() -> UIImage? {

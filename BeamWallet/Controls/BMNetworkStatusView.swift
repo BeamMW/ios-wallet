@@ -2,7 +2,7 @@
 // BMStatusView.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -134,22 +134,20 @@ class BMNetworkStatusView: UIView {
     @objc private func onChangeNode() {
         if let top = UIApplication.getTopMostViewController() {
             let vc = SelectNodeViewController()
-            //SettingsViewController(type: SettingsViewModel.SettingsType.node)
+            // SettingsViewController(type: SettingsViewModel.SettingsType.node)
             top.pushViewController(vc: vc)
         }
     }
     
     private var onlineString:String {
-        get {
-            if Settings.sharedManager().isNodeProtocolEnabled {
-                return  Localizable.shared.strings.online_mobile_node.lowercased()
-            }
-            else if !Settings.sharedManager().connectToRandomNode {
-                return  Localizable.shared.strings.online.lowercased()
-            }
-            else {
-                return Localizable.shared.strings.online.lowercased()
-            }
+        if Settings.sharedManager().isNodeProtocolEnabled {
+            return  Localizable.shared.strings.online_mobile_node.lowercased()
+        }
+        else if !Settings.sharedManager().connectToRandomNode {
+            return  Localizable.shared.strings.online.lowercased()
+        }
+        else {
+            return Localizable.shared.strings.online.lowercased()
         }
     }
     
@@ -366,7 +364,7 @@ extension BMNetworkStatusView: WalletModelDelegate {
     func onNetwotkStartConnecting(_ connecting: Bool) {
         DispatchQueue.main.async {
             if connecting {
-                //https://github.com/BeamMW/ios-wallet/issues/194
+                // https://github.com/BeamMW/ios-wallet/issues/194
                 self.onNetwotkStatusChange(true)
             }
         }

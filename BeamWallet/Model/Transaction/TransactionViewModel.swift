@@ -2,7 +2,7 @@
 // TransactionViewModel.swift
 // BeamWallet
 //
-// Copyright 2018 Beam Development
+// Copyright 2026 Beam Development
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class TransactionViewModel: NSObject {
         }
     }
     
-    public var assetId:Int32? = nil {
+    public var assetId:Int32? {
         didSet {
             if let id = assetId {
                 self.transactions = self.transactions.filter { tr in
@@ -105,7 +105,7 @@ class TransactionViewModel: NSObject {
         AppModel.sharedManager().removeDelegate(self)
     }
     
-//MARK: - Actions
+// MARK: - Actions
 
     public func cancelTransation(indexPath:IndexPath?) {
         let transaction:BMTransaction = (indexPath == nil ? self.transaction! : transactions[indexPath!.row])
@@ -161,17 +161,17 @@ class TransactionViewModel: NSObject {
     public func trailingSwipeActions(indexPath:IndexPath) -> UISwipeActionsConfiguration? {
         let transaction = transactions[indexPath.row]
         
-        let cancel = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let cancel = UIContextualAction(style: .normal, title: nil) { (_, _, handler) in
             handler(true)
             self.cancelTransation(indexPath: indexPath)
         }
         cancel.image = IconRowCancel()
         cancel.backgroundColor = UIColor.main.cerulean
         
-        var rep:UIContextualAction? = nil
+        var rep:UIContextualAction?
         
         if !transaction.isShielded {
-            rep = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+            rep = UIContextualAction(style: .normal, title: nil) { (_, _, handler) in
                 handler(true)
                 self.repeatTransation(transaction: transaction)
             }
@@ -179,7 +179,7 @@ class TransactionViewModel: NSObject {
             rep!.backgroundColor = UIColor.main.deepSeaBlue
         }
         
-        let delete = UIContextualAction(style: .normal, title: nil) { (action, view, handler) in
+        let delete = UIContextualAction(style: .normal, title: nil) { (_, _, handler) in
             handler(true)
             self.deleteTransation(indexPath: indexPath)
         }
@@ -206,7 +206,7 @@ class TransactionViewModel: NSObject {
     }
 }
 
-//MARK: - Delegate
+// MARK: - Delegate
 
 extension TransactionViewModel : WalletModelDelegate {
     
