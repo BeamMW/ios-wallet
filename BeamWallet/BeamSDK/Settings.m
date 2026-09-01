@@ -161,7 +161,7 @@ static NSString *oracleEnabledKey = @"oracleEnabledKey";
     _whereBuyAddress = @"https://www.beam.mw/#exchanges";
     _documentationAddress = @"https://beam.mw/docs";
     
-    if (ENALBE_LANG) {
+    if (ENABLE_LANG) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:languageKey]) {
             _language = [[NSUserDefaults standardUserDefaults] objectForKey:languageKey];
         }

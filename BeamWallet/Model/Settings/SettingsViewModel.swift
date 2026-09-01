@@ -195,7 +195,7 @@ class SettingsViewModel: NSObject {
         allItems.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
         allItems.append(SettingsItem(title: Localizable.shared.strings.clear_local_data, detail: nil, isSwitch: nil, type: .clear_data, hasArrow: true))
         
-        if ENALBE_LANG == true {
+        if ENABLE_LANG == true {
             allItems.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
         }
         
@@ -259,7 +259,7 @@ class SettingsViewModel: NSObject {
             section_0.append(SettingsItem(title: Localizable.shared.strings.min_confirmations, detail: "\(Settings.sharedManager().minConfirmations)", isSwitch: nil, type: .confirmations, hasArrow: true))
 
             var section_1 = [SettingsItem]()
-            if ENALBE_LANG == true {
+            if ENABLE_LANG == true {
                 section_1.append(SettingsItem(title: Localizable.shared.strings.language, detail: Settings.sharedManager().languageName(), isSwitch: nil, type: .language, hasArrow: true))
             }
             section_1.append(SettingsItem(title: Localizable.shared.strings.dark_mode, detail: nil, isSwitch: Settings.sharedManager().isDarkMode, type: .dark_mode, hasArrow: false))
